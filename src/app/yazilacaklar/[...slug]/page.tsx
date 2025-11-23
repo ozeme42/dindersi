@@ -35,7 +35,7 @@ async function getDefinitionsForTopic(topicId: string): Promise<{ concept: strin
 function YazilacaklarDisplayPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
-    
+
     const [topic, setTopic] = useState<Topic | null>(null);
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -164,7 +164,7 @@ function YazilacaklarDisplayPage() {
         setIsDownloading(false);
     };
     
-    const backUrl = `/`;
+    const backUrl = `/student/yazilacaklar`;
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.1, 3.0));
     const decreaseFontSize = () => setFontSize(fs => Math.max(0.5, fs - 0.1));
@@ -178,20 +178,20 @@ function YazilacaklarDisplayPage() {
             <div className="flex h-screen items-center justify-center text-center p-8">
                 <div>
                     <p className="text-destructive mb-4">{error || "Bu konu için içerik bulunmuyor."}</p>
-                    <Button asChild variant="outline"><Link href={backUrl}>Ana Sayfaya Dön</Link></Button>
+                    <Button asChild variant="outline"><Link href={backUrl}>Geri Dön</Link></Button>
                 </div>
             </div>
         );
     }
     
     const KavramlarContent = (
-         <Card className="bg-background/80 flex flex-col h-full overflow-hidden border-0 rounded-none sm:rounded-lg">
+         <Card className="bg-background/80 flex flex-col h-full overflow-hidden">
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Kavramlar ve Tanımları'}</CardTitle>
             </CardHeader>
             <CardContent className="flex-grow p-4 min-h-0">
                 <ScrollArea className="h-full pr-2">
-                    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {content.conceptDefinitions.length > 0 ? content.conceptDefinitions.map((item, index) => (
                             <Card key={index} className={cn("text-foreground", colorClasses[index % colorClasses.length])}>
                                 <CardHeader className="flex flex-row items-center gap-3 p-3">
@@ -210,7 +210,7 @@ function YazilacaklarDisplayPage() {
     );
 
     const NotlarContent = (
-        <Card className="bg-background/80 flex flex-col h-full overflow-hidden border-0 rounded-none sm:rounded-lg">
+        <Card className="bg-background/80 flex flex-col h-full overflow-hidden">
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Önemli Notlar'}</CardTitle>
             </CardHeader>
@@ -247,7 +247,7 @@ function YazilacaklarDisplayPage() {
                         </div>
                         <Button variant="outline" asChild>
                             <Link href={backUrl}>
-                                <ArrowLeft className="mr-2 h-4 w-4"/> Ana Sayfaya Dön
+                                <ArrowLeft className="mr-2 h-4 w-4"/> Konu Seçimine Dön
                             </Link>
                         </Button>
                         <Button variant="secondary" onClick={handleDownloadPDF} disabled={isDownloading}>
@@ -264,10 +264,10 @@ function YazilacaklarDisplayPage() {
                             <TabsTrigger value="kavramlar">Kavramlar</TabsTrigger>
                             <TabsTrigger value="notlar">Önemli Notlar</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 p-4">
+                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0">
                             {KavramlarContent}
                         </TabsContent>
-                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 p-4">
+                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0">
                             {NotlarContent}
                         </TabsContent>
                     </Tabs>
@@ -285,3 +285,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+  
