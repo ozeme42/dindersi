@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -9,13 +10,13 @@ import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
-import type { PublicClass } from './actions/getPublicCurriculum';
+import type { CourseGroup } from './actions/getPublicCurriculum';
 import React, { type ReactNode } from "react";
 import { cn } from '@/lib/utils';
 
 
-const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
-    if (classGroups.length === 0) {
+const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
+    if (courseGroups.length === 0) {
         return (
             <div className="flex flex-col min-h-screen">
                 <AppHeader />
@@ -39,17 +40,17 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                  </div>
                  
                 <Accordion type="multiple" className="w-full space-y-4">
-                    {classGroups.map((group) => (
-                        <AccordionItem value={group.name} key={group.name} className="border rounded-lg bg-card shadow-sm">
+                    {courseGroups.map((group) => (
+                        <AccordionItem value={group.title} key={group.title} className="border rounded-lg bg-card shadow-sm">
                             <AccordionTrigger className="p-4 text-xl sm:text-2xl font-semibold hover:no-underline">
-                                {group.name === 'Genel' ? 'Genel Dersler' : `${group.name}. Sınıflar`}
+                               {group.title}
                             </AccordionTrigger>
                             <AccordionContent className="p-4 pt-0">
                                 <Accordion type="multiple" className="w-full space-y-3">
                                     {group.courses.map((course) => (
                                         <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
                                             <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
-                                                {course.title}
+                                                {course.className}
                                             </AccordionTrigger>
                                             <AccordionContent className="p-3">
                                                 {course.units.length > 0 ? (
@@ -229,7 +230,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 };
 
 
-export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
+export function PageContent({ courseGroups }: { courseGroups: CourseGroup[] }) {
     const { user, loading } = useAuth();
     
     if (loading) {
@@ -244,5 +245,5 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
         return <LoggedInDashboard user={user} />;
     }
     
-    return <LoggedOutPage classGroups={classGroups} />;
+    return <LoggedOutPage courseGroups={courseGroups} />;
 }

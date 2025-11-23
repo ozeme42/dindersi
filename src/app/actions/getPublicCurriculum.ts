@@ -2,22 +2,23 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, Timestamp, where } from "firebase/firestore";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
-export type PublicCourse = Omit<Course, 'units'> & {
+export type PublicCourse = Omit<Course, 'units' | 'className'> & {
+    className: string;
     units: (Omit<Unit, 'topics'> & {
         topics: (Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean })[]
     })[]
 };
 
-export type PublicClass = Omit<SchoolClass, 'courses'> & {
+export type CourseGroup = {
+    title: string;
     courses: PublicCourse[];
-};
+}
 
-
-export async function getPublicCurriculum(): Promise<{ classGroups: { name: string; courses: PublicCourse[] }[] }> {
+export async function getPublicCurriculum(): Promise<{ courseGroups: CourseGroup[] }> {
     noStore();
     try {
         const [coursesSnap, classesSnap] = await Promise.all([
@@ -27,6 +28,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
 
         const allCoursesData = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const classMap = new Map(allClasses.map(c => [c.id, c.name]));
         
         const coursesWithContent: PublicCourse[] = [];
 
@@ -38,58 +40,46 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                 const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
                 const topics = topicsSnap.docs.map(topicDoc => {
                     const data = topicDoc.data() as Topic;
-                    const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
+                    const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0;
                     const hasOzet = !!data.htmlContent;
-                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet } as Topic & { hasYazilacaklarContent: boolean, hasOzetContent: boolean };
+                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
                 });
-
-                // removed filter: .filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); 
-
-                 units.push({
+                
+                units.push({
                     id: unitDoc.id,
                     title: unitDoc.data().title,
                     topics
                 });
             }
-            
+
             const enrichedCourse: PublicCourse = {
                 id: course.id,
                 title: course.title,
                 classId: course.classId,
+                className: classMap.get(course.classId || '') || 'Genel',
                 units: units
             };
             coursesWithContent.push(enrichedCourse);
         }
         
-        const groupedByClass: { [classId: string]: PublicCourse[] } = {};
-        const generalCourses: PublicCourse[] = [];
+        const groupedByCourseTitle: { [title: string]: PublicCourse[] } = {};
         
         coursesWithContent.forEach(course => {
-            if (course.classId) {
-                if (!groupedByClass[course.classId]) {
-                    groupedByClass[course.classId] = [];
-                }
-                groupedByClass[course.classId].push(course);
-            } else {
-                generalCourses.push(course);
+            if (!groupedByCourseTitle[course.title]) {
+                groupedByCourseTitle[course.title] = [];
             }
+            groupedByCourseTitle[course.title].push(course);
         });
+
+        const courseGroups = Object.keys(groupedByCourseTitle).map(title => ({
+            title,
+            courses: groupedByCourseTitle[title].sort((a, b) => (a.className).localeCompare(b.className))
+        })).sort((a,b) => a.title.localeCompare(b.title));
         
-        const classGroups = allClasses
-            .map(cls => ({
-                name: cls.name,
-                courses: groupedByClass[cls.id] || []
-            }))
-            .filter(group => group.courses.length > 0);
-        
-        if (generalCourses.length > 0) {
-            classGroups.push({ name: "Genel", courses: generalCourses });
-        }
-        
-        return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
+        return { courseGroups: JSON.parse(JSON.stringify(courseGroups)) };
 
     } catch (e: any) {
         console.error("Error fetching public curriculum: ", e);
-        return { classGroups: [] };
+        return { courseGroups: [] };
     }
 }
