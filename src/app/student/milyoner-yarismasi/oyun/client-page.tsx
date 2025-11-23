@@ -1,19 +1,17 @@
 
-"use client";
+'use client';
 
-import React, { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
-import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Home, Repeat, PartyPopper } from 'lucide-react';
-import { playSound, stopSound } from '@/lib/audio-service';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
+import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Home } from "lucide-react";
+import { playSound, stopSound } from "@/lib/audio-service";
+import { cn } from "@/lib/utils";
 import Confetti from 'react-dom-confetti';
 import { addScore, checkAndAwardMillionaireBadge } from './actions';
 import type { Question } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
-
-type GameQuestion = Question;
-
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const MONEY_LEVELS = [
   "100", "200", "300", "400", "500", 
@@ -34,48 +32,28 @@ const confettiConfig = {
   colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
 };
 
-export function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestions: Question[] | null, initialError?: string }) {
+export function MilyonerClientPage({ questions, error }: { questions: Question[] | null, error?: string }) {
   const router = useRouter();
   const { user, loading: userLoading } = useAuth();
-  const { toast } = useToast();
   
   const [qIndex, setQIndex] = useState(0);
-  const [gameState, setGameState] = useState('loading'); // loading, start, playing, won, lost, withdraw
+  const [gameState, setGameState] = useState('intro'); // intro, playing, won, lost, withdraw
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [revealState, setRevealState] = useState('none'); // none, selected, revealed
   const [lifelines, setLifelines] = useState({ fifty: true, phone: true, audience: true });
   const [eliminatedOptions, setEliminatedOptions] = useState<number[]>([]);
   const [modalContent, setModalContent] = useState<any>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-
-  const [questions, setQuestions] = useState<GameQuestion[]>(initialQuestions || []);
-  const [error, setError] = useState<string | null>(initialError || null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (initialError) {
-        setError(initialError);
-        setGameState('error');
-    } else if (initialQuestions && initialQuestions.length > 0) {
-        setQuestions(initialQuestions as GameQuestion[]);
-        setGameState('intro'); // Start with the intro screen
-    } else if (!userLoading) {
-        // If there are no initial questions and we are not loading user data, it's likely an error.
-        setError("Yarışma için sorular yüklenemedi veya bulunamadı.");
-        setGameState('error');
-    }
-  }, [initialQuestions, initialError, userLoading]);
-
-  const startGame = useCallback(() => {
-    if (questions.length === 0) {
-      setError("Oyun için soru yüklenemedi veya bulunamadı.");
+    if (error) {
       setGameState('error');
-      return;
+      setIsLoading(false);
+    } else if (questions) {
+      setIsLoading(false);
     }
-    setQIndex(0);
-    setGameState('playing');
-    resetQuestion();
-    setLifelines({ fifty: true, phone: true, audience: true });
-  }, [questions]);
+  }, [questions, error]);
 
   const resetQuestion = useCallback(() => {
     setSelectedOption(null);
@@ -85,7 +63,6 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   }, []);
 
   const handleEndGame = useCallback(async (endState: 'lost' | 'withdraw', prize: number, context: string) => {
-    stopSound('timer');
     setGameState(endState);
     if (user && prize > 0) {
       await addScore(user.uid, prize, context);
@@ -93,19 +70,20 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   }, [user]);
 
   const checkAnswer = useCallback((index: number) => {
-    const correctIndex = (questions[qIndex] as any).correct;
+    const correctIndex = questions![qIndex].correctAnswer;
+    const isCorrect = index === parseInt(String(correctIndex), 10);
 
-    if (index === correctIndex) {
+    if (isCorrect) {
       playSound('correct');
       setTimeout(async () => {
-        if (qIndex < questions.length - 1) {
+        if (qIndex < questions!.length - 1) {
           setQIndex(prev => prev + 1);
           resetQuestion();
         } else {
           setGameState('won');
           setShowConfetti(true);
           if (user) {
-            const finalPrize = parseInt(questions[qIndex].money.replace(/\./g, ''));
+            const finalPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
             await addScore(user.uid, finalPrize, "Milyoner Yarışmasını Kazandı");
             await checkAndAwardMillionaireBadge(user.uid);
           }
@@ -114,7 +92,7 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
     } else {
       playSound('incorrect');
       setTimeout(() => {
-        const prize = 0; 
+        const prize = 0; // No safety net for now
         handleEndGame('lost', prize, "Milyoner Yarışmasında Elendi");
       }, 2000);
     }
@@ -135,73 +113,103 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   }, [revealState, eliminatedOptions, checkAnswer]);
   
   const withdraw = useCallback(() => {
-    const currentPrize = qIndex > 0 ? parseInt(questions[qIndex - 1].money.replace(/\./g, '')) : 0;
+    const currentPrize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
     handleEndGame('withdraw', currentPrize, "Milyoner Yarışması'ndan Çekildi");
-  }, [qIndex, handleEndGame, questions]);
+  }, [qIndex, handleEndGame]);
 
   const useFiftyFifty = () => {
     if (!lifelines.fifty) return;
-    const correct = (questions[qIndex] as any).correct;
+    
+    const correct = questions![qIndex].correctAnswer;
     let wrongs = [0, 1, 2, 3].filter(i => i !== correct);
+    
     wrongs = wrongs.sort(() => Math.random() - 0.5).slice(0, 2);
+    
     setEliminatedOptions(wrongs);
     setLifelines(prev => ({ ...prev, fifty: false }));
   };
 
   const usePhone = () => {
     if (!lifelines.phone) return;
-    const correct = (questions[qIndex] as any).correct;
-    const correctLetter = ["A", "B", "C", "D"][correct];
+    
+    const correct = questions![qIndex].correctAnswer;
+    const correctLetter = ["A", "B", "C", "D"][correct as number];
+    
     const suggestion = Math.random() < 0.8 ? correctLetter : ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
-    setModalContent({ title: "Telefon Jokeri", icon: <Phone size={32} className="text-yellow-500" />, text: `Arkadaşın Abdullah düşünüyor...\n\n"Bence cevap %90 ${suggestion} şıkkı dostum. Ama son karar senin."` });
+
+    setModalContent({
+      title: "Telefon Jokeri",
+      icon: <Phone size={32} className="text-yellow-500" />,
+      text: `Arkadaşın Abdullah düşünüyor...\n\n"Bence cevap %90 ${suggestion} şıkkı dostum. Ama son karar senin."`
+    });
     setLifelines(prev => ({ ...prev, phone: false }));
   };
 
   const useAudience = () => {
     if (!lifelines.audience) return;
-    const correct = (questions[qIndex] as any).correct;
+    
+    const correct = questions![qIndex].correctAnswer;
     const percentages = [0, 0, 0, 0];
     let remaining = 100;
-    percentages[correct] = Math.floor(Math.random() * 30) + 40;
-    remaining -= percentages[correct];
+    
+    percentages[correct as number] = Math.floor(Math.random() * 30) + 40;
+    remaining -= percentages[correct as number];
+    
     const wrongOptions = [0,1,2,3].filter(i => i !== correct);
     const firstWrongShare = Math.floor(Math.random() * remaining);
     percentages[wrongOptions[0]] = firstWrongShare;
     remaining -= firstWrongShare;
+    
     const secondWrongShare = Math.floor(Math.random() * remaining);
     percentages[wrongOptions[1]] = secondWrongShare;
     remaining -= secondWrongShare;
+    
     percentages[wrongOptions[2]] = remaining;
-    setModalContent({ title: "Seyirci Jokeri", icon: <Users size={32} className="text-yellow-500" />, chart: percentages });
+
+    setModalContent({
+      title: "Seyirci Jokeri",
+      icon: <Users size={32} className="text-yellow-500" />,
+      chart: percentages
+    });
     setLifelines(prev => ({ ...prev, audience: false }));
   };
   
+  const goHome = () => router.push('/');
+  
+  const startGame = () => {
+    if (!questions || questions.length === 0) {
+      setGameState('error');
+      setError('Oyun başlatılamadı, hiç soru yüklenemedi.');
+      return;
+    }
+    setQIndex(0);
+    setScore(0);
+    setLifelines({ fifty: true, phone: true, audience: true });
+    resetQuestion();
+    setGameState('playing');
+  };
+
   const backToSetup = () => router.push('/student/milyoner-yarismasi');
 
-  if (userLoading || gameState === 'loading') {
+  if (userLoading || isLoading) {
     return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
   }
-  
-  if (gameState === 'error' || error) {
-      return (
-         <div className="flex h-screen items-center justify-center p-4 bg-[#000022] text-white">
-            <div className="bg-red-900/50 border border-red-500 px-4 py-3 rounded-lg relative max-w-md text-center" role="alert">
-                <strong className="font-bold block">Hata!</strong>
-                <span className="block sm:inline ml-2">{error || "Bilinmeyen bir hata oluştu."}</span>
-                 <div className="mt-4">
-                    <Button variant="secondary" onClick={backToSetup}>
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön
-                    </Button>
-                </div>
-            </div>
-        </div>
-      )
-  }
 
+  if (gameState === 'error') {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 font-sans relative overflow-hidden bg-[#000022]">
+        <h2 className="text-2xl font-bold text-red-500">Bir Hata Oluştu</h2>
+        <p className="text-gray-300 mt-2">{error}</p>
+        <Button onClick={backToSetup} className="mt-6">Kurulum Sayfasına Dön</Button>
+      </div>
+    );
+  }
+  
   if (gameState === 'intro') {
      return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 font-sans relative overflow-hidden bg-[#000022]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
+        
         <div className="w-48 h-48 rounded-full border-4 border-yellow-600 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(212,175,55,0.5)] bg-gradient-to-br from-blue-900 to-black animate-pulse">
           <span className="text-6xl">🏆</span>
         </div>
@@ -222,12 +230,13 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   if (gameState === 'won' || gameState === 'lost' || gameState === 'withdraw') {
     let prize = 0;
     if (gameState === 'won') prize = 1000;
-    else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(questions[qIndex - 1].money.replace(/\./g, '')) : 0;
-    else prize = 0;
+    else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
+    else prize = 0; // Baraj sistemi şimdilik yok
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 bg-[#000022] relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
+        
         <h1 className={`text-4xl font-bold mb-4 ${gameState === 'won' ? 'text-green-500' : 'text-yellow-500'}`}>
           {gameState === 'won' ? 'TEBRİKLER! BÜYÜK ÖDÜLÜ KAZANDIN! 🏆' : (gameState === 'withdraw' ? 'YARIŞMADAN ÇEKİLDİN' : 'ELENDİNİZ')}
         </h1>
@@ -236,39 +245,40 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
           <p className="text-6xl font-black text-white drop-shadow-md">{prize} Puan</p>
         </div>
         <div className="flex gap-4">
-            <Button 
-              onClick={startNewGame}
-              className="px-10 py-3 bg-blue-700 text-white rounded-full font-bold hover:bg-blue-600 transition-colors border border-gray-400 hover:border-white"
-            >
-              <Repeat className="mr-2 h-5 w-5"/> TEKRAR OYNA
+            <Button onClick={startGame} className="px-10 py-3 text-lg">
+              TEKRAR OYNA
             </Button>
-             <Button 
-              onClick={backToSetup}
-              className="px-10 py-3 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600 transition-colors border border-gray-500"
-            >
-              <Home className="mr-2 h-5 w-5"/> ANA SAYFAYA DÖN
+             <Button asChild variant="outline" className="px-10 py-3 text-lg">
+              <Link href="/student/yarismalar">
+                <Home className="mr-2 h-4 w-4" /> Çık
+              </Link>
             </Button>
         </div>
       </div>
     );
   }
 
-  const currentQ = questions[qIndex];
+  const currentQ = questions![qIndex];
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white overflow-hidden bg-[#000022] font-sans relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
       
       <style>{`
-        .hex-box { clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); }
-        .hex-box::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background: #000033; clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); z-index: -1; }
-        .answer-correct { animation: blink-correct 0.5s 3; }
-        .answer-wrong { animation: blink-wrong 0.5s 3; }
-        @keyframes blink-correct { 0%, 100% { background-color: #059669; } 50% { background-color: #34d399; } }
-        @keyframes blink-wrong { 0%, 100% { background-color: #dc2626; } 50% { background-color: #f87171; } }
+        .hex-box {
+            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
+        }
+        .hex-box::before {
+            content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
+            background: #000033;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
+            z-index: -1;
+        }
+        .answer-correct { animation: blink 0.5s 3; }
+        @keyframes blink { 0%, 100% { background-color: #059669; } 50% { background-color: #34d399; } }
       `}</style>
       
-      <div className="flex-1 flex flex-col justify-between p-4 md:p-8 relative z-10 order-2 md:order-1">
+      <div className="flex-1 flex flex-col justify-between p-4 md:p-8 relative z-10">
         
         <div className="flex justify-between items-start mb-8">
           {revealState === 'none' && (
@@ -276,20 +286,19 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
                   ÇEKİL
               </Button>
           )}
-          <div className="flex-grow"></div>
           <div className="flex gap-4">
-            <Button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="%50">
+            <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="%50">
                 <span className="text-sm">50:50</span>
                 {!lifelines.fifty && <X className="absolute text-red-600 w-full h-full" />}
-            </Button>
-            <Button onClick={usePhone} disabled={!lifelines.phone} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Telefon">
+            </button>
+            <button onClick={usePhone} disabled={!lifelines.phone} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Telefon">
                 <Phone size={20} />
                 {!lifelines.phone && <X className="absolute text-red-600 w-full h-full" />}
-            </Button>
-            <Button onClick={useAudience} disabled={!lifelines.audience} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Seyirci">
+            </button>
+            <button onClick={useAudience} disabled={!lifelines.audience} className="w-[60px] h-[40px] rounded-[50%] border-2 border-[#d4af37] flex items-center justify-center font-bold bg-[#000033] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#000033] disabled:opacity-30 disabled:cursor-not-allowed transition-colors relative" title="Seyirci">
                 <Users size={20} />
                 {!lifelines.audience && <X className="absolute text-red-600 w-full h-full" />}
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -302,50 +311,37 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
-            {currentQ.options?.map((opt, idx) => {
-                const isCorrect = idx === (currentQ as any).correct;
+            {(currentQ.options || []).map((opt, idx) => {
                 let bgClass = "bg-gradient-to-r from-[#000044] via-[#1e3c72] to-[#000044]";
                 let borderClass = "border-gray-500";
-                
-                if (revealState === 'selected' && selectedOption === idx) { 
-                    bgClass = "bg-[#d97706]"; borderClass = "border-white";
-                }
+                let textClass = "text-white";
+                if (revealState === 'selected' && selectedOption === idx) { bgClass = "bg-[#d97706]"; borderClass = "border-white"; }
                 if (revealState === 'revealed') {
-                    if (isCorrect) { 
-                        bgClass = "answer-correct bg-green-600"; borderClass = "border-green-300"; 
-                    } else if (selectedOption === idx) {
-                        bgClass = "answer-wrong bg-red-700"; borderClass = "border-red-400";
-                    }
+                    if (idx === currentQ.correctAnswer) { bgClass = "bg-[#059669] answer-correct"; borderClass = "border-[#34d399]"; } 
+                    else if (idx === selectedOption) { bgClass = "bg-[#dc2626]"; borderClass = "border-[#f87171]"; }
                 }
 
-                if (eliminatedOptions.includes(idx)) { 
-                    return <div key={idx} className="h-[52px] md:h-[60px]"></div>;
-                }
-
+                if (eliminatedOptions.includes(idx)) { return <div key={idx} className="h-[52px] md:h-[60px]"></div>; }
                 return (
-                    <Button key={idx} onClick={() => handleOptionSelect(idx)} disabled={revealState !== 'none'} className={`py-3 px-6 text-left flex items-center rounded-full border hover:border-white hover:text-yellow-300 transition-all ${bgClass} ${borderClass} h-auto justify-start`}>
+                    <button key={idx} onClick={() => handleOptionSelect(idx)} disabled={revealState !== 'none'} className={`py-3 px-6 text-left flex items-center rounded-full border hover:border-white hover:text-yellow-300 transition-all ${bgClass} ${borderClass} ${textClass} h-auto justify-start`}>
                         <span className="text-[#d4af37] font-bold mr-3 w-6 text-lg">{['A','B','C','D'][idx]}:</span>
                         <span className="flex-1 font-semibold">{opt}</span>
-                    </Button>
+                    </button>
                 );
             })}
         </div>
       </div>
 
-      <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l-2 border-blue-800 p-4 flex flex-col justify-center order-1 md:order-2">
+      <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l-2 border-blue-800 p-4 flex flex-col justify-center order-first md:order-last">
         <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
             {MONEY_LEVELS.map((money, idx) => (
                 <div key={idx} className={cn(
-                    "flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center transition-all duration-300",
-                    qIndex > idx ? 'bg-gray-700/50 text-gray-400' :
-                    qIndex === idx ? 'bg-[#d4af37] text-[#000033] font-bold scale-105 shadow-lg text-base' : 
-                    'text-[#d4af37]',
+                    "flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center",
+                    idx === qIndex ? 'bg-[#d4af37] text-[#000033] font-bold scale-105 shadow-lg text-base' : 'text-[#d4af37]',
                     "border border-transparent",
-                    idx === 4 && "border-b-2 border-yellow-300 mb-2 md:mb-0 md:border-b-0 md:border-l-2 md:ml-2 md:pl-2", // Baraj
                     idx === qIndex && "border-white"
                 )}>
-                    <span className="hidden sm:inline-block md:hidden">{idx + 1}.</span>
-                    <span>{money}</span>
+                    <span>{idx + 1}</span><Star className="w-3 h-3 mx-1 text-yellow-500"/><span>{money}</span>
                 </div>
             ))}
         </div>
@@ -370,9 +366,9 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
                         ))}
                     </div>
                 )}
-                <Button onClick={() => setModalContent(null)} className="mt-6 w-full py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm font-bold transition-colors">
+                <button onClick={() => setModalContent(null)} className="mt-6 w-full py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm font-bold transition-colors">
                     TAMAM
-                </Button>
+                </button>
             </div>
         </div>
       )}
