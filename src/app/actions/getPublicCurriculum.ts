@@ -21,7 +21,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
     noStore();
     try {
         const [coursesSnap, classesSnap] = await Promise.all([
-            getDocs(query(collection(db, 'courses'), where('isTeacherOnly', '!=', true))),
+            getDocs(query(collection(db, 'courses'))),
             getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc')))
         ]);
 
@@ -41,26 +41,24 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                     const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
                     const hasOzet = !!data.htmlContent;
                     return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet } as Topic & { hasYazilacaklarContent: boolean, hasOzetContent: boolean };
-                }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); // Only include topics with content
+                });
 
-                if (topics.length > 0) {
-                     units.push({
-                        id: unitDoc.id,
-                        title: unitDoc.data().title,
-                        topics
-                    });
-                }
-            }
+                // removed filter: .filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); 
 
-            if (units.length > 0) {
-                 const enrichedCourse: PublicCourse = {
-                    id: course.id,
-                    title: course.title,
-                    classId: course.classId,
-                    units: units
-                };
-                coursesWithContent.push(enrichedCourse);
+                 units.push({
+                    id: unitDoc.id,
+                    title: unitDoc.data().title,
+                    topics
+                });
             }
+            
+            const enrichedCourse: PublicCourse = {
+                id: course.id,
+                title: course.title,
+                classId: course.classId,
+                units: units
+            };
+            coursesWithContent.push(enrichedCourse);
         }
         
         const groupedByClass: { [classId: string]: PublicCourse[] } = {};
