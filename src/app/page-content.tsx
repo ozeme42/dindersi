@@ -68,7 +68,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                 {group.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-4 pt-4">
-                                    <Accordion type="multiple" defaultValue={group.courses.map(c => c.id)} className="w-full space-y-3">
+                                    <Accordion type="multiple" className="w-full space-y-3">
                                         {group.courses.map((course) => (
                                             <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background overflow-hidden">
                                                 <AccordionTrigger className={cn("p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary text-white", classColorMap[course.className] || defaultClassColor)}>
