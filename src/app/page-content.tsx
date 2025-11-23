@@ -206,19 +206,23 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         
          <TeacherMainButtons />
 
-        <Card>
-            <CardHeader>
-                <CardTitle>Tüm Yönetim Panelleri</CardTitle>
-                 <CardDescription>Tüm yönetimsel araçlara buradan erişebilirsiniz.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {getManagementButtons().map(({ key, href, title, icon }) =>
-                        <ManagementButton key={key} href={href} title={title} icon={icon} />
-                    )}
-                </div>
-            </CardContent>
-        </Card>
+        <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1" className="border rounded-lg bg-card shadow-sm">
+                <AccordionTrigger className="p-4 text-xl font-semibold hover:no-underline">
+                     <div>
+                        <h3 className="text-xl font-semibold">Tüm Yönetim Panelleri</h3>
+                        <p className="text-sm text-muted-foreground text-left">Tüm yönetimsel araçlara buradan erişebilirsiniz.</p>
+                    </div>
+                </AccordionTrigger>
+                <AccordionContent className="p-4 pt-0">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {getManagementButtons().map(({ key, href, title, icon }) =>
+                            <ManagementButton key={key} href={href} title={title} icon={icon} />
+                        )}
+                    </div>
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
       </main>
     </div>
   );
