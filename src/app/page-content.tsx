@@ -1,11 +1,10 @@
-
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Workflow, MonitorPlay, Gamepad2, Sun, ArrowRight } from 'lucide-react';
+import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign } from 'lucide-react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -26,6 +25,11 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
             </div>
         );
     }
+
+    const colorClasses = [
+        'bg-chart-1 text-white', 'bg-chart-2 text-white', 'bg-chart-3 text-white',
+        'bg-chart-4 text-white', 'bg-chart-5 text-white', 'bg-accent text-accent-foreground'
+    ];
     
     return (
         <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
@@ -40,18 +44,18 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                  </div>
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                    {courseGroups.map((group) => (
+                    {courseGroups.map((group, groupIndex) => (
                         <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
-                            <AccordionItem value={group.title} className="border rounded-lg bg-card shadow-sm">
-                                <AccordionTrigger className="p-4 text-xl sm:text-2xl font-semibold hover:no-underline">
+                            <AccordionItem value={group.title} className="border rounded-lg bg-card shadow-sm overflow-hidden">
+                                <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", colorClasses[groupIndex % colorClasses.length])}>
                                 {group.title}
                                 </AccordionTrigger>
-                                <AccordionContent className="p-4 pt-0">
-                                    <Accordion type="multiple" className="w-full space-y-3" defaultValue={group.courses.map(c => c.id)}>
+                                <AccordionContent className="p-4 pt-4">
+                                    <Accordion type="multiple" className="w-full space-y-3">
                                         {group.courses.map((course) => (
                                             <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
                                                 <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
-                                                    {course.className}
+                                                    {course.className === 'Genel' ? 'Genel Dersler' : `${course.className}. Sınıf`}
                                                 </AccordionTrigger>
                                                 <AccordionContent className="p-3">
                                                     {course.units.length > 0 ? (
@@ -128,14 +132,8 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     contentTeacher: {
       key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />,
     },
-    summerContent: {
-       key: 'summerContent', href: "/teacher/summer-school/content-creation", title: "Yaz Kursu İçerik", icon: <Sun />,
-    },
     studentsTeacher: {
         key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />,
-    },
-    summerStudents: {
-        key: 'summerStudents', href: '/teacher/summer-school/students', title: 'Yaz Kursu Öğrencileri', icon: <UserCog />,
     },
     questionsTeacher: {
         key: 'questionsTeacher', href: '/teacher/questions', title: 'Soru Bankası', icon: <FileCog />,
@@ -175,9 +173,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   const getManagementButtons = () => {
       const buttons = [
           managementButtons.contentTeacher,
-          managementButtons.summerContent,
           managementButtons.studentsTeacher,
-          managementButtons.summerStudents,
           managementButtons.questionsTeacher,
           managementButtons.examQuestions,
           managementButtons.activityDataBank,
