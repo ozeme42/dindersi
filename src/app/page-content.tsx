@@ -28,7 +28,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
     }
     
     return (
-        <div className="flex flex-col min-h-screen bg-grid">
+        <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
              <AppHeader />
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8">
                  <div className="text-center">
@@ -39,58 +39,60 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                     </p>
                  </div>
                  
-                <Accordion type="multiple" className="w-full space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group) => (
-                        <AccordionItem value={group.title} key={group.title} className="border rounded-lg bg-card shadow-sm">
-                            <AccordionTrigger className="p-4 text-xl sm:text-2xl font-semibold hover:no-underline">
-                               {group.title}
-                            </AccordionTrigger>
-                            <AccordionContent className="p-4 pt-0">
-                                <Accordion type="multiple" className="w-full space-y-3">
-                                    {group.courses.map((course) => (
-                                        <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
-                                            <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
-                                                {course.className}
-                                            </AccordionTrigger>
-                                            <AccordionContent className="p-3">
-                                                {course.units.length > 0 ? (
-                                                    <Accordion type="multiple" className="w-full space-y-2">
-                                                        {course.units.map(unit => (
-                                                            <AccordionItem value={unit.id} key={unit.id} className="border-b-0">
-                                                                <AccordionTrigger className="font-semibold text-base py-2">{unit.title}</AccordionTrigger>
-                                                                <AccordionContent className="pt-2 pl-4">
-                                                                    <div className="space-y-1">
-                                                                        {unit.topics.map(topic => (
-                                                                            <div key={topic.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                                                                                <span className="font-medium">{topic.title}</span>
-                                                                                <div className="flex gap-2">
-                                                                                    {topic.hasYazilacaklarContent && (
-                                                                                        <Button asChild variant="outline" size="sm">
-                                                                                            <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}><Columns className="h-4 w-4 mr-2"/>Yazılacaklar</Link>
-                                                                                        </Button>
-                                                                                    )}
-                                                                                    {topic.hasOzetContent && (
-                                                                                        <Button asChild variant="outline" size="sm">
-                                                                                            <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}><LayoutTemplate className="h-4 w-4 mr-2"/>Özet</Link>
-                                                                                        </Button>
-                                                                                    )}
+                        <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
+                            <AccordionItem value={group.title} className="border rounded-lg bg-card shadow-sm">
+                                <AccordionTrigger className="p-4 text-xl sm:text-2xl font-semibold hover:no-underline">
+                                {group.title}
+                                </AccordionTrigger>
+                                <AccordionContent className="p-4 pt-0">
+                                    <Accordion type="multiple" className="w-full space-y-3" defaultValue={group.courses.map(c => c.id)}>
+                                        {group.courses.map((course) => (
+                                            <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
+                                                <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
+                                                    {course.className}
+                                                </AccordionTrigger>
+                                                <AccordionContent className="p-3">
+                                                    {course.units.length > 0 ? (
+                                                        <Accordion type="multiple" className="w-full space-y-2">
+                                                            {course.units.map(unit => (
+                                                                <AccordionItem value={unit.id} key={unit.id} className="border-b-0">
+                                                                    <AccordionTrigger className="font-semibold text-base py-2">{unit.title}</AccordionTrigger>
+                                                                    <AccordionContent className="pt-2 pl-4">
+                                                                        <div className="space-y-1">
+                                                                            {unit.topics.map(topic => (
+                                                                                <div key={topic.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                                                                                    <span className="font-medium">{topic.title}</span>
+                                                                                    <div className="flex gap-2">
+                                                                                        {topic.hasYazilacaklarContent && (
+                                                                                            <Button asChild variant="outline" size="sm">
+                                                                                                <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}><Columns className="h-4 w-4 mr-2"/>Yazılacaklar</Link>
+                                                                                            </Button>
+                                                                                        )}
+                                                                                        {topic.hasOzetContent && (
+                                                                                            <Button asChild variant="outline" size="sm">
+                                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}><LayoutTemplate className="h-4 w-4 mr-2"/>Özet</Link>
+                                                                                            </Button>
+                                                                                        )}
+                                                                                    </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                        ))}
-                                                    </Accordion>
-                                                ) : <p className="text-sm text-muted-foreground p-2">Bu ders için henüz ünite eklenmemiş.</p>}
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    ))}
-                                </Accordion>
-                            </AccordionContent>
-                        </AccordionItem>
+                                                                            ))}
+                                                                        </div>
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            ))}
+                                                        </Accordion>
+                                                    ) : <p className="text-sm text-muted-foreground p-2">Bu ders için henüz ünite eklenmemiş.</p>}
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        ))}
+                                    </Accordion>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
                     ))}
-                </Accordion>
+                </div>
             </main>
         </div>
     );
