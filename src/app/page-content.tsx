@@ -93,7 +93,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                                                         )}
                                                                                         {topic.hasOzetContent && (
                                                                                             <Button asChild variant="outline" size="sm">
-                                                                                                <Link href={`/student/ozetler/${course.id}/${unit.id}/${topic.id}`}><LayoutTemplate className="h-4 w-4 mr-2"/>Özet</Link>
+                                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}><LayoutTemplate className="h-4 w-4 mr-2"/>Özet</Link>
                                                                                             </Button>
                                                                                         )}
                                                                                     </div>
