@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -19,43 +20,43 @@ export async function getMilyonerQuestionsAction(
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'questions'), where('type', '==', 'Çoktan Seçmeli'));
+        let q = query(collection(db, 'questions'), where('type', '==', 'Çoktan Seçmeli'));
 
         if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
+            q = query(q, where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
+            q = query(q, where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+            q = query(q, where("courseId", "==", courseId));
         }
 
-        const easyQuery = query(baseQuery, where('difficulty', '==', 'Kolay'));
-        const mediumQuery = query(baseQuery, where('difficulty', '==', 'Orta'));
-        const hardQuery = query(baseQuery, where('difficulty', '==', 'Zor'));
+        const querySnapshot = await getDocs(q);
 
-        const [easySnap, mediumSnap, hardSnap] = await Promise.all([
-            getDocs(easyQuery),
-            getDocs(mediumQuery),
-            getDocs(hardQuery)
-        ]);
-
-        const easyQuestions = easySnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
-        const mediumQuestions = mediumSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
-        const hardQuestions = hardSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
+        const allQuestions = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Question));
         
-        if (easyQuestions.length < 4 || mediumQuestions.length < 4 || hardQuestions.length < 4) {
-            return { error: "Bu yarışma için her zorluk seviyesinden (Kolay, Orta, Zor) en az 4 adet çoktan seçmeli soru bulunamadı.", questions: [] };
+        const easyQuestions = allQuestions.filter(q => q.difficulty === 'Kolay');
+        const mediumQuestions = allQuestions.filter(q => q.difficulty === 'Orta');
+        const hardQuestions = allQuestions.filter(q => q.difficulty === 'Zor');
+
+        if (easyQuestions.length < 5 || mediumQuestions.length < 5 || hardQuestions.length < 5) {
+            return { error: `Bu yarışma için yeterli sayıda soru bulunamadı. Her zorluk seviyesinden en az 5 soru gereklidir. Mevcut: ${easyQuestions.length} Kolay, ${mediumQuestions.length} Orta, ${hardQuestions.length} Zor.`, questions: [] };
         }
 
-        const selectedEasy = shuffleArray(easyQuestions).slice(0, 4);
-        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 4);
-        const selectedHard = shuffleArray(hardQuestions).slice(0, 4);
+        const selectedEasy = shuffleArray(easyQuestions).slice(0, 5);
+        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 5);
+        const selectedHard = shuffleArray(hardQuestions).slice(0, 5);
 
-        const allQuestions = [...selectedEasy, ...selectedMedium, ...selectedHard];
+        const finalQuestions = [...selectedEasy, ...selectedMedium, ...selectedHard];
 
-        return { questions: JSON.parse(JSON.stringify(allQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(finalQuestions)) };
     } catch (error: any) {
         console.error("Error getting Milyoner questions:", error);
+         if (error.code === 'failed-precondition') {
+            return { 
+                error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}`, 
+                questions: [] 
+            };
+        }
         return { error: "Milyoner yarışması soruları alınırken bir hata oluştu.", questions: [] };
     }
 }
