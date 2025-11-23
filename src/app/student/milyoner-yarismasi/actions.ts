@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -44,13 +43,13 @@ export async function getMilyonerQuestionsAction(
         const mediumQuestions = mediumSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         const hardQuestions = hardSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         
-        if (easyQuestions.length === 0 || mediumQuestions.length === 0 || hardQuestions.length === 0) {
-            return { error: "Bu yarışma için her zorluk seviyesinden (Kolay, Orta, Zor) en az bir adet çoktan seçmeli soru bulunamadı.", questions: [] };
+        if (easyQuestions.length < 4 || mediumQuestions.length < 4 || hardQuestions.length < 4) {
+            return { error: "Bu yarışma için her zorluk seviyesinden (Kolay, Orta, Zor) en az 4 adet çoktan seçmeli soru bulunamadı.", questions: [] };
         }
 
-        const selectedEasy = shuffleArray(easyQuestions).slice(0, 5);
-        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 5);
-        const selectedHard = shuffleArray(hardQuestions).slice(0, 5);
+        const selectedEasy = shuffleArray(easyQuestions).slice(0, 4);
+        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 4);
+        const selectedHard = shuffleArray(hardQuestions).slice(0, 4);
 
         const allQuestions = [...selectedEasy, ...selectedMedium, ...selectedHard];
 
@@ -101,4 +100,3 @@ export async function submitMilyonerScoreAction(userId: string | null, score: nu
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
-

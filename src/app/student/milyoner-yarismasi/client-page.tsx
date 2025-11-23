@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -158,11 +158,11 @@ export function MilyonerSetupClientPage() {
   const renderContent = () => {
       switch(currentStep) {
           case 1:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={(id, name) => handleSelectCourse(id, name)} isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
           case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={(id, name) => handleSelectUnit(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} isLoading={isLoading}/>;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
           case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={(id, name) => handleSelectTopic(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} isLoading={isLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
           case 4:
             return (
               <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
@@ -228,7 +228,7 @@ export function MilyonerSetupClientPage() {
                 (currentStep === 1 && !selection.courseId) ||
                 (currentStep === 2 && !selection.unitId) ||
                 (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
+              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
             ) : (
               <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                 <Link href={getGameUrl()}>
