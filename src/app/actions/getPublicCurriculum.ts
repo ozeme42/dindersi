@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, Timestamp } from "firebase/firestore";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -21,7 +21,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
     noStore();
     try {
         const [coursesSnap, classesSnap] = await Promise.all([
-            getDocs(query(collection(db, 'courses'))),
+            getDocs(query(collection(db, 'courses'), where('isTeacherOnly', '!=', true))),
             getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc')))
         ]);
 
@@ -85,7 +85,13 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
             .filter(group => group.courses.length > 0);
         
         if (generalCourses.length > 0) {
-            classGroups.push({ name: "Genel", courses: generalCourses });
+            // Find the correct position for "Genel"
+            const firstClass = allClasses.length > 0 ? allClasses[0].name : '';
+            if (firstClass && firstClass.startsWith('1')) {
+                 classGroups.unshift({ name: "Genel", courses: generalCourses });
+            } else {
+                 classGroups.push({ name: "Genel", courses: generalCourses });
+            }
         }
         
         return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
