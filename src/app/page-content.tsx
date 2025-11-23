@@ -18,7 +18,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
     if (courseGroups.length === 0) {
         return (
             <div className="flex flex-col min-h-screen">
-                <AppHeader />
+                
                 <main className="flex-1 flex flex-col items-center justify-center p-4">
                     <p className="text-center text-muted-foreground py-8">Gösterilecek herkese açık ders bulunmuyor.</p>
                 </main>
@@ -33,7 +33,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
     
     return (
         <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
-             <AppHeader />
+             
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8">
                 <div className="flex justify-center gap-4">
                     <Button asChild size="lg">
