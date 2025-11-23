@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
@@ -270,7 +269,7 @@ export default function StudentDashboard() {
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20">
+    <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
           {/* Player Header */}
            <Card className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
@@ -295,7 +294,7 @@ export default function StudentDashboard() {
               <Link href="/student/soru-bankasi" className="block group h-full">
                  <Card className="h-full bg-primary text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105">
                       <BookOpen className="h-10 w-10 sm:h-12 sm:w-12 opacity-80" />
-                      <p className="text-lg sm:text-2xl font-bold mt-2">Dersler ve Soru Bankası</p>
+                      <p className="text-lg sm:text-2xl font-bold mt-2">Dersler ve Çalışma</p>
                       <div className="w-full px-4 mt-4 space-y-3">
                           <div>
                               <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
@@ -306,7 +305,7 @@ export default function StudentDashboard() {
                           </div>
                           <div>
                               <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
-                                  <span>Soru Bankası Başarısı</span>
+                                  <span>Genel Başarı</span>
                                   <span>{stats.questionBankProgress}%</span>
                               </div>
                               <Progress value={stats.questionBankProgress} className="h-3 bg-white/30 [&>div]:bg-amber-400"/>
@@ -381,5 +380,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-    

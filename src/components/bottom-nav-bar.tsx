@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -42,7 +41,7 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
-        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Soru Bankası' },
+        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Çalışma' },
         { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
