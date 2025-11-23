@@ -52,12 +52,6 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                             Giriş Yap
                         </Link>
                     </Button>
-                     <Button asChild variant="default" size="lg" className="bg-green-600 hover:bg-green-700">
-                        <a href="https://drive.google.com/file/d/19J9e8KGlR_H2VxKgsegfp3EnmcClR16E/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
-                            <Smartphone className="mr-2 h-5 w-5" />
-                            Android Uygulamasını İndir
-                        </a>
-                    </Button>
                     <Button asChild variant="outline" size="lg">
                         <Link href="/leaderboard">
                             <ListOrdered className="mr-2 h-5 w-5" />
@@ -121,6 +115,22 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                     ))}
                 </div>
             </main>
+             <footer className="container mx-auto p-8 text-center">
+                <div className="flex justify-center gap-4 flex-wrap">
+                    <Button asChild size="lg" className="bg-green-600 hover:bg-green-700">
+                        <a href="https://drive.google.com/file/d/19J9e8KGlR_H2VxKgsegfp3EnmcClR16E/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+                            <Smartphone className="mr-2 h-5 w-5" />
+                            Android Uygulamasını İndir
+                        </a>
+                    </Button>
+                    <Button asChild size="lg" className="bg-sky-600 hover:bg-sky-700">
+                        <a href="https://vimeo.com/user248310384" target="_blank" rel="noopener noreferrer">
+                            <Video className="mr-2 h-5 w-5" />
+                            Videolar
+                        </a>
+                    </Button>
+                </div>
+            </footer>
         </div>
     );
 };
