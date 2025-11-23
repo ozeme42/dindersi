@@ -62,7 +62,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group, groupIndex) => (
-                        <Accordion type="multiple" defaultValue={group.courses.map(course => course.id)} className="w-full space-y-4" key={group.title}>
+                        <Accordion type="multiple" className="w-full space-y-4" key={group.title}>
                             <AccordionItem value={group.title} className="border rounded-lg bg-card/30 shadow-sm overflow-hidden backdrop-blur-sm">
                                 <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", groupColorClasses[groupIndex % groupColorClasses.length])}>
                                 {group.title}
@@ -83,9 +83,9 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                                     <AccordionContent className="pt-2 pl-4">
                                                                         <div className="space-y-1">
                                                                             {unit.topics.map(topic => (
-                                                                                <div key={topic.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
-                                                                                    <span className="font-medium">{topic.title}</span>
-                                                                                    <div className="flex gap-2">
+                                                                                <div key={topic.id} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-2 rounded-md hover:bg-muted/50">
+                                                                                    <span className="font-medium flex-1">{topic.title}</span>
+                                                                                    <div className="flex gap-2 self-end sm:self-center">
                                                                                         {topic.hasYazilacaklarContent && (
                                                                                             <Button asChild variant="outline" size="sm">
                                                                                                 <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}><Columns className="h-4 w-4 mr-2"/>Yazılacaklar</Link>
