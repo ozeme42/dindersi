@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign } from 'lucide-react';
+import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered } from 'lucide-react';
+import React from 'react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
 import type { CourseGroup } from './actions/getPublicCurriculum';
-import React, { type ReactNode } from "react";
 import { cn } from '@/lib/utils';
 
 
@@ -35,13 +35,20 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
         <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
              <AppHeader />
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8">
-                 <div className="text-center">
-                    <h1 className="text-4xl sm:text-5xl font-bold font-headline text-primary drop-shadow-lg">Değerler Oyunu</h1>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Eğlenerek öğrenmeye hoş geldiniz! Aşağıdaki ders içeriklerini keşfedin veya
-                        yarışmalara katılmak için giriş yapın.
-                    </p>
-                 </div>
+                <div className="flex justify-center gap-4">
+                    <Button asChild size="lg">
+                        <Link href="/login">
+                            <LogIn className="mr-2 h-5 w-5" />
+                            Giriş Yap
+                        </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="lg">
+                        <Link href="/leaderboard">
+                            <ListOrdered className="mr-2 h-5 w-5" />
+                            Liderlik Tablosu
+                        </Link>
+                    </Button>
+                </div>
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group, groupIndex) => (
@@ -51,7 +58,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                 {group.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-4 pt-4">
-                                    <Accordion type="multiple" className="w-full space-y-3">
+                                    <Accordion type="single" collapsible className="w-full space-y-3">
                                         {group.courses.map((course) => (
                                             <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
                                                 <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
@@ -102,7 +109,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
     );
 };
 
-const ManagementButton = ({ href, title, icon }: { href: string, title: string, icon: ReactNode }) => {
+const ManagementButton = ({ href, title, icon }: { href: string, title: string, icon: React.ReactNode }) => {
     return (
         <Link href={href} className="block group">
             <div className="p-4 rounded-lg flex flex-col items-center justify-center text-center shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-40 bg-background hover:bg-muted border">
