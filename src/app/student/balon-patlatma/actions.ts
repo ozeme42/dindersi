@@ -2,20 +2,15 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
-import { unstable_noStore as noStore } from 'next/cache';
+import { collection, query, where, getDocs } from "firebase/firestore";
 import type { ActivityItem } from '@/lib/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
-export type Balloon = {
-    id: number;
-    word: string;
-    isCorrect: boolean;
-};
 
-export type BalloonRound = {
+export type BalloonPoppingRound = {
     definition: string;
-    correctWord: string;
-    balloons: Balloon[];
+    target: string;
+    words: string[]; // A shuffled array of the target word and several trap words
 };
 
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -27,107 +22,72 @@ const shuffleArray = <T>(array: T[]): T[] => {
     return newArray;
 };
 
-
-export async function getBalloonGameAction(
+export async function getBalloonPoppingAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ rounds: BalloonRound[]; error?: string }> {
+): Promise<{ data: BalloonPoppingRound[] | null; error?: string }> {
     noStore();
     try {
-        let definitionsQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
-        let conceptsQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
-
-        if (topicId && topicId !== 'all') {
-            definitionsQuery = query(definitionsQuery, where("topicId", "==", topicId));
-            conceptsQuery = query(conceptsQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            definitionsQuery = query(definitionsQuery, where("unitId", "==", unitId));
-            conceptsQuery = query(conceptsQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            definitionsQuery = query(definitionsQuery, where("courseId", "==", courseId));
-            conceptsQuery = query(conceptsQuery, where("courseId", "==", courseId));
+        if (!topicId || topicId === 'all') {
+             return { error: "Lütfen oynamak için belirli bir konu seçin.", data: null };
         }
-
-        const [definitionsSnapshot, conceptsSnapshot] = await Promise.all([
-            getDocs(definitionsQuery),
-            getDocs(conceptsQuery)
-        ]);
-
-        const definitions = definitionsSnapshot.docs.map(doc => doc.data() as ActivityItem).filter(item => item.content?.term && item.content?.definition);
-        const conceptPool = conceptsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.text!).filter(Boolean);
-
-        if (definitions.length < 5) {
-            return { error: `Bu oyun için en az 5 tanım gereklidir. Bulunan: ${definitions.length}`, rounds: [] };
+        if (!unitId && !courseId) {
+             return { error: "Oyun için yeterli bağlam (ünite veya ders) bulunamadı.", data: null };
         }
-        if (conceptPool.length < 10) {
-             return { error: `Bu oyun için en az 10 farklı kavram gereklidir (çeldiriciler için). Bulunan: ${conceptPool.length}`, rounds: [] };
-        }
-
-        const shuffledDefinitions = shuffleArray(definitions).slice(0, 10); // 10 rounds
-
-        const rounds: BalloonRound[] = shuffledDefinitions.map((def, index) => {
-            const correctWord = def.content.term!;
-            const distractors = shuffleArray(conceptPool.filter(c => c !== correctWord)).slice(0, 5);
-            
-            const balloonWords = shuffleArray([correctWord, ...distractors]);
-            
-            const balloons: Balloon[] = balloonWords.map((word, i) => ({
-                id: i,
-                word: word,
-                isCorrect: word === correctWord,
-            }));
-            
-            return {
-                definition: def.content.definition!,
-                correctWord: correctWord,
-                balloons: balloons,
-            };
-        });
-
-        return { rounds: JSON.parse(JSON.stringify(rounds)) };
-
-    } catch (error: any) {
-        console.error("Error getting Balloon Pop data:", error);
-        return { error: "Balon Patlatma oyunu verileri alınırken bir hata oluştu.", rounds: [] };
-    }
-}
-
-
-export async function submitBalloonPopScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) {
-        return { success: true };
-    }
-    
-    try {
-        const attemptsQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', userId),
-            where('gameType', '==', 'Balon Patlatma'),
-            where('context', '==', context)
-        );
-        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
-            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
-        }
-
-        const batch = writeBatch(db);
         
-        const userRef = doc(db, 'users', userId);
-        batch.update(userRef, { score: increment(score) });
+        const definitionsQuery = query(
+            collection(db, 'activityItems'),
+            where('type', '==', 'definition'),
+            where('topicId', '==', topicId)
+        );
+        
+        const definitionsSnapshot = await getDocs(definitionsQuery);
+        const topicDefinitions = definitionsSnapshot.docs
+            .map(doc => doc.data() as ActivityItem)
+            .filter(item => item.content?.term && item.content?.definition);
 
-        const eventRef = doc(collection(db, 'scoreEvents'));
-        batch.set(eventRef, {
-            userId: userId,
-            points: score,
-            timestamp: serverTimestamp(),
-            gameType: 'Balon Patlatma',
-            context: context,
-        });
+        if (topicDefinitions.length < 1) {
+            return { error: "Balon Patlatma oyunu için bu konuda uygun tanım-kavram çifti bulunamadı.", data: null };
+        }
 
-        await batch.commit();
+        let conceptsQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
+        if (unitId && unitId !== 'all') {
+            conceptsQuery = query(conceptsQuery, where('unitId', '==', unitId));
+        } else if (courseId) {
+            conceptsQuery = query(conceptsQuery, where('courseId', '==', courseId));
+        }
 
-        return { success: true };
+        const conceptsSnapshot = await getDocs(conceptsQuery);
+        const distractorPool = conceptsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.text!).filter(Boolean);
+        const uniqueDistractors = [...new Set(distractorPool)];
+
+        const selectedDefinitions = topicDefinitions.sort((a, b) => (a.content.term || '').localeCompare(b.content.term || ''));
+
+        const gameRounds: BalloonPoppingRound[] = [];
+        for (const item of selectedDefinitions) {
+            const target = item.content.term!;
+            const traps = shuffleArray(uniqueDistractors.filter(d => d !== target)).slice(0, 8);
+            
+            if (traps.length < 3) {
+                continue;
+            }
+
+            const wordsForRound = shuffleArray([target, ...traps]);
+
+            gameRounds.push({
+                definition: item.content.definition!,
+                target: target,
+                words: wordsForRound,
+            });
+        }
+        
+        if (gameRounds.length === 0) {
+            return { error: "Oyun için yeterli sayıda seçenek/tuzak kelime bulunamadı. Lütfen veri bankasına daha fazla kavram ekleyin.", data: null };
+        }
+
+        return { data: JSON.parse(JSON.stringify(gameRounds)) };
+
     } catch (error: any) {
-        console.error("Error submitting Balon Patlatma score:", error);
-        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
+        console.error("Error getting Balloon Popping data:", error);
+        return { error: "Oyun verileri alınırken bir hata oluştu.", data: null };
     }
 }
