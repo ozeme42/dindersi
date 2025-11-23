@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered } from 'lucide-react';
+import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone } from 'lucide-react';
 import React from 'react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -45,12 +45,18 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
         <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
              
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8">
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-4 flex-wrap">
                     <Button asChild size="lg">
                         <Link href="/login">
                             <LogIn className="mr-2 h-5 w-5" />
                             Giriş Yap
                         </Link>
+                    </Button>
+                     <Button asChild variant="default" size="lg" className="bg-green-600 hover:bg-green-700">
+                        <a href="https://drive.google.com/file/d/19J9e8KGlR_H2VxKgsegfp3EnmcClR16E/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+                            <Smartphone className="mr-2 h-5 w-5" />
+                            Android Uygulamasını İndir
+                        </a>
                     </Button>
                     <Button asChild variant="outline" size="lg">
                         <Link href="/leaderboard">
@@ -62,7 +68,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group, groupIndex) => (
-                        <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
+                        <Accordion type="multiple" className="w-full space-y-4" key={group.title}>
                             <AccordionItem value={group.title} className="border rounded-lg bg-card/70 shadow-sm overflow-hidden backdrop-blur-sm">
                                 <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", groupColorClasses[groupIndex % groupColorClasses.length])}>
                                 {group.title}
