@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
 import type { PublicClass } from './actions/getPublicCurriculum';
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { cn } from '@/lib/utils';
 
 
