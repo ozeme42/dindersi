@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -7,10 +6,16 @@ import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, s
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 
-export type BalloonPoppingRound = {
+export type Balloon = {
+    id: number;
+    word: string;
+    isCorrect: boolean;
+};
+
+export type BalloonRound = {
     definition: string;
-    target: string;
-    words: string[];
+    correctWord: string;
+    balloons: Balloon[];
 };
 
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -22,78 +27,72 @@ const shuffleArray = <T>(array: T[]): T[] => {
     return newArray;
 };
 
-export async function getBalloonPoppingAction(
+
+export async function getBalloonGameAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ data: BalloonPoppingRound[] | null; error?: string }> {
+): Promise<{ rounds: BalloonRound[]; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-             return { error: "Lütfen oynamak için belirli bir konu seçin.", data: null };
-        }
-        if (!unitId && !courseId) {
-             return { error: "Oyun için yeterli bağlam (ünite veya ders) bulunamadı.", data: null };
-        }
-        
-        const definitionsQuery = query(
-            collection(db, 'activityItems'),
-            where('type', '==', 'definition'),
-            where('topicId', '==', topicId)
-        );
-        
-        const definitionsSnapshot = await getDocs(definitionsQuery);
-        const topicDefinitions = definitionsSnapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
-
-        if (topicDefinitions.length < 1) {
-            return { error: "Balon Patlatma oyunu için bu konuda uygun tanım-kavram çifti bulunamadı.", data: null };
-        }
-
+        let definitionsQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
         let conceptsQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
-        if (unitId && unitId !== 'all') {
-            conceptsQuery = query(conceptsQuery, where('unitId', '==', unitId));
-        } else if (courseId) {
-            conceptsQuery = query(conceptsQuery, where('courseId', '==', courseId));
+
+        if (topicId && topicId !== 'all') {
+            definitionsQuery = query(definitionsQuery, where("topicId", "==", topicId));
+            conceptsQuery = query(conceptsQuery, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            definitionsQuery = query(definitionsQuery, where("unitId", "==", unitId));
+            conceptsQuery = query(conceptsQuery, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            definitionsQuery = query(definitionsQuery, where("courseId", "==", courseId));
+            conceptsQuery = query(conceptsQuery, where("courseId", "==", courseId));
         }
 
-        const conceptsSnapshot = await getDocs(conceptsQuery);
-        const distractorPool = conceptsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.text!).filter(Boolean);
-        const uniqueDistractors = [...new Set(distractorPool)];
+        const [definitionsSnapshot, conceptsSnapshot] = await Promise.all([
+            getDocs(definitionsQuery),
+            getDocs(conceptsQuery)
+        ]);
 
-        const selectedDefinitions = topicDefinitions.sort((a, b) => (a.content.term || '').localeCompare(b.content.term || ''));
+        const definitions = definitionsSnapshot.docs.map(doc => doc.data() as ActivityItem).filter(item => item.content?.term && item.content?.definition);
+        const conceptPool = conceptsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.text!).filter(Boolean);
 
-        const gameRounds: BalloonPoppingRound[] = [];
-        for (const item of selectedDefinitions) {
-            const target = item.content.term!;
-            const traps = shuffleArray(uniqueDistractors.filter(d => d !== target)).slice(0, 5);
+        if (definitions.length < 5) {
+            return { error: `Bu oyun için en az 5 tanım gereklidir. Bulunan: ${definitions.length}`, rounds: [] };
+        }
+        if (conceptPool.length < 10) {
+             return { error: `Bu oyun için en az 10 farklı kavram gereklidir (çeldiriciler için). Bulunan: ${conceptPool.length}`, rounds: [] };
+        }
+
+        const shuffledDefinitions = shuffleArray(definitions).slice(0, 10); // 10 rounds
+
+        const rounds: BalloonRound[] = shuffledDefinitions.map((def, index) => {
+            const correctWord = def.content.term!;
+            const distractors = shuffleArray(conceptPool.filter(c => c !== correctWord)).slice(0, 5);
             
-            if (traps.length < 3) {
-                continue;
-            }
+            const balloonWords = shuffleArray([correctWord, ...distractors]);
+            
+            const balloons: Balloon[] = balloonWords.map((word, i) => ({
+                id: i,
+                word: word,
+                isCorrect: word === correctWord,
+            }));
+            
+            return {
+                definition: def.content.definition!,
+                correctWord: correctWord,
+                balloons: balloons,
+            };
+        });
 
-            const singleWords = [target, ...traps];
-            const wordsForRound = shuffleArray([...singleWords, ...singleWords]);
-
-            gameRounds.push({
-                definition: item.content.definition!,
-                target: target,
-                words: wordsForRound,
-            });
-        }
-        
-        if (gameRounds.length === 0) {
-            return { error: "Oyun için yeterli sayıda seçenek/tuzak kelime bulunamadı.", data: null };
-        }
-
-        return { data: JSON.parse(JSON.stringify(gameRounds)) };
+        return { rounds: JSON.parse(JSON.stringify(rounds)) };
 
     } catch (error: any) {
-        console.error("Error getting Balloon Popping data:", error);
-        return { error: "Oyun verileri alınırken bir hata oluştu.", data: null };
+        console.error("Error getting Balloon Pop data:", error);
+        return { error: "Balon Patlatma oyunu verileri alınırken bir hata oluştu.", rounds: [] };
     }
 }
 
-export async function submitBalloonPoppingScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+
+export async function submitBalloonPopScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) {
         return { success: true };
     }
@@ -111,21 +110,24 @@ export async function submitBalloonPoppingScoreAction(userId: string | null, sco
         }
 
         const batch = writeBatch(db);
+        
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
+
         const eventRef = doc(collection(db, 'scoreEvents'));
         batch.set(eventRef, {
-            userId,
+            userId: userId,
             points: score,
             timestamp: serverTimestamp(),
             gameType: 'Balon Patlatma',
-            context,
+            context: context,
         });
 
         await batch.commit();
+
         return { success: true };
     } catch (error: any) {
-        console.error("Error submitting score:", error);
+        console.error("Error submitting Balon Patlatma score:", error);
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
