@@ -26,10 +26,20 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
         );
     }
 
-    const colorClasses = [
+    const groupColorClasses = [
         'bg-chart-1 text-white', 'bg-chart-2 text-white', 'bg-chart-3 text-white',
         'bg-chart-4 text-white', 'bg-chart-5 text-white', 'bg-accent text-accent-foreground'
     ];
+    
+    const classColorMap: { [key: string]: string } = {
+        '5': 'bg-sky-600',
+        '6': 'bg-emerald-600',
+        '7': 'bg-amber-600',
+        '8': 'bg-rose-600',
+        'Lise': 'bg-indigo-600',
+        'Genel': 'bg-slate-600',
+    };
+    const defaultClassColor = 'bg-gray-600';
     
     return (
         <div className="flex flex-col min-h-screen bg-grid pb-20 md:pb-8">
@@ -54,19 +64,19 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                     {courseGroups.map((group, groupIndex) => (
                         <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
                             <AccordionItem value={group.title} className="border rounded-lg bg-card shadow-sm overflow-hidden">
-                                <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", colorClasses[groupIndex % colorClasses.length])}>
+                                <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", groupColorClasses[groupIndex % groupColorClasses.length])}>
                                 {group.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-4 pt-4">
                                     <Accordion type="multiple" defaultValue={group.courses.map(c => c.id)} className="w-full space-y-3">
-                                        {group.courses.map((course, courseIndex) => (
+                                        {group.courses.map((course) => (
                                             <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background overflow-hidden">
-                                                <AccordionTrigger className={cn("p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary", colorClasses[(courseIndex + groupIndex + 1) % colorClasses.length])}>
+                                                <AccordionTrigger className={cn("p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary text-white", classColorMap[course.className] || defaultClassColor)}>
                                                     {course.className === 'Genel' ? 'Genel Dersler' : `${course.className}. Sınıf`}
                                                 </AccordionTrigger>
                                                 <AccordionContent className="p-3">
                                                     {course.units.length > 0 ? (
-                                                        <Accordion type="single" collapsible className="w-full space-y-2">
+                                                        <Accordion type="multiple" className="w-full space-y-2">
                                                             {course.units.map(unit => (
                                                                 <AccordionItem value={unit.id} key={unit.id} className="border-b-0">
                                                                     <AccordionTrigger className="font-semibold text-base py-2">{unit.title}</AccordionTrigger>
