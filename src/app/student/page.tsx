@@ -270,7 +270,7 @@ export default function StudentDashboard() {
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
+    <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
           {/* Player Header */}
            <Card className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
@@ -381,3 +381,5 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+    
