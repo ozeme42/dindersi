@@ -2,21 +2,21 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Trophy, PartyPopper, Home, Repeat, ArrowLeft } from 'lucide-react';
+import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Repeat, Home, PartyPopper } from 'lucide-react';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-dom-confetti';
-import { addScore, checkAndAwardMillionaireBadge } from './actions';
+import { addScore, checkAndAwardMillionaireBadge } from '../actions';
 import { getMilyonerQuestionsAction } from '../actions';
 import type { Question } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter } from '@/components/ui/alert-dialog';
-import Link from 'next/link';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const MONEY_LEVELS = [
-    "100", "200", "300", "400", "500", "600", "700", "800", "900", "1.000"
+  "100", "200", "300", "400", "500", 
+  "600", "700", "800", "900", "1.000"
 ];
 
 const confettiConfig = {
@@ -34,11 +34,9 @@ const confettiConfig = {
 };
 
 function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestions: Question[] | null, initialError?: string }) {
-    const { user, loading: userLoading } = useAuth();
     const router = useRouter();
-    const { toast } = useToast();
-
-    const [questions, setQuestions] = useState<Question[]>(initialQuestions || []);
+    const { user, loading: userLoading } = useAuth();
+    
     const [qIndex, setQIndex] = useState(0);
     const [gameState, setGameState] = useState('intro'); // intro, playing, won, lost, withdraw
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -47,7 +45,9 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
     const [eliminatedOptions, setEliminatedOptions] = useState<number[]>([]);
     const [modalContent, setModalContent] = useState<any>(null);
     const [showConfetti, setShowConfetti] = useState(false);
-    const [guaranteedMoney, setGuaranteedMoney] = useState(0);
+    const [guaranteedMoney, setGuaranteedMoney] = useState("0");
+    const [questions, setQuestions] = useState<Question[]>(initialQuestions || []);
+    const [error, setError] = useState<string | null>(initialError || null);
 
     const resetQuestion = useCallback(() => {
         setSelectedOption(null);
@@ -64,14 +64,14 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
     }, [user]);
 
     const checkAnswer = useCallback((index: number) => {
-        if (qIndex >= questions.length) return;
         const correctIndex = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
 
         if (index === correctIndex) {
             playSound('correct');
             setTimeout(async () => {
-                if (qIndex === 4) setGuaranteedMoney(500); 
-                if (qIndex === 9) setGuaranteedMoney(1000);
+                const currentPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
+                if (currentPrize >= 500) setGuaranteedMoney("500");
+                if (currentPrize >= 5000) setGuaranteedMoney("5000");
 
                 if (qIndex < questions.length - 1) {
                     setQIndex(prev => prev + 1);
@@ -89,10 +89,12 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
         } else {
             playSound('incorrect');
             setTimeout(() => {
-                handleEndGame('lost', guaranteedMoney, "Milyoner Yarışmasında Elendi");
+                const prize = parseInt(guaranteedMoney.replace(/\./g, ''));
+                handleEndGame('lost', prize, "Milyoner Yarışmasında Elendi");
             }, 2000);
         }
-    }, [qIndex, questions, resetQuestion, user, handleEndGame, guaranteedMoney]);
+    }, [qIndex, resetQuestion, user, handleEndGame, questions, guaranteedMoney]);
+
 
     const handleOptionSelect = useCallback((index: number) => {
         if (revealState !== 'none' || eliminatedOptions.includes(index)) return;
@@ -107,16 +109,18 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
             checkAnswer(index);
         }, 3000);
     }, [revealState, eliminatedOptions, checkAnswer]);
-    
+      
     const withdraw = useCallback(() => {
         const currentPrize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
         handleEndGame('withdraw', currentPrize, "Milyoner Yarışması'ndan Çekildi");
     }, [qIndex, handleEndGame]);
 
     const useFiftyFifty = () => {
-        if (!lifelines.fifty || qIndex >= questions.length) return;
+        if (!lifelines.fifty) return;
         
         const correctIndex = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
+        if(correctIndex === undefined) return;
+
         let wrongs = [0, 1, 2, 3].filter(i => i !== correctIndex);
         
         wrongs = wrongs.sort(() => Math.random() - 0.5).slice(0, 2);
@@ -126,32 +130,34 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
     };
 
     const usePhone = () => {
-        if (!lifelines.phone || qIndex >= questions.length) return;
+        if (!lifelines.phone) return;
         
-        const correctIndex = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
-        const correctLetter = ["A", "B", "C", "D"][correctIndex!];
-        
+        const correct = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
+        if(correct === undefined) return;
+
+        const correctLetter = ["A", "B", "C", "D"][correct];
         const suggestion = Math.random() < 0.8 ? correctLetter : ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
 
         setModalContent({
             title: "📞 Telefon Jokeri",
-            icon: <Phone size={32} className="text-yellow-500" />,
             text: `Arkadaşın Abdullah düşünüyor...\n\n"Bence cevap %90 ${suggestion} şıkkı dostum. Ama son karar senin."`
         });
         setLifelines(prev => ({ ...prev, phone: false }));
     };
 
     const useAudience = () => {
-        if (!lifelines.audience || qIndex >= questions.length) return;
+        if (!lifelines.audience) return;
         
-        const correctIndex = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
+        const correct = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
+        if(correct === undefined) return;
+        
         const percentages = [0, 0, 0, 0];
         let remaining = 100;
         
-        percentages[correctIndex!] = Math.floor(Math.random() * 30) + 40; // 40-69%
-        remaining -= percentages[correctIndex!];
+        percentages[correct] = Math.floor(Math.random() * 30) + 40; // %40-70 arası
+        remaining -= percentages[correct];
         
-        const wrongOptions = [0,1,2,3].filter(i => i !== correctIndex);
+        const wrongOptions = [0,1,2,3].filter(i => i !== correct);
         const firstWrongShare = Math.floor(Math.random() * remaining);
         percentages[wrongOptions[0]] = firstWrongShare;
         remaining -= firstWrongShare;
@@ -164,169 +170,168 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
 
         setModalContent({
             title: "👥 Seyirci Jokeri",
-            icon: <Users size={32} className="text-yellow-500" />,
             chart: percentages
         });
         setLifelines(prev => ({ ...prev, audience: false }));
     };
 
-    const startGame = () => {
+    const startGame = useCallback(() => {
+        if (userLoading) return;
+        if (error) {
+            setGameState('error');
+            return;
+        }
         setQIndex(0);
         setGameState('playing');
         setLifelines({ fifty: true, phone: true, audience: true });
-        setGuaranteedMoney(0);
+        setGuaranteedMoney("0");
         resetQuestion();
-    };
+    }, [userLoading, error, resetQuestion]);
 
     const goHome = () => router.push('/');
 
     if (userLoading) {
-        return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
+      return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
     }
     
-     if (initialError) {
-        return (
-             <div className="flex h-screen items-center justify-center p-4">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
-                    <strong className="font-bold">Hata! </strong>
-                    <span className="block sm:inline ml-2">{initialError}</span>
-                     <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href="/student/milyoner-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
-                        </Button>
-                    </div>
-                </div>
+    if (gameState === 'error') {
+         return (
+             <div className="min-h-screen bg-milyoner flex flex-col items-center justify-center text-center p-4">
+                <h1 className="text-2xl font-bold mb-4 text-red-500">Bir Hata Oluştu</h1>
+                <p className="text-gray-300 mb-8">{error}</p>
+                 <Button asChild><Link href="/student/milyoner-yarismasi">Geri Dön</Link></Button>
             </div>
-        );
+         )
     }
-    
+
     if (gameState === 'intro') {
         return (
             <div className="min-h-screen bg-milyoner flex flex-col items-center justify-center text-center p-4">
-                 <div className="w-48 h-48 rounded-full border-4 border-yellow-600 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(212,175,55,0.5)] bg-gradient-to-br from-blue-900 to-black">
+                <div className="w-48 h-48 rounded-full border-4 border-yellow-600 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(212,175,55,0.5)] bg-gradient-to-br from-blue-900 to-black">
                     <span className="text-6xl">🏆</span>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 mb-4 header-font drop-shadow-lg">
                     KİM 1000 PUAN İSTER?
                 </h1>
-                <p className="text-gray-300 mb-8 text-lg font-medium">Bilgilerini Test Et, Büyük Ödülü Kazan!</p>
-                <Button 
+                <p className="text-gray-300 mb-8 text-lg">Bilgilerini Test Et, Büyük Ödülü Kazan!</p>
+                <button 
                     onClick={startGame}
-                    size="lg"
-                    className="h-14 px-12 text-xl bg-gradient-to-r from-blue-800 to-blue-600 border-2 border-gray-400 rounded-full font-bold hover:border-yellow-500 hover:text-yellow-400 hover:scale-105 transition-all shadow-lg"
+                    className="px-12 py-4 bg-gradient-to-r from-blue-800 to-blue-600 border-2 border-gray-400 rounded-full text-xl font-bold hover:border-yellow-500 hover:text-yellow-400 hover:scale-105 transition-all shadow-lg"
                 >
                     YARIŞMAYA BAŞLA
-                </Button>
+                </button>
             </div>
         );
     }
-
+    
     if (gameState === 'won' || gameState === 'lost' || gameState === 'withdraw') {
         let prize = 0;
         if (gameState === 'won') prize = 1000;
         else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
-        else prize = guaranteedMoney;
+        else prize = parseInt(guaranteedMoney.replace(/\./g, ''));
 
         return (
             <div className="min-h-screen bg-milyoner flex flex-col items-center justify-center text-center p-4">
                 <h1 className={`text-4xl font-bold mb-4 ${gameState === 'won' ? 'text-green-500' : 'text-yellow-500'}`}>
-                    {gameState === 'won' ? 'BÜYÜK ÖDÜLÜ KAZANDIN! 🏆' : (gameState === 'withdraw' ? 'YARIŞMADAN ÇEKİLDİN' : 'ELENDİNİZ')}
+                    {gameState === 'won' ? 'TEBRİKLER! BÜYÜK ÖDÜLÜ KAZANDIN! 🏆' : (gameState === 'withdraw' ? 'YARIŞMADAN ÇEKİLDİN' : 'ELENDİNİZ')}
                 </h1>
                 <div className="bg-blue-900/50 p-8 rounded-2xl border border-blue-500 mb-8">
                     <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Kazanılan Ödül</p>
                     <p className="text-5xl font-black text-white header-font">{prize} Puan</p>
                 </div>
                 <div className="flex gap-4">
-                    <Button onClick={startGame} size="lg" className="h-14">
-                        <Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna
-                    </Button>
-                    <Button asChild size="lg" variant="secondary" className="h-14">
-                        <Link href="/"><Home className="mr-2 h-5 w-5"/> Ana Sayfa</Link>
-                    </Button>
+                    <button 
+                    onClick={startGame}
+                    className="px-10 py-3 bg-blue-700 rounded-full font-bold hover:bg-blue-600 transition-colors border border-gray-400 hover:border-white"
+                    >
+                    TEKRAR OYNA
+                    </button>
+                    <button 
+                        onClick={goHome}
+                        className="px-10 py-3 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600 transition-colors border border-gray-500"
+                    >
+                        ANA SAYFA
+                    </button>
                 </div>
             </div>
         );
     }
 
     const currentQ = questions[qIndex];
-    if (!currentQ || !currentQ.options) {
-        return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
+    if (!currentQ) {
+         return (
+             <div className="min-h-screen bg-milyoner flex flex-col items-center justify-center text-center p-4">
+                <Loader2 className="h-12 w-12 animate-spin text-white mb-4"/>
+                <p>Sorular yükleniyor...</p>
+            </div>
+         );
     }
-
+    const correctIndex = currentQ.options?.indexOf(currentQ.correctAnswer!);
 
     return (
-        <div className="min-h-screen bg-milyoner flex flex-col md:flex-row text-white overflow-hidden">
+        <div className="min-h-screen bg-milyoner flex flex-col md:flex-row text-white overflow-hidden font-sans relative">
+            <style>{`
+                .hex-box { clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); }
+                .hex-box::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background: #000033; clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); z-index: -1; }
+                .answer-correct { animation: blink 0.5s 3; }
+                @keyframes blink { 0%, 100% { background-color: #059669; } 50% { background-color: #34d399; } }
+            `}</style>
+            
             <div className="flex-1 flex flex-col justify-between p-4 md:p-8 relative z-10">
+                
                 <div className="flex justify-between items-start mb-8">
                     {revealState === 'none' && (
-                        <Button onClick={withdraw} variant="outline" className="border-red-500 text-red-400 hover:bg-red-900/50 hover:text-red-300 font-bold">
-                            ÇEKİL
-                        </Button>
+                        <button onClick={withdraw} className="px-4 py-2 border border-red-500 text-red-400 rounded hover:bg-red-900/50 transition-colors text-sm font-bold">ÇEKİL</button>
                     )}
-                     <div className="flex-1" /> {/* Spacer */}
                     <div className="flex gap-4">
-                        <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="lifeline-btn" title="%50">50:50</button>
-                        <button onClick={usePhone} disabled={!lifelines.phone} className="lifeline-btn" title="Telefon">📞</button>
-                        <button onClick={useAudience} disabled={!lifelines.audience} className="lifeline-btn" title="Seyirci">👥</button>
+                        <button onClick={useFiftyFifty} disabled={!lifelines.fifty} className="lifeline-btn" title="%50"><span className="text-sm">50:50</span>{!lifelines.fifty && <X className="absolute text-red-600 w-full h-full" />}</button>
+                        <button onClick={usePhone} disabled={!lifelines.phone} className="lifeline-btn" title="Telefon"><Phone size={20} />{!lifelines.phone && <X className="absolute text-red-600 w-full h-full" />}</button>
+                        <button onClick={useAudience} disabled={!lifelines.audience} className="lifeline-btn" title="Seyirci"><Users size={20} />{!lifelines.audience && <X className="absolute text-red-600 w-full h-full" />}</button>
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="hex-box w-full min-h-[120px] px-12 py-6 mb-8">
-                        <h2 className="text-lg md:text-2xl font-bold text-white leading-relaxed z-10">
-                            {currentQ.q}
-                        </h2>
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="hex-box w-full min-h-[120px] px-12 py-6 mb-8 bg-gradient-to-b from-[#1e3c72] to-[#2a5298] border-2 border-[#d4af37] flex items-center justify-center text-center shadow-[0_0_15px_rgba(212,175,55,0.3)] relative">
+                        <h2 className="text-lg md:text-2xl font-bold text-white leading-relaxed">{currentQ.text}</h2>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
-                    {currentQ.options.map((opt, idx) => {
+                    {currentQ.options?.map((opt, idx) => {
                         let statusClass = "";
                         if (revealState === 'selected' && selectedOption === idx) statusClass = "selected";
                         if (revealState === 'revealed') {
-                            if (idx === questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!)) statusClass = "correct";
+                            if (idx === correctIndex) statusClass = "correct";
                             else if (idx === selectedOption) statusClass = "wrong";
                         }
                         if (eliminatedOptions.includes(idx)) return <div key={idx} className="h-[52px] md:h-[60px]"></div>;
-                        
                         return (
-                            <Button
-                                key={idx}
-                                onClick={() => handleOptionSelect(idx)}
-                                disabled={revealState !== 'none'}
-                                className={cn("answer-btn py-3 px-6 text-left flex items-center h-auto justify-start text-base", statusClass)}
-                            >
-                                <span className="text-[#d4af37] font-bold mr-3 w-6">{['A','B','C','D'][idx]}:</span>
+                            <button key={idx} onClick={() => handleOptionSelect(idx)} disabled={revealState !== 'none'} className={`answer-btn py-3 px-6 text-left flex items-center h-auto justify-start ${statusClass}`}>
+                                <span className="text-[#d4af37] font-bold mr-3 w-6 text-lg">{['A','B','C','D'][idx]}:</span>
                                 <span className="flex-1 font-semibold">{opt}</span>
-                            </Button>
+                            </button>
                         );
                     })}
                 </div>
             </div>
 
-            <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l-2 border-blue-800 p-4 flex flex-col justify-center order-first md:order-last">
-                <div className="flex flex-col-reverse gap-1">
+            <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-first md:order-last">
+                <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
                     {MONEY_LEVELS.map((money, idx) => (
-                        <div key={idx} className={cn("flex justify-between px-3 py-1 text-sm font-mono rounded-md", 
-                            idx === qIndex ? 'active bg-[#d4af37] text-black font-bold' : 'money-item',
-                            (idx === 4 || idx === 9) && "guaranteed font-bold"
-                        )}>
-                            <span className="mr-2">{idx + 1}</span>
-                            <span>{money} Puan</span>
+                        <div key={idx} className={cn("flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center", idx === qIndex ? 'active text-black font-bold scale-105 shadow-lg bg-yellow-400' : 'money-item', (idx === 1 || idx === 6) && 'guaranteed')}>
+                            <span className="mr-2">{idx + 1}</span><span>{money} Puan</span>
                         </div>
                     ))}
                 </div>
             </div>
 
             {modalContent && (
-                <AlertDialog open={!!modalContent} onOpenChange={() => setModalContent(null)}>
-                    <AlertDialogContent className="bg-blue-900 border-2 border-yellow-500 text-white">
-                        <AlertDialogHeader>
-                            <AlertDialogTitle className="flex items-center gap-3 text-yellow-400">{modalContent.icon} {modalContent.title}</AlertDialogTitle>
-                        </AlertDialogHeader>
-                        {modalContent.text && <p className="whitespace-pre-line text-lg leading-relaxed">{modalContent.text}</p>}
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setModalContent(null)}>
+                    <div className="bg-[#000033] border-2 border-[#d4af37] p-6 rounded-xl max-w-sm w-full shadow-[0_0_20px_rgba(212,175,55,0.5)]" onClick={e => e.stopPropagation()}>
+                        <h3 className="text-xl font-bold text-[#d4af37] mb-4 border-b border-yellow-600 pb-2 flex items-center gap-2">{modalContent.title}</h3>
+                        {modalContent.text && <p className="text-white whitespace-pre-line text-lg leading-relaxed">{modalContent.text}</p>}
                         {modalContent.chart && (
-                            <div className="flex justify-around items-end h-40 gap-2 pt-4 rounded-lg">
+                            <div className="flex justify-around items-end h-40 gap-2 pt-4 bg-blue-900/30 rounded-lg p-4">
                                 {modalContent.chart.map((val: number, i: number) => (
                                     <div key={i} className="flex flex-col items-center w-1/4 h-full justify-end group">
                                         <div className="text-xs text-yellow-300 mb-1 font-bold">{val}%</div>
@@ -336,57 +341,41 @@ function MilyonerClientPage({ initialQuestions, initialError }: { initialQuestio
                                 ))}
                             </div>
                         )}
-                        <AlertDialogFooter>
-                             <Button onClick={() => setModalContent(null)} className="mt-6 w-full py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm font-bold transition-colors">
-                                TAMAM
-                            </Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                        <button onClick={() => setModalContent(null)} className="mt-6 w-full py-2 bg-blue-700 hover:bg-blue-600 text-white rounded text-sm font-bold transition-colors">TAMAM</button>
+                    </div>
+                </div>
             )}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                 <Confetti active={showConfetti} config={confettiConfig} />
-             </div>
+            </div>
         </div>
     );
 }
 
-export default function MilyonerOyunPageWrapper({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>}>
-            <MilyonerOyunPage searchParams={searchParams} />
-        </Suspense>
-    );
-}
-
-function MilyonerOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
-    const [questions, setQuestions] = useState<Question[] | null>(null);
-    const [error, setError] = useState<string | undefined>(undefined);
+export default function MilyonerOyunPage() {
+    const searchParams = useSearchParams();
+    const [questionData, setQuestionData] = useState<{ questions: Question[] | null; error?: string }>({ questions: null });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchQuestions = async () => {
             const params = {
-                courseId: typeof searchParams.courseId === 'string' ? searchParams.courseId : undefined,
-                unitId: typeof searchParams.unitId === 'string' ? searchParams.unitId : undefined,
-                topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
             };
             const result = await getMilyonerQuestionsAction(params);
-            if (result.error) {
-                setError(result.error);
-            } else {
-                setQuestions(result.questions || []);
-            }
+            setQuestionData(result);
             setIsLoading(false);
         };
         fetchQuestions();
     }, [searchParams]);
 
-    if (isLoading) {
+    if(isLoading) {
         return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
     }
 
-    return <MilyonerClientPage initialQuestions={questions} initialError={error} />;
+    return (
+        <MilyonerClientPage initialQuestions={questionData.questions} initialError={questionData.error} />
+    );
 }
-
-    
