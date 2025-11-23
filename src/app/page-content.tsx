@@ -58,15 +58,15 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                 {group.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-4 pt-4">
-                                    <Accordion type="single" collapsible className="w-full space-y-3">
-                                        {group.courses.map((course) => (
-                                            <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background">
-                                                <AccordionTrigger className="p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary">
+                                    <Accordion type="multiple" defaultValue={group.courses.map(c => c.id)} className="w-full space-y-3">
+                                        {group.courses.map((course, courseIndex) => (
+                                            <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background overflow-hidden">
+                                                <AccordionTrigger className={cn("p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary", colorClasses[(courseIndex + groupIndex + 1) % colorClasses.length])}>
                                                     {course.className === 'Genel' ? 'Genel Dersler' : `${course.className}. Sınıf`}
                                                 </AccordionTrigger>
                                                 <AccordionContent className="p-3">
                                                     {course.units.length > 0 ? (
-                                                        <Accordion type="multiple" className="w-full space-y-2">
+                                                        <Accordion type="single" collapsible className="w-full space-y-2">
                                                             {course.units.map(unit => (
                                                                 <AccordionItem value={unit.id} key={unit.id} className="border-b-0">
                                                                     <AccordionTrigger className="font-semibold text-base py-2">{unit.title}</AccordionTrigger>
