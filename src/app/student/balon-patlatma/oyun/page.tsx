@@ -1,398 +1,340 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Balon Avcısı: Peygamberler</title>
-    {/* React ve ReactDOM */}
-    <script crossOrigin="true" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossOrigin="true" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #0ea5e9; /* Sky Blue */
-            color: white;
-            overflow: hidden;
-            touch-action: none;
-            user-select: none;
-        }
-        .header-font {
-            font-family: 'Fredoka', sans-serif;
-        }
 
-        /* Oyun Alanı */
-        #game-canvas {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 100%);
-            cursor: crosshair;
-        }
+'use client';
 
-        /* Bulutlar */
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: floatCloud linear infinite;
-        }
-        .cloud::after, .cloud::before {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-        @keyframes floatCloud {
-            from { transform: translateX(-200px); }
-            to { transform: translateX(120vw); }
-        }
+import { useState, useEffect, useRef, useCallback, Suspense, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Loader2, ArrowLeft, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useAuth } from '@/context/auth-context';
+import { getBalloonPoppingAction, submitBalloonPoppingScoreAction } from '../actions';
+import type { BalloonPoppingRound } from '../actions';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
-        /* Balon Stili */
-        .balloon {
-            position: absolute;
-            width: 70px;
-            height: 85px;
-            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-            line-height: 1;
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
-            transition: transform 0.1s;
-            z-index: 10;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        /* Balon İpi */
-        .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 20px;
-            background: rgba(0,0,0,0.3);
-        }
-        /* Balon Düğümü */
-        .balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 4px;
-            background: inherit;
-            border-radius: 2px;
-        }
 
-        /* Oyuncu (Yay/Top) */
-        .shooter {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform-origin: center bottom; /* Dönme noktası alt orta */
-            width: 6px;
-            height: 60px;
-            background: #475569;
-            z-index: 20;
-            border-radius: 3px;
-        }
-        .shooter-base {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            background: #1e293b;
-            border-radius: 30px 30px 0 0;
-            z-index: 19;
-        }
+const BALLOON_COLORS = [
+    '#ef4444', '#f97316', '#eab308', '#22c55e', 
+    '#3b82f6', '#a855f7', '#ec4899'
+];
 
-        /* Ok/Mermi */
-        .projectile {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ef4444;
-            border-radius: 50%;
-            z-index: 15;
-            box-shadow: 0 0 5px #ef4444;
-        }
+function BalloonPoppingGame() {
+    const { user } = useAuth();
+    const { toast } = useToast();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-        /* Patlama Efekti */
-        .pop-effect {
-            position: absolute;
-            font-size: 2rem;
-            font-weight: bold;
-            animation: popAnim 0.4s ease-out forwards;
-            z-index: 30;
-            pointer-events: none;
-        }
-        @keyframes popAnim {
-            0% { transform: scale(0.5); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
+    const [gameState, setGameState] = useState('start'); // start, playing, gameover
+    const [score, setScore] = useState(0);
+    const [levelIndex, setLevelIndex] = useState(0);
+    const [levels, setLevels] = useState<BalloonPoppingRound[]>([]);
+    const [balloons, setBalloons] = useState<any[]>([]);
+    const [projectiles, setProjectiles] = useState<any[]>([]);
+    const [effects, setEffects] = useState<any[]>([]);
+    const [angle, setAngle] = useState(0);
 
-        /* Soru Paneli */
-        .question-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            pointer-events: none; 
-            display: flex;
-            justify-content: center;
-            z-index: 50;
-        }
-        .question-box {
-            background: white;
-            color: #0f172a;
-            padding: 15px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: center;
-            border-bottom: 6px solid #cbd5e1;
-            pointer-events: auto;
-            max-width: 90%;
-        }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef, useCallback } = React;
+    const requestRef = useRef<number>();
+    const lastSpawnTime = useRef(0);
+    const gameAreaRef = useRef<HTMLDivElement>(null);
+    
+    const gameContext = useMemo(() => `Balon Patlatma - ${searchParams.get('topicName') || 'Genel'}`, [searchParams]);
 
-        const useQuery = () => new URLSearchParams(window.location.search);
-
-        const LEVELS = [
-            { q: "Hz. Musa'nın Kitabı?", a: "Tevrat", wrongs: ["İncil", "Zebur", "Kur'an", "Suhuf"] },
-            { q: "Hz. İsa'nın Kitabı?", a: "İncil", wrongs: ["Tevrat", "Zebur", "Kur'an", "Hadis"] },
-            { q: "Hz. Davud'un Kitabı?", a: "Zebur", wrongs: ["Tevrat", "İncil", "Kur'an", "Siyer"] },
-            { q: "Son İlahi Kitap?", a: "Kur'an", wrongs: ["İncil", "Tevrat", "Zebur", "Suhuf"] },
-            { q: "Güvenilir Olmak?", a: "Emanet", wrongs: ["Sıdk", "İsmet", "Fetanet", "Tebliğ"] },
-            { q: "Doğru Sözlü Olmak?", a: "Sıdk", wrongs: ["Emanet", "İsmet", "Fetanet", "Tebyin"] },
-            { q: "Akıllı Olmak?", a: "Fetanet", wrongs: ["İsmet", "Emanet", "Sıdk", "Temsil"] },
-            { q: "Günahsız Olmak?", a: "İsmet", wrongs: ["Sıdk", "Fetanet", "Emanet", "Tebliğ"] },
-            { q: "Vahyi İletmek?", a: "Tebliğ", wrongs: ["Tebyin", "Temsil", "Tezkiye", "İnzar"] },
-            { q: "İlk Peygamber?", a: "Hz. Adem", wrongs: ["Hz. Nuh", "Hz. İbrahim", "Hz. Musa", "Hz. İsa"] }
-        ];
-
-        const BALLOON_COLORS = [
-            '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'
-        ];
-
-        function App() {
-            const query = useQuery();
-            const [gameState, setGameState] = useState('start');
-            const [score, setScore] = useState(0);
-            const [levelIndex, setLevelIndex] = useState(0);
-            const [balloons, setBalloons] = useState([]);
-            const [projectiles, setProjectiles] = useState([]);
-            const [effects, setEffects] = useState([]);
-            const [angle, setAngle] = useState(0);
-            const [isSaving, setIsSaving] = useState(false);
-            const [scoreSaved, setScoreSaved] = useState(false);
-
-            const requestRef = useRef();
-            const lastSpawnTime = useRef(0);
-
-            const startGame = () => {
-                setScore(0);
-                setLevelIndex(0);
-                setBalloons([]);
-                setProjectiles([]);
-                setEffects([]);
-                setGameState('playing');
-                setScoreSaved(false);
-                lastSpawnTime.current = 0;
+    // Fetch game data
+    useEffect(() => {
+        const fetchGameData = async () => {
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
             };
+            const result = await getBalloonPoppingAction(params);
+            if (result.error || !result.data || result.data.length === 0) {
+                setError(result.error || "Bu konu için uygun oyun verisi bulunamadı.");
+                setGameState('error');
+            } else {
+                setLevels(result.data);
+            }
+            setIsLoading(false);
+        };
+        fetchGameData();
+    }, [searchParams]);
 
-            const endGame = () => {
-                setGameState('gameover');
-            };
+    // Game handlers
+    const startGame = () => {
+        setScore(0);
+        setLevelIndex(0);
+        setBalloons([]);
+        setProjectiles([]);
+        setEffects([]);
+        setGameState('playing');
+        lastSpawnTime.current = 0;
+    };
 
-            const handleSaveAndExit = async () => {
-                if (score === 0 || isSaving || scoreSaved) {
-                    window.location.href = '/student/activities';
-                    return;
+    const handleCorrectHit = (x: number, y: number) => {
+        setScore(s => s + 10);
+        addEffect(x, y, "+10", "#22c55e");
+        setTimeout(() => {
+            setLevelIndex(prev => (prev + 1) % levels.length);
+            setBalloons(prev => prev.filter(b => !b.isCorrect));
+        }, 500);
+    };
+
+    const handleWrongHit = (x: number, y: number) => {
+        setScore(s => Math.max(0, s - 5));
+        addEffect(x, y, "-5", "#ef4444");
+    };
+
+    const addEffect = (x: number, y: number, text: string, color: string) => {
+        const id = Date.now() + Math.random();
+        setEffects(prev => [...prev, { id, x, y, text, color }]);
+        setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 500);
+    };
+    
+    const handleSaveScore = async () => {
+        if(!user || score <= 0) {
+             router.push('/student/balon-patlatma');
+             return;
+        }
+        const result = await submitBalloonPoppingScoreAction(user.uid, score, gameContext);
+        if(result.success) {
+            toast({ title: "Başarılı!", description: "Puanınız kaydedildi."});
+        } else {
+            toast({ title: "Hata", description: result.error, variant: 'destructive'});
+        }
+        router.push('/student/balon-patlatma');
+    }
+
+    // Game Loop
+    const updateGame = useCallback((time: number) => {
+        if (gameState !== 'playing' || levels.length === 0) return;
+
+        const currentLevel = levels[levelIndex % levels.length];
+
+        // 1. SPAWN BALLOONS
+        if (time - lastSpawnTime.current > 1500) {
+            const isCorrect = Math.random() > 0.6;
+            const text = isCorrect ? currentLevel.target : currentLevel.words[Math.floor(Math.random() * currentLevel.words.length)];
+            
+            if (text) {
+                const newBalloon = {
+                    id: Date.now() + Math.random(),
+                    x: Math.random() * (window.innerWidth - 80) + 40,
+                    y: window.innerHeight + 50,
+                    text: text,
+                    speed: Math.random() * 1 + 1,
+                    color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
+                    isCorrect: text === currentLevel.target
+                };
+                setBalloons(prev => [...prev, newBalloon]);
+            }
+            lastSpawnTime.current = time;
+        }
+
+        // 2. MOVE OBJECTS
+        setBalloons(prev => prev.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -150));
+        setProjectiles(prev => prev.map(p => ({
+            ...p,
+            x: p.x + Math.sin(p.angle * Math.PI / 180) * 10,
+            y: p.y - Math.cos(p.angle * Math.PI / 180) * 10
+        })).filter(p => p.y > 0));
+        
+        // 3. COLLISION DETECTION
+        let nextProjectiles = [...projectiles];
+        let nextBalloons = [...balloons];
+
+        for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
+            const p = nextProjectiles[pIdx];
+            for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
+                const b = nextBalloons[bIdx];
+                const dx = p.x - b.x;
+                const dy = p.y - b.y;
+                if (Math.sqrt(dx * dx + dy * dy) < 40) {
+                    if (b.isCorrect) {
+                        handleCorrectHit(b.x, b.y);
+                    } else {
+                        handleWrongHit(b.x, b.y);
+                    }
+                    nextProjectiles.splice(pIdx, 1);
+                    nextBalloons.splice(bIdx, 1);
+                    break;
                 }
-                setIsSaving(true);
-                // This would be a server action call in a real Next.js app
-                // For this standalone file, we simulate it
-                console.log(`Saving score: ${score}`);
-                // In a real app, you would get userId from context.
-                // const result = await submitBalloonPoppingScoreAction(userId, score, "Balon Patlatma");
-                setTimeout(() => { // Simulate network delay
-                    setScoreSaved(true);
-                    setIsSaving(false);
-                    alert(`${score} puan kaydedildi!`);
-                    window.location.href = '/student/activities';
-                }, 1000);
-            };
+            }
+        }
+        
+        setProjectiles(nextProjectiles);
+        setBalloons(nextBalloons);
 
-            const updateGame = useCallback((time) => {
-                if (gameState !== 'playing') return;
+        requestRef.current = requestAnimationFrame(updateGame);
+    }, [gameState, levelIndex, levels, projectiles, balloons]);
 
-                const currentLevel = LEVELS[levelIndex % LEVELS.length];
 
-                if (time - lastSpawnTime.current > 1500) {
-                    const isCorrect = Math.random() > 0.6;
-                    const text = isCorrect ? currentLevel.a : currentLevel.wrongs[Math.floor(Math.random() * currentLevel.wrongs.length)];
-                    const newBalloon = {
-                        id: Date.now(),
-                        x: Math.random() * (window.innerWidth - 80) + 40,
-                        y: window.innerHeight + 50,
-                        text: text,
-                        speed: Math.random() * 1 + 1,
-                        color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
-                        isCorrect: text === currentLevel.a
-                    };
-                    setBalloons(prev => [...prev, newBalloon]);
-                    lastSpawnTime.current = time;
-                }
+    useEffect(() => {
+        if(gameState === 'playing') {
+            requestRef.current = requestAnimationFrame(updateGame);
+        }
+        return () => {
+            if (requestRef.current) cancelAnimationFrame(requestRef.current);
+        };
+    }, [updateGame, gameState]);
 
-                setBalloons(prev => prev.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -150));
-                setProjectiles(prev => prev.map(p => ({ ...p, x: p.x + Math.sin(p.angle * Math.PI / 180) * 10, y: p.y - Math.cos(p.angle * Math.PI / 180) * 10 })).filter(p => p.x > 0 && p.x < window.innerWidth && p.y > 0));
+    // INPUT HANDLING
+    const handleInput = (e: React.MouseEvent | React.TouchEvent) => {
+        if (gameState !== 'playing') return;
 
-                setProjectiles(currentProjectiles => {
-                    let nextProjectiles = [...currentProjectiles];
-                    setBalloons(currentBalloons => {
-                        let nextBalloons = [...currentBalloons];
-                        for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
-                            const p = nextProjectiles[pIdx];
-                            for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
-                                const b = nextBalloons[bIdx];
-                                const dx = p.x - b.x;
-                                const dy = p.y - b.y;
-                                const dist = Math.sqrt(dx*dx + dy*dy);
+        const clientX = 'clientX' in e ? e.clientX : (e.touches && e.touches[0].clientX);
+        const clientY = 'clientY' in e ? e.clientY : (e.touches && e.touches[0].clientY);
+        
+        if (!clientX) return;
 
-                                if (dist < 40) {
-                                    nextProjectiles.splice(pIdx, 1);
-                                    nextBalloons.splice(bIdx, 1);
-                                    if (b.isCorrect) handleCorrectHit(b.x, b.y); else handleWrongHit(b.x, b.y);
-                                    break;
-                                }
-                            }
-                        }
-                        return nextBalloons;
-                    });
-                    return nextProjectiles;
-                });
-                requestRef.current = requestAnimationFrame(updateGame);
-            }, [gameState, levelIndex]);
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight - 20;
 
-            useEffect(() => {
-                requestRef.current = requestAnimationFrame(updateGame);
-                return () => cancelAnimationFrame(requestRef.current);
-            }, [updateGame]);
+        const dx = clientX - centerX;
+        const dy = clientY - centerY;
+        
+        const rad = Math.atan2(dx, -dy);
+        const deg = rad * (180 / Math.PI);
+        
+        const clampedAngle = Math.max(-70, Math.min(70, deg));
+        setAngle(clampedAngle);
 
-            const handleCorrectHit = (x, y) => {
-                setScore(s => s + 10);
-                addEffect(x, y, "+10", "#22c55e");
-                setTimeout(() => {
-                    setLevelIndex(prev => (prev + 1) % LEVELS.length);
-                    setBalloons(prev => prev.filter(b => !b.isCorrect));
-                }, 500);
-            };
+        if (e.type === 'mousedown' || e.type === 'touchstart') {
+            shoot(clampedAngle);
+        }
+    };
+    
+    const shoot = (fireAngle: number) => {
+        const radian = fireAngle * Math.PI / 180;
+        const startX = window.innerWidth / 2 + Math.sin(radian) * 60;
+        const startY = window.innerHeight - 20 - Math.cos(radian) * 60;
 
-            const handleWrongHit = (x, y) => {
-                setScore(s => Math.max(0, s - 5));
-                addEffect(x, y, "-5", "#ef4444");
-                // End game on wrong hit
-                endGame();
-            };
+        setProjectiles(prev => [...prev, {
+            id: Date.now(), x: startX, y: startY, angle: fireAngle
+        }]);
+    };
 
-            const addEffect = (x, y, text, color) => {
-                const id = Date.now() + Math.random();
-                setEffects(prev => [...prev, { id, x, y, text, color }]);
-                setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 500);
-            };
-
-            const handleInput = (e) => {
-                if (gameState !== 'playing') return;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight - 20;
-                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-                if (!clientX) return;
-                const dx = clientX - centerX;
-                const dy = clientY - centerY;
-                const rad = Math.atan2(dx, -dy);
-                const deg = rad * (180 / Math.PI);
-                const clampedAngle = Math.max(-70, Math.min(70, deg));
-                setAngle(clampedAngle);
-                if (e.type === 'mousedown' || e.type === 'touchstart') shoot(clampedAngle);
-            };
-
-            const shoot = (fireAngle) => {
-                const radian = fireAngle * Math.PI / 180;
-                const startX = window.innerWidth / 2 + Math.sin(radian) * 60;
-                const startY = window.innerHeight - 20 - Math.cos(radian) * 60;
-                setProjectiles(prev => [...prev, { id: Date.now(), x: startX, y: startY, angle: fireAngle }]);
-            };
-
-            return (
-                <div id="game-canvas" onMouseMove={handleInput} onMouseDown={handleInput} onTouchMove={handleInput} onTouchStart={handleInput}>
-                    <div className="cloud" style={{ top: '10%', width: '100px', height: '40px' }}></div>
-                    <div className="cloud" style={{ top: '20%', left: '60%', width: '120px', height: '50px', animationDuration: '15s' }}></div>
-                    <div className="cloud" style={{ top: '5%', left: '80%', width: '80px', height: '30px', animationDuration: '25s' }}></div>
-                    <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200">Puan: {score}</div>
-                    
-                    {balloons.map(b => (<div key={b.id} className="balloon" style={{ left: b.x, top: b.y, backgroundColor: b.color, borderColor: b.color }}>{b.text}</div>))}
-                    {projectiles.map(p => (<div key={p.id} className="projectile" style={{ left: p.x, top: p.y }}></div>))}
-                    {effects.map(e => (<div key={e.id} className="pop-effect" style={{ left: e.x, top: e.y, color: e.color }}>{e.text}</div>))}
-
-                    <div className="shooter-base"></div>
-                    <div className="shooter" style={{ transform: `translateX(-50%) rotate(${angle}deg)` }}>
-                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>
+    if (isLoading) {
+        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin"/></div>;
+    }
+    
+    if (error) {
+         return (
+            <div className="w-full h-full min-h-screen p-4 flex items-center justify-center bg-gray-900">
+                <Alert variant="destructive" className="max-w-lg bg-card text-card-foreground">
+                    <AlertTitle>Hata!</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                     <div className="mt-4">
+                        <Button asChild variant="outline">
+                            <Link href="/student/balon-patlatma">
+                                <ArrowLeft className="mr-2 h-4 w-4"/> Kurulumu Değiştir
+                            </Link>
+                        </Button>
                     </div>
-                    
-                    {gameState === 'playing' && (<div className="question-panel"><div className="question-box animate-[bounce_2s_infinite]"><span className="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>{LEVELS[levelIndex % LEVELS.length].q}</div></div>)}
-                    
-                    {(gameState === 'start' || gameState === 'gameover') && (
-                        <div className="absolute inset-0 bg-sky-900/80 flex items-center justify-center z-50 backdrop-blur-sm">
-                            <div className="bg-white p-8 rounded-3xl text-center max-w-sm shadow-2xl border-b-8 border-sky-500">
-                                {gameState === 'start' ? (
-                                    <>
-                                        <h1 className="text-4xl font-bold text-sky-600 mb-4 header-font">Balon Avcısı 🏹</h1>
-                                        <p className="text-gray-600 mb-8 text-lg">Aşağıdaki soruyu oku.<br/>Doğru cevabı taşıyan balonu vur!</p>
-                                        <button onClick={startGame} className="px-10 py-4 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-full text-xl transition-transform hover:scale-105 shadow-lg">BAŞLA</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <h1 className="text-4xl font-bold text-red-600 mb-4 header-font">Oyun Bitti!</h1>
-                                        <p className="text-gray-600 mb-2 text-lg">Yanlış balonu vurdun.</p>
-                                        <p className="text-gray-800 font-bold text-2xl mb-8">Skorun: {score}</p>
-                                        <div className="flex flex-col gap-2">
-                                            <button onClick={startGame} className="px-10 py-4 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-full text-xl transition-transform hover:scale-105 shadow-lg">TEKRAR OYNA</button>
-                                            <button onClick={handleSaveAndExit} disabled={isSaving || score === 0 || scoreSaved} className="w-full py-2 bg-gray-100 text-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                                {isSaving ? 'Kaydediliyor...' : (scoreSaved ? 'Puan Kaydedildi' : 'Puanı Kaydet ve Çık')}
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    )}
+                </Alert>
+            </div>
+        );
+    }
+    
+    return (
+        <main>
+            <div 
+                id="game-canvas"
+                ref={gameAreaRef}
+                className="w-screen h-screen relative bg-gradient-to-b from-sky-300 to-sky-100 cursor-crosshair overflow-hidden"
+                onMouseMove={handleInput}
+                onMouseDown={handleInput}
+                onTouchMove={handleInput}
+                onTouchStart={handleInput}
+            >
+                {/* Score */}
+                <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200">
+                    Puan: {score}
                 </div>
-            );
-        }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
+                {/* Balloons */}
+                {balloons.map(b => (
+                    <div 
+                        key={b.id}
+                        className="absolute w-[70px] h-[85px] rounded-[50%_50%_50%_50%_/_40%_40%_60%_60%] flex items-center justify-center text-center font-bold text-xs leading-tight text-white [text-shadow:1px_1px_2px_rgba(0,0,0,0.3)] shadow-[inset_-5px_-5px_10px_rgba(0,0,0,0.1)] transition-transform duration-100 z-10"
+                        style={{ left: b.x, top: b.y, backgroundColor: b.color }}
+                    >
+                        {b.text}
+                         {/* Rope */}
+                         <div className="absolute bottom-[-20px] left-1/2 -translate-x-1/2 w-[2px] h-[20px] bg-black/30"></div>
+                         {/* Knot */}
+                         <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-[6px] h-[4px] rounded-[2px]" style={{backgroundColor: 'inherit'}}></div>
+                    </div>
+                ))}
+
+                {/* Projectiles */}
+                {projectiles.map(p => (
+                    <div key={p.id} className="absolute w-2.5 h-2.5 bg-red-500 rounded-full z-[15] shadow-[0_0_5px_#ef4444]" style={{ left: p.x, top: p.y }}/>
+                ))}
+
+                 {/* Pop Effects */}
+                {effects.map(e => (
+                    <div key={e.id} className="absolute text-3xl font-bold z-30 pointer-events-none animate-pop-effect" style={{ left: e.x, top: e.y, color: e.color }}>
+                        {e.text}
+                    </div>
+                ))}
+                
+                {/* Shooter */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60px] h-[30px] bg-slate-800 rounded-t-[30px] z-[19]"></div>
+                <div className="absolute bottom-5 left-1/2 w-1.5 h-16 bg-slate-600 z-20 rounded-sm" style={{ transformOrigin: 'center bottom', transform: `translateX(-50%) rotate(${angle}deg)` }}>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>
+                </div>
+
+                 {/* Question Panel */}
+                 {gameState === 'playing' && levels.length > 0 && (
+                    <div className="absolute bottom-5 left-5 right-5 pointer-events-none flex justify-center z-50">
+                        <div className="bg-white text-slate-900 py-3 px-8 rounded-2xl shadow-lg font-bold text-lg text-center border-b-4 border-slate-300 pointer-events-auto max-w-full animate-[bounce_2s_infinite]">
+                            <span className="text-sky-600 text-xs block opacity-70 uppercase tracking-widest">HEDEF</span>
+                            {levels[levelIndex % levels.length].definition}
+                        </div>
+                    </div>
+                 )}
+                 
+                 {/* Start/End Screen */}
+                <AlertDialog open={gameState === 'start'}>
+                    <AlertDialogContent className="text-center">
+                        <AlertDialogHeader>
+                            <AlertDialogTitle className="text-4xl font-bold text-sky-600 mb-4 header-font">Balon Avcısı 🏹</AlertDialogTitle>
+                            <AlertDialogDescription className="text-gray-600 mb-8 text-lg">
+                                Aşağıdaki tanımı oku.<br/>Doğru kavramı taşıyan balonu vur!
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <Button onClick={startGame} size="lg" className="w-full">BAŞLA</Button>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
+            
+             <style jsx global>{`
+                .header-font { font-family: 'Fredoka', sans-serif; }
+                @keyframes pop-effect {
+                    0% { transform: scale(0.5); opacity: 1; }
+                    100% { transform: scale(2); opacity: 0; }
+                }
+                .animate-pop-effect { animation: pop-effect 0.4s ease-out forwards; }
+            `}</style>
+        </main>
+    );
+}
+
+// Wrapper to use Suspense
+export default function BalloonPoppingGamePage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin"/></div>}>
+            <BalloonPoppingGame />
+        </Suspense>
+    );
+}
