@@ -62,7 +62,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group, groupIndex) => (
-                        <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
+                        <Accordion type="multiple" className="w-full space-y-4" key={group.title}>
                             <AccordionItem value={group.title} className="border rounded-lg bg-card/30 shadow-sm overflow-hidden backdrop-blur-sm">
                                 <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", groupColorClasses[groupIndex % groupColorClasses.length])}>
                                 {group.title}
