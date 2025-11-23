@@ -5,7 +5,7 @@ import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -149,8 +149,13 @@ const ManagementButton = ({ href, title, icon }: { href: string, title: string, 
 const LoggedInDashboard = ({ user }: { user: any }) => {
     const router = useRouter();
 
+    useEffect(() => {
+        if (user.role === 'student') {
+            router.replace('/student');
+        }
+    }, [user, router]);
+    
     if (user.role === 'student') {
-        router.replace('/student');
         return (
             <div className="flex h-screen items-center justify-center">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
