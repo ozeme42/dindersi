@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
@@ -138,7 +139,7 @@ export default function StudentDashboard() {
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+          getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"]))),
           getStudentExams(user.uid),
         ]);
         
@@ -294,7 +295,7 @@ export default function StudentDashboard() {
               <Link href="/student/soru-bankasi" className="block group h-full">
                  <Card className="h-full bg-primary text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105">
                       <BookOpen className="h-10 w-10 sm:h-12 sm:w-12 opacity-80" />
-                      <p className="text-lg sm:text-2xl font-bold mt-2">Dersler ve Çalışma</p>
+                      <p className="text-lg sm:text-2xl font-bold mt-2">Dersler ve Soru Bankası</p>
                       <div className="w-full px-4 mt-4 space-y-3">
                           <div>
                               <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
@@ -305,7 +306,7 @@ export default function StudentDashboard() {
                           </div>
                           <div>
                               <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
-                                  <span>Genel Başarı</span>
+                                  <span>Soru Bankası Başarısı</span>
                                   <span>{stats.questionBankProgress}%</span>
                               </div>
                               <Progress value={stats.questionBankProgress} className="h-3 bg-white/30 [&>div]:bg-amber-400"/>

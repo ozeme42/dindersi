@@ -1,8 +1,9 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Gamepad2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -42,7 +43,7 @@ export function BottomNavBar() {
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
         { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Çalışma' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
+        { href: '/student/activities', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
