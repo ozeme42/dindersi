@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -62,13 +63,13 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                  
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     {courseGroups.map((group, groupIndex) => (
-                        <Accordion type="multiple" className="w-full space-y-4" key={group.title}>
+                        <Accordion type="multiple" defaultValue={[group.title]} className="w-full space-y-4" key={group.title}>
                             <AccordionItem value={group.title} className="border rounded-lg bg-card/70 shadow-sm overflow-hidden backdrop-blur-sm">
                                 <AccordionTrigger className={cn("p-4 text-xl sm:text-2xl font-semibold hover:no-underline", groupColorClasses[groupIndex % groupColorClasses.length])}>
                                 {group.title}
                                 </AccordionTrigger>
                                 <AccordionContent className="p-4 pt-4">
-                                    <Accordion type="multiple" className="w-full space-y-3">
+                                    <Accordion type="multiple" defaultValue={group.courses.map(course => course.id)} className="w-full space-y-3">
                                         {group.courses.map((course) => (
                                             <AccordionItem value={course.id} key={course.id} className="border rounded-md bg-background overflow-hidden">
                                                 <AccordionTrigger className={cn("p-3 text-lg font-medium hover:no-underline [&[data-state=open]>svg]:text-primary text-white", classColorMap[course.className] || defaultClassColor)}>
