@@ -1,21 +1,17 @@
 
-"use client";
+'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
+import { Button } from '@/components/ui/button';
 import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart } from 'lucide-react';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-dom-confetti';
 import { addScore, checkAndAwardMillionaireBadge } from './actions';
 import type { Question } from '@/lib/types';
-import { Button } from '@/components/ui/button';
 
-const MONEY_LEVELS = [
-  "100", "200", "300", "400", "500",
-  "600", "700", "800", "900", "1.000"
-];
 
 const confettiConfig = {
   angle: 90,
@@ -52,30 +48,31 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
     if (initialError) {
       setError(initialError);
       setIsLoading(false);
-    } else if (initialQuestions) {
+      setGameState('error'); // Set a state to show error
+    } else if (initialQuestions && initialQuestions.length > 0) {
       setQuestions(initialQuestions);
       setIsLoading(false);
-      // Don't set game state here, let the intro screen handle it
+      setGameState('intro'); // Start with intro screen
+    } else {
+      // Handle the case where initialQuestions is null or empty but no error
+      setError("Yarışma için soru bulunamadı.");
+      setIsLoading(false);
+      setGameState('error');
     }
   }, [initialQuestions, initialError]);
 
 
-  const startGame = () => {
-    if (!initialQuestions || initialQuestions.length === 0) {
-      setError("Yarışma için soru yüklenemedi veya bulunamadı.");
-      return;
-    }
-    setQuestions(initialQuestions);
+  const startGame = useCallback(() => {
     setQIndex(0);
     setGameState('playing');
-    setScore(0);
-    resetQuestion();
+    setSelectedOption(null);
+    setRevealState('none');
     setLifelines({ fifty: true, phone: true, audience: true });
+    setEliminatedOptions([]);
+    setModalContent(null);
     setShowConfetti(false);
-  };
+  }, []);
   
-  const [score, setScore] = useState(0);
-
   const resetQuestion = useCallback(() => {
     setSelectedOption(null);
     setRevealState('none');
@@ -106,7 +103,7 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
           setGameState('won');
           setShowConfetti(true);
           if (user) {
-            const finalPrize = parseInt(MONEY_LEVELS[MONEY_LEVELS.length - 1].replace(/\./g, ''));
+            const finalPrize = 1000;
             await addScore(user.uid, finalPrize, "Milyoner Yarışmasını Kazandı");
             await checkAndAwardMillionaireBadge(user.uid);
           }
@@ -115,11 +112,11 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
     } else {
       playSound('incorrect');
       setTimeout(() => {
-        const prize = 0; // No safety net logic for now
+        const prize = 0; // No safety nets for now
         handleEndGame('lost', prize, "Milyoner Yarışmasında Elendi");
       }, 2000);
     }
-  }, [qIndex, questions, resetQuestion, user, handleEndGame]);
+  }, [qIndex, resetQuestion, user, handleEndGame, questions]);
 
   const handleOptionSelect = useCallback((index: number) => {
     if (revealState !== 'none' || eliminatedOptions.includes(index)) return;
@@ -136,16 +133,17 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   }, [revealState, eliminatedOptions, checkAnswer]);
   
   const withdraw = useCallback(() => {
-    const currentPrize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
+    const currentPrize = qIndex > 0 ? (qIndex * 100) : 0;
     handleEndGame('withdraw', currentPrize, "Milyoner Yarışması'ndan Çekildi");
   }, [qIndex, handleEndGame]);
 
   const useFiftyFifty = () => {
     if (!lifelines.fifty) return;
-    
     const question = questions[qIndex];
-    const correctIndex = question.options?.indexOf(question.correctAnswer!);
-    let wrongs = [0, 1, 2, 3].filter(i => i !== correctIndex);
+    if (!question) return;
+    
+    const correct = question.options?.indexOf(question.correctAnswer!);
+    let wrongs = [0, 1, 2, 3].filter(i => i !== correct);
     
     wrongs = wrongs.sort(() => Math.random() - 0.5).slice(0, 2);
     
@@ -157,8 +155,10 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
     if (!lifelines.phone) return;
     
     const question = questions[qIndex];
-    const correctIndex = question.options?.indexOf(question.correctAnswer!);
-    const correctLetter = ["A", "B", "C", "D"][correctIndex!];
+    if (!question) return;
+
+    const correct = question.options?.indexOf(question.correctAnswer!);
+    const correctLetter = ["A", "B", "C", "D"][correct!];
     
     const suggestion = Math.random() < 0.8 ? correctLetter : ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
 
@@ -172,16 +172,18 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
 
   const useAudience = () => {
     if (!lifelines.audience) return;
-    
+
     const question = questions[qIndex];
-    const correctIndex = question.options?.indexOf(question.correctAnswer!);
+    if (!question) return;
+    
+    const correct = question.options?.indexOf(question.correctAnswer!);
     const percentages = [0, 0, 0, 0];
     let remaining = 100;
     
-    percentages[correctIndex!] = Math.floor(Math.random() * 30) + 40;
-    remaining -= percentages[correctIndex!];
+    percentages[correct!] = Math.floor(Math.random() * 30) + 40;
+    remaining -= percentages[correct!];
     
-    const wrongOptions = [0,1,2,3].filter(i => i !== correctIndex);
+    const wrongOptions = [0,1,2,3].filter(i => i !== correct);
     const firstWrongShare = Math.floor(Math.random() * remaining);
     percentages[wrongOptions[0]] = firstWrongShare;
     remaining -= firstWrongShare;
@@ -200,7 +202,8 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
     setLifelines(prev => ({ ...prev, audience: false }));
   };
   
-  const goHome = () => router.push('/student');
+  const goHome = () => router.push('/');
+  const backToSetup = () => router.push('/student/milyoner-yarismasi');
 
   if (userLoading || isLoading) {
     return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
@@ -208,10 +211,11 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   
   if (error) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#000022] p-4 text-center text-red-300">
-        <div>
-          <p className="text-xl mb-4">Hata: {error}</p>
-          <Button onClick={() => router.push('/student/milyoner-yarismasi')}>Kuruluma Geri Dön</Button>
+      <div className="flex h-screen items-center justify-center p-4 bg-[#000022] text-white">
+        <div className="text-center">
+            <h2 className="text-xl font-bold text-red-500">Bir Hata Oluştu</h2>
+            <p className="text-gray-300 mt-2">{error}</p>
+            <Button onClick={backToSetup} className="mt-4">Geri Dön</Button>
         </div>
       </div>
     );
@@ -226,7 +230,7 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
           <span className="text-6xl">🏆</span>
         </div>
         <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-600 mb-4 drop-shadow-lg">
-          KİM 1000 PUAN İSTER?
+          KİM MİLYONER OLMAK İSTER?
         </h1>
         <p className="text-gray-300 mb-8 text-lg font-medium">Bilgilerini Test Et, Büyük Ödülü Kazan!</p>
         <Button 
@@ -241,9 +245,9 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
 
   if (gameState === 'won' || gameState === 'lost' || gameState === 'withdraw') {
     let prize = 0;
-    if (gameState === 'won') prize = parseInt(MONEY_LEVELS[MONEY_LEVELS.length - 1].replace(/\./g, ''));
-    else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
-    else prize = 0; // No safety net
+    if (gameState === 'won') prize = 1000;
+    else if (gameState === 'withdraw') prize = qIndex > 0 ? (qIndex * 100) : 0;
+    else prize = 0;
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 bg-[#000022] relative">
@@ -275,11 +279,7 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
   }
 
   const currentQ = questions[qIndex];
-  if (!currentQ) {
-    // This can happen briefly while state is updating
-    return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
-  }
-  const correctIndex = currentQ.options?.indexOf(currentQ.correctAnswer!);
+  if (!currentQ) return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white overflow-hidden bg-[#000022] font-sans relative">
@@ -336,8 +336,10 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
                 let bgClass = "bg-gradient-to-r from-[#000044] via-[#1e3c72] to-[#000044]";
                 let borderClass = "border-gray-500";
                 let textClass = "text-white";
+                
                 if (revealState === 'selected' && selectedOption === idx) { bgClass = "bg-[#d97706]"; borderClass = "border-white"; }
                 if (revealState === 'revealed') {
+                    const correctIndex = questions[qIndex].options?.indexOf(questions[qIndex].correctAnswer!);
                     if (idx === correctIndex) { bgClass = "bg-[#059669] answer-correct"; borderClass = "border-[#34d399]"; } 
                     else if (idx === selectedOption) { bgClass = "bg-[#dc2626]"; borderClass = "border-[#f87171]"; }
                 }
@@ -355,14 +357,15 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
 
       <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-first md:order-last">
         <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
-            {MONEY_LEVELS.map((money, idx) => (
+            {[...Array(questions.length)].map((_, idx) => (
                 <div key={idx} className={cn(
                     "flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center",
                     idx === qIndex ? 'bg-[#d4af37] text-[#000033] font-bold scale-105 shadow-lg text-base' : 'text-[#d4af37]',
                     "border border-transparent",
+                    idx < qIndex && "text-green-500", // Answered correctly
                     idx === qIndex && "border-white"
                 )}>
-                    <span>{money}</span>
+                    <span>{ (idx + 1) * 100 }</span>
                 </div>
             ))}
         </div>
@@ -378,7 +381,7 @@ export function MilyonerClientPage({ initialQuestions, initialError }: { initial
                 {modalContent.text && <p className="text-white whitespace-pre-line text-lg leading-relaxed">{modalContent.text}</p>}
                 {modalContent.chart && (
                     <div className="flex justify-around items-end h-40 gap-2 pt-4 bg-blue-900/30 rounded-lg p-4">
-                        {modalContent.chart.map((val: number, i: number) => (
+                        {modalContent.chart.map((val:number, i:number) => (
                             <div key={i} className="flex flex-col items-center w-1/4 h-full justify-end group">
                                 <div className="text-xs text-yellow-300 mb-1 font-bold">{val}%</div>
                                 <div className="w-full bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t transition-all duration-500" style={{ height: `${val}%` }}></div>
