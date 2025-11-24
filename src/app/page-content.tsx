@@ -80,7 +80,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                         <Accordion type="multiple" className="w-full space-y-2">
                                                             {course.units.map(unit => (
                                                                 <AccordionItem value={unit.id} key={unit.id} className="border-b-0">
-                                                                    <AccordionTrigger className="font-semibold text-base py-2">{unit.title}</AccordionTrigger>
+                                                                    <AccordionTrigger className="font-semibold text-base py-2 px-3 rounded bg-slate-500 text-white hover:bg-slate-600">{unit.title}</AccordionTrigger>
                                                                     <AccordionContent className="pt-2 pl-4">
                                                                         <div className="space-y-1">
                                                                             {unit.topics.map(topic => (
