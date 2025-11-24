@@ -49,7 +49,7 @@ export async function getBilBakalimAction(
                 text: item.content.definition!,
                 type: 'Çoktan Seçmeli', // This type is nominal for the Question type, game logic will differ
                 correctAnswer: item.content.term!,
-                options: [], // Not used in this new game version
+                options: allDefinitions.map(d => d.content.term!), // Provide all terms as options
                 difficulty: 'Orta',
                 courseId: item.courseId,
                 unitId: item.unitId,
@@ -58,7 +58,7 @@ export async function getBilBakalimAction(
             };
         });
 
-        return { questions: JSON.parse(JSON.stringify(shuffleArray(gameQuestions))) };
+        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
         return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", questions: [] };
