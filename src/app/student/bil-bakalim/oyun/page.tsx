@@ -2,139 +2,125 @@
 "use client";
 
 import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Lightbulb, Repeat, Home } from 'lucide-react';
+import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Lightbulb, PartyPopper, Repeat } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 function GuessItGame() {
     const searchParams = useSearchParams();
     const { user } = useAuth();
     const { toast } = useToast();
     
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
-    const [questionQueue, setQuestionQueue] = useState<Question[]>([]);
-    const [allAnswers, setAllAnswers] = useState<string[]>([]);
-    const [solvedQuestions, setSolvedQuestions] = useState<string[]>([]);
-
-    const [isAnswered, setIsAnswered] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<string | null>(null);
-    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+    
+    const [questionQueue, setQuestionQueue] = useState<Partial<Question>[]>([]);
+    const [solvedAnswers, setSolvedAnswers] = useState<string[]>([]);
+    
+    const [wrongFeedbackId, setWrongFeedbackId] = useState<string | null>(null);
+    const [isCorrectAnim, setIsCorrectAnim] = useState(false);
+    const [gameState, setGameState] = useState<'start' | 'playing' | 'won'>('start');
     const [mistakeCount, setMistakeCount] = useState(0);
     const [score, setScore] = useState(0);
     const [scoreSaved, setScoreSaved] = useState(false);
 
-    const [isFinished, setIsFinished] = useState(false);
-    
     const isStatic = searchParams.get('static') === 'true';
     const gameContext = useMemo(() => `Bil Bakalım - ${searchParams.get('topicName')}`, [searchParams]);
 
-    const startGame = useCallback((questionsToPlay: Question[]) => {
-        const shuffled = [...questionsToPlay].sort(() => 0.5 - Math.random());
+    const startGame = useCallback(() => {
+        const shuffled = [...questions].sort(() => 0.5 - Math.random());
         setQuestionQueue(shuffled);
-        
-        const allPossibleAnswers = Array.from(new Set(questionsToPlay.map(q => q.correctAnswer!)));
-        setAllAnswers(allPossibleAnswers.sort(() => 0.5 - Math.random()));
-        
-        setSolvedQuestions([]);
-        setScore(0);
+        setSolvedAnswers([]);
         setMistakeCount(0);
-        setIsFinished(false);
-        setIsAnswered(false);
-        setSelectedOption(null);
-        setIsCorrect(null);
+        setScore(0);
         setScoreSaved(false);
-    }, []);
-
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-
-            const result = await getBilBakalimAction(params);
-            if (result.error) {
-                setError(result.error);
-            } else if (result.questions && result.questions.length > 0) {
-                setQuestions(result.questions);
-                startGame(result.questions);
-            } else {
-                setError("Bu konu için uygun soru bulunamadı.");
-            }
-            setIsLoading(false);
-        };
-        fetchQuestions();
-    }, [searchParams, startGame]);
+        setGameState('playing');
+    }, [questions]);
     
-    const currentQuestion = questionQueue.length > 0 ? questionQueue[0] : null;
+    const handleAnswer = useCallback((selectedAnswer: string) => {
+        if (isCorrectAnim || wrongFeedbackId !== null) return;
 
-    const handleAnswer = (selectedAnswer: string) => {
-        if (!currentQuestion || isAnswered) return;
-        
-        const correct = selectedAnswer === currentQuestion.correctAnswer;
-        setSelectedOption(selectedAnswer);
-        setIsAnswered(true);
-        setIsCorrect(correct);
+        const currentQ = questionQueue[0];
+        if (!currentQ) return;
 
-        if (correct) {
+        if (selectedAnswer === currentQ.correctAnswer) {
             playSound('correct');
+            setIsCorrectAnim(true);
             setScore(prev => prev + 15);
-            setSolvedQuestions(prev => [...prev, currentQuestion.id]);
-
+            setSolvedAnswers(prev => [...prev, selectedAnswer]);
             setTimeout(() => {
                 setQuestionQueue(prev => prev.slice(1));
-                setIsAnswered(false);
-                setSelectedOption(null);
-                setIsCorrect(null);
-            }, 1200);
-
+                setIsCorrectAnim(false);
+            }, 600);
         } else {
             playSound('incorrect');
+            setWrongFeedbackId(selectedAnswer);
             setScore(prev => Math.max(0, prev - 5));
             setMistakeCount(prev => prev + 1);
-            
             setTimeout(() => {
                 setQuestionQueue(prev => {
                     const wrongQ = prev[0];
                     const remaining = prev.slice(1);
                     return [...remaining, wrongQ];
                 });
-                setIsAnswered(false);
-                setSelectedOption(null);
-                setIsCorrect(null);
-            }, 1200);
+                setWrongFeedbackId(null);
+            }, 600);
         }
-    };
+    }, [isCorrectAnim, wrongFeedbackId, questionQueue]);
     
     useEffect(() => {
-        const finishGame = async () => {
-             if (user && score > 0 && !isStatic && !scoreSaved) {
+        const fetchQuestions = async () => {
+            setIsLoading(true);
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+            };
+            const result = await getBilBakalimAction(params);
+            if (result.error) {
+                setError(result.error);
+            } else if (result.questions && result.questions.length > 0) {
+                setQuestions(result.questions);
+            } else {
+                setError("Bu konu için uygun soru bulunamadı.");
+            }
+            setIsLoading(false);
+        };
+        fetchQuestions();
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (gameState === 'playing' && questions.length > 0 && questionQueue.length === 0 && solvedAnswers.length === questions.length) {
+            setGameState('won');
+        }
+    }, [questionQueue, questions, solvedAnswers, gameState]);
+
+    useEffect(() => {
+        const saveScore = async () => {
+             if (gameState === 'won' && user && score > 0 && !isStatic && !scoreSaved) {
+                setScoreSaved(true); // Prevent multiple saves
                 await submitBilBakalimScoreAction(user.uid, score, gameContext);
-                setScoreSaved(true);
              }
         }
-
-        if (!isLoading && questionQueue.length === 0 && questions.length > 0) {
-            setIsFinished(true);
-            finishGame();
+        if(gameState === 'won') {
+            saveScore();
         }
-    }, [questionQueue, questions, isLoading, user, score, isStatic, gameContext, scoreSaved]);
+    }, [gameState, user, score, isStatic, gameContext, scoreSaved]);
     
     const backUrl = isStatic ? '/statik' : '/teacher/activities';
     
+    const currentQuestion = questionQueue.length > 0 ? questionQueue[0] : null;
+
     if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
     
     if (error) return (
@@ -152,107 +138,138 @@ function GuessItGame() {
         </div>
     );
 
-    if (isFinished) {
-        return (
-            <div className="flex h-screen w-full items-center justify-center p-4 sm:p-6">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle>Tebrikler!</CardTitle>
-                        <CardDescription>Bil Bakalım etkinliğini tamamladınız.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-4xl font-bold text-primary">{score}</p>
-                        <p className="text-muted-foreground">Toplam Puan</p>
-                         <p className="text-sm text-red-500 mt-2">{mistakeCount} hata yapıldı.</p>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Button onClick={() => startGame(questions)} className="w-full">Tekrar Oyna</Button>
-                        <Button variant="outline" asChild className="w-full">
-                           <Link href={backUrl}>Etkinlik Merkezine Dön</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        );
-    }
-    
-    if (!currentQuestion) return <div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>;
-
     return (
-        <div className="min-h-screen flex flex-col items-center justify-start py-6 px-4 max-w-3xl mx-auto">
-             <div className="w-full flex justify-between items-center mb-6">
-                <h1 className="text-xl sm:text-2xl font-bold text-rose-600 header-font">Bil Bakalım?</h1>
-                <div className="flex items-center gap-4">
-                    <div className="bg-white px-3 py-1 rounded-full shadow-sm text-sm font-bold text-gray-600 border border-rose-100">
-                        Puan: <span className="text-rose-600 text-base">{score}</span>
-                    </div>
-                     <div className="bg-white px-3 py-1 rounded-full shadow-sm text-sm font-bold text-gray-600 border border-rose-100">
-                        Kalan: <span className="text-rose-600 text-base">{questionQueue.length}</span>
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 bg-rose-50 dark:bg-rose-900/50">
+            <div className="w-full max-w-7xl mx-auto">
+                <div className="w-full flex justify-between items-center mb-4 sm:mb-6">
+                    <h1 className="text-xl sm:text-2xl font-bold text-rose-600 header-font">Bil Bakalım?</h1>
+                    <div className="text-right">
+                        <div className="bg-white px-3 py-1 rounded-full shadow-sm text-sm font-bold text-gray-600 border border-rose-100">
+                            Puan: <span className="text-rose-600 text-base">{score}</span>
+                        </div>
+                         <div className="text-xs text-muted-foreground mt-1">
+                            Kalan Soru: {questionQueue.length}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className={cn("w-full bg-white p-4 sm:p-8 rounded-3xl shadow-lg border-b-8 border-rose-200 mb-8 text-center min-h-[140px] sm:min-h-[180px] flex flex-col justify-center items-center relative overflow-hidden transition-colors duration-300", 
-                isAnswered && isCorrect && 'bg-green-50 border-green-200',
-                isAnswered && !isCorrect && 'bg-red-50 border-red-200 animate-shake'
-            )}>
-                <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Soru</div>
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold leading-relaxed text-gray-800">
-                    {currentQuestion.text}
-                </h2>
-                {isAnswered && (
-                     <div className="absolute bottom-2 text-sm font-bold">
-                        {isCorrect ? <p className="text-green-600 animate-pop">Doğru!</p> : <p className="text-red-600">Yanlış! Soru sona eklendi.</p>}
+                {gameState === 'playing' && currentQuestion && (
+                    <>
+                        <div className={cn(
+                            "w-full bg-white p-4 sm:p-8 rounded-3xl shadow-lg border-b-8 border-rose-200 mb-6 text-center min-h-[140px] sm:min-h-[180px] flex flex-col justify-center items-center relative overflow-hidden transition-colors duration-300",
+                            isCorrectAnim && 'bg-green-50 border-green-200',
+                            wrongFeedbackId && 'bg-red-50 border-red-200 animate-shake',
+                            !wrongFeedbackId && 'animate-slide'
+                        )}>
+                            <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Soru</div>
+                            <h2 className={cn(
+                                "text-lg sm:text-xl md:text-2xl font-bold leading-relaxed transition-colors",
+                                wrongFeedbackId ? 'text-red-600' : 'text-gray-800'
+                            )}>
+                                {currentQuestion.text}
+                            </h2>
+
+                            {wrongFeedbackId && (
+                                <div className="absolute bottom-2 text-red-500 font-bold text-sm">
+                                    Yanlış! Bu soru sona atıldı.
+                                </div>
+                            )}
+                            {isCorrectAnim && (
+                                <div className="absolute bottom-2 text-green-600 font-bold text-sm animate-pop">
+                                    Harika! Doğru Cevap.
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 w-full">
+                            {questions.sort((a,b) => (a.correctAnswer || "").localeCompare(b.correctAnswer || "")).map((item) => {
+                                const answer = item.correctAnswer || '';
+                                const isCurrentCorrect = isCorrectAnim && currentQuestion && answer === currentQuestion.correctAnswer;
+                                const isWrong = wrongFeedbackId === answer;
+
+                                let btnClass = "concept-btn py-4 rounded-xl font-bold border-b-4 transition-all ";
+                                
+                                if (isCurrentCorrect) {
+                                    btnClass += "bg-green-500 border-green-700 text-white transform scale-105 shadow-lg z-10";
+                                } else if (isWrong) {
+                                    btnClass += "bg-red-500 border-red-700 text-white animate-shake";
+                                } else {
+                                    btnClass += "bg-white border-rose-200 text-gray-700 hover:bg-rose-50 hover:border-rose-300 hover:-translate-y-1";
+                                }
+
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => handleAnswer(answer)}
+                                        disabled={isCorrectAnim || wrongFeedbackId !== null}
+                                        className={cn("h-20 text-base", btnClass)}
+                                    >
+                                        {answer}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </>
+                )}
+
+                {gameState === 'start' && (
+                    <div className="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md border-4 border-rose-100 mt-10 mx-auto">
+                        <div className="text-6xl mb-4">🤔</div>
+                        <h1 className="text-3xl font-bold text-rose-600 mb-4 header-font">Hazır mısın?</h1>
+                        <p className="text-gray-600 mb-8 text-lg">
+                            Yukarıda soru çıkacak, aşağıdan cevabı bul. Yanlış cevaplanan sorular sona eklenecek.
+                        </p>
+                        <button 
+                            onClick={startGame}
+                            className="px-10 py-4 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 hover:scale-105 transition-all text-xl"
+                        >
+                            BAŞLA
+                        </button>
                     </div>
                 )}
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 w-full">
-                {allAnswers.map((answer, index) => {
-                    const isCorrectAnswer = answer === currentQuestion.correctAnswer;
-                    const isSelected = answer === selectedOption;
-                    let buttonClass = '';
 
-                    if (isAnswered) {
-                        if (isCorrectAnswer) {
-                            buttonClass = "bg-green-500 border-green-700 text-white transform scale-105 shadow-lg z-10";
-                        } else if (isSelected) {
-                            buttonClass = "bg-red-500 border-red-700 text-white animate-shake";
-                        } else {
-                            buttonClass = "bg-white border-rose-200 text-gray-400 opacity-50";
-                        }
-                    } else {
-                        buttonClass = "bg-white border-rose-200 text-gray-700 hover:bg-rose-50 hover:border-rose-300 hover:-translate-y-1";
-                    }
+                {gameState === 'won' && (
+                    <div className="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md border-4 border-green-100 mt-10 mx-auto animate-pop">
+                        <div className="text-6xl mb-4">🎉</div>
+                        <h1 className="text-3xl font-bold text-green-600 mb-2 header-font">Tebrikler!</h1>
+                        <p className="text-gray-600 mb-6">Tüm kavramları başarıyla öğrendin.</p>
+                        
+                         <div className="grid grid-cols-2 gap-4 mb-8">
+                             <div className="bg-gray-50 p-4 rounded-xl">
+                                <p className="text-sm text-gray-500">Toplam Puan</p>
+                                <p className="text-2xl font-bold text-rose-500">{score}</p>
+                            </div>
+                            <div className="bg-gray-50 p-4 rounded-xl">
+                                <p className="text-sm text-gray-500">Yapılan Hata</p>
+                                <p className="text-2xl font-bold text-rose-500">{mistakeCount}</p>
+                            </div>
+                        </div>
 
-                    return (
-                        <Button 
-                            key={`${answer}-${index}`} 
-                            className={cn("h-16 text-sm sm:h-20 sm:text-base", buttonClass)}
-                            onClick={() => handleAnswer(answer)}
-                            disabled={isAnswered}
+                        <button 
+                            onClick={startGame}
+                            className="w-full py-4 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition-all"
                         >
-                            {answer}
-                        </Button>
-                    );
-                })}
+                            TEKRAR OYNA
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
 
 function GuessItPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex h-screen w-full items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-      }
-    >
-      <GuessItGame />
-    </Suspense>
-  );
+    return (
+        <Suspense
+            fallback={
+                <div className="flex h-screen w-full items-center justify-center">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                </div>
+            }
+        >
+            <GuessItGame />
+        </Suspense>
+    );
 }
 
 export default GuessItPage;
