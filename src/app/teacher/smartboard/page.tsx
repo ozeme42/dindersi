@@ -56,13 +56,6 @@ export default function SmartboardPage() {
       icon: <Swords />,
       colorClass: "bg-fuchsia-600 text-fuchsia-50 hover:bg-fuchsia-700",
     },
-    {
-      href: "/teacher/smartboard/kavram-yarismasi",
-      title: "Kavram Yarışması",
-      description: "Tanımı verilen kavramı bularak rakibini alt et.",
-      icon: <BrainCircuit />,
-      colorClass: "bg-orange-500 text-orange-50 hover:bg-orange-600",
-    },
      {
       href: "/teacher/smartboard/fetih-oyunu",
       title: "Fetih Oyunu",
