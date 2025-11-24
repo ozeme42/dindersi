@@ -103,15 +103,17 @@ export default function SoruBankasiPage() {
                 const studentClassId = studentClass?.id;
 
                 const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
+                
+                const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+                
                 let filteredCourses: Course[] = [];
                 if (studentClassId) {
                     const isFirstClass = studentClassId === firstClassId;
-                    filteredCourses = allCourses.filter(course =>
+                    filteredCourses = studentVisibleCourses.filter(course =>
                         !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
                     );
                 } else {
-                    filteredCourses = allCourses.filter(course => !course.classId && !course.isTeacherOnly);
+                    filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
                 }
 
                 const coursesData = await Promise.all(filteredCourses.map(async (course) => {
@@ -158,7 +160,7 @@ export default function SoruBankasiPage() {
     }, [user]);
 
     return (
-        <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8">
+        <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold font-headline mb-2">Dersler ve Soru Bankası</h1>
@@ -184,5 +186,3 @@ export default function SoruBankasiPage() {
         </div>
     );
 }
-
-    
