@@ -3,17 +3,18 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import type { Question } from '@/lib/types';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const shuffleArray = <T>(array: T[]): T[] => {
-    for (let i = array.length - 1; i > 0; i--) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-    return array;
-}
+    return newArray;
+};
 
 export async function getMilyonerQuestionsAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -44,22 +45,36 @@ export async function getMilyonerQuestionsAction(
         const mediumQuestions = mediumSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         const hardQuestions = hardSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         
-        if (easyQuestions.length < 4 || mediumQuestions.length < 4 || hardQuestions.length < 2) {
-            return { error: "Bu yarışma için yeterli sayıda soru bulunamadı (en az 4 kolay, 4 orta, 2 zor).", questions: [] };
+        const requiredCounts = { easy: 4, medium: 4, hard: 2 };
+        if (easyQuestions.length < requiredCounts.easy || mediumQuestions.length < requiredCounts.medium || hardQuestions.length < requiredCounts.hard) {
+            return { 
+                error: `Bu yarışma için yeterli soru bulunamadı. Gerekli: ${requiredCounts.easy} Kolay, ${requiredCounts.medium} Orta, ${requiredCounts.hard} Zor.`, 
+                questions: [] 
+            };
         }
 
         const selectedEasy = shuffleArray(easyQuestions).slice(0, 4);
         const selectedMedium = shuffleArray(mediumQuestions).slice(0, 4);
         const selectedHard = shuffleArray(hardQuestions).slice(0, 2);
 
-        // This should now correctly be 10 questions to match the 10 money levels.
         const allQuestions = [...selectedEasy, ...selectedMedium, ...selectedHard];
+        
+        // Shuffle options for each question
+        const questionsWithShuffledOptions = allQuestions.map(q => {
+            if (q.options) {
+                return { ...q, options: shuffleArray(q.options) };
+            }
+            return q;
+        });
 
-        return { questions: JSON.parse(JSON.stringify(allQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
     } catch (error: any) {
         console.error("Error getting Milyoner questions:", error);
-        if (error.code === 'failed-precondition') {
-             return { error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}`, questions: [] };
+         if (error.code === 'failed-precondition') {
+            return { 
+                error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}`, 
+                questions: [] 
+            };
         }
         return { error: "Milyoner yarışması soruları alınırken bir hata oluştu.", questions: [] };
     }
@@ -67,7 +82,41 @@ export async function getMilyonerQuestionsAction(
 
 
 export async function submitMilyonerScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    // This action seems to be unused by the client-page, which uses a different action.
-    // However, keeping it in case it's intended for other purposes.
-    return { success: true };
+    if (!userId || score <= 0) {
+        return { success: true };
+    }
+    
+    try {
+        const attemptsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('gameType', '==', 'Milyoner'),
+            where('context', '==', context)
+        );
+        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
+        if (attemptsSnapshot.data().count >= 10) {
+            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
+        }
+
+        const batch = writeBatch(db);
+
+        const userRef = doc(db, 'users', userId);
+        batch.update(userRef, { score: increment(score) });
+
+        const eventRef = doc(collection(db, 'scoreEvents'));
+        batch.set(eventRef, {
+            userId,
+            points: score,
+            timestamp: serverTimestamp(),
+            gameType: 'Milyoner',
+            context,
+        });
+        
+        await batch.commit();
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error submitting Milyoner score:", error);
+        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
+    }
 }
