@@ -1,7 +1,7 @@
 
 import { Suspense } from 'react';
-import KavramYarismaOyunPageWrapper from './oyun/page';
-import { getConceptQuizAction, type ConceptQuizQuestion } from './actions';
+import { KavramYarismaClientPage } from './oyun/client-page';
+import { getConceptQuizData } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,11 +13,11 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
       topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
   };
 
-  const questionData = await getConceptQuizAction(params);
+  const conceptData = await getConceptQuizData(params);
 
   return (
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
-      <KavramYarismaOyunPageWrapper initialQuestions={questionData.concepts} initialError={questionData.error} />
+      <KavramYarismaClientPage initialConcepts={conceptData.concepts} initialError={conceptData.error} />
     </Suspense>
   );
 }
