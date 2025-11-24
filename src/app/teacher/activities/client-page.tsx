@@ -7,15 +7,33 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Gamepad2, ArrowLeft, Bug } from 'lucide-react';
+import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Gamepad2, ArrowLeft, Skull, Layers, FolderKanban, MousePointerClick, Trophy, Bug, ArrowDownUp, Link2, Mic, Pencil, Wind, Package } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { SelectionGrid } from '@/components/selection-grid';
 import { useSearchParams } from 'next/navigation';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { ErrorReportDialog } from '@/components/error-report-dialog';
-import { activityTypes } from '@/lib/activities';
 
+
+const activityTypes = [
+  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
+  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search },
+  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
+  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle },
+  { href: '/student/cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle },
+  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
+  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
+  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
+  { href: '/student/kategorilere-ayir', label: 'Kategorilere Ayır', icon: FolderKanban },
+  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
+  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
+  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
+  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
+  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
+  { href: '/student/tornado', label: 'Tornado', icon: Wind },
+  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package },
+];
 
 export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
   const searchParams = useSearchParams();
@@ -150,7 +168,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                                                         colorClasses[activityIndex % colorClasses.length]
                                                                     )}
                                                                 >
-                                                                    <Link href={`${activity.href}?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`}>
+                                                                    <Link href={`${activity.href}/oyun?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}&static=true`}>
                                                                         <activity.icon className="h-6 w-6 mb-1" />
                                                                         <span>{activity.label}</span>
                                                                     </Link>
@@ -230,3 +248,5 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     </div>
   );
 }
+
+    
