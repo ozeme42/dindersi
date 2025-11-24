@@ -2,11 +2,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, Crosshair } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, Crosshair, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -23,6 +23,8 @@ const steps = [
 
 export function BalloonHuntSetupClientPage() {
   const { user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -40,6 +42,16 @@ export function BalloonHuntSetupClientPage() {
   });
 
   useEffect(() => {
+    // Teacher redirect logic
+    const courseId = searchParams.get('courseId');
+    const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
+    if (user?.role !== 'student' && courseId && unitId && topicId) {
+        const gameUrl = `/student/balon-avcisi/oyun?${searchParams.toString()}`;
+        router.replace(gameUrl);
+        return; // Stop further execution
+    }
+
     const fetchCourses = async () => {
       if (!user) {
         setIsLoading(true);
@@ -87,7 +99,7 @@ export function BalloonHuntSetupClientPage() {
       }
     };
     fetchCourses();
-  }, [user]);
+  }, [user, searchParams, router]);
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection({ ...selection, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' });
@@ -139,6 +151,10 @@ export function BalloonHuntSetupClientPage() {
   }
   
   const renderContent = () => {
+      // If we are being redirected from teacher panel, show loading.
+      if (user?.role !== 'student' && searchParams.get('courseId')) {
+          return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>
+      }
       switch(currentStep) {
           case 1:
             return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={(id, name) => handleSelectCourse(id, name)} isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
