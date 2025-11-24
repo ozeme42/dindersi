@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -87,12 +88,12 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                                                     <span className="font-medium flex-1">{topic.title}</span>
                                                                                     <div className="flex gap-2 self-end sm:self-center">
                                                                                         {topic.hasYazilacaklarContent && (
-                                                                                            <Button asChild variant="outline" size="sm">
+                                                                                            <Button asChild size="sm" className="bg-sky-600 hover:bg-sky-700 text-white">
                                                                                                 <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}><Columns className="h-4 w-4 mr-2"/>Yazılacaklar</Link>
                                                                                             </Button>
                                                                                         )}
                                                                                         {topic.hasOzetContent && (
-                                                                                            <Button asChild variant="outline" size="sm">
+                                                                                            <Button asChild size="sm" className="bg-amber-600 hover:bg-amber-700 text-white">
                                                                                                 <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}><LayoutTemplate className="h-4 w-4 mr-2"/>Özet</Link>
                                                                                             </Button>
                                                                                         )}
