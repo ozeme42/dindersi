@@ -235,7 +235,7 @@ function GameComponent() {
 
   return (
     <div 
-        className="min-h-screen bg-gradient-to-b from-violet-900 to-fuchsia-900 flex flex-col items-center overflow-hidden font-sans text-white select-none"
+        className="h-screen overflow-y-hidden bg-gradient-to-b from-violet-900 to-fuchsia-900 flex flex-col items-center font-sans text-white select-none"
         onMouseMove={handleMove}
         onMouseUp={handleEnd}
         onTouchMove={handleMove}
@@ -359,5 +359,3 @@ export default function IlimHazinesiPage() {
         </Suspense>
     )
 }
-
-    
