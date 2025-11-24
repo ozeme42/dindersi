@@ -28,14 +28,77 @@ import { doc, getDoc } from 'firebase/firestore';
 
 type GameQuestion = GetQuizOutput['questions'][0];
 type TeamStudent = { uid: string, displayName: string, avatar?: string };
-type Team = { id: number; name: string; students: TeamStudent[]; score: number };
-type TeamForUrl = { id: number; name: string; studentUids: string[] };
+type Team = { id: number; name: string; students: TeamStudent[]; score: number; nextPlayerIndex: number; };
+type TeamForUrl = { id: number; name: string; playerUids: string[] };
 
-function TeamCompetitionComponent() {
+function CompetitionLoadingSkeleton() {
+    return (
+      <div className="container mx-auto p-4 sm:p-6 md:p-8">
+        <div className="flex justify-between items-center mb-6">
+            <div className="h-8 w-64 bg-muted rounded-md animate-pulse" />
+            <div className="h-10 w-32 bg-muted rounded-md animate-pulse" />
+        </div>
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
+            <div className="h-24 w-72 bg-muted rounded-md animate-pulse" />
+            <div className="h-24 w-72 bg-muted rounded-md animate-pulse" />
+        </div>
+        <Card className="p-6">
+             <div className="flex justify-between items-center mb-4">
+                <div className="h-6 w-32 bg-muted rounded-md animate-pulse" />
+                <div className="h-10 w-24 bg-muted rounded-md animate-pulse" />
+            </div>
+             <div className="h-4 w-full bg-muted rounded-full animate-pulse mb-8" />
+             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
+                {Array.from({ length: 20 }).map((_, i) => (
+                    <div key={i} className="aspect-square bg-muted rounded-md animate-pulse" />
+                ))}
+             </div>
+        </Card>
+      </div>
+    );
+}
+
+const TeamScoreCard = ({ team, isActive, colorIndex, rank, isFullscreen, nextPlayerName }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean, nextPlayerName?: string }) => {
+    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
+    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
+    const bgColor = colorClasses[colorIndex % colorClasses.length];
+    const ringColor = ringClasses[colorIndex % ringClasses.length];
+    
+    const getInitials = (name?: string): string => {
+        if (!name) return '?';
+        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
+    };
+
+    return (
+        <div className={cn(
+            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col justify-between",
+            bgColor,
+            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
+            isFullscreen ? "w-96 min-h-[180px]" : "w-72 min-h-[150px]"
+        )}>
+            <div className="flex justify-between items-start">
+                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
+                    <Users /> {team.name}
+                </h3>
+                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
+            </div>
+            <div className={cn("font-bold text-center my-2", isFullscreen ? "text-8xl" : "text-6xl")}>
+                {team.score}
+            </div>
+             {isActive && nextPlayerName && (
+                <div className="mt-2 text-center text-white bg-black/20 p-1 rounded-b-lg">
+                    <p className="text-xs font-semibold">Sıradaki: {nextPlayerName}</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
+
+function CompetitionComponent() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
   const [isSubmittingScores, setIsSubmittingScores] = useState(false);
   const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
 
@@ -46,9 +109,9 @@ function TeamCompetitionComponent() {
   }, []);
   
   const pointsConfig = useMemo(() => {
-    const pointsParam = searchParams.get('points');
+    const param = searchParams.get('points');
     try {
-        return pointsParam ? JSON.parse(pointsParam) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
+        return param ? JSON.parse(param) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     } catch {
         return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     }
@@ -72,7 +135,6 @@ function TeamCompetitionComponent() {
   const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
   const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
   const [winner, setWinner] = useState<Team | 'draw' | null>(null);
-  const [currentPlayerIndices, setCurrentPlayerIndices] = useState<Record<number, number>>({});
   
   const colorClasses = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-accent"];
 
@@ -96,13 +158,8 @@ function TeamCompetitionComponent() {
                 name: tUrl.name,
                 score: 0,
                 students: tUrl.playerUids.map(uid => studentsMap.get(uid)).filter(Boolean) as UserProfile[],
+                nextPlayerIndex: 0
             }));
-
-            const initialIndices: Record<number, number> = {};
-            initialTeams.forEach(team => {
-                initialIndices[team.id] = 0;
-            });
-            setCurrentPlayerIndices(initialIndices);
 
             setTeams(initialTeams);
             setActiveTeamId(initialTeams[0]?.id || null);
@@ -194,7 +251,7 @@ function TeamCompetitionComponent() {
       const updatedTeams = teams.map(t => {
           if (t.id === activeTeamId) {
               const newScore = Math.max(0, t.score + scoreChange);
-              const updatedTeam = { ...t, score: newScore };
+              const updatedTeam = { ...t, score: newScore, nextPlayerIndex: (t.nextPlayerIndex + 1) % (t.students.length || 1) };
               if (finishScore > 0 && newScore >= finishScore) {
                   winnerFound = updatedTeam;
               }
@@ -212,14 +269,7 @@ function TeamCompetitionComponent() {
           setGameState('finished');
       } else {
         const currentTeamIndex = teams.findIndex(t => t.id === activeTeamId);
-        if (currentTeamIndex === -1) return; // Should not happen
-        
-        // Update current player index for the team that just played
-        setCurrentPlayerIndices(prev => ({
-            ...prev,
-            [activeTeamId]: (prev[activeTeamId] + 1) % teams[currentTeamIndex].students.length
-        }));
-
+        if (currentTeamIndex === -1) return;
         const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
         setActiveTeamId(teams[nextTeamIndex]?.id);
       }
@@ -260,7 +310,7 @@ function TeamCompetitionComponent() {
             <CardHeader><CardTitle className="font-headline text-3xl">Yarışma Bitti!</CardTitle></CardHeader>
             <CardContent className="flex flex-col items-center gap-4">
                 {winner === 'draw' ? <><Award className="h-24 w-24 text-muted-foreground"/><p className="text-2xl font-bold">Berabere!</p></>
-                : winner ? <><Users className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
+                : winner ? <><Trophy className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
                 : <p>Sonuçlar hesaplanıyor...</p> }
 
                 <div className="w-full mt-4 border rounded-md">
@@ -296,9 +346,9 @@ function TeamCompetitionComponent() {
       </div>
     );
   }
-
+  
   const activeTeam = teams.find(t => t.id === activeTeamId);
-  const activePlayer = activeTeam?.students[currentPlayerIndices[activeTeam.id] || 0];
+  const nextPlayerName = activeTeam && activeTeam.students.length > 0 ? activeTeam.students[activeTeam.nextPlayerIndex].displayName : undefined;
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-indigo-300 via-purple-400 to-pink-500 dark:from-indigo-800 dark:via-purple-900 dark:to-pink-950">
@@ -314,7 +364,7 @@ function TeamCompetitionComponent() {
             </div>
             <div className="space-y-8">
                 <div className="flex flex-wrap justify-center items-center gap-6 mb-8">
-                    {teams.map((team, index) => <TeamScoreCard key={team.id} team={team} isActive={team.id === activeTeamId} colorIndex={index} rank={sortedTeams.findIndex(t => t.id === team.id)} isFullscreen={isFullscreen} />)}
+                    {teams.map((team, index) => <TeamScoreCard key={team.id} team={team} isActive={team.id === activeTeamId} colorIndex={index} rank={sortedTeams.findIndex(t => t.id === team.id)} isFullscreen={isFullscreen} nextPlayerName={isActive ? nextPlayerName : undefined} />)}
                 </div>
                 <Card className="bg-card/70 backdrop-blur-sm">
                     <CardHeader>
@@ -325,9 +375,6 @@ function TeamCompetitionComponent() {
                                 {activeTeamId && <Badge variant="secondary">Sıradaki Takım: {teams.find(t=>t.id===activeTeamId)?.name}</Badge>}
                             </div>
                         </CardTitle>
-                        <CardDescription>
-                            Sıradaki Oyuncu: <span className="font-semibold">{activePlayer?.displayName || "Bilinmiyor"}</span>
-                        </CardDescription>
                     </CardHeader>
                     <CardContent className={cn("grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2", isFullscreen && "grid-cols-15 gap-1")}>
                         {questions.map((q, i) => {
@@ -361,58 +408,12 @@ function TeamCompetitionComponent() {
   );
 }
 
-function TeamScoreCard({ team, isActive, colorIndex, rank, isFullscreen }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean }) {
-    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
-    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
-    const bgColor = colorClasses[colorIndex % colorClasses.length];
-    const ringColor = ringClasses[colorIndex % ringClasses.length];
-    
-    const getInitials = (name?: string): string => {
-        if (!name) return '?';
-        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
-    };
-
-    return (
-        <div className={cn(
-            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col",
-            bgColor,
-            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
-            isFullscreen ? "w-96" : "w-72"
-        )}>
-            <div className="flex justify-between items-start">
-                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
-                    <Users /> {team.name}
-                </h3>
-                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
-            </div>
-            <div className={cn("font-bold text-center my-4", isFullscreen ? "text-8xl" : "text-6xl")}>
-                {team.score}
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center mt-auto">
-                {team.students.length > 0 ? (
-                    team.students.map(student => (
-                        <TooltipProvider key={student.uid}>
-                             <Tooltip>
-                                <TooltipTrigger>
-                                    <Avatar className={cn(isFullscreen ? "h-12 w-12 text-lg" : "h-10 w-10")}>
-                                        <AvatarImage src={student.avatar || ''} data-ai-hint="profile picture" />
-                                        <AvatarFallback>{getInitials(student.displayName)}</AvatarFallback>
-                                    </Avatar>
-                                </TooltipTrigger>
-                                <TooltipContent><p>{student.displayName}</p></TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    ))
-                ) : <p className="text-sm text-white/70">Takımda oyuncu yok.</p>}
-            </div>
-        </div>
-    );
-}
 
 export default function SmartboardTakimOyunPage() {
   return (
     <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
-        <TeamCompetitionComponent />
+        <CompetitionComponent />
     </Suspense>
   )
 }
+```
