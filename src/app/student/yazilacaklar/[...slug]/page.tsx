@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
@@ -239,7 +238,7 @@ function YazilacaklarDisplayPage() {
             )}
         >
             <div className="container mx-auto max-w-7xl">
-                 <div className="my-6 md:my-12 text-center flex flex-col items-center">
+                 <div className="mb-6 md:mb-12 text-center flex flex-col items-center pt-4">
                     <h1 className="font-bold font-headline text-4xl">{topic?.title || 'Yazılacaklar'}</h1>
                      <div className="flex gap-2 justify-center mt-4 flex-wrap">
                         <div className="flex items-center gap-1">
@@ -265,10 +264,10 @@ function YazilacaklarDisplayPage() {
                             <TabsTrigger value="kavramlar">Kavramlar</TabsTrigger>
                             <TabsTrigger value="notlar">Önemli Notlar</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 p-4">
+                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0">
                             {KavramlarContent}
                         </TabsContent>
-                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 p-4">
+                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0">
                             {NotlarContent}
                         </TabsContent>
                     </Tabs>
@@ -286,5 +285,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
-    
