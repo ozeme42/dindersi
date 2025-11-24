@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Gamepad2 } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, BarChart3 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -42,8 +42,8 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
-        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Çalışma' },
-        { href: '/student/activities', icon: Gamepad2, label: 'Etkinlikler' },
+        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Soru Bankası' },
+        { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
@@ -53,7 +53,7 @@ export function BottomNavBar() {
         { href: '/teacher/content-creation', icon: PenSquare, label: 'İçerik' },
         { href: '/teacher/score-events', icon: DollarSign, label: 'Puanlar' },
         { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
-        { href: '/teacher/stats', icon: Trophy, label: 'Sıralama' },
+        { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;
