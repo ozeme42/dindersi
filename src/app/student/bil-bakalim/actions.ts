@@ -16,10 +16,10 @@ const shuffleArray = <T>(array: T[]): T[] => {
     return newArray;
 }
 
-// The output is now a list of all term/definition pairs for the selected context.
+// Re-using the Question type for the output, as it fits the structure.
 export async function getBilBakalimAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ questions: { id: string; answer: string; question: string; }[]; error?: string }> {
+): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
         let baseQuery = query(collection(db, 'activityItems'));
@@ -43,15 +43,22 @@ export async function getBilBakalimAction(
             return { error: "Bil Bakalım için bu konuda uygun tanım bulunamadı.", questions: [] };
         }
 
-        const gameQuestions = allDefinitions.map((item, index) => {
+        const gameQuestions: Question[] = allDefinitions.map((item, index) => {
             return {
                 id: item.id,
-                question: item.content.definition!,
-                answer: item.content.term!,
+                text: item.content.definition!,
+                type: 'Çoktan Seçmeli', // This type is nominal for the Question type, game logic will differ
+                correctAnswer: item.content.term!,
+                options: [], // Not used in this new game version
+                difficulty: 'Orta',
+                courseId: item.courseId,
+                unitId: item.unitId,
+                topicId: item.topicId,
+                topic: '',
             };
         });
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(shuffleArray(gameQuestions))) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
         return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", questions: [] };
