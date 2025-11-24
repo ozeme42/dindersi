@@ -5,48 +5,34 @@ import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "rea
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, BrainCircuit, Check, Trash2, Users, Shuffle, PartyPopper, Star, Award, Trophy, UserCog } from "lucide-react";
+import { ArrowLeft, Swords, Repeat, UserCheck, Award, PartyPopper, Castle, Loader2, AlertTriangle, Home, Trophy, Users } from "lucide-react";
 import Link from "next/link";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
-import { Skeleton } from "@/components/ui/skeleton";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import { getQuestionsFromBank } from "@/lib/quiz-actions";
 import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import type { SchoolClass, UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { playSound, stopSound } from "@/lib/audio-service";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import { QuestionDialog } from "@/components/question-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
-import { addStudentToClass } from "@/app/teacher/students/actions";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, collection, query, where } from 'firebase/firestore';
 
-const SUMMER_SCHOOL_CLASS_NAME = "Yaz Okulu Havuzu";
+const GRID_COLS = 6;
+const GRID_ROWS = 4;
+const TOTAL_TERRITORIES = GRID_COLS * GRID_ROWS;
 
 type GameQuestion = GetQuizOutput['questions'][0];
-
-type GameCompetitor = {
-    uid: string;
-    displayName: string;
-    avatar?: string;
-    score: number;
-    playerTurnIndex: number;
-};
-type Team = { 
-    id: number; 
-    name: string; 
-    players: UserProfile[]; 
-    score: number;
-    currentPlayerIndex: number; 
+type Player = { uid: string; displayName: string; };
+type Team = { id: number; name: string; color: string; players: Player[]; score: number };
+type TeamForUrl = { id: number; name: string; color: string; playerUids: string[] };
+type Territory = {
+  id: number;
+  question: GameQuestion;
+  owner: number | null; // team id
+  isBase: boolean;
 };
 
 function CompetitionLoadingSkeleton() {
@@ -56,35 +42,26 @@ function CompetitionLoadingSkeleton() {
             <Skeleton className="h-8 w-64" />
             <Skeleton className="h-10 w-32" />
         </div>
-        <Card className="p-6">
-             <div className="flex justify-between items-center mb-4">
-                <div className="h-6 w-32 bg-muted rounded-md animate-pulse" />
-                <div className="h-10 w-24 bg-muted rounded-md animate-pulse" />
-            </div>
-             <div className="h-4 w-full bg-muted rounded-full animate-pulse mb-8" />
-             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
-                {Array.from({ length: 20 }).map((_, i) => (
-                    <div key={i} className="aspect-square bg-muted rounded-md animate-pulse" />
-                ))}
-             </div>
-        </Card>
+        <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
+            <Skeleton className="h-24 w-72" />
+            <Skeleton className="h-24 w-72" />
+        </div>
+        <div className="aspect-video w-full max-w-4xl mx-auto grid gap-1 bg-gray-300 dark:bg-gray-700 p-1" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))`}}>
+            {Array.from({ length: TOTAL_TERRITORIES }).map((_, i) => (
+                <Skeleton key={i} className="w-full h-full" />
+            ))}
+        </div>
       </div>
     );
 }
 
-function TeamScoreCard({ team, isActive, colorIndex, rank }: { team: Team, isActive: boolean, colorIndex: number, rank: number }) {
-    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
-    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
-    const bgColor = colorClasses[colorIndex % colorClasses.length];
-    const ringColor = ringClasses[colorIndex % ringClasses.length];
-    const nextPlayer = team.players[team.currentPlayerIndex];
-    
+const TeamScoreCard = ({ team, isActive, rank, colorClass, nextPlayerName }: { team: Team, isActive: boolean, rank: number, colorClass: string, nextPlayerName?: string }) => {
     return (
         <Card 
             className={cn(
-                'relative group transition-all text-white border-transparent w-full',
-                bgColor,
-                isActive && `ring-4 ${ringColor} scale-105`
+                'relative group cursor-pointer transition-all text-white border-transparent shadow-lg w-72',
+                colorClass,
+                isActive && `ring-4 ring-offset-background ring-offset-2 ring-white/80 scale-105`
             )}
         >
             <CardContent className="p-4 flex items-center justify-between gap-3">
@@ -97,11 +74,14 @@ function TeamScoreCard({ team, isActive, colorIndex, rank }: { team: Team, isAct
                     </div>
                     <div className="truncate">
                         <p className="font-bold text-lg truncate">{team.name}</p>
-                        {isActive && nextPlayer && <p className="text-xs opacity-90 truncate">Sıradaki: {nextPlayer.displayName}</p>}
+                         {isActive && nextPlayerName && (
+                            <p className="text-xs opacity-80 animate-pulse">Sıradaki: {nextPlayerName}</p>
+                        )}
                     </div>
                 </div>
                 <div className="text-right">
                     <p className="text-4xl font-bold">{team.score}</p>
+                    <p className="text-xs opacity-80">Fethedilen Kale</p>
                 </div>
             </CardContent>
         </Card>
@@ -111,10 +91,19 @@ function TeamScoreCard({ team, isActive, colorIndex, rank }: { team: Team, isAct
 
 function CompetitionComponent() {
     const searchParams = useSearchParams();
-    const { toast } = useToast();
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [teams, setTeams] = useState<Team[]>([]);
+    const [activeTeamId, setActiveTeamId] = useState<number | null>(null);
+    const [territories, setTerritories] = useState<Territory[]>([]);
+    const [openedQuestion, setOpenedQuestion] = useState<{ territoryId: number, question: GameQuestion } | null>(null);
+    const [winner, setWinner] = useState<Team | null>(null);
+    const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isSubmittingScores, setIsSubmittingScores] = useState(false);
-    const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
+    
+    // This state will track the next player index for each team
+    const [nextPlayerIndex, setNextPlayerIndex] = useState<Record<number, number>>({});
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -122,78 +111,59 @@ function CompetitionComponent() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const finishScore = parseInt(searchParams.get('finishScore') || '0');
-    const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
-
-    const pointsConfig = useMemo(() => {
-        const param = searchParams.get('points');
-        try {
-            return param ? JSON.parse(param) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
-        } catch {
-            return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
-        }
-    }, [searchParams]);
-
-    const penaltyConfig = useMemo(() => {
-        const penaltyParam = searchParams.get('penalty');
-        try {
-            return penaltyParam ? JSON.parse(penaltyParam) : { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
-        } catch {
-            return { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
-        }
-    }, [searchParams]);
-
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const [teams, setTeams] = useState<Team[]>([]);
-    const [activeTeamId, setActiveTeamId] = useState<number | null>(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
-    const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
-    const [winner, setWinner] = useState<Team | 'draw' | null>(null);
-
-    const colorClasses = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-accent"];
-
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         try {
             const teamsParam = searchParams.get('teams');
-            if (!teamsParam) throw new Error("Takım bilgileri bulunamadı.");
+            if (!teamsParam) throw new Error("Takım bilgileri eksik.");
             
             const teamsFromUrl: TeamForUrl[] = JSON.parse(teamsParam);
-            const studentUids = teamsFromUrl.flatMap(t => t.playerUids);
+            const playerUids = teamsFromUrl.flatMap(t => t.playerUids);
             
-            const studentDocs = studentUids.length > 0 ? await Promise.all(studentUids.map(id => getDoc(doc(db, "users", id)))) : [];
+            const studentDocs = playerUids.length > 0 ? await Promise.all(playerUids.map(id => getDoc(doc(db, "users", id)))) : [];
             const studentsMap = new Map(studentDocs.map(docSnap => [docSnap.id, { uid: docSnap.id, ...docSnap.data() } as UserProfile]));
 
             const initialTeams: Team[] = teamsFromUrl.map(tUrl => ({
                 id: tUrl.id,
                 name: tUrl.name,
                 color: tUrl.color,
-                score: 0,
-                players: tUrl.playerUids.map(uid => studentsMap.get(uid)).filter(Boolean) as UserProfile[],
-                currentPlayerIndex: 0,
+                score: 1, // Start with their base castle
+                players: tUrl.playerUids.map(uid => studentsMap.get(uid)).filter(Boolean) as Player[],
             }));
-
+            
             setTeams(initialTeams);
             setActiveTeamId(initialTeams[0]?.id || null);
-
-            const params: GetQuizInput = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: parseInt(searchParams.get('questionCount') || '40'),
-                difficulty: ['Kolay', 'Orta', 'Zor'],
-                questionTypes: ['mcq', 'tf', 'fitb'],
-            };
-            const result = await getQuestionsFromBank(params);
-            if ('error' in result) throw new Error(result.error);
-            if (!result.questions || result.questions.length === 0) throw new Error("Uygun soru bulunamadı.");
             
-            setQuestions(result.questions as GameQuestion[]);
+            const initialPlayerIndexes: Record<number, number> = {};
+            initialTeams.forEach(t => initialPlayerIndexes[t.id] = 0);
+            setNextPlayerIndex(initialPlayerIndexes);
+
+
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+                questionCount: TOTAL_TERRITORIES,
+            };
+            const questionResult = await getFetihGameQuestions(params);
+
+            if (questionResult.error) throw new Error(questionResult.error);
+            if (!questionResult.questions || questionResult.questions.length < TOTAL_TERRITORIES) throw new Error(`Fetih oyunu için yeterli soru bulunamadı. En az ${TOTAL_TERRITORIES} soru gereklidir.`);
+            
+            const gameTerritories: Territory[] = questionResult.questions.map((q, i) => ({
+                id: i,
+                question: q,
+                owner: null,
+                isBase: false,
+            }));
+
+            // Set bases
+            gameTerritories[0].owner = initialTeams[0].id;
+            gameTerritories[0].isBase = true;
+            gameTerritories[TOTAL_TERRITORIES - 1].owner = initialTeams[1].id;
+            gameTerritories[TOTAL_TERRITORIES - 1].isBase = true;
+
+            setTerritories(gameTerritories);
             setGameState('playing');
 
         } catch (err: any) {
@@ -207,81 +177,68 @@ function CompetitionComponent() {
         fetchGameData();
     }, [fetchGameData]);
 
-    const handleSaveScores = useCallback(async (andFinish: boolean = false) => {
-        if (scoresHaveBeenSaved || teams.length === 0) return;
-        
-        setIsSubmittingScores(true);
-        
-        const scoreUpdates = teams.flatMap(team => 
-            team.players.map(player => ({
-                userId: player.uid,
-                points: Math.round(team.score / team.players.length),
-                gameType: 'smartboard_takim' as const,
-                context: `${searchParams.get('courseName') || 'Genel'} - ${searchParams.get('topicName') || 'Genel'}`
-            }))
-        ).filter(update => update.points > 0);
-
-        if (scoreUpdates.length === 0) {
-            toast({ title: "Skor Yok", description: "Kaydedilecek puan bulunmuyor." + (andFinish ? " Yarışma sonlandırılıyor." : "") });
-        } else {
-            const result = await updateMultipleStudentScores(scoreUpdates);
-            if (result.success) {
-                toast({ title: "Skorlar Kaydedildi", description: "Takım skorları oyuncu profillerine eklendi." });
-                setScoresHaveBeenSaved(true);
-            } else {
-                toast({ title: "Hata", description: result.error, variant: "destructive" });
-            }
-        }
-        
-        if (andFinish) {
-            const finalSorted = [...teams].sort((a,b) => b.score - a.score);
-            if (finalSorted.length > 0) {
-                setWinner(finalSorted[0]);
-            }
-            setGameState('finished');
-        }
-        setIsSubmittingScores(false);
-    }, [scoresHaveBeenSaved, searchParams, toast, gameState, teams]);
-
-
-    useEffect(() => {
-        if (gameState !== 'playing' || !questions.length || answeredQuestions.length === 0) return;
-        if (answeredQuestions.length === questions.length) {
-            handleSaveScores(true);
-        }
-    }, [gameState, answeredQuestions.length, questions.length, handleSaveScores]);
+    const isAdjacent = (territoryId: number, teamId: number): boolean => {
+        const row = Math.floor(territoryId / GRID_COLS);
+        const col = territoryId % GRID_COLS;
     
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
-        if (!activeTeamId || gameState !== 'playing') return;
-        
-        let winnerFound: Team | null = null;
-        
-        const updatedTeams = teams.map(t => {
-            if (t.id === activeTeamId) {
-                const newScore = Math.max(0, t.score + scoreChange);
-                const updatedTeam = { ...t, score: newScore, currentPlayerIndex: (t.currentPlayerIndex + 1) % t.players.length };
-                if (finishScore > 0 && newScore >= finishScore) {
-                    winnerFound = updatedTeam;
+        for (let r_off = -1; r_off <= 1; r_off++) {
+            for (let c_off = -1; c_off <= 1; c_off++) {
+                if (r_off === 0 && c_off === 0) continue;
+                const newRow = row + r_off;
+                const newCol = col + c_off;
+                if (newRow >= 0 && newRow < GRID_ROWS && newCol >= 0 && newCol < GRID_COLS) {
+                    const neighborId = newRow * GRID_COLS + newCol;
+                    if (territories[neighborId]?.owner === teamId) {
+                        return true;
+                    }
                 }
-                return updatedTeam;
             }
-            return t;
-        });
+        }
+        return false;
+    };
 
-        setTeams(updatedTeams);
-        setAnsweredQuestions([...answeredQuestions, questionNumber]);
+    const handleAnswerQuestion = (territoryId: number, isCorrect: boolean, scoreChange: number) => {
+        if (activeTeamId === null || gameState !== 'playing') return;
+
+        if (isCorrect) {
+            const newTerritories = territories.map(t => 
+                t.id === territoryId ? { ...t, owner: activeTeamId } : t
+            );
+            setTerritories(newTerritories);
+            
+            const newTeams = teams.map(t => 
+                t.id === activeTeamId ? {...t, score: t.score + 1} : t
+            );
+            setTeams(newTeams);
+            
+            // Check for win condition
+            const opponentBaseId = activeTeamId === teams[0].id ? TOTAL_TERRITORIES - 1 : 0;
+            if (territoryId === opponentBaseId) {
+                setWinner(teams.find(t => t.id === activeTeamId) || null);
+                setGameState('finished');
+            }
+        }
+        
         setOpenedQuestion(null);
         
-        if (winnerFound) {
-            setWinner(winnerFound);
-            handleSaveScores(true);
-        } else {
-          const currentTeamIndex = teams.findIndex(t => t.id === activeTeamId);
-          if (currentTeamIndex === -1) return; // Should not happen
-          const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
-          setActiveTeamId(teams[nextTeamIndex]?.id);
-        }
+        const currentTeamIndex = teams.findIndex(t => t.id === activeTeamId);
+        
+        setNextPlayerIndex(prev => {
+            const team = teams[currentTeamIndex];
+            if (team && team.players.length > 0) {
+                 const nextIndex = (prev[team.id] + 1) % team.players.length;
+                 return { ...prev, [team.id]: nextIndex };
+            }
+            return prev;
+        });
+
+        const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
+        setActiveTeamId(teams[nextTeamIndex]?.id);
     };
+    
+     const sortedTeams = useMemo(() => {
+        return [...teams].sort((a, b) => b.score - a.score);
+    }, [teams]);
     
     if (isLoading) return <CompetitionLoadingSkeleton />;
     if (error) return (
@@ -290,9 +247,9 @@ function CompetitionComponent() {
                 <AlertTriangle className="h-4 w-4" />
                 <AlertTitle>Hata!</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
-                <div className="mt-4">
+                 <div className="mt-4">
                     <Button asChild variant="outline">
-                        <Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Geri Dön</Link>
+                        <Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Geri Dön</Link>
                     </Button>
                 </div>
             </Alert>
@@ -300,93 +257,92 @@ function CompetitionComponent() {
     );
     
     if (gameState === 'finished') {
-        const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
         return (
              <div className="p-4 sm:p-6 md:p-8 flex items-center justify-center min-h-screen">
                 <Card className="w-full max-w-xl text-center">
                     <CardHeader>
-                        <CardTitle className="font-headline text-3xl">Yarışma Bitti!</CardTitle>
+                        <CardTitle className="font-headline text-3xl">Oyun Bitti!</CardTitle>
                     </CardHeader>
                     <CardContent className="flex flex-col items-center gap-4">
-                        {winner === 'draw' ? <><Award className="h-24 w-24 text-muted-foreground"/><p className="text-2xl font-bold">Berabere!</p></>
-                        : winner ? <><Trophy className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
-                        : <p>Sonuçlar hesaplanıyor...</p> }
-
-                        <div className="w-full mt-4 border rounded-md">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[50px]">Sıra</TableHead>
-                                        <TableHead>Takım</TableHead>
-                                        <TableHead className="text-right">Puan</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {sortedTeams.map((team, index) => (
-                                        <TableRow key={team.id}>
-                                            <TableCell className="font-medium">{index + 1}</TableCell>
-                                            <TableCell>{team.name}</TableCell>
-                                            <TableCell className="text-right font-bold">{team.score}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                        <Trophy className="h-24 w-24 text-amber-400"/>
+                        <p className="text-2xl">Kazanan: <span className="font-bold text-primary">{winner?.name || 'Belli değil'}</span></p>
                     </CardContent>
                     <CardFooter className="flex-col sm:flex-row justify-center gap-4">
-                       <Button onClick={() => handleSaveScores(false)} disabled={isSubmittingScores || scoresHaveBeenSaved}>
-                          {isSubmittingScores ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : scoresHaveBeenSaved ? <Check className="mr-2 h-4 w-4"/> : <PartyPopper className="mr-2 h-4 w-4" />}
-                          {scoresHaveBeenSaved ? 'Puanlar Kaydedildi' : 'Puanları Kaydet'}
-                      </Button>
-                      <Button size="lg" onClick={() => window.location.reload()} variant="secondary"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
-                      <Button asChild variant="outline"><Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link></Button>
+                         <Button onClick={() => window.location.reload()}><Repeat className="mr-2 h-4 w-4"/> Yeni Oyun</Button>
+                         <Button asChild variant="outline"><Link href="/teacher/smartboard"><Home className="mr-2 h-4 w-4"/> Ana Menü</Link></Button>
                     </CardFooter>
                 </Card>
             </div>
         )
     }
-    
+
     return (
-        <div className={cn("p-4 sm:p-6 md:p-8", isFullscreen ? "h-screen w-screen m-0 flex flex-col" : "container mx-auto")}>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold font-headline">Takım Yarışması</h1>
+        <div ref={mainContentRef} className="w-full min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-3xl font-bold font-headline">Fetih Oyunu</h1>
                 <div className="flex items-center gap-2">
-                    <FullscreenToggle />
-                    <Button asChild variant="outline"><Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link></Button>
+                    <FullscreenToggle elementRef={mainContentRef} />
+                    <Button asChild variant="outline"><Link href="/teacher/smartboard/fetih-oyunu"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link></Button>
                 </div>
             </div>
-            <div className="flex flex-wrap justify-center items-center gap-6 mb-8">
-                {teams.map((team, index) => <TeamScoreCard key={team.id} team={team} isActive={team.id === activeTeamId} colorIndex={index} rank={sortedTeams.findIndex(t => t.id === team.id)} />)}
+            <div className="flex flex-wrap justify-center items-center gap-6 mb-4">
+                 {teams.map((team, index) => {
+                    const activeTeam = teams.find(t => t.id === activeTeamId);
+                    const nextPlayerName = activeTeam?.id === team.id ? activeTeam?.players[nextPlayerIndex[team.id]]?.displayName : undefined;
+
+                    return (
+                        <TeamScoreCard 
+                            key={team.id} 
+                            team={team} 
+                            isActive={team.id === activeTeamId} 
+                            colorClass={team.color === 'blue' ? 'bg-blue-600' : 'bg-red-600'}
+                            rank={sortedTeams.findIndex(t => t.id === team.id)}
+                            nextPlayerName={nextPlayerName}
+                        />
+                    );
+                 })}
             </div>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                        <span>Sorular ({questions.length - answeredQuestions.length} kaldı)</span>
-                        <div className="flex items-center gap-2">
-                            <Button variant="outline" size="sm" onClick={handleSaveScores} disabled={isSubmittingScores || scoresHaveBeenSaved}>
-                                {isSubmittingScores ? <Loader2 className="h-4 w-4 animate-spin"/> : scoresHaveBeenSaved ? <Check className="h-4 w-4" /> : null}
-                                {scoresHaveBeenSaved ? 'Kaydedildi' : 'Puanları Kaydet'}
-                            </Button>
-                             <Button variant="destructive" size="sm" onClick={() => handleSaveScores(true)} disabled={isSubmittingScores || scoresHaveBeenSaved}>Yarışmayı Bitir</Button>
-                        </div>
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
-                    {questions.map((q, i) => {
-                        const qNum = i + 1;
-                        const isAnswered = answeredQuestions.includes(qNum);
-                        return <Button key={i} className={cn("aspect-square h-auto w-auto", isAnswered ? "bg-muted text-muted-foreground" : "bg-primary")} disabled={isAnswered} onClick={() => setOpenedQuestion({ number: qNum, question: q })}>
-                            {isAnswered ? <Check/> : qNum}
+
+            <div className="aspect-video w-full max-w-6xl mx-auto grid gap-1 bg-gray-300 dark:bg-gray-700 p-1" style={{ gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))`}}>
+                {territories.map(t => {
+                    const teamOwner = teams.find(team => team.id === t.owner);
+                    const isAdjacentToActive = activeTeamId !== null && isAdjacent(t.id, activeTeamId);
+                    const canAttack = t.owner === null && isAdjacentToActive;
+                    return (
+                        <Button 
+                            key={t.id}
+                            onClick={() => setOpenedQuestion({ territoryId: t.id, question: t.question })}
+                            disabled={!canAttack}
+                            className={cn(
+                                "w-full h-full flex items-center justify-center rounded-sm transition-all duration-200 p-0",
+                                t.owner === null ? "bg-gray-200 dark:bg-gray-800" : (teamOwner?.color === 'blue' ? 'bg-blue-500' : 'bg-red-500'),
+                                canAttack && "cursor-pointer hover:scale-105 hover:z-10 ring-2 ring-offset-2 ring-yellow-400",
+                                !canAttack && "cursor-not-allowed"
+                            )}
+                        >
+                            {t.isBase && <Castle className="h-6 w-6 text-white"/>}
                         </Button>
-                    })}
-                </CardContent>
-            </Card>
-            {openedQuestion && <QuestionDialog isFullscreen={isFullscreen} isOpen={!!openedQuestion} onClose={() => setOpenedQuestion(null)} questionData={openedQuestion} onAnswer={handleAnswerQuestion} timerDuration={questionTimer} pointsConfig={pointsConfig} penaltyConfig={penaltyConfig}/>}
+                    )
+                })}
+            </div>
+             {openedQuestion && (
+                <QuestionDialog
+                    isOpen={!!openedQuestion}
+                    onClose={() => setOpenedQuestion(null)}
+                    questionData={{number: openedQuestion.territoryId, question: openedQuestion.question}}
+                    onAnswer={handleAnswerQuestion}
+                    timerDuration={20}
+                    pointsConfig={{ 'default': { points: 1 } }}
+                    penaltyConfig={{ 'default': { penalty: 0 } }} // No penalty in Fetih
+                    isFullscreen={isFullscreen}
+                    showCorrectAnswerOnWrong={false} // Don't show correct answer, just fail
+                />
+            )}
         </div>
     );
 }
 
-export default function SmartboardTakimOyunPage() {
+export default function FetihOyunPage() {
     return <Suspense fallback={<CompetitionLoadingSkeleton />}><CompetitionComponent /></Suspense>
 }
 
