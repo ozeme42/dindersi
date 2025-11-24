@@ -1,42 +1,59 @@
 
 "use client";
 
-import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
+import { submitBilBakalimScoreAction, getBilBakalimAction } from '../actions';
+import type { Question } from "@/lib/types";
+import { Loader2, AlertTriangle, ArrowLeft, PartyPopper, Repeat, Home } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
-import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Repeat, Home } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
-import { Progress } from '@/components/ui/progress';
-import { useToast } from '@/hooks/use-toast';
+
+const GameScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
+    const isVisible = gameState === 'start' || gameState === 'flipping' || gameState === 'result' || gameState === 'finished';
+    if (!isVisible) return null;
+    return (
+        <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 text-center relative overflow-hidden w-full">
+            {children}
+        </div>
+    );
+};
+
+const QuestionScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
+    const isVisible = gameState === 'question' || gameState === 'feedback';
+    if (!isVisible) return null;
+    return (
+         <div className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border-t-8 border-indigo-500 relative w-full">
+            {children}
+         </div>
+    );
+}
 
 function GuessItGame() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const { user } = useAuth();
     const { toast } = useToast();
-    
-    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
-    const [questionQueue, setQuestionQueue] = useState<Partial<Question>[]>([]);
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questionQueue, setQuestionQueue] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
-    const [currentQuestion, setCurrentQuestion] = useState<Partial<Question> | null>(null);
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-    const [isAnswered, setIsAnswered] = useState(false);
 
+    const [gameState, setGameState] = useState('playing');
     const [score, setScore] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [mistakeCount, setMistakeCount] = useState(0);
+
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [isAnswered, setIsAnswered] = useState(false);
 
     const isStatic = searchParams.get('static') === 'true';
-    const gameContext = `Bil Bakalım - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`;
+    const gameContext = `Bil Bakalım - ${searchParams.get('topicName')}`;
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -46,47 +63,48 @@ function GuessItGame() {
                 topicId: searchParams.get('topicId') || undefined,
             };
             const result = await getBilBakalimAction(params);
-            if (result.error || !result.questions || result.questions.length === 0) {
-                setError(result.error || "Bu konu için uygun soru bulunamadı.");
+            if (result.error) {
+                setError(result.error);
+            } else if (result.questions && result.questions.length > 0) {
+                setQuestions(result.questions);
+                setQuestionQueue(result.questions);
             } else {
-                const allQuestions = result.questions.sort(() => 0.5 - Math.random());
-                setQuestions(allQuestions);
-                setQuestionQueue(allQuestions);
-                setCurrentQuestion(allQuestions[0]);
+                setError("Bu konu için uygun soru bulunamadı.");
             }
             setIsLoading(false);
         };
         fetchQuestions();
     }, [searchParams, isStatic]);
     
-    const handleAnswer = (answer: string) => {
-        if (isAnswered) return;
+    const currentQuestion = questionQueue.length > 0 ? questionQueue[0] : null;
 
-        const isCorrect = answer === currentQuestion?.correctAnswer;
+    const handleAnswer = (answer: string) => {
+        if (isAnswered || !currentQuestion) return;
+
+        const isCorrect = answer === currentQuestion.correctAnswer;
         setSelectedAnswer(answer);
         setIsAnswered(true);
-
+        
         if (isCorrect) {
             playSound('correct');
-            setScore(prev => prev + 15);
-             setTimeout(() => {
+            setScore(prev => prev + 10);
+            setTimeout(() => {
                 const newQueue = questionQueue.slice(1);
                 setQuestionQueue(newQueue);
-                if (newQueue.length > 0) {
-                    setCurrentQuestion(newQueue[0]);
+                if (newQueue.length === 0) {
+                    setIsFinished(true);
+                } else {
                     setIsAnswered(false);
                     setSelectedAnswer(null);
                 }
             }, 1200);
         } else {
             playSound('incorrect');
-            setMistakeCount(prev => prev + 1);
             setScore(prev => Math.max(0, prev - 5));
             setTimeout(() => {
-                const failedQuestion = questionQueue[0];
-                const newQueue = [...questionQueue.slice(1), failedQuestion];
+                const wrongQuestion = questionQueue[0];
+                const newQueue = [...questionQueue.slice(1), wrongQuestion];
                 setQuestionQueue(newQueue);
-                setCurrentQuestion(newQueue[0]);
                 setIsAnswered(false);
                 setSelectedAnswer(null);
             }, 1200);
@@ -94,118 +112,104 @@ function GuessItGame() {
     };
     
     useEffect(() => {
-        if (!isLoading && user && questionQueue.length === 0 && questions.length > 0) {
-            setIsFinished(true);
-            if (score > 0 && !isStatic) {
-                submitBilBakalimScoreAction(user.uid, score, gameContext);
-            }
+        const handleFinish = async () => {
+             if (user && score > 0 && !isStatic) {
+                await submitBilBakalimScoreAction(user.uid, score, gameContext);
+             }
         }
-    }, [questionQueue, questions, isLoading, user, score, isStatic, gameContext]);
+        if (isFinished) {
+            handleFinish();
+        }
+    }, [isFinished, user, score, isStatic, gameContext]);
     
-    const backUrl = isStatic ? '/statik' : '/teacher/activities';
+    const backUrl = '/student/bil-bakalim';
     
     if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
     
     if (error) return (
         <div className="flex h-screen w-full items-center justify-center p-4">
-             <Alert variant="destructive" className="max-w-lg">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Oyun Yüklenemedi</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                <div className="mt-4">
-                    <Button asChild variant="secondary">
+             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
+                <strong className="font-bold">Hata! </strong>
+                <span className="block sm:inline ml-2">{error}</span>
+                 <div className="mt-4">
+                    <Button asChild variant="outline">
                         <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
-            </Alert>
+            </div>
         </div>
     );
 
     if (isFinished) {
         return (
-            <div className="flex h-screen w-full items-center justify-center">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle>Tebrikler!</CardTitle>
-                        <CardDescription>Bil Bakalım etkinliğini tamamladınız.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div>
-                            <p className="text-4xl font-bold text-primary">{score}</p>
-                            <p className="text-muted-foreground">Toplam Puan</p>
-                        </div>
-                        <div>
-                            <p className="text-lg font-semibold text-red-500">{mistakeCount}</p>
-                            <p className="text-xs text-muted-foreground">Yapılan Hata</p>
-                        </div>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Button onClick={() => window.location.reload()} className="w-full">Tekrar Oyna</Button>
-                        <Button variant="outline" asChild className="w-full">
-                           <Link href="/student/bil-bakalim">Etkinlik Merkezine Dön</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
+            <div className="flex h-screen w-full items-center justify-center p-4">
+                <GameScreen gameState="finished">
+                    <div className="text-6xl mb-4">🎉</div>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-2 header-font">Tebrikler!</h2>
+                    <p className="text-gray-600 mb-6">Tüm kavramları öğrendin.</p>
+                    
+                    <div className="bg-rose-50 p-4 rounded-xl mb-6">
+                        <p className="text-sm font-bold text-rose-500 uppercase tracking-wider">Toplam Skorun</p>
+                        <p className="text-4xl font-black text-rose-600 header-font">{score}</p>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <Button onClick={() => window.location.reload()} className="w-full py-3">Tekrar Oyna</Button>
+                         <Button asChild variant="outline" className="w-full py-3"><Link href={backUrl}>Ana Menü</Link></Button>
+                    </div>
+                </GameScreen>
             </div>
         );
     }
     
-    if (!currentQuestion) return null;
-
     return (
-        <div className="flex h-screen w-full flex-col items-center justify-center p-4 bg-teal-50 dark:bg-teal-900/50">
-            <div className="w-full max-w-5xl">
-                <div className="flex justify-between items-center mb-4">
-                     <div className="w-24">
-                        <Link href="/student/bil-bakalim">
-                            <Button variant="outline" size="sm"><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Button>
-                        </Link>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <p className="text-lg font-bold text-primary">Puan: {score}</p>
-                        <p className="text-sm text-muted-foreground">Kalan: {questionQueue.length}/{questions.length}</p>
-                    </div>
-                    <div className="w-24"/>
+        <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-rose-50 dark:bg-slate-900 font-body">
+            
+            <div className="w-full max-w-2xl flex justify-between items-center mb-4 sm:mb-6">
+                 <h1 className="text-xl sm:text-2xl font-bold text-rose-600 header-font">Bil Bakalım?</h1>
+                <div className="bg-white px-4 py-2 rounded-full shadow-sm text-sm font-bold text-gray-600 border border-rose-100">
+                    Puan: <span className="text-rose-600 text-lg">{score}</span>
                 </div>
+            </div>
 
-                <div className="text-center bg-background/50 border-2 border-primary/20 p-6 rounded-lg shadow-lg relative mt-2">
-                    <p className="text-xl sm:text-2xl font-semibold italic">"{currentQuestion.text}"</p>
-                </div>
-                
-                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full mt-6">
-                    {questions.map((q) => {
-                        const answer = q.correctAnswer;
-                        if (!answer) return null;
+            <div className="w-full max-w-2xl">
+                <QuestionScreen gameState="question">
+                    {currentQuestion && (
+                        <>
+                            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center min-h-[60px] flex items-center justify-center">
+                                {currentQuestion.question}
+                            </h3>
 
-                        const isAnsweredForThisQ = questionQueue.find(qu => qu.id === q.id) === undefined;
-                        const isTheCorrectAnswer = answer === currentQuestion.correctAnswer;
-                        const isSelected = answer === selectedAnswer;
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {currentQuestion.options?.map((option, index) => {
+                                    const isCorrect = option === currentQuestion.correctAnswer;
+                                    const isSelected = option === selectedAnswer;
 
-                        let buttonClass = 'bg-white hover:bg-gray-100 text-gray-800';
+                                    let buttonClass = 'bg-white border-gray-200 text-gray-700 hover:bg-rose-50 hover:border-rose-300';
+                                    if(isAnswered) {
+                                        if (isCorrect) buttonClass = 'bg-green-500 border-green-700 text-white animate-pop';
+                                        else if (isSelected) buttonClass = 'bg-red-500 border-red-700 text-white animate-shake';
+                                        else buttonClass = 'bg-gray-100 border-gray-200 text-gray-400 opacity-70';
+                                    }
 
-                        if (isAnswered) {
-                            if (isSelected) {
-                                buttonClass = isTheCorrectAnswer ? 'bg-green-500 animate-tada' : 'bg-red-500 animate-shake';
-                            } else if(isTheCorrectAnswer) {
-                                buttonClass = 'bg-green-500 animate-tada';
-                            } else {
-                                buttonClass = 'opacity-50 bg-gray-300';
-                            }
-                        }
-
-                        return (
-                            <Button
-                                key={q.id}
-                                variant="outline"
-                                className={`h-24 text-lg font-bold transition-all duration-300 ${buttonClass}`}
-                                onClick={() => handleAnswer(answer)}
-                                disabled={isAnswered || isAnsweredForThisQ}
-                            >
-                                {answer}
-                            </Button>
-                        );
-                    })}
-                </div>
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleAnswer(option)}
+                                            disabled={isAnswered}
+                                            className={`w-full py-4 px-4 rounded-xl font-bold text-left text-base sm:text-lg border-b-4 transition-all concept-btn ${buttonClass}`}
+                                        >
+                                            <span className="font-bold mr-2">{['A','B','C','D'][index]})</span> {option}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    )}
+                </QuestionScreen>
+            </div>
+            <div className="mt-8 text-center opacity-40 text-xs text-gray-500">
+                Pekiştirme Etkinliği
             </div>
         </div>
     );
@@ -218,4 +222,3 @@ export default function GuessItPage() {
         </Suspense>
     );
 }
-
