@@ -2,11 +2,11 @@
 "use client";
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home } from "lucide-react";
+import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home, Trophy } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog } from "@/components/ui/alert-dialog";
@@ -46,9 +46,9 @@ function TeamCompetitionComponent() {
   }, []);
   
   const pointsConfig = useMemo(() => {
-    const param = searchParams.get('points');
+    const pointsParam = searchParams.get('points');
     try {
-        return param ? JSON.parse(param) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
+        return pointsParam ? JSON.parse(pointsParam) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     } catch {
         return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     }
@@ -72,6 +72,7 @@ function TeamCompetitionComponent() {
   const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
   const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
   const [winner, setWinner] = useState<Team | 'draw' | null>(null);
+  const [currentPlayerIndices, setCurrentPlayerIndices] = useState<Record<number, number>>({});
   
   const colorClasses = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-accent"];
 
@@ -96,6 +97,12 @@ function TeamCompetitionComponent() {
                 score: 0,
                 students: tUrl.playerUids.map(uid => studentsMap.get(uid)).filter(Boolean) as UserProfile[],
             }));
+
+            const initialIndices: Record<number, number> = {};
+            initialTeams.forEach(team => {
+                initialIndices[team.id] = 0;
+            });
+            setCurrentPlayerIndices(initialIndices);
 
             setTeams(initialTeams);
             setActiveTeamId(initialTeams[0]?.id || null);
@@ -125,7 +132,10 @@ function TeamCompetitionComponent() {
   
   const handleSaveScores = async (andFinish: boolean = false) => {
     const inGameCompetitors = teams.flatMap(t => t.students);
-    if (scoresHaveBeenSaved || inGameCompetitors.length === 0) return;
+    if (scoresHaveBeenSaved || inGameCompetitors.length === 0) {
+        if (andFinish && gameState !== 'finished') setGameState('finished');
+        return;
+    }
 
     setIsSubmittingScores(true);
     
@@ -144,7 +154,7 @@ function TeamCompetitionComponent() {
     } else {
         const result = await updateMultipleStudentScores(scoreUpdates);
         if (result.success) {
-            toast({ title: "Skorlar Kaydedildi", description: "Takım skorları oyuncu profillerine eklendi." });
+            toast({ title: "Skorlar Kaydedildi", description: "Takım skorları öğrenci profillerine eklendi." });
             setScoresHaveBeenSaved(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -203,6 +213,13 @@ function TeamCompetitionComponent() {
       } else {
         const currentTeamIndex = teams.findIndex(t => t.id === activeTeamId);
         if (currentTeamIndex === -1) return; // Should not happen
+        
+        // Update current player index for the team that just played
+        setCurrentPlayerIndices(prev => ({
+            ...prev,
+            [activeTeamId]: (prev[activeTeamId] + 1) % teams[currentTeamIndex].students.length
+        }));
+
         const nextTeamIndex = (currentTeamIndex + 1) % teams.length;
         setActiveTeamId(teams[nextTeamIndex]?.id);
       }
@@ -280,15 +297,18 @@ function TeamCompetitionComponent() {
     );
   }
 
+  const activeTeam = teams.find(t => t.id === activeTeamId);
+  const activePlayer = activeTeam?.students[currentPlayerIndices[activeTeam.id] || 0];
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-indigo-300 via-purple-400 to-pink-500 dark:from-indigo-800 dark:via-purple-900 dark:to-pink-950">
         <div className={cn("p-4 sm:p-6 md:p-8", isFullscreen ? "h-full flex flex-col" : "container mx-auto")}>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Yaz Kursu Takım Yarışması</h1>
+                <h1 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Takım Yarışması</h1>
                 <div className="flex items-center gap-2">
                     <FullscreenToggle />
                     <Button asChild variant="outline" className="bg-card/70 backdrop-blur-sm hover:bg-card/90">
-                        <Link href="/teacher/summer-school/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
+                        <Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
                     </Button>
                 </div>
             </div>
@@ -305,6 +325,9 @@ function TeamCompetitionComponent() {
                                 {activeTeamId && <Badge variant="secondary">Sıradaki Takım: {teams.find(t=>t.id===activeTeamId)?.name}</Badge>}
                             </div>
                         </CardTitle>
+                        <CardDescription>
+                            Sıradaki Oyuncu: <span className="font-semibold">{activePlayer?.displayName || "Bilinmiyor"}</span>
+                        </CardDescription>
                     </CardHeader>
                     <CardContent className={cn("grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2", isFullscreen && "grid-cols-15 gap-1")}>
                         {questions.map((q, i) => {
@@ -393,5 +416,3 @@ export default function SmartboardTakimOyunPage() {
     </Suspense>
   )
 }
-
-    
