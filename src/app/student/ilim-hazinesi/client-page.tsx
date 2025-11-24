@@ -211,7 +211,7 @@ export function IlimHazinesiSetupClientPage() {
                 (currentStep === 1 && !selection.courseId) ||
                 (currentStep === 2 && !selection.unitId) ||
                 (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
+              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
             ) : (
               <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                 <Link href={getGameUrl()}>
@@ -225,3 +225,5 @@ export function IlimHazinesiSetupClientPage() {
     </div>
   );
 }
+
+    
