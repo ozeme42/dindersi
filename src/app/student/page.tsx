@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
@@ -341,10 +340,10 @@ export default function StudentDashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-               <Button className="h-20 sm:h-24 text-sm sm:text-base flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
+               <Button className="py-6 text-sm sm:text-base flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
                     <Link href="/student/activities"><Gamepad2 className="h-5 w-5"/> Bireysel Etkinlikler</Link>
                 </Button>
-                 <Button className="h-20 sm:h-24 text-sm sm:text-base flex-col gap-1 bg-destructive hover:bg-destructive/80" asChild>
+                 <Button className="py-6 text-sm sm:text-base flex-col gap-1 bg-destructive hover:bg-destructive/80" asChild>
                     <Link href="/student/yarismalar"><Users className="h-5 w-5"/> Çok Oyunculu</Link>
                 </Button>
           </div>
@@ -360,7 +359,7 @@ export default function StudentDashboard() {
                   <Link href="/student/shop"><ShoppingCart className="h-5 w-5"/> Puan Dükkanı</Link>
               </Button>
               <Card className="relative">
-                <Button className="w-full h-20 sm:h-24 text-sm sm:text-md flex-col gap-1 bg-violet-600 hover:bg-violet-700" asChild>
+                <Button className="w-full h-20 sm:h-24 text-sm sm:text-base flex-col gap-1 bg-violet-600 hover:bg-violet-700" asChild>
                     <Link href="/student/deneme">
                         <FileCog className="h-5 w-5"/> Deneme Sınavlarım
                     </Link>
