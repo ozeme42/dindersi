@@ -10,6 +10,16 @@ function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
+// Helper function to shuffle an array
+const shuffleArray = <T>(array: T[]): T[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
 // Centralized function to fetch questions
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 10, difficulty, questionTypes } = params;
@@ -74,11 +84,19 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         // Shuffle and limit
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-        const selectedQuestions = shuffled.slice(0, questionCount);
+        let selectedQuestions = shuffled.slice(0, questionCount);
         
         if (selectedQuestions.length === 0) {
             return { questions: [], error: "Belirtilen kriterlere uygun soru bulunamadı." };
         }
+
+        // Shuffle options for MCQ and FITB questions
+        selectedQuestions = selectedQuestions.map(q => {
+            if ((q.type === 'Çoktan Seçmeli' || q.type === 'Boşluk Doldurma') && q.options) {
+                return { ...q, options: shuffleArray(q.options) };
+            }
+            return q;
+        });
 
         return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
 
@@ -90,5 +108,3 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
 }
-
-    
