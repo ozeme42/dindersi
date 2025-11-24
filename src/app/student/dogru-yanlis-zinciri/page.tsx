@@ -1,34 +1,27 @@
 
-
 "use client";
 
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { TrueFalseChainSetupClientPage } from './client-page';
-import { useRouter, useSearchParams } from 'next/navigation';
+import TrueFalseChainPage from './oyun/page';
 
-function PageContent() {
-    const router = useRouter();
+function DogruYanlisZinciriPageWrapper() {
     const searchParams = useSearchParams();
-    const isStatic = searchParams.get('static') === 'true';
+    const hasGameParams = searchParams.has('courseId') && searchParams.has('topicId');
 
-    useEffect(() => {
-        if (isStatic) {
-            const params = new URLSearchParams(searchParams.toString());
-            router.replace(`/student/dogru-yanlis-zinciri/oyun?${params.toString()}`);
-        }
-    }, [isStatic, router, searchParams]);
-
-    if (!isStatic) {
-        return <TrueFalseChainSetupClientPage />;
+    if (hasGameParams) {
+        return <TrueFalseChainPage />;
     }
 
-    return <div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>
+    return <TrueFalseChainSetupClientPage />;
 }
 
-export default function DogruYanlisZinciriPage() {
+
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <PageContent />
+            <DogruYanlisZinciriPageWrapper />
         </Suspense>
     );
 }

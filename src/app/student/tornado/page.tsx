@@ -1,35 +1,26 @@
 
-
 "use client";
 
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { TornadoSetupClientPage } from './client-page';
-import { useRouter, useSearchParams } from 'next/navigation';
+import TornadoOyunPage from './oyun/page';
 
-
-function PageContent() {
-    const router = useRouter();
+function TornadoPageWrapper() {
     const searchParams = useSearchParams();
-    const isStatic = searchParams.get('static') === 'true';
+    const hasGameParams = searchParams.has('courseId') && searchParams.has('topicId');
 
-    useEffect(() => {
-        if (isStatic) {
-            const params = new URLSearchParams(searchParams.toString());
-            router.replace(`/student/tornado/oyun?${params.toString()}`);
-        }
-    }, [isStatic, router, searchParams]);
-
-    if (!isStatic) {
-        return <TornadoSetupClientPage />;
+    if (hasGameParams) {
+        return <TornadoOyunPage />;
     }
 
-    return <div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>
+    return <TornadoSetupClientPage />;
 }
 
-export default function TornadoSetupPage() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <PageContent />
+            <TornadoPageWrapper />
         </Suspense>
     );
 }

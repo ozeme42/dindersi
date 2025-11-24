@@ -1,34 +1,26 @@
 
-
 "use client";
 
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { HedefiVurSetupClientPage } from './client-page';
-import { useRouter, useSearchParams } from 'next/navigation';
+import HitTheTargetPage from './oyun/page';
 
-function PageContent() {
-    const router = useRouter();
+function HedefiVurPageWrapper() {
     const searchParams = useSearchParams();
-    const isStatic = searchParams.get('static') === 'true';
+    const hasGameParams = searchParams.has('courseId') && searchParams.has('topicId');
 
-    useEffect(() => {
-        if (isStatic) {
-            const params = new URLSearchParams(searchParams.toString());
-            router.replace(`/student/hedefi-vur/oyun?${params.toString()}`);
-        }
-    }, [isStatic, router, searchParams]);
-
-    if (!isStatic) {
-        return <HedefiVurSetupClientPage />;
+    if (hasGameParams) {
+        return <HitTheTargetPage />;
     }
 
-    return <div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>
+    return <HedefiVurSetupClientPage />;
 }
 
-export default function HedefiVurPage() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <PageContent />
+            <HedefiVurPageWrapper />
         </Suspense>
     );
 }

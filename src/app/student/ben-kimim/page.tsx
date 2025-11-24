@@ -1,34 +1,26 @@
 
-
 "use client";
 
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { BenKimimSetupClientPage } from './client-page';
-import { useRouter, useSearchParams } from 'next/navigation';
+import WhoAmIPage from './oyun/page';
 
-function PageContent() {
-    const router = useRouter();
+function BenKimimPageWrapper() {
     const searchParams = useSearchParams();
-    const isStatic = searchParams.get('static') === 'true';
+    const hasGameParams = searchParams.has('courseId') && searchParams.has('topicId');
 
-    useEffect(() => {
-        if (isStatic) {
-            const params = new URLSearchParams(searchParams.toString());
-            router.replace(`/student/ben-kimim/oyun?${params.toString()}`);
-        }
-    }, [isStatic, router, searchParams]);
-
-    if (!isStatic) {
-        return <BenKimimSetupClientPage />;
+    if (hasGameParams) {
+        return <WhoAmIPage />;
     }
 
-    return <div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>
+    return <BenKimimSetupClientPage />;
 }
 
-export default function BenKimimPage() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <PageContent />
+            <BenKimimPageWrapper />
         </Suspense>
     );
 }

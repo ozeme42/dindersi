@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Gamepad2, ArrowLeft, Skull, Layers, FolderKanban, MousePointerClick, Trophy, Bug, ArrowDownUp, Link2, Mic, Pencil } from 'lucide-react';
+import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Gamepad2, ArrowLeft, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, Wind, Package, BookOpen, Coins, ClipboardCheck } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { SelectionGrid } from '@/components/selection-grid';
@@ -18,10 +18,13 @@ import { ErrorReportDialog } from '@/components/error-report-dialog';
 
 const activityTypes = [
   { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
+  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins },
+  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit },
   { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search },
+  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package },
   { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
   { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle },
-  { href: '/student/cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle },
+  { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle },
   { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
   { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
   { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
@@ -29,8 +32,12 @@ const activityTypes = [
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: Mic },
+  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
+  { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
+  { href: '/student/labirent', label: 'Labirent', icon: Puzzle },
+  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
+  { href: '/student/tornado', label: 'Tornado', icon: Wind },
 ];
 
 export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
@@ -125,7 +132,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                             </AccordionTrigger>
                                             <AccordionContent className="p-4">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                    {activityTypes.map((activity, activityIndex) => {
+                                                    {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity, activityIndex) => {
                                                          const buttonProps = {
                                                              size: "lg" as const,
                                                              className: cn(
@@ -156,7 +163,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                                     </AccordionTrigger>
                                                     <AccordionContent className="p-4">
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                            {activityTypes.map((activity, activityIndex) => (
+                                                            {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity, activityIndex) => (
                                                                 <Button
                                                                     asChild
                                                                     key={activity.href}
@@ -214,7 +221,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
               </div>
               <div className='flex items-center gap-2'>
                   <Button variant="outline" size="sm" onClick={() => setIsReportDialogOpen(true)}>
-                    <Bug className="h-4 w-4 mr-2"/> Hata Bildir
+                    Hata Bildir
                   </Button>
                   {selectedClassId && (
                       <Button variant="outline" size="sm" onClick={handleBack}>
@@ -246,5 +253,3 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     </div>
   );
 }
-
-    
