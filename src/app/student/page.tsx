@@ -341,10 +341,10 @@ export default function StudentDashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-               <Button size="lg" className="h-24 text-sm sm:text-base flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
+               <Button size="lg" className="h-24 text-xs px-2 py-4 sm:text-base flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
                     <Link href="/student/activities"><Gamepad2 className="h-5 w-5"/> Bireysel Etkinlikler</Link>
                 </Button>
-                 <Button size="lg" className="h-24 text-sm sm:text-base flex-col gap-1 bg-destructive hover:bg-destructive/80" asChild>
+                 <Button size="lg" className="h-24 text-xs px-2 py-4 sm:text-base flex-col gap-1 bg-destructive hover:bg-destructive/80" asChild>
                     <Link href="/student/yarismalar"><Users className="h-5 w-5"/> Çok Oyunculu</Link>
                 </Button>
           </div>
