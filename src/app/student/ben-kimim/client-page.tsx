@@ -1,242 +1,67 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, BrainCircuit } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
-import { useAuth } from "@/context/auth-context";
-import { SelectionGrid } from "@/components/selection-grid";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const steps = [
-  { id: 1, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
-  { id: 2, name: "Ünite Seçimi", icon: <Library className="h-5 w-5" /> },
-  { id: 3, name: "Konu Seçimi", icon: <ListTodo className="h-5 w-5" /> },
-  { id: 4, name: "Onay", icon: <Check className="h-5 w-5" /> },
+
+const activityTypes = [
+  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "bg-purple-600 hover:bg-purple-700 text-white" },
+  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "bg-amber-500 hover:bg-amber-600 text-white" },
+  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
+  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "bg-teal-600 hover:bg-teal-700 text-white" },
+  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
+  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
+  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
+  { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
+  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
+  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
+  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
+  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
+  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
+  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+  { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, colorClass: "bg-violet-600 hover:bg-violet-700 text-white" },
+  { href: '/student/labirent', label: 'Labirent', icon: Milestone, colorClass: "bg-gray-700 hover:bg-gray-800 text-white" },
+  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, colorClass: "bg-violet-500 hover:bg-violet-600 text-white" },
+  { href: '/student/tornado', label: 'Tornado', icon: Wind, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
 ];
 
-export function BenKimimSetupClientPage() {
-  const { user } = useAuth();
-  const searchParams = useSearchParams();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
+export const dynamic = 'force-dynamic';
 
-  const [selection, setSelection] = useState({
-    courseId: "",
-    courseName: "",
-    unitId: "",
-    unitName: "",
-    topicId: "",
-    topicName: "",
-  });
-
-  useEffect(() => {
-    const courseId = searchParams.get('courseId');
-    const unitId = searchParams.get('unitId');
-    const topicId = searchParams.get('topicId');
-    const courseName = searchParams.get('courseName');
-    const unitName = searchParams.get('unitName');
-    const topicName = searchParams.get('topicName');
-
-    if (courseId && unitId && topicId && courseName && unitName && topicName) {
-      setSelection({ courseId, courseName, unitId, unitName, topicId, topicName });
-      setCurrentStep(4);
-      setIsLoading(false);
-      return;
-    }
-
-    const fetchCourses = async () => {
-      if (!user) {
-        setIsLoading(true);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) {
-                finalCourses = studentVisibleCourses.filter(course =>
-                    course.classId === studentClassId || !course.classId
-                );
-            } else {
-                finalCourses = studentVisibleCourses.filter(course => !course.classId);
-            }
-        }
-        setCourses(finalCourses);
-      } catch (error) {
-        console.error("Error fetching filtered courses:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCourses();
-  }, [user, searchParams]);
-
-  const handleSelectCourse = async (courseId: string, courseName: string) => {
-    setSelection({ ...selection, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' });
-    setIsLoading(true);
-    const unitsRef = collection(db, `courses/${courseId}/units`);
-    const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    setTopics([]);
-    setIsLoading(false);
-    setCurrentStep(2);
-  };
-
-  const handleSelectUnit = async (unitId: string, unitName: string) => {
-    setSelection({ ...selection, unitId, unitName, topicId: '', topicName: '' });
-    if (unitId === 'all') {
-      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
-      setTopics([]);
-      setCurrentStep(4);
-      return;
-    }
-    setIsLoading(true);
-    const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-    const q = query(topicsRef, orderBy("title"));
-    const topicsSnapshot = await getDocs(q);
-    setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-    setIsLoading(false);
-    setCurrentStep(3);
-  };
-  
-  const handleSelectTopic = (topicId: string, topicName: string) => {
-    setSelection({ ...selection, topicId, topicName });
-    setCurrentStep(4);
-  };
-
-  const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
-  const handleBack = () => currentStep > 1 && setCurrentStep(currentStep - 1);
-  
-  const getGameUrl = () => {
-    const params = new URLSearchParams({
-      courseId: selection.courseId,
-      courseName: selection.courseName,
-      unitId: selection.unitId,
-      unitName: selection.unitName,
-      topicId: selection.topicId,
-      topicName: selection.topicName,
-    });
-    return `/student/ben-kimim/oyun?${params.toString()}`;
-  }
-  
-  const renderContent = () => {
-      switch(currentStep) {
-          case 1:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={(id, name) => handleSelectCourse(id, name)} isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
-          case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={(id, name) => handleSelectUnit(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} isLoading={isLoading}/>;
-          case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={(id, name) => handleSelectTopic(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} isLoading={isLoading}/>;
-          case 4:
-            return (
-              <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
-                 <h3 className="text-xl font-semibold font-headline text-center mb-4">Oyun Özeti</h3>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
-                    <p><strong>Ders:</strong></p><p>{selection.courseName}</p>
-                    <p><strong>Ünite:</strong></p><p>{selection.unitName}</p>
-                    <p><strong>Konu:</strong></p><p>{selection.topicName}</p>
-                 </div>
-              </div>
-            );
-          default:
-            return null;
-      }
-  }
+export default function StudentActivitiesPage() {
 
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-2">
-            <BrainCircuit className="h-8 w-8 text-red-500"/>
-            Ben Kimim?
-          </h1>
-          <p className="text-muted-foreground">Tanımı verilen kavramı seçenekler arasından bul!</p>
+        <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
+                <Gamepad2 className="h-8 w-8 text-cyan-500"/>
+                Bireysel Etkinlikler
+            </h1>
+            <Button asChild variant="outline">
+                <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4"/> Panele Dön</Link>
+            </Button>
         </div>
-
-        <div className="flex justify-center items-center mb-8 px-4">
-          <ol className="flex items-center w-full max-w-2xl">
-            {steps.map((step, index) => (
-              <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-border after:border-2 after:inline-block": index !== steps.length - 1 })}>
-                <span className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
-                  currentStep > step.id ? "bg-primary text-primary-foreground" :
-                  currentStep === step.id ? "bg-accent text-accent-foreground scale-110" :
-                  "bg-muted text-muted-foreground"
-                )}>
-                  {step.icon}
-                </span>
-              </li>
-            ))}
-          </ol>
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+            {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity) => {
+                const Icon = activity.icon;
+                return (
+                    <Button
+                        key={activity.href}
+                        asChild
+                        className={cn(
+                            "h-20 text-lg flex flex-col items-center justify-center gap-1 shadow-lg transform transition-transform hover:-translate-y-1 sm:h-32 sm:gap-2",
+                            activity.colorClass
+                        )}
+                    >
+                        <Link href={activity.href}>
+                            <Icon className="h-6 w-6 sm:h-10 sm:w-10 mb-0 sm:mb-1" />
+                            <span className="text-xs sm:text-sm text-center">{activity.label}</span>
+                        </Link>
+                    </Button>
+                );
+            })}
         </div>
-
-        <Card className="min-h-[400px]">
-          <CardHeader>
-            <CardTitle>{steps.find(s => s.id === currentStep)?.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="min-h-[250px] flex items-center justify-center">
-            {renderContent()}
-          </CardContent>
-          <CardFooter className="flex justify-between pt-6">
-            {currentStep === 1 ? (
-                <Button asChild variant="outline">
-                    <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                </Button>
-            ) : (
-                <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
-            )}
-
-            {currentStep < steps.length ? (
-              <Button onClick={handleNext} disabled={
-                (currentStep === 1 && !selection.courseId) ||
-                (currentStep === 2 && !selection.unitId) ||
-                (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
-            ) : (
-              <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
-                <Link href={getGameUrl()}>
-                    <PartyPopper className="mr-2 h-4 w-4" /> Oyunu Başlat
-                </Link>
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
-      </div>
     </div>
   );
 }

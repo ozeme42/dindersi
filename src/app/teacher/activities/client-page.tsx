@@ -1,20 +1,18 @@
 
-
-"use client";
+'use client';
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Gamepad2, ArrowLeft, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, Wind, Package, BookOpen, Coins, ClipboardCheck } from 'lucide-react';
+import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Gamepad2, ArrowLeft, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, Wind, Package, BookOpen, Coins, ClipboardCheck, Milestone } from 'lucide-react';
 import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { SelectionGrid } from '@/components/selection-grid';
 import { useSearchParams } from 'next/navigation';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { ErrorReportDialog } from '@/components/error-report-dialog';
-
 
 const activityTypes = [
   { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
@@ -25,17 +23,14 @@ const activityTypes = [
   { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
   { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle },
   { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle },
-  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
   { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
   { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
-  { href: '/student/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
   { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
-  { href: '/student/labirent', label: 'Labirent', icon: Puzzle },
+  { href: '/student/labirent', label: 'Labirent', icon: Milestone },
   { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
   { href: '/student/tornado', label: 'Tornado', icon: Wind },
 ];
@@ -253,3 +248,5 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     </div>
   );
 }
+
+    

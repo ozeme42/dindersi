@@ -1,217 +1,67 @@
-
 "use client";
 
-import { useState, useEffect, Suspense, useCallback } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { getQuestionsFromBank } from '@/lib/quiz-actions';
-import type { Question } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, FolderKanban, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { updateScore } from '../../actions';
-import { useAuth } from '@/context/auth-context';
-import { playSound } from '@/lib/audio-service';
-import { DndContext, useDroppable, useDraggable, closestCenter } from '@dnd-kit/core';
 
-type DraggableItem = {
-    id: string;
-    text: string;
-    category: string;
-};
 
-const Draggable = ({ id, text, isDragging }: { id: string, text: string, isDragging: boolean }) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
-    const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined;
-    return <Button ref={setNodeRef} style={style} {...listeners} {...attributes} className={cn("touch-none", isDragging && "opacity-50")}>{text}</Button>;
-};
+const activityTypes = [
+  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "bg-purple-600 hover:bg-purple-700 text-white" },
+  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "bg-amber-500 hover:bg-amber-600 text-white" },
+  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
+  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "bg-teal-600 hover:bg-teal-700 text-white" },
+  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
+  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
+  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
+  { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
+  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
+  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
+  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
+  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
+  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
+  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+  { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, colorClass: "bg-violet-600 hover:bg-violet-700 text-white" },
+  { href: '/student/labirent', label: 'Labirent', icon: Milestone, colorClass: "bg-gray-700 hover:bg-gray-800 text-white" },
+  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, colorClass: "bg-violet-500 hover:bg-violet-600 text-white" },
+  { href: '/student/tornado', label: 'Tornado', icon: Wind, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+];
 
-const Droppable = ({ id, children, categoryName, isOver }: { id: string, children: React.ReactNode, categoryName: string, isOver: boolean }) => {
-    const { setNodeRef } = useDroppable({ id });
-    return (
-        <div ref={setNodeRef} className={cn("p-4 border-2 border-dashed rounded-lg min-h-[100px] space-y-2", isOver ? "bg-primary/20 border-primary" : "bg-muted")}>
-            <h3 className="font-bold text-lg text-center">{categoryName}</h3>
-            {children}
+export const dynamic = 'force-dynamic';
+
+export default function StudentActivitiesPage() {
+
+  return (
+    <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
+        <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
+                <Gamepad2 className="h-8 w-8 text-cyan-500"/>
+                Bireysel Etkinlikler
+            </h1>
+            <Button asChild variant="outline">
+                <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4"/> Panele Dön</Link>
+            </Button>
         </div>
-    );
-};
-
-function CategorizationGame() {
-    const searchParams = useSearchParams();
-    const { user } = useAuth();
-
-    const [items, setItems] = useState<DraggableItem[]>([]);
-    const [categories, setCategories] = useState<string[]>([]);
-    const [placedItems, setPlacedItems] = useState<Record<string, DraggableItem[]>>({});
-    const [unplacedItems, setUnplacedItems] = useState<DraggableItem[]>([]);
-    
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [score, setScore] = useState(0);
-    const [isFinished, setIsFinished] = useState(false);
-    
-    const [activeId, setActiveId] = useState<string | null>(null);
-    const [overContainer, setOverContainer] = useState<string | null>(null);
-
-    const isStatic = searchParams.get('static') === 'true';
-
-    useEffect(() => {
-        const fetchGameData = async () => {
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: 8,
-                questionTypes: ['mcq'],
-                isStatic,
-            };
-            const result = await getQuestionsFromBank(params);
-
-            if (result.error || !result.questions || result.questions.length < 2) {
-                setError(result.error || "Bu oyun için yeterli soru (en az 2) bulunamadı.");
-            } else {
-                const cats = [result.questions[0].topic, result.questions[1].topic].filter((t, i, a) => a.indexOf(t) === i);
-                if (cats.length < 2) {
-                     setError("Bu oyun için en az 2 farklı konudan soru gerekmektedir.");
-                     setIsLoading(false);
-                     return;
-                }
-                setCategories(cats);
-                const gameItems = result.questions.map(q => ({
-                    id: q.id!,
-                    text: q.correctAnswer!,
-                    category: q.topic!
-                }));
-                setItems(gameItems);
-                setUnplacedItems(gameItems);
-                
-                const initialPlaced: Record<string, DraggableItem[]> = {};
-                cats.forEach(c => initialPlaced[c] = []);
-                setPlacedItems(initialPlaced);
-            }
-            setIsLoading(false);
-        };
-        fetchGameData();
-    }, [searchParams, isStatic]);
-
-    const handleDragStart = (event: any) => setActiveId(event.active.id);
-    
-    const handleDragOver = (event: any) => setOverContainer(event.over?.id || null);
-
-    const handleDragEnd = async (event: any) => {
-        const { active, over } = event;
-        setActiveId(null);
-        setOverContainer(null);
-        if (!over) return;
-    
-        const item = unplacedItems.find(i => i.id === active.id) || Object.values(placedItems).flat().find(i => i.id === active.id);
-        if (!item) return;
-
-        // Move item back to unplaced
-        if (over.id === 'unplaced') {
-            setPlacedItems(prev => {
-                const newPlaced = { ...prev };
-                for (const cat in newPlaced) {
-                    newPlaced[cat] = newPlaced[cat].filter(i => i.id !== item.id);
-                }
-                return newPlaced;
-            });
-            if (!unplacedItems.some(i => i.id === item.id)) {
-                 setUnplacedItems(prev => [...prev, item]);
-            }
-            return;
-        }
-
-        const isCorrect = item.category === over.id;
-        if(isCorrect) playSound('correct'); else playSound('incorrect');
-
-        setScore(prev => prev + (isCorrect ? 10 : -5));
-        
-        // Optimistically move the item
-        setUnplacedItems(prev => prev.filter(i => i.id !== active.id));
-        setPlacedItems(prev => {
-            const newPlaced = { ...prev };
-             for (const cat in newPlaced) { // Remove from old category if it exists
-                newPlaced[cat] = newPlaced[cat].filter(i => i.id !== item.id);
-            }
-            if (!newPlaced[over.id]) newPlaced[over.id] = [];
-            if (!newPlaced[over.id].some(i => i.id === item.id)) {
-                newPlaced[over.id].push(item);
-            }
-            return newPlaced;
-        });
-
-    };
-    
-    useEffect(() => {
-        if(unplacedItems.length === 0 && items.length > 0) {
-            const allCorrect = Object.entries(placedItems).every(([category, items]) => items.every(item => item.category === category));
-            if(allCorrect) {
-                 if (user && score > 0 && !isStatic) {
-                    updateScore(user.uid, score, "kategorilere-ayir", `Konu: ${searchParams.get('topicName')}`);
-                 }
-                setIsFinished(true);
-            }
-        }
-    }, [unplacedItems, placedItems, items, isFinished, score, user, isStatic, searchParams]);
-
-    const backUrl = isStatic ? '/statik' : '/teacher/activities';
-
-    if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
-    
-    if (error) return (
-        <div className="flex h-screen w-full items-center justify-center p-4">
-            <Alert variant="destructive" className="max-w-lg"><AlertTriangle className="h-4 w-4" /><AlertTitle>Oyun Yüklenemedi</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="secondary"><Link href={backUrl}>Geri Dön</Link></Button></div></Alert>
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+            {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity) => {
+                const Icon = activity.icon;
+                return (
+                    <Button
+                        key={activity.href}
+                        asChild
+                        className={cn(
+                            "h-20 text-lg flex flex-col items-center justify-center gap-1 shadow-lg transform transition-transform hover:-translate-y-1 sm:h-32 sm:gap-2",
+                            activity.colorClass
+                        )}
+                    >
+                        <Link href={activity.href}>
+                            <Icon className="h-6 w-6 sm:h-10 sm:w-10 mb-0 sm:mb-1" />
+                            <span className="text-xs sm:text-sm text-center">{activity.label}</span>
+                        </Link>
+                    </Button>
+                );
+            })}
         </div>
-    );
-
-    if (isFinished) {
-        return (
-            <div className="flex h-screen w-full items-center justify-center">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader><CardTitle>Tebrikler!</CardTitle><CardDescription>Kategorilere Ayırma oyununu tamamladınız.</CardDescription></CardHeader>
-                    <CardContent><p className="text-4xl font-bold text-primary">{score}</p><p className="text-muted-foreground">Toplam Puan</p></CardContent>
-                    <CardFooter className="flex-col gap-2"><Button onClick={() => window.location.reload()} className="w-full">Tekrar Oyna</Button><Button variant="outline" asChild className="w-full"><Link href={backUrl}>Etkinlik Merkezine Dön</Link></Button></CardFooter>
-                </Card>
-            </div>
-        );
-    }
-
-    return (
-        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragOver={handleDragOver} collisionDetection={closestCenter}>
-            <div className="flex h-screen w-full flex-col items-center justify-center p-4 bg-lime-50 dark:bg-lime-900/50">
-                <Card className="w-full max-w-6xl">
-                    <CardHeader>
-                        <div className="flex justify-between items-center">
-                             <CardTitle className="text-3xl font-bold font-headline">Kategorilere Ayır</CardTitle>
-                             <div className="text-lg font-bold text-primary">Puan: {score}</div>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <Droppable id="unplaced" categoryName="Kavramlar" isOver={overContainer === 'unplaced'}>
-                             <div className="flex flex-wrap gap-2 justify-center">
-                                {unplacedItems.map(item => <Draggable key={item.id} id={item.id} text={item.text} isDragging={activeId === item.id} />)}
-                                {unplacedItems.length === 0 && <p className="text-muted-foreground">Tüm kavramlar yerleştirildi!</p>}
-                            </div>
-                        </Droppable>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {categories.map(category => (
-                                <Droppable key={category} id={category} categoryName={category} isOver={overContainer === category}>
-                                    {placedItems[category]?.map(item => (
-                                         <Draggable key={item.id} id={item.id} text={item.text} isDragging={activeId === item.id}/>
-                                    ))}
-                                </Droppable>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </DndContext>
-    );
-}
-
-export default function CategorizationPage() {
-    return <Suspense><CategorizationGame /></Suspense>;
+    </div>
+  );
 }

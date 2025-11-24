@@ -1,144 +1,67 @@
+"use client";
 
-'use server';
-
-import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
-import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem, Question, Course } from '@/lib/types';
-
-export type BenKimimQuestion = {
-    id: string;
-    questionText: string;
-    options: string[];
-    correctAnswer: string;
-};
-
-// Simple array shuffle function
-const shuffleArray = <T>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-}
-
-export async function getBenKimimAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ questions: BenKimimQuestion[]; error?: string }> {
-    noStore();
-    try {
-        let baseQuery = query(collection(db, 'activityItems'));
-
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
-        }
-        
-        const definitionsQuery = query(baseQuery, where('type', '==', 'definition'));
-        const definitionsSnapshot = await getDocs(definitionsQuery);
-        
-        const allDefinitions = definitionsSnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem))
-            .filter(item => item.content?.term && item.content?.definition);
-
-        if (allDefinitions.length < 1) {
-            return { error: "Ben Kimim? için bu konuda uygun tanım bulunamadı.", questions: [] };
-        }
-
-        // --- Improved Distractor Pool Logic ---
-        let distractorPoolQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
-        
-        if (courseId && courseId !== 'all') {
-            const courseRef = doc(db, 'courses', courseId);
-            const courseSnap = await getDoc(courseRef);
-            const courseData = courseSnap.exists() ? courseSnap.data() as Course : null;
-            
-            if (courseData?.classId) {
-                 const classCourseIdsSnap = await getDocs(query(collection(db, 'courses'), where('classId', '==', courseData.classId)));
-                 const classCourseIds = classCourseIdsSnap.docs.map(d => d.id);
-                 if(classCourseIds.length > 0) {
-                    distractorPoolQuery = query(distractorPoolQuery, where('courseId', 'in', classCourseIds.slice(0, 30)));
-                 }
-            } else {
-                distractorPoolQuery = query(distractorPoolQuery, where('courseId', '==', courseId));
-            }
-        }
-        
-        const conceptsSnapshot = await getDocs(distractorPoolQuery);
-        const distractorPool = conceptsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.text!).filter(Boolean);
-        const uniqueDistractors = [...new Set(distractorPool)];
-
-        const selectedDefinitions = shuffleArray(allDefinitions).slice(0, 10);
-
-        const gameQuestions: BenKimimQuestion[] = selectedDefinitions.map((item) => {
-            const correctAnswer = item.content.term!;
-            const questionText = item.content.definition!;
-            
-            const distractors = shuffleArray(uniqueDistractors.filter(d => d !== correctAnswer)).slice(0, 3);
-            const options = shuffleArray([correctAnswer, ...distractors]);
-            
-            return {
-                id: item.id,
-                questionText: questionText,
-                correctAnswer: correctAnswer,
-                options: options,
-            };
-        });
-        
-        const finalQuestions = gameQuestions.filter(q => q.options?.length === 4);
-        if (finalQuestions.length === 0 && selectedDefinitions.length > 0) {
-            return { error: "Sorular için yeterli sayıda seçenek bulunamadı.", questions: [] };
-        }
-
-        return { questions: finalQuestions };
-
-    } catch (error: any) {
-        console.error("Error getting Ben Kimim? questions:", error);
-        return { error: "Ben Kimim? görevi alınırken bir hata oluştu.", questions: [] };
-    }
-}
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 
-export async function submitBenKimimScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) {
-        return { success: true };
-    }
+const activityTypes = [
+  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "bg-purple-600 hover:bg-purple-700 text-white" },
+  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "bg-amber-500 hover:bg-amber-600 text-white" },
+  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
+  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "bg-teal-600 hover:bg-teal-700 text-white" },
+  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
+  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
+  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
+  { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
+  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
+  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
+  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
+  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
+  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
+  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+  { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, colorClass: "bg-violet-600 hover:bg-violet-700 text-white" },
+  { href: '/student/labirent', label: 'Labirent', icon: Milestone, colorClass: "bg-gray-700 hover:bg-gray-800 text-white" },
+  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, colorClass: "bg-violet-500 hover:bg-violet-600 text-white" },
+  { href: '/student/tornado', label: 'Tornado', icon: Wind, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+];
 
-    try {
-        const attemptsQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', userId),
-            where('gameType', '==', 'Ben Kimim?'),
-            where('context', '==', context)
-        );
-        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
-            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
-        }
+export const dynamic = 'force-dynamic';
 
-        const batch = writeBatch(db);
-        
-        const userRef = doc(db, 'users', userId);
-        batch.update(userRef, { score: increment(score) });
+export default function StudentActivitiesPage() {
 
-        const eventRef = doc(collection(db, 'scoreEvents'));
-        batch.set(eventRef, {
-            userId: userId,
-            points: score,
-            timestamp: serverTimestamp(),
-            gameType: 'Ben Kimim?',
-            context: context,
-        });
-
-        await batch.commit();
-
-        return { success: true };
-    } catch (error: any) {
-        console.error("Error submitting Ben Kimim? score:", error);
-        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
-    }
+  return (
+    <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
+        <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
+                <Gamepad2 className="h-8 w-8 text-cyan-500"/>
+                Bireysel Etkinlikler
+            </h1>
+            <Button asChild variant="outline">
+                <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4"/> Panele Dön</Link>
+            </Button>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+            {activityTypes.sort((a,b) => a.label.localeCompare(b.label, 'tr')).map((activity) => {
+                const Icon = activity.icon;
+                return (
+                    <Button
+                        key={activity.href}
+                        asChild
+                        className={cn(
+                            "h-20 text-lg flex flex-col items-center justify-center gap-1 shadow-lg transform transition-transform hover:-translate-y-1 sm:h-32 sm:gap-2",
+                            activity.colorClass
+                        )}
+                    >
+                        <Link href={activity.href}>
+                            <Icon className="h-6 w-6 sm:h-10 sm:w-10 mb-0 sm:mb-1" />
+                            <span className="text-xs sm:text-sm text-center">{activity.label}</span>
+                        </Link>
+                    </Button>
+                );
+            })}
+        </div>
+    </div>
+  );
 }
