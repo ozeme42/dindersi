@@ -2,12 +2,12 @@
 "use client";
 
 import { Suspense } from 'react';
-import { IlimHazinesiSetupClientPage } from './client-page';
+import { BalloonHuntSetupClientPage } from './client-page';
 
-export default function IlimHazinesiSetupPage() {
+export default function BalonAvcisiPage() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <IlimHazinesiSetupClientPage />
+            <BalloonHuntSetupClientPage />
         </Suspense>
     );
 }

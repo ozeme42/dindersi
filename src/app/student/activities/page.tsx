@@ -27,6 +27,7 @@ const activityTypes = [
   { href: '/student/labirent', label: 'Labirent', icon: Milestone, colorClass: "bg-gray-700 hover:bg-gray-800 text-white" },
   { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, colorClass: "bg-violet-500 hover:bg-violet-600 text-white" },
   { href: '/student/tornado', label: 'Tornado', icon: Wind, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
+  { href: '/student/balon-avcisi', label: 'Balon Avcısı', icon: Crosshair, colorClass: "bg-sky-500 hover:bg-sky-600 text-white" },
 ];
 
 export const dynamic = 'force-dynamic';
@@ -67,5 +68,3 @@ export default function StudentActivitiesPage() {
     </div>
   );
 }
-
-    

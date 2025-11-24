@@ -1,5 +1,6 @@
 
-'use client';
+
+"use client";
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import { SelectionGrid } from '@/components/selection-grid';
 import { useSearchParams } from 'next/navigation';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { ErrorReportDialog } from '@/components/error-report-dialog';
+
 
 const activityTypes = [
   { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
@@ -33,6 +35,7 @@ const activityTypes = [
   { href: '/student/labirent', label: 'Labirent', icon: Milestone },
   { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
   { href: '/student/tornado', label: 'Tornado', icon: Wind },
+  { href: '/student/balon-avcisi', label: 'Balon Avcısı', icon: Crosshair },
 ];
 
 export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
@@ -248,5 +251,3 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
     </div>
   );
 }
-
-    
