@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -11,15 +12,18 @@ import type { EnrichedClass } from './actions';
 import { cn } from '@/lib/utils';
 import { SelectionGrid } from '@/components/selection-grid';
 import { useSearchParams } from 'next/navigation';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { ErrorReportDialog } from '@/components/error-report-dialog';
-import { STUDENT_ACTIVITIES } from '@/lib/activity-config';
+import { activityTypes } from '@/lib/activities';
 
 
 export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
   const searchParams = useSearchParams();
   const [selectedClassId, setSelectedClassId] = useState<string | null>(searchParams.get("classId") || null);
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(searchParams.get("courseId") || null);
+  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const [infoDialogContent, setInfoDialogContent] = useState({ title: '', description: '' });
 
   const selectedClassData = useMemo(() => data.find(c => c.id === selectedClassId), [data, selectedClassId]);
   const coursesForSelectedClass = useMemo(() => selectedClassData?.courses || [], [selectedClassData]);
@@ -27,7 +31,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
 
   const handleSelectClass = (classId: string) => {
     setSelectedClassId(classId);
-    setSelectedCourseId(null);
+    setSelectedCourseId(null); // Reset course selection
   };
   
   const handleSelectCourse = (courseId: string) => {
@@ -60,6 +64,14 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           description: "Etkinlik içeriğini filtrelemek için bir sınıf seçin."
       };
   }
+  
+  const handleInfoClick = (activityLabel: string) => {
+    setInfoDialogContent({
+        title: `${activityLabel} İçin Konu Seçimi Gerekli`,
+        description: `Bu etkinlik, sorularını doğrudan belirli bir konudan aldığı için, oynamak üzere bir konu seçmeniz gerekmektedir. Lütfen bir üniteyi genişletip, ardından listeden belirli bir konuya tıklayarak etkinliği başlatın.`
+    });
+    setInfoDialogOpen(true);
+  }
 
   const { title, description } = getHeader();
   
@@ -89,53 +101,70 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                                 {unit.title}
                             </AccordionTrigger>
                             <AccordionContent className="p-4 pt-0">
-                                <Accordion type="multiple" className="w-full space-y-3">
+                                <div className="space-y-3">
+                                     <Accordion type="multiple" className="w-full">
+                                        <AccordionItem value="all-topics" className="border rounded-md bg-muted/50">
+                                            <AccordionTrigger className="p-3 text-lg font-semibold hover:no-underline text-primary">
+                                                Tüm Konular (Genel Etkinlikler)
+                                            </AccordionTrigger>
+                                            <AccordionContent className="p-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                    {activityTypes.map((activity, activityIndex) => {
+                                                         const buttonProps = {
+                                                             size: "lg" as const,
+                                                             className: cn(
+                                                                "h-24 text-lg text-primary-foreground flex flex-col items-center justify-center gap-1",
+                                                                colorClasses[activityIndex % colorClasses.length]
+                                                             )
+                                                         };
+
+                                                         return (
+                                                            <Button key={activity.href} asChild {...buttonProps}>
+                                                                <Link href={`${activity.href}?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=all&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent("Tüm Konular")}`}>
+                                                                    <activity.icon className="h-6 w-6 mb-1" />
+                                                                    <span>{activity.label}</span>
+                                                                </Link>
+                                                            </Button>
+                                                         );
+                                                    })}
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                     </Accordion>
                                     {unit.topics.length > 0 ? (
-                                        unit.topics.map(topic => (
-                                            <AccordionItem value={topic.id} key={topic.id} className="border rounded-md bg-muted/50">
-                                                <AccordionTrigger className="p-3 text-lg font-semibold hover:no-underline">
-                                                    {topic.title}
-                                                </AccordionTrigger>
-                                                <AccordionContent className="p-4">
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                        {STUDENT_ACTIVITIES.map((activity, activityIndex) => {
-                                                            const params = new URLSearchParams({
-                                                                courseId: selectedCourseData.id,
-                                                                courseName: selectedCourseData.title,
-                                                                unitId: unit.id,
-                                                                unitName: unit.title,
-                                                                topicId: topic.id,
-                                                                topicName: topic.title,
-                                                            });
-
-                                                            const href = `${activity.href}?${params.toString()}`;
-                                                            const Icon = activity.icon;
-
-                                                            return (
+                                        <Accordion type="multiple" className="w-full space-y-3">
+                                            {unit.topics.map(topic => (
+                                                <AccordionItem value={topic.id} key={topic.id} className="border rounded-md bg-background">
+                                                    <AccordionTrigger className="p-3 text-lg font-semibold hover:no-underline">
+                                                        {topic.title}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="p-4">
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                            {activityTypes.map((activity, activityIndex) => (
                                                                 <Button
                                                                     asChild
                                                                     key={activity.href}
                                                                     size="lg"
                                                                     className={cn(
                                                                         "h-24 text-lg text-primary-foreground flex flex-col items-center justify-center gap-1",
-                                                                        activity.colorClass || colorClasses[activityIndex % colorClasses.length]
+                                                                        colorClasses[activityIndex % colorClasses.length]
                                                                     )}
                                                                 >
-                                                                    <Link href={href}>
-                                                                        <Icon className="h-6 w-6 mb-1" />
+                                                                    <Link href={`${activity.href}?classId=${selectedClassData.id}&courseId=${selectedCourseData.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(selectedCourseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`}>
+                                                                        <activity.icon className="h-6 w-6 mb-1" />
                                                                         <span>{activity.label}</span>
                                                                     </Link>
                                                                 </Button>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        ))
+                                                            ))}
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            ))}
+                                        </Accordion>
                                     ) : (
                                         <p className="pl-4 text-sm text-muted-foreground">Bu ünite için konu bulunmuyor.</p>
                                     )}
-                                </Accordion>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     ))
@@ -146,7 +175,7 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
         );
     }
     
-    return null;
+    return null; // Should not be reached
   }
 
 
@@ -184,6 +213,19 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
         </CardContent>
       </Card>
       
+       <AlertDialog open={infoDialogOpen} onOpenChange={setInfoDialogOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{infoDialogContent.title}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {infoDialogContent.description}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogAction onClick={() => setInfoDialogOpen(false)}>Anladım</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
         <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} />
     </div>
   );
