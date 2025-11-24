@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home } from "lucide-react";
+import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home, Trophy, UserPlus } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog } from "@/components/ui/alert-dialog";
@@ -23,50 +23,102 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, query, where } from 'firebase/firestore';
-
-
-const colorClasses = [
-    "bg-chart-1 text-primary-foreground hover:bg-chart-1/90",
-    "bg-chart-2 text-primary-foreground hover:bg-chart-2/90",
-    "bg-chart-3 text-primary-foreground hover:bg-chart-3/90",
-    "bg-chart-4 text-primary-foreground hover:bg-chart-4/90",
-    "bg-chart-5 text-primary-foreground hover:bg-chart-5/90",
-    "bg-accent text-accent-foreground hover:bg-accent/90",
-];
-
-const bgColors = [
-    'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-indigo-500', 'bg-pink-500', 'bg-sky-500', 'bg-rose-500',
-    'bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'
-];
- const hoverBgColors = [
-    'hover:bg-blue-600', 'hover:bg-emerald-600', 'hover:bg-amber-600', 'hover:bg-indigo-600', 'hover:bg-pink-600', 'hover:bg-sky-600', 'hover:bg-rose-600',
-    'hover:bg-chart-1/90', 'hover:bg-chart-2/90', 'hover:bg-chart-3/90', 'hover:bg-chart-4/90', 'hover:bg-chart-5/90'
-];
+import { doc, getDoc } from 'firebase/firestore';
+import { Skeleton } from "@/components/ui/skeleton";
 
 type GameQuestion = GetQuizOutput['questions'][0];
-type TeamStudent = { uid: string, displayName: string, avatar?: string };
+type TeamStudent = { uid: string; displayName: string; avatar?: string };
 type Team = { id: number; name: string; students: TeamStudent[]; score: number };
 type TeamForUrl = { id: number; name: string; studentUids: string[] };
 
-function CompetitionComponent() {
-    const searchParams = useSearchParams();
-    const { toast } = useToast();
-    const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isSubmittingScores, setIsSubmittingScores] = useState(false);
-    const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
-    const [inGameCompetitors, setInGameCompetitors] = useState<GameCompetitor[]>([]);
+function CompetitionLoadingSkeleton() {
+    return (
+      <div className="container mx-auto p-4 sm:p-6 md:p-8">
+        <div className="flex justify-between items-center mb-6">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-10 w-32" />
+        </div>
+        <Card className="p-6">
+             <div className="flex justify-between items-center mb-4">
+                <div className="h-6 w-32 bg-muted rounded-md animate-pulse" />
+                <div className="h-10 w-24 bg-muted rounded-md animate-pulse" />
+            </div>
+             <div className="h-4 w-full bg-muted rounded-full animate-pulse mb-8" />
+             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
+                {Array.from({ length: 20 }).map((_, i) => (
+                    <div key={i} className="aspect-square bg-muted rounded-md animate-pulse" />
+                ))}
+             </div>
+        </Card>
+      </div>
+    );
+}
 
-    useEffect(() => {
-        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
+const TeamScoreCard = ({ team, isActive, colorIndex, rank, isFullscreen }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean }) => {
+    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
+    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
+    const bgColor = colorClasses[colorIndex % colorClasses.length];
+    const ringColor = ringClasses[colorIndex % ringClasses.length];
+    
+    const getInitials = (name?: string): string => {
+        if (!name) return '?';
+        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
+    };
+
+    return (
+        <div className={cn(
+            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col",
+            bgColor,
+            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
+            isFullscreen ? "w-96" : "w-72"
+        )}>
+            <div className="flex justify-between items-start">
+                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
+                    <Users /> {team.name}
+                </h3>
+                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
+            </div>
+            <div className={cn("font-bold text-center my-4", isFullscreen ? "text-8xl" : "text-6xl")}>
+                {team.score}
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center mt-auto">
+                {team.students.length > 0 ? (
+                    team.students.map(student => (
+                        <TooltipProvider key={student.uid}>
+                             <Tooltip>
+                                <TooltipTrigger>
+                                    <Avatar className={cn(isFullscreen ? "h-12 w-12 text-lg" : "h-10 w-10")}>
+                                        <AvatarImage src={student.avatar || ''} data-ai-hint="profile picture" />
+                                        <AvatarFallback>{getInitials(student.displayName)}</AvatarFallback>
+                                    </Avatar>
+                                </TooltipTrigger>
+                                <TooltipContent><p>{student.displayName}</p></TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    ))
+                ) : <p className="text-sm text-white/70">Takımda oyuncu yok.</p>}
+            </div>
+        </div>
+    );
+}
+
+function TeamCompetitionComponent() {
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSubmittingScores, setIsSubmittingScores] = useState(false);
+  const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
   
   const pointsConfig = useMemo(() => {
-    const pointsParam = searchParams.get('points');
+    const param = searchParams.get('points');
     try {
-        return pointsParam ? JSON.parse(pointsParam) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
+        return param ? JSON.parse(param) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     } catch {
         return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
     }
@@ -90,7 +142,17 @@ function CompetitionComponent() {
   const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
   const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
   const [winner, setWinner] = useState<Team | 'draw' | null>(null);
-  const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
+  
+  const colorClasses = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-accent"];
+  
+    const bgColors = [
+        'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-indigo-500', 'bg-pink-500', 'bg-sky-500', 'bg-rose-500',
+        'bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'
+    ];
+     const hoverBgColors = [
+        'hover:bg-blue-600', 'hover:bg-emerald-600', 'hover:bg-amber-600', 'hover:bg-indigo-600', 'hover:bg-pink-600', 'hover:bg-sky-600', 'hover:bg-rose-600',
+        'hover:bg-chart-1/90', 'hover:bg-chart-2/90', 'hover:bg-chart-3/90', 'hover:bg-chart-4/90', 'hover:bg-chart-5/90'
+    ];
 
   const fetchGameData = useCallback(async () => {
         setIsLoading(true);
@@ -110,6 +172,7 @@ function CompetitionComponent() {
             const initialTeams: Team[] = teamsFromUrl.map(tUrl => ({
                 id: tUrl.id,
                 name: tUrl.name,
+                color: tUrl.color,
                 score: 0,
                 students: tUrl.playerUids.map(uid => studentsMap.get(uid)).filter(Boolean) as UserProfile[],
             }));
@@ -127,7 +190,7 @@ function CompetitionComponent() {
             };
             const result = await getQuestionsFromBank(params);
             if ('error' in result) setError(result.error);
-            else if (result.questions) setQuestions(result.questions);
+            else if (result.questions) setQuestions(result.questions as GameQuestion[]);
             else setError("Uygun soru bulunamadı.");
         } catch (e: any) {
             setError("Oyun verileri yüklenirken bir hata oluştu: " + e.message);
@@ -246,7 +309,7 @@ function CompetitionComponent() {
   
   const sortedTeams = useMemo(() => [...teams].sort((a,b) => b.score - a.score), [teams]);
   
-  if (isLoading) return <div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
+  if (isLoading) return <CompetitionLoadingSkeleton />;
   if (error) return (
     <div className="w-full h-full min-h-screen p-4 flex items-center justify-center bg-gradient-to-br from-indigo-300 via-purple-400 to-pink-500 dark:from-indigo-800 dark:via-purple-900 dark:to-pink-950">
         <Alert variant="destructive" className="max-w-lg bg-card/70 backdrop-blur-sm">
@@ -263,7 +326,7 @@ function CompetitionComponent() {
             <CardHeader><CardTitle className="font-headline text-3xl">Yarışma Bitti!</CardTitle></CardHeader>
             <CardContent className="flex flex-col items-center gap-4">
                 {winner === 'draw' ? <><Award className="h-24 w-24 text-muted-foreground"/><p className="text-2xl font-bold">Berabere!</p></>
-                : winner ? <><Trophy className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
+                : winner ? <><Users className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
                 : <p>Sonuçlar hesaplanıyor...</p> }
 
                 <div className="w-full mt-4 border rounded-md">
@@ -288,7 +351,7 @@ function CompetitionComponent() {
                 </div>
             </CardContent>
             <CardFooter className="flex-col sm:flex-row justify-center gap-4">
-               <Button onClick={() => handleSaveScores(false)} disabled={isSubmittingScores || scoresHaveBeenSaved}>
+              <Button onClick={() => handleSaveScores(false)} disabled={isSubmittingScores || scoresHaveBeenSaved}>
                   {isSubmittingScores ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : scoresHaveBeenSaved ? <Check className="mr-2 h-4 w-4"/> : <PartyPopper className="mr-2 h-4 w-4" />}
                   {scoresHaveBeenSaved ? 'Puanlar Kaydedildi' : 'Puanları Kaydet'}
               </Button>
@@ -322,7 +385,7 @@ function CompetitionComponent() {
                             <span>Sorular ({questions.length - answeredQuestions.length} kaldı)</span>
                             <div className="flex items-center gap-2">
                                 <Button variant="outline" size="sm" onClick={handleSelectRandomQuestion} disabled={!activeTeamId}><Shuffle className="mr-2 h-4 w-4"/> Rastgele Seç</Button>
-                                {activeTeamId && <Badge variant="secondary">Sıra: {teams.find(t=>t.id===activeTeamId)?.name}</Badge>}
+                                {activeTeamId && <Badge variant="secondary">Sıradaki Takım: {teams.find(t=>t.id===activeTeamId)?.name}</Badge>}
                             </div>
                         </CardTitle>
                     </CardHeader>
@@ -333,10 +396,10 @@ function CompetitionComponent() {
                             return <Button key={i} className={cn(
                                 "aspect-square h-auto w-auto font-bold transition-transform hover:scale-105", 
                                 isFullscreen ? "text-lg" : "text-2xl",
-                                isQuestionAnswered ? "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed" : colorClasses[i % colorClasses.length]
+                                isQuestionAnswered ? "bg-muted text-muted-foreground hover:bg-muted cursor-not-allowed" : bgColors[i % bgColors.length]
                                 )}
                                 disabled={isQuestionAnswered || !activeTeamId} onClick={() => !isQuestionAnswered && setOpenedQuestion({ number: questionNumber, question: q })}>
-                                {isQuestionAnswered ? <Check className="h-6 w-6 text-white" /> : questionNumber}
+                                {isQuestionAnswered ? <Check className="h-6 w-6 text-green-500" /> : questionNumber}
                             </Button>
                         })}
                     </CardContent>
@@ -358,62 +421,10 @@ function CompetitionComponent() {
   );
 }
 
-function TeamScoreCard({ team, isActive, colorIndex, rank, isFullscreen }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean }) {
-    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
-    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
-    const bgColor = colorClasses[colorIndex % colorClasses.length];
-    const ringColor = ringClasses[colorIndex % ringClasses.length];
-    
-    const getInitials = (name?: string): string => {
-        if (!name) return '?';
-        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
-    };
-
+export default function SmartboardTakimOyunPage() {
     return (
-        <div className={cn(
-            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col",
-            bgColor,
-            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
-            isFullscreen ? "w-96" : "w-72"
-        )}>
-            <div className="flex justify-between items-start">
-                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
-                    <Users /> {team.name}
-                </h3>
-                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
-            </div>
-            <div className={cn("font-bold text-center my-4", isFullscreen ? "text-8xl" : "text-6xl")}>
-                {team.score}
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center mt-auto">
-                {team.students.length > 0 ? (
-                    team.students.map(student => (
-                        <TooltipProvider key={student.uid}>
-                             <Tooltip>
-                                <TooltipTrigger>
-                                    <Avatar className={cn(isFullscreen ? "h-12 w-12 text-lg" : "h-10 w-10")}>
-                                        <AvatarImage src={student.avatar || ''} data-ai-hint="profile picture" />
-                                        <AvatarFallback>{getInitials(student.displayName)}</AvatarFallback>
-                                    </Avatar>
-                                </TooltipTrigger>
-                                <TooltipContent><p>{student.displayName}</p></TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    ))
-                ) : <p className="text-sm text-white/70">Takımda oyuncu yok.</p>}
-            </div>
-        </div>
-    );
-}
-
-function SmartboardTakimOyunPage() {
-    return (
-      <Suspense fallback={<CompetitionLoadingSkeleton />}>
-          <TeamCompetitionComponent />
-      </Suspense>
+        <Suspense fallback={<CompetitionLoadingSkeleton />}>
+            <TeamCompetitionComponent />
+        </Suspense>
     )
 }
-
-export default SmartboardTakimOyunPage;
-
-    
