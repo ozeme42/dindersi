@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -86,10 +86,12 @@ export function BilBakalimSetupClientPage() {
             const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
             const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
             const studentClassId = studentClass?.id;
+            const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
             
             if (studentClassId) { // Student has a class
+                const isFirstClass = studentClassId === firstClassId;
                 finalCourses = studentVisibleCourses.filter(course =>
-                    course.classId === studentClassId || !course.classId
+                    course.classId === studentClassId || (isFirstClass && !course.classId)
                 );
             } else { // Student has no class assigned, show orphan courses
                 finalCourses = studentVisibleCourses.filter(course => !course.classId);
@@ -228,7 +230,7 @@ export function BilBakalimSetupClientPage() {
                 (currentStep === 1 && !selection.courseId) ||
                 (currentStep === 2 && !selection.unitId) ||
                 (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
+              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
             ) : (
               <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                 <Link href={getGameUrl()}>

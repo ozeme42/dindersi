@@ -181,7 +181,7 @@ export function EslestirmeSetupClientPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
+    <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-2">
@@ -230,7 +230,7 @@ export function EslestirmeSetupClientPage() {
                 (currentStep === 1 && !selection.courseId) ||
                 (currentStep === 2 && !selection.unitId) ||
                 (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
+              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
             ) : (
               <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                 <Link href={getGameUrl()}>

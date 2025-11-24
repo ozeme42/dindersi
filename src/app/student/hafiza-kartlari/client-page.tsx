@@ -181,7 +181,7 @@ export function HafizaKartlariSetupClientPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
+    <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-2">
