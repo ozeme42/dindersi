@@ -164,7 +164,7 @@ function YazilacaklarDisplayPage() {
         setIsDownloading(false);
     };
     
-    const backUrl = `/student/yazilacaklar`;
+    const backUrl = `/`;
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.1, 3.0));
     const decreaseFontSize = () => setFontSize(fs => Math.max(0.5, fs - 0.1));
@@ -178,7 +178,7 @@ function YazilacaklarDisplayPage() {
             <div className="flex h-screen items-center justify-center text-center p-8">
                 <div>
                     <p className="text-destructive mb-4">{error || "Bu konu için içerik bulunmuyor."}</p>
-                    <Button asChild variant="outline"><Link href={backUrl}>Geri Dön</Link></Button>
+                    <Button asChild variant="outline"><Link href={backUrl}>Ana Sayfaya Dön</Link></Button>
                 </div>
             </div>
         );
@@ -233,7 +233,8 @@ function YazilacaklarDisplayPage() {
         <div 
             ref={mainContentRef} 
             className={cn(
-                "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col sm:p-6 md:p-8"
+                "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col",
+                !isFullscreen && "pb-20 md:pb-8 sm:p-6 md:p-8"
             )}
         >
             <div className="container mx-auto max-w-7xl">
@@ -246,7 +247,7 @@ function YazilacaklarDisplayPage() {
                         </div>
                         <Button variant="outline" asChild>
                             <Link href={backUrl}>
-                                <ArrowLeft className="mr-2 h-4 w-4"/> Konu Seçimine Dön
+                                <ArrowLeft className="mr-2 h-4 w-4"/> Ana Sayfaya Dön
                             </Link>
                         </Button>
                         <Button variant="secondary" onClick={handleDownloadPDF} disabled={isDownloading}>
@@ -259,14 +260,14 @@ function YazilacaklarDisplayPage() {
 
                 <div className="flex-grow flex flex-col min-h-0">
                     <Tabs defaultValue="kavramlar" className="w-full flex-grow flex flex-col">
-                        <TabsList className={cn("grid w-full grid-cols-2", isFullscreen && "hidden")}>
+                        <TabsList className="grid w-full grid-cols-2">
                             <TabsTrigger value="kavramlar">Kavramlar</TabsTrigger>
                             <TabsTrigger value="notlar">Önemli Notlar</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 p-0 sm:p-4">
+                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 sm:p-4">
                             {KavramlarContent}
                         </TabsContent>
-                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 p-0 sm:p-4">
+                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 sm:p-4">
                             {NotlarContent}
                         </TabsContent>
                     </Tabs>
