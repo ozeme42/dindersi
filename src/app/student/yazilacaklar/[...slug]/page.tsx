@@ -194,11 +194,11 @@ function YazilacaklarDisplayPage() {
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                         {content.conceptDefinitions.length > 0 ? content.conceptDefinitions.map((item, index) => (
                             <Card key={index} className={cn("text-foreground", colorClasses[index % colorClasses.length])}>
-                                <CardHeader className="flex flex-row items-center gap-3 p-3">
+                                <CardHeader className="flex flex-row items-center gap-3 p-2 sm:p-3">
                                     <div className="h-8 w-8 flex-shrink-0 flex items-center justify-center rounded-full bg-black/20 text-white font-bold">{index + 1}</div>
                                     <CardTitle style={{ fontSize: `${fontSize * 1.1}rem` }} className="text-lg text-foreground">{item.concept}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="p-3 pt-0">
+                                <CardContent className="p-2 sm:p-3 pt-0">
                                     <p style={{ fontSize: `${fontSize}rem` }} className="text-sm opacity-90 text-foreground">{item.definition}</p>
                                 </CardContent>
                             </Card>
@@ -238,7 +238,7 @@ function YazilacaklarDisplayPage() {
             )}
         >
             <div className="container mx-auto max-w-7xl">
-                 <div className="mb-6 md:mb-12 text-center flex flex-col items-center pt-4">
+                 <div className="mb-6 md:mb-12 text-center flex flex-col items-center">
                     <h1 className="font-bold font-headline text-4xl">{topic?.title || 'Yazılacaklar'}</h1>
                      <div className="flex gap-2 justify-center mt-4 flex-wrap">
                         <div className="flex items-center gap-1">
