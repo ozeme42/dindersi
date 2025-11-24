@@ -1,21 +1,19 @@
 
-'use client';
+"use client";
 
-import { useState, useEffect, Suspense, useCallback } from 'react';
+import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Brain, Repeat, Home, PartyPopper } from 'lucide-react';
+import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Repeat, Home } from 'lucide-react';
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
-
+import { useToast } from '@/hooks/use-toast';
 
 function GuessItGame() {
     const searchParams = useSearchParams();
@@ -23,21 +21,22 @@ function GuessItGame() {
     const { user } = useAuth();
     const { toast } = useToast();
     
-    const [questions, setQuestions] = useState<Question[]>([]);
-    const [questionQueue, setQuestionQueue] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
+    const [questionQueue, setQuestionQueue] = useState<Partial<Question>[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    
+    const [currentQuestion, setCurrentQuestion] = useState<Partial<Question> | null>(null);
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [isAnswered, setIsAnswered] = useState(false);
 
     const [score, setScore] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    
-    const [isAnswered, setIsAnswered] = useState(false);
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-
+    const [mistakeCount, setMistakeCount] = useState(0);
 
     const isStatic = searchParams.get('static') === 'true';
-    const gameContext = `Bil Bakalım - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
+    const gameContext = `Bil Bakalım - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`;
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -47,78 +46,63 @@ function GuessItGame() {
                 topicId: searchParams.get('topicId') || undefined,
             };
             const result = await getBilBakalimAction(params);
-            if (result.error) {
-                setError(result.error);
-            } else if (result.questions && result.questions.length > 0) {
-                setQuestions(result.questions);
-                setQuestionQueue(result.questions.sort(() => 0.5 - Math.random()));
+            if (result.error || !result.questions || result.questions.length === 0) {
+                setError(result.error || "Bu konu için uygun soru bulunamadı.");
             } else {
-                setError("Bu konu için uygun soru bulunamadı.");
+                const allQuestions = result.questions.sort(() => 0.5 - Math.random());
+                setQuestions(allQuestions);
+                setQuestionQueue(allQuestions);
+                setCurrentQuestion(allQuestions[0]);
             }
             setIsLoading(false);
         };
         fetchQuestions();
     }, [searchParams, isStatic]);
     
-    const currentQuestion = questionQueue.length > 0 ? questionQueue[0] : null;
-
     const handleAnswer = (answer: string) => {
-        if (!currentQuestion || isAnswered) return;
-        
-        const isCorrect = answer === currentQuestion.correctAnswer;
+        if (isAnswered) return;
+
+        const isCorrect = answer === currentQuestion?.correctAnswer;
         setSelectedAnswer(answer);
         setIsAnswered(true);
 
         if (isCorrect) {
             playSound('correct');
             setScore(prev => prev + 15);
-            setTimeout(() => {
+             setTimeout(() => {
                 const newQueue = questionQueue.slice(1);
                 setQuestionQueue(newQueue);
-                if (newQueue.length === 0) {
-                    setIsFinished(true);
-                } else {
+                if (newQueue.length > 0) {
+                    setCurrentQuestion(newQueue[0]);
                     setIsAnswered(false);
                     setSelectedAnswer(null);
                 }
             }, 1200);
         } else {
             playSound('incorrect');
+            setMistakeCount(prev => prev + 1);
             setScore(prev => Math.max(0, prev - 5));
             setTimeout(() => {
-                const wrongQuestion = questionQueue[0];
-                const newQueue = [...questionQueue.slice(1), wrongQuestion];
+                const failedQuestion = questionQueue[0];
+                const newQueue = [...questionQueue.slice(1), failedQuestion];
                 setQuestionQueue(newQueue);
+                setCurrentQuestion(newQueue[0]);
                 setIsAnswered(false);
                 setSelectedAnswer(null);
             }, 1200);
         }
     };
     
-    const handleSaveAndExit = useCallback(async () => {
-        if (!user || score <= 0 || isSaving) {
-            router.push('/student/activities');
-            return;
-        }
-
-        setIsSaving(true);
-        const result = await submitBilBakalimScoreAction(user.uid, score, gameContext);
-        if (result.success) {
-            toast({ title: 'Başarılı!', description: 'Puanın kaydedildi.' });
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
-        }
-        setIsSaving(false);
-        router.push('/student/activities');
-    }, [user, score, gameContext, router, isSaving, toast]);
-    
     useEffect(() => {
-        if (isFinished) {
-            handleSaveAndExit();
+        if (!isLoading && user && questionQueue.length === 0 && questions.length > 0) {
+            setIsFinished(true);
+            if (score > 0 && !isStatic) {
+                submitBilBakalimScoreAction(user.uid, score, gameContext);
+            }
         }
-    }, [isFinished, handleSaveAndExit]);
-
-    const backUrl = '/student/bil-bakalim';
+    }, [questionQueue, questions, isLoading, user, score, isStatic, gameContext]);
+    
+    const backUrl = isStatic ? '/statik' : '/teacher/activities';
     
     if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
     
@@ -145,14 +129,20 @@ function GuessItGame() {
                         <CardTitle>Tebrikler!</CardTitle>
                         <CardDescription>Bil Bakalım etkinliğini tamamladınız.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <p className="text-4xl font-bold text-primary">{score}</p>
-                        <p className="text-muted-foreground">Toplam Puan</p>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <p className="text-4xl font-bold text-primary">{score}</p>
+                            <p className="text-muted-foreground">Toplam Puan</p>
+                        </div>
+                        <div>
+                            <p className="text-lg font-semibold text-red-500">{mistakeCount}</p>
+                            <p className="text-xs text-muted-foreground">Yapılan Hata</p>
+                        </div>
                     </CardContent>
                     <CardFooter className="flex-col gap-2">
                         <Button onClick={() => window.location.reload()} className="w-full">Tekrar Oyna</Button>
                         <Button variant="outline" asChild className="w-full">
-                           <Link href={backUrl}>Etkinlik Merkezine Dön</Link>
+                           <Link href="/student/bil-bakalim">Etkinlik Merkezine Dön</Link>
                         </Button>
                     </CardFooter>
                 </Card>
@@ -160,54 +150,62 @@ function GuessItGame() {
         );
     }
     
-    if (!currentQuestion) return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <p>Sorular hazırlanıyor...</p>
-        </div>
-    );
+    if (!currentQuestion) return null;
 
     return (
         <div className="flex h-screen w-full flex-col items-center justify-center p-4 bg-teal-50 dark:bg-teal-900/50">
-            <Card className="w-full max-w-xl text-center">
-                 <CardHeader>
-                    <div className="flex justify-between items-center">
-                        <CardTitle className="text-2xl">Soru {questions.length - questionQueue.length + 1}/{questions.length}</CardTitle>
-                        <div className="text-lg font-bold text-primary">Puan: {score}</div>
+            <div className="w-full max-w-5xl">
+                <div className="flex justify-between items-center mb-4">
+                     <div className="w-24">
+                        <Link href="/student/bil-bakalim">
+                            <Button variant="outline" size="sm"><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Button>
+                        </Link>
                     </div>
-                </CardHeader>
-                <CardContent 
-                    className="h-64 w-full rounded-lg bg-teal-600 text-white flex items-center justify-center p-6"
-                >
-                    <p className="text-2xl font-semibold">{currentQuestion.text}</p>
-                </CardContent>
-            </Card>
-            <div className="mt-6 w-full max-w-4xl grid grid-cols-2 lg:grid-cols-4 gap-3">
-                {questions.map((q) => {
-                    const isTheCorrectAnswer = q.correctAnswer === currentQuestion.correctAnswer;
-                    const isSelected = q.correctAnswer === selectedAnswer;
+                    <div className="flex flex-col items-center">
+                        <p className="text-lg font-bold text-primary">Puan: {score}</p>
+                        <p className="text-sm text-muted-foreground">Kalan: {questionQueue.length}/{questions.length}</p>
+                    </div>
+                    <div className="w-24"/>
+                </div>
 
-                    let buttonClass = 'bg-white hover:bg-gray-100 text-gray-800';
-                    if (isAnswered) {
-                        if (isTheCorrectAnswer) {
-                            buttonClass = 'bg-green-500 hover:bg-green-600 text-white animate-tada';
-                        } else if (isSelected) {
-                            buttonClass = 'bg-red-500 hover:bg-red-600 text-white animate-shake';
-                        } else {
-                            buttonClass = 'bg-gray-300 text-gray-500 opacity-50';
+                <div className="text-center bg-background/50 border-2 border-primary/20 p-6 rounded-lg shadow-lg relative mt-2">
+                    <p className="text-xl sm:text-2xl font-semibold italic">"{currentQuestion.text}"</p>
+                </div>
+                
+                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full mt-6">
+                    {questions.map((q) => {
+                        const answer = q.correctAnswer;
+                        if (!answer) return null;
+
+                        const isAnsweredForThisQ = questionQueue.find(qu => qu.id === q.id) === undefined;
+                        const isTheCorrectAnswer = answer === currentQuestion.correctAnswer;
+                        const isSelected = answer === selectedAnswer;
+
+                        let buttonClass = 'bg-white hover:bg-gray-100 text-gray-800';
+
+                        if (isAnswered) {
+                            if (isSelected) {
+                                buttonClass = isTheCorrectAnswer ? 'bg-green-500 animate-tada' : 'bg-red-500 animate-shake';
+                            } else if(isTheCorrectAnswer) {
+                                buttonClass = 'bg-green-500 animate-tada';
+                            } else {
+                                buttonClass = 'opacity-50 bg-gray-300';
+                            }
                         }
-                    }
 
-                    return (
-                        <Button
-                            key={q.id}
-                            onClick={() => handleAnswer(q.correctAnswer)}
-                            className={cn('h-24 text-lg font-bold', buttonClass)}
-                            disabled={isAnswered}
-                        >
-                            {q.correctAnswer}
-                        </Button>
-                    )
-                })}
+                        return (
+                            <Button
+                                key={q.id}
+                                variant="outline"
+                                className={`h-24 text-lg font-bold transition-all duration-300 ${buttonClass}`}
+                                onClick={() => handleAnswer(answer)}
+                                disabled={isAnswered || isAnsweredForThisQ}
+                            >
+                                {answer}
+                            </Button>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
@@ -220,3 +218,4 @@ export default function GuessItPage() {
         </Suspense>
     );
 }
+
