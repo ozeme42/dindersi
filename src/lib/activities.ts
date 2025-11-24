@@ -1,5 +1,24 @@
-
-import { BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, Mic, Pencil, ClipboardCheck, Coins, Wind, BookOpen, Milestone } from 'lucide-react';
+import {
+  BrainCircuit,
+  Search,
+  Crosshair,
+  Shuffle,
+  Lightbulb,
+  Puzzle,
+  Skull,
+  Layers,
+  FolderKanban,
+  MousePointerClick,
+  Trophy,
+  ArrowDownUp,
+  Link2,
+  Mic,
+  Pencil,
+  Package,
+  Wind,
+  Coins,
+  BookOpen
+} from 'lucide-react';
 
 export const activityTypes = [
   { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
@@ -20,7 +39,5 @@ export const activityTypes = [
   { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
   { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
-  { href: '/student/labirent', label: 'Labirent', icon: Milestone },
-  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
   { href: '/student/tornado', label: 'Tornado', icon: Wind },
 ];
