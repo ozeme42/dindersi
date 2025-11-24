@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, BrainCircuit, Check, Trash2, Users, Shuffle, PartyPopper, Star, Award, Trophy } from "lucide-react";
+import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, UserCheck, BrainCircuit, Check, Trash2, Users, Shuffle, PartyPopper, Star, Home, Award, Trophy, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
@@ -29,7 +29,7 @@ import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import { QuestionDialog } from "@/components/question-dialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { addStudentToClass } from "@/app/teacher/students/actions";
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 const SUMMER_SCHOOL_CLASS_NAME = "Yaz Okulu Havuzu";
@@ -150,6 +150,7 @@ const TeamScoreCard = ({ competitor, isActive, colorClass, rank }: { competitor:
 
 function CompetitionComponent() {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const { toast } = useToast();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isSubmittingScores, setIsSubmittingScores] = useState(false);
@@ -159,6 +160,7 @@ function CompetitionComponent() {
 
     const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
 
+
     useEffect(() => {
         const handleFullscreenChange = () => {
           setIsFullscreen(!!document.fullscreenElement);
@@ -166,10 +168,7 @@ function CompetitionComponent() {
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
-
-    // Get setup parameters from URL
-    const finishScore = parseInt(searchParams.get('finishScore') || '0');
-
+    
     const pointsConfig = useMemo(() => {
         const pointsParam = searchParams.get('points');
         try {
@@ -178,7 +177,7 @@ function CompetitionComponent() {
             return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
         }
     }, [searchParams]);
-
+    
     const penaltyConfig = useMemo(() => {
         const penaltyParam = searchParams.get('penalty');
         try {
@@ -227,64 +226,11 @@ function CompetitionComponent() {
         'hover:bg-blue-600', 'hover:bg-emerald-600', 'hover:bg-amber-600', 'hover:bg-indigo-600', 'hover:bg-pink-600', 'hover:bg-sky-600', 'hover:bg-rose-600',
         'hover:bg-chart-1/90', 'hover:bg-chart-2/90', 'hover:bg-chart-3/90', 'hover:bg-chart-4/90', 'hover:bg-chart-5/90'
     ];
-
-    const fetchGameData = useCallback(async () => {
-        setIsLoading(true);
-        setIsPoolLoading(true);
-        setError(null);
-
-        try {
-            const params: GetQuizInput = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: parseInt(searchParams.get('questionCount') || '20'),
-                difficulty: searchParams.get('difficulty')?.split(','),
-                questionTypes: searchParams.get('questionTypes')?.split(','),
-                isStatic: searchParams.get('isStatic') === 'true'
-            };
-            const questionResult = await getQuestionsFromBank(params);
-
-            if ('error' in questionResult) {
-                setError(questionResult.error);
-            } else if (questionResult.questions && questionResult.questions.length > 0) {
-                setQuestions(questionResult.questions);
-            } else {
-                setError("Belirtilen kriterlere uygun soru bulunamadı.");
-            }
-
-            const classId = searchParams.get('classId');
-            if (classId) {
-                const classDoc = await getDoc(doc(db, "classes", classId));
-                if (classDoc.exists()) {
-                    const classData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
-                    setCurrentClass(classData);
-                    const studentsQuery = query(collection(db, "users"), where("class", ">=", classData.name), where("class", "<", classData.name + '\uf8ff'), where("role", "==", "guest"));
-                    const studentsSnapshot = await getDocs(studentsQuery);
-                    setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
-                } else {
-                    setError("Sınıf bilgisi bulunamadı.");
-                }
-            } else {
-                // Handle cases without a classId if needed, e.g., summer school
-                 const studentsQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME), where("role", "==", "guest"));
-                 const studentsSnapshot = await getDocs(studentsQuery);
-                 setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
-            }
-
-        } catch (err: any) {
-            console.error("Error fetching data:", err);
-            setError("Veriler yüklenirken bir hata oluştu.");
-        } finally {
-            setIsLoading(false);
-            setIsPoolLoading(false);
-        }
-    }, [searchParams]);
-
-    useEffect(() => {
-        fetchGameData();
-    }, [fetchGameData]);
     
+    const sortedCompetitors = useMemo(() =>
+        [...inGameCompetitors].sort((a, b) => b.score - a.score),
+    [inGameCompetitors]);
+
     const handleSaveScores = useCallback(async (andFinish: boolean = false) => {
         if (scoresHaveBeenSaved || inGameCompetitors.length === 0) {
             if (andFinish && gameState !== 'finished') setGameState('finished');
@@ -324,6 +270,98 @@ function CompetitionComponent() {
         setIsSubmittingScores(false);
     }, [scoresHaveBeenSaved, inGameCompetitors, searchParams, toast, gameState]);
 
+    const fetchGameData = useCallback(async () => {
+        setIsLoading(true);
+        setIsPoolLoading(true);
+        setError(null);
+
+        try {
+            const params: GetQuizInput = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+                questionCount: parseInt(searchParams.get('questionCount') || '20'),
+                difficulty: searchParams.get('difficulty')?.split(','),
+                questionTypes: searchParams.get('questionTypes')?.split(','),
+                isStatic: searchParams.get('isStatic') === 'true'
+            };
+            const questionResult = await getQuestionsFromBank(params as any);
+
+            if ('error' in questionResult) {
+                setError(questionResult.error);
+            } else if (questionResult.questions && questionResult.questions.length > 0) {
+                setQuestions(questionResult.questions as GameQuestion[]);
+            } else {
+                setError("Belirtilen kriterlere uygun soru bulunamadı.");
+            }
+
+            const classId = searchParams.get('classId');
+            if (classId) {
+                const classDoc = await getDoc(doc(db, "classes", classId));
+                if (classDoc.exists()) {
+                    const classData = { id: classDoc.id, ...classDoc.data() } as SchoolClass;
+                    setCurrentClass(classData);
+                    const studentsQuery = query(collection(db, "users"), where("class", ">=", classData.name), where("class", "<", classData.name + '\uf8ff'));
+                    const studentsSnapshot = await getDocs(studentsQuery);
+                    setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+                } else {
+                    setError("Sınıf bilgisi bulunamadı.");
+                }
+            } else {
+                // Handle cases without a classId if needed, e.g., summer school
+                 const studentsQuery = query(collection(db, "users"), where("class", "==", SUMMER_SCHOOL_CLASS_NAME));
+                 const studentsSnapshot = await getDocs(studentsQuery);
+                 setStudentPool(studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+            }
+
+        } catch (err: any) {
+            console.error("Error fetching data:", err);
+            setError("Veriler yüklenirken bir hata oluştu.");
+        } finally {
+            setIsLoading(false);
+            setIsPoolLoading(false);
+        }
+    }, [searchParams]);
+
+    useEffect(() => {
+        fetchGameData();
+    }, [fetchGameData]);
+
+    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
+        if (!activeCompetitorId || gameState === 'finished') return;
+        const finishScore = parseInt(searchParams.get('finishScore') || '0');
+        
+        let winnerFound: GameCompetitor | null = null;
+
+        const updatedCompetitors = inGameCompetitors.map(c => {
+            if (c.uid === activeCompetitorId) {
+                const newScore = Math.max(0, c.score + scoreChange);
+                const updatedCompetitor = { ...c, score: newScore };
+                if (finishScore > 0 && newScore >= finishScore) {
+                    winnerFound = updatedCompetitor;
+                }
+                return updatedCompetitor;
+            }
+            return c;
+        });
+
+        setInGameCompetitors(updatedCompetitors);
+        setAnsweredQuestions([...answeredQuestions, questionNumber]);
+        setOpenedQuestion(null);
+        setCurrentView('leaderboard');
+
+        if (winnerFound) {
+            setWinner(winnerFound);
+            setGameState('finished');
+        }
+    };
+    
+    useEffect(() => {
+        if (gameState === 'playing' && questions.length > 0 && answeredQuestions.length === questions.length) {
+            handleSaveScores(true);
+        }
+    }, [gameState, answeredQuestions.length, questions.length, handleSaveScores]);
+    
     const handleAddStudent = async (displayName: string, className: string) => {
         if (!displayName.trim()) return;
         setIsAddingStudent(true);
@@ -354,7 +392,7 @@ function CompetitionComponent() {
 
     const addCompetitorToGame = (competitor: UserProfile) => {
         if(inGameCompetitors.some(c => c.uid === competitor.uid)) return;
-        const newCompetitor: GameCompetitor = { uid: competitor.uid, displayName: competitor.displayName, avatar: competitor.avatar, score: 0 };
+        const newCompetitor: GameCompetitor = { ...competitor, score: 0 };
         setInGameCompetitors(prev => [...prev, newCompetitor]);
     };
 
@@ -391,40 +429,7 @@ function CompetitionComponent() {
         setOpenedQuestion({ number, question });
     };
 
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
-        if (!activeCompetitorId || gameState === 'finished') return;
-        
-        let winnerFound: GameCompetitor | null = null;
-
-        const updatedCompetitors = inGameCompetitors.map(c => {
-            if (c.uid === activeCompetitorId) {
-                const newScore = Math.max(0, c.score + scoreChange);
-                const updatedCompetitor = { ...c, score: newScore };
-                if (finishScore > 0 && newScore >= finishScore) {
-                    winnerFound = updatedCompetitor;
-                }
-                return updatedCompetitor;
-            }
-            return c;
-        });
-
-        setInGameCompetitors(updatedCompetitors);
-        setAnsweredQuestions([...answeredQuestions, questionNumber]);
-        setOpenedQuestion(null);
-        setCurrentView('leaderboard');
-
-        if (winnerFound) {
-            setWinner(winnerFound);
-            setGameState('finished');
-        }
-    };
     
-    useEffect(() => {
-        if (gameState === 'playing' && questions.length > 0 && answeredQuestions.length === questions.length) {
-            handleSaveScores(true);
-        }
-    }, [gameState, answeredQuestions.length, questions.length, handleSaveScores]);
-
     const startNewGame = () => {
         window.location.reload();
     };
@@ -450,10 +455,6 @@ function CompetitionComponent() {
         setOpenedQuestion({ number: questionNumber, question });
     };
 
-    const sortedCompetitors = useMemo(() =>
-        [...inGameCompetitors].sort((a, b) => b.score - a.score),
-    [inGameCompetitors]);
-
     if (isLoading) {
         return <CompetitionLoadingSkeleton />;
     }
@@ -474,7 +475,6 @@ function CompetitionComponent() {
             </div>
         );
     }
-
     if (gameState === 'finished') {
         return (
             <div className={cn("p-4 sm:p-6 md:p-8 flex items-center justify-center min-h-screen", isFullscreen ? "h-screen w-screen m-0" : "container mx-auto")}>
@@ -549,137 +549,79 @@ function CompetitionComponent() {
                     </Button>
                     <FullscreenToggle />
                     <Button asChild variant="outline">
-                        <Link href="/teacher/summer-school/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
+                        <Link href="/teacher/smartboard/bireysel"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
                     </Button>
                 </div>
             </div>
 
-            <div className={cn("space-y-8", isFullscreen ? "flex-grow flex flex-col overflow-hidden" : "")}>
-                {currentView === 'leaderboard' ? (
-                     <div className="space-y-8 h-full flex flex-col">
-                        <div className={cn(isFullscreen && "flex-grow min-h-0")}>
-                             <Card className={cn("bg-card/70 backdrop-blur-sm", isFullscreen && "flex-grow flex flex-col h-full")}>
-                                <CardHeader>
-                                    <div className="flex justify-between items-center">
-                                        <CardTitle className="flex items-center gap-2"><Crown className="text-yellow-500"/> Liderlik Tablosu</CardTitle>
-                                        <Button variant="outline" size="sm" onClick={removeAllFromGame} disabled={inGameCompetitors.length === 0}>
-                                            <UserMinus className="mr-2 h-4 w-4"/> Tüm Yarışmacıları Çıkar
-                                        </Button>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className={cn("flex flex-col", isFullscreen && "flex-grow min-h-0")}>
-                                    <div className={cn("flex-1", isFullscreen && "overflow-hidden")}>
-                                        <ScrollArea className={cn(isFullscreen ? "h-full" : "h-auto")}>
-                                            {sortedCompetitors.length > 0 ? (
-                                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                                    {sortedCompetitors.map((player, index) => {
-                                                        const colorClass = bgColors[index % bgColors.length];
-                                                        const hoverColorClass = hoverBgColors[index % hoverBgColors.length];
-                                                        const isActive = activeCompetitorId === player.uid;
-                                                        return (
-                                                             <Card 
-                                                                key={player.uid} 
-                                                                onClick={() => setActiveCompetitorId(player.uid)}
-                                                                className={cn(
-                                                                    'relative group cursor-pointer transition-all text-white border-transparent',
-                                                                    colorClass,
-                                                                    hoverColorClass,
-                                                                    isActive && `ring-4 ring-offset-background ring-offset-2 ring-white/80`
-                                                                )}
-                                                            >
-                                                                <Button size="icon" variant="ghost" className="absolute top-1 right-1 h-7 w-7 text-white/70 hover:bg-white/20 hover:text-white opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); removeCompetitorFromGame(player.uid)}} title="Yarışmadan çıkar">
-                                                                    <Trash2 className="h-4 w-4"/>
-                                                                </Button>
-                                                                <CardContent className="p-4 flex items-center justify-between gap-3">
-                                                                    <div className="flex items-center gap-3 overflow-hidden">
-                                                                        <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full border-2 border-white/50 bg-white/20 font-bold text-lg">
-                                                                            {index === 0 && <Crown className="h-6 w-6 text-yellow-400" />}
-                                                                            {index === 1 && <Award className="h-6 w-6 text-gray-400" />}
-                                                                            {index === 2 && <Award className="h-6 w-6 text-orange-400" />}
-                                                                            {index > 2 && (index + 1)}
-                                                                        </div>
-                                                                        <div className="truncate">
-                                                                            <p className="font-bold text-lg truncate">{player.displayName}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="text-right">
-                                                                        <p className="text-4xl font-bold">{player.score}</p>
-                                                                    </div>
-                                                                </CardContent>
-                                                            </Card>
-                                                        )
-                                                    })}
-                                                </div>
-                                            ) : (
-                                                <div className="text-center py-12 text-muted-foreground flex-grow flex items-center justify-center">
-                                                    <p>Yarışmaya başlamak için aşağıdaki havuzdan yarışmacı ekleyin.</p>
-                                                </div>
-                                            )}
-                                        </ScrollArea>
-                                    </div>
-                                    <div className="pt-6">
-                                    {inGameCompetitors.length > 0 && (
-                                            activeCompetitorId !== null ? (
-                                                <Button size="lg" className="w-full" onClick={() => setCurrentView('questions')}>
-                                                    <BrainCircuit className="mr-2 h-5 w-5"/>
-                                                    Sıradaki Yarışmacı ({inGameCompetitors.find(c=>c.uid === activeCompetitorId)?.displayName}) İçin Soru Seç
-                                                </Button>
-                                            ) : (
-                                                <Alert variant="destructive">
-                                                    <AlertTriangle className="h-4 w-4" />
-                                                    <AlertTitle>Devam Etmek İçin Bir Yarışmacı Seçin</AlertTitle>
-                                                    <AlertDescription>
-                                                      Liderlik tablosundan sıradaki yarışmacıyı seçerek devam edin.
-                                                    </AlertDescription>
-                                                </Alert>
+            <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-8", isFullscreen ? "flex-grow flex overflow-hidden" : "")}>
+                <div className={cn("lg:col-span-2", isFullscreen ? "w-3/4 flex flex-col" : "")}>
+                    <Tabs defaultValue="questions" className={cn("h-full", isFullscreen ? "flex-grow flex flex-col" : "")} onValueChange={(value) => setCurrentView(value as 'leaderboard' | 'questions')}>
+                      <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="leaderboard">Liderlik Tablosu</TabsTrigger>
+                        <TabsTrigger value="questions">Sorular</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="leaderboard" className={cn("mt-6", isFullscreen && "flex-grow min-h-0")}>
+                            <ScrollArea className="h-full">
+                                {sortedCompetitors.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                        {sortedCompetitors.map((player, index) => {
+                                            const colorClass = bgColors[index % bgColors.length];
+                                            const hoverColorClass = hoverBgColors[index % hoverBgColors.length];
+                                            const isActive = activeCompetitorId === player.uid;
+                                            return (
+                                                <Card 
+                                                    key={player.uid} 
+                                                    onClick={() => setActiveCompetitorId(player.uid)}
+                                                    className={cn(
+                                                        'relative group cursor-pointer transition-all text-white border-transparent',
+                                                        colorClass,
+                                                        hoverColorClass,
+                                                        isActive && `ring-4 ring-offset-background ring-offset-2 ring-white/80`
+                                                    )}
+                                                >
+                                                    <Button size="icon" variant="ghost" className="absolute top-1 right-1 h-7 w-7 text-white/70 hover:bg-white/20 hover:text-white opacity-0 transition-opacity group-hover:opacity-100" onClick={(e) => { e.stopPropagation(); removeCompetitorFromGame(player.uid)}} title="Yarışmadan çıkar">
+                                                        <Trash2 className="h-4 w-4"/>
+                                                    </Button>
+                                                    <CardContent className="p-4 flex items-center justify-between gap-3">
+                                                        <div className="flex items-center gap-3 overflow-hidden">
+                                                            <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full border-2 border-white/50 bg-white/20 font-bold text-lg">
+                                                                {index === 0 && <Crown className="h-6 w-6 text-yellow-400" />}
+                                                                {index === 1 && <Award className="h-6 w-6 text-gray-400" />}
+                                                                {index === 2 && <Award className="h-6 w-6 text-orange-400" />}
+                                                                {index > 2 && (index + 1)}
+                                                            </div>
+                                                            <div className="truncate">
+                                                                <p className="font-bold text-lg truncate">{player.displayName}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-4xl font-bold">{player.score}</p>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
                                             )
-                                    )}
+                                        })}
                                     </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                        
-                        {!isFullscreen && (
-                            <div>
-                                <Card className="bg-card/70 backdrop-blur-sm mt-8">
-                                    <CardHeader>
-                                        <CardTitle className="flex justify-between items-center">
-                                            <span>Yaz Okulu Öğrenci Havuzu</span>
-                                            <Button size="sm" variant="outline" onClick={() => setIsAddStudentOpen(true)}>
-                                                <UserPlus className="mr-2 h-4 w-4" /> Yeni Öğrenci
-                                            </Button>
-                                        </CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <Button size="sm" className="w-full mb-2" onClick={addAllFromPoolToGame} disabled={studentPool.every(s => inGameCompetitors.some(c => c.uid === s.uid)) || studentPool.length === 0}>Tümünü Ekle</Button>
-                                         <ScrollArea className="h-80">
-                                            {isPoolLoading ? <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div> :
-                                            studentPool.length > 0 ? studentPool.map(s => <StudentListItem key={s.uid} student={s} onAddToGame={addCompetitorToGame} isAdded={inGameCompetitors.some(c => c.uid === s.uid)} />) :
-                                            <p className="text-center text-sm text-muted-foreground p-4">Havuzda öğrenci yok.</p>}
-                                        </ScrollArea>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <div className="lg:col-span-3">
-                         <Card className={cn("bg-card/70 backdrop-blur-sm", isFullscreen && "flex-grow flex flex-col")}>
+                                ) : (
+                                    <div className="text-center py-12 text-muted-foreground">
+                                        <p>Yarışmaya başlamak için yandaki havuzdan yarışmacı ekleyin.</p>
+                                    </div>
+                                )}
+                            </ScrollArea>
+                      </TabsContent>
+                      <TabsContent value="questions" className={cn("mt-6", isFullscreen && "flex-grow min-h-0")}>
+                        <Card className="h-full">
                             <CardHeader>
                                 <CardTitle className="flex items-center justify-between">
                                     <span>Sorular ({questions.length - answeredQuestions.length} kaldı)</span>
                                     <div className="flex items-center gap-2">
-                                        <Button variant="outline" size="sm" onClick={handleSelectRandomQuestion} disabled={!activeCompetitorId}>
-                                            <Shuffle className="mr-2 h-4 w-4" /> Rastgele Seç
-                                        </Button>
-                                        <Button variant="outline" onClick={() => setCurrentView('leaderboard')}>
-                                            <ArrowLeft className="mr-2 h-4 w-4"/> Liderlik Tablosu
-                                        </Button>
+                                        <Button variant="outline" size="sm" onClick={handleSelectRandomQuestion} disabled={!activeCompetitorId}><Shuffle className="mr-2 h-4 w-4"/> Rastgele Seç</Button>
+                                        {activeCompetitorId && <Badge variant="secondary">Sıradaki: {inGameCompetitors.find(c=>c.uid === activeCompetitorId)?.displayName}</Badge>}
                                     </div>
                                 </CardTitle>
-                                <CardDescription>Sıradaki: {inGameCompetitors.find(c => c.uid === activeCompetitorId)?.displayName}</CardDescription>
                             </CardHeader>
-                            <CardContent className={cn("grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2", isFullscreen && "grid-cols-8 flex-grow gap-4")}>
+                            <CardContent className={cn("grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2", isFullscreen && "grid-cols-8 gap-4")}>
                                 {questions.map((q, i) => {
                                      const questionNumber = i + 1;
                                      const isQuestionAnswered = answeredQuestions.includes(questionNumber);
@@ -703,8 +645,40 @@ function CompetitionComponent() {
                                 })}
                             </CardContent>
                         </Card>
-                    </div>
-                )}
+                      </TabsContent>
+                    </Tabs>
+                </div>
+                 <div className={cn("lg:col-span-1", isFullscreen ? "w-1/4" : "")}>
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex justify-between items-center">
+                                <span>Öğrenci Havuzu</span>
+                                <Button size="sm" variant="outline" onClick={() => setIsAddStudentOpen(true)}>
+                                    <UserPlus className="mr-2 h-4 w-4" /> Yeni Sanal Öğrenci
+                                </Button>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                             <div className="flex gap-2 mb-2">
+                                {currentClass && 
+                                    <Select value={selectedBranch} onValueChange={handleBranchSelect}>
+                                        <SelectTrigger><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                            {currentClass.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                }
+                                <Button className="w-full" onClick={addAllFromPoolToGame} disabled={studentsInBranch.every(s => inGameCompetitors.some(c => c.uid === s.uid)) || studentsInBranch.length === 0}>Tümünü Ekle</Button>
+                            </div>
+                             <ScrollArea className="h-80">
+                                {isPoolLoading ? <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div> :
+                                studentsInBranch.length > 0 ? studentsInBranch.map(s => <StudentListItem key={s.uid} student={s} onAddToGame={addCompetitorToGame} isAdded={inGameCompetitors.some(c => c.uid === s.uid)} />) :
+                                <p className="text-center text-sm text-muted-foreground p-4">Havuzda öğrenci yok.</p>}
+                            </ScrollArea>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
             {openedQuestion && (
                 <QuestionDialog
@@ -718,12 +692,12 @@ function CompetitionComponent() {
                     isFullscreen={isFullscreen}
                 />
             )}
-             <AddStudentDialog
+            <AddStudentDialog
                 isOpen={isAddStudentOpen}
                 onOpenChange={setIsAddStudentOpen}
                 onAdd={handleAddStudent}
                 isSaving={isAddingStudent}
-                poolClassName={SUMMER_SCHOOL_CLASS_NAME}
+                poolClassName={currentClass ? `${currentClass.name} - ${selectedBranch} (Havuz)` : SUMMER_SCHOOL_CLASS_NAME}
             />
         </div>
     )
@@ -736,317 +710,3 @@ export default function SmartboardBireyselOyunPage() {
         </Suspense>
     )
 }
-
-```
-- src/download_unzipped.zip_unzipped/src/teacher/summer-school/smartboard/page.tsx:
-```tsx
-'use client';
-
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight } from 'lucide-react';
-import React, { type ReactNode } from 'react';
-import { cn } from '@/lib/utils';
-
-
-const FeatureButton = ({ href, title, description, icon, colorClass }: { href: string, title: string, description:string, icon: ReactNode, colorClass: string }) => {
-    return (
-        <Link href={href} className="block group h-full">
-            <div className={cn(
-                "h-full w-full rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300",
-                colorClass
-            )}>
-                {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 opacity-90" })}
-                <h3 className="font-headline text-3xl mt-4">{title}</h3>
-                <p className="mt-2 opacity-80 text-sm max-w-xs">{description}</p>
-                <div className="flex-grow" />
-                <ArrowRight className="mt-4 h-6 w-6 group-hover:translate-x-1 transition-transform" />
-            </div>
-        </Link>
-    )
-};
-
-export default function SummerSmartboardPage() {
-  const buttons = [
-    {
-      href: "/teacher/summer-school/smartboard/bireysel",
-      title: "Bireysel Yarışma",
-      description: "Her öğrencinin kendi başına yarıştığı klasik mod.",
-      icon: <User />,
-      colorClass: "bg-primary text-primary-foreground hover:bg-primary/90",
-    },
-    {
-      href: "/teacher/summer-school/smartboard/takim",
-      title: "Takım Yarışması",
-      description: "Öğrencileri takımlara ayırarak rekabeti artırın.",
-      icon: <Users />,
-      colorClass: "bg-cyan-600 text-cyan-50 hover:bg-cyan-700",
-    },
-    {
-      href: "/teacher/summer-school/smartboard/duello",
-      title: "Düello",
-      description: "İki öğrenciyi veya takımı karşı karşıya getirin.",
-      icon: <Swords />,
-      colorClass: "bg-fuchsia-600 text-fuchsia-50 hover:bg-fuchsia-700",
-    },
-  ];
-
-  return (
-    <div className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 space-y-12 h-full bg-gradient-to-br from-background via-primary/5 to-accent/5">
-        <div className="text-center animate-fade-in-up">
-            <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary">Yaz Kursu Yarışmaları</h1>
-            <p className="text-muted-foreground mt-4 text-xl md:text-2xl">Yaz kursu öğrencileriniz için bir yarışma türü seçin.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl h-auto animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            {buttons.map((buttonProps, index) => <div key={index} className="h-80"><FeatureButton {...buttonProps} /></div>)}
-        </div>
-    </div>
-  );
-}
-
-```
-- src/download_unzipped.zip_unzipped/src/teacher/summer-school/smartboard/takim/client-page.tsx:
-```tsx
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
-
-export const ai = genkit({
-  plugins: [
-    googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    }),
-  ],
-});
-```
-- src/download_unzipped.zip_unzipped/src/teacher/summer-school/smartboard/takim/page.tsx:
-```tsx
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
-
-export const ai = genkit({
-  plugins: [
-    googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    }),
-  ],
-});
-```
-- src/download_unzipped.zip_unzipped/src/teacher/summer-school/students/page.tsx:
-```tsx
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
-
-export const ai = genkit({
-  plugins: [
-    googleAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    }),
-  ],
-});
-```
-- storage.rules:
-```rules
-rules_version = '2';
-
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if false;
-    }
-  }
-}
-```
-- tailwind.config.ts:
-```ts
-import type {Config} from 'tailwindcss';
-
-const colorNames = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
-const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-
-// Creates a regex pattern like: /^(bg|text|border)-(slate|gray|...)-(50|100|...)$/
-const colorPattern = new RegExp(
-  `^(bg|text|border|ring|fill|stroke)-(${colorNames.join('|')})-(${shades.join('|')})$`
-);
-
-
-export default {
-  darkMode: ['class'],
-  content: [
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  safelist: [
-    {
-      pattern: colorPattern,
-    },
-    {
-      pattern: /bg-chart-(1|2|3|4|5)/,
-    }
-  ],
-  theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
-      fontFamily: {
-        body: ['"Inter"', 'sans-serif'],
-        headline: ['"Poppins"', 'serif'],
-        code: ['monospace'],
-      },
-      colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
-        },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-      keyframes: {
-        'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-        },
-        'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
-        },
-        "fade-in-up": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(20px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
-        },
-        "shake": {
-          "10%, 90%": { transform: "translate3d(-1px, 0, 0)" },
-          "20%, 80%": { transform: "translate3d(2px, 0, 0)" },
-          "30%, 50%, 70%": { transform: "translate3d(-4px, 0, 0)" },
-          "40%, 60%": { transform: "translate3d(4px, 0, 0)" },
-        },
-        "shake-game": {
-            "0%": { transform: "translateX(0)" },
-            "25%": { transform: "translateX(-5px)" },
-            "50%": { transform: "translateX(5px)" },
-            "75%": { transform: "translateX(-5px)" },
-            "100%": { transform: "translateX(0)" },
-        },
-        "tada": {
-          "0%": { transform: "scale(1)" },
-          "10%, 20%": { transform: "scale(0.9) rotate(-3deg)" },
-          "30%, 50%, 70%, 90%": { transform: "scale(1.1) rotate(3deg)" },
-          "40%, 60%, 80%": { transform: "scale(1.1) rotate(-3deg)" },
-          "100%": { transform: "scale(1) rotate(0)" }
-        },
-        "bubbleFloat": {
-            "0%": { transform: "translate(0px, 0px) scale(1)", opacity: "0.9" },
-            "50%": { transform: "translate(var(--translate-x), var(--translate-y)) scale(1.02)", opacity: "0.95" },
-            "100%": { transform: "translate(0px, 0px) scale(1)", opacity: "0.9" },
-        },
-        "fadeAndScaleIn": {
-            from: { opacity: "0", transform: "scale(0.9)" },
-            to: { opacity: "1", transform: "scale(1)" },
-        }
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        "fade-in-up": "fade-in-up 0.5s ease-out forwards",
-        "shake": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
-        "tada": "tada 1s ease-in-out",
-        "shake-game": "shake-game .3s ease-out",
-        "bubbleFloat": "bubbleFloat var(--animation-duration, 5s) ease-in-out var(--animation-delay, 0s) infinite alternate",
-        "fadeAndScaleIn": "fadeAndScaleIn .3s ease-out",
-      },
-    },
-  },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
-} satisfies Config;
-```
-- tsconfig.json:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
