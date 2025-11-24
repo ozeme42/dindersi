@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
@@ -185,7 +186,7 @@ function YazilacaklarDisplayPage() {
     }
     
     const KavramlarContent = (
-         <Card className="bg-background/80 flex flex-col h-full overflow-hidden">
+         <Card className="bg-background/80 flex flex-col h-full overflow-hidden border-0 rounded-none sm:rounded-lg">
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Kavramlar ve Tanımları'}</CardTitle>
             </CardHeader>
@@ -210,7 +211,7 @@ function YazilacaklarDisplayPage() {
     );
 
     const NotlarContent = (
-        <Card className="bg-background/80 flex flex-col h-full overflow-hidden">
+        <Card className="bg-background/80 flex flex-col h-full overflow-hidden border-0 rounded-none sm:rounded-lg">
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Önemli Notlar'}</CardTitle>
             </CardHeader>
@@ -234,11 +235,11 @@ function YazilacaklarDisplayPage() {
             ref={mainContentRef} 
             className={cn(
                 "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col",
-                !isFullscreen && "p-4 sm:p-6 md:p-8"
+                !isFullscreen && "sm:p-6 md:p-8"
             )}
         >
             <div className="container mx-auto max-w-7xl">
-                 <div className="mb-6 md:mb-12 text-center flex flex-col items-center">
+                 <div className="my-6 md:my-12 text-center flex flex-col items-center">
                     <h1 className="font-bold font-headline text-4xl">{topic?.title || 'Yazılacaklar'}</h1>
                      <div className="flex gap-2 justify-center mt-4 flex-wrap">
                         <div className="flex items-center gap-1">
@@ -264,10 +265,10 @@ function YazilacaklarDisplayPage() {
                             <TabsTrigger value="kavramlar">Kavramlar</TabsTrigger>
                             <TabsTrigger value="notlar">Önemli Notlar</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0">
+                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 p-4">
                             {KavramlarContent}
                         </TabsContent>
-                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0">
+                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 p-4">
                             {NotlarContent}
                         </TabsContent>
                     </Tabs>
@@ -285,3 +286,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+    
