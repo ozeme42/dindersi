@@ -189,9 +189,9 @@ function YazilacaklarDisplayPage() {
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Kavramlar ve Tanımları'}</CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow p-4 min-h-0">
+            <CardContent className="flex-grow p-0 sm:p-4 min-h-0">
                 <ScrollArea className="h-full pr-2">
-                    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {content.conceptDefinitions.length > 0 ? content.conceptDefinitions.map((item, index) => (
                             <Card key={index} className={cn("text-foreground", colorClasses[index % colorClasses.length])}>
                                 <CardHeader className="flex flex-row items-center gap-3 p-2 sm:p-3">
@@ -214,7 +214,7 @@ function YazilacaklarDisplayPage() {
             <CardHeader className="flex-shrink-0">
                 <CardTitle className="text-primary text-2xl font-bold">{topic?.title || 'Önemli Notlar'}</CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow p-4 min-h-0">
+            <CardContent className="flex-grow p-0 sm:p-4 min-h-0">
                  <ScrollArea className="h-full pr-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {content.notes.length > 0 ? content.notes.map((note, index) => (
@@ -233,8 +233,7 @@ function YazilacaklarDisplayPage() {
         <div 
             ref={mainContentRef} 
             className={cn(
-                "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col",
-                !isFullscreen && "sm:p-6 md:p-8"
+                "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col sm:p-6 md:p-8"
             )}
         >
             <div className="container mx-auto max-w-7xl">
@@ -260,14 +259,14 @@ function YazilacaklarDisplayPage() {
 
                 <div className="flex-grow flex flex-col min-h-0">
                     <Tabs defaultValue="kavramlar" className="w-full flex-grow flex flex-col">
-                        <TabsList className="grid w-full grid-cols-2">
+                        <TabsList className={cn("grid w-full grid-cols-2", isFullscreen && "hidden")}>
                             <TabsTrigger value="kavramlar">Kavramlar</TabsTrigger>
                             <TabsTrigger value="notlar">Önemli Notlar</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0">
+                        <TabsContent value="kavramlar" className="flex-grow mt-4 min-h-0 p-0 sm:p-4">
                             {KavramlarContent}
                         </TabsContent>
-                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0">
+                        <TabsContent value="notlar" className="flex-grow mt-4 min-h-0 p-0 sm:p-4">
                             {NotlarContent}
                         </TabsContent>
                     </Tabs>
