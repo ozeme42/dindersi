@@ -1,4 +1,5 @@
-'use client';
+
+"use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
@@ -340,26 +341,26 @@ export default function StudentDashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-               <Button className="py-6 text-sm sm:text-base flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
+               <Button className="h-auto py-4 text-sm sm:text-base flex-row items-center justify-center gap-2 bg-cyan-600 hover:bg-cyan-700" asChild>
                     <Link href="/student/activities"><Gamepad2 className="h-5 w-5"/> Bireysel Etkinlikler</Link>
                 </Button>
-                 <Button className="py-6 text-sm sm:text-base flex-col gap-1 bg-destructive hover:bg-destructive/80" asChild>
+                 <Button className="h-auto py-4 text-sm sm:text-base flex-row items-center justify-center gap-2 bg-destructive hover:bg-destructive/80" asChild>
                     <Link href="/student/yarismalar"><Users className="h-5 w-5"/> Çok Oyunculu</Link>
                 </Button>
           </div>
           
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button className="h-20 sm:h-24 text-sm sm:text-md flex-col gap-1 bg-sky-500 hover:bg-sky-600" asChild>
+              <Button className="py-4 flex-col sm:flex-row h-auto items-center justify-center text-sm sm:text-base gap-1 bg-sky-500 hover:bg-sky-600" asChild>
                   <Link href="/student/yazilacaklar"><Columns className="h-5 w-5"/> Yazılacaklar</Link>
               </Button>
-              <Button className="h-20 sm:h-24 text-sm sm:text-md flex-col gap-1 bg-orange-500 hover:bg-orange-600" asChild>
+              <Button className="py-4 flex-col sm:flex-row h-auto items-center justify-center text-sm sm:text-base gap-1 bg-orange-500 hover:bg-orange-600" asChild>
                   <Link href="/student/ozetler"><LayoutTemplate className="h-5 w-5"/> Özetler</Link>
               </Button>
-              <Button className="h-20 sm:h-24 text-sm sm:text-md flex-col gap-1 bg-green-600 hover:bg-green-700" asChild>
+              <Button className="py-4 flex-col sm:flex-row h-auto items-center justify-center text-sm sm:text-base gap-1 bg-green-600 hover:bg-green-700" asChild>
                   <Link href="/student/shop"><ShoppingCart className="h-5 w-5"/> Puan Dükkanı</Link>
               </Button>
               <Card className="relative">
-                <Button className="w-full h-20 sm:h-24 text-sm sm:text-base flex-col gap-1 bg-violet-600 hover:bg-violet-700" asChild>
+                <Button className="w-full py-4 flex-col sm:flex-row h-full items-center justify-center text-sm sm:text-base gap-1 bg-violet-600 hover:bg-violet-700" asChild>
                     <Link href="/student/deneme">
                         <FileCog className="h-5 w-5"/> Deneme Sınavlarım
                     </Link>
