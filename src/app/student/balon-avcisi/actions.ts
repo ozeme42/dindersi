@@ -1,65 +1,43 @@
-
-
 'use server';
 
-import { db } from '@/lib/firebase';
-import { doc, updateDoc, increment, collection, addDoc, serverTimestamp, writeBatch, query, where, getCountFromServer } from 'firebase/firestore';
+import { db } from "@/lib/firebase";
+import { doc, updateDoc, increment, collection, addDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { Question } from '@/lib/types';
-import { getQuestionsFromBank } from '@/lib/quiz-actions';
 
-export async function getBalloonHuntQuestionsAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ questions: Question[]; error?: string }> {
+// Bu veriler normalde Firestore'dan çekilebilir, şimdilik statik olarak burada duruyor.
+const LEVELS = [
+    { q: "Hz. Musa'nın Kitabı?", a: "Tevrat", wrongs: ["İncil", "Zebur", "Kur'an", "Suhuf"] },
+    { q: "Hz. İsa'nın Kitabı?", a: "İncil", wrongs: ["Tevrat", "Zebur", "Kur'an", "Hadis"] },
+    { q: "Hz. Davud'un Kitabı?", a: "Zebur", wrongs: ["Tevrat", "İncil", "Kur'an", "Siyer"] },
+    { q: "Son İlahi Kitap?", a: "Kur'an", wrongs: ["İncil", "Tevrat", "Zebur", "Suhuf"] },
+    { q: "Güvenilir Olmak?", a: "Emanet", wrongs: ["Sıdk", "İsmet", "Fetanet", "Tebliğ"] },
+    { q: "Doğru Sözlü Olmak?", a: "Sıdk", wrongs: ["Emanet", "İsmet", "Fetanet", "Tebyin"] },
+    { q: "Akıllı Olmak?", a: "Fetanet", wrongs: ["İsmet", "Emanet", "Sıdk", "Temsil"] },
+    { q: "Günahsız Olmak?", a: "İsmet", wrongs: ["Sıdk", "Fetanet", "Emanet", "Tebliğ"] },
+    { q: "Vahyi İletmek?", a: "Tebliğ", wrongs: ["Tebyin", "Temsil", "Tezkiye", "İnzar"] },
+    { q: "İlk Peygamber?", a: "Hz. Adem", wrongs: ["Hz. Nuh", "Hz. İbrahim", "Hz. Musa", "Hz. İsa"] }
+];
+
+export async function getBalloonHuntQuestions(params: { topicId?: string }): Promise<{ levels?: any[]; error?: string }> {
     noStore();
-    try {
-        const result = await getQuestionsFromBank({
-            courseId,
-            unitId,
-            topicId,
-            questionCount: 20, // Fetch up to 20 questions for variety
-            difficulty: ['Kolay', 'Orta', 'Zor'],
-            questionTypes: ['Çoktan Seçmeli'], // This game works best with MCQs
-        });
-
-        if (result.error) {
-            return { error: result.error, questions: [] };
-        }
-        
-        if (result.questions.length < 5) {
-            return { error: "Balon Avcısı oyunu için bu konuda yeterli sayıda (en az 5) çoktan seçmeli soru bulunamadı.", questions: [] };
-        }
-
-        return { questions: result.questions };
-
-    } catch (error: any) {
-        console.error("Error getting Balloon Hunt questions:", error);
-        return { error: "Oyun soruları alınırken bir hata oluştu.", questions: [] };
-    }
+    // TODO: Use topicId to fetch topic-specific questions from Firestore
+    // For now, we return the static LEVELS array.
+    return { levels: LEVELS };
 }
 
-export async function submitBalloonHuntScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+export async function submitBalloonHuntScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
     if (!userId || score <= 0) {
-        return { success: true };
+        return { success: true }; // No score to submit
     }
     
     try {
-        const attemptsQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', userId),
-            where('gameType', '==', 'Balon Avcısı'),
-            where('context', '==', context)
-        );
-        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
-            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
-        }
-
         const batch = writeBatch(db);
         
+        // 1. Increment user's total score
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
 
+        // 2. Log the score event
         const eventRef = doc(collection(db, 'scoreEvents'));
         batch.set(eventRef, {
             userId: userId,
@@ -70,7 +48,7 @@ export async function submitBalloonHuntScoreAction(userId: string | null, score:
         });
 
         await batch.commit();
-
+        
         return { success: true };
     } catch (error: any) {
         console.error("Error submitting Balloon Hunt score:", error);
