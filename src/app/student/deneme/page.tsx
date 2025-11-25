@@ -1,7 +1,8 @@
 
 'use client';
 
-import { useState, useEffect, Suspense, useCallback } from 'react';
+import { Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -15,105 +16,16 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, FileText, Clock, Calendar, Play, XCircle, Award, AlertCircle, Trophy } from 'lucide-react';
+import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, Clock, Trophy, Users, Play, XCircle, ClipboardCheck, Award } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
-import { format, formatDistanceToNow, isFuture, isPast } from 'date-fns';
+import { format, formatDistanceToNow, isFuture } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
-
-function InfoBlock({ icon, label, value }: { icon: React.ReactNode, label: string, value: string | number }) {
-  return (
-    <div className="flex items-start gap-3">
-        <div className="p-2 bg-slate-100 text-slate-600 rounded-lg">
-            {icon}
-        </div>
-        <div>
-            <div className="text-xs text-gray-400 font-bold uppercase tracking-wider">{label}</div>
-            <div className="text-gray-800 font-bold">{value}</div>
-        </div>
-    </div>
-  )
-}
-
-function IntroCard({ assignment }: { assignment: any }) {
-  const router = useRouter();
-
-  const handleStartExam = () => {
-      if (!assignment.questionIds || assignment.questionIds.length === 0) {
-          return;
-      }
-      const params = new URLSearchParams({
-          assignmentId: assignment.id,
-          assignmentTitle: assignment.title,
-          questionIds: assignment.questionIds.join(','),
-          duration: assignment.duration || '0'
-      });
-      router.push(`/student/deneme/coz?${params.toString()}`);
-  }
-
-  const isSolved = !!assignment.solvedEvent;
-  const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
-  const isExpired = assignment.dueDate && isPast(new Date(assignment.dueDate));
-  
-  const status = isSolved
-      ? { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> }
-      : isExpired
-      ? { text: "Süre Doldu", color: "bg-red-600", icon: <XCircle /> }
-      : !canStart
-      ? { text: "Henüz Başlamadı", color: "bg-amber-600", icon: <Clock /> }
-      : { text: "Bekliyor", color: "bg-blue-600", icon: <Play /> };
-
-
-  return (
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
-          <div className="bg-indigo-600 p-6 text-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-              <div className="relative z-10">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                      <FileText size={32} className="text-indigo-600" />
-                  </div>
-                  <h1 className="text-xl font-bold text-white tracking-wide">{assignment.title}</h1>
-                  <div className="mt-1 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">
-                      {assignment.courseName}
-                  </div>
-              </div>
-          </div>
-          <div className="p-6 space-y-4">
-              <div className="p-4 bg-slate-50 rounded-xl space-y-3">
-                  <InfoBlock icon={<AlertCircle size={20}/>} label="SINAV DURUMU" value={<Badge className={`${status.color} text-white`}>{status.text}</Badge>} />
-                  {isSolved && assignment.rank > 0 && (
-                      <Link href={`/teacher/assignments/${assignment.id}`} className="block">
-                          <InfoBlock icon={<Trophy size={20}/>} label="SIRALAMA" value={`${assignment.rank}. / ${assignment.totalParticipants || '?'}`} />
-                      </Link>
-                  )}
-                  <InfoBlock icon={<FileText size={20}/>} label="SORU SAYISI" value={`${assignment.questionIds?.length || 0} Soru`} />
-                  <InfoBlock icon={<Clock size={20}/>} label="SÜRE" value={`${assignment.duration || '?'} Dakika`} />
-                  {assignment.startDate && (
-                      <InfoBlock icon={<Calendar size={20}/>} label="TARİH ARALIĞI" value={`${format(new Date(assignment.startDate), 'dd MMM', {locale: tr})} - ${assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM yyyy', {locale: tr}) : 'Süresiz'}`} />
-                  )}
-              </div>
-              <hr className="border-gray-100" />
-              {isSolved ? (
-                  <Button asChild className="w-full" variant="secondary">
-                      <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                          Sonuçları Gör <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                  </Button>
-              ) : (
-                  <Button onClick={handleStartExam} disabled={!canStart || isExpired} className="w-full group">
-                      <Play className="mr-2 h-5 w-5 fill-current" /> Sınavı Başlat
-                  </Button>
-              )}
-          </div>
-      </div>
-  );
-}
-
 
 function DenemeSinaviPage() {
   const { user, loading: authLoading } = useAuth();
@@ -140,7 +52,23 @@ function DenemeSinaviPage() {
       fetchAssignments();
     }
   }, [authLoading, fetchAssignments]);
-  
+
+  const handleStartExam = (assignment: any) => {
+    if (!assignment.questionIds || assignment.questionIds.length === 0) {
+        setError("Bu deneme için hiç soru atanmamış.");
+        return;
+    }
+    const params = new URLSearchParams({
+        assignmentId: assignment.id,
+        assignmentTitle: assignment.title,
+        questionIds: assignment.questionIds.join(','),
+        duration: assignment.duration || '0'
+    });
+    router.push(`/student/deneme/coz?${params.toString()}`);
+  }
+
+  const backUrl = '/student';
+
   if (isLoading || authLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -158,14 +86,14 @@ function DenemeSinaviPage() {
                     <AlertDescription>{error}</AlertDescription>
                     <div className="mt-4">
                          <Button asChild variant="secondary">
-                            <Link href="/student">Panele Dön</Link>
+                            <Link href={backUrl}>Panele Dön</Link>
                         </Button>
                     </div>
                 </Alert>
             </div>
         );
     }
-
+    
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
       <div className="flex flex-col items-center text-center mb-12">
@@ -176,17 +104,92 @@ function DenemeSinaviPage() {
         </p>
       </div>
 
-      {assignments.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {assignments.map(assignment => (
-                  <IntroCard key={assignment.id} assignment={assignment} />
-              ))}
-          </div>
-      ) : (
-          <Card className="text-center p-12 text-muted-foreground">
-              <p>Sana atanmış bir deneme sınavı bulunmuyor.</p>
-          </Card>
-      )}
+       <div className="space-y-6">
+            {assignments.length > 0 ? (
+                assignments.map(assignment => {
+                    const isSolved = !!assignment.solvedEvent;
+                    const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
+                    const isExpired = assignment.dueDate && !isFuture(new Date(assignment.dueDate));
+
+                    const status = isSolved 
+                        ? { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> }
+                        : isExpired
+                        ? { text: "Süre Doldu", color: "bg-red-600", icon: <XCircle /> }
+                        : !canStart
+                        ? { text: "Henüz Başlamadı", color: "bg-amber-600", icon: <Clock /> }
+                        : { text: "Bekliyor", color: "bg-blue-600", icon: <Play /> };
+
+                    return (
+                        <Card key={assignment.id} className="bg-card/80 backdrop-blur-sm shadow-xl overflow-hidden transition-all hover:shadow-2xl">
+                          <CardHeader className="p-0">
+                               <div className="p-6 bg-gradient-to-br from-primary/10 via-card to-accent/10">
+                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                                      <div className="flex-1">
+                                          <CardTitle>{assignment.title}</CardTitle>
+                                          <CardDescription>{assignment.className} - {assignment.courseName}</CardDescription>
+                                      </div>
+                                       <Badge className={cn("text-white", status.color)}>
+                                          {status.icon}
+                                          <span className="ml-1.5">{status.text}</span>
+                                      </Badge>
+                                  </div>
+                               </div>
+                          </CardHeader>
+                          <CardContent className="p-6 space-y-4">
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                                  <div className="space-y-1">
+                                      <p className="text-xs text-muted-foreground font-semibold uppercase">SORU SAYISI</p>
+                                      <p className="text-lg font-bold">{assignment.questionIds?.length || 0} Soru</p>
+                                  </div>
+                                  <div className="space-y-1">
+                                      <p className="text-xs text-muted-foreground font-semibold uppercase">SÜRE</p>
+                                      <p className="text-lg font-bold">{assignment.duration ? `${assignment.duration} Dakika` : 'Süresiz'}</p>
+                                  </div>
+                                  <div className="space-y-1">
+                                      <p className="text-xs text-muted-foreground font-semibold uppercase">BAŞLANGIÇ</p>
+                                      <p className="text-lg font-bold">{assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', { locale: tr }) : '-'}</p>
+                                  </div>
+                                  <div className="space-y-1">
+                                      <p className="text-xs text-muted-foreground font-semibold uppercase">BİTİŞ</p>
+                                      <p className="text-lg font-bold">{assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM', { locale: tr }) : '-'}</p>
+                                  </div>
+                              </div>
+                          </CardContent>
+                          <CardFooter className="bg-muted/30 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                {isSolved ? (
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                                        <div className="flex items-center gap-1.5 font-medium">
+                                            <span className="font-bold text-lg">{assignment.solvedEvent.points}</span> Puan
+                                        </div>
+                                         {assignment.rank && (
+                                            <Link href={`/teacher/assignments/${assignment.id}`} className="flex items-center gap-1.5 hover:underline">
+                                                <Trophy className="h-4 w-4 text-amber-500"/> Derece: <span className="font-bold">{assignment.rank} / {assignment.totalParticipants}</span>
+                                            </Link>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div/> // Placeholder to keep layout consistent
+                                )}
+                                <div className="flex gap-2 self-end sm:self-center">
+                                    {isSolved && (
+                                        <Button asChild variant="secondary" size="sm">
+                                            <Link href={`/student/deneme/sonuc/${assignment.id}`}>Sonuçları Gör</Link>
+                                        </Button>
+                                    )}
+                                     <Button size="sm" onClick={() => handleStartExam(assignment)} disabled={!canStart || isExpired || isSolved}>
+                                        <Gamepad2 className="mr-2 h-4 w-4"/> Sınava Başla
+                                    </Button>
+                                </div>
+                          </CardFooter>
+                        </Card>
+                    )
+                })
+            ) : (
+                <Card className="text-center p-12 text-muted-foreground border-2 border-dashed rounded-lg">
+                    <p>Sana atanmış bir deneme sınavı bulunmuyor.</p>
+                </Card>
+            )}
+       </div>
     </div>
   );
 }
@@ -198,3 +201,4 @@ export default function Page() {
         </Suspense>
     );
 }
+
