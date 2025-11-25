@@ -1,30 +1,35 @@
+
+
 'use client';
 
-import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getExamResultDetails, submitDenemeScoreAction } from '../../actions';
 import type { ExamResultDetails, Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, BarChart3, Clock, Trophy, Award } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
+import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, BarChart3, Clock, Check, Award } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 function ResultCard({ question, studentAnswer, index }: { question: Question, studentAnswer: string | boolean | null, index: number }) {
     let isCorrect = false;
-    let correctAnswerText = '';
-
     if (question.type === 'Doğru/Yanlış') {
         const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
         isCorrect = studentAnswer === correctAnswerBool;
-        correctAnswerText = correctAnswerBool ? 'Doğru' : 'Yanlış';
     } else {
         isCorrect = studentAnswer === question.correctAnswer;
-        correctAnswerText = question.correctAnswer || '';
     }
 
     const getAnswerText = (answer: any) => {
@@ -53,14 +58,13 @@ function ResultCard({ question, studentAnswer, index }: { question: Question, st
                  {!isCorrect && (
                     <div className="p-2 rounded-md bg-muted">
                         <p className="text-xs font-semibold">Doğru Cevap:</p>
-                        <p className="font-medium mt-1">{getAnswerText(correctAnswerText)}</p>
+                        <p className="font-medium mt-1">{getAnswerText(question.correctAnswer ?? (question.isTrue ? 'Doğru' : 'Yanlış'))}</p>
                     </div>
                 )}
             </CardContent>
         </Card>
     );
 }
-
 
 function ExamResultsPage() {
     const { user } = useAuth();
@@ -173,7 +177,7 @@ function ExamResultsPage() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
             <ExamResultsPage />
         </Suspense>
     );
