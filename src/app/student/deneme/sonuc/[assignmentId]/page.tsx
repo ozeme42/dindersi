@@ -1,35 +1,82 @@
 
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { getExamResultDetails } from './actions';
-import type { ExamResultDetails, Question } from '@/lib/types';
+import { getAssignmentDetails } from "@/app/teacher/assignments/[assignmentId]/actions";
+import type { ExamResultDetails, Question, ScoreEvent } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, BarChart3, Clock, Play, Award, CalendarIcon, FileText } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, BarChart3, Clock, Trophy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from '@/components/ui/dialog';
+  DialogClose,
+} from "@/components/ui/dialog";
 import { ScrollArea } from '@/components/ui/scroll-area';
+
+function IncorrectAnswersDialog({ 
+    isOpen, 
+    onOpenChange, 
+    questions, 
+    studentAnswers 
+}: { 
+    isOpen: boolean; 
+    onOpenChange: (open: boolean) => void; 
+    questions: Question[]; 
+    studentAnswers: (string | boolean | null)[]; 
+}) {
+    const incorrectQuestions = questions.map((q, index) => {
+        const studentAnswer = studentAnswers[index];
+        let isCorrect = false;
+        if (q.type === 'Doğru/Yanlış') {
+            const correctAnswerBool = q.isTrue ?? (q.correctAnswer === 'Doğru');
+            isCorrect = studentAnswer === correctAnswerBool;
+        } else {
+            isCorrect = studentAnswer === q.correctAnswer;
+        }
+        return { question: q, studentAnswer, isCorrect, originalIndex: index };
+    }).filter(item => !item.isCorrect);
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
+                <DialogHeader>
+                    <DialogTitle>Yanlış Cevaplar</DialogTitle>
+                    <DialogDescription>
+                        Yanlış cevapladığın soruları ve doğru cevaplarını aşağıda görebilirsin.
+                    </DialogDescription>
+                </DialogHeader>
+                <ScrollArea className="flex-grow pr-6">
+                    <div className="space-y-4">
+                        {incorrectQuestions.length > 0 ? incorrectQuestions.map(({ question, studentAnswer, originalIndex }) => (
+                            <ResultCard key={originalIndex} question={question} studentAnswer={studentAnswer} index={originalIndex} />
+                        )) : (
+                            <p className="text-center text-muted-foreground py-8">Tebrikler, hiç yanlışın yok!</p>
+                        )}
+                    </div>
+                </ScrollArea>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
 
 function ResultCard({ question, studentAnswer, index }: { question: Question, studentAnswer: string | boolean | null, index: number }) {
     let isCorrect = false;
     let correctAnswerText = '';
 
     if (question.type === 'Doğru/Yanlış') {
-        const correctAnswerBool = question.isTrue ?? question.correctAnswer === 'Doğru';
+        const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
         isCorrect = studentAnswer === correctAnswerBool;
         correctAnswerText = correctAnswerBool ? 'Doğru' : 'Yanlış';
     } else {
@@ -38,78 +85,37 @@ function ResultCard({ question, studentAnswer, index }: { question: Question, st
     }
 
     const getAnswerText = (answer: any) => {
+        if (answer === null || answer === undefined) return 'Boş';
         if (typeof answer === 'boolean') {
             return answer ? 'Doğru' : 'Yanlış';
         }
-        return answer || 'Boş';
+        return answer;
     };
 
     return (
-        <div className="p-4 border-b">
-            <p className="font-semibold mb-2">{index + 1}. {question.text}</p>
-            <div className="flex flex-col sm:flex-row gap-2">
-                <div className={`flex-1 p-2 rounded-md ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
-                    <p className="text-xs font-bold">SENİN CEVABIN</p>
-                    <p>{getAnswerText(studentAnswer)}</p>
+        <Card className={cn("w-full", isCorrect ? 'border-green-300 dark:border-green-800' : 'border-red-300 dark:border-red-800')}>
+            <CardHeader>
+                <CardTitle className="text-base flex items-start gap-3">
+                    <span className="font-bold text-primary">{index + 1}.</span>
+                    <span className="flex-1">{question.text}</span>
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+                <div className={cn("p-2 rounded-md", isCorrect ? "bg-green-100 dark:bg-green-900/30" : "bg-red-100 dark:bg-red-900/30")}>
+                    <p className="text-xs font-semibold">Senin Cevabın:</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        {isCorrect ? <CheckCircle2 className="h-5 w-5 text-green-600" /> : <XCircle className="h-5 w-5 text-red-600" />}
+                        <p className="font-medium">{getAnswerText(studentAnswer)}</p>
+                    </div>
                 </div>
-                {!isCorrect && (
-                    <div className="flex-1 p-2 rounded-md bg-green-100">
-                        <p className="text-xs font-bold text-green-800">DOĞRU CEVAP</p>
-                        <p>{correctAnswerText}</p>
+                 {!isCorrect && (
+                    <div className="p-2 rounded-md bg-muted">
+                        <p className="text-xs font-semibold">Doğru Cevap:</p>
+                        <p className="font-medium mt-1">{getAnswerText(correctAnswerText)}</p>
                     </div>
                 )}
-            </div>
-        </div>
-    );
-}
-
-function WrongAnswersDialog({
-    isOpen,
-    onOpenChange,
-    questions,
-    studentAnswers
-}: {
-    isOpen: boolean;
-    onOpenChange: (open: boolean) => void;
-    questions: Question[];
-    studentAnswers: (string | boolean | null)[];
-}) {
-    const wrongQuestions = questions.map((q, i) => {
-        let isCorrect = false;
-        const studentAnswer = studentAnswers[i];
-        if (q.type === 'Doğru/Yanlış') {
-            const correctAnswerBool = q.isTrue ?? q.correctAnswer === 'Doğru';
-            isCorrect = studentAnswer === correctAnswerBool;
-        } else {
-            isCorrect = studentAnswer === q.correctAnswer;
-        }
-        return { q, studentAnswer, isCorrect };
-    }).filter(item => !item.isCorrect);
-
-    return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
-                <DialogHeader>
-                    <DialogTitle>Yanlış Cevaplar ve Doğruları</DialogTitle>
-                    <DialogDescription>
-                        Yanlış cevapladığın veya boş bıraktığın soruların doğrularını buradan inceleyebilirsin.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="flex-grow min-h-0">
-                    <ScrollArea className="h-full pr-6">
-                        <div className="space-y-4">
-                            {wrongQuestions.length > 0 ? (
-                                wrongQuestions.map(({ q, studentAnswer }, index) => (
-                                    <ResultCard key={q.id} question={q} studentAnswer={studentAnswer} index={questions.indexOf(q)} />
-                                ))
-                            ) : (
-                                <p className="text-center text-muted-foreground py-10">Tebrikler, hiç yanlışın yok!</p>
-                            )}
-                        </div>
-                    </ScrollArea>
-                </div>
-            </DialogContent>
-        </Dialog>
+            </CardContent>
+        </Card>
     );
 }
 
@@ -117,31 +123,33 @@ function WrongAnswersDialog({
 function ExamResultsPage() {
     const { user } = useAuth();
     const params = useParams();
-    const router = useRouter();
+    const { toast } = useToast();
 
     const assignmentId = params.assignmentId as string;
     
     const [details, setDetails] = useState<ExamResultDetails | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isWrongAnswersOpen, setIsWrongAnswersOpen] = useState(false);
-    
-    useEffect(() => {
+    const [isIncorrectAnswersOpen, setIsIncorrectAnswersOpen] = useState(false);
+
+
+    const fetchResults = useCallback(async () => {
         if (!user || !assignmentId) return;
 
-        const fetchResults = async () => {
-            setIsLoading(true);
-            const result = await getExamResultDetails(assignmentId, user.uid);
-            if (result.success && result.data) {
-                setDetails(result.data);
-            } else {
-                setError(result.error || "Sonuçlar getirilemedi.");
-            }
-            setIsLoading(false);
-        };
-        
+        setIsLoading(true);
+        const result = await getAssignmentDetails(assignmentId, user.uid);
+        if (result.success && result.data) {
+            setDetails(result.data);
+        } else {
+            setError(result.error || "Sonuçlar getirilemedi.");
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsLoading(false);
+    }, [assignmentId, user, toast]);
+
+    useEffect(() => {
         fetchResults();
-    }, [assignmentId, user]);
+    }, [fetchResults]);
     
     if (isLoading) {
         return <div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /> Yükleniyor...</div>;
@@ -165,103 +173,77 @@ function ExamResultsPage() {
     }
 
     const { assignment, questions, studentAnswers, scoreEvent } = details;
-    const totalQuestions = questions.length;
-    let correctCount = 0;
-
-    questions.forEach((question, index) => {
+    const correctCount = questions.reduce((count, question, index) => {
         const studentAnswer = studentAnswers[index];
         let isCorrect = false;
         if (question.type === 'Doğru/Yanlış') {
-            const correctAnswerBool = question.isTrue ?? question.correctAnswer === 'Doğru';
+            const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
             isCorrect = studentAnswer === correctAnswerBool;
         } else {
             isCorrect = studentAnswer === question.correctAnswer;
         }
-        if (isCorrect) {
-            correctCount++;
-        }
-    });
+        return count + (isCorrect ? 1 : 0);
+    }, 0);
 
-    const incorrectCount = totalQuestions - correctCount;
-    const score = (correctCount / totalQuestions) * 100;
-
-     let message = "";
-    let color = "";
-    
-    if (score >= 90) { message = "Mükemmel!"; color = "text-green-600"; }
-    else if (score >= 70) { message = "Tebrikler!"; color = "text-blue-600"; }
-    else if (score >= 50) { message = "Güzel, Ama Daha İyi Olabilir."; color = "text-yellow-600"; }
-    else { message = "Biraz Daha Çalışmalısın."; color = "text-red-600"; }
+    const incorrectCount = questions.length - correctCount;
     
     return (
-        <>
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
-                <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 text-center">
-                    <div className="mb-6 relative inline-block">
-                        <Award size={80} className={`mx-auto ${score >= 50 ? 'text-yellow-500' : 'text-gray-400'}`} />
-                        {score >= 90 && <div className="absolute -top-2 -right-2 text-4xl animate-bounce">🌟</div>}
-                    </div>
-
-                    <h2 className={`text-3xl font-black mb-2 ${color}`}>{message}</h2>
-                    <p className="text-gray-500 mb-8">Sınav Sonucun</p>
-
-                    <div className="mb-8 flex justify-center">
-                        <div className="relative w-40 h-40 flex items-center justify-center rounded-full border-8 border-slate-100">
-                            <div className="text-center">
-                                <div className="text-4xl font-black text-slate-800">{Math.round(score)}</div>
-                                <div className="text-xs font-bold text-gray-400">PUAN</div>
-                            </div>
-                             <svg className="absolute top-0 left-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="46" fill="none" stroke="#e2e8f0" strokeWidth="8" />
-                                <circle 
-                                    cx="50" cy="50" r="46" fill="none" stroke={score >= 50 ? "#4f46e5" : "#ef4444"} strokeWidth="8" 
-                                    strokeDasharray="289" 
-                                    strokeDashoffset={289 - (289 * score) / 100} 
-                                    strokeLinecap="round"
-                                    className="transition-all duration-1000 ease-out"
-                                />
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4 mb-8">
-                        <div className="p-4 bg-green-50 rounded-xl border border-green-100">
-                            <div className="text-green-600 font-bold text-xl">{correctCount}</div>
-                            <div className="text-xs text-green-800 font-bold uppercase">Doğru</div>
-                        </div>
-                         <div className="p-4 bg-red-50 rounded-xl border border-red-100 cursor-pointer hover:bg-red-100" onClick={() => setIsWrongAnswersOpen(true)}>
-                            <div className="text-red-600 font-bold text-xl">{incorrectCount}</div>
-                            <div className="text-xs text-red-800 font-bold uppercase">Yanlış</div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                            <div className="text-gray-600 font-bold text-xl">{totalQuestions}</div>
-                            <div className="text-xs text-gray-800 font-bold uppercase">Toplam Soru</div>
-                        </div>
-                    </div>
-                    
-                    <Button asChild className="w-full">
-                        <Link href="/student/deneme">
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Deneme Sınavlarına Dön
-                        </Link>
-                    </Button>
-                </div>
+        <div className="container mx-auto p-4 sm:p-6 md:p-8">
+            <div className="mb-6">
+                <Button asChild variant="outline" size="sm" className="mb-4">
+                    <Link href="/student/deneme">
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Deneme Sınavlarıma Dön
+                    </Link>
+                </Button>
+                <h1 className="text-3xl font-bold font-headline">{assignment.title}</h1>
+                <p className="text-muted-foreground">Sınav Sonuç Detayları</p>
             </div>
-            <WrongAnswersDialog
-                isOpen={isWrongAnswersOpen}
-                onOpenChange={setIsWrongAnswersOpen}
+            
+             <Card className="mb-6 bg-card/80 backdrop-blur-sm">
+                <CardHeader>
+                    <CardTitle>Genel Sonuç</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 flex flex-col items-center justify-center">
+                        <span className="text-3xl font-bold text-blue-600">{scoreEvent.points}</span>
+                        <span className="text-sm text-muted-foreground mt-1">Puan</span>
+                    </div>
+                     <div className="p-4 bg-green-50 rounded-xl border border-green-100 flex flex-col items-center justify-center">
+                        <span className="text-3xl font-bold text-green-600">{correctCount}</span>
+                        <span className="text-sm text-muted-foreground mt-1">Doğru</span>
+                    </div>
+                     <div className="p-4 bg-red-50 rounded-xl border border-red-100 cursor-pointer hover:bg-red-100" onClick={() => setIsIncorrectAnswersOpen(true)}>
+                        <span className="text-3xl font-bold text-red-600">{incorrectCount}</span>
+                        <span className="text-sm text-muted-foreground mt-1">Yanlış</span>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col items-center justify-center">
+                        <span className="text-3xl font-bold">{questions.length}</span>
+                        <span className="text-sm text-muted-foreground mt-1">Toplam Soru</span>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="space-y-4">
+                <h2 className="text-2xl font-bold">Tüm Sorular ve Cevapların</h2>
+                {questions.map((q, index) => (
+                    <ResultCard key={q.id || index} question={q} studentAnswer={studentAnswers[index]} index={index} />
+                ))}
+            </div>
+
+             <IncorrectAnswersDialog
+                isOpen={isIncorrectAnswersOpen}
+                onOpenChange={setIsIncorrectAnswersOpen}
                 questions={questions}
                 studentAnswers={studentAnswers}
             />
-        </>
+        </div>
     );
 }
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
             <ExamResultsPage />
         </Suspense>
     );
 }
-
-```
