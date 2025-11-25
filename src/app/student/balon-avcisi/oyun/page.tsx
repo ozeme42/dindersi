@@ -1,34 +1,62 @@
 
 'use client';
 
-import { useState, useEffect, useRef, useCallback, Suspense, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getBalloonHuntQuestions, submitBalloonHuntScore } from '../actions';
 import type { BalloonHuntLevel } from '../actions';
-import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 
 function BalloonHuntGame() {
     const { user } = useAuth();
     const router = useRouter();
-    const { toast } = useToast();
     const searchParams = useSearchParams();
-    const topicId = searchParams.get('topicId');
+    const { toast } = useToast();
     const topicName = searchParams.get('topicName');
-    
-    const [LEVELS, setLEVELS] = useState<BalloonHuntLevel[]>([]);
-    const [error, setError] = useState<string | null>(null);
+
+    const [levels, setLevels] = useState<BalloonHuntLevel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === 'GAME_OVER' && user && event.data.score > 0) {
+                submitBalloonHuntScore(user.uid, event.data.score, `Balon Avcısı - ${topicName || 'Genel'}`)
+                    .then(result => {
+                        if (result.success) {
+                            toast({ title: 'Skor Kaydedildi', description: `Tebrikler! ${event.data.score} puan kazandın.` });
+                        } else {
+                            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+                        }
+                    }).finally(() => {
+                        router.push('/student/activities');
+                    });
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [user, topicName, router, toast]);
+
+    useEffect(() => {
+        getBalloonHuntQuestions({ topicId: searchParams.get('topicId') || undefined })
+            .then(result => {
+                if (result.error || !result.levels || result.levels.length === 0) {
+                    setError(result.error || "Bu konu için oyun verisi bulunamadı.");
+                } else {
+                    setLevels(result.levels);
+                }
+            })
+            .finally(() => setIsLoading(false));
+    }, [searchParams]);
 
     const gameHtml = useMemo(() => {
-        if (isLoading || error || LEVELS.length === 0) return '';
-
-        const levelsData = JSON.stringify(LEVELS);
-        const colorsData = JSON.stringify([
-            '#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'
-        ]);
-
+        const levelsData = JSON.stringify(levels);
+        
         return `
             <!DOCTYPE html>
             <html lang="tr">
@@ -44,13 +72,14 @@ function BalloonHuntGame() {
                 <style>
                     body { font-family: 'Nunito', sans-serif; background-color: #0ea5e9; color: white; overflow: hidden; touch-action: none; user-select: none; }
                     .header-font { font-family: 'Fredoka', sans-serif; }
-                    #game-canvas { width: 100vw; height: 100vh; position: relative; background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 100%); cursor: crosshair; }
+                    #game-canvas { position: relative; background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 100%); cursor: crosshair; }
                     .cloud { position: absolute; background: white; border-radius: 50%; opacity: 0.8; animation: floatCloud linear infinite; }
                     .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
                     @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
-                    .balloon { position: absolute; width: 70px; height: 85px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 0.85rem; line-height: 1; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1); transition: transform 0.1s; z-index: 10; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-                    .balloon.popped { animation: pop-balloon 0.3s ease-out forwards; }
-                    @keyframes pop-balloon { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+                    .balloon { position: absolute; width: 70px; height: 85px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 0.85rem; line-height: 1; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1); transition: transform 0.1s; z-index: 10; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); animation: pop-in 0.3s ease-out; }
+                    .balloon.popped { animation: pop-out 0.3s ease-in forwards; }
+                    @keyframes pop-in { from { transform: scale(0); } to { transform: scale(1); } }
+                    @keyframes pop-out { from { transform: scale(1); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
                     .balloon::after { content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 2px; height: 20px; background: rgba(0,0,0,0.3); }
                     .balloon::before { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 6px; height: 4px; background: inherit; border-radius: 2px; }
                     .shooter { position: absolute; bottom: 20px; left: 50%; transform-origin: center bottom; width: 6px; height: 60px; background: #475569; z-index: 20; border-radius: 3px; }
@@ -64,11 +93,9 @@ function BalloonHuntGame() {
             </head>
             <body><div id="root"></div>
             <script type="text/babel">
-                const { useState, useEffect, useRef, useCallback, useMemo } = React;
-                
+                const { useState, useEffect, useRef, useCallback } = React;
                 const LEVELS = ${levelsData};
-                const BALLOON_COLORS = ${colorsData};
-
+                
                 function App() {
                     const [gameState, setGameState] = useState('start');
                     const [score, setScore] = useState(0);
@@ -80,8 +107,22 @@ function BalloonHuntGame() {
                     const [angle, setAngle] = useState(0);
                     const requestRef = useRef();
                     const lastSpawnTime = useRef(0);
+                    
+                    const setupGameArea = () => {
+                        const gameCanvas = document.getElementById('game-canvas');
+                        if (gameCanvas) {
+                            gameCanvas.style.width = '100vw';
+                            gameCanvas.style.height = window.innerHeight + 'px';
+                        }
+                    };
+                    
+                    useEffect(() => {
+                        setupGameArea();
+                        window.addEventListener('resize', setupGameArea);
+                        return () => window.removeEventListener('resize', setupGameArea);
+                    }, []);
 
-                    const createBalloon = useCallback(() => {
+                    const createBalloon = () => {
                         const currentLevel = LEVELS[levelIndex % LEVELS.length];
                         const isCorrect = Math.random() > 0.6;
                         const text = isCorrect ? currentLevel.a : currentLevel.wrongs[Math.floor(Math.random() * currentLevel.wrongs.length)];
@@ -91,12 +132,31 @@ function BalloonHuntGame() {
                             x: Math.random() * (window.innerWidth - 80) + 40,
                             y: window.innerHeight + 50,
                             text: text,
-                            speed: Math.random() * 1.5 + 1.2,
-                            color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
+                            speed: Math.random() * 1 + 1,
+                            color: '#'+(Math.random()*0xFFFFFF<<0).toString(16).padStart(6,'0'),
                             isCorrect: text === currentLevel.a,
                             popped: false
                         };
-                    }, [levelIndex]);
+                    };
+                    
+                    const startGame = () => {
+                        setScore(0);
+                        setLives(3);
+                        setLevelIndex(0);
+                        setBalloons([createBalloon(), createBalloon(), createBalloon()]);
+                        setProjectiles([]);
+                        setEffects([]);
+                        setGameState('playing');
+                        lastSpawnTime.current = 0;
+                    };
+
+                    const handleEndGame = () => {
+                        setGameState('gameover');
+                    };
+                    
+                    const postScoreAndExit = () => {
+                        window.parent.postMessage({ type: 'GAME_OVER', score: score }, '*');
+                    };
 
                     const updateGame = useCallback((time) => {
                         if (gameState !== 'playing') return;
@@ -107,41 +167,35 @@ function BalloonHuntGame() {
                         }
 
                         setBalloons(prev => prev.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -150));
+                        setProjectiles(prev => prev.map(p => ({ ...p, x: p.x + Math.sin(p.angle * Math.PI / 180) * 10, y: p.y - Math.cos(p.angle * Math.PI / 180) * 10 })).filter(p => p.x > 0 && p.x < window.innerWidth && p.y > 0 && p.y < window.innerHeight));
 
-                        setProjectiles(prev => prev.map(p => ({ ...p, x: p.x + Math.sin(p.angle * Math.PI / 180) * 12, y: p.y - Math.cos(p.angle * Math.PI / 180) * 12 })).filter(p => p.x > 0 && p.x < window.innerWidth && p.y > 0));
-
-                        let newProjectiles = [...projectiles];
-                        let newBalloons = [...balloons];
-                        
-                        for (let pIdx = newProjectiles.length - 1; pIdx >= 0; pIdx--) {
-                            const p = newProjectiles[pIdx];
-                            for (let bIdx = newBalloons.length - 1; bIdx >= 0; bIdx--) {
-                                const b = newBalloons[bIdx];
-                                if (b.popped) continue;
-
-                                const dx = p.x - b.x;
-                                const dy = p.y - b.y;
-                                const dist = Math.sqrt(dx*dx + dy*dy);
-
-                                if (dist < 45) {
-                                    newProjectiles.splice(pIdx, 1);
-                                    
-                                    newBalloons[bIdx].popped = true;
-                                    
-                                    setTimeout(() => {
-                                        setBalloons(prev => prev.filter(balloon => balloon.id !== b.id));
-                                    }, 300);
-
-                                    if (b.isCorrect) handleCorrectHit(b.x, b.y);
-                                    else handleWrongHit(b.x, b.y);
-                                    
-                                    break; 
+                        setProjectiles(currentProjectiles => {
+                            let nextProjectiles = [...currentProjectiles];
+                            setBalloons(currentBalloons => {
+                                let nextBalloons = [...currentBalloons];
+                                for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
+                                    const p = nextProjectiles[pIdx];
+                                    for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
+                                        const b = nextBalloons[bIdx];
+                                        if (b.popped) continue;
+                                        const dx = p.x - b.x;
+                                        const dy = p.y - b.y;
+                                        if (Math.sqrt(dx*dx + dy*dy) < 45) {
+                                            nextProjectiles.splice(pIdx, 1);
+                                            b.popped = true;
+                                            if (b.isCorrect) handleCorrectHit(b.x, b.y);
+                                            else handleWrongHit(b.x, b.y);
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-                        }
+                                return nextBalloons.filter(b => !b.popped);
+                            });
+                            return nextProjectiles;
+                        });
 
                         requestRef.current = requestAnimationFrame(updateGame);
-                    }, [gameState, levelIndex, createBalloon, projectiles, balloons]);
+                    }, [gameState, levelIndex]);
 
                     useEffect(() => {
                         if (gameState === 'playing') {
@@ -150,55 +204,46 @@ function BalloonHuntGame() {
                         return () => cancelAnimationFrame(requestRef.current);
                     }, [gameState, updateGame]);
 
-                    const startGame = () => {
-                        setScore(0);
-                        setLives(3);
-                        setLevelIndex(0);
-                        setBalloons([]);
-                        setProjectiles([]);
-                        setEffects([]);
-                        setGameState('playing');
-                        lastSpawnTime.current = 0;
-                    };
-
                     const handleCorrectHit = (x, y) => {
                         setScore(s => s + 10);
                         addEffect(x, y, "+10", "#22c55e");
                         setTimeout(() => {
                             setLevelIndex(prev => (prev + 1) % LEVELS.length);
-                            setBalloons(prev => prev.filter(b => !b.isCorrect && !b.popped));
+                            setBalloons(prev => prev.filter(b => !b.isCorrect));
                         }, 500);
                     };
 
                     const handleWrongHit = (x, y) => {
-                        const newLives = lives - 1;
-                        setLives(newLives);
-                        addEffect(x, y, "❤️ -1", "#ef4444");
-                        if (newLives <= 0) {
-                            setGameState('gameover');
-                             window.parent.postMessage({ type: 'SAVE_SCORE', score: score, context: "Balon Avcısı" }, '*');
-                        }
+                        addEffect(x, y, "-1 Can", "#ef4444");
+                        setLives(l => {
+                            const newLives = l - 1;
+                            if (newLives <= 0) handleEndGame();
+                            return newLives;
+                        });
                     };
 
                     const addEffect = (x, y, text, color) => {
                         const id = Date.now() + Math.random();
                         setEffects(prev => [...prev, { id, x, y, text, color }]);
-                        setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 600);
+                        setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 500);
                     };
 
                     const handleInput = (e) => {
                         if (gameState !== 'playing') return;
                         const centerX = window.innerWidth / 2;
                         const centerY = window.innerHeight;
-                        const clientX = e.clientX || e.touches[0].clientX;
-                        const clientY = e.clientY || e.touches[0].clientY;
+                        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
                         if (!clientX) return;
                         const dx = clientX - centerX;
                         const dy = clientY - centerY;
                         const rad = Math.atan2(dx, -dy);
-                        const deg = Math.max(-70, Math.min(70, rad * (180 / Math.PI)));
-                        setAngle(deg);
-                        if (e.type === 'mousedown' || e.type === 'touchstart') shoot(deg);
+                        const deg = rad * (180 / Math.PI);
+                        const clampedAngle = Math.max(-80, Math.min(80, deg));
+                        setAngle(clampedAngle);
+                        if (e.type === 'mousedown' || e.type === 'touchstart') {
+                            shoot(clampedAngle);
+                        }
                     };
 
                     const shoot = (fireAngle) => {
@@ -208,82 +253,56 @@ function BalloonHuntGame() {
                         setProjectiles(prev => [...prev, { id: Date.now(), x: startX, y: startY, angle: fireAngle }]);
                     };
 
-                    const exitGame = () => window.parent.postMessage({ type: 'EXIT_GAME' }, '*');
+                    const currentLevel = LEVELS[levelIndex % LEVELS.length];
 
                     return (
                         <div id="game-canvas" onMouseMove={handleInput} onMouseDown={handleInput} onTouchMove={handleInput} onTouchStart={handleInput}>
-                            <div className="absolute top-4 left-4 flex gap-2 z-50">
-                                {Array.from({ length: 3 }).map((_, i) => (
-                                    <span key={i} className={\`text-3xl transition-opacity duration-300 \${lives > i ? 'opacity-100' : 'opacity-20'}\`}>❤️</span>
-                                ))}
-                            </div>
-                            <div className="cloud" style={{ top: '10%', width: '100px', height: '40px', animationDuration: '20s' }}></div>
-                            <div className="cloud" style={{ top: '20%', left: '60%', width: '120px', height: '50px', animationDuration: '15s' }}></div>
-                            <div className="cloud" style={{ top: '5%', left: '80%', width: '80px', height: '30px', animationDuration: '25s' }}></div>
+                            <div className="absolute top-4 left-4 flex gap-2 z-50">{[...Array(3)].map((_, i) => <div key={i} className={\`w-8 h-8 rounded-full \${i < lives ? 'bg-red-500' : 'bg-gray-400'}\`}></div>)}</div>
                             <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200">Puan: {score}</div>
                             {balloons.map(b => <div key={b.id} className={\`balloon \${b.popped ? 'popped' : ''}\`} style={{ left: b.x, top: b.y, backgroundColor: b.color, borderColor: b.color }}>{b.text}</div>)}
                             {projectiles.map(p => <div key={p.id} className="projectile" style={{ left: p.x, top: p.y }}></div>)}
                             {effects.map(e => <div key={e.id} className="pop-effect" style={{ left: e.x, top: e.y, color: e.color }}>{e.text}</div>)}
                             <div className="shooter-base"></div>
-                            <div className="shooter" style={{ transform: \`translateX(-50%) rotate(\${angle}deg)\` }}>
-                                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>
-                            </div>
-                            {gameState === 'playing' && <div className="question-panel"><div className="question-box animate-[bounce_2s_infinite]"><span className="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>{LEVELS[levelIndex % LEVELS.length].q}</div></div>}
+                            <div className="shooter" style={{ transform: \`translateX(-50%) rotate(\${angle}deg)\` }}><div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div></div>
+                            {gameState === 'playing' && <div className="question-panel"><div className="question-box"><span>HEDEF: </span>{currentLevel.q}</div></div>}
                             {gameState === 'start' && <div className="absolute inset-0 bg-sky-900/80 flex items-center justify-center z-50 backdrop-blur-sm"><div className="bg-white p-8 rounded-3xl text-center max-w-sm shadow-2xl border-b-8 border-sky-500"><h1 className="text-4xl font-bold text-sky-600 mb-4 header-font">Balon Avcısı 🏹</h1><p className="text-gray-600 mb-8 text-lg">Aşağıdaki soruyu oku.<br/>Doğru cevabı taşıyan balonu vur!</p><button onClick={startGame} className="px-10 py-4 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-full text-xl transition-transform hover:scale-105 shadow-lg">BAŞLA</button></div></div>}
-                            {gameState === 'gameover' && <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-50 backdrop-blur-sm"><div className="bg-white p-8 rounded-3xl text-center max-w-sm shadow-2xl border-b-8 border-red-500"><h1 className="text-4xl font-bold text-red-600 mb-4 header-font">Oyun Bitti!</h1><p className="text-gray-600 mb-4 text-lg">Toplam Puanın: <span className="font-bold text-2xl text-black">{score}</span></p><div className="flex flex-col gap-2 mt-6"><button onClick={startGame} className="px-10 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-full text-lg transition-transform hover:scale-105">Tekrar Oyna</button><button onClick={exitGame} className="px-10 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-full text-lg transition-transform hover:scale-105">Puanı Kaydet ve Çık</button></div></div></div>}
+                            {gameState === 'gameover' && <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-50 backdrop-blur-sm"><div className="bg-white p-8 rounded-3xl text-center max-w-sm shadow-2xl border-b-8 border-red-500"><h1 className="text-4xl font-bold text-red-600 mb-4 header-font">Oyun Bitti!</h1><p className="text-gray-600 mb-2 text-xl">Skorun: <strong className="text-2xl text-black">{score}</strong></p><div className="flex flex-col gap-2 mt-6"><button onClick={startGame} className="px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg text-lg">Tekrar Oyna</button><button onClick={postScoreAndExit} className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg text-lg">Puanı Kaydet ve Çık</button></div></div></div>}
                         </div>
                     );
                 }
+
                 const root = ReactDOM.createRoot(document.getElementById('root'));
                 root.render(<App />);
             </script>
-            </body></html>
+            </body>
+            </html>
         `;
-    }, [isLoading, error, LEVELS]);
-
-    useEffect(() => {
-        const handleMessage = (event: MessageEvent) => {
-            if (event.data.type === 'SAVE_SCORE' && user) {
-                submitBalloonHuntScore(user.uid, event.data.score, topicName || 'Balon Avcısı').then(result => {
-                    if (result.success) {
-                        toast({ title: "Başarılı!", description: "Puanınız kaydedildi." });
-                    } else {
-                        toast({ title: "Hata", description: result.error, variant: 'destructive'});
-                    }
-                });
-            } else if (event.data.type === 'EXIT_GAME') {
-                router.back();
-            }
-        };
-
-        window.addEventListener('message', handleMessage);
-        return () => window.removeEventListener('message', handleMessage);
-    }, [user, topicName, router, toast]);
-
-    useEffect(() => {
-        getBalloonHuntQuestions({ topicId: searchParams.get('topicId') || undefined })
-            .then(result => {
-                if (result.error || !result.levels || result.levels.length === 0) {
-                    setError(result.error || "Bu konu için oyun verisi bulunamadı.");
-                } else {
-                    setLEVELS(result.levels);
-                }
-            })
-            .finally(() => setIsLoading(false));
-    }, [searchParams]);
+    }, [levels]);
 
     if (isLoading) {
         return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
     }
     
     if (error) {
-        return <div className="flex h-screen w-full items-center justify-center text-red-500 p-4 text-center">{error}</div>;
+        return (
+            <div className="flex h-screen w-full items-center justify-center p-4">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
+                    <strong className="font-bold">Hata! </strong>
+                    <span className="block sm:inline ml-2">{error}</span>
+                    <div className="mt-4">
+                        <Button asChild variant="outline">
+                            <Link href="/student/balon-avcisi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
         <iframe
             srcDoc={gameHtml}
-            style={{ width: '100vw', height: '100vh', border: 'none' }}
+            className="w-full h-screen border-0"
             title="Balon Avcısı Oyunu"
         />
     );
@@ -296,5 +315,3 @@ export default function Page() {
         </Suspense>
     );
 }
-
-    
