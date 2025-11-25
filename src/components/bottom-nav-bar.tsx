@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Gamepad2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -14,17 +14,17 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
     const isActive = (href === '/' || href === '/student') ? pathname === href : pathname.startsWith(href);
 
     return (
-        <Link href={href} className={cn(
-            "flex flex-col items-center justify-center gap-0.5 w-full text-center transition-all duration-200",
-            isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/80"
-        )}>
+        <Link href={href} className="flex flex-col items-center justify-center gap-1 w-full text-center p-1 group">
             <div className={cn(
-                'p-1 rounded-md transition-all', 
-                isActive && 'bg-primary/10'
+                "p-2 rounded-full transition-all duration-200",
+                isActive ? "bg-primary/10" : ""
             )}>
-                 <Icon className={cn("h-5 w-5 transition-transform", isActive && "scale-110")} />
+                 <Icon className={cn("h-5 w-5 transition-all duration-200", isActive ? "text-primary scale-110" : "text-muted-foreground group-hover:text-foreground/80")} />
             </div>
-            <span className="text-xs font-medium">{label}</span>
+            <span className={cn(
+                "text-xs font-medium transition-colors duration-200",
+                 isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground/80"
+            )}>{label}</span>
         </Link>
     );
 };
@@ -47,8 +47,8 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
-        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Soru Bankası' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
+        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Çalışmalar' },
+        { href: '/student/activities', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
@@ -65,7 +65,7 @@ export function BottomNavBar() {
 
     return (
         <>
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/90 to-background/70 backdrop-blur-sm z-50 pb-[env(safe-area-inset-bottom)]">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background via-card/95 to-card/90 backdrop-blur-sm z-50 pb-safe">
                 <div className="flex items-stretch justify-around h-full">
                     {links.map(link => (
                         <NavLink key={link.href} {...link} />
