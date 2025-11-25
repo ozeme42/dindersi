@@ -2,8 +2,10 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { db } from '@/lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import type { Assignment } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,12 +14,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, ClipboardCheck, BarChart3, Clock, Trophy, Users, FileText, Play, Calendar, AlertCircle } from 'lucide-react';
+import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, ClipboardCheck, BarChart3, Clock, Trophy, Users } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
-import { format, formatDistanceToNow, isFuture, isPast } from 'date-fns';
+import { format, formatDistanceToNow, isFuture } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -101,79 +104,58 @@ function DenemeSinaviPage() {
         </p>
       </div>
 
-       <div className="space-y-6">
+       <div className="space-y-4">
             {assignments.length > 0 ? (
                 assignments.map(assignment => {
                     const isSolved = !!assignment.solvedEvent;
                     const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
-                    const isExpired = assignment.dueDate && isPast(new Date(assignment.dueDate));
-
+                    
                     return (
-                        <div key={assignment.id} className="bg-white w-full max-w-md mx-auto rounded-3xl shadow-2xl overflow-hidden border border-slate-200 animate-[fadeIn_0.5s_ease-out]">
-                            <div className="bg-indigo-600 p-6 text-center relative overflow-hidden">
-                                 <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                                 <div className="relative z-10">
-                                     <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                        {isSolved ? <CheckCircle2 size={32} className="text-green-600"/> : <FileText size={32} className="text-indigo-600" />}
-                                     </div>
-                                     <h2 className="text-xl font-bold text-white tracking-wide uppercase">{assignment.title}</h2>
-                                      <div className="mt-2 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                                        {assignment.courseName}
+                        <Card key={assignment.id} className={cn("overflow-hidden", isSolved && "bg-muted/50")}>
+                            <CardHeader>
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
+                                    <div className="flex-1">
+                                        <CardTitle>{assignment.title}</CardTitle>
+                                        <CardDescription>{assignment.className} - {assignment.courseName}</CardDescription>
                                     </div>
-                                 </div>
-                            </div>
-                             <div className="p-6 space-y-4">
-                               <div className="flex items-center gap-4">
-                                  <div className="p-3 bg-orange-50 text-orange-600 rounded-xl"><FileText size={20} /></div>
-                                  <div>
-                                    <div className="text-xs text-gray-400 font-bold uppercase">SORU SAYISI</div>
-                                    <div className="text-gray-800 font-bold">{assignment.questionIds?.length || 0} Soru</div>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                  <div className="p-3 bg-purple-50 text-purple-600 rounded-xl"><Clock size={20} /></div>
-                                  <div>
-                                    <div className="text-xs text-gray-400 font-bold uppercase">SÜRE</div>
-                                    <div className="text-gray-800 font-bold">{assignment.duration ? `${assignment.duration} Dakika` : "Süresiz"}</div>
-                                  </div>
-                                </div>
-                                 <div className="flex items-center gap-4">
-                                  <div className="p-3 bg-green-50 text-green-600 rounded-xl"><Calendar size={20} /></div>
-                                  <div>
-                                    <div className="text-xs text-gray-400 font-bold uppercase">TARİH ARALIĞI</div>
-                                    <div className="text-gray-800 font-bold text-sm">
-                                        {assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', {locale: tr}) : 'Her zaman'}
-                                        {assignment.dueDate && ` - ${format(new Date(assignment.dueDate), 'dd MMM yyyy', {locale: tr})}`}
+                                    <div className="flex items-center gap-2">
+                                        {assignment.duration && <Badge variant="outline"><Clock className="mr-1.5 h-3 w-3"/>{assignment.duration} dk</Badge>}
+                                        <Badge variant="secondary">{assignment.questionIds?.length || 0} Soru</Badge>
                                     </div>
-                                  </div>
                                 </div>
-
-                                {isSolved && (
-                                     <div className="flex items-center gap-4 pt-4 border-t">
-                                        <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Trophy size={20} /></div>
-                                        <div>
-                                            <div className="text-xs text-gray-400 font-bold uppercase">SONUÇ</div>
-                                            <div className="text-gray-800 font-bold">{assignment.solvedEvent.points} Puan (Derece: {assignment.rank}/{assignment.totalParticipants})</div>
-                                        </div>
-                                    </div>
-                                )}
-                                
-                                <hr className="border-gray-100" />
-                                
+                            </CardHeader>
+                            <CardFooter className="bg-muted/30 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 {isSolved ? (
-                                    <Button asChild size="lg" className="w-full">
-                                        <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                                            Sonuçları Gör <BarChart3 className="ml-2 h-5 w-5"/>
+                                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                                        <div className="flex items-center gap-1.5 font-medium text-green-600"><CheckCircle2 className="h-4 w-4"/> Çözüldü</div>
+                                        <div className="flex items-center gap-1.5"><BarChart3 className="h-4 w-4"/> Puan: <span className="font-bold">{assignment.solvedEvent.points}</span></div>
+                                        <Link href={`/teacher/assignments/${assignment.id}`} className="flex items-center gap-1.5 cursor-pointer hover:underline">
+                                            <Trophy className="h-4 w-4 text-amber-500"/> Derece: <span className="font-bold">{assignment.rank} / {assignment.totalParticipants}</span>
                                         </Link>
-                                    </Button>
+                                    </div>
                                 ) : (
-                                     <Button onClick={() => handleStartExam(assignment)} disabled={!canStart || isExpired} size="lg" className="w-full">
-                                        {!canStart ? "Henüz Başlamadı" : isExpired ? "Süre Doldu" : "Sınava Başla"}
-                                        {!isExpired && canStart && <Play className="ml-2 h-5 w-5"/>}
-                                    </Button>
+                                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                        {canStart ? (
+                                            <>
+                                                {assignment.dueDate && <span>Son Teslim: {formatDistanceToNow(new Date(assignment.dueDate), { addSuffix: true, locale: tr })}</span>}
+                                            </>
+                                        ) : (
+                                            <span className="text-blue-600 font-medium">Başlangıç: {format(new Date(assignment.startDate), 'dd MMMM yyyy, HH:mm', { locale: tr })}</span>
+                                        )}
+                                    </div>
                                 )}
-                             </div>
-                        </div>
+                                <div className="flex gap-2">
+                                    {isSolved && (
+                                        <Button asChild variant="secondary" size="sm">
+                                            <Link href={`/student/deneme/sonuc/${assignment.id}`}>Sonuçları Gör</Link>
+                                        </Button>
+                                    )}
+                                     <Button size="sm" onClick={() => handleStartExam(assignment)} disabled={isSolved || !canStart}>
+                                        <Gamepad2 className="mr-2 h-4 w-4"/> {isSolved ? "Tekrar Çöz" : "Sınava Başla"}
+                                    </Button>
+                                </div>
+                            </CardFooter>
+                        </Card>
                     )
                 })
             ) : (
