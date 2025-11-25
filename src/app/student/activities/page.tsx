@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from 'next/link';
@@ -16,10 +17,8 @@ const activityTypes = [
   { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
   { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
   { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
-  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp, colorClass: "bg-sky-600 hover:bg-sky-700 text-white" },
   { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
   { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
-  { href: '/student/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban, colorClass: "bg-lime-600 hover:bg-lime-700 text-white" },
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
