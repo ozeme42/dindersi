@@ -25,72 +25,55 @@ type CourseWithAllProgress = Course & {
     totalQuestionBankTests?: number;
 };
 
-const CourseCardWithProgress = ({ course, index }: { course: CourseWithAllProgress, index: number }) => {
-    const colorClasses = [
-        'bg-blue-600 hover:bg-blue-700',
-        'bg-emerald-600 hover:bg-emerald-700',
-        'bg-purple-600 hover:bg-purple-700',
-        'bg-rose-600 hover:bg-rose-700',
-        'bg-amber-600 hover:bg-amber-700',
-        'bg-indigo-600 hover:bg-indigo-700',
-        'bg-teal-600 hover:bg-teal-700',
-        'bg-cyan-600 hover:bg-cyan-700',
-        'bg-pink-600 hover:bg-pink-700',
-        'bg-orange-600 hover:bg-orange-700',
-    ];
-    
-    const colorClass = colorClasses[index % colorClasses.length];
-
-    return (
+const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllProgress, colorClass: string }) => (
     <Card className={cn("hover:shadow-lg transition-shadow flex flex-col text-white transform hover:-translate-y-1 duration-300", colorClass)}>
         <CardHeader>
             <div className="flex items-center gap-4">
                 <div className="p-4 bg-white/10 rounded-xl">
-                    <BookOpen className="h-8 w-8"/>
+                    <BookOpen className="h-8 w-8 text-white/80"/>
                 </div>
                 <div>
                     <CardTitle className="text-xl">{course.title}</CardTitle>
-                    <p className="text-sm opacity-80">{course.className}</p>
+                    <p className="text-sm text-white/80">{course.className}</p>
                 </div>
             </div>
         </CardHeader>
         <CardContent className="flex-grow space-y-4">
             <div>
-                <div className="flex justify-between text-xs font-semibold opacity-80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                     <span>Ders İlerlemesi</span>
                     <span>{course.lessonProgress || 0}%</span>
                 </div>
-                <Progress value={course.lessonProgress || 0} className="h-2 bg-white/30 [&>div]:bg-green-400" />
-                <p className="text-xs opacity-80 text-right mt-1">
+                <Progress value={course.lessonProgress || 0} className="h-2 bg-white/20 [&>div]:bg-green-400" />
+                <p className="text-xs text-white/70 text-right mt-1">
                     ({course.completedTopicsCount || 0} / {course.topicsCount || 0} Konu)
                 </p>
             </div>
             <div>
-                <div className="flex justify-between text-xs font-semibold opacity-80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                     <span>Soru Bankası Başarısı</span>
                     <span>{course.questionBankProgress || 0}%</span>
                 </div>
-                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/30 [&>div]:bg-amber-400"/>
-                 <p className="text-xs opacity-80 text-right mt-1">
+                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/20 [&>div]:bg-amber-400" />
+                 <p className="text-xs text-white/70 text-right mt-1">
                     ({course.passedTests || 0} / {course.totalQuestionBankTests || 0} Test)
                 </p>
             </div>
         </CardContent>
         <CardFooter className="flex-col items-stretch gap-2">
-            <Button asChild className="w-full bg-white/20 hover:bg-white/30 text-white">
+            <Button asChild className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm">
                 <Link href={`/student/ders/${course.id}`}>
                     Derse Devam Et <ArrowRight className="ml-2 h-4 w-4"/>
                 </Link>
             </Button>
-            <Button asChild className="w-full" variant="secondary">
+            <Button asChild className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm" variant="secondary">
                 <Link href={`/student/soru-bankasi/${course.id}`}>
                     Testleri Çöz <ClipboardCheck className="ml-2 h-4 w-4"/>
                 </Link>
             </Button>
         </CardFooter>
     </Card>
-    );
-};
+);
 
 export default function SoruBankasiPage() {
     const { user } = useAuth();
@@ -134,7 +117,7 @@ export default function SoruBankasiPage() {
                     filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
                 }
 
-                const coursesData = await Promise.all(filteredCourses.map(async (course) => {
+                const coursesDataPromises = filteredCourses.map(async (course) => {
                     const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
                     const qbStats = getCourseQuestionBankStats(course.id, user.uid);
                     
@@ -165,7 +148,21 @@ export default function SoruBankasiPage() {
                         passedTests: questionBankStats.passedTests,
                         totalQuestionBankTests: questionBankStats.totalTests,
                     };
-                }));
+                });
+                
+                let coursesData = await Promise.all(coursesDataPromises);
+
+                // Sort courses: DKAB first, then Siyer, then others alphabetically
+                coursesData.sort((a, b) => {
+                    const titleA = a.title.toUpperCase();
+                    const titleB = b.title.toUpperCase();
+                    if (titleA.includes('DKAB') && !titleB.includes('DKAB')) return -1;
+                    if (!titleA.includes('DKAB') && titleB.includes('DKAB')) return 1;
+                    if (titleA.includes('SİYER') && !titleB.includes('SİYER')) return -1;
+                    if (!titleA.includes('SİYER') && titleB.includes('SİYER')) return 1;
+                    return a.title.localeCompare(b.title, 'tr');
+                });
+
 
                 setCourses(coursesData);
             } catch (error) {
@@ -176,6 +173,15 @@ export default function SoruBankasiPage() {
         }
         fetchCoursesAndProgress();
     }, [user]);
+
+    const colorClasses = [
+        'bg-blue-600 hover:bg-blue-700',
+        'bg-emerald-600 hover:bg-emerald-700',
+        'bg-purple-600 hover:bg-purple-700',
+        'bg-rose-600 hover:bg-rose-700',
+        'bg-amber-600 hover:bg-amber-700',
+        'bg-indigo-600 hover:bg-indigo-700',
+    ];
 
     return (
         <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
@@ -191,7 +197,7 @@ export default function SoruBankasiPage() {
                 ) : courses.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courses.map((course, index) => (
-                            <CourseCardWithProgress key={course.id} course={course} index={index} />
+                            <CourseCardWithProgress key={course.id} course={course} colorClass={colorClasses[index % colorClasses.length]} />
                         ))}
                     </div>
                 ) : (
