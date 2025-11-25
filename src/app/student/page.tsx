@@ -2,24 +2,23 @@
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getStudentDashboardStats } from './actions';
+import { getStudentDashboardStats } from '@/app/student/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Map, Swords, Backpack } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack, Loader2, Home, User } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
@@ -72,6 +71,8 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 // --- NEW: MOBILE BOTTOM NAVIGATION ---
+import { usePathname } from 'next/navigation';
+
 const MobileNav = () => {
     const { user } = useAuth();
     const pathname = usePathname();
@@ -83,8 +84,10 @@ const MobileNav = () => {
         { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
-    
-    if (!user || user.role !== 'student') return null;
+
+    if (user?.role !== 'student') {
+        return null;
+    }
 
     return (
         <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
@@ -132,7 +135,7 @@ const MobileNav = () => {
                             {!item.highlight && (
                                 <span className={cn(
                                     "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
                                 )}>
                                     {item.label}
                                 </span>
@@ -145,8 +148,6 @@ const MobileNav = () => {
     );
 };
 
-
-// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -180,7 +181,7 @@ function HardestWorkersToday() {
                         <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
                     </div>
                 ) : dailyTop.length > 0 ? (
-                    <div className="space-y-2">
+                     <div className="space-y-2">
                         {dailyTop.map((student, index) => (
                             <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
                                 <div className="flex items-center gap-3">
@@ -207,8 +208,9 @@ function HardestWorkersToday() {
     )
 }
 
+
 export default function StudentDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -221,8 +223,6 @@ export default function StudentDashboard() {
       classRank: 0,
       branchRank: 0,
       questionBankProgress: 0,
-      passedTests: 0,
-      totalQuestionBankTests: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
@@ -237,7 +237,7 @@ export default function StudentDashboard() {
       
       try {
         const [statsResult, examsSnapshot] = await Promise.all([
-          getStudentDashboardStats(user),
+          getStudentDashboardStats(user.uid),
           getStudentExams(user.uid)
         ]);
 
@@ -262,7 +262,7 @@ export default function StudentDashboard() {
     fetchData();
   }, [user]);
   
-  if (isLoading || authLoading) {
+  if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -423,3 +423,5 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+    
