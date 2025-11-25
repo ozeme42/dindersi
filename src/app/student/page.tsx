@@ -1,30 +1,37 @@
 
-"use client";
+'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
-
-// --- UTILS & MOCKS ---
-import { cn } from "@/lib/utils";
+import { useAuth } from '@/context/auth-context';
+import { getStudentDashboardStats, type StudentStats } from './actions';
+import { getStudentExams } from './deneme/actions';
+import { getLiveLeaderboard } from '@/app/leaderboard/actions';
+import type { UserProfile } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { useAuth } from "@/context/auth-context";
-import { UserAvatar } from "@/components/user-avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
+import { usePathname } from 'next/navigation';
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 
-import { getStudentDashboardStats } from "./actions";
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentExams } from "./deneme/actions";
-import type { UserProfile } from "@/lib/types";
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
 
-// --- GAMIFIED UI COMPONENTS ---
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 const GameButton = ({ 
     children, 
@@ -73,8 +80,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-// --- NEW: MOBILE BOTTOM NAVIGATION ---
-
 const MobileNav = () => {
     const { user } = useAuth();
     const pathname = usePathname();
@@ -87,34 +92,29 @@ const MobileNav = () => {
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
     
-    if (user?.role !== 'student') {
-        return null;
-    }
+    if (!user || user.role !== 'student') return null;
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
             <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border-t border-white/10 rounded-t-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
                 
-                {/* Alt parıltı efekti */}
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = pathname === item.href;
+                    const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
                     return (
                         <Link
-                            href={item.href}
                             key={item.id}
+                            href={item.href}
                             className={cn(
                                 "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
                                 isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
                             )}
                         >
-                            {/* Active Indicator Background */}
                             {isActive && (
                                 <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
                             )}
                             
-                            {/* Highlighted Middle Button Style */}
                             {item.highlight ? (
                                 <div className={cn(
                                     "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
@@ -133,12 +133,8 @@ const MobileNav = () => {
                                 </div>
                             )}
 
-                            {/* Label (Only visible if not highlighted middle button or if active) */}
                             {!item.highlight && isActive && (
-                                <span className={cn(
-                                    "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
-                                )}>
+                                <span className="text-[10px] font-bold mt-1 transition-all duration-300 opacity-100 translate-y-0">
                                     {item.label}
                                 </span>
                             )}
@@ -149,9 +145,6 @@ const MobileNav = () => {
         </div>
     );
 };
-
-
-// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -215,26 +208,14 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user, loading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-      score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      questionBankProgress: 0, 
-      generalRank: 0,
-      classRank: 0,
-      branchRank: 0,
-  });
+  const [stats, setStats] = useState<StudentStats | null>(null);
   const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
 
   useEffect(() => {
-    async function fetchData() {
-        // Ensure user and user.role is loaded before fetching data dependent on it.
-        if (!user?.uid || !user.role) {
-            return;
-        };
-
+    const fetchData = async () => {
+        if (!user?.role) return;
+        
         setIsLoading(true);
-
         try {
             const [statsResult, examsSnapshot] = await Promise.all([
                 getStudentDashboardStats(user),
@@ -254,18 +235,18 @@ export default function StudentDashboard() {
             }
 
         } catch (error) {
-            console.error("Error fetching student dashboard data:", error);
+            console.error("Error fetching dashboard data:", error);
         } finally {
             setIsLoading(false);
         }
     }
     
-    if(!authLoading) {
+    if (!authLoading) {
       fetchData();
     }
   }, [user, authLoading]);
-  
-  if (authLoading || isLoading) {
+
+  if (isLoading || authLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -273,7 +254,7 @@ export default function StudentDashboard() {
     );
   }
 
-  const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
+  const lessonProgress = stats ? (stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0) : 0;
   
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
@@ -289,7 +270,7 @@ export default function StudentDashboard() {
                          <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
-                        LVL {Math.floor(stats.score / 1000) + 1}
+                        LVL {Math.floor((stats?.score || 0) / 1000) + 1}
                     </div>
                   </div>
                   
@@ -304,7 +285,7 @@ export default function StudentDashboard() {
                   <div className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
                       <div className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
                           <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
-                          <span>{stats.score.toLocaleString()}</span>
+                          <span>{(stats?.score || 0).toLocaleString()}</span>
                       </div>
                       <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
                   </div>
@@ -339,10 +320,10 @@ export default function StudentDashboard() {
                               <div>
                                   <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
                                       <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
-                                      <span>{stats.questionBankProgress}%</span>
+                                      <span>{stats?.questionBankProgress || 0}%</span>
                                   </div>
                                   <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats?.questionBankProgress || 0}%`}}></div>
                                   </div>
                               </div>
                           </div>
@@ -364,15 +345,15 @@ export default function StudentDashboard() {
                         
                         <div className="mt-auto grid grid-cols-3 gap-2">
                              <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
+                                 <span className="text-2xl font-black text-white">{stats?.generalRank || 0 > 0 ? `#${stats?.generalRank}` : '-'}</span>
                                  <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
                              </div>
                              <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
+                                 <span className="text-2xl font-black text-white">{stats?.classRank || 0 > 0 ? `#${stats?.classRank}` : '-'}</span>
                                  <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
                              </div>
                              <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
+                                 <span className="text-2xl font-black text-white">{stats?.branchRank || 0 > 0 ? `#${stats?.branchRank}` : '-'}</span>
                                  <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
                              </div>
                         </div>
