@@ -7,7 +7,6 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
 import type { Course, SchoolClass, UserProgress } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { cn } from "@/lib/utils";
 
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -15,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Loader2, ClipboardCheck } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 type CourseWithAllProgress = Course & {
     lessonProgress?: number;
@@ -25,15 +25,6 @@ type CourseWithAllProgress = Course & {
     totalQuestionBankTests?: number;
 };
 
-const colorClasses = [
-    'bg-blue-600 hover:bg-blue-700',
-    'bg-emerald-600 hover:bg-emerald-700',
-    'bg-purple-600 hover:bg-purple-700',
-    'bg-rose-600 hover:bg-rose-700',
-    'bg-amber-600 hover:bg-amber-700',
-    'bg-indigo-600 hover:bg-indigo-700',
-];
-
 const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllProgress, colorClass: string }) => (
     <Card className={cn("hover:shadow-lg transition-shadow flex flex-col text-white transform hover:-translate-y-1 duration-300", colorClass)}>
         <CardHeader>
@@ -43,39 +34,39 @@ const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllP
                 </div>
                 <div>
                     <CardTitle className="text-xl">{course.title}</CardTitle>
-                    <p className="text-sm opacity-80">{course.className}</p>
+                    <p className="text-sm text-white/80">{course.className}</p>
                 </div>
             </div>
         </CardHeader>
         <CardContent className="flex-grow space-y-4">
             <div>
-                <div className="flex justify-between text-xs font-semibold opacity-80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                     <span>Ders İlerlemesi</span>
                     <span>{course.lessonProgress || 0}%</span>
                 </div>
                 <Progress value={course.lessonProgress || 0} className="h-2 bg-white/30 [&>div]:bg-green-400" />
-                <p className="text-xs opacity-80 text-right mt-1">
+                <p className="text-xs text-white/80 text-right mt-1">
                     ({course.completedTopicsCount || 0} / {course.topicsCount || 0} Konu)
                 </p>
             </div>
             <div>
-                <div className="flex justify-between text-xs font-semibold opacity-80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                     <span>Soru Bankası Başarısı</span>
                     <span>{course.questionBankProgress || 0}%</span>
                 </div>
-                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/30 [&>div]:bg-amber-400" />
-                 <p className="text-xs opacity-80 text-right mt-1">
+                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/30 [&>div]:bg-amber-400"/>
+                 <p className="text-xs text-white/80 text-right mt-1">
                     ({course.passedTests || 0} / {course.totalQuestionBankTests || 0} Test)
                 </p>
             </div>
         </CardContent>
         <CardFooter className="flex-col items-stretch gap-2">
-            <Button asChild className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm">
+            <Button asChild className="w-full bg-white/90 text-black hover:bg-white">
                 <Link href={`/student/ders/${course.id}`}>
                     Derse Devam Et <ArrowRight className="ml-2 h-4 w-4"/>
                 </Link>
             </Button>
-            <Button asChild className="w-full bg-black/20 hover:bg-black/30 backdrop-blur-sm">
+            <Button asChild className="w-full" variant="secondary">
                 <Link href={`/student/soru-bankasi/${course.id}`}>
                     Testleri Çöz <ClipboardCheck className="ml-2 h-4 w-4"/>
                 </Link>
@@ -113,15 +104,17 @@ export default function SoruBankasiPage() {
                 const studentClassId = studentClass?.id;
 
                 const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
+                
+                const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+                
                 let filteredCourses: Course[] = [];
                 if (studentClassId) {
                     const isFirstClass = studentClassId === firstClassId;
-                    filteredCourses = allCourses.filter(course =>
+                    filteredCourses = studentVisibleCourses.filter(course =>
                         !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
                     );
                 } else {
-                    filteredCourses = allCourses.filter(course => !course.classId && !course.isTeacherOnly);
+                    filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
                 }
 
                 const coursesData = await Promise.all(filteredCourses.map(async (course) => {
@@ -167,8 +160,21 @@ export default function SoruBankasiPage() {
         fetchCoursesAndProgress();
     }, [user]);
 
+    const colorClasses = [
+        'bg-blue-600 hover:bg-blue-700',
+        'bg-emerald-600 hover:bg-emerald-700',
+        'bg-purple-600 hover:bg-purple-700',
+        'bg-rose-600 hover:bg-rose-700',
+        'bg-amber-600 hover:bg-amber-700',
+        'bg-indigo-600 hover:bg-indigo-700',
+        'bg-teal-600 hover:bg-teal-700',
+        'bg-cyan-600 hover:bg-cyan-700',
+        'bg-pink-600 hover:bg-pink-700',
+        'bg-orange-600 hover:bg-orange-700',
+    ];
+
     return (
-        <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8">
+        <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold font-headline mb-2">Dersler ve Soru Bankası</h1>
@@ -177,7 +183,7 @@ export default function SoruBankasiPage() {
                 
                 {isLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-96" />)}
+                        {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-80" />)}
                     </div>
                 ) : courses.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
