@@ -1,10 +1,10 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import type { Assignment } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,120 +15,16 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Loader2, Calendar, Clock, Play, CheckCircle2, XCircle, Award, Trophy, FileText, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, Clock, Trophy, Play, Calendar, AlertCircle, Award, ArrowRight, XCircle, FileText, ClipboardCheck } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
-import { format, isFuture } from 'date-fns';
+import { format, formatDistanceToNow, isFuture, isPast } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
-
-const IntroCard = ({ assignment, onStart }: { assignment: any, onStart: (assignment: any) => void }) => {
-    const { title, questionIds, duration, startDate, dueDate } = assignment;
-    const isSolved = !!assignment.solvedEvent;
-    const isExpired = dueDate && new Date(dueDate) < new Date();
-    const canStart = !startDate || !isFuture(new Date(startDate));
-
-    const status = isSolved
-        ? { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> }
-        : isExpired
-        ? { text: "Süre Doldu", color: "bg-red-600", icon: <XCircle /> }
-        : !canStart
-        ? { text: "Henüz Başlamadı", color: "bg-amber-600", icon: <Clock /> }
-        : { text: "Bekliyor", color: "bg-blue-600", icon: <Play /> };
-
-    return (
-        <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200 animate-[fadeIn_0.5s_ease-out]">
-            {/* Üst Başlık Alanı */}
-            <div className="bg-indigo-600 p-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                <div className="relative z-10">
-                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                        <FileText size={40} className="text-indigo-600" />
-                    </div>
-                    <h1 className="text-xl font-bold text-white tracking-wide uppercase">{title}</h1>
-                    <div className="mt-2 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                        Deneme Sınavı
-                    </div>
-                </div>
-            </div>
-
-            {/* Detaylar */}
-            <div className="p-8 space-y-6">
-                <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                        <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">{status.icon}</div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SINAV DURUMU</div>
-                            <div className={`font-bold text-lg ${status.color.replace('bg-', 'text-')}`}>{status.text}</div>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-orange-50 text-orange-600 rounded-xl"><FileText size={24} /></div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SORU SAYISI</div>
-                            <div className="text-gray-800 font-bold text-lg">{questionIds?.length || 0} Soru</div>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-purple-50 text-purple-600 rounded-xl"><Clock size={24} /></div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SÜRE</div>
-                            <div className="text-gray-800 font-bold text-lg">{duration || 'Sınırsız'} Dakika</div>
-                        </div>
-                    </div>
-
-                    {dueDate && (
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-green-50 text-green-600 rounded-xl"><Calendar size={24} /></div>
-                            <div>
-                                <div className="text-xs text-gray-400 font-bold uppercase">TARİH ARALIĞI</div>
-                                <div className="text-gray-800 font-bold">{format(new Date(startDate), 'dd MMM', {locale: tr})} - {format(new Date(dueDate), 'dd MMM yyyy', {locale: tr})}</div>
-                            </div>
-                        </div>
-                    )}
-                     {assignment.solvedEvent && (
-                        <div className="flex items-center gap-4 pt-4 border-t">
-                            <div className="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><Award size={24} /></div>
-                            <div>
-                                <div className="text-xs text-gray-400 font-bold uppercase">SONUÇ</div>
-                                <Link href={`/teacher/assignments/${assignment.id}`} className="text-indigo-600 hover:underline">
-                                    <div className="font-bold text-lg">{assignment.solvedEvent.points} Puan (Derece: {assignment.rank}/{assignment.totalParticipants})</div>
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <hr className="border-gray-100" />
-                
-                {isSolved ? (
-                  <Button asChild className="w-full">
-                     <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                        Sonuçları Gör <ArrowRight className="ml-2 h-5 w-5"/>
-                     </Link>
-                  </Button>
-                ) : (
-                  <button 
-                    onClick={() => onStart(assignment)}
-                    disabled={!canStart || isExpired}
-                    className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30 disabled:bg-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
-                  >
-                    <span>SINAVI BAŞLAT</span>
-                    <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />
-                  </button>
-                )}
-                
-            </div>
-        </div>
-    );
-};
-
 
 function DenemeSinaviPage() {
   const { user, loading: authLoading } = useAuth();
@@ -156,19 +52,107 @@ function DenemeSinaviPage() {
     }
   }, [authLoading, fetchAssignments]);
 
-  const handleStartExam = (assignment: any) => {
-    if (!assignment.questionIds || assignment.questionIds.length === 0) {
-        setError("Bu deneme için hiç soru atanmamış.");
-        return;
-    }
-    const params = new URLSearchParams({
-        assignmentId: assignment.id,
-        assignmentTitle: assignment.title,
-        questionIds: assignment.questionIds.join(','),
-        duration: assignment.duration || '0'
-    });
-    router.push(`/student/deneme/coz?${params.toString()}`);
-  }
+  const IntroCard = ({ assignment }: { assignment: any }) => {
+    const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
+    const isExpired = assignment.dueDate && isPast(new Date(assignment.dueDate));
+
+    const statusInfo = assignment.solvedEvent
+        ? { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> }
+        : isExpired
+        ? { text: "Süre Doldu", color: "bg-red-600", icon: <XCircle /> }
+        : !canStart
+        ? { text: "Henüz Başlamadı", color: "bg-amber-600", icon: <Clock /> }
+        : { text: "Bekliyor", color: "bg-blue-600", icon: <Play /> };
+
+    return (
+        <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
+            <div className="bg-indigo-600 p-8 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <div className="relative z-10">
+                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <FileText size={40} className="text-indigo-600" />
+                    </div>
+                    <h1 className="text-xl font-bold text-white tracking-wide uppercase">{assignment.title}</h1>
+                    <div className="mt-2 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+                        {assignment.courseName}
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-8 space-y-6">
+                <div className="space-y-4">
+                    <div className="flex items-start gap-4">
+                        <div className={cn("p-3 rounded-xl text-white", statusInfo.color)}>
+                            {statusInfo.icon}
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-400 font-bold uppercase">SINAV DURUMU</div>
+                            <div className="text-gray-800 font-bold text-lg">{statusInfo.text}</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                            <FileText size={24} />
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-400 font-bold uppercase">SORU SAYISI</div>
+                            <div className="text-gray-800 font-bold text-lg">{assignment.questionIds?.length || 0} Soru</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                            <Clock size={24} />
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-400 font-bold uppercase">SÜRE</div>
+                            <div className="text-gray-800 font-bold text-lg">{assignment.duration || '?'} Dakika</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-green-50 text-green-600 rounded-xl">
+                            <Calendar size={24} />
+                        </div>
+                        <div>
+                            <div className="text-xs text-gray-400 font-bold uppercase">TARİH ARALIĞI</div>
+                            <div className="text-gray-800 font-bold">
+                                {assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', { locale: tr }) : '?'} - {assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM yyyy', { locale: tr }) : 'Süresiz'}
+                            </div>
+                        </div>
+                    </div>
+                     {assignment.solvedEvent && (
+                        <Link href={`/teacher/assignments/${assignment.id}`} className="block group">
+                            <div className="flex items-center gap-4 pt-4 border-t cursor-pointer">
+                                 <div className="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><Trophy size={24} /></div>
+                                 <div>
+                                     <div className="text-xs text-gray-400 font-bold uppercase">Sıralama</div>
+                                     <div className="text-indigo-600 group-hover:underline font-bold text-lg">{assignment.rank || 'N/A'} / {assignment.totalParticipants || 'N/A'}</div>
+                                 </div>
+                            </div>
+                         </Link>
+                    )}
+
+                </div>
+                <hr className="border-gray-100" />
+                {assignment.solvedEvent ? (
+                    <Button asChild className="w-full">
+                         <Link href={`/student/deneme/sonuc/${assignment.id}`}>
+                            Sonuçları Gör <ArrowRight className="ml-2 h-5 w-5"/>
+                         </Link>
+                    </Button>
+                ) : (
+                    <Button 
+                        onClick={() => router.push(`/student/deneme/coz?assignmentId=${assignment.id}`)}
+                        disabled={!canStart || isExpired}
+                        className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30"
+                    >
+                        <span>SINAVI BAŞLAT</span>
+                        <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
+  };
 
   const backUrl = '/student';
 
@@ -209,13 +193,11 @@ function DenemeSinaviPage() {
 
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {assignments.length > 0 ? (
-                assignments.map(assignment => (
-                    <IntroCard key={assignment.id} assignment={assignment} onStart={handleStartExam} />
-                ))
+                assignments.map(assignment => <IntroCard key={assignment.id} assignment={assignment} />)
             ) : (
-                <Card className="md:col-span-2 lg:col-span-3 text-center p-12 text-muted-foreground">
+                <div className="col-span-full text-center py-16 text-muted-foreground">
                     <p>Sana atanmış bir deneme sınavı bulunmuyor.</p>
-                </Card>
+                </div>
             )}
        </div>
     </div>
