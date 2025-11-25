@@ -1,37 +1,33 @@
+
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, type ReactNode, useCallback } from "react";
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
-import { getStudentDashboardStats } from "@/app/student/actions";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc, getCountFromServer } from "firebase/firestore";
+import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment, UserProgress, TestResult } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
+
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { 
-    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import Link from 'next/link';
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import type { UserProfile } from "@/lib/types";
+import { UserAvatar } from "@/components/user-avatar";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 
-// --- UI Components ---
 
-const UserAvatar = ({ user, className }: any) => (
-    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
-        {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
-        ) : (
-            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
-        )}
-    </div>
-);
-
-const Skeleton = ({ className }: { className?: string }) => (
-    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
-);
+// --- GAMIFIED UI COMPONENTS ---
 
 const GameButton = ({ 
     children, 
@@ -80,39 +76,35 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-
-// --- Bottom Navigation ---
+// --- MOBILE BOTTOM NAVIGATION ---
 
 const MobileNav = () => {
     const { user } = useAuth();
     const pathname = usePathname();
 
     const navItems = [
-        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
-        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
-        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
-        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
-        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
+        { id: '/student', icon: Home, label: 'Ana Üs', href: '/student' },
+        { id: '/student/soru-bankasi', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
+        { id: '/student/yarismalar', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
+        { id: '/leaderboard', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
+        { id: '/student/profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
-    
+
     if (!user) return null;
 
     return (
         <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
             <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
+                
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = (item.href === '/student' && pathname === item.href) || (item.href !== '/student' && pathname.startsWith(item.href));
+                    const isActive = pathname === item.id;
                     return (
-                        <Link
-                            key={item.id}
-                            href={item.href}
-                            className={cn(
+                         <Link href={item.href} key={item.id} className={cn(
                                 "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
                                 isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
-                            )}
-                        >
+                            )}>
                             {isActive && (
                                 <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
                             )}
@@ -136,7 +128,7 @@ const MobileNav = () => {
                             )}
 
                             {!item.highlight && isActive && (
-                                <span className="text-[10px] font-bold mt-1 opacity-100 translate-y-0 transition-all duration-300">
+                                <span className="text-[10px] font-bold mt-1 transition-all duration-300 opacity-100 translate-y-0">
                                     {item.label}
                                 </span>
                             )}
@@ -149,7 +141,7 @@ const MobileNav = () => {
 };
 
 
-// --- Data Components ---
+// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -210,62 +202,110 @@ function HardestWorkersToday() {
     )
 }
 
-// --- Main Dashboard Component ---
-
 export default function StudentDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      questionBankProgress: 0, 
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
+      questionBankProgress: 0,
+      passedTests: 0,
+      totalQuestionBankTests: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
     async function fetchData() {
-        if (!user || !user.uid) {
-            setIsLoading(false);
-            return;
+      if (!user?.uid) {
+          setIsLoading(false);
+          return;
+      };
+
+      setIsLoading(true);
+      
+      try {
+        let completedTopicsTotal = 0;
+        let grandTotalTopics = 0;
+        
+        const [allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+            getDocs(query(collection(db, "courses"), where("isSummerSchool", "!=", true))),
+            getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+            getStudentExams(user.uid),
+        ]);
+        
+        if (examsSnapshot.success && examsSnapshot.data) {
+            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+            setExamStats({ pending, solved: examsSnapshot.data.length - pending });
         }
 
-        setIsLoading(true);
-        try {
-            const [statsResult, examsSnapshot] = await Promise.all([
-                getStudentDashboardStats(user.uid, user.class || ''),
-                getStudentExams(user.uid),
-            ]);
+        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
-            if (statsResult.data) {
-                setStats(prev => ({
-                    ...prev,
-                    ...statsResult.data,
-                    score: user.score || statsResult.data.score, // Prioritize real-time score from auth context
-                }));
-            } else {
-                console.error(statsResult.error);
-            }
-            
-            if (examsSnapshot.success && examsSnapshot.data) {
-                const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-                const solved = examsSnapshot.data.length - pending;
-                setExamStats({ pending, solved });
-            }
+        let classRank = 0;
+        let branchRank = 0;
 
-        } catch (error) {
-            console.error("Öğrenci verileri alınırken bir sunucu hatası oluştu.", error);
-        } finally {
-            setIsLoading(false);
+        if(user.class) {
+            const gradeName = user.class.split(' - ')[0];
+            const sortedGradeStudents = allStudents.filter(s => s.class?.startsWith(gradeName)).sort((a,b) => (b.score || 0) - (a.score || 0));
+            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+            const sortedBranchStudents = allStudents.filter(s => s.class === user.class).sort((a,b) => (b.score || 0) - (a.score || 0));
+            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
         }
+
+        let totalQuestionBankPassedTests = 0;
+        let totalQuestionBankTests = 0;
+
+        for (const courseDoc of allCoursesSnapshot.docs) {
+            const course = { id: courseDoc.id, ...courseDoc.data() } as Course;
+            const unitsSnap = await getDocs(query(collection(db, 'courses', course.id, 'units')));
+            let courseTotalTopics = 0;
+            for (const unitDoc of unitsSnap.docs) {
+                const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                courseTotalTopics += topicsSnap.data().count;
+            }
+            grandTotalTopics += courseTotalTopics;
+
+            const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
+            totalQuestionBankPassedTests += qbStats.passedTests;
+            totalQuestionBankTests += qbStats.totalTests;
+        }
+
+        const progressCollectionRef = collection(db, `users/${user.uid}/progress`);
+        const progressSnapshot = await getDocs(progressCollectionRef);
+        progressSnapshot.forEach(doc => {
+            completedTopicsTotal += (doc.data().completedTopics || []).length;
+        });
+        
+        const qbProgressPercentage = totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0;
+        const lessonProgressPercentage = grandTotalTopics > 0 ? Math.round((completedTopicsTotal / grandTotalTopics) * 100) : 0;
+
+        setStats({
+            score: user.score || 0,
+            completedTopics: completedTopicsTotal,
+            totalTopics: grandTotalTopics,
+            generalRank,
+            classRank,
+            branchRank,
+            questionBankProgress: qbProgressPercentage,
+            passedTests: totalQuestionBankPassedTests,
+            totalQuestionBankTests,
+        });
+
+      } catch (error) {
+        console.error("Error fetching student dashboard data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchData();
   }, [user]);
   
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -415,8 +455,11 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
+
       <MobileNav />
       
     </div>
   );
 }
+
+    
