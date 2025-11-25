@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -15,7 +15,7 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Play, CheckCircle2, XCircle, Clock, Trophy, Users, BarChart3, FileText, Calendar, AlertCircle } from 'lucide-react';
+import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, XCircle, ClipboardCheck, Clock, FileText, Play, AlertCircle, Award } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
@@ -29,7 +29,7 @@ import { AlertTriangle } from 'lucide-react';
 function IntroCard({ assignment }: { assignment: any }) {
     const router = useRouter();
 
-    const startExam = () => {
+    const handleStartExam = (assignment: any) => {
         if (!assignment.questionIds || assignment.questionIds.length === 0) {
             alert("Bu deneme için hiç soru atanmamış.");
             return;
@@ -44,9 +44,12 @@ function IntroCard({ assignment }: { assignment: any }) {
     }
 
     const getStatus = () => {
+        const now = new Date();
         const isSolved = !!assignment.solvedEvent;
-        const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
-        const isExpired = assignment.dueDate && isPast(new Date(assignment.dueDate));
+        const startDate = assignment.startDate ? new Date(assignment.startDate) : null;
+        const dueDate = assignment.dueDate ? new Date(assignment.dueDate) : null;
+        const canStart = !startDate || !isFuture(startDate);
+        const isExpired = dueDate && isPast(dueDate);
 
         if (isSolved) {
             return { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> };
@@ -77,17 +80,13 @@ function IntroCard({ assignment }: { assignment: any }) {
                 </div>
             </div>
 
-            <div className="p-8 space-y-6">
-                <div className="space-y-4">
+            <div className="p-6 space-y-4">
+                <div className="space-y-3">
                     <div className="flex items-start gap-4">
-                        <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                            <AlertCircle size={24} />
-                        </div>
+                        <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><AlertCircle size={24} /></div>
                         <div>
                             <div className="text-xs text-gray-400 font-bold uppercase">SINAV DURUMU</div>
-                            <div className={cn("text-white font-bold text-lg px-2 py-1 rounded-md mt-1", status.color)}>
-                                {status.text}
-                            </div>
+                            <div className="text-gray-800 font-bold text-lg">{status.text}</div>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -109,40 +108,42 @@ function IntroCard({ assignment }: { assignment: any }) {
                         <div>
                             <div className="text-xs text-gray-400 font-bold uppercase">TARİH ARALIĞI</div>
                             <div className="text-gray-800 font-bold">
-                                {assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', {locale: tr}) : 'Her zaman'} - {assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM yyyy', {locale: tr}) : 'Süresiz'}
+                                {assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', { locale: tr }) : 'Her zaman'} - {assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM yyyy', { locale: tr }) : 'Süresiz'}
                             </div>
                         </div>
                     </div>
-                     {assignment.solvedEvent && (
+                    
+                    {assignment.solvedEvent && (
                         <div className="flex items-center gap-4 pt-4 border-t">
                             <div className="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><Award size={24} /></div>
                             <div>
                                 <div className="text-xs text-gray-400 font-bold uppercase">SONUÇ</div>
                                 <Link href={`/teacher/assignments/${assignment.id}`} className="text-indigo-600 hover:underline">
-                                    <div className="text-gray-800 font-bold text-lg">{assignment.solvedEvent.points} Puan (Derece: {assignment.rank}/{assignment.totalParticipants})</div>
+                                    <div className="text-gray-800 font-bold">
+                                        {assignment.solvedEvent.points} Puan (Derece: {assignment.rank}/{assignment.totalParticipants})
+                                    </div>
                                 </Link>
                             </div>
                         </div>
                     )}
+
                 </div>
 
                 <hr className="border-gray-100" />
                 
-                {status.text === 'Bekliyor' ? (
-                     <button onClick={startExam} className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30">
-                        <span>SINAVI BAŞLAT</span>
-                        <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />
-                    </button>
-                ) : status.text === "Çözüldü" ? (
-                     <Link href={`/student/deneme/sonuc/${assignment.id}`} className="w-full block text-center bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-xl font-bold text-xl transition-all shadow-lg">
-                        SONUÇLARI GÖR
-                    </Link>
-                ) : null}
+                <Button
+                    onClick={() => handleStartExam(assignment)}
+                    disabled={status.text !== 'Bekliyor'}
+                    className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                    <span>{status.text === 'Bekliyor' ? 'SINAVI BAŞLAT' : status.text}</span>
+                    {status.text === 'Bekliyor' && <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />}
+                </Button>
+                <p className="text-center text-xs text-gray-400">Başarılar Dileriz.</p>
             </div>
         </div>
     );
 }
-
 
 function DenemeSinaviPage() {
   const { user, loading: authLoading } = useAuth();
@@ -150,30 +151,32 @@ function DenemeSinaviPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchAssignments = useCallback(async () => {
+    if (!user) return;
+    setIsLoading(true);
+    const result = await getStudentExams(user.uid);
+    if (result.success && result.data) {
+      setAssignments(result.data);
+    } else {
+      setError(result.error || "Denemeler yüklenemedi.");
+    }
+    setIsLoading(false);
+  }, [user]);
+
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      setIsLoading(false);
-      return;
-    };
-    
-    const fetchAssignments = async () => {
-        setIsLoading(true);
-        const result = await getStudentExams(user.uid);
-        if (result.success && result.data) {
-          setAssignments(result.data);
-        } else {
-          setError(result.error || "Denemeler yüklenemedi.");
-        }
-        setIsLoading(false);
-    };
+    if (!authLoading) {
+      fetchAssignments();
+    }
+  }, [authLoading, fetchAssignments]);
 
-    fetchAssignments();
-  }, [user, authLoading]);
-
+  const backUrl = '/student';
 
   if (isLoading || authLoading) {
-    return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
   }
 
    if (error) {
@@ -183,36 +186,37 @@ function DenemeSinaviPage() {
                     <AlertTriangle className="h-4 w-4" />
                     <AlertTitle>Denemeler Yüklenemedi!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
+                    <div className="mt-4">
+                         <Button asChild variant="secondary">
+                            <Link href={backUrl}>Panele Dön</Link>
+                        </Button>
+                    </div>
                 </Alert>
             </div>
         );
     }
-  
-    if (assignments.length === 0) {
-        return (
-             <div className="flex h-screen items-center justify-center text-center p-4">
-                 <div>
-                    <FileText size={48} className="mx-auto text-gray-400 mb-4" />
-                    <h2 className="text-xl font-semibold">Henüz Atanmış Deneme Sınavı Yok</h2>
-                    <p className="text-gray-500 mt-2">Öğretmeniniz bir deneme atadığında burada görünecektir.</p>
-                 </div>
-            </div>
-        )
-    }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 font-sans pb-20 md:pb-8">
-      <style>{`
-          @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
-          }
-      `}</style>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {assignments.map(assignment => (
-          <IntroCard key={assignment.id} assignment={assignment} />
-        ))}
-      </div>
+    <div className="min-h-screen bg-slate-50">
+        <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
+            <div className="flex flex-col items-center text-center mb-12">
+                <ClipboardCheck className="h-16 w-16 text-primary mb-4" />
+                <h1 className="text-4xl font-bold font-headline">Deneme Sınavlarım</h1>
+                <p className="text-muted-foreground mt-2 max-w-2xl">
+                Öğretmenlerin tarafından sana özel olarak atanmış deneme sınavlarını buradan çözebilirsin.
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {assignments.length > 0 ? (
+                    assignments.map(assignment => <IntroCard key={assignment.id} assignment={assignment} />)
+                ) : (
+                    <Card className="col-span-full text-center p-12 text-muted-foreground">
+                        <p>Sana atanmış bir deneme sınavı bulunmuyor.</p>
+                    </Card>
+                )}
+            </div>
+        </div>
     </div>
   );
 }
@@ -224,3 +228,4 @@ export default function Page() {
         </Suspense>
     );
 }
+
