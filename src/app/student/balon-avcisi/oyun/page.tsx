@@ -1,19 +1,22 @@
+
 'use client';
 
-import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getBalloonHuntQuestions, submitBalloonHuntScore } from '../actions';
 import { useAuth } from '@/context/auth-context';
+import { getBalloonHuntQuestions, submitBalloonHuntScore } from '../actions';
+import type { BalloonHuntLevel } from '../actions';
 import { Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 function BalloonHuntGame() {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [levels, setLevels] = useState<any[]>([]);
+    const [levels, setLevels] = useState<BalloonHuntLevel[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const topicName = useMemo(() => searchParams.get('topicName') || 'Genel', [searchParams]);
 
     useEffect(() => {
         getBalloonHuntQuestions({ topicId: searchParams.get('topicId') || undefined })
@@ -29,8 +32,10 @@ function BalloonHuntGame() {
 
     const gameHtml = useMemo(() => {
         if (levels.length === 0) return '';
-        const topicName = searchParams.get('topicName') || 'Genel';
         
+        // Safely serialize the levels data to be injected into the script.
+        const serializedLevels = JSON.stringify(levels);
+
         return `
             <!DOCTYPE html>
             <html lang="tr">
@@ -38,91 +43,53 @@ function BalloonHuntGame() {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
                 <title>Balon Avcısı</title>
+                <script src="https://cdn.tailwindcss.com"></script>
                 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
                 <style>
                     body {
                         font-family: 'Nunito', sans-serif;
-                        background-color: #0ea5e9;
                         color: white;
                         overflow: hidden;
                         touch-action: none;
                         user-select: none;
                         margin: 0;
+                        padding: 0;
                     }
                     .header-font { font-family: 'Fredoka', sans-serif; }
-                    #game-canvas { width: 100vw; height: 100vh; position: relative; background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 100%); cursor: crosshair; }
+                    #game-container {
+                        width: 100vw;
+                        height: 100vh;
+                        position: relative;
+                        background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 100%);
+                        cursor: crosshair;
+                    }
                     .cloud { position: absolute; background: white; border-radius: 50%; opacity: 0.8; animation: floatCloud linear infinite; }
                     .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
                     @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
-                    .balloon { position: absolute; width: 80px; height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 0.85rem; line-height: 1; z-index: 10; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+                    .balloon { position: absolute; width: 80px; height: 100px; font-weight: bold; font-size: 0.85rem; line-height: 1; z-index: 10; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; text-align: center; }
                     .shooter { position: absolute; bottom: 20px; left: 50%; transform-origin: center bottom; width: 6px; height: 60px; background: #475569; z-index: 20; border-radius: 3px; }
                     .shooter-base { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 30px; background: #1e293b; border-radius: 30px 30px 0 0; z-index: 19; }
                     .projectile { position: absolute; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; z-index: 15; box-shadow: 0 0 5px #ef4444; }
                     .pop-effect { position: absolute; font-size: 2rem; font-weight: bold; animation: popAnim 0.4s ease-out forwards; z-index: 30; pointer-events: none; }
                     @keyframes popAnim { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
-                    .question-panel { position: absolute; bottom: 80px; left: 20px; right: 20px; pointer-events: none; display: flex; justify-content: center; z-index: 50; }
-                    .question-box { background: white; color: #0f172a; padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: bold; font-size: 1.2rem; text-align: center; border-bottom: 6px solid #cbd5e1; pointer-events: auto; max-width: 90%; }
-                    .game-ui { position: absolute; top: 1rem; left: 1rem; right: 1rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-                    .ui-box { background: rgba(255,255,255,0.8); color: #0f172a; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); backdrop-filter: blur(5px); }
-                    .lives-container { display: flex; gap: 0.5rem; }
-                    .start-screen, .gameover-screen { position: absolute; inset: 0; background: rgba(14, 165, 233, 0.8); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); }
-                    .screen-content { background: white; padding: 2rem; border-radius: 1.5rem; text-align: center; max-width: 24rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); border-bottom: 8px solid #38bdf8; }
+                    .game-screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(4px); background: rgba(14, 165, 233, 0.8); }
+                    .dialog-box { background: white; color: #0f172a; padding: 2rem; border-radius: 1.5rem; text-align: center; max-width: 90%; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-bottom: 8px solid #cbd5e1; }
+                    .start-button { padding: 1rem 2.5rem; background-color: #facc15; color: #78350f; font-weight: 900; border-radius: 9999px; font-size: 1.25rem; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                    .start-button:hover { transform: scale(1.05); }
+                    .header { position: absolute; top: 1rem; left: 1rem; right: 1rem; display: flex; justify-content: space-between; align-items: center; z-index: 40; }
+                    .header-box { background: rgba(255, 255, 255, 0.9); color: #0ea5e9; padding: 0.5rem 1rem; border-radius: 9999px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid white; }
+                    .question-panel { position: absolute; bottom: 20px; left: 20px; right: 20px; pointer-events: none; display: flex; justify-content: center; z-index: 50; }
+                    .question-box { background: white; color: #0f172a; padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: bold; font-size: 1.2rem; text-align: center; border-bottom: 6px solid #cbd5e1; pointer-events: auto; max-width: 90%; animation: bounce 2s infinite; }
+                    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+                    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+                    .shake-anim { animation: shake 0.3s ease-out; }
                 </style>
             </head>
             <body>
-                <div id="game-canvas">
-                    <div class="cloud" style="top: 10%; width: 100px; height: 40px; animation-duration: 20s;"></div>
-                    <div class="cloud" style="top: 20%; left: 60%; width: 120px; height: 50px; animation-duration: 15s;"></div>
-                    <div class="cloud" style="top: 5%; left: 80%; width: 80px; height: 30px; animation-duration: 25s;"></div>
-                    
-                    <div class="game-ui">
-                        <div id="lives" class="ui-box lives-container"></div>
-                        <div id="score" class="ui-box">Puan: 0</div>
-                    </div>
-                    <div id="game-container"></div>
-                    <div class="shooter-base"></div>
-                    <div id="shooter-barrel" class="shooter"></div>
-                    <div class="question-panel">
-                        <div id="question-box" class="question-box"></div>
-                    </div>
-
-                    <div id="start-screen" class="start-screen">
-                        <div class="screen-content">
-                            <h1 id="start-title" class="text-4xl font-bold text-sky-600 mb-4 header-font"></h1>
-                            <p id="start-description" class="text-gray-600 mb-8 text-lg"></p>
-                            <button id="start-button" class="px-10 py-4 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-full text-xl transition-transform hover:scale-105 shadow-lg"></button>
-                        </div>
-                    </div>
-
-                     <div id="gameover-screen" class="gameover-screen" style="display: none;">
-                        <div class="screen-content">
-                             <h1 id="gameover-title" class="text-4xl font-bold text-sky-600 mb-4 header-font"></h1>
-                             <p id="gameover-description" class="text-gray-600 mb-8 text-lg"></p>
-                             <div class="flex flex-col gap-2">
-                                <button id="restart-button" class="px-10 py-4 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-black rounded-full text-xl transition-transform hover:scale-105 shadow-lg"></button>
-                                <button id="exit-button" class="px-10 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-full text-base transition-colors">Çık</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
+                <div id="game-container"></div>
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
                         const gameContainer = document.getElementById('game-container');
-                        const scoreDisplay = document.getElementById('score');
-                        const livesContainer = document.getElementById('lives');
-                        const questionBox = document.getElementById('question-box');
-                        const shooterBarrel = document.getElementById('shooter-barrel');
-                        const startScreen = document.getElementById('start-screen');
-                        const gameoverScreen = document.getElementById('gameover-screen');
-                        const startButton = document.getElementById('start-button');
-                        const restartButton = document.getElementById('restart-button');
-                        const exitButton = document.getElementById('exit-button');
-
-                        const LEVELS = ${JSON.stringify(levels)};
-                        const BALLOON_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
-                        
                         let gameState = 'start';
                         let score = 0;
                         let lives = 3;
@@ -133,27 +100,88 @@ function BalloonHuntGame() {
                         let angle = 0;
                         let animationFrameId;
                         let lastSpawnTime = 0;
+                        const shooterBase = document.createElement('div');
+                        const shooterBarrel = document.createElement('div');
+
+                        // Inject data from React
+                        const LEVELS = ${serializedLevels};
+                        const TOPIC_NAME = "${topicName}";
 
                         function updateUI() {
+                            gameContainer.innerHTML = '';
                             if (gameState === 'start' || gameState === 'gameover') {
-                                const isStart = gameState === 'start';
-                                const screen = isStart ? startScreen : gameoverScreen;
-                                const titleEl = document.getElementById(isStart ? 'start-title' : 'gameover-title');
-                                const descEl = document.getElementById(isStart ? 'start-description' : 'gameover-description');
-                                const buttonEl = document.getElementById(isStart ? 'start-button' : 'restart-button');
+                                const screen = document.createElement('div');
+                                screen.className = 'game-screen';
+                                const dialog = document.createElement('div');
+                                dialog.className = 'dialog-box';
+                                if (gameState === 'start') {
+                                    dialog.innerHTML = '<h1 class="text-4xl font-bold text-sky-600 mb-4 header-font">Balon Avcısı</h1><p class="text-gray-600 mb-8 text-lg">Aşağıdaki soruyu oku.<br/>Doğru cevabı taşıyan balonu vur!</p>';
+                                    const startButton = document.createElement('button');
+                                    startButton.textContent = 'BAŞLA';
+                                    startButton.className = 'start-button';
+                                    startButton.onclick = startGame;
+                                    dialog.appendChild(startButton);
+                                } else { // gameover
+                                    dialog.innerHTML = '<h1 class="text-3xl font-bold text-red-600 mb-4 header-font">Oyun Bitti!</h1><p class="text-gray-600 mb-2 text-xl">Puanın: <strong class="text-sky-700">' + score + '</strong></p>';
+                                    const buttonContainer = document.createElement('div');
+                                    buttonContainer.className = 'flex flex-col gap-2 mt-6';
+                                    const restartButton = document.createElement('button');
+                                    restartButton.textContent = 'Tekrar Oyna';
+                                    restartButton.className = 'start-button bg-sky-500 text-white';
+                                    restartButton.onclick = startGame;
+                                    const exitButton = document.createElement('button');
+                                    exitButton.textContent = 'Çık';
+                                    exitButton.className = 'start-button bg-gray-400 text-gray-800';
+                                    exitButton.onclick = withdrawAndSave;
+                                    buttonContainer.appendChild(restartButton);
+                                    buttonContainer.appendChild(exitButton);
+                                    dialog.appendChild(buttonContainer);
+                                }
+                                screen.appendChild(dialog);
+                                gameContainer.appendChild(screen);
+                            } else if (gameState === 'playing') {
+                                // Add header
+                                const header = document.createElement('div');
+                                header.className = 'header';
+                                const scoreDisplay = document.createElement('div');
+                                scoreDisplay.id = 'score-display';
+                                scoreDisplay.className = 'header-box';
+                                const livesDisplay = document.createElement('div');
+                                livesDisplay.id = 'lives-display';
+                                livesDisplay.className = 'header-box flex gap-1';
+                                header.appendChild(livesDisplay);
+                                header.appendChild(scoreDisplay);
+                                
+                                // Add question panel
+                                const questionPanel = document.createElement('div');
+                                questionPanel.className = 'question-panel';
+                                const questionBox = document.createElement('div');
+                                questionBox.id = 'question-box';
+                                questionBox.className = 'question-box';
+                                questionPanel.appendChild(questionBox);
 
-                                screen.style.display = 'flex';
-                                titleEl.textContent = isStart ? 'Balon Avcısı 🏹' : 'Oyun Bitti!';
-                                descEl.innerHTML = isStart ? 'Aşağıdaki soruyu oku. Doğru cevabı taşıyan balonu vur!' : 'Harika bir oyundu! Toplam puanın: ' + score;
-                                buttonEl.textContent = isStart ? 'BAŞLA' : 'TEKRAR OYNA';
-                            } else {
-                                startScreen.style.display = 'none';
-                                gameoverScreen.style.display = 'none';
+                                gameContainer.appendChild(header);
+                                gameContainer.appendChild(questionPanel);
+
+                                // Add clouds
+                                ['10%', '20%', '5%'].forEach((top, i) => {
+                                    const cloud = document.createElement('div');
+                                    cloud.className = 'cloud';
+                                    cloud.style.top = top;
+                                    cloud.style.left = (i * 40) + '%';
+                                    cloud.style.width = (100 + i*20) + 'px';
+                                    cloud.style.height = (40 + i*10) + 'px';
+                                    cloud.style.animationDuration = (15 + i*10) + 's';
+                                    gameContainer.appendChild(cloud);
+                                });
+
+                                // Add shooter
+                                shooterBase.className = 'shooter-base';
+                                shooterBarrel.className = 'shooter';
+                                shooterBarrel.innerHTML = '<div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>';
+                                gameContainer.appendChild(shooterBase);
+                                gameContainer.appendChild(shooterBarrel);
                             }
-                            
-                            scoreDisplay.textContent = 'Puan: ' + score;
-                            questionBox.textContent = LEVELS[levelIndex % LEVELS.length].q;
-                            renderLives();
                         }
 
                         function startGame() {
@@ -166,14 +194,172 @@ function BalloonHuntGame() {
                             gameState = 'playing';
                             lastSpawnTime = 0;
                             updateUI();
-                            gameLoop();
+                            animationFrameId = requestAnimationFrame(gameLoop);
+                        }
+
+                        function handleCorrectHit(balloon) {
+                            score += 10;
+                            addEffect(balloon.x, balloon.y, "+10", "#22c55e");
+                            setTimeout(() => {
+                                levelIndex = (levelIndex + 1) % LEVELS.length;
+                                balloons = balloons.filter(b => !b.isCorrect); 
+                            }, 500);
+                        }
+
+                        function handleWrongHit(balloon) {
+                            lives -= 1;
+                            addEffect(balloon.x, balloon.y, "-1 Can", "#ef4444");
+                            if (lives <= 0) {
+                                gameState = 'gameover';
+                                withdrawAndSave();
+                                updateUI();
+                            }
                         }
                         
-                        function withdrawAndSave() {
-                             window.parent.postMessage({ type: 'SAVE_SCORE', payload: { score, gameType: 'Balon Avcısı', context: 'Konu: ' + '${topicName}' } }, '*');
+                        function addEffect(x, y, text, color) {
+                            const id = Date.now() + Math.random();
+                            effects.push({ id, x, y, text, color });
+                            setTimeout(() => effects = effects.filter(e => e.id !== id), 500);
+                        }
+
+                        function handleInput(e) {
+                            if (gameState !== 'playing') return;
+                            e.preventDefault();
+                            const centerX = window.innerWidth / 2;
+                            const centerY = window.innerHeight - 20;
+                            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                            if (!clientX) return;
+                            const dx = clientX - centerX;
+                            const dy = clientY - centerY;
+                            const rad = Math.atan2(dx, -dy);
+                            const deg = rad * (180 / Math.PI);
+                            const clampedAngle = Math.max(-70, Math.min(70, deg));
+                            angle = clampedAngle;
+                            if (shooterBarrel) shooterBarrel.style.transform = 'translateX(-50%) rotate(' + angle + 'deg)';
+                            if (e.type === 'mousedown' || e.type === 'touchstart') {
+                                shoot(clampedAngle);
+                            }
+                        }
+
+                        function shoot(fireAngle) {
+                            const radian = fireAngle * Math.PI / 180;
+                            const startX = window.innerWidth / 2 + Math.sin(radian) * 60;
+                            const startY = window.innerHeight - 20 - Math.cos(radian) * 60;
+                            projectiles.push({ id: Date.now(), x: startX, y: startY, angle: fireAngle });
+                        }
+
+                        function createBalloon() {
+                            const currentLevel = LEVELS[levelIndex % LEVELS.length];
+                            const isCorrect = Math.random() > 0.6;
+                            const text = isCorrect ? currentLevel.a : currentLevel.wrongs[Math.floor(Math.random() * currentLevel.wrongs.length)];
+                            balloons.push({
+                                id: Date.now(),
+                                x: Math.random() * (window.innerWidth - 80) + 40,
+                                y: window.innerHeight + 50,
+                                text: text,
+                                speed: Math.random() * 1 + 1.5,
+                                color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
+                                isCorrect: text === currentLevel.a
+                            });
+                        }
+                        
+                        function gameLoop(time) {
+                            if (gameState !== 'playing') {
+                                cancelAnimationFrame(animationFrameId);
+                                return;
+                            }
+                            if (time - lastSpawnTime > 1500) {
+                                createBalloon();
+                                lastSpawnTime = time;
+                            }
+                            balloons = balloons.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -150);
+                            projectiles = projectiles.map(p => ({
+                                ...p,
+                                x: p.x + Math.sin(p.angle * Math.PI / 180) * 10,
+                                y: p.y - Math.cos(p.angle * Math.PI / 180) * 10
+                            })).filter(p => p.x > 0 && p.x < window.innerWidth && p.y > 0);
+                            
+                            let hitDetected = false;
+                            const newProjectiles = [];
+                            const newBalloons = [];
+                            for(const p of projectiles) {
+                                let p_hit = false;
+                                for(const b of balloons) {
+                                    const dx = p.x - b.x;
+                                    const dy = p.y - b.y;
+                                    const dist = Math.sqrt(dx*dx + dy*dy);
+                                    if(dist < 50) {
+                                        p_hit = true;
+                                        b.hit = true;
+                                        if (b.isCorrect) handleCorrectHit(b); else handleWrongHit(b);
+                                        break;
+                                    }
+                                }
+                                if(!p_hit) newProjectiles.push(p);
+                            }
+                            balloons.forEach(b => { if(!b.hit) newBalloons.push(b) });
+                            projectiles = newProjectiles;
+                            balloons = newBalloons;
+
+                            renderAll();
+                            animationFrameId = requestAnimationFrame(gameLoop);
+                        }
+
+                        function renderAll() {
+                            renderBalloons();
+                            renderProjectiles();
+                            renderEffects();
+                            renderScore();
+                            renderLives();
+                            renderQuestion();
+                        }
+                        
+                        function renderBalloons() {
+                            gameContainer.querySelectorAll('.balloon').forEach(el => el.remove());
+                            balloons.forEach(balloon => {
+                                const el = document.createElement('div');
+                                el.className = 'balloon';
+                                el.style.left = (balloon.x - 40) + 'px';
+                                el.style.top = (balloon.y - 50) + 'px';
+                                el.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), ' + balloon.color + ')';
+                                el.style.filter = 'drop-shadow(2px 4px 6px black)';
+                                el.innerHTML = '<span>' + balloon.text + '</span>';
+                                gameContainer.appendChild(el);
+                            });
+                        }
+
+                        function renderProjectiles() {
+                            gameContainer.querySelectorAll('.projectile').forEach(el => el.remove());
+                            projectiles.forEach(p => {
+                                const el = document.createElement('div');
+                                el.className = 'projectile';
+                                el.style.left = p.x - 5 + 'px';
+                                el.style.top = p.y - 5 + 'px';
+                                gameContainer.appendChild(el);
+                            });
+                        }
+                        
+                        function renderEffects() {
+                            gameContainer.querySelectorAll('.pop-effect').forEach(el => el.remove());
+                            effects.forEach(effect => {
+                                const el = document.createElement('div');
+                                el.className = 'pop-effect';
+                                el.style.left = effect.x + 'px';
+                                el.style.top = effect.y + 'px';
+                                el.style.color = effect.color;
+                                el.textContent = effect.text;
+                                gameContainer.appendChild(el);
+                            });
+                        }
+
+                        function renderScore() {
+                            const scoreEl = document.getElementById('score-display');
+                            if(scoreEl) scoreEl.textContent = 'Puan: ' + score;
                         }
 
                         function renderLives() {
+                            const livesContainer = document.getElementById('lives-display');
                             if (!livesContainer) return;
                             livesContainer.innerHTML = '';
                             for (let i = 0; i < 3; i++) {
@@ -184,135 +370,57 @@ function BalloonHuntGame() {
                             }
                         }
 
-                        function handleBalloonClick(balloon) {
-                            if (balloon.isCorrect) {
-                                score += 10;
-                                addEffect(balloon.x, balloon.y, "+10", "#22c55e");
-                                setLevelIndex(prev => prev + 1);
-                                balloons = balloons.filter(b => b.id !== balloon.id);
-                            } else {
-                                lives -= 1;
-                                addEffect(balloon.x, balloon.y, "-1 Can", "#ef4444");
-                                balloons = balloons.filter(b => b.id !== balloon.id);
-                                if (lives <= 0) {
-                                    gameState = 'gameover';
-                                    updateUI();
-                                }
-                            }
-                            updateUI();
-                        }
-
-                        function createBalloon() {
-                            const currentLevel = LEVELS[levelIndex % LEVELS.length];
-                            const isCorrect = Math.random() > 0.6;
-                            const text = isCorrect ? currentLevel.a : currentLevel.wrongs[Math.floor(Math.random() * currentLevel.wrongs.length)];
-                            
-                            const newBalloon = {
-                                id: Date.now(),
-                                x: Math.random() * (window.innerWidth - 80) + 40,
-                                y: window.innerHeight + 100,
-                                text: text,
-                                speed: Math.random() * 1.5 + 1.5,
-                                color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
-                                isCorrect: text === currentLevel.a
-                            };
-                            balloons.push(newBalloon);
-                        }
-
-                        function renderBalloons() {
-                            if (!gameContainer) return;
-                            gameContainer.innerHTML = ''; // Clear only balloons and projectiles
-                            balloons.forEach(balloon => {
-                                const el = document.createElement('div');
-                                el.className = 'balloon';
-                                el.style.left = balloon.x + 'px';
-                                el.style.top = balloon.y + 'px';
-                                el.innerHTML = '<svg style="position:absolute;z-index:-1;width:100%;height:100%;" viewBox="0 0 100 125"><defs><radialGradient id="grad' + balloon.id + '" cx="30%" cy="30%" r="70%"><stop offset="0%" stop-color="rgba(255,255,255,0.7)"/><stop offset="100%" stop-color="' + balloon.color + '"/></radialGradient></defs><path d="M50,0C12.5,0,0,12.5,0,50c0,12.5,12.5,25,25,25c12.5,0,25,12.5,25,25s12.5,25,25,25s25-12.5,25-25s12.5-25,25-25S100,37.5,100,25S87.5,0,50,0Z" fill="url(#grad' + balloon.id + ')"/></svg><span style="padding: 5px;">' + balloon.text + '</span>';
-                                el.onclick = () => handleBalloonClick(balloon);
-                                gameContainer.appendChild(el);
-                            });
+                        function renderQuestion() {
+                            const questionEl = document.getElementById('question-box');
+                            if(questionEl) questionEl.innerHTML = '<span class="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>' + LEVELS[levelIndex % LEVELS.length].q;
                         }
                         
-                        function gameLoop(time) {
-                            if (gameState !== 'playing') {
-                                cancelAnimationFrame(animationFrameId);
-                                return;
-                            }
-                            
-                            if (time - lastSpawnTime > 1500) {
-                                createBalloon();
-                                lastSpawnTime = time;
-                            }
-                            
-                            balloons = balloons.map(b => ({ ...b, y: b.y - b.speed })).filter(b => b.y > -150);
-                            renderBalloons();
-                            
-                            animationFrameId = requestAnimationFrame(gameLoop);
+                        function withdrawAndSave() {
+                            const payload = { score, gameType: 'Balon Avcısı', context: 'Konu: ' + TOPIC_NAME };
+                            window.parent.postMessage(payload, '*');
                         }
-                        
+
                         // Initial setup
-                        startButton.onclick = startGame;
-                        restartButton.onclick = startGame;
-                        exitButton.onclick = withdrawAndSave;
                         updateUI();
                     });
                 </script>
             </body>
             </html>
         `;
-    }, [levels, searchParams]);
+    }, [levels, topicName]);
 
     useEffect(() => {
-        if (typeof window === 'undefined' || !user) return;
-
-        const handleMessage = (event: MessageEvent) => {
-            if (event.data.type === 'SAVE_SCORE') {
-                const { score, gameType, context } = event.data.payload;
-                submitBalloonHuntScore(user.uid, score, context).then(result => {
-                    if (result.success) {
-                        router.push('/student/activities');
-                    } else {
-                        // Handle error if needed
-                        console.error("Failed to save score");
-                    }
-                });
+        const handleMessage = (event) => {
+            if (event.data && typeof event.data.score !== 'undefined') {
+                if(user && event.data.score > 0) {
+                    submitBalloonHuntScore(user.uid, event.data.score, event.data.context);
+                }
+                router.push('/student/activities');
             }
         };
-
         window.addEventListener('message', handleMessage);
         return () => window.removeEventListener('message', handleMessage);
     }, [user, router]);
     
-
     if (isLoading) {
         return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
     }
 
     if (error) {
-        return (
-            <div className="flex h-screen items-center justify-center text-center p-4">
-                <div>
-                    <h2 className="text-xl font-semibold text-destructive">Hata!</h2>
-                    <p className="text-muted-foreground mt-2">{error}</p>
-                    <Button asChild variant="link" className="mt-4">
-                         <Link href="/student/balon-avcisi">Geri Dön</Link>
-                    </Button>
-                </div>
-            </div>
-        );
+        return <div className="flex h-screen w-full items-center justify-center p-4 text-center text-red-500">{error}</div>;
     }
-    
+
     return (
-          <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+        <div style={{ width: '100%', height: '100vh', overflow: 'hidden' }}>
             <iframe
                 srcDoc={gameHtml}
-                style={{ width: '100%', height: '100%', border: 'none' }}
+                style={{ border: 'none', width: '100%', height: '100%' }}
                 title="Balon Avcısı Oyunu"
                 sandbox="allow-scripts allow-same-origin"
             />
-          </div>
+        </div>
     );
-};
+}
 
 export default function Page() {
     return (
