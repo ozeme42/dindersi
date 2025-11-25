@@ -1,21 +1,31 @@
 
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from "@/context/auth-context";
-import { getStudentDashboardStats, getLiveLeaderboard, getStudentExams } from "./actions";
-import type { UserProfile } from "@/lib/types";
+
+// --- UTILS & MOCKS ---
 import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import { useAuth } from "@/context/auth-context";
+import { UserAvatar } from "@/components/user-avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+
+import { getStudentDashboardStats } from "./actions";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getStudentExams } from "./deneme/actions";
+import type { UserProfile } from "@/lib/types";
 
 // --- GAMIFIED UI COMPONENTS ---
+
 const GameButton = ({ 
     children, 
     className, 
@@ -53,7 +63,6 @@ const GameButton = ({
     return <button className="block w-full h-full">{content}</button>;
 };
 
-
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
         "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
@@ -77,18 +86,10 @@ const MobileNav = () => {
         { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
-
-    if (!user || user.role !== 'student') {
-        return null;
-    }
-
-    // Hide on specific focus-intensive student pages
-    const studentGamePaths = ['/coz', '/oyun', '/ders/', '/soru-bankasi/'];
-    if (studentGamePaths.some(p => pathname.includes(p))) {
-        return null;
-    }
     
-    const activeTab = navItems.find(item => pathname === item.href)?.id || 'home';
+    if (user?.role !== 'student') {
+        return null;
+    }
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
@@ -98,11 +99,11 @@ const MobileNav = () => {
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = activeTab === item.id;
+                    const isActive = pathname === item.href;
                     return (
                         <Link
-                            key={item.id}
                             href={item.href}
+                            key={item.id}
                             className={cn(
                                 "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
                                 isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
@@ -133,10 +134,10 @@ const MobileNav = () => {
                             )}
 
                             {/* Label (Only visible if not highlighted middle button or if active) */}
-                            {!item.highlight && (
+                            {!item.highlight && isActive && (
                                 <span className={cn(
                                     "text-[10px] font-bold mt-1 transition-all duration-300",
-                                     isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
                                 )}>
                                     {item.label}
                                 </span>
@@ -149,21 +150,8 @@ const MobileNav = () => {
     );
 };
 
+
 // --- COMPONENTS ---
-
-const UserAvatar = ({ user, className }: any) => (
-    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
-        {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
-        ) : (
-            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
-        )}
-    </div>
-);
-
-const Skeleton = ({ className }: { className?: string }) => (
-    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
-);
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -240,13 +228,13 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     async function fetchData() {
-        if (!user?.uid || !user?.role) {
-            if (!authLoading) setIsLoading(false);
+        // Ensure user and user.role is loaded before fetching data dependent on it.
+        if (!user?.uid || !user.role) {
             return;
-        }
+        };
 
         setIsLoading(true);
-        
+
         try {
             const [statsResult, examsSnapshot] = await Promise.all([
                 getStudentDashboardStats(user),
@@ -272,13 +260,12 @@ export default function StudentDashboard() {
         }
     }
     
-    if (!authLoading) {
-        fetchData();
+    if(!authLoading) {
+      fetchData();
     }
-    
   }, [user, authLoading]);
   
-  if (isLoading || authLoading) {
+  if (authLoading || isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
