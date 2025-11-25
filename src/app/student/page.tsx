@@ -14,17 +14,13 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, 
-    ShoppingCart, Columns, LayoutTemplate, FileCog, 
-    Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, Home, User
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Map, Swords, Backpack } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -76,7 +72,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 // --- NEW: MOBILE BOTTOM NAVIGATION ---
-
 const MobileNav = () => {
     const { user } = useAuth();
     const pathname = usePathname();
@@ -88,16 +83,8 @@ const MobileNav = () => {
         { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
-
-    if (user?.role !== 'student') {
-        return null;
-    }
     
-    // Hide on specific focus-intensive student pages
-    const studentGamePaths = ['/coz', '/oyun', '/ders/'];
-    if (studentGamePaths.some(p => pathname.includes(p))) {
-        return null;
-    }
+    if (!user || user.role !== 'student') return null;
 
     return (
         <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
@@ -107,8 +94,7 @@ const MobileNav = () => {
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = (item.href === '/student' && pathname === '/student') || (item.href !== '/student' && pathname.startsWith(item.href));
-                    
+                    const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
                     return (
                         <Link
                             key={item.id}
@@ -143,10 +129,10 @@ const MobileNav = () => {
                             )}
 
                             {/* Label (Only visible if not highlighted middle button or if active) */}
-                            {!item.highlight && isActive && (
+                            {!item.highlight && (
                                 <span className={cn(
                                     "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                                 )}>
                                     {item.label}
                                 </span>
@@ -158,6 +144,9 @@ const MobileNav = () => {
         </div>
     );
 };
+
+
+// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -219,15 +208,21 @@ function HardestWorkersToday() {
 }
 
 export default function StudentDashboard() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
-      lessonProgress: 0,
-      questionBankProgress: 0,
+      completedTopics: 0,
+      totalTopics: 0,
+      coursesStarted: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
+      questionBankProgress: 0,
+      passedTests: 0,
+      totalQuestionBankTests: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
@@ -242,7 +237,7 @@ export default function StudentDashboard() {
       
       try {
         const [statsResult, examsSnapshot] = await Promise.all([
-          getStudentDashboardStats(user.uid),
+          getStudentDashboardStats(user),
           getStudentExams(user.uid)
         ]);
 
@@ -259,20 +254,15 @@ export default function StudentDashboard() {
         }
 
       } catch (error) {
-        console.error("Öğrenci verileri alınırken bir sunucu hatası oluştu.", error);
+        console.error("Error fetching student dashboard data:", error);
       } finally {
         setIsLoading(false);
       }
     }
-    
-    if(!loading && user) {
-        fetchData();
-    } else if (!loading && !user) {
-        setIsLoading(false);
-    }
-  }, [user, loading]);
+    fetchData();
+  }, [user]);
   
-  if (isLoading || loading) {
+  if (isLoading || authLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -280,10 +270,10 @@ export default function StudentDashboard() {
     );
   }
 
-  const lessonProgress = stats.lessonProgress;
+  const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <div className="min-h-full bg-gradient-to-br from-indigo-200 via-sky-200 to-purple-200 dark:from-slate-900 dark:via-indigo-950 dark:to-slate-900 p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
+    <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
           {/* PLAYER HUD HEADER */}
@@ -433,5 +423,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-    
