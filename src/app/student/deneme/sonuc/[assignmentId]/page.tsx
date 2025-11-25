@@ -6,64 +6,14 @@ import { useParams, useRouter } from 'next/navigation';
 import { getExamResultDetails } from './actions';
 import type { ExamResultDetails, Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, BarChart3, Clock } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Loader2, ArrowLeft, CheckCircle2, XCircle, AlertTriangle, BookCopy, Award } from 'lucide-react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
-
-function ResultCard({ question, studentAnswer, index }: { question: Question, studentAnswer: string | boolean | null, index: number }) {
-    let isCorrect = false;
-    if (question.type === 'Doğru/Yanlış') {
-        const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
-        isCorrect = studentAnswer === correctAnswerBool;
-    } else {
-        isCorrect = studentAnswer === question.correctAnswer;
-    }
-
-    const getAnswerText = (answer: any) => {
-        if (typeof answer === 'boolean') {
-            return answer ? 'Doğru' : 'Yanlış';
-        }
-        return answer || 'Boş';
-    };
-
-    return (
-        <Card className={cn("w-full", isCorrect ? 'border-green-300 dark:border-green-800' : 'border-red-300 dark:border-red-800')}>
-            <CardHeader>
-                <CardTitle className="text-base flex items-start gap-3">
-                    <span className="font-bold text-primary">{index + 1}.</span>
-                    <span className="flex-1">{question.text}</span>
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-                <div className={cn("p-2 rounded-md", isCorrect ? "bg-green-100 dark:bg-green-900/30" : "bg-red-100 dark:bg-red-900/30")}>
-                    <p className="text-xs font-semibold">Senin Cevabın:</p>
-                    <div className="flex items-center gap-2 mt-1">
-                        {isCorrect ? <CheckCircle2 className="h-5 w-5 text-green-600" /> : <XCircle className="h-5 w-5 text-red-600" />}
-                        <p className="font-medium">{getAnswerText(studentAnswer)}</p>
-                    </div>
-                </div>
-                 {!isCorrect && (
-                    <div className="p-2 rounded-md bg-muted">
-                        <p className="text-xs font-semibold">Doğru Cevap:</p>
-                        <p className="font-medium mt-1">{getAnswerText(question.correctAnswer ?? (question.isTrue ? 'Doğru' : 'Yanlış'))}</p>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
-    );
-}
-
 
 function ExamResultsPage() {
     const { user } = useAuth();
     const params = useParams();
     const router = useRouter();
-    const { toast } = useToast();
 
     const assignmentId = params.assignmentId as string;
     
@@ -80,10 +30,9 @@ function ExamResultsPage() {
             setDetails(result.data);
         } else {
             setError(result.error || "Sonuçlar getirilemedi.");
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    }, [assignmentId, user, toast]);
+    }, [assignmentId, user]);
 
     useEffect(() => {
         fetchResults();
@@ -111,60 +60,106 @@ function ExamResultsPage() {
     }
 
     const { assignment, questions, studentAnswers, scoreEvent } = details;
-    const correctCount = questions.reduce((count, question, index) => {
-        const studentAnswer = studentAnswers[index];
-        let isCorrect = false;
-        if (question.type === 'Doğru/Yanlış') {
-            const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
-            isCorrect = studentAnswer === correctAnswerBool;
-        } else {
-            isCorrect = studentAnswer === question.correctAnswer;
-        }
-        return count + (isCorrect ? 1 : 0);
-    }, 0);
     
-    return (
-        <div className="container mx-auto p-4 sm:p-6 md:p-8">
-            <div className="mb-6">
-                <Button asChild variant="outline" size="sm" className="mb-4">
-                    <Link href="/student/deneme">
-                        <ArrowLeft className="mr-2 h-4 w-4" /> Deneme Sınavlarıma Dön
-                    </Link>
-                </Button>
-                <h1 className="text-3xl font-bold font-headline">{assignment.title}</h1>
-                <p className="text-muted-foreground">Sınav Sonuç Detayları</p>
-            </div>
-            
-            <Card className="mb-6 bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle>Genel Sonuç</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
-                        <span className="text-3xl font-bold text-primary">{scoreEvent.points}</span>
-                        <span className="text-sm text-muted-foreground">Puan</span>
-                    </div>
-                     <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
-                        <span className="text-3xl font-bold text-green-600">{correctCount}</span>
-                        <span className="text-sm text-muted-foreground">Doğru</span>
-                    </div>
-                     <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
-                        <span className="text-3xl font-bold text-red-600">{questions.length - correctCount}</span>
-                        <span className="text-sm text-muted-foreground">Yanlış</span>
-                    </div>
-                    <div className="flex flex-col items-center justify-center p-4 bg-muted rounded-lg">
-                        <span className="text-3xl font-bold">{questions.length}</span>
-                        <span className="text-sm text-muted-foreground">Toplam Soru</span>
-                    </div>
-                </CardContent>
-            </Card>
+    const calculateResults = () => {
+        let correct = 0;
+        let wrong = 0;
+        let empty = 0;
 
-            <div className="space-y-4">
-                {questions.map((q, index) => (
-                    <ResultCard key={q.id} question={q} studentAnswer={studentAnswers[index]} index={index} />
-                ))}
+        studentAnswers.forEach((ans, idx) => {
+            const question = questions[idx];
+            if (!question) return;
+
+            if (ans === null || ans === undefined) {
+                empty++;
+            } else {
+                 let isCorrect = false;
+                if (question.type === 'Doğru/Yanlış') {
+                    const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
+                    isCorrect = ans === correctAnswerBool;
+                } else {
+                    isCorrect = ans === question.correctAnswer;
+                }
+
+                if (isCorrect) correct++;
+                else wrong++;
+            }
+        });
+
+        const score = (correct * 100) / questions.length;
+        return { correct, wrong, empty, score };
+    };
+
+    const { correct, wrong, empty, score } = calculateResults();
+    
+    let message = "";
+    let color = "";
+    
+    if (score >= 90) { message = "Mükemmel!"; color = "text-green-600"; }
+    else if (score >= 70) { message = "Tebrikler!"; color = "text-blue-600"; }
+    else if (score >= 50) { message = "Güzel, Ama Daha İyi Olabilir."; color = "text-yellow-600"; }
+    else { message = "Biraz Daha Çalışmalısın."; color = "text-red-600"; }
+
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans">
+        <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 text-center animate-[scaleUp_0.5s_ease-out]">
+          
+          <div className="mb-6 relative inline-block">
+            <Award size={80} className={`mx-auto ${score >= 50 ? 'text-yellow-500' : 'text-gray-400'}`} />
+            {score >= 90 && <div className="absolute -top-2 -right-2 text-4xl animate-bounce">🌟</div>}
+          </div>
+
+          <h2 className={`text-3xl font-black mb-2 ${color}`}>{message}</h2>
+          <p className="text-gray-500 mb-8">Sınav Sonucunuz</p>
+
+          <div className="mb-8 flex justify-center">
+            <div className="relative w-40 h-40 flex items-center justify-center rounded-full border-8 border-slate-100">
+                <div className="text-center">
+                    <div className="text-4xl font-black text-slate-800">{score.toFixed(0)}</div>
+                    <div className="text-xs font-bold text-gray-400">PUAN</div>
+                </div>
+                <svg className="absolute top-0 left-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="#e2e8f0" strokeWidth="8" />
+                    <circle 
+                        cx="50" cy="50" r="46" fill="none" stroke={score >= 50 ? "#4f46e5" : "#ef4444"} strokeWidth="8" 
+                        strokeDasharray="289" 
+                        strokeDashoffset={289 - (289 * score) / 100} 
+                        strokeLinecap="round"
+                        className="transition-all duration-1000 ease-out"
+                    />
+                </svg>
             </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="p-4 bg-green-50 rounded-xl border border-green-100">
+                <div className="text-green-600 font-bold text-xl">{correct}</div>
+                <div className="text-xs text-green-800 font-bold uppercase">Doğru</div>
+            </div>
+            <div className="p-4 bg-red-50 rounded-xl border border-red-100">
+                <div className="text-red-600 font-bold text-xl">{wrong}</div>
+                <div className="text-xs text-red-800 font-bold uppercase">Yanlış</div>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="text-gray-600 font-bold text-xl">{empty}</div>
+                <div className="text-xs text-gray-800 font-bold uppercase">Boş</div>
+            </div>
+          </div>
+          
+           <Button asChild variant="outline" className="w-full">
+               <Link href="/student/deneme">
+                   <ArrowLeft className="mr-2 h-4 w-4" /> Deneme Sınavlarıma Dön
+               </Link>
+           </Button>
+
         </div>
+        <style>{`
+            @keyframes scaleUp {
+                from { transform: scale(0.8); opacity: 0; }
+                to { transform: scale(1); opacity: 1; }
+            }
+        `}</style>
+      </div>
     );
 }
 
