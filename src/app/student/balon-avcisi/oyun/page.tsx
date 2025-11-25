@@ -2,45 +2,25 @@
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { submitBalloonHuntScore } from './actions';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
-
 
 function BalloonHuntGame() {
-    const { user } = useAuth();
-    const { toast } = useToast();
-    const router = useRouter();
     const searchParams = useSearchParams();
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [topicId, setTopicId] = useState<string | null>(null);
-
-    useEffect(() => {
-        setTopicId(searchParams.get('topicId'));
-    }, [searchParams]);
-
-    const handleGameEnd = useCallback(async (score: number) => {
-        if (!user || score <= 0) return;
-
-        const context = `Balon Avcısı - Konu: ${topicId || 'Genel'}`;
-        await submitBalloonHuntScore(user.uid, score, context);
-        toast({
-            title: "Oyun Bitti!",
-            description: `${score} puan kazandın! Puanın liderlik tablosuna eklendi.`,
-        });
-    }, [user, topicId, toast]);
-
-    const htmlContent = `
-    <!DOCTYPE html>
+    const { toast } = useToast();
+    const { user } = useAuth();
+    
+    // The entire game logic will be inside an iframe for isolation
+    const gameHtml = `
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Balon Avcısı</title>
-    <!-- React ve ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -72,16 +52,8 @@ function BalloonHuntGame() {
             opacity: 0.8;
             animation: floatCloud linear infinite;
         }
-        .cloud::after, .cloud::before {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-        @keyframes floatCloud {
-            from { transform: translateX(-200px); }
-            to { transform: translateX(120vw); }
-        }
+        .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
+        @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
         .balloon {
             position: absolute;
             width: 70px;
@@ -100,93 +72,17 @@ function BalloonHuntGame() {
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-        .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 20px;
-            background: rgba(0,0,0,0.3);
-        }
-        .balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 4px;
-            background: inherit;
-            border-radius: 2px;
-        }
-        .shooter {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform-origin: center bottom;
-            width: 6px;
-            height: 60px;
-            background: #475569;
-            z-index: 20;
-            border-radius: 3px;
-        }
-        .shooter-base {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            background: #1e293b;
-            border-radius: 30px 30px 0 0;
-            z-index: 19;
-        }
-        .projectile {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ef4444;
-            border-radius: 50%;
-            z-index: 15;
-            box-shadow: 0 0 5px #ef4444;
-        }
-        .pop-effect {
-            position: absolute;
-            font-size: 2rem;
-            font-weight: bold;
-            animation: popAnim 0.4s ease-out forwards;
-            z-index: 30;
-            pointer-events: none;
-        }
-        @keyframes popAnim {
-            0% { transform: scale(0.5); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-        .question-panel {
-            position: absolute;
-            bottom: 85px;
-            left: 20px;
-            right: 20px;
-            pointer-events: none; 
-            display: flex;
-            justify-content: center;
-            z-index: 50;
-        }
-        .question-box {
-            background: white;
-            color: #0f172a;
-            padding: 15px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-align: center;
-            border-bottom: 6px solid #cbd5e1;
-            pointer-events: auto;
-            max-width: 90%;
-        }
+        .balloon::after { content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 2px; height: 20px; background: rgba(0,0,0,0.3); }
+        .balloon::before { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 6px; height: 4px; background: inherit; border-radius: 2px; }
+        .shooter { position: absolute; bottom: 80px; left: 50%; transform-origin: center bottom; width: 6px; height: 60px; background: #475569; z-index: 20; border-radius: 3px; }
+        .shooter-base { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); width: 60px; height: 30px; background: #1e293b; border-radius: 30px 30px 0 0; z-index: 19; }
+        .projectile { position: absolute; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; z-index: 15; box-shadow: 0 0 5px #ef4444; }
+        .pop-effect { position: absolute; font-size: 2rem; font-weight: bold; animation: popAnim 0.4s ease-out forwards; z-index: 30; pointer-events: none; }
+        @keyframes popAnim { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        .question-panel { position: absolute; bottom: 85px; left: 20px; right: 20px; pointer-events: none; display: flex; justify-content: center; z-index: 50; }
+        .question-box { background: white; color: #0f172a; padding: 15px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: bold; font-size: 1.2rem; text-align: center; border-bottom: 6px solid #cbd5e1; pointer-events: auto; max-width: 90%; }
+        .game-over-screen { animation: gameOverAnim 0.5s ease-out; }
+        @keyframes gameOverAnim { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -194,53 +90,32 @@ function BalloonHuntGame() {
 
     <script type="text/babel">
         const { useState, useEffect, useRef, useCallback } = React;
-        
-        const FullscreenButton = () => {
-            const [isFullscreen, setIsFullscreen] = useState(false);
 
-            useEffect(() => {
-                const handleChange = () => setIsFullscreen(!!document.fullscreenElement);
-                document.addEventListener('fullscreenchange', handleChange);
-                return () => document.removeEventListener('fullscreenchange', handleChange);
-            }, []);
-
-            const toggleFullscreen = () => {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => console.error(err));
-                } else {
-                    document.exitFullscreen();
-                }
-            };
-            
-            return (
-                 <button onClick={toggleFullscreen} className="absolute top-4 right-4 bg-white/50 text-sky-800 p-2 rounded-full shadow-lg z-50 border-2 border-white/80">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        {isFullscreen ? <path d="M4 14h6v6m-6-6l7 7M20 10h-6V4m6 6l-7-7"/> : <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>}
-                    </svg>
-                </button>
-            )
-        }
+        const BALLOON_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
+        let scoreToSubmit = 0;
 
         function App() {
-            const [gameState, setGameState] = useState('loading');
+            const [gameState, setGameState] = useState('loading'); // loading, start, playing, gameover
             const [score, setScore] = useState(0);
             const [lives, setLives] = useState(3);
-            const [levelIndex, setLevelIndex] = useState(0);
+            const [currentQuestion, setCurrentQuestion] = useState(null);
             const [balloons, setBalloons] = useState([]);
             const [projectiles, setProjectiles] = useState([]);
             const [effects, setEffects] = useState([]);
             const [angle, setAngle] = useState(0);
+            
             const [levels, setLevels] = useState([]);
 
             const requestRef = useRef();
             const lastSpawnTime = useRef(0);
 
+            // Fetch questions from the API
             useEffect(() => {
                 const queryParams = new URLSearchParams(window.location.search);
                 const topicId = queryParams.get('topicId');
                 
                 async function fetchQuestions() {
-                    const response = await fetch(`/api/get-balloon-questions?topicId=${topicId || ''}`);
+                    const response = await fetch('/api/get-balloon-questions?topicId=' + (topicId || ''));
                     const data = await response.json();
                     if (data.error || data.questions.length === 0) {
                         console.error(data.error || "No questions found");
@@ -250,77 +125,58 @@ function BalloonHuntGame() {
                         setGameState('start');
                     }
                 }
+
                 fetchQuestions();
             }, []);
-            
+
             const startGame = () => {
                 setScore(0);
-                setLevelIndex(0);
+                setLives(3);
+                setCurrentQuestion(levels[0]);
                 setBalloons([]);
                 setProjectiles([]);
                 setEffects([]);
-                setLives(3);
                 setGameState('playing');
                 lastSpawnTime.current = 0;
-            };
-            
-            const gameOver = () => {
-                setGameState('gameover');
-                const finalScore = score;
-                // Notify the parent window about the final score
-                window.parent.postMessage({ type: 'GAME_OVER', score: finalScore }, '*');
             };
 
             const updateGame = useCallback((time) => {
                 if (gameState !== 'playing') return;
 
-                const currentLevel = levels[levelIndex % levels.length];
-                if (!currentLevel) {
+                if (!currentQuestion) {
                      requestRef.current = requestAnimationFrame(updateGame);
-                     return;
-                };
-
-
-                // 1. SPAWN BALLOONS
-                if (time - lastSpawnTime.current > 1500) {
-                    const allOptions = [currentLevel.a, ...currentLevel.wrongs];
-                    const shuffledOptions = allOptions.sort(() => 0.5 - Math.random());
-                    const optionToShow = shuffledOptions[0];
+                    return;
+                }
+                
+                if (balloons.length < 5 && time - lastSpawnTime.current > 1200) {
+                    const allAnswers = [currentQuestion.a, ...currentQuestion.wrongs];
+                    const text = allAnswers[Math.floor(Math.random() * allAnswers.length)];
                     
                     const newBalloon = {
                         id: Date.now() + Math.random(),
                         x: Math.random() * (window.innerWidth - 80) + 40,
                         y: window.innerHeight + 50,
-                        text: optionToShow,
-                        speed: Math.random() * 1 + 1,
+                        text: text,
+                        speed: Math.random() * 1.5 + 1,
                         color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
-                        isCorrect: optionToShow === currentLevel.a
+                        isCorrect: text === currentQuestion.a
                     };
                     setBalloons(prev => [...prev, newBalloon]);
                     lastSpawnTime.current = time;
                 }
 
-                // 2. MOVE ITEMS
-                setBalloons(prev => {
-                    const nextBalloons = [];
-                    for(const b of prev) {
-                        const newY = b.y - b.speed;
-                        if (newY > -150) {
-                            nextBalloons.push({ ...b, y: newY });
-                        } else {
-                            if (!b.isCorrect) {
-                                // Non-correct balloons just disappear
-                            } else {
-                                // Correct balloon missed
-                                setLives(l => l - 1);
-                                if (lives - 1 <= 0) {
-                                   gameOver();
-                                }
+                setBalloons(prev => prev
+                    .map(b => ({ ...b, y: b.y - b.speed }))
+                    .filter(b => {
+                        if (b.y < -100) {
+                            if (b.isCorrect) {
+                                setLives(l => Math.max(0, l - 1));
                             }
+                            return false;
                         }
-                    }
-                    return nextBalloons;
-                });
+                        return true;
+                    })
+                );
 
                 setProjectiles(prev => prev
                     .map(p => ({
@@ -331,117 +187,118 @@ function BalloonHuntGame() {
                     .filter(p => p.y > 0)
                 );
 
-                // 3. COLLISION DETECTION
-                let newBalloons = [...balloons];
-                let newProjectiles = [...projectiles];
-                let hitOccurred = false;
+                let nextBalloons = [...balloons];
+                let nextProjectiles = [...projectiles];
 
-                for (let pIdx = newProjectiles.length - 1; pIdx >= 0; pIdx--) {
-                    for (let bIdx = newBalloons.length - 1; bIdx >= 0; bIdx--) {
-                        const p = newProjectiles[pIdx];
-                        const b = newBalloons[bIdx];
-                        if (!p || !b) continue;
-
+                for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
+                    const p = nextProjectiles[pIdx];
+                    for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
+                        const b = nextBalloons[bIdx];
                         const dx = p.x - b.x;
                         const dy = p.y - b.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
 
                         if (dist < 40) {
+                            nextProjectiles.splice(pIdx, 1);
+                            nextBalloons.splice(bIdx, 1);
+                            
                             if (b.isCorrect) {
                                 handleCorrectHit(b.x, b.y);
                             } else {
                                 handleWrongHit(b.x, b.y);
                             }
-                            newBalloons.splice(bIdx, 1);
-                            newProjectiles.splice(pIdx, 1);
-                            hitOccurred = true;
-                            break; 
+                            break;
                         }
                     }
-                    if (hitOccurred) break;
                 }
 
-                if (hitOccurred) {
-                    setBalloons(newBalloons);
-                    setProjectiles(newProjectiles);
-                }
+                setBalloons(nextBalloons);
+                setProjectiles(nextProjectiles);
 
                 requestRef.current = requestAnimationFrame(updateGame);
-            }, [gameState, levelIndex, levels, score, lives]);
+            }, [gameState, currentQuestion, balloons, projectiles]);
 
-             useEffect(() => {
+            useEffect(() => {
+                if (lives <= 0) {
+                    setGameState('gameover');
+                    scoreToSubmit = score;
+                    window.parent.postMessage({ type: 'SAVE_SCORE', score: score }, '*');
+                }
+            }, [lives, score]);
+
+            useEffect(() => {
                 if (gameState === 'playing') {
                     requestRef.current = requestAnimationFrame(updateGame);
+                    return () => cancelAnimationFrame(requestRef.current);
                 }
-                return () => {
-                    if (requestRef.current) {
-                        cancelAnimationFrame(requestRef.current);
-                    }
-                };
             }, [gameState, updateGame]);
 
             const handleCorrectHit = (x, y) => {
                 setScore(s => s + 10);
                 addEffect(x, y, "+10", "#22c55e");
+                
                 setTimeout(() => {
-                    setLevelIndex(prev => (prev + 1));
-                    setBalloons(prev => prev.filter(b => !b.isCorrect)); 
+                     const newIndex = (levels.findIndex(l => l.q === currentQuestion.q) + 1) % levels.length;
+                     setCurrentQuestion(levels[newIndex]);
+                     setBalloons(prev => prev.filter(b => !b.isCorrect));
                 }, 500);
             };
 
             const handleWrongHit = (x, y) => {
-                setLives(l => l - 1);
+                setLives(l => Math.max(0, l - 1));
                 addEffect(x, y, "-1 Can", "#ef4444");
-                if (lives - 1 <= 0) {
-                   gameOver();
-                }
             };
 
             const addEffect = (x, y, text, color) => {
                 const id = Date.now() + Math.random();
                 setEffects(prev => [...prev, { id, x, y, text, color }]);
-                setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 600);
+                setTimeout(() => setEffects(prev => prev.filter(e => e.id !== id)), 500);
             };
-
+            
             const handleInput = (e) => {
                 if (gameState !== 'playing') return;
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight;
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 if (!clientX) return;
+                
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight - 80;
                 const dx = clientX - centerX;
                 const dy = clientY - centerY;
+                
                 const rad = Math.atan2(dx, -dy);
                 const deg = rad * (180 / Math.PI);
-                const clampedAngle = Math.max(-70, Math.min(70, deg));
-                setAngle(clampedAngle);
+                setAngle(Math.max(-70, Math.min(70, deg)));
+
                 if (e.type === 'mousedown' || e.type === 'touchstart') {
-                    shoot(clampedAngle);
+                    shoot(Math.max(-70, Math.min(70, deg)));
                 }
             };
-
+            
             const shoot = (fireAngle) => {
                 const radian = fireAngle * Math.PI / 180;
                 const startX = window.innerWidth / 2 + Math.sin(radian) * 60;
-                const startY = window.innerHeight - Math.cos(radian) * 60;
+                const startY = window.innerHeight - 80 - Math.cos(radian) * 60;
                 setProjectiles(prev => [...prev, { id: Date.now(), x: startX, y: startY, angle: fireAngle }]);
             };
             
             const handleRestart = () => {
-                if (gameState === 'gameover') {
-                    startGame();
-                }
+                window.location.reload();
             };
 
-            const BALLOON_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
-            const currentLevel = levels[levelIndex % levels.length];
+            if (gameState === 'loading') {
+                return <div className="absolute inset-0 flex items-center justify-center">Yükleniyor...</div>;
+            }
+            if (gameState === 'error') {
+                 return <div className="absolute inset-0 flex items-center justify-center text-red-500">Oyun yüklenemedi.</div>;
+            }
 
             return (
                 <div id="game-canvas" onMouseMove={handleInput} onMouseDown={handleInput} onTouchMove={handleInput} onTouchStart={handleInput}>
-                    {gameState !== 'start' && gameState !== 'loading' && (
+                    {gameState === 'playing' && (
                         <>
-                            <FullscreenButton />
+                            <div className="cloud" style={{ top: '10%', width: '100px', height: '40px', animationDuration: '20s' }}></div>
+                            <div className="cloud" style={{ top: '20%', left: '60%', width: '120px', height: '50px', animationDuration: '15s' }}></div>
+                            <div className="cloud" style={{ top: '5%', left: '80%', width: '80px', height: '30px', animationDuration: '25s' }}></div>
                             <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200">
                                 Puan: {score}
                             </div>
@@ -458,24 +315,10 @@ function BalloonHuntGame() {
                             <div className="question-panel">
                                 <div className="question-box animate-[bounce_2s_infinite]">
                                     <span className="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>
-                                    {currentLevel?.q}
+                                    {currentQuestion?.q}
                                 </div>
                             </div>
                         </>
-                    )}
-                    {gameState === 'loading' && (
-                         <div className="absolute inset-0 bg-sky-900/80 flex items-center justify-center z-50 backdrop-blur-sm">
-                            <div className="text-white text-2xl font-bold">Yükleniyor...</div>
-                        </div>
-                    )}
-                    {gameState === 'error' && (
-                         <div className="absolute inset-0 bg-red-900/80 flex items-center justify-center z-50 backdrop-blur-sm">
-                            <div className="bg-white p-8 rounded-3xl text-center max-w-sm shadow-2xl border-b-8 border-red-500">
-                                <h1 className="text-3xl font-bold text-red-600 mb-2">Hata!</h1>
-                                <p className="text-gray-600 mb-6 text-lg">Oyun verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.</p>
-                                <a href="/student/balon-avcisi" className="px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-full text-lg">Geri Dön</a>
-                            </div>
-                        </div>
                     )}
                     {gameState === 'start' && (
                         <div className="absolute inset-0 bg-sky-900/80 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -493,7 +336,7 @@ function BalloonHuntGame() {
                                 <p className="text-gray-600 mb-6 text-lg">Toplam Puanın: <strong className="text-2xl text-red-700">{score}</strong></p>
                                 <div className="flex flex-col sm:flex-row gap-2">
                                      <button onClick={handleRestart} className="flex-1 px-8 py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-full text-lg transition-transform hover:scale-105 shadow-lg">Tekrar Oyna</button>
-                                     <a href="/student/activities" className="flex-1 px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-full text-lg transition-transform hover:scale-105 shadow-lg">Ana Menü</a>
+                                     <a href="/student/activities" className="flex-1 px-8 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-full text-lg transition-transform hover:scale-105 shadow-lg no-underline">Ana Menü</a>
                                 </div>
                             </div>
                         </div>
@@ -509,18 +352,44 @@ function BalloonHuntGame() {
 </html>
     `;
     
+    useEffect(() => {
+        if (gameStateRef.current === 'gameover' && scoreRef.current > 0) {
+            const topicId = searchParams.get('topicId');
+            submitBalloonHuntScore(user?.uid || null, scoreRef.current, `Balon Avcısı - Konu: ${topicId}`);
+            scoreRef.current = 0; // Prevent resubmitting
+        }
+    }, [gameStateRef, scoreRef, user, searchParams]);
+
+    // This ref handling is to communicate from iframe to parent
+    const gameStateRef = useRef<string>();
+    const scoreRef = useRef<number>(0);
+
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === 'SAVE_SCORE') {
+                gameStateRef.current = 'gameover';
+                scoreRef.current = event.data.score;
+                // Trigger the save effect
+                if (user?.uid) {
+                     const topicId = searchParams.get('topicId');
+                     submitBalloonHuntScore(user.uid, event.data.score, `Balon Avcısı - Konu: ${topicId}`);
+                }
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [user, searchParams]);
+
     return (
         <div style={{ width: '100%', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
             <iframe
-                srcDoc={htmlContent}
+                srcDoc={gameHtml}
                 style={{ width: '100%', height: '100%', border: 'none' }}
                 title="Balon Avcısı Oyunu"
-                sandbox="allow-scripts allow-same-origin"
             />
         </div>
     );
 }
-
 
 export default function BalonAvcisiPage() {
     return (
