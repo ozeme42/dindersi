@@ -1,8 +1,9 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Gamepad2 } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -14,10 +15,15 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
     return (
         <Link href={href} className={cn(
-            "flex flex-col items-center justify-center gap-0.5 w-full text-center",
+            "flex flex-col items-center justify-center gap-0.5 w-full text-center transition-all duration-200",
             isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/80"
         )}>
-            <Icon className="h-5 w-5" />
+            <div className={cn(
+                'p-1 rounded-md transition-all', 
+                isActive && 'bg-primary/10'
+            )}>
+                 <Icon className={cn("h-5 w-5 transition-transform", isActive && "scale-110")} />
+            </div>
             <span className="text-xs font-medium">{label}</span>
         </Link>
     );
@@ -41,8 +47,8 @@ export function BottomNavBar() {
 
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
-        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Çalışmalar' },
-        { href: '/student/activities', icon: Gamepad2, label: 'Etkinlikler' },
+        { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Soru Bankası' },
+        { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
@@ -59,7 +65,7 @@ export function BottomNavBar() {
 
     return (
         <>
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-card/95 backdrop-blur-sm border-t z-50">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background/90 to-background/70 backdrop-blur-sm z-50 pb-[env(safe-area-inset-bottom)]">
                 <div className="flex items-stretch justify-around h-full">
                     {links.map(link => (
                         <NavLink key={link.href} {...link} />
