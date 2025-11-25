@@ -1,11 +1,11 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import type { Assignment } from '@/lib/types';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import type { Assignment, ScoreEvent } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,16 +15,158 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, Clock, Trophy, Play, Calendar, AlertCircle, Award, ArrowRight, XCircle, FileText, ClipboardCheck } from 'lucide-react';
+import { Loader2, ArrowLeft, Gamepad2, CheckCircle2, ClipboardCheck, BarChart3, Clock, Trophy, Award, FileText, AlertCircle, Calendar, Play, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import Link from 'next/link';
 import { getStudentExams } from './actions';
-import { format, formatDistanceToNow, isFuture, isPast } from 'date-fns';
+import { format, formatDistanceToNow, isFuture } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { UserAvatar } from '@/components/user-avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+function LeaderboardDialog({ assignment, isOpen, onOpenChange }: { assignment: any | null, isOpen: boolean, onOpenChange: (open: boolean) => void }) {
+    if (!assignment) return null;
+
+    const sortedProgress = useMemo(() => {
+        if (!assignment.studentProgress) return [];
+        return [...assignment.studentProgress].sort((a, b) => (b.scoreEvent?.points || 0) - (a.scoreEvent?.points || 0));
+    }, [assignment.studentProgress]);
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-lg">
+                <DialogHeader>
+                    <DialogTitle>{assignment.title} - Sıralama</DialogTitle>
+                </DialogHeader>
+                <ScrollArea className="max-h-[60vh] mt-4">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-16">Sıra</TableHead>
+                                <TableHead>Öğrenci</TableHead>
+                                <TableHead className="text-right">Puan</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {sortedProgress.map((progress, index) => (
+                                <TableRow key={progress.student.uid}>
+                                    <TableCell className="font-bold">{index + 1}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <UserAvatar user={progress.student} className="w-8 h-8" />
+                                            <span>{progress.student.displayName}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-right font-semibold">{progress.scoreEvent?.points || 0}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </ScrollArea>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function IntroCard({ assignment, onStart, onShowLeaderboard }: { assignment: any, onStart: (assignment: any) => void, onShowLeaderboard: (assignment: any) => void }) {
+    const isSolved = !!assignment.solvedEvent;
+    const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
+    const totalQuestions = assignment.questionIds?.length || 0;
+
+    return (
+      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200 animate-[fadeIn_0.5s_ease-out]">
+        
+        <div className="bg-indigo-600 p-8 text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+          <div className="relative z-10">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <FileText size={40} className="text-indigo-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-white tracking-wide uppercase">{assignment.title}</h1>
+             <div className="mt-2 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+              {assignment.courseName}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-8 space-y-6">
+          <div className="space-y-4">
+            
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                <AlertCircle size={24} />
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase">Sınav Durumu</div>
+                <div className={`font-bold text-lg ${isSolved ? 'text-green-600' : (canStart ? 'text-blue-600' : 'text-amber-600')}`}>
+                  {isSolved ? "Tamamlandı" : (canStart ? 'Aktif' : 'Beklemede')}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                <FileText size={24} />
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase">Soru Sayısı</div>
+                <div className="text-gray-800 font-bold text-lg">{totalQuestions} Soru</div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                <Clock size={24} />
+              </div>
+              <div>
+                <div className="text-xs text-gray-400 font-bold uppercase">Süre</div>
+                <div className="text-gray-800 font-bold text-lg">{assignment.duration ? `${assignment.duration} Dakika` : 'Süresiz'}</div>
+              </div>
+            </div>
+             {assignment.dueDate && (
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-red-50 text-red-600 rounded-xl">
+                        <Calendar size={24} />
+                    </div>
+                    <div>
+                        <div className="text-xs text-gray-400 font-bold uppercase">Son Teslim</div>
+                        <div className="text-gray-800 font-bold">{format(new Date(assignment.dueDate), "dd MMMM yyyy", { locale: tr })}</div>
+                    </div>
+                </div>
+            )}
+             {isSolved && (
+                <div className="flex items-center gap-4 pt-4 border-t cursor-pointer" onClick={() => onShowLeaderboard(assignment)}>
+                    <div className="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><Trophy size={24} /></div>
+                    <div>
+                        <div className="text-xs text-gray-400 font-bold uppercase">Sıralama</div>
+                        <div className="text-gray-800 font-bold text-lg hover:underline">{assignment.rank} / {assignment.totalParticipants}</div>
+                    </div>
+                </div>
+            )}
+          </div>
+          <hr className="border-gray-100" />
+            {isSolved ? (
+                 <Button asChild className="w-full">
+                    <Link href={`/student/deneme/sonuc/${assignment.id}`}>
+                       Sonuçları Gör <ArrowRight className="ml-2 h-5 w-5"/>
+                    </Link>
+                 </Button>
+            ) : (
+                 <Button onClick={() => onStart(assignment)} disabled={!canStart} className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30">
+                    <span>{canStart ? 'SINAVI BAŞLAT' : 'HENÜZ BAŞLAMADI'}</span>
+                    {canStart && <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />}
+                 </Button>
+            )}
+        </div>
+      </div>
+    );
+}
 
 function DenemeSinaviPage() {
   const { user, loading: authLoading } = useAuth();
@@ -33,6 +175,8 @@ function DenemeSinaviPage() {
   const [assignments, setAssignments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedAssignment, setSelectedAssignment] = useState<any | null>(null);
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
 
   const fetchAssignments = useCallback(async () => {
     if (!user) return;
@@ -52,106 +196,23 @@ function DenemeSinaviPage() {
     }
   }, [authLoading, fetchAssignments]);
 
-  const IntroCard = ({ assignment }: { assignment: any }) => {
-    const canStart = !assignment.startDate || !isFuture(new Date(assignment.startDate));
-    const isExpired = assignment.dueDate && isPast(new Date(assignment.dueDate));
+  const handleStartExam = (assignment: any) => {
+    if (!assignment.questionIds || assignment.questionIds.length === 0) {
+        setError("Bu deneme için hiç soru atanmamış.");
+        return;
+    }
+    const params = new URLSearchParams({
+        assignmentId: assignment.id,
+        assignmentTitle: assignment.title,
+        questionIds: assignment.questionIds.join(','),
+        duration: assignment.duration || '0'
+    });
+    router.push(`/student/deneme/coz?${params.toString()}`);
+  }
 
-    const statusInfo = assignment.solvedEvent
-        ? { text: "Çözüldü", color: "bg-green-600", icon: <CheckCircle2 /> }
-        : isExpired
-        ? { text: "Süre Doldu", color: "bg-red-600", icon: <XCircle /> }
-        : !canStart
-        ? { text: "Henüz Başlamadı", color: "bg-amber-600", icon: <Clock /> }
-        : { text: "Bekliyor", color: "bg-blue-600", icon: <Play /> };
-
-    return (
-        <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
-            <div className="bg-indigo-600 p-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                <div className="relative z-10">
-                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                        <FileText size={40} className="text-indigo-600" />
-                    </div>
-                    <h1 className="text-xl font-bold text-white tracking-wide uppercase">{assignment.title}</h1>
-                    <div className="mt-2 inline-block bg-indigo-800 text-indigo-100 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                        {assignment.courseName}
-                    </div>
-                </div>
-            </div>
-
-            <div className="p-8 space-y-6">
-                <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                        <div className={cn("p-3 rounded-xl text-white", statusInfo.color)}>
-                            {statusInfo.icon}
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SINAV DURUMU</div>
-                            <div className="text-gray-800 font-bold text-lg">{statusInfo.text}</div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
-                            <FileText size={24} />
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SORU SAYISI</div>
-                            <div className="text-gray-800 font-bold text-lg">{assignment.questionIds?.length || 0} Soru</div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
-                            <Clock size={24} />
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">SÜRE</div>
-                            <div className="text-gray-800 font-bold text-lg">{assignment.duration || '?'} Dakika</div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-green-50 text-green-600 rounded-xl">
-                            <Calendar size={24} />
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-400 font-bold uppercase">TARİH ARALIĞI</div>
-                            <div className="text-gray-800 font-bold">
-                                {assignment.startDate ? format(new Date(assignment.startDate), 'dd MMM', { locale: tr }) : '?'} - {assignment.dueDate ? format(new Date(assignment.dueDate), 'dd MMM yyyy', { locale: tr }) : 'Süresiz'}
-                            </div>
-                        </div>
-                    </div>
-                     {assignment.solvedEvent && (
-                        <Link href={`/teacher/assignments/${assignment.id}`} className="block group">
-                            <div className="flex items-center gap-4 pt-4 border-t cursor-pointer">
-                                 <div className="p-3 bg-yellow-50 text-yellow-600 rounded-xl"><Trophy size={24} /></div>
-                                 <div>
-                                     <div className="text-xs text-gray-400 font-bold uppercase">Sıralama</div>
-                                     <div className="text-indigo-600 group-hover:underline font-bold text-lg">{assignment.rank || 'N/A'} / {assignment.totalParticipants || 'N/A'}</div>
-                                 </div>
-                            </div>
-                         </Link>
-                    )}
-
-                </div>
-                <hr className="border-gray-100" />
-                {assignment.solvedEvent ? (
-                    <Button asChild className="w-full">
-                         <Link href={`/student/deneme/sonuc/${assignment.id}`}>
-                            Sonuçları Gör <ArrowRight className="ml-2 h-5 w-5"/>
-                         </Link>
-                    </Button>
-                ) : (
-                    <Button 
-                        onClick={() => router.push(`/student/deneme/coz?assignmentId=${assignment.id}`)}
-                        disabled={!canStart || isExpired}
-                        className="w-full group relative flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold text-xl transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-indigo-500/30"
-                    >
-                        <span>SINAVI BAŞLAT</span>
-                        <Play size={24} className="fill-current group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                )}
-            </div>
-        </div>
-    );
+  const handleShowLeaderboard = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setIsLeaderboardOpen(true);
   };
 
   const backUrl = '/student';
@@ -190,16 +251,18 @@ function DenemeSinaviPage() {
           Öğretmenlerin tarafından sana özel olarak atanmış deneme sınavlarını buradan çözebilirsin.
         </p>
       </div>
-
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="flex flex-wrap justify-center gap-8">
             {assignments.length > 0 ? (
-                assignments.map(assignment => <IntroCard key={assignment.id} assignment={assignment} />)
+                assignments.map(assignment => (
+                   <IntroCard key={assignment.id} assignment={assignment} onStart={handleStartExam} onShowLeaderboard={handleShowLeaderboard}/>
+                ))
             ) : (
-                <div className="col-span-full text-center py-16 text-muted-foreground">
+                <Card className="text-center p-12 text-muted-foreground">
                     <p>Sana atanmış bir deneme sınavı bulunmuyor.</p>
-                </div>
+                </Card>
             )}
        </div>
+       <LeaderboardDialog assignment={selectedAssignment} isOpen={isLeaderboardOpen} onOpenChange={setIsLeaderboardOpen} />
     </div>
   );
 }
@@ -211,3 +274,5 @@ export default function Page() {
         </Suspense>
     );
 }
+
+      
