@@ -1,133 +1,130 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc, getCountFromServer } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import { collection, getDocs, query, where, orderBy, limit, Timestamp, getDoc, doc } from "firebase/firestore";
+import type { UserProfile, Course, QuestionBankStats, TestResult } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
-type StudentStats = {
-    score: number;
-    completedTopics: number;
-    totalTopics: number;
-    questionBankProgress: number;
-    generalRank: number;
-    classRank: number;
-    branchRank: number;
-};
 
-export async function getStudentDashboardStats(userId: string): Promise<{ data?: StudentStats; error?: string; success: boolean }> {
+export async function getStudentDashboardStats(userId: string): Promise<{
+    success: boolean,
+    data?: {
+        score: number;
+        lessonProgress: number;
+        questionBankProgress: number;
+        generalRank: number;
+        classRank: number;
+        branchRank: number;
+    },
+    error?: string
+}> {
     noStore();
-    if (!userId) {
-        return { error: "Kullanıcı ID'si bulunamadı.", success: false };
-    }
 
-    const defaultStats: StudentStats = {
+    // Initialize with default values
+    const defaultData = {
         score: 0,
-        completedTopics: 0,
-        totalTopics: 0,
+        lessonProgress: 0,
         questionBankProgress: 0,
         generalRank: 0,
         classRank: 0,
         branchRank: 0,
     };
 
+    if (!userId) {
+        return { success: false, error: "Kullanıcı ID'si bulunamadı." };
+    }
+
     try {
-        const studentRef = doc(db, 'users', userId);
-        const [studentSnap, allClassesSnap, allCoursesSnap, allUsersSnap] = await Promise.all([
-            getDoc(studentRef),
-            getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-            getDocs(collection(db, "courses")),
-            getDocs(query(collection(db, "users"), where("role", "==", "student")))
+        const [allUsersSnapshot, allCoursesSnapshot] = await Promise.all([
+            getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"]))),
+            getDocs(collection(db, "courses"))
         ]);
 
-        if (!studentSnap.exists()) {
-            return { error: "Kullanıcı bulunamadı.", success: false };
+        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        const currentUser = allStudents.find(s => s.uid === userId);
+
+        if (!currentUser) {
+            return { success: false, error: "Kullanıcı bulunamadı." };
         }
 
-        const user = { uid: studentSnap.id, ...studentSnap.data() } as UserProfile;
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const allStudents = allUsersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-        const sortedAllStudents = [...allStudents].sort((a, b) => (b.score || 0) - (a.score || 0));
-        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
+        // --- Rank Calculations ---
+        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+        const generalRank = sortedAllStudents.findIndex(s => s.uid === userId) + 1;
+        
         let classRank = 0;
         let branchRank = 0;
+        if (currentUser.class) {
+            const gradeName = currentUser.class.split(' - ')[0];
+            const branchName = currentUser.class;
 
-        if (user.class) {
-            const gradeName = user.class.split(' - ')[0];
             const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            const sortedGradeStudents = [...studentsInGrade].sort((a, b) => (b.score || 0) - (a.score || 0));
-            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-            const studentsInBranch = allStudents.filter(s => s.class === user.class);
-            const sortedBranchStudents = [...studentsInBranch].sort((a, b) => (b.score || 0) - (a.score || 0));
-            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-        }
-
-        const allClasses = allClassesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-        const studentClassId = studentClass?.id;
-        
-        const allCourses = allCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        
-        const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-        
-        let filteredCourses: Course[] = [];
-        if (studentClassId) {
-            const isFirstClass = allClasses[0] && studentClassId === allClasses[0].id;
-            filteredCourses = studentVisibleCourses.filter(course =>
-                course.classId === studentClassId || (!course.classId && isFirstClass)
-            );
-        } else {
-            filteredCourses = studentVisibleCourses.filter(course => !course.classId);
-        }
-        
-        let grandTotalTopics = 0;
-        let completedTopicsTotal = 0;
-        let totalQuestionBankPassedTests = 0;
-        let totalQuestionBankTests = 0;
-        
-        for (const course of filteredCourses) {
-            const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-            const qbStatsPromise = getCourseQuestionBankStats(course.id, user.uid);
-            
-            const [progressSnap, questionBankStats] = await Promise.all([
-                getDoc(progressRef),
-                qbStatsPromise
-            ]);
-
-            const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
-            completedTopicsTotal += completedTopics.length;
-            
-            const unitsSnap = await getDocs(collection(db, 'courses', course.id, 'units'));
-            for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-                grandTotalTopics += topicsSnap.data().count;
+            if(studentsInGrade.length > 0) {
+                 const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+                 classRank = sortedGradeStudents.findIndex(s => s.uid === userId) + 1;
             }
 
-            totalQuestionBankPassedTests += questionBankStats.passedTests;
-            totalQuestionBankTests += questionBankStats.totalTests;
+            const studentsInBranch = allStudents.filter(s => s.class === branchName);
+             if (studentsInBranch.length > 0) {
+                const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+                branchRank = sortedBranchStudents.findIndex(s => s.uid === userId) + 1;
+            }
+        }
+        
+        // --- Progress Calculations ---
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        
+        let studentVisibleCourses: Course[];
+        if (currentUser.class) {
+            const studentClassName = currentUser.class.split(' - ')[0];
+            studentVisibleCourses = allCourses.filter(course =>
+                !course.isTeacherOnly &&
+                (course.className === studentClassName || !course.classId) // Match student's class OR general courses
+            );
+        } else {
+             studentVisibleCourses = allCourses.filter(course => !course.isTeacherOnly && !course.classId);
         }
 
-        const qbProgressPercentage = totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0;
+        let totalTopicsAvailable = 0;
+        let completedTopicsCount = 0;
+        let totalQuestionBankTests = 0;
+        let passedTests = 0;
 
-        const finalStats = {
-            score: user.score || 0,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            questionBankProgress: qbProgressPercentage,
-            generalRank,
-            classRank,
-            branchRank,
+        for (const course of studentVisibleCourses) {
+            const courseId = course.id;
+            const unitsSnap = await getDocs(collection(db, 'courses', courseId, 'units'));
+            for (const unitDoc of unitsSnap.docs) {
+                const topicsSnap = await getDocs(collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics'));
+                totalTopicsAvailable += topicsSnap.size;
+            }
+            
+            const progressDoc = await getDoc(doc(db, `users/${userId}/progress`, courseId));
+            if (progressDoc.exists()) {
+                completedTopicsCount += (progressDoc.data().completedTopics || []).length;
+            }
+            
+            const qbStats = await getCourseQuestionBankStats(courseId, userId);
+            totalQuestionBankTests += qbStats.totalTests;
+            passedTests += qbStats.passedTests;
+        }
+
+        const lessonProgress = totalTopicsAvailable > 0 ? Math.round((completedTopicsCount / totalTopicsAvailable) * 100) : 0;
+        const questionBankProgress = totalQuestionBankTests > 0 ? Math.round((passedTests / totalQuestionBankTests) * 100) : 0;
+
+        return {
+            success: true,
+            data: {
+                score: currentUser.score || 0,
+                lessonProgress,
+                questionBankProgress,
+                generalRank,
+                classRank,
+                branchRank,
+            }
         };
 
-        return { data: finalStats, success: true };
-
-    } catch (error) {
-        console.error("Error fetching student dashboard stats:", error);
-        return { error: "İstatistikler yüklenirken bir hata oluştu.", success: false, data: defaultStats };
+    } catch (e: any) {
+        console.error("Error calculating student dashboard stats:", e);
+        return { success: false, error: 'İstatistikler yüklenirken bir hata oluştu.', data: defaultData };
     }
-  }
+}
