@@ -29,8 +29,8 @@ const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllP
     <Card className={cn("hover:shadow-lg transition-shadow flex flex-col text-white transform hover:-translate-y-1 duration-300", colorClass)}>
         <CardHeader>
             <div className="flex items-center gap-4">
-                <div className="p-4 bg-white/10 rounded-xl">
-                    <BookOpen className="h-8 w-8 text-white/80"/>
+                <div className="p-4 bg-white/20 rounded-xl backdrop-blur-sm">
+                    <BookOpen className="h-8 w-8 text-white"/>
                 </div>
                 <div>
                     <CardTitle className="text-xl">{course.title}</CardTitle>
@@ -44,8 +44,8 @@ const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllP
                     <span>Ders İlerlemesi</span>
                     <span>{course.lessonProgress || 0}%</span>
                 </div>
-                <Progress value={course.lessonProgress || 0} className="h-2 bg-white/20 [&>div]:bg-green-400" />
-                <p className="text-xs text-white/70 text-right mt-1">
+                <Progress value={course.lessonProgress || 0} className="h-2 bg-white/30 [&>div]:bg-green-400" />
+                <p className="text-xs text-white/80 text-right mt-1">
                     ({course.completedTopicsCount || 0} / {course.topicsCount || 0} Konu)
                 </p>
             </div>
@@ -54,19 +54,19 @@ const CourseCardWithProgress = ({ course, colorClass }: { course: CourseWithAllP
                     <span>Soru Bankası Başarısı</span>
                     <span>{course.questionBankProgress || 0}%</span>
                 </div>
-                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/20 [&>div]:bg-amber-400" />
-                 <p className="text-xs text-white/70 text-right mt-1">
+                <Progress value={course.questionBankProgress || 0} className="h-2 bg-white/30 [&>div]:bg-amber-400"/>
+                 <p className="text-xs text-white/80 text-right mt-1">
                     ({course.passedTests || 0} / {course.totalQuestionBankTests || 0} Test)
                 </p>
             </div>
         </CardContent>
         <CardFooter className="flex-col items-stretch gap-2">
-            <Button asChild className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm">
+            <Button asChild className="w-full bg-white/90 hover:bg-white text-primary font-bold">
                 <Link href={`/student/ders/${course.id}`}>
                     Derse Devam Et <ArrowRight className="ml-2 h-4 w-4"/>
                 </Link>
             </Button>
-            <Button asChild className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm" variant="secondary">
+            <Button asChild variant="outline" className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border-white/30 hover:text-white">
                 <Link href={`/student/soru-bankasi/${course.id}`}>
                     Testleri Çöz <ClipboardCheck className="ml-2 h-4 w-4"/>
                 </Link>
@@ -117,7 +117,7 @@ export default function SoruBankasiPage() {
                     filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
                 }
 
-                const coursesDataPromises = filteredCourses.map(async (course) => {
+                const coursesData = await Promise.all(filteredCourses.map(async (course) => {
                     const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
                     const qbStats = getCourseQuestionBankStats(course.id, user.uid);
                     
@@ -148,21 +148,18 @@ export default function SoruBankasiPage() {
                         passedTests: questionBankStats.passedTests,
                         totalQuestionBankTests: questionBankStats.totalTests,
                     };
-                });
-                
-                let coursesData = await Promise.all(coursesDataPromises);
+                }));
 
-                // Sort courses: DKAB first, then Siyer, then others alphabetically
+                // Custom sort: DKAB first, then Siyer, then others alphabetically
                 coursesData.sort((a, b) => {
-                    const titleA = a.title.toUpperCase();
-                    const titleB = b.title.toUpperCase();
-                    if (titleA.includes('DKAB') && !titleB.includes('DKAB')) return -1;
-                    if (!titleA.includes('DKAB') && titleB.includes('DKAB')) return 1;
-                    if (titleA.includes('SİYER') && !titleB.includes('SİYER')) return -1;
-                    if (!titleA.includes('SİYER') && titleB.includes('SİYER')) return 1;
+                    const aTitle = a.title.toUpperCase();
+                    const bTitle = b.title.toUpperCase();
+                    if (aTitle.includes('DKAB') && !bTitle.includes('DKAB')) return -1;
+                    if (!aTitle.includes('DKAB') && bTitle.includes('DKAB')) return 1;
+                    if (aTitle.includes('SİYER') && !bTitle.includes('SİYER')) return -1;
+                    if (!aTitle.includes('SİYER') && bTitle.includes('SİYER')) return 1;
                     return a.title.localeCompare(b.title, 'tr');
                 });
-
 
                 setCourses(coursesData);
             } catch (error) {
