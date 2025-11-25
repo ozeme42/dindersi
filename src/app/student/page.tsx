@@ -4,22 +4,26 @@
 import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getStudentDashboardStats } from '@/app/student/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getStudentDashboardStats } from "@/app/student/actions";
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
+    Loader2, Home, User
+} from 'lucide-react';
+import { cn } from "@/lib/utils";
+import Link from 'next/link';
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack, Loader2, Home, User } from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import type { UserProfile, Course } from "@/lib/types";
+
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -71,7 +75,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 // --- NEW: MOBILE BOTTOM NAVIGATION ---
-import { usePathname } from 'next/navigation';
 
 const MobileNav = () => {
     const { user } = useAuth();
@@ -84,10 +87,10 @@ const MobileNav = () => {
         { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
+    
+    if (!user || user.role !== 'student') return null;
+    const activeTab = navItems.find(item => pathname === item.href)?.id || 'home';
 
-    if (user?.role !== 'student') {
-        return null;
-    }
 
     return (
         <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
@@ -97,7 +100,7 @@ const MobileNav = () => {
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
+                    const isActive = activeTab === item.id;
                     return (
                         <Link
                             key={item.id}
@@ -181,7 +184,7 @@ function HardestWorkersToday() {
                         <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
                     </div>
                 ) : dailyTop.length > 0 ? (
-                     <div className="space-y-2">
+                    <div className="space-y-2">
                         {dailyTop.map((student, index) => (
                             <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
                                 <div className="flex items-center gap-3">
@@ -208,7 +211,6 @@ function HardestWorkersToday() {
     )
 }
 
-
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
@@ -216,20 +218,17 @@ export default function StudentDashboard() {
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0, 
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
     async function fetchData() {
-      if (!user?.uid) {
-          setIsLoading(false);
+      // Wait until the user object is fully loaded with firestore data (role is a good indicator)
+      if (!user?.uid || !user.role) {
           return;
       };
 
@@ -237,10 +236,10 @@ export default function StudentDashboard() {
       
       try {
         const [statsResult, examsSnapshot] = await Promise.all([
-          getStudentDashboardStats(user.uid),
-          getStudentExams(user.uid)
+            getStudentDashboardStats(user.uid),
+            getStudentExams(user.uid),
         ]);
-
+        
         if (statsResult.success && statsResult.data) {
             setStats(statsResult.data);
         } else {
@@ -423,5 +422,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-    
