@@ -1,29 +1,55 @@
-
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
-import { useAuth } from "@/context/auth-context";
-import { getStudentExams } from "@/app/student/deneme/actions";
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentDashboardStats } from "@/app/student/actions";
+import React, { useState, useEffect } from "react";
+import { usePathname } from 'next/navigation';
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import { cn } from "@/lib/utils";
-import Link from 'next/link';
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { UserAvatar } from "@/components/user-avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import type { UserProfile, Course } from "@/lib/types";
+// --- UTILS & MOCKS ---
 
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const useAuth = () => {
+    // This is a mock. In a real app, this would come from a context provider.
+    return {
+        user: {
+            uid: 'student-123',
+            displayName: 'Efe Can',
+            email: 'efe@okul.com',
+            role: 'student',
+            class: '6-A',
+            score: 15450,
+            avatarUrl: null
+        },
+        loading: false
+    };
+};
+
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -87,10 +113,10 @@ const MobileNav = () => {
         { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
         { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
-    
-    if (!user || user.role !== 'student') return null;
-    const activeTab = navItems.find(item => pathname === item.href)?.id || 'home';
 
+    if (!user || user.role !== 'student') {
+        return null;
+    }
 
     return (
         <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
@@ -100,7 +126,7 @@ const MobileNav = () => {
                 <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
 
                 {navItems.map((item) => {
-                    const isActive = activeTab === item.id;
+                    const isActive = (item.href === '/student' && pathname === '/student') || (item.href !== '/student' && pathname.startsWith(item.href));
                     return (
                         <Link
                             key={item.id}
@@ -152,16 +178,41 @@ const MobileNav = () => {
 };
 
 
+// --- MOCK DATA ---
+
+const MOCK_LEADERBOARD = [
+    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
+    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
+    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
+];
+
+const MOCK_STATS = {
+    score: 15450,
+    completedTopics: 12,
+    totalTopics: 20,
+    questionBankProgress: 65, 
+    generalRank: 42,
+    classRank: 5,
+    branchRank: 3,
+};
+
+const MOCK_EXAM_STATS = {
+    pending: 2,
+    solved: 8
+};
+
+// --- COMPONENTS ---
+
 function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
+    const [dailyTop, setDailyTop] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => {
-            setDailyTop(data.slice(0, 3));
-        }).finally(() => {
+        const timer = setTimeout(() => {
+            setDailyTop(MOCK_LEADERBOARD);
             setIsLoading(false);
-        });
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -214,52 +265,15 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-      score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      questionBankProgress: 0, 
-      generalRank: 0,
-      classRank: 0,
-      branchRank: 0,
-  });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  const [stats, setStats] = useState(MOCK_STATS);
+  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
 
   useEffect(() => {
-    async function fetchData() {
-      // Wait until the user object is fully loaded with firestore data (role is a good indicator)
-      if (!user?.uid || !user.role) {
-          return;
-      };
-
-      setIsLoading(true);
-      
-      try {
-        const [statsResult, examsSnapshot] = await Promise.all([
-            getStudentDashboardStats(user.uid),
-            getStudentExams(user.uid),
-        ]);
-        
-        if (statsResult.success && statsResult.data) {
-            setStats(statsResult.data);
-        } else {
-            console.error(statsResult.error);
-        }
-        
-        if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-            const solved = examsSnapshot.data.length - pending;
-            setExamStats({ pending, solved });
-        }
-
-      } catch (error) {
-        console.error("Error fetching student dashboard data:", error);
-      } finally {
+    const timer = setTimeout(() => {
         setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, [user]);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
   
   if (isLoading) {
     return (
