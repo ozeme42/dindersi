@@ -1,4 +1,6 @@
-'use client';
+
+
+"use client";
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -22,7 +24,6 @@ const activityTypes = [
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit, colorClass: "bg-blue-500 hover:bg-blue-600 text-white" },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-gray-500 hover:bg-gray-600 text-white" },
   { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, colorClass: "bg-violet-600 hover:bg-violet-700 text-white" },
   { href: '/student/labirent', label: 'Labirent', icon: Milestone, colorClass: "bg-gray-700 hover:bg-gray-800 text-white" },
