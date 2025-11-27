@@ -36,9 +36,8 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
-    onAllTfAnswered: () => void;
-    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
     isFullscreen: boolean;
+    onAllTfAnswered: () => void;
 };
 
 
@@ -71,9 +70,13 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const colorClasses = [
+    const summaryColorClasses = [
         'border-blue-500', 'border-emerald-500', 'border-purple-500', 
         'border-rose-500', 'border-amber-500', 'border-indigo-500', 'border-teal-500'
+    ];
+    const darkBgClasses = [
+        'bg-slate-800', 'bg-gray-800', 'bg-zinc-800', 
+        'bg-neutral-800', 'bg-stone-800'
     ];
 
     return (
@@ -85,14 +88,12 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
              <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
-                    const colorClass = colorClasses[index % colorClasses.length];
+                    const colorClass = summaryColorClasses[index % summaryColorClasses.length];
+                    const darkBgClass = darkBgClasses[index % darkBgClasses.length];
                     return (
-                        <div key={index} className={cn(
-                            "p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn bg-card text-card-foreground border-l-8", 
-                            colorClass
-                        )}>
-                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8 text-primary")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-semibold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn text-white/90 border-l-8", colorClass, darkBgClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8", colorClass.replace('border-', 'text-'))} />
+                             <div className={cn("flex-1 break-words not-prose text-justify", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -926,9 +927,8 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onMultiAnswer,
-    onAllTfAnswered
-}: LessonContentViewerProps & { onMultiAnswer: any, onAllTfAnswered: any }) {
+    onAllTfAnswered,
+}: LessonContentViewerProps) {
     const { user } = useAuth();
     
     // For ContentListPlayer
@@ -1016,6 +1016,8 @@ export function LessonContentViewer({
         
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
+        
+        if(onAllTfAnswered) onAllTfAnswered();
     }
 
      const isNextButtonEnabled = useMemo(() => {
