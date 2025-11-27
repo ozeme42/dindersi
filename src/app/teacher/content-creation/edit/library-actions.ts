@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -15,13 +16,46 @@ export type LibraryFilter = {
     activityTypes?: ActivityItem['type'][];
 };
 
+async function getSubCollectionIds(path: string, subCollectionName: 'units' | 'topics'): Promise<string[]> {
+    try {
+        const snapshot = await getDocs(collection(db, `${path}/${subCollectionName}`));
+        return snapshot.docs.map(doc => doc.id);
+    } catch (e) {
+        // This might happen if the path is invalid, which is okay in our recursive search.
+        return [];
+    }
+}
+
 async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]> {
     if (filter.topicId && filter.topicId !== 'all') {
         return [filter.topicId];
     }
     
-    // This helper function seems complex and might not be necessary if we filter directly.
-    // Let's simplify the logic inside getLibraryItems.
+    if (filter.unitId && filter.unitId !== 'all' && filter.courseId && filter.courseId !== 'all') {
+        return await getSubCollectionIds(`courses/${filter.courseId}/units/${filter.unitId}`, 'topics');
+    }
+    
+    if (filter.courseId && filter.courseId !== 'all') {
+        const unitIds = await getSubCollectionIds(`courses/${filter.courseId}`, 'units');
+        const topicIdPromises = unitIds.map(unitId => getSubCollectionIds(`courses/${filter.courseId}/units/${unitId}`, 'topics'));
+        return (await Promise.all(topicIdPromises)).flat();
+    }
+    
+    if (filter.classId && filter.classId !== 'all') {
+        const coursesQuery = query(collection(db, 'courses'), where('classId', '==', filter.classId));
+        const coursesSnapshot = await getDocs(coursesQuery);
+        const courseIds = coursesSnapshot.docs.map(doc => doc.id);
+        
+        const unitIdPromises = courseIds.map(courseId => getSubCollectionIds(`courses/${courseId}`, 'units'));
+        const unitIds = (await Promise.all(unitIdPromises)).flat();
+
+        const topicIdPromises = courseIds.flatMap(courseId => 
+            unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
+        );
+        return (await Promise.all(topicIdPromises)).flat();
+    }
+    
+    // If no specific filter is applied, return empty, which will result in fetching all items.
     return [];
 }
 
@@ -46,33 +80,34 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         const collectionName = isQuestions ? "questions" : "activityItems";
         let baseQuery: Query = collection(db, collectionName);
 
-        const conditions = [];
+        const topicIds = await getAllTopicIdsUnderPath(filters);
 
-        if (filters.topicId && filters.topicId !== 'all') {
-            conditions.push(where("topicId", "==", filters.topicId));
-        } else if (filters.unitId && filters.unitId !== 'all') {
-            conditions.push(where("unitId", "==", filters.unitId));
-        } else if (filters.courseId && filters.courseId !== 'all') {
-            conditions.push(where("courseId", "==", filters.courseId));
-        } else if (filters.classId && filters.classId !== 'all') {
-            // This part is tricky without a direct classId on questions/activities.
-            // A better approach might be to pre-fetch courseIds for the class.
-            // For now, we'll assume this might require a more complex query or denormalization.
-            // Let's stick to the direct filters which are more reliable.
+        let finalConditions: any[] = [];
+        
+        if (topicIds.length > 0) {
+             // Firestore 'in' queries are limited to 30 items per query. 
+             // This logic doesn't handle chunking for >30 topics, but is more robust than before.
+            finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
+        } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
+            // No topic filter, fetch all
+        } else {
+             // If we got here with filters applied, it means no topics were found under the hierarchy.
+            // So, return no items.
+             return { items: [] };
         }
 
         // Apply type filters
         if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
-            conditions.push(where("type", "in", filters.questionTypes));
+            finalConditions.push(where("type", "in", filters.questionTypes));
         }
 
         if (!isQuestions && filters.activityTypes && filters.activityTypes.length > 0) {
-            conditions.push(where("type", "in", filters.activityTypes));
+            finalConditions.push(where("type", "in", filters.activityTypes));
         }
         
         // Construct the final query
-        if (conditions.length > 0) {
-            baseQuery = query(baseQuery, and(...conditions));
+        if (finalConditions.length > 0) {
+            baseQuery = query(baseQuery, and(...finalConditions));
         }
         
         const snapshot = await getDocs(baseQuery);
