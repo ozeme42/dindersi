@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -37,9 +36,9 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
+    onAllTfAnswered: () => void;
+    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
     isFullscreen: boolean;
-    onMultiAnswer?: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered?: () => void;
 };
 
 
@@ -72,7 +71,10 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const summaryColorClasses = ['bg-blue-500/80', 'bg-emerald-500/80', 'bg-purple-500/80', 'bg-rose-500/80', 'bg-amber-500/80', 'bg-indigo-500/80', 'bg-teal-500/80'];
+    const colorClasses = [
+        'border-blue-500', 'border-emerald-500', 'border-purple-500', 
+        'border-rose-500', 'border-amber-500', 'border-indigo-500', 'border-teal-500'
+    ];
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
@@ -83,11 +85,14 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
              <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
-                    const colorClass = summaryColorClasses[index % summaryColorClasses.length];
+                    const colorClass = colorClasses[index % colorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 text-primary-foreground animate-fadeAndScaleIn", colorClass)}>
-                            <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn(
+                            "p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn bg-card text-card-foreground border-l-8", 
+                            colorClass
+                        )}>
+                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8 text-primary")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-semibold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -601,7 +606,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-2xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -739,7 +744,7 @@ function StepContent({
                         'bil-bakalim': Lightbulb, 'eslestirme': Puzzle, 'hafiza-kartlari': Layers, 'adam-asmaca': Skull,
                         'kavram-avi': Crosshair, 'kelime-avi': Search, 'hedefi-vur': MousePointerClick,
                         'cumle-olusturma': Shuffle, 'kategorilere-ayir': FolderKanban, 'milyoner-yarismasi': Trophy, 'soru-coz': BrainCircuit,
-                        'dogru-yanlis-zinciri': LinkIcon, 'ben-kimim': BrainCircuit, 'acik-uclu-cevapla': Pencil, 'yazi-tura': Layers, 'deneme': ClipboardCheck, 'olay-siralama': ArrowDownUp
+                        'dogru-yanlis-zinciri': LinkIcon, 'ben-kimim': BrainCircuit, 'acik-uclu-cevapla': Pencil, 'yazi-tura': Coins, 'deneme': ClipboardCheck, 'olay-siralama': ArrowDownUp
                     };
                     const Icon = activityIcons[activityStep.activityType.split('/').pop() || ''] || Gamepad2;
                     return (
@@ -923,7 +928,7 @@ export function LessonContentViewer({
     isFullscreen,
     onMultiAnswer,
     onAllTfAnswered
-}: LessonContentViewerProps) {
+}: LessonContentViewerProps & { onMultiAnswer: any, onAllTfAnswered: any }) {
     const { user } = useAuth();
     
     // For ContentListPlayer
@@ -955,7 +960,7 @@ export function LessonContentViewer({
     
     
     useEffect(() => {
-        if (topic && onProgressUpdate) {
+        if (topic) {
             onProgressUpdate(topic.id, internalProgress);
         }
     }, [internalProgress, onProgressUpdate, topic]);
@@ -1004,14 +1009,13 @@ export function LessonContentViewer({
     };
     
     const handleLocalAllTfAnswered = () => {
-        if (!currentStep || currentStep.type !== 'trueFalseList' || !onAllTfAnswered) return;
+        if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
         const points = correctCount * 20;
         
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
-        onAllTfAnswered();
     }
 
      const isNextButtonEnabled = useMemo(() => {
