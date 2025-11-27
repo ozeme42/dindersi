@@ -3,6 +3,7 @@ import { initializeApp, getApps, getApp, FirebaseApp, setLogLevel } from "fireba
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
@@ -31,6 +32,21 @@ if (!getApps().length) {
 } else {
     app = getApp();
 }
+
+// Initialize App Check for security
+if (typeof window !== 'undefined') {
+  // Pass your reCAPTCHA v3 site key (from the Google Cloud Console)
+  // to initializeAppCheck().
+  // In a real app, this key would be stored in an environment variable.
+  // For this development environment, we're using a debug token.
+  // Self-host debug token listener to avoid loading from a CDN.
+  (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider('6Ld-5f8pAAAAALd_2C5hM9sc-d5D0Gf-eaSj8sS4'),
+    isTokenAutoRefreshEnabled: true
+  });
+}
+
 
 auth = getAuth(app);
 db = getFirestore(app);
