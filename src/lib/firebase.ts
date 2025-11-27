@@ -2,6 +2,7 @@
 import { initializeApp, getApps, getApp, FirebaseApp, setLogLevel } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
@@ -15,6 +16,7 @@ export const firebaseConfig = {
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
 let db: ReturnType<typeof getFirestore>;
+let storage: ReturnType<typeof getStorage>;
 
 // Check if Firebase has already been initialized
 if (!getApps().length) {
@@ -32,6 +34,7 @@ if (!getApps().length) {
 
 auth = getAuth(app);
 db = getFirestore(app);
+storage = getStorage(app);
 
 // Enable offline persistence only on the client-side
 if (typeof window !== 'undefined') {
@@ -48,4 +51,4 @@ if (typeof window !== 'undefined') {
     });
 }
 
-export { app, auth, db };
+export { app, auth, db, storage };
