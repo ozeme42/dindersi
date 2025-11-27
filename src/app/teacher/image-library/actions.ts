@@ -1,62 +1,92 @@
 
 'use server';
 
-import { db, storage } from '@/lib/firebase';
-import { collection, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadString, getDownloadURL, deleteObject } from 'firebase/storage';
-import { z } from 'zod';
-import { adminApp } from '@/lib/firebase-admin'; // Needed for getting user
+import { db } from "@/lib/firebase";
+import { storage } from "@/lib/firebase-storage";
+import { collection, query, where, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import type { ImageAsset } from "@/lib/types";
 
-const UploadSchema = z.object({
-  image: z.string().startsWith('data:image', "Geçersiz resim formatı."),
-  name: z.string().min(1, "Dosya adı gerekli."),
-  teacherId: z.string(),
-});
-
-export async function uploadImage(data: unknown) {
-  const validation = UploadSchema.safeParse(data);
-  if (!validation.success) {
-    return { success: false, error: validation.error.flatten().fieldErrors };
-  }
-
-  const { image, name, teacherId } = validation.data;
-  const storageRef = ref(storage, `image-library/${teacherId}/${Date.now()}-${name}`);
-
-  try {
-    const snapshot = await uploadString(storageRef, image, 'data_url');
-    const downloadURL = await getDownloadURL(snapshot.ref);
-
-    const docRef = await addDoc(collection(db, 'imageLibrary'), {
-      name: name,
-      url: downloadURL,
-      storagePath: snapshot.ref.fullPath,
-      teacherId: teacherId,
-      createdAt: serverTimestamp(),
-    });
-
-    return { success: true, id: docRef.id, url: downloadURL };
-  } catch (error: any) {
-    console.error("Error uploading image:", error);
-    return { success: false, error: "Görsel yüklenirken bir hata oluştu." };
-  }
+export async function getImages(teacherId: string): Promise<{ success: boolean; data?: ImageAsset[]; error?: string }> {
+    try {
+        const q = query(
+            collection(db, 'imageLibrary'),
+            where('teacherId', '==', teacherId),
+            orderBy('createdAt', 'desc')
+        );
+        const snapshot = await getDocs(q);
+        const images = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+                createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+            } as ImageAsset;
+        });
+        return { success: true, data: JSON.parse(JSON.stringify(images)) };
+    } catch (e: any) {
+        console.error("Error getting images:", e);
+        if (e.code === 'failed-precondition') {
+             return { success: false, error: `Veritabanı indeksi eksik. Geliştirici konsolundaki linki kullanarak indeksi oluşturun. Hata: ${e.message}`};
+        }
+        return { success: false, error: 'Görseller alınamadı.' };
+    }
 }
 
-export async function deleteImage(imageId: string, storagePath: string) {
-    if (!imageId || !storagePath) {
-        return { success: false, error: 'Eksik bilgi.' };
+export async function uploadImage(teacherId: string, formData: FormData): Promise<{ success: boolean; url?: string; path?: string; error?: string; }> {
+    const file = formData.get('file') as File;
+    if (!file) {
+        return { success: false, error: 'Dosya bulunamadı.' };
     }
+    
+    const fileExtension = file.name.split('.').pop();
+    const newFileName = `${teacherId}_${Date.now()}.${fileExtension}`;
+    const storagePath = `image-library/${teacherId}/${newFileName}`;
+    const storageRef = ref(storage, storagePath);
+
     try {
-        const imageDocRef = doc(db, 'imageLibrary', imageId);
-        await deleteDoc(imageDocRef);
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
 
-        const storageRef = ref(storage, storagePath);
-        await deleteObject(storageRef);
+        await uploadBytes(storageRef, buffer, { contentType: file.type });
+        const downloadURL = await getDownloadURL(storageRef);
 
-        return { success: true };
+        return { success: true, url: downloadURL, path: storagePath };
     } catch (error: any) {
-        console.error("Error deleting image:", error);
-        // If doc is deleted but storage is not, we might have an orphan file.
-        // For this app, we'll accept that risk and report a generic error.
-        return { success: false, error: "Görsel silinirken bir hata oluştu." };
+        console.error('Error uploading image:', error);
+        return { success: false, error: 'Görsel yüklenirken bir hata oluştu: ' + error.message };
+    }
+}
+
+export async function addImageRecord(image: Omit<ImageAsset, 'id' | 'createdAt'>): Promise<{ success: boolean; id?: string; error?: string }> {
+    try {
+        const docRef = await addDoc(collection(db, 'imageLibrary'), {
+            ...image,
+            createdAt: serverTimestamp()
+        });
+        return { success: true, id: docRef.id };
+    } catch (e: any) {
+        return { success: false, error: 'Görsel veritabanına kaydedilemedi.' };
+    }
+}
+
+export async function deleteImage(image: ImageAsset): Promise<{ success: boolean; error?: string }> {
+    try {
+        // First, delete the file from Storage
+        if (image.storagePath) {
+            const storageRef = ref(storage, image.storagePath);
+            await deleteObject(storageRef);
+        }
+        // Then, delete the record from Firestore
+        await deleteDoc(doc(db, 'imageLibrary', image.id));
+        return { success: true };
+    } catch (e: any) {
+        console.error("Error deleting image:", e);
+        if ((e as any).code === 'storage/object-not-found') {
+            console.warn("Storage object not found, deleting Firestore record anyway.");
+             await deleteDoc(doc(db, 'imageLibrary', image.id));
+             return { success: true };
+        }
+        return { success: false, error: 'Görsel silinemedi.' };
     }
 }
