@@ -37,6 +37,7 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
+    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered: () => void;
     isFullscreen: boolean;
 };
@@ -72,13 +73,13 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
     const summaryColorClasses = [
-        'border-blue-500 bg-blue-800/70',
-        'border-emerald-500 bg-emerald-800/70',
-        'border-purple-500 bg-purple-800/70',
-        'border-rose-500 bg-rose-800/70',
-        'border-amber-500 bg-amber-800/70',
-        'border-indigo-500 bg-indigo-800/70',
-        'border-teal-500 bg-teal-800/70'
+        "bg-blue-800/70 border-blue-600",
+        "bg-emerald-800/70 border-emerald-600",
+        "bg-purple-800/70 border-purple-600",
+        "bg-rose-800/70 border-rose-600",
+        "bg-amber-800/70 border-amber-600",
+        "bg-indigo-800/70 border-indigo-600",
+        "bg-teal-800/70 border-teal-600",
     ];
 
     return (
@@ -92,9 +93,9 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn", "bg-card text-card-foreground border-l-8", colorClass)}>
-                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8 text-white/90", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-bold text-white/90", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn text-white/90 border-l-8", colorClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-medium", isFullscreen ? "text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -927,8 +928,9 @@ export function LessonContentViewer({
     onTopicComplete,
     progress,
     onProgressUpdate,
+    onMultiAnswer,
+    onAllTfAnswered,
     isFullscreen,
-    onAllTfAnswered = () => {},
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
@@ -1237,7 +1239,7 @@ export function LessonContentViewer({
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return "from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-950";
+                 return "from-slate-900 to-gray-900";
             case 'conceptExplanation':
                 return "from-indigo-200 to-purple-300 dark:from-indigo-900 dark:to-purple-950";
             case 'mcq':
@@ -1288,7 +1290,7 @@ export function LessonContentViewer({
                  stepAnswers={internalProgress.answers[currentStepIndex]}
                  topic={topic}
                  courseId={courseId}
-                 unitId={unitId}
+                 unitId={unitId!}
                  courseTitle={courseTitle}
                  unitTitle={unitTitle}
                  isFullscreen={isFullscreen}
