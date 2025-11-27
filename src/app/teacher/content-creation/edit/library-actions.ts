@@ -1,17 +1,16 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, UploadedImage } from "@/lib/types";
+import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, ImageAsset } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'imageLibrary' | 'videos';
+    type: 'questions' | 'activities' | 'videos' | 'imageLibrary';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -21,7 +20,6 @@ async function getSubCollectionIds(path: string, subCollectionName: 'units' | 't
         const snapshot = await getDocs(collection(db, `${path}/${subCollectionName}`));
         return snapshot.docs.map(doc => doc.id);
     } catch (e) {
-        // This might happen if the path is invalid, which is okay in our recursive search.
         return [];
     }
 }
@@ -47,20 +45,24 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
         const courseIds = coursesSnapshot.docs.map(doc => doc.id);
         
         const unitIdPromises = courseIds.map(courseId => getSubCollectionIds(`courses/${courseId}`, 'units'));
-        const unitIds = (await Promise.all(unitIdPromises)).flat();
+        const unitIdsArrays = await Promise.all(unitIdPromises);
+        const allUnitIds = unitIdsArrays.flat();
 
-        const topicIdPromises = courseIds.flatMap(courseId => 
-            unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
-        );
-        return (await Promise.all(topicIdPromises)).flat();
+        const topicIdPromises = courseIds.flatMap(courseId => {
+            const courseUnitIds = allUnitIds.filter(uid => uid.startsWith(courseId)); // This is not how unit ids work, needs fixing if we depend on it
+            return getSubCollectionIds(`courses/${courseId}`, 'units').then(unitIds => 
+                Promise.all(unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics')))
+            );
+        });
+        
+        return (await Promise.all(topicIdPromises)).flat(2);
     }
     
-    // If no specific filter is applied, return empty, which will result in fetching all items.
     return [];
 }
 
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | UploadedImage)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | ImageAsset)[], error?: string }> {
     try {
         if (filters.type === 'videos') {
             const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
@@ -70,9 +72,9 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         }
         
         if (filters.type === 'imageLibrary') {
-            const imagesQuery = query(collection(db, "imageLibrary"), orderBy("createdAt", "desc"));
+            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
             const snapshot = await getDocs(imagesQuery);
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UploadedImage));
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
 
@@ -85,18 +87,14 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         let finalConditions: any[] = [];
         
         if (topicIds.length > 0) {
-             // Firestore 'in' queries are limited to 30 items per query. 
-             // This logic doesn't handle chunking for >30 topics, but is more robust than before.
             finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
         } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
             // No topic filter, fetch all
         } else if (filters.classId || filters.courseId || filters.unitId || filters.topicId) {
-             // If we got here with filters applied, it means no topics were found under the hierarchy.
-            // So, return no items.
+             // If we have filters but no topicIds found, it means no items match.
              return { items: [] };
         }
 
-        // Apply type filters
         if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
             finalConditions.push(where("type", "in", filters.questionTypes));
         }
@@ -105,7 +103,6 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             finalConditions.push(where("type", "in", filters.activityTypes));
         }
         
-        // Construct the final query
         if (finalConditions.length > 0) {
             baseQuery = query(baseQuery, and(...finalConditions));
         }

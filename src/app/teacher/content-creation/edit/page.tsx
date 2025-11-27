@@ -8,7 +8,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep, ImageAsset } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video, Image as ImageIcon } from 'lucide-react';
+import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
 import Link from 'next/link';
@@ -61,10 +61,7 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
             case 'anagramFlashcard': return `${step.cards.length} anagram kartı`;
             case 'sentenceScramble': return step.scrambledSentence;
             case 'visual': 
-                if (!(step as VisualStep).imageUrl) {
-                    return <span className="text-destructive">Görsel URL'i eksik</span>
-                }
-                return <Image src={(step as VisualStep).imageUrl} alt={step.title} width={100} height={100} className="rounded-md object-cover" data-ai-hint="lesson visual" />;
+                return (step as VisualStep).imageUrl ? <Image src={(step as VisualStep).imageUrl} alt={step.title} width={100} height={100} className="rounded-md object-cover" data-ai-hint="lesson visual" /> : "Görsel URL'i eksik";
             case 'iframe': return step.url;
             case 'htmlSlide': return "İnteraktif HTML Sayfası";
             case 'activityLink': return `Etkinlik: ${step.activityLabel}`;
@@ -128,7 +125,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'imageLibrary' | 'videoLibrary'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -231,15 +228,22 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'imageLibrary' | 'videoLibrary') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
-
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'imageLibrary') => {
+    
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
+            case 'visual':
+                 newSteps = (importedItems as ImageAsset[]).map(item => ({
+                    type: 'visual',
+                    title: item.title || 'Kütüphaneden Görsel',
+                    imageUrl: item.imageUrl
+                }));
+                break;
             case 'flashcard':
                 newSteps.push({
                     type: 'flashcard',
@@ -289,13 +293,6 @@ function TopicEditor() {
                             return null;
                     }
                 }).filter((s): s is LessonStep => s !== null);
-                break;
-            case 'visual':
-                newSteps = (importedItems as ImageAsset[]).map(img => ({
-                    type: 'visual',
-                    title: img.title,
-                    imageUrl: img.url,
-                }));
                 break;
         }
 
@@ -448,27 +445,25 @@ function TopicEditor() {
         return <div className="text-center text-muted-foreground">Konu yüklenemedi.</div>
     }
 
-    const anlatimStepOptions: {label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void}[] = [
+    const anlatimStepOptions: {label: string, type: LessonStep['type'], defaultTitle: string}[] = [
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Bu Konuda Öğreneceklerimiz' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
-        { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
-        { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
+        { label: 'Bilgi Kartları', type: 'flashcard', defaultTitle: 'Bilgi Kartları' },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Kavram Haritası', type: 'conceptMap', defaultTitle: 'Kavram Haritası' },
         { label: 'Dış Sayfa / Simülasyon', type: 'iframe', defaultTitle: 'İnteraktif Etkinlik' },
         { label: 'İnteraktif HTML Sayfası', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
     ];
-    const degerlendirmeStepOptions: {label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void}[] = [
+    const degerlendirmeStepOptions: {label: string, type: LessonStep['type'], defaultTitle: string}[] = [
         { label: 'Çoktan Seçmeli', type: 'mcq', defaultTitle: 'Çoktan Seçmeli Soru' },
         { label: 'Doğru/Yanlış', type: 'tf', defaultTitle: 'Doğru/Yanlış' },
         { label: 'Doğru/Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
-        { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
-        { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
-        { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
+        { label: 'Anagram Bilgi Kartları', type: 'anagramFlashcard', defaultTitle: 'Anagram Kartları' },
+        { label: 'Cümle Düzeltme', type: 'sentenceScramble', defaultTitle: 'Cümle Düzeltme' },
     ];
     
     const playableActivities = [
@@ -521,8 +516,8 @@ function TopicEditor() {
                         <Eye className="mr-2 h-4 w-4" />
                         Önizle
                     </Button>
-                    <Button variant="outline" onClick={() => handleOpenLibrary(['imageLibrary'], false, 'visual')}>
-                        <ImageIcon className="mr-2 h-4 w-4"/>
+                    <Button variant="outline" onClick={() => handleOpenLibrary(['imageLibrary'], true, 'visual')}>
+                        <Library className="mr-2 h-4 w-4"/>
                         Görsel Ekle
                     </Button>
                     <Button variant="outline" onClick={() => setIsBulkImportOpen(true)}>
@@ -622,7 +617,7 @@ function TopicEditor() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            {anlatimStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)}>{opt.label}</DropdownMenuItem>)}
+                            {anlatimStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => handleAddStep(opt.type, opt.defaultTitle)}>{opt.label}</DropdownMenuItem>)}
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <DropdownMenu>
@@ -632,7 +627,7 @@ function TopicEditor() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            {degerlendirmeStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)}>{opt.label}</DropdownMenuItem>)}
+                            {degerlendirmeStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => handleAddStep(opt.type, opt.defaultTitle)}>{opt.label}</DropdownMenuItem>)}
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <DropdownMenu>
@@ -723,7 +718,7 @@ function TopicEditor() {
     );
 }
 
-export default function SummerTopicEditorPage() {
+export default function TopicEditorPage() {
     return (
         <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <TopicEditor />
