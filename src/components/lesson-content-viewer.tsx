@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -72,19 +71,19 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const summaryColorClasses = [
-        "bg-blue-800/70 border-blue-600",
-        "bg-emerald-800/70 border-emerald-600",
-        "bg-purple-800/70 border-purple-600",
-        "bg-rose-800/70 border-rose-600",
-        "bg-amber-800/70 border-amber-600",
-        "bg-indigo-800/70 border-indigo-600",
-        "bg-teal-800/70 border-teal-600",
+     const summaryColorClasses = [
+        'bg-blue-500/10 border-l-8 border-blue-500 text-blue-800 dark:text-blue-100',
+        'bg-emerald-500/10 border-l-8 border-emerald-500 text-emerald-800 dark:text-emerald-100',
+        'bg-purple-500/10 border-l-8 border-purple-500 text-purple-800 dark:text-purple-100',
+        'bg-rose-500/10 border-l-8 border-rose-500 text-rose-800 dark:text-rose-100',
+        'bg-amber-500/10 border-l-8 border-amber-500 text-amber-800 dark:text-amber-100',
+        'bg-indigo-500/10 border-l-8 border-indigo-500 text-indigo-800 dark:text-indigo-100',
+        'bg-teal-500/10 border-l-8 border-teal-500 text-teal-800 dark:text-teal-100',
     ];
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
-            <div className="p-4 rounded-lg shadow-md bg-primary flex-shrink-0">
+            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-b-4 border-primary/50 flex-shrink-0">
                 <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
             </div>
             
@@ -93,9 +92,9 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn text-white/90 border-l-8", colorClass)}>
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn bg-card", colorClass)}>
                             <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-medium", isFullscreen ? "text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -109,7 +108,7 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
     
     return (
         <div className='flex flex-col h-full w-full items-center'>
-            <div className="p-4 rounded-lg shadow-md bg-primary flex-shrink-0 mb-4">
+             <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-b-4 border-primary/50 flex-shrink-0 mb-4">
                 <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{title}</h2>
             </div>
             <div className="w-full flex-grow grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 md:gap-6 p-2">
@@ -609,7 +608,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-2xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -928,9 +927,9 @@ export function LessonContentViewer({
     onTopicComplete,
     progress,
     onProgressUpdate,
-    onMultiAnswer,
-    onAllTfAnswered,
     isFullscreen,
+    onMultiAnswer,
+    onAllTfAnswered
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
