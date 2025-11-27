@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep } from '@/lib/types';
+import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep, ImageAsset } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video } from 'lucide-react';
@@ -61,12 +61,9 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
             case 'anagram': return step.scrambledWord;
             case 'anagramFlashcard': return `${step.cards.length} anagram kartı`;
             case 'sentenceScramble': return step.scrambledSentence;
-            case 'visual': 
-                const visualStep = step as VisualStep;
-                if (!visualStep.imageUrl) {
-                    return <span className="text-destructive">Görsel URL'i eksik!</span>;
-                }
-                return <Image src={visualStep.imageUrl} alt={visualStep.title} width={100} height={100} className="rounded-md object-cover" data-ai-hint="lesson visual" />;
+            case 'visual':
+                const imageUrl = (step as VisualStep).imageUrl;
+                return imageUrl ? <Image src={imageUrl} alt={step.title} width={100} height={100} className="rounded-md object-cover" data-ai-hint="lesson visual" /> : <span className="text-destructive text-xs">Görsel URL'i eksik!</span>;
             case 'iframe': return step.url;
             case 'htmlSlide': return "İnteraktif HTML Sayfası";
             case 'activityLink': return `Etkinlik: ${step.activityLabel}`;
@@ -130,7 +127,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -185,9 +182,7 @@ function TopicEditor() {
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
             case 'flashcard': newStep = { type, title: defaultTitle, cards: [{ term: 'Terim', definition: 'Tanım' }] }; break;
-            case 'visual':
-                handleOpenLibrary(['imageLibrary'], false, 'visual');
-                return;
+            case 'visual': newStep = { type, title: defaultTitle, imageUrl: '' }; break;
             case 'mcq': newStep = { type, title: defaultTitle, question: 'Soru?', options: ['A', 'B', 'C', 'D'], correctAnswer: 'A' }; break;
             case 'tf': newStep = { type, title: defaultTitle, statement: 'Bu ifade doğru mu?', isTrue: true }; break;
             case 'trueFalseList': newStep = { type, title: defaultTitle, questions: [{ statement: 'Yeni ifade...', isTrue: true}] }; break;
@@ -235,78 +230,73 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         let newSteps: LessonStep[] = [];
         
-        if (stepType === 'visual' && importedItems.length > 0) {
-            const imageItem = importedItems[0] as any; // Assuming it's an UploadedImage-like structure from another action
-            const visualStep: VisualStep = {
-                type: 'visual',
-                title: imageItem.title || 'Kütüphaneden Görsel',
-                imageUrl: imageItem.downloadUrl,
-            };
-            newSteps.push(visualStep);
+        switch (stepType) {
+            case 'visual':
+                newSteps = (importedItems as ImageAsset[]).map(item => ({
+                    type: 'visual',
+                    title: item.title || 'Kütüphane Görseli',
+                    imageUrl: item.downloadUrl,
+                }));
+                break;
+            case 'flashcard':
+                newSteps.push({
+                    type: 'flashcard',
+                    title: 'Bilgi Kartları (Veri Bankası)',
+                    cards: (importedItems as ActivityItem[]).map(item => ({
+                        term: item.content.term || '',
+                        definition: item.content.definition || '',
+                    }))
+                });
+                break;
+            case 'anagramFlashcard':
+                newSteps.push({
+                    type: 'anagramFlashcard',
+                    title: 'Anagram Kartları (Veri Bankası)',
+                    cards: (importedItems as ActivityItem[]).map(item => ({
+                        definition: `İpucu: Bu kelime "${item.content.text}"`,
+                        scrambledWord: (item.content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
+                        correctAnswer: item.content.text || ''
+                    }))
+                });
+                break;
+            case 'sentenceScramble':
+                newSteps = (importedItems as ActivityItem[]).map(item => ({
+                    type: 'sentenceScramble',
+                    title: 'Cümle Düzeltme (Veri Bankası)',
+                    correctSentence: item.content.text || '',
+                    scrambledSentence: (item.content.text || '').split(' ').sort(() => 0.5 - Math.random()).join(' ')
+                }));
+                break;
+            case 'keyConcepts':
+                 newSteps.push({
+                    type: 'content',
+                    title: 'Anahtar Kavramlar (Veri Bankası)',
+                    content: "<ul>" + (importedItems as ActivityItem[]).map(item => `<li>${item.content.text}</li>`).join('') + "</ul>"
+                });
+                break;
+            case 'questions':
+                newSteps = (importedItems as Question[]).map(q => {
+                    switch (q.type) {
+                        case 'Çoktan Seçmeli':
+                            return { type: 'mcq', title: q.text, question: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' };
+                        case 'Doğru/Yanlış':
+                            return { type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' || q.isTrue || false };
+                        case 'Boşluk Doldurma':
+                            return { type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' };
+                        default:
+                            return null;
+                    }
+                }).filter((s): s is LessonStep => s !== null);
+                break;
         }
-        else {
-            switch (stepType) {
-                case 'flashcard':
-                    newSteps.push({
-                        type: 'flashcard',
-                        title: 'Bilgi Kartları (Veri Bankası)',
-                        cards: (importedItems as ActivityItem[]).map(item => ({
-                            term: item.content.term || '',
-                            definition: item.content.definition || '',
-                        }))
-                    });
-                    break;
-                case 'anagramFlashcard':
-                    newSteps.push({
-                        type: 'anagramFlashcard',
-                        title: 'Anagram Kartları (Veri Bankası)',
-                        cards: (importedItems as ActivityItem[]).map(item => ({
-                            definition: `İpucu: Bu kelime "${item.content.text}"`,
-                            scrambledWord: (item.content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
-                            correctAnswer: item.content.text || ''
-                        }))
-                    });
-                    break;
-                case 'sentenceScramble':
-                    newSteps = (importedItems as ActivityItem[]).map(item => ({
-                        type: 'sentenceScramble',
-                        title: 'Cümle Düzeltme (Veri Bankası)',
-                        correctSentence: item.content.text || '',
-                        scrambledSentence: (item.content.text || '').split(' ').sort(() => 0.5 - Math.random()).join(' ')
-                    }));
-                    break;
-                case 'keyConcepts':
-                    newSteps.push({
-                        type: 'content',
-                        title: 'Anahtar Kavramlar (Veri Bankası)',
-                        content: "<ul>" + (importedItems as ActivityItem[]).map(item => `<li>${item.content.text}</li>`).join('') + "</ul>"
-                    });
-                    break;
-                case 'questions':
-                    newSteps = (importedItems as Question[]).map(q => {
-                        switch (q.type) {
-                            case 'Çoktan Seçmeli':
-                                return { type: 'mcq', title: q.text, question: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' };
-                            case 'Doğru/Yanlış':
-                                return { type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' || q.isTrue || false };
-                            case 'Boşluk Doldurma':
-                                return { type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' };
-                            default:
-                                return null;
-                        }
-                    }).filter((s): s is LessonStep => s !== null);
-                    break;
-            }
-        }
-
 
         if (newSteps.length > 0) {
             const newStepsWithIds = addIdToSteps(newSteps);
@@ -316,6 +306,7 @@ function TopicEditor() {
                 description: `${newSteps.length} yeni adım kütüphaneden eklendi.`,
             });
         }
+        setIsLibraryPanelOpen(false);
     };
 
 
@@ -464,7 +455,7 @@ function TopicEditor() {
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
+        { label: 'Görsel / Afiş', action: () => handleOpenLibrary(['imageLibrary'], true, 'visual') },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
         { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },
@@ -483,20 +474,6 @@ function TopicEditor() {
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
     
-    const playableActivities = [
-      { href: 'bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
-      { href: 'eslestirme', label: 'Eşleştirme', icon: Puzzle },
-      { href: 'hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
-      { href: 'adam-asmaca', label: 'Adam Asmaca', icon: Skull },
-      { href: 'kavram-avi', label: 'Kavram Avı', icon: Crosshair },
-      { href: 'kelime-avi', label: 'Kelime Avı', icon: Search },
-      { href: 'hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
-      { href: 'cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle },
-      { href: 'kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
-      { href: 'milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
-      { href: 'soru-coz', label: 'Soru Çöz', icon: BrainCircuit },
-    ] as const;
-
     const aiGenerationOptions = [
         { label: 'Özet (Akordiyon)', moduleId: 'summary' },
         { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
@@ -513,6 +490,24 @@ function TopicEditor() {
         { label: 'Boşluk Doldurma Soruları', moduleId: 'fillInTheBlankQuestions' },
         { label: 'Anagram Soruları (Kart Formatında)', moduleId: 'anagramQuestions' },
         { label: 'Cümle Düzeltme Soruları', moduleId: 'sentenceScrambleQuestions' },
+    ] as const;
+
+    const playableActivities = [
+      { href: 'bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
+      { href: 'eslestirme', label: 'Eşleştirme', icon: Puzzle },
+      { href: 'hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
+      { href: 'adam-asmaca', label: 'Adam Asmaca', icon: Skull },
+      { href: 'kavram-avi', label: 'Kavram Avı', icon: Crosshair },
+      { href: 'kelime-avi', label: 'Kelime Avı', icon: Search },
+      { href: 'hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
+      { href: 'cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle },
+      { href: 'kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
+      { href: 'milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
+      { href: 'soru-coz', label: 'Soru Çöz', icon: BrainCircuit },
+      { href: 'dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: LinkIcon },
+      { href: 'ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
+      { href: 'acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
+      { href: 'olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
     ] as const;
 
     return (
@@ -708,7 +703,7 @@ function TopicEditor() {
                 isOpen={isLibraryPanelOpen}
                 onOpenChange={setIsLibraryPanelOpen}
                 onItemsSelected={handleItemsImportedFromLibrary}
-                context={{ courseId, unitId: null, topicId }}
+                context={{ courseId, unitId, topicId }}
                 config={libraryConfig}
              />
              <StepEditorDialog 
@@ -716,7 +711,7 @@ function TopicEditor() {
                 onOpenChange={(isOpen) => !isOpen && setEditingStep(null)}
                 step={editingStep?.step ?? null}
                 onSave={handleUpdateStep}
-                context={{ courseId, unitId: null, topicId }}
+                context={{ courseId, unitId, topicId }}
             />
              <LessonPreviewDialog 
                 isOpen={isPreviewOpen}
