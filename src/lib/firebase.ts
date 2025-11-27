@@ -5,6 +5,7 @@ import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
+
 export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
   authDomain: "tamuyum.firebaseapp.com",
@@ -23,7 +24,20 @@ let storage: ReturnType<typeof getStorage>;
 if (!getApps().length) {
     try {
         app = initializeApp(firebaseConfig);
-        setLogLevel('error'); // Reduce console noise
+        if (typeof window !== 'undefined') {
+            if (process.env.NODE_ENV === 'development') {
+                // Pass your reCAPTCHA v3 site key (public) to the provider.
+                (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+            }
+             initializeAppCheck(app, {
+                provider: new ReCaptchaV3Provider('6Ld-9PgpAAAAAKiJnS3x0G0Ki-v8sS5vV3Pq3aTj'),
+
+                // Optional argument. If true, the SDK automatically refreshes App Check
+                // tokens as needed.
+                isTokenAutoRefreshEnabled: true
+            });
+        }
+        setLogLevel('error');
     } catch (error) {
         console.error("Firebase initialization error", error);
         // In case of race conditions, try to get the already initialized app
@@ -33,28 +47,20 @@ if (!getApps().length) {
     app = getApp();
 }
 
-// Initialize App Check for security - only on client side
-if (typeof window !== 'undefined') {
-    // Self-host the reCAPTCHA v3 script to avoid conflicts with other scripts
-    (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.NODE_ENV === 'development';
-    
-    initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider('6Ld-1QsqAAAAAK7_r85D_Zp7mH_N3-mF18S3E_Kg'),
-      isTokenAutoRefreshEnabled: true
-    });
-}
-
 auth = getAuth(app);
 db = getFirestore(app);
-storage = getStorage(app); // Initialize Storage
+storage = getStorage(app);
 
 // Enable offline persistence only on the client-side
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db)
     .catch((err) => {
       if (err.code == 'failed-precondition') {
+        // This can happen if multiple tabs are open, as persistence can only be
+        // enabled in one tab at a time.
         console.warn("Firestore persistence failed, most likely due to multiple tabs open.");
       } else if (err.code == 'unimplemented') {
+        // The current browser does not support all of the features required to enable persistence
         console.warn("Firestore persistence is not supported in this browser.");
       }
     });
