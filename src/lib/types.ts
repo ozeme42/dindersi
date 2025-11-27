@@ -1,7 +1,4 @@
 
-
-
-
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -71,6 +68,7 @@ export type QuestionBankProgress = {
 
 export type VideoAsset = {
     id: string;
+    type: 'videoLibrary';
     title: string;
     description: string;
     url: string;
@@ -78,17 +76,16 @@ export type VideoAsset = {
     createdAt: any;
 };
 
-export type UploadedImage = {
+export type ImageAsset = {
     id: string;
+    type: 'imageLibrary';
     title: string;
-    downloadUrl: string;
+    description: string;
+    url: string;
     teacherId: string;
-    classId: string;
-    courseId: string;
-    unitId: string;
-    topicId: string;
     createdAt: any;
 };
+
 
 // Discriminated union for more type-safe lesson steps
 export type ContentStep = { type: 'content'; title: string; content: string; };
@@ -225,7 +222,7 @@ export type Question = {
     isTrue?: boolean;
     classId?: string;
     className?: string;
-    createdAt?: string;
+    createdAt?: any;
 };
 
 // Represents a class in the school
@@ -393,7 +390,6 @@ export type GetQuizOutput = {
 
 export type YaziTuraQuestions = {
     easy: Question[];
-    medium: Question[];
     hard: Question[];
 };
 
