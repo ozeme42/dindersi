@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -10,7 +11,7 @@ export type LibraryFilter = {
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'videos' | 'images';
+    type: 'questions' | 'activities' | 'imageLibrary' | 'videos';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -67,8 +68,9 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
-        if (filters.type === 'images') {
-            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
+        
+        if (filters.type === 'imageLibrary') {
+            const imagesQuery = query(collection(db, "imageLibrary"), orderBy("createdAt", "desc"));
             const snapshot = await getDocs(imagesQuery);
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UploadedImage));
             return { items: JSON.parse(JSON.stringify(items)) };
@@ -88,7 +90,7 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
         } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
             // No topic filter, fetch all
-        } else {
+        } else if (filters.classId || filters.courseId || filters.unitId || filters.topicId) {
              // If we got here with filters applied, it means no topics were found under the hierarchy.
             // So, return no items.
              return { items: [] };

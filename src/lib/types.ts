@@ -1,6 +1,7 @@
 
 
 
+
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -77,6 +78,17 @@ export type VideoAsset = {
     createdAt: any;
 };
 
+export type UploadedImage = {
+    id: string;
+    title: string;
+    downloadUrl: string;
+    teacherId: string;
+    classId: string;
+    courseId: string;
+    unitId: string;
+    topicId: string;
+    createdAt: any;
+};
 
 // Discriminated union for more type-safe lesson steps
 export type ContentStep = { type: 'content'; title: string; content: string; };
@@ -213,6 +225,7 @@ export type Question = {
     isTrue?: boolean;
     classId?: string;
     className?: string;
+    createdAt?: string;
 };
 
 // Represents a class in the school
