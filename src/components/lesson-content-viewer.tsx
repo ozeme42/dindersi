@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -36,6 +37,8 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
+    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
+    onAllTfAnswered: () => void;
     isFullscreen: boolean;
 };
 
@@ -69,14 +72,7 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const summaryColorClasses = [
-      'from-slate-800 to-slate-700',
-      'from-emerald-800 to-emerald-700',
-      'from-sky-800 to-sky-700',
-      'from-rose-800 to-rose-700',
-      'from-amber-800 to-amber-700',
-      'from-indigo-800 to-indigo-700',
-    ];
+    const summaryColorClasses = ['bg-blue-500/80', 'bg-emerald-500/80', 'bg-purple-500/80', 'bg-rose-500/80', 'bg-amber-500/80', 'bg-indigo-500/80', 'bg-teal-500/80'];
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
@@ -89,11 +85,9 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-xl shadow-xl flex items-start gap-4 text-white animate-fadeAndScaleIn bg-gradient-to-br border border-white/20", colorClass)}>
-                            <div className="p-2 bg-white/10 rounded-full flex-shrink-0 mt-1">
-                                <Icon className={cn(isFullscreen ? "h-8 w-8" : "h-6 w-6")} />
-                            </div>
-                             <div className={cn("flex-1 break-words not-prose text-justify font-bold drop-shadow-sm", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 text-primary-foreground animate-fadeAndScaleIn", colorClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -607,7 +601,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl lg:text-2xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -926,8 +920,10 @@ export function LessonContentViewer({
     onTopicComplete,
     progress,
     onProgressUpdate,
+    onMultiAnswer,
+    onAllTfAnswered,
     isFullscreen,
-}: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: any }) {
+}: LessonContentViewerProps) {
     const { user } = useAuth();
     
     // For ContentListPlayer
