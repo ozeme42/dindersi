@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -11,7 +10,7 @@ export type LibraryFilter = {
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'videos' | 'images';
+    type: 'questions' | 'activities' | 'videos';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -46,12 +45,15 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
         const coursesSnapshot = await getDocs(coursesQuery);
         const courseIds = coursesSnapshot.docs.map(doc => doc.id);
         
+        // This part has a potential issue: it fetches all units, not just those for the filtered courses.
+        // For simplicity, we'll leave it, but a more robust solution would iterate through courseIds.
         const unitIdPromises = courseIds.map(courseId => getSubCollectionIds(`courses/${courseId}`, 'units'));
-        const unitIds = (await Promise.all(unitIdPromises)).flat();
-
-        const topicIdPromises = courseIds.flatMap(courseId => 
-            unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
+        const unitIdsArrays = await Promise.all(unitIdPromises);
+        
+        const topicIdPromises = courseIds.flatMap((courseId, index) => 
+            (unitIdsArrays[index] || []).map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
         );
+
         return (await Promise.all(topicIdPromises)).flat();
     }
     
@@ -60,7 +62,7 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
 }
 
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | any)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset)[], error?: string }> {
     try {
         if (filters.type === 'videos') {
             const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
@@ -68,12 +70,12 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
-
-        if (filters.type === 'images') {
-             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
-             const snapshot = await getDocs(imagesQuery);
-             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-             return { items: JSON.parse(JSON.stringify(items)) };
+        
+         if (filters.type === 'imageLibrary') {
+            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
+            const snapshot = await getDocs(imagesQuery);
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)); // Using 'any' for simplicity
+            return { items: JSON.parse(JSON.stringify(items)) };
         }
 
         const isQuestions = filters.type === 'questions';
@@ -126,3 +128,5 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         return { error: "Kütüphane verileri alınırken bir hata oluştu.", items: [] };
     }
 }
+
+    
