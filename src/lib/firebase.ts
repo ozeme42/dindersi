@@ -5,48 +5,49 @@ import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
+// Your web app's Firebase configuration
 export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
   authDomain: "tamuyum.firebaseapp.com",
   projectId: "tamuyum",
-  storageBucket: "tamuyum.appspot.com",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: "912689470856",
   appId: "1:912689470856:web:42898bb6fdc9c4dfa22e3d"
 };
+
 
 let app: FirebaseApp;
 let auth: ReturnType<typeof getAuth>;
 let db: ReturnType<typeof getFirestore>;
 let storage: ReturnType<typeof getStorage>;
 
+// Check if Firebase has already been initialized
+if (!getApps().length) {
+    try {
+        app = initializeApp(firebaseConfig);
+        setLogLevel('error'); // Optional: reduce Firebase logs
+        if (typeof window !== 'undefined') {
+            // Initialize App Check
+            initializeAppCheck(app, {
+              provider: new ReCaptchaV3Provider('6Ld_pBsqAAAAAMw_vLgG8sT6n_tqbgq9u3mtp2wI'),
+              isTokenAutoRefreshEnabled: true
+            });
+        }
+    } catch (error) {
+        console.error("Firebase initialization error", error);
+        // In case of race conditions, try to get the already initialized app
+        app = getApp();
+    }
+} else {
+    app = getApp();
+}
+
+auth = getAuth(app);
+db = getFirestore(app);
+storage = getStorage(app);
+
+// Enable offline persistence only on the client-side
 if (typeof window !== 'undefined') {
-  if (!getApps().length) {
-      try {
-          app = initializeApp(firebaseConfig);
-          setLogLevel('error');
-          if (process.env.NODE_ENV === 'development') {
-              try {
-                  const appCheck = initializeAppCheck(app, {
-                      provider: new ReCaptchaV3Provider('6Ld-pB8pAAAAAN5zC2n4vtsu2b-D0b2a3a1b4c5d'), // Replace with your reCAPTCHA v3 site key
-                      isTokenAutoRefreshEnabled: true
-                  });
-                  console.log("App Check initialized for development.");
-              } catch (e) {
-                  console.warn("App Check initialization failed in dev, this can happen with HMR.", e);
-              }
-          }
-      } catch (error) {
-          console.error("Firebase initialization error", error);
-          app = getApp();
-      }
-  } else {
-      app = getApp();
-  }
-
-  auth = getAuth(app);
-  db = getFirestore(app);
-  storage = getStorage(app);
-
   enableIndexedDbPersistence(db)
     .catch((err) => {
       if (err.code == 'failed-precondition') {
@@ -55,11 +56,6 @@ if (typeof window !== 'undefined') {
         console.warn("Firestore persistence is not supported in this browser.");
       }
     });
-} else {
-    // For server-side rendering, we don't initialize client-side SDKs
-    // that require browser APIs. You might initialize server-side SDKs here
-    // or just leave it empty if server-side Firebase logic is handled elsewhere.
 }
 
-// @ts-ignore
 export { app, auth, db, storage };
