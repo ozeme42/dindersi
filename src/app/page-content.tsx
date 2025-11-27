@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone } from 'lucide-react';
+import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Image as ImageIcon } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -49,13 +49,11 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                 <div className="flex justify-center gap-4 flex-wrap">
                     <Button asChild size="lg">
                         <Link href="/login">
-                            <LogIn className="mr-2 h-5 w-5" />
                             Giriş Yap
                         </Link>
                     </Button>
                     <Button asChild variant="outline" size="lg">
                         <Link href="/leaderboard">
-                            <ListOrdered className="mr-2 h-5 w-5" />
                             Liderlik Tablosu
                         </Link>
                     </Button>
@@ -120,13 +118,11 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                 <div className="flex justify-center gap-4 flex-wrap">
                     <Button asChild size="lg" className="bg-green-600 hover:bg-green-700">
                         <a href="https://drive.google.com/file/d/19J9e8KGlR_H2VxKgsegfp3EnmcClR16E/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
-                            <Smartphone className="mr-2 h-5 w-5" />
                             Android Uygulamasını İndir
                         </a>
                     </Button>
                     <Button asChild size="lg" className="bg-sky-600 hover:bg-sky-700">
                         <a href="https://vimeo.com/user248310384" target="_blank" rel="noopener noreferrer">
-                            <Video className="mr-2 h-5 w-5" />
                             Videolar
                         </a>
                     </Button>
@@ -195,6 +191,9 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     videoLibrary: {
         key: 'videoLibrary', href: '/teacher/video-library', title: 'Video Arşivi', icon: <Video />,
     },
+    imageLibrary: {
+        key: 'imageLibrary', href: '/teacher/image-library', title: 'Görsel Kütüphanesi', icon: <ImageIcon />,
+    },
     gameSettingsTeacher: {
         key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />,
     },
@@ -220,6 +219,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.evaluationScales,
           managementButtons.statsTeacher,
           managementButtons.videoLibrary,
+          managementButtons.imageLibrary,
           managementButtons.gameSettingsTeacher,
           managementButtons.leaderboard,
           managementButtons.errorReports,

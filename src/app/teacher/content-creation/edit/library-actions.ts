@@ -4,14 +4,14 @@
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset } from "@/lib/types";
+import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, LibraryImage } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'videos';
+    type: 'questions' | 'activities' | 'videos' | 'images';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -60,13 +60,20 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
 }
 
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | LibraryImage)[], error?: string }> {
     try {
         if (filters.type === 'videos') {
             const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
             const snapshot = await getDocs(videosQuery);
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
+        }
+
+        if (filters.type === 'images') {
+             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
+             const snapshot = await getDocs(imagesQuery);
+             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryImage));
+             return { items: JSON.parse(JSON.stringify(items)) };
         }
 
         const isQuestions = filters.type === 'questions';
