@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Library, PlusCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, Library, PlusCircle, AlertTriangle, Video, Image as ImageIcon } from 'lucide-react';
 import { getLibraryItems, type LibraryFilter } from '@/app/teacher/content-creation/edit/library-actions';
 import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass, VideoAsset, ImageAsset } from '@/lib/types';
 import { Badge } from './ui/badge';
@@ -18,48 +18,53 @@ import { Card, CardContent, CardFooter } from './ui/card';
 import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Alert, AlertTitle, AlertDescription } from './ui/alert';
 
 type LibraryItem = Question | ActivityItem | VideoAsset | ImageAsset;
 
 function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, onSelect: (item: LibraryItem) => void, isSelected: boolean }) {
-    
+    const isQuestion = 'text' in item && 'difficulty' in item;
+    const isActivity = 'content' in item;
+    const isVideo = 'videoUrl' in item;
+    const isImage = 'imageUrl' in item;
+
     const renderContent = () => {
-        if ('text' in item) {
-             return (item as Question).text;
-        } else if ('content' in item) {
+        if (isQuestion) {
+            return <p className="text-sm font-medium line-clamp-4">{(item as Question).text}</p>
+        }
+        if (isActivity) {
             const actItem = item as ActivityItem;
             switch(actItem.type) {
-                case 'concept': return actItem.content.text;
-                case 'definition': return `${actItem.content.term}: ${actItem.content.definition}`;
-                case 'sentence': return actItem.content.text;
-                case 'categorization': return `Oyun: ${actItem.content.title}`;
-                default: return 'Bilinmeyen etkinlik öğesi';
-            }
-        } else if ('url' in item) {
-            if ('teacherId' in item) { // VideoAsset
-                const video = item as VideoAsset;
-                 const videoId = video.url.split('v=')[1]?.split('&')[0] || video.url.split('/').pop();
-                 const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                 return (
-                     <div className="w-full h-full aspect-video relative">
-                        <img src={thumbnailUrl} alt={video.title || "Kütüphane video görseli"} className="object-cover rounded-t-lg w-full h-full" />
-                     </div>
-                 )
-            } else { // ImageAsset
-                 const image = item as ImageAsset;
-                 return (
-                     <div className="w-full h-full aspect-video relative">
-                        <img src={image.url} alt={image.title || "Kütüphane görseli"} className="object-cover rounded-t-lg w-full h-full" />
-                     </div>
-                 )
+                case 'concept': return <p className="text-sm font-medium line-clamp-4">{actItem.content.text}</p>;
+                case 'definition': return <p className="text-sm font-medium line-clamp-4">{actItem.content.term}: {actItem.content.definition}</p>;
+                case 'sentence': return <p className="text-sm font-medium line-clamp-4">"{actItem.content.text}"</p>;
+                case 'categorization': return <p className="text-sm font-medium line-clamp-4">Oyun: {actItem.content.title}</p>;
+                default: return <p className="text-xs text-muted-foreground">Bilinmeyen etkinlik öğesi</p>;
             }
         }
-        return 'Bilinmeyen öğe';
+        if (isVideo) {
+             const asset = item as VideoAsset;
+             const videoId = asset.url.split('embed/')[1];
+             const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : 'https://placehold.co/320x180.png';
+             return (
+                 <div className="w-full h-full aspect-video relative">
+                    <img src={thumbnailUrl} alt={asset.title || "Kütüphane video görseli"} className="object-cover rounded-t-lg w-full h-full" />
+                 </div>
+             )
+        }
+        if (isImage) {
+            const asset = item as ImageAsset;
+            return (
+                 <div className="w-full h-full aspect-video relative">
+                    <img src={asset.imageUrl} alt={asset.title || "Kütüphane görseli"} className="object-cover rounded-t-lg w-full h-full" />
+                 </div>
+            )
+        }
+        return <p className="text-xs text-muted-foreground">Bilinmeyen öğe</p>;
     }
     
-    const renderTypeBadge = () => {
-        if ('text' in item) {
+    const renderFooter = () => {
+        if (isQuestion) {
             const q = item as Question;
             const difficultyColors: Record<string, string> = {
                 'Kolay': 'bg-green-100 text-green-800',
@@ -67,24 +72,27 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
                 'Zor': 'bg-red-100 text-red-800',
             };
             return (
-                <div className='flex items-center gap-1'>
-                    <Badge variant="secondary">Soru</Badge>
-                    <Badge variant="outline" className={cn("border", difficultyColors[q.difficulty])}>{q.difficulty}</Badge>
+                <div className='flex items-center gap-1 overflow-hidden'>
+                    <Badge variant="secondary" className="truncate">{q.topic}</Badge>
+                    <Badge variant="outline" className={cn("border", difficultyColors[q.difficulty] || '')}>{q.difficulty}</Badge>
                 </div>
             )
-        } else if ('content' in item) {
-            const actItem = item as ActivityItem;
-            const typeLabels: Record<string, string> = {
-                concept: 'Kavram',
-                definition: 'Tanım',
-                sentence: 'Cümle',
-                categorization: 'Kategorizasyon'
-            }
-            return <Badge variant="outline">Etkinlik: {typeLabels[actItem.type]}</Badge>
-        } else if ('url' in item) {
-            return <Badge variant="outline">{'teacherId' in item ? 'Video' : 'Görsel'}</Badge>
         }
+        if (isActivity) {
+            const actItem = item as ActivityItem;
+            const typeLabels: Record<string, string> = { concept: 'Kavram', definition: 'Tanım', sentence: 'Cümle', categorization: 'Kategorizasyon' }
+            return <Badge variant="outline">Etkinlik: {typeLabels[actItem.type]}</Badge>
+        }
+         if (isVideo) return <Badge variant="destructive">Video</Badge>;
+         if (isImage) return <Badge variant="default" className="bg-sky-500">Görsel</Badge>;
+
         return null;
+    }
+
+    const getItemTitle = () => {
+         if (isQuestion) return (item as Question).text;
+         if (isActivity) return (item as ActivityItem).content.title || (item as ActivityItem).content.text || (item as ActivityItem).content.term;
+         return (item as VideoAsset | ImageAsset).title;
     }
 
     return (
@@ -92,11 +100,14 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
             className={cn("flex flex-col hover:shadow-md transition-shadow cursor-pointer", isSelected && "ring-2 ring-primary")}
             onClick={() => onSelect(item)}
         >
-            <CardContent className="p-0 flex-grow">
-                 <div className="text-sm font-medium line-clamp-3 h-full">{renderContent()}</div>
+            <CardContent className="p-0">
+                {renderContent()}
             </CardContent>
-            <CardFooter className="p-2 bg-muted/50 flex justify-between items-center text-xs">
-                {renderTypeBadge()}
+             <div className="p-3 flex-grow space-y-2">
+                 <p className="text-sm font-semibold line-clamp-2">{getItemTitle()}</p>
+            </div>
+            <CardFooter className="p-3 bg-muted/50 flex justify-between items-center text-xs">
+                {renderFooter()}
                 <Checkbox checked={isSelected} />
             </CardFooter>
         </Card>
@@ -106,9 +117,9 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
 export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, context, config }: {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    onItemsSelected: (items: (ActivityItem | Question | ImageAsset | VideoAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => void;
+    onItemsSelected: (items: (ActivityItem | Question | ImageAsset | VideoAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual' | 'video') => void;
     context: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
-    config: { filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videos')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual'; };
+    config: { filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videos')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual' | 'video'; };
 }) {
     const [items, setItems] = useState<LibraryItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -126,22 +137,9 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
 
      useEffect(() => {
         if (!isOpen) return;
-        
-        const typeMapping = {
-            questions: 'questions',
-            imageLibrary: 'imageLibrary',
-            videos: 'videos',
-        } as const;
-
-        const determineType = (): 'questions' | 'activities' | 'imageLibrary' | 'videos' => {
-            if (config.filter.includes('questions')) return 'questions';
-            if (config.filter.includes('imageLibrary')) return 'imageLibrary';
-            if (config.filter.includes('videos')) return 'videos';
-            return 'activities';
-        };
 
         setFilters({
-            type: determineType(),
+            type: config.filter.includes('questions') ? 'questions' : (config.filter.includes('imageLibrary') ? 'imageLibrary' : 'activities'),
             classId: null,
             courseId: context?.courseId || null,
             unitId: context?.unitId || null,
@@ -271,25 +269,29 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                         <Checkbox
                             id="select-all-library"
                             checked={allOnPageSelected}
-                            onCheckedChange={() => handleSelectAll(!allOnPageSelected)}
+                            onCheckedChange={handleSelectAll}
                         />
                         <Label htmlFor="select-all-library" className="font-semibold">
                             Tümünü Seç ({items.length})
                         </Label>
                     </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {itemsToRender.map(item => <LibraryItemCard key={item.id} item={item} onSelect={handleSelect} isSelected={selectedItemIds.has(item.id)} />)}
                 </div>
             </>
         )
     }
 
+    const typeLabel = config.filter.includes('questions') ? "Sorular" :
+                      config.filter.includes('imageLibrary') ? "Görsel Arşivi" :
+                      config.filter.includes('videos') ? "Video Arşivi" : "Etkinlik Verileri";
+
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2"><Library /> Veri Bankasından İçerik Ekle</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2"><Library /> {typeLabel}</DialogTitle>
                 </DialogHeader>
                  <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
                     <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: filters.type, classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
