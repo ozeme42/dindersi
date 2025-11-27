@@ -1,11 +1,10 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ArrowRight, PartyPopper, Repeat, Brain, BookOpen, Gamepad2, Lightbulb, CheckCircle2, XCircle, LayersIcon, X, FilePenLine, Link as LinkIcon, Layers, Star, Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Bug, Video, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, PartyPopper, Repeat, Brain, BookOpen, Gamepad2, Lightbulb, CheckCircle2, XCircle, LayersIcon, X, FilePenLine, Link as LinkIcon, Layers, Star, Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Bug, Video, Loader2, CheckCircle } from 'lucide-react';
 import type { LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, ConceptExplanationStep, ObjectiveListStep, VideoStep } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
@@ -69,33 +68,31 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     }, [step]);
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
-    const summaryIcons = [Star, CheckCircle2, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    
-     const summaryColorClasses = [
-        'bg-blue-500/80 border-blue-400',
-        'bg-emerald-500/80 border-emerald-400',
-        'bg-purple-500/80 border-purple-400',
-        'bg-rose-500/80 border-rose-400',
-        'bg-amber-500/80 border-amber-400',
-        'bg-indigo-500/80 border-indigo-400',
-        'bg-teal-500/80 border-teal-400',
+    const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
+    const summaryColorClasses = [
+        "border-l-blue-400 bg-slate-800/60",
+        "border-l-emerald-400 bg-slate-800/60",
+        "border-l-purple-400 bg-slate-800/60",
+        "border-l-rose-400 bg-slate-800/60",
+        "border-l-amber-400 bg-slate-800/60",
+        "border-l-indigo-400 bg-slate-800/60",
+        "border-l-teal-400 bg-slate-800/60"
     ];
-
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
-            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-2 border-slate-700 glow-shadow flex-shrink-0">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
-            </div>
+            <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0">
+                <h2 className={cn("font-bold text-center text-white/90", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
+            </Card>
             
              <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn text-white/90 border-l-8", colorClass)}>
-                            <Icon className={cn("flex-shrink-0 mt-1 text-white", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-semibold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 text-white/90 animate-fadeAndScaleIn border-l-8", colorClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1 text-white/70", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -109,9 +106,9 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
     
     return (
         <div className='flex flex-col h-full w-full items-center'>
-            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-2 border-slate-700 glow-shadow flex-shrink-0 mb-4">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-4xl" : "text-3xl")}>{title}</h2>
-            </div>
+            <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0 mb-4">
+                <h2 className={cn("font-bold text-center text-white/90", isFullscreen ? "text-4xl" : "text-3xl")}>{title}</h2>
+            </Card>
             <div className="w-full flex-grow grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 md:gap-6 p-2">
                 {items.map((item, index) => (
                     <Card key={index} className={cn("shadow-2xl bg-white/20 backdrop-blur-md border-white/30 text-white flex flex-col", isFullscreen ? 'min-h-[200px]' : 'min-h-[150px]')}>
@@ -138,17 +135,19 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
 
     const getDynamicFontSize = (text: string) => {
         const baseSize = isFullscreen ? 3 : 2.25; 
-        if (text.length > 8) {
-            const reductionFactor = Math.min(1.0, (text.length - 8) / 5);
+        const maxLength = 8;
+        if (text.length > maxLength) {
+            const reductionFactor = Math.min(1.5, (text.length - maxLength) / 3);
             return `${baseSize - reductionFactor}rem`;
         }
         return `${baseSize}rem`;
     };
-    
 
     return (
         <div className="w-full">
-            <h2 className={cn("text-3xl font-bold text-center text-foreground dark:text-white mb-6", isFullscreen && "text-4xl")}>{step.title}</h2>
+            <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0 mb-6">
+                <h2 className={cn("font-bold text-center text-white/90", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
+            </Card>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                 {step.cards.map((card, index) => (
                     <div
@@ -205,7 +204,9 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
 
     return (
         <div className="w-full">
-            <h2 className={cn("text-3xl font-bold text-center text-foreground dark:text-white mb-6", isFullscreen && "text-4xl")}>{step.title}</h2>
+            <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0 mb-6">
+                <h2 className={cn("font-bold text-center text-white/90", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
+            </Card>
             <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", isFullscreen && "lg:grid-cols-4")}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
@@ -354,6 +355,9 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: Anagr
     
     return (
         <div className="text-center space-y-6 flex flex-col items-center">
+             <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50">
+                <h2 className="text-3xl font-bold text-center text-white/90">{step.title}</h2>
+            </Card>
             <p className="text-2xl font-semibold italic text-foreground dark:text-primary-foreground">"{step.definition}"</p>
             <div className={cn("flex justify-center flex-wrap gap-2 p-4 rounded-lg min-h-[5rem] items-center", isWrong && "animate-shake")}>
                 {Array.from({ length: step.correctAnswer.length }).map((_, index) => {
@@ -416,36 +420,12 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
         }
     };
     
-    const handleUndo = () => {
-        if (isAnswerRevealed || constructedWords.length === 0) return;
-        const lastWord = constructedWords[constructedWords.length - 1];
-        setConstructedWords(prev => prev.slice(0, -1));
-        setBankWords(prev => [...prev, lastWord].sort((a, b) => a.id - b.id));
-    };
-
-    const checkAnswer = () => {
-        if (bankWords.length > 0) return;
-        const userAnswer = constructedWords.map(w => w.word).join(' ');
-        const correct = userAnswer === step.correctSentence;
-        
-        if (correct) {
-            playSound('correct');
-            onAnswer(userAnswer);
-        } else {
-            playSound('incorrect');
-            // Allow retry by resetting state partially
-            setTimeout(() => {
-                setBankWords(initialWords);
-                setConstructedWords([]);
-            }, 1000);
-        }
-    };
-
     useEffect(() => {
         if (!isAnswerRevealed && bankWords.length === 0 && constructedWords.length > 0) {
-            checkAnswer();
+            const userAnswer = constructedWords.map(w => w.word).join(' ');
+            onAnswer(userAnswer);
         }
-    }, [bankWords, constructedWords, isAnswerRevealed, checkAnswer]);
+    }, [bankWords.length, constructedWords, isAnswerRevealed, onAnswer]);
 
     useEffect(() => {
         if (answer?.isCorrect) {
@@ -458,12 +438,19 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 
     return (
         <div className="space-y-4 text-center">
+             <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50">
+                <h2 className="text-3xl font-bold text-center text-white/90">{step.title}</h2>
+            </Card>
             <p className="text-lg italic text-muted-foreground">"Kelimeleri doğru sıraya dizin."</p>
              <div className="flex flex-wrap justify-center items-center gap-3 bg-muted p-4 rounded-lg min-h-[5rem]">
-                {constructedWords.map((wordObj, i) => (
-                    <div key={i} className={cn("px-4 py-2 rounded-lg font-semibold text-white", isAnswerRevealed && (answer?.isCorrect ? 'bg-green-500' : 'bg-red-500'), bankColorClasses[wordObj.id % bankColorClasses.length])}>
-                        <span className="text-xl md:text-2xl">{wordObj.word}</span>
-                    </div>
+                {constructedWords.map((wordObj) => (
+                    <Button 
+                        key={wordObj.id} 
+                        className={cn("animate-pop-in text-lg h-auto py-3 px-5", bankColorClasses[wordObj.id % bankColorClasses.length])}
+                        disabled={true} 
+                    >
+                        {wordObj.word}
+                    </Button>
                 ))}
                 {constructedWords.length === 0 && <span className="text-muted-foreground">Cümleniz burada görünecek...</span>}
             </div>
@@ -479,19 +466,17 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                             variant="default"
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "text-xl h-auto py-3 px-5 text-white font-semibold transition-all duration-200 cursor-pointer select-none shadow-lg hover:shadow-xl transform hover:-translate-y-1 animate-pop-in",
-                                bankColorClasses[item.id % bankColorClasses.length],
+                                "animate-pop-in text-lg h-auto py-3 px-5 font-medium transition-all duration-200 cursor-pointer select-none shadow-lg text-primary-foreground flex items-center gap-2",
+                                bankColorClasses[index % bankColorClasses.length],
                                 mistakenWordId === item.id && "animate-shake bg-destructive"
                             )}
                         >
+                            {mistakenWordId === item.id && <X className="h-5 w-5" />}
                             {item.word}
                         </Button>
                     ))}
                 </div>
             )}
-             <div className="flex justify-center gap-4 mt-4">
-                <Button variant="ghost" onClick={handleUndo} disabled={isAnswerRevealed || constructedWords.length === 0}>Geri Al</Button>
-            </div>
         </div>
     );
 };
@@ -608,7 +593,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
  }) {
     
     useEffect(() => {
-        if (!step) return;
+        if (!step || !onAllAnswered) return;
         if (Object.keys(answers || {}).length === step.questions.length) {
             onAllAnswered();
         }
@@ -616,12 +601,9 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
 
     return (
         <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
-             <h2 className={cn(
-                "text-2xl font-bold text-center text-white p-4 flex-shrink-0 border-b-4 border-slate-700",
-                isFullscreen && "text-4xl"
-            )}>
-                {step.title}
-            </h2>
+             <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 m-6 mb-2">
+                <h2 className={cn("font-bold text-center text-white/90", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
+            </Card>
             <ScrollArea className="flex-grow">
                 <div className="space-y-4 p-4 md:p-6">
                     {step.questions.map((q, index) => {
@@ -630,17 +612,16 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         const isQuestionCorrect = q.isTrue;
                         
                         return (
-                            <Card key={index} className="p-4 bg-slate-900/50 border-slate-700 text-white">
-                                <p className={cn("flex-1 font-medium mb-3", isFullscreen ? "text-2xl" : "lg:text-2xl")}>{index + 1}. {q.statement}</p>
+                            <Card key={index} className="p-4 bg-slate-700/50 border-slate-600">
+                                <p className={cn("flex-1 font-medium text-white mb-3", isFullscreen ? "lg:text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
                                         disabled={isAnswered}
                                         className={cn(
-                                            "w-32 text-lg font-bold",
-                                            isAnswered && !isQuestionCorrect && "opacity-50 bg-secondary",
-                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
-                                            !isAnswered && "bg-green-500 hover:bg-green-600"
+                                            "w-28 text-base font-bold",
+                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-white/80",
+                                            isAnswered && !isQuestionCorrect && "opacity-50 bg-secondary"
                                         )}
                                     >
                                         {isAnswered && isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Doğru'}
@@ -649,10 +630,9 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                                         onClick={() => !isAnswered && onAnswer(index, false)}
                                         disabled={isAnswered}
                                         className={cn(
-                                            "w-32 text-lg font-bold",
-                                            isAnswered && isQuestionCorrect && "opacity-50 bg-secondary",
-                                            isAnswered && !isQuestionCorrect && "bg-red-600 hover:bg-red-700 ring-2 ring-primary",
-                                            !isAnswered && "bg-red-500 hover:bg-red-600"
+                                            "w-28 text-base font-bold",
+                                            isAnswered && !isQuestionCorrect && "bg-red-600 hover:bg-red-700 ring-2 ring-white/80",
+                                            isAnswered && isQuestionCorrect && "opacity-50 bg-secondary"
                                         )}
                                     >
                                        {isAnswered && !isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Yanlış'}
@@ -713,7 +693,7 @@ function StepContent({
     onCardFlip, 
     onSlideScrolledToEnd,
     onMultiAnswer,
-    onAllAnswered
+    onAllTfAnswered
 }: { 
     step: LessonStep, 
     answer?: any, 
@@ -732,7 +712,7 @@ function StepContent({
     onCardFlip: (cardIndex: number, type: 'flashcard' | 'anagramFlashcard') => void;
     onSlideScrolledToEnd: () => void;
     onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllAnswered: () => void;
+    onAllTfAnswered: () => void;
 }) {
     const noOp = () => {};
 
@@ -791,7 +771,7 @@ function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllAnswered} />;
+                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                 const mapStep = step as ConceptMapStep;
                 return <ConceptMapViewer mapData={mapStep.mapData} />;
@@ -815,9 +795,9 @@ function StepContent({
                 const mcqStep = step as McqStep;
                 return (
                     <div className="w-full max-w-4xl mx-auto text-center">
-                        <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
-                          <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{mcqStep.question}</h3>
-                        </div>
+                        <Card className="p-4 rounded-lg shadow-md bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 mb-8">
+                          <h3 className={cn("font-semibold text-white/90", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{mcqStep.question}</h3>
+                        </Card>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
@@ -853,9 +833,9 @@ function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
                     <div className="w-full max-w-2xl mx-auto text-center text-foreground">
-                         <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
-                            <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{tfStep.statement}</h3>
-                        </div>
+                         <Card className="p-6 md:p-8 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-2 border-slate-700 mb-8">
+                            <h3 className={cn("font-semibold text-white/90", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{tfStep.statement}</h3>
+                        </Card>
                         <div className="flex justify-center gap-4">
                             {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
@@ -887,11 +867,11 @@ function StepContent({
                 const fitbStep = step as FitbStep;
                 return (
                     <div className="w-full max-w-4xl mx-auto text-center text-foreground">
-                        <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
-                          <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>
+                        <Card className="p-6 md:p-8 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-2 border-slate-700 mb-8">
+                          <h3 className={cn("font-semibold text-white/90", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>
                               {fitbStep.sentenceWithBlank?.replace('___', '______')}
                           </h3>
-                        </div>
+                        </Card>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
@@ -953,7 +933,8 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-}: LessonContentViewerProps) {
+    onAllTfAnswered,
+}: LessonContentViewerProps & { onMultiAnswer?: any; onAllTfAnswered: () => void }) {
     const { user } = useAuth();
     
     // For ContentListPlayer
@@ -1193,7 +1174,7 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-background/50 backdrop-blur-sm md:pb-4 pb-20">
+             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-card/50 backdrop-blur-sm md:pb-4 pb-20">
                  <div className="flex gap-2">
                     {user?.role === 'student' && (
                         <Button variant="outline" size="icon" onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
@@ -1257,32 +1238,26 @@ export function LessonContentViewer({
     }
 
     const getBackgroundClass = () => {
+         const commonBg = "from-slate-900 to-gray-800";
         switch(currentStep.type) {
             case 'content':
             case 'objectiveList':
             case 'accordion':
-                 return "from-slate-900 to-gray-900";
             case 'conceptExplanation':
-                return "from-indigo-200 to-purple-300 dark:from-indigo-900 dark:to-purple-950";
             case 'mcq':
             case 'tf':
             case 'fitb':
             case 'anagram':
             case 'sentenceScramble':
             case 'trueFalseList':
-                 return "from-slate-800 to-slate-900"; // Specific for question types
             case 'flashcard':
             case 'anagramFlashcard':
-                 return "from-rose-100 to-pink-200 dark:from-rose-900 dark:to-pink-950";
             case 'visual':
-                 return "from-gray-300 to-gray-400 dark:from-gray-800 dark:to-gray-900";
             case 'iframe':
             case 'htmlSlide':
-                 return "from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900";
-             case 'conceptMap':
-                return "from-sky-900 to-indigo-950";
+            case 'conceptMap':
             case 'video':
-                 return "from-gray-800 to-gray-900";
+                 return commonBg;
             default:
                  return "bg-background";
         }
@@ -1294,15 +1269,13 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-            <Card className="flex-shrink-0 rounded-none border-x-0 border-t-0 bg-card/50 backdrop-blur-sm p-2">
-                <CardContent className="p-0">
-                    <Progress value={(currentStepIndex + 1) / steps.length * 100} />
-                    <div className="flex justify-between items-center text-xs text-foreground/80 pt-1 px-1">
-                        <span>Adım {currentStepIndex + 1}/{steps.length}</span>
-                        <span className="font-bold">Puan: {internalProgress.score}</span>
-                    </div>
-                </CardContent>
-            </Card>
+           <Card className="flex-shrink-0 m-4 p-4 border-b bg-card/50 backdrop-blur-sm rounded-lg">
+                <Progress value={(currentStepIndex + 1) / steps.length * 100} />
+                 <div className="flex justify-between items-center text-xs text-foreground/80 pt-1">
+                    <span>Adım {currentStepIndex + 1}/{steps.length}</span>
+                    <span className="font-bold">Puan: {internalProgress.score}</span>
+                 </div>
+           </Card>
            <div className="flex-grow flex items-center justify-center relative p-2 sm:p-4 overflow-y-auto">
               <StepContent
                  step={currentStep}
@@ -1310,7 +1283,7 @@ export function LessonContentViewer({
                  onAnswer={handleAnswer}
                  onCorrectAndNext={onCorrectAndNext}
                  onMultiAnswer={handleLocalMultiAnswer}
-                 onAllAnswered={handleLocalAllTfAnswered}
+                 onAllTfAnswered={handleLocalAllTfAnswered}
                  stepAnswers={internalProgress.answers[currentStepIndex]}
                  topic={topic}
                  courseId={courseId}
