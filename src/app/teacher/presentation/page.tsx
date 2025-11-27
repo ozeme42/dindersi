@@ -76,7 +76,7 @@ function PresentationPageContent() {
     const noOp = () => {};
 
     return (
-        <main ref={mainContentRef} className="h-screen w-screen p-4 sm:p-6 md:p-8">
+        <main ref={mainContentRef} className="h-screen w-screen p-4 sm:p-6 md:p-8 bg-background">
             <div className="flex justify-between items-start mb-4">
                  <div>
                     <h1 className="text-3xl font-bold font-headline">{topic.title}</h1>

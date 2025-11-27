@@ -37,9 +37,9 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
-    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered: () => void;
     isFullscreen: boolean;
+    onMultiAnswer?: (questionIndex: number, selectedAnswer: boolean) => void;
+    onAllTfAnswered?: () => void;
 };
 
 
@@ -601,7 +601,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl lg:text-2xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-2xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -739,7 +739,7 @@ function StepContent({
                         'bil-bakalim': Lightbulb, 'eslestirme': Puzzle, 'hafiza-kartlari': Layers, 'adam-asmaca': Skull,
                         'kavram-avi': Crosshair, 'kelime-avi': Search, 'hedefi-vur': MousePointerClick,
                         'cumle-olusturma': Shuffle, 'kategorilere-ayir': FolderKanban, 'milyoner-yarismasi': Trophy, 'soru-coz': BrainCircuit,
-                        'dogru-yanlis-zinciri': LinkIcon, 'ben-kimim': BrainCircuit, 'acik-uclu-cevapla': Pencil, 'yazi-tura': Coins, 'deneme': ClipboardCheck, 'olay-siralama': ArrowDownUp
+                        'dogru-yanlis-zinciri': LinkIcon, 'ben-kimim': BrainCircuit, 'acik-uclu-cevapla': Pencil, 'yazi-tura': Layers, 'deneme': ClipboardCheck, 'olay-siralama': ArrowDownUp
                     };
                     const Icon = activityIcons[activityStep.activityType.split('/').pop() || ''] || Gamepad2;
                     return (
@@ -920,9 +920,9 @@ export function LessonContentViewer({
     onTopicComplete,
     progress,
     onProgressUpdate,
-    onMultiAnswer,
-    onAllTfAnswered,
     isFullscreen,
+    onMultiAnswer,
+    onAllTfAnswered
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
@@ -955,7 +955,7 @@ export function LessonContentViewer({
     
     
     useEffect(() => {
-        if (topic) {
+        if (topic && onProgressUpdate) {
             onProgressUpdate(topic.id, internalProgress);
         }
     }, [internalProgress, onProgressUpdate, topic]);
@@ -1004,13 +1004,14 @@ export function LessonContentViewer({
     };
     
     const handleLocalAllTfAnswered = () => {
-        if (!currentStep || currentStep.type !== 'trueFalseList') return;
+        if (!currentStep || currentStep.type !== 'trueFalseList' || !onAllTfAnswered) return;
         const answersForStep = internalProgress.answers[currentStepIndex];
         const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
         const points = correctCount * 20;
         
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
+        onAllTfAnswered();
     }
 
      const isNextButtonEnabled = useMemo(() => {
