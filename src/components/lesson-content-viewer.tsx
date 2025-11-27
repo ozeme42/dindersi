@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -9,7 +10,6 @@ import { ArrowLeft, ArrowRight, PartyPopper, Repeat, Brain, BookOpen, Gamepad2, 
 import type { LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, ConceptExplanationStep, ObjectiveListStep, VideoStep } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
@@ -36,8 +36,6 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
-    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered: () => void;
     isFullscreen: boolean;
 };
 
@@ -71,19 +69,14 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-     const summaryColorClasses = [
-        'bg-blue-500/10 border-l-8 border-blue-500 text-blue-800 dark:text-blue-100',
-        'bg-emerald-500/10 border-l-8 border-emerald-500 text-emerald-800 dark:text-emerald-100',
-        'bg-purple-500/10 border-l-8 border-purple-500 text-purple-800 dark:text-purple-100',
-        'bg-rose-500/10 border-l-8 border-rose-500 text-rose-800 dark:text-rose-100',
-        'bg-amber-500/10 border-l-8 border-amber-500 text-amber-800 dark:text-amber-100',
-        'bg-indigo-500/10 border-l-8 border-indigo-500 text-indigo-800 dark:text-indigo-100',
-        'bg-teal-500/10 border-l-8 border-teal-500 text-teal-800 dark:text-teal-100',
+    const summaryColorClasses = [
+        'bg-blue-800/80 border-blue-600', 'bg-emerald-800/80 border-emerald-600', 'bg-purple-800/80 border-purple-600',
+        'bg-rose-800/80 border-rose-600', 'bg-amber-800/80 border-amber-600', 'bg-indigo-800/80 border-indigo-600', 'bg-teal-800/80 border-teal-600'
     ];
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
-            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-b-4 border-primary/50 flex-shrink-0">
+            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0">
                 <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
             </div>
             
@@ -92,9 +85,12 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn bg-card", colorClass)}>
+                        <div key={index} className={cn(
+                            "p-4 rounded-lg shadow-md flex items-start gap-4 text-white/90 animate-fadeAndScaleIn border-b-4",
+                            colorClass
+                        )}>
                             <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -108,7 +104,7 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
     
     return (
         <div className='flex flex-col h-full w-full items-center'>
-             <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-b-4 border-primary/50 flex-shrink-0 mb-4">
+            <div className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border border-slate-700/50 flex-shrink-0 mb-4">
                 <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{title}</h2>
             </div>
             <div className="w-full flex-grow grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 md:gap-6 p-2">
@@ -608,7 +604,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -928,9 +924,8 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onMultiAnswer,
-    onAllTfAnswered
-}: LessonContentViewerProps) {
+    onAllTfAnswered,
+}: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: () => void }) {
     const { user } = useAuth();
     
     // For ContentListPlayer
@@ -1240,7 +1235,7 @@ export function LessonContentViewer({
             case 'accordion':
                  return "from-slate-900 to-gray-900";
             case 'conceptExplanation':
-                return "from-indigo-200 to-purple-300 dark:from-indigo-900 dark:to-purple-950";
+                return "from-indigo-900 to-purple-950";
             case 'mcq':
             case 'tf':
             case 'fitb':
@@ -1250,12 +1245,12 @@ export function LessonContentViewer({
                  return "from-slate-800 to-slate-900"; // Specific for question types
             case 'flashcard':
             case 'anagramFlashcard':
-                 return "from-rose-100 to-pink-200 dark:from-rose-900 dark:to-pink-950";
+                 return "from-rose-900 to-pink-950";
             case 'visual':
-                 return "from-gray-300 to-gray-400 dark:from-gray-800 dark:to-gray-900";
+                 return "from-gray-800 to-gray-900";
             case 'iframe':
             case 'htmlSlide':
-                 return "from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900";
+                 return "from-gray-800 to-gray-900";
              case 'conceptMap':
                 return "from-sky-900 to-indigo-950";
             case 'video':
@@ -1271,13 +1266,15 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-           <div className="flex-shrink-0 p-4 border-b bg-background/50 backdrop-blur-sm">
-                <Progress value={(currentStepIndex + 1) / steps.length * 100} />
-                 <div className="flex justify-between items-center text-xs text-foreground/80 pt-1">
-                    <span>Adım {currentStepIndex + 1}/{steps.length}</span>
-                    <span className="font-bold">Puan: {internalProgress.score}</span>
-                 </div>
-           </div>
+           <Card className="flex-shrink-0 m-4 shadow-lg border-2 bg-background/50 backdrop-blur-sm border-white/10">
+                <CardContent className="p-3">
+                    <Progress value={(currentStepIndex + 1) / steps.length * 100} />
+                    <div className="flex justify-between items-center text-xs text-foreground/80 pt-1">
+                        <span className="font-semibold">Adım {currentStepIndex + 1}/{steps.length}</span>
+                        <span className="font-bold text-lg">Puan: {internalProgress.score}</span>
+                    </div>
+                </CardContent>
+           </Card>
            <div className="flex-grow flex items-center justify-center relative p-2 sm:p-4 overflow-y-auto">
               <StepContent
                  step={currentStep}
