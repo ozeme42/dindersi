@@ -243,7 +243,7 @@ export function StudentProgressReports({ studentReports }: { studentReports: Stu
     };
 
     return (
-        <Card>
+        <Card className="pb-16">
             <CardHeader>
                 <CardTitle>Öğrenci İlerleme Raporları</CardTitle>
                 <CardDescription>Tüm öğrencilerin genel ilerlemesini ve istatistiklerini görüntüleyin.</CardDescription>

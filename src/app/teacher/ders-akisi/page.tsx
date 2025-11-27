@@ -125,9 +125,10 @@ export default function DersAkisiPage() {
         return (
             <Accordion type="multiple" className="w-full space-y-4">
                 {courseGroups.map((group, groupIndex) => (
-                    <AccordionItem value={group.title} key={group.title} className="border-b-0 overflow-hidden rounded-lg shadow-md">
-                        <Card className="border-0">
-                             <CardHeader className={cn("p-0 rounded-t-lg bg-grid bg-gray-800 bg-[size:60px_60px] bg-blend-overlay", colorClasses[groupIndex % colorClasses.length])}>
+                    <AccordionItem value={group.title} key={group.title} className="border-b-0">
+                        <Card>
+                            <CardHeader className={cn("p-0 rounded-t-lg relative overflow-hidden", colorClasses[groupIndex % colorClasses.length])}>
+                                 <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-[length:32px_32px] [mask-image:linear-gradient(to_bottom,white_0,white_60%,transparent_100%)]"></div>
                                 <AccordionTrigger className="text-3xl font-bold font-headline hover:no-underline p-6 text-primary-foreground shadow-inner-lg transition-all hover:bg-black/20">
                                     {group.title}
                                 </AccordionTrigger>
@@ -236,7 +237,7 @@ export default function DersAkisiPage() {
     }
 
     return (
-        <div className="container mx-auto p-4 sm:p-6 md:p-8">
+        <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20">
             <div className="flex flex-col items-center text-center my-8">
                 <Workflow className="h-16 w-16 text-primary mb-4" />
                 <h1 className="text-4xl font-bold font-headline">Ders Akışı Yönetimi</h1>

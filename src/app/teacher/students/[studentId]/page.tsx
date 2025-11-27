@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from "react";
@@ -99,7 +100,7 @@ function CourseProgress({ coursesProgress }: { coursesProgress: StudentDetails['
                                 {course.completedTopics}/{course.totalTopics} Konu
                             </p>
                         </div>
-                        <Progress value={course.progress} />
+                        <Progress value={course.progress} className="h-2" />
                     </div>
                 ))}
             </CardContent>
@@ -185,7 +186,7 @@ export default function StudentDetailPage() {
     const { profile, recentActivity, coursesProgress, questionBankStats } = details;
 
     return (
-        <div className="container mx-auto p-4 sm:p-6 md:p-8">
+        <div className="container mx-auto p-4 sm:p-6 md:p-8 pb-20">
             <div className="flex items-center mb-6">
                  <Button asChild variant="outline" size="sm">
                     <Link href="/teacher/students">

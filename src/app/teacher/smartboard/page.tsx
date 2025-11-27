@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog } from 'lucide-react';
+import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2 } from 'lucide-react';
 import React, { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -13,8 +13,8 @@ const FeatureButton = ({ href, title, description, icon, colorClass, isExternal 
             "h-full w-full rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300",
             colorClass
         )}>
-            {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 opacity-90" })}
-            <h3 className="font-headline text-3xl mt-4">{title}</h3>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-90" })}
+            <h3 className="font-headline text-2xl mt-4">{title}</h3>
             <p className="mt-2 opacity-80 text-sm max-w-xs">{description}</p>
             <div className="flex-grow" />
             <ArrowRight className="mt-4 h-6 w-6 group-hover:translate-x-1 transition-transform" />
@@ -55,6 +55,13 @@ export default function SmartboardPage() {
       description: "İki öğrenciyi veya takımı karşı karşıya getirin.",
       icon: <Swords />,
       colorClass: "bg-fuchsia-600 text-fuchsia-50 hover:bg-fuchsia-700",
+    },
+    {
+      href: "/teacher/smartboard/kavram-duellosu",
+      title: "Kavram Düellosu",
+      description: "Tanımı verilen kavramı bularak rakibini alt et.",
+      icon: <BrainCircuit />,
+      colorClass: "bg-orange-500 text-orange-50 hover:bg-orange-600",
     },
      {
       href: "/teacher/smartboard/fetih-oyunu",
@@ -97,7 +104,7 @@ export default function SmartboardPage() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 space-y-12 min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
+    <div className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 space-y-12 min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5 pb-20">
         <div className="text-center animate-fade-in-up">
             <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary">Akıllı Tahta</h1>
             <p className="text-muted-foreground mt-4 text-xl md:text-2xl">Sınıfınız için bir yarışma veya sunum türü seçin.</p>
