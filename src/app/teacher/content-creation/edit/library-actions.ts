@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -68,7 +67,7 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
-        
+
         if (filters.type === 'imageLibrary') {
             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
             const snapshot = await getDocs(imagesQuery);
