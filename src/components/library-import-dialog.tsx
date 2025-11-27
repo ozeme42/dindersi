@@ -6,9 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Library, PlusCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, Library, PlusCircle, AlertTriangle, Video, Image as ImageIcon } from 'lucide-react';
 import { getLibraryItems, type LibraryFilter } from '@/app/teacher/content-creation/edit/library-actions';
-import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass, VideoAsset } from '@/lib/types';
+import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass, VideoAsset, ImageAsset } from "@/lib/types";
 import { Badge } from './ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
@@ -18,16 +18,48 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-import Image from 'next/image';
+import NextImage from "next/image";
 
-type LibraryItem = Question | ActivityItem | VideoAsset;
+
+type LibraryItem = Question | ActivityItem | VideoAsset | ImageAsset;
+
+const getYouTubeThumbnail = (url: string): string => {
+    if (!url) return 'https://placehold.co/300x200.png?text=Video';
+    try {
+        const urlObj = new URL(url);
+        let videoId: string | null = null;
+        if (urlObj.hostname.includes('youtube.com')) {
+            videoId = urlObj.searchParams.get('v');
+        } else if (urlObj.hostname.includes('youtu.be')) {
+            videoId = urlObj.pathname.slice(1);
+        }
+        if (videoId) {
+            return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        }
+    } catch (e) {
+        console.error("Invalid YouTube URL for thumbnail:", url);
+    }
+    return 'https://placehold.co/300x200.png?text=Video';
+}
 
 function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, onSelect: (item: LibraryItem) => void, isSelected: boolean }) {
+    const isQuestion = 'text' in item && 'difficulty' in item;
     
     const renderContent = () => {
-        if ('text' in item) { // Question
+        if (isQuestion) {
             return (item as Question).text;
-        } else if ('content' in item) { // ActivityItem
+        } else if ('downloadUrl' in item) {
+            const image = item as ImageAsset;
+            return <div className="w-full h-full aspect-video relative"><NextImage src={image.downloadUrl} alt={image.title} fill className="object-cover rounded-t-lg" /></div>
+        } else if ('url' in item && 'teacherId' in item) { // Differentiates VideoAsset from other types with a 'url' field
+             const video = item as VideoAsset;
+             const thumbnailUrl = getYouTubeThumbnail(video.url);
+             return (
+                 <div className="w-full h-full aspect-video relative">
+                    <NextImage src={thumbnailUrl} alt={video.title} fill className="object-cover rounded-t-lg" />
+                 </div>
+             )
+        } else {
             const actItem = item as ActivityItem;
             switch(actItem.type) {
                 case 'concept': return actItem.content.text;
@@ -36,29 +68,11 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
                 case 'categorization': return `Oyun: ${actItem.content.title}`;
                 default: return 'Bilinmeyen öğe';
             }
-        } else if ('url' in item) { // VideoAsset or ImageAsset
-             if ((item as any).storagePath) { // ImageAsset
-                return (
-                    <div className="w-full h-full aspect-video relative">
-                        <Image src={(item as any).url} alt={(item as any).title} fill className="object-cover rounded-t-lg" />
-                    </div>
-                )
-             }
-             // VideoAsset
-             const video = item as VideoAsset;
-             const videoId = video.url.split('embed/')[1];
-             const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400.png';
-             return (
-                 <div className="w-full h-full aspect-video relative">
-                    <Image src={thumbnailUrl} alt={video.title} fill className="object-cover rounded-t-lg" />
-                 </div>
-             )
         }
-        return 'Bilinmeyen öğe';
     }
     
     const renderTypeBadge = () => {
-        if ('text' in item) {
+        if (isQuestion) {
             const q = item as Question;
             const difficultyColors: Record<string, string> = {
                 'Kolay': 'bg-green-100 text-green-800',
@@ -68,10 +82,14 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
             return (
                 <div className='flex items-center gap-1'>
                     <Badge variant="secondary">Soru</Badge>
-                    <Badge variant="outline" className={cn(difficultyColors[q.difficulty] || '')}>{q.difficulty}</Badge>
+                    <Badge variant="outline" className={cn("border", difficultyColors[q.difficulty])}>{q.difficulty}</Badge>
                 </div>
             )
-        } else if ('content' in item) {
+        } else if ('downloadUrl' in item) {
+            return <Badge variant="outline" className="border-sky-300 bg-sky-50 text-sky-800"><ImageIcon className="mr-1 h-3 w-3"/> Görsel</Badge>
+        } else if ('url' in item && 'teacherId' in item) {
+            return <Badge variant="outline" className="border-red-300 bg-red-50 text-red-800"><Video className="mr-1 h-3 w-3"/> Video</Badge>
+        } else {
             const actItem = item as ActivityItem;
             const typeLabels: Record<string, string> = {
                 concept: 'Kavram',
@@ -80,12 +98,7 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
                 categorization: 'Kategorizasyon'
             }
             return <Badge variant="outline">Etkinlik: {typeLabels[actItem.type]}</Badge>
-        } else if ((item as any).storagePath) {
-             return <Badge variant="outline">Görsel</Badge>;
-        } else if ('url' in item) {
-            return <Badge variant="outline">Video</Badge>;
         }
-        return null;
     }
 
     return (
@@ -93,15 +106,11 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
             className={cn("flex flex-col hover:shadow-md transition-shadow cursor-pointer", isSelected && "ring-2 ring-primary")}
             onClick={() => onSelect(item)}
         >
-            <CardContent className="p-0 flex-grow">
-                 <div className="aspect-video w-full relative">
-                    {renderContent()}
-                </div>
+            <CardContent className="p-0 flex-grow space-y-2">
+                <div className="text-sm font-medium line-clamp-3 h-full">{renderContent()}</div>
             </CardContent>
-            <CardFooter className="p-3 bg-muted/50 flex justify-between items-center text-xs">
-                 <div className="flex items-center gap-1 overflow-hidden">
-                   {renderTypeBadge()}
-                </div>
+            <CardFooter className="p-3 bg-muted/50 flex justify-between items-center">
+                {renderTypeBadge()}
                 <Checkbox checked={isSelected} />
             </CardFooter>
         </Card>
@@ -111,9 +120,9 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
 export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, context, config }: {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    onItemsSelected: (items: (ActivityItem | Question | VideoAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => void;
+    onItemsSelected: (items: (ActivityItem | Question | ImageAsset | VideoAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'imageLibrary' | 'videoLibrary') => void;
     context: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
-    config: { filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual' | 'video'; };
+    config: { filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'imageLibrary' | 'videoLibrary'; };
 }) {
     const [items, setItems] = useState<LibraryItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +130,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     const [selectedItemIds, setSelectedItemIds] = useState<Set<string>>(new Set());
 
     const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-    const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[] })[] })[]>([]);
+    const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
     
     const [filters, setFilters] = useState<LibraryFilter>({
         type: config.filter.includes('questions') ? 'questions' : (config.filter.includes('imageLibrary') ? 'imageLibrary' : 'activities'),
@@ -129,16 +138,17 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     
     const { toast } = useToast();
 
-     const fetchItemsCallback = useCallback(async (currentFilters: LibraryFilter) => {
+    const fetchItemsCallback = useCallback(async (currentFilters: LibraryFilter) => {
         setIsLoading(true);
         setError(null);
         setSelectedItemIds(new Set());
         
         const filterPayload: LibraryFilter = { 
             ...currentFilters, 
-            activityTypes: config.filter.filter(f => f !== 'questions' && f !== 'imageLibrary') as ActivityItem['type'][],
+            activityTypes: config.filter.filter(f => !['questions', 'imageLibrary', 'videoLibrary'].includes(f)) as ActivityItem['type'][],
             questionTypes: config.filter.includes('questions') ? ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'] : [],
         };
+
         const { items: fetchedItems, error: fetchError } = await getLibraryItems(filterPayload);
         
         if (fetchError) setError(fetchError);
@@ -161,6 +171,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
         fetchItemsCallback(initialFilters);
 
         const fetchFilterData = async () => {
+            if (allClasses.length > 0) return; // Don't refetch
             const [classesSnapshot, coursesSnapshot] = await Promise.all([
                 getDocs(query(collection(db, 'classes'), orderBy('name'))),
                 getDocs(query(collection(db, 'courses')))
@@ -185,14 +196,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
         
         fetchFilterData();
 
-    }, [isOpen, context, config.type, fetchItemsCallback]);
-    
-    useEffect(() => {
-        if(isOpen) {
-             fetchItemsCallback(filters);
-        }
-    }, [filters, isOpen, fetchItemsCallback]);
-
+    }, [isOpen, context, config.type, fetchItemsCallback, allClasses.length]);
 
     const handleSelect = (item: LibraryItem) => {
         setSelectedItemIds(prev => {
@@ -275,15 +279,14 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                         </Label>
                     </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {itemsToRender.map(item => <LibraryItemCard key={item.id} item={item} onSelect={handleSelect} isSelected={selectedItemIds.has(item.id)} />)}
                 </div>
             </>
         )
     }
-    
-    const showFilters = config.stepType !== 'visual' && config.stepType !== 'video';
 
+    const showFilters = config.filter[0] !== 'imageLibrary' && config.filter[0] !== 'videoLibrary';
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -291,24 +294,26 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2"><Library /> Veri Bankasından İçerik Ekle</DialogTitle>
                 </DialogHeader>
-                 {showFilters && <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
-                    <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: config.type, classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
-                        <SelectTrigger><SelectValue placeholder="Sınıf Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
-                        <SelectTrigger><SelectValue placeholder="Ders Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
-                        <SelectTrigger><SelectValue placeholder="Ünite Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
-                        <SelectTrigger><SelectValue placeholder="Konu Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                </div>}
+                {showFilters && (
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
+                        <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: config.type, classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
+                            <SelectTrigger><SelectValue placeholder="Sınıf Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                        </Select>
+                         <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
+                            <SelectTrigger><SelectValue placeholder="Ders Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                         <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
+                            <SelectTrigger><SelectValue placeholder="Ünite Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                         <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
+                            <SelectTrigger><SelectValue placeholder="Konu Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                    </div>
+                )}
                 
                 <div className="flex-grow mt-4 overflow-hidden">
                     <ScrollArea className="h-full pr-4">
@@ -327,5 +332,3 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
         </Dialog>
     );
 }
-
-    
