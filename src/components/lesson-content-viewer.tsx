@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -36,8 +37,8 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
-    isFullscreen: boolean;
     onAllTfAnswered: () => void;
+    isFullscreen: boolean;
 };
 
 
@@ -71,12 +72,13 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
     const summaryColorClasses = [
-        'border-blue-500', 'border-emerald-500', 'border-purple-500', 
-        'border-rose-500', 'border-amber-500', 'border-indigo-500', 'border-teal-500'
-    ];
-    const darkBgClasses = [
-        'bg-slate-800', 'bg-gray-800', 'bg-zinc-800', 
-        'bg-neutral-800', 'bg-stone-800'
+        'border-blue-500 bg-blue-800/70',
+        'border-emerald-500 bg-emerald-800/70',
+        'border-purple-500 bg-purple-800/70',
+        'border-rose-500 bg-rose-800/70',
+        'border-amber-500 bg-amber-800/70',
+        'border-indigo-500 bg-indigo-800/70',
+        'border-teal-500 bg-teal-800/70'
     ];
 
     return (
@@ -89,11 +91,10 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
-                    const darkBgClass = darkBgClasses[index % darkBgClasses.length];
                     return (
-                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn text-white/90 border-l-8", colorClass, darkBgClass)}>
-                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8", colorClass.replace('border-', 'text-'))} />
-                             <div className={cn("flex-1 break-words not-prose text-justify", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 animate-fadeAndScaleIn", "bg-card text-card-foreground border-l-8", colorClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1 h-8 w-8 text-white/90", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold text-white/90", isFullscreen ? "text-2xl md:text-2xl" : "text-lg md:text-xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -607,7 +608,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-muted/50">
-                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-2xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -927,7 +928,7 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onAllTfAnswered,
+    onAllTfAnswered = () => {},
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
@@ -1016,8 +1017,6 @@ export function LessonContentViewer({
         
         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
-        
-        if(onAllTfAnswered) onAllTfAnswered();
     }
 
      const isNextButtonEnabled = useMemo(() => {
@@ -1289,7 +1288,7 @@ export function LessonContentViewer({
                  stepAnswers={internalProgress.answers[currentStepIndex]}
                  topic={topic}
                  courseId={courseId}
-                 unitId={unitId!}
+                 unitId={unitId}
                  courseTitle={courseTitle}
                  unitTitle={unitTitle}
                  isFullscreen={isFullscreen}
