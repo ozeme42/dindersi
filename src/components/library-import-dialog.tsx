@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -9,7 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Library, PlusCircle, AlertTriangle } from 'lucide-react';
 import { getLibraryItems, type LibraryFilter } from '@/app/teacher/content-creation/edit/library-actions';
-import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass } from '@/lib/types';
+import type { Question, ActivityItem, LessonStep, Course, Unit, Topic, SchoolClass, VideoAsset, ImageAsset } from '@/lib/types';
 import { Badge } from './ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
@@ -19,50 +18,36 @@ import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Label } from './ui/label';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { useAuth } from '@/context/auth-context';
+import Image from 'next/image';
 
-type LibraryItem = Question | ActivityItem;
+type LibraryItem = Question | ActivityItem | VideoAsset | ImageAsset;
 
 function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, onSelect: (item: LibraryItem) => void, isSelected: boolean }) {
-    const isQuestion = 'text' in item;
     
     const renderContent = () => {
-        if (isQuestion) {
-            return (item as Question).text;
-        } else {
-            const actItem = item as ActivityItem;
-            switch(actItem.type) {
-                case 'concept': return actItem.content.text;
-                case 'definition': return `${actItem.content.term}: ${actItem.content.definition}`;
-                case 'sentence': return actItem.content.text;
-                case 'categorization': return `Oyun: ${actItem.content.title}`;
-                default: return 'Bilinmeyen öğe';
-            }
-        }
+        if ('text' in item) return (item as Question).text;
+        if ('type' in item && item.type === 'concept') return (item as ActivityItem).content.text;
+        if ('type' in item && item.type === 'definition') return `${(item as ActivityItem).content.term}: ${(item as ActivityItem).content.definition}`;
+        if ('type' in item && item.type === 'sentence') return (item as ActivityItem).content.text;
+        if ('url' in item) return <Image src={(item as ImageAsset).url} alt={(item as ImageAsset).title} width={100} height={100} className="w-full h-24 object-cover rounded-md" />;
+        return 'Bilinmeyen öğe';
     }
     
     const renderTypeBadge = () => {
-        if (isQuestion) {
+        if ('text' in item) { // Question
             const q = item as Question;
             const difficultyColors: Record<string, string> = {
                 'Kolay': 'bg-green-100 text-green-800',
                 'Orta': 'bg-yellow-100 text-yellow-800',
                 'Zor': 'bg-red-100 text-red-800',
             };
-            return (
-                <div className='flex items-center gap-1'>
-                    <Badge variant="secondary">Soru</Badge>
-                    <Badge variant="outline" className={difficultyColors[q.difficulty] || ''}>{q.difficulty}</Badge>
-                </div>
-            )
-        } else {
+            return <Badge variant="outline" className={cn("border", difficultyColors[q.difficulty] || '')}>{q.difficulty}</Badge>
+        } else if ('type' in item && 'content' in item) { // ActivityItem
             const actItem = item as ActivityItem;
-            const typeLabels: Record<string, string> = {
-                concept: 'Kavram',
-                definition: 'Tanım',
-                sentence: 'Cümle',
-                categorization: 'Kategorizasyon'
-            }
-            return <Badge variant="outline">Etkinlik: {typeLabels[actItem.type]}</Badge>
+            return <Badge variant="secondary">{actItem.type}</Badge>
+        } else { // VideoAsset or ImageAsset
+            return <Badge variant="default">Medya</Badge>
         }
     }
 
@@ -71,10 +56,10 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
             className={cn("flex flex-col hover:shadow-md transition-shadow cursor-pointer", isSelected && "ring-2 ring-primary")}
             onClick={() => onSelect(item)}
         >
-            <CardContent className="p-4 flex-grow space-y-2">
-                <p className="text-sm font-medium line-clamp-3">{renderContent()}</p>
+            <CardContent className="p-3 flex-grow space-y-2">
+                <div className="text-sm font-medium line-clamp-3">{renderContent()}</div>
             </CardContent>
-            <CardFooter className="p-3 bg-muted/50 flex justify-between items-center">
+            <CardFooter className="p-2 bg-muted/50 flex justify-between items-center">
                 {renderTypeBadge()}
                 <Checkbox checked={isSelected} />
             </CardFooter>
@@ -82,13 +67,20 @@ function LibraryItemCard({ item, onSelect, isSelected }: { item: LibraryItem, on
     )
 }
 
+type LibraryConfig = { 
+    filter: (ActivityItem['type'] | 'questions' | 'videos' | 'images')[]; 
+    multiSelect: boolean; 
+    stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual' 
+};
+
 export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, context, config }: {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
-    onItemsSelected: (items: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => void;
+    onItemsSelected: (items: LibraryItem[], stepType: LibraryConfig['stepType']) => void;
     context: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
-    config: { filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; };
+    config: LibraryConfig;
 }) {
+    const { user } = useAuth();
     const [items, setItems] = useState<LibraryItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -98,7 +90,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
     
     const [filters, setFilters] = useState<LibraryFilter>({
-        type: config.filter.includes('questions') ? 'questions' : 'activities',
+        type: config.filter.includes('questions') ? 'questions' : (config.filter.includes('videos') ? 'videos' : (config.filter.includes('images') ? 'images' : 'activities')),
     });
     
     const { toast } = useToast();
@@ -107,7 +99,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
         if (!isOpen) return;
 
         setFilters({
-            type: config.filter.includes('questions') ? 'questions' : 'activities',
+            type: config.filter.includes('questions') ? 'questions' : (config.filter.includes('videos') ? 'videos' : (config.filter.includes('images') ? 'images' : 'activities')),
             classId: null,
             courseId: context?.courseId || null,
             unitId: context?.unitId || null,
@@ -142,7 +134,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
     }, [isOpen, context, config.type]);
     
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isOpen || !user) return;
         const fetchItems = async () => {
             setIsLoading(true);
             setError(null);
@@ -150,10 +142,10 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
             
             const filterPayload: LibraryFilter = { 
                 ...filters, 
-                activityTypes: config.filter.filter(f => f !== 'questions') as ActivityItem['type'][],
+                activityTypes: config.filter.filter(f => !['questions', 'videos', 'images'].includes(f)) as ActivityItem['type'][],
                 questionTypes: config.filter.includes('questions') ? ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'] : [],
             };
-            const { items: fetchedItems, error: fetchError } = await getLibraryItems(filterPayload);
+            const { items: fetchedItems, error: fetchError } = await getLibraryItems(filterPayload, user.uid);
             
             if (fetchError) setError(fetchError);
             else setItems(fetchedItems);
@@ -161,7 +153,7 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
             setIsLoading(false);
         };
         fetchItems();
-    }, [isOpen, filters, config.filter]);
+    }, [isOpen, filters, config.filter, user]);
 
     const handleSelect = (item: LibraryItem) => {
         setSelectedItemIds(prev => {
@@ -257,24 +249,26 @@ export function LibraryImportDialog({ isOpen, onOpenChange, onItemsSelected, con
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2"><Library /> Veri Bankasından İçerik Ekle</DialogTitle>
                 </DialogHeader>
-                 <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
-                    <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: config.type === 'questions' ? 'questions' : 'activities', classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
-                        <SelectTrigger><SelectValue placeholder="Sınıf Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
-                        <SelectTrigger><SelectValue placeholder="Ders Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
-                        <SelectTrigger><SelectValue placeholder="Ünite Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                     <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
-                        <SelectTrigger><SelectValue placeholder="Konu Seçin..." /></SelectTrigger>
-                        <SelectContent><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
-                    </Select>
-                </div>
+                {!['videos', 'images'].includes(filters.type) && (
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-2 pt-2">
+                        <Select value={filters.classId || 'all'} onValueChange={v => setFilters({ type: config.filter.includes('questions') ? 'questions' : 'activities', classId: v === 'all' ? null : v, courseId: null, unitId: null, topicId: null })}>
+                            <SelectTrigger><SelectValue placeholder="Sınıf Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Select value={filters.courseId || 'all'} onValueChange={v => setFilters(f => ({ ...f, courseId: v === 'all' ? null : v, unitId: null, topicId: null }))} disabled={!filters.classId}>
+                            <SelectTrigger><SelectValue placeholder="Ders Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Dersler</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Select value={filters.unitId || 'all'} onValueChange={v => setFilters(f => ({ ...f, unitId: v === 'all' ? null : v, topicId: null }))} disabled={!filters.courseId}>
+                            <SelectTrigger><SelectValue placeholder="Ünite Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Üniteler</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Select value={filters.topicId || 'all'} onValueChange={v => setFilters(f => ({ ...f, topicId: v === 'all' ? null : v }))} disabled={!filters.unitId}>
+                            <SelectTrigger><SelectValue placeholder="Konu Seçin..." /></SelectTrigger>
+                            <SelectContent><SelectItem value="all">Tüm Konular</SelectItem>{filteredTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent>
+                        </Select>
+                    </div>
+                )}
                 
                 <div className="flex-grow mt-4 overflow-hidden">
                     <ScrollArea className="h-full pr-4">

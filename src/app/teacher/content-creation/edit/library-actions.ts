@@ -1,10 +1,9 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, LibraryImage } from "@/lib/types";
+import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, ImageAsset } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
@@ -21,7 +20,6 @@ async function getSubCollectionIds(path: string, subCollectionName: 'units' | 't
         const snapshot = await getDocs(collection(db, `${path}/${subCollectionName}`));
         return snapshot.docs.map(doc => doc.id);
     } catch (e) {
-        // This might happen if the path is invalid, which is okay in our recursive search.
         return [];
     }
 }
@@ -55,12 +53,25 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
         return (await Promise.all(topicIdPromises)).flat();
     }
     
-    // If no specific filter is applied, return empty, which will result in fetching all items.
     return [];
 }
 
+export async function getImages(teacherId: string): Promise<{ success: boolean; data?: ImageAsset[]; error?: string }> {
+    try {
+        const q = query(
+            collection(db, 'imageLibrary'),
+            where('teacherId', '==', teacherId),
+            orderBy('createdAt', 'desc')
+        );
+        const snapshot = await getDocs(q);
+        const images = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
+        return { success: true, data: images };
+    } catch (e: any) {
+        return { success: false, error: 'Görseller alınamadı.' };
+    }
+}
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | LibraryImage)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter, teacherId: string): Promise<{ items: (Question | ActivityItem | VideoAsset | ImageAsset)[], error?: string }> {
     try {
         if (filters.type === 'videos') {
             const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
@@ -70,10 +81,11 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         }
 
         if (filters.type === 'images') {
-             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
-             const snapshot = await getDocs(imagesQuery);
-             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LibraryImage));
-             return { items: JSON.parse(JSON.stringify(items)) };
+             const result = await getImages(teacherId);
+             if (result.success) {
+                 return { items: JSON.parse(JSON.stringify(result.data)) };
+             }
+             return { items: [], error: result.error };
         }
 
         const isQuestions = filters.type === 'questions';
@@ -85,18 +97,13 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         let finalConditions: any[] = [];
         
         if (topicIds.length > 0) {
-             // Firestore 'in' queries are limited to 30 items per query. 
-             // This logic doesn't handle chunking for >30 topics, but is more robust than before.
             finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
         } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
             // No topic filter, fetch all
         } else {
-             // If we got here with filters applied, it means no topics were found under the hierarchy.
-            // So, return no items.
              return { items: [] };
         }
 
-        // Apply type filters
         if (isQuestions && filters.questionTypes && filters.questionTypes.length > 0) {
             finalConditions.push(where("type", "in", filters.questionTypes));
         }
@@ -105,7 +112,6 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             finalConditions.push(where("type", "in", filters.activityTypes));
         }
         
-        // Construct the final query
         if (finalConditions.length > 0) {
             baseQuery = query(baseQuery, and(...finalConditions));
         }
