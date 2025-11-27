@@ -1,76 +1,63 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { storage } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { collection, query, where, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, orderBy } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import type { ImageAsset } from "@/lib/types";
+import type { VideoAsset } from "@/lib/types";
+import { ref, deleteObject } from "firebase/storage";
 import { unstable_noStore as noStore } from 'next/cache';
 
-export async function getImages(teacherId: string): Promise<{ success: boolean; data?: ImageAsset[]; error?: string }> {
+
+export async function getImages(): Promise<{ success: boolean; data?: VideoAsset[]; error?: string }> {
     noStore();
     try {
-        const q = query(
-            collection(db, 'imageLibrary'), 
-            where('teacherId', '==', teacherId),
-            orderBy('createdAt', 'desc') // Sort by creation date, newest first
-        );
+        const q = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
         const snapshot = await getDocs(q);
-        const images = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return { 
-                id: doc.id, 
-                ...data,
-                createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-            } as ImageAsset
-        });
-        return { success: true, data: images };
+        const images = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), createdAt: doc.data().createdAt?.toDate().toISOString() } as VideoAsset));
+        return { success: true, data: JSON.parse(JSON.stringify(images)) };
     } catch (e: any) {
-        console.error("Error getting images: ", e);
+        console.error("Error fetching images:", e);
         if (e.code === 'failed-precondition') {
-             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${e.message}`};
+             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın veya aşağıdaki linke tıklayın. Hata: ${e.message}`};
         }
         return { success: false, error: 'Görseller alınamadı.' };
     }
 }
 
-
-export async function addImageRecord(record: Omit<ImageAsset, 'id' | 'createdAt'>): Promise<{ success: boolean, id?: string, error?: string }> {
+export async function addImageRecord(imageData: Omit<VideoAsset, 'id' | 'createdAt'>): Promise<{ success: boolean; id?: string; error?: string }> {
     try {
         const docRef = await addDoc(collection(db, 'imageLibrary'), {
-            ...record,
+            ...imageData,
             createdAt: serverTimestamp()
         });
         return { success: true, id: docRef.id };
     } catch (e: any) {
-        return { success: false, error: 'Veritabanı kaydı oluşturulurken hata oluştu.' };
+        return { success: false, error: 'Görsel bilgisi veritabanına kaydedilemedi.' };
     }
 }
 
 
-export async function deleteImage(image: ImageAsset): Promise<{ success: boolean; error?: string }> {
+export async function deleteImage(image: VideoAsset): Promise<{ success: boolean; error?: string }> {
     try {
         // Delete the Firestore document
         await deleteDoc(doc(db, 'imageLibrary', image.id));
         
-        // Delete the file from Storage
-        try {
+        // Delete the file from Firebase Storage
+        if (image.storagePath) {
             const storageRef = ref(storage, image.storagePath);
-            await deleteObject(storageRef);
-        } catch (storageError: any) {
-            // If the file doesn't exist in storage (e.g., already deleted), that's okay.
-            // We still want to proceed if the main error was just "object-not-found".
-            if (storageError.code !== 'storage/object-not-found') {
-                // If it's a different error (like permissions), we re-throw it.
-                throw storageError;
+            try {
+                await deleteObject(storageRef);
+            } catch (storageError: any) {
+                 // If the file doesn't exist in storage, that's okay, we can ignore it.
+                if (storageError.code !== 'storage/object-not-found') {
+                    throw storageError; // Re-throw other storage errors
+                }
             }
-            console.warn(`File at ${image.storagePath} not found in Storage, but proceeding with Firestore deletion.`);
         }
 
         return { success: true };
     } catch (e: any) {
-        console.error("Error deleting image:", e);
-        return { success: false, error: 'Görsel silinirken bir hata oluştu.' };
+        return { success: false, error: 'Görsel silinemedi.' };
     }
 }
+
