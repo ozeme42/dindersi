@@ -125,7 +125,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'image')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -228,20 +228,20 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'image')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | { url: string; title: string })[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | { id: string, downloadUrl: string, title: string })[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
             case 'visual':
-                newSteps = (importedItems as { url: string; title: string }[]).map(item => ({
+                newSteps = (importedItems as { id: string, downloadUrl: string, title: string }[]).map(item => ({
                     type: 'visual',
                     title: item.title,
-                    imageUrl: item.url,
+                    imageUrl: item.downloadUrl,
                 }));
                 break;
             case 'flashcard':
@@ -450,10 +450,10 @@ function TopicEditor() {
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Bu Konuda Öğreneceklerimiz' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
-        { label: 'Görsel Kütüphanesinden Ekle', action: () => handleOpenLibrary(['image'], false, 'visual') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
+        { label: 'Görsel / Afiş (Kütüphaneden)', action: () => handleOpenLibrary(['images'], false, 'visual') },
+        { label: 'Görsel / Afiş (URL)', type: 'visual', defaultTitle: 'Görsel' },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
         { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },
@@ -489,8 +489,9 @@ function TopicEditor() {
      const aiGenerationOptions = [
         { label: 'Özet (Akordiyon)', moduleId: 'summary' },
         { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
-        { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
+        { label: 'Öğrendiklerimiz (Liste)', moduleId: 'keyTakeaways' },
         { label: 'Kavram Açıklamaları', moduleId: 'conceptExplanations' },
+        { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
         { label: 'Bilgi Kartları', moduleId: 'flashcards' },
         { label: 'AI ile Görsel Oluştur', moduleId: 'visuals' },
      ] as const;
@@ -723,7 +724,7 @@ function TopicEditor() {
     );
 }
 
-export default function TopicEditorPage() {
+export default function SummerTopicEditorPage() {
     return (
         <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <TopicEditor />
