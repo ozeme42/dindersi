@@ -125,7 +125,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'image')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -228,15 +228,22 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'image')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | { url: string; title: string })[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'visual') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
+            case 'visual':
+                newSteps = (importedItems as { url: string; title: string }[]).map(item => ({
+                    type: 'visual',
+                    title: item.title,
+                    imageUrl: item.url,
+                }));
+                break;
             case 'flashcard':
                 newSteps.push({
                     type: 'flashcard',
@@ -443,6 +450,7 @@ function TopicEditor() {
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Bu Konuda Öğreneceklerimiz' },
         { label: 'Kavram Açıklamaları', type: 'conceptExplanation', defaultTitle: 'Kavram Açıklamaları' },
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
+        { label: 'Görsel Kütüphanesinden Ekle', action: () => handleOpenLibrary(['image'], false, 'visual') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
         { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
@@ -464,24 +472,6 @@ function TopicEditor() {
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
     
-    const aiGenerationOptions = [
-        { label: 'Özet (Akordiyon)', moduleId: 'summary' },
-        { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
-        { label: 'Öğrendiklerimiz (Liste)', moduleId: 'keyTakeaways' },
-        { label: 'Kavram Açıklamaları', moduleId: 'conceptExplanations' },
-        { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
-        { label: 'Bilgi Kartları', moduleId: 'flashcards' },
-        { label: 'AI ile Görsel Oluştur', moduleId: 'visuals' },
-     ] as const;
-
-    const aiAssessmentOptions = [
-        { label: 'Çoktan Seçmeli Sorular', moduleId: 'multipleChoiceQuestions' },
-        { label: 'Doğru/Yanlış Soruları', moduleId: 'trueFalseQuestions' },
-        { label: 'Boşluk Doldurma Soruları', moduleId: 'fillInTheBlankQuestions' },
-        { label: 'Anagram Soruları (Kart Formatında)', moduleId: 'anagramQuestions' },
-        { label: 'Cümle Düzeltme Soruları', moduleId: 'sentenceScrambleQuestions' },
-    ] as const;
-
     const playableActivities = [
       { href: 'bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
       { href: 'eslestirme', label: 'Eşleştirme', icon: Puzzle },
@@ -494,6 +484,23 @@ function TopicEditor() {
       { href: 'kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
       { href: 'milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
       { href: 'soru-coz', label: 'Soru Çöz', icon: BrainCircuit },
+    ] as const;
+
+     const aiGenerationOptions = [
+        { label: 'Özet (Akordiyon)', moduleId: 'summary' },
+        { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
+        { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
+        { label: 'Kavram Açıklamaları', moduleId: 'conceptExplanations' },
+        { label: 'Bilgi Kartları', moduleId: 'flashcards' },
+        { label: 'AI ile Görsel Oluştur', moduleId: 'visuals' },
+     ] as const;
+
+    const aiAssessmentOptions = [
+        { label: 'Çoktan Seçmeli Sorular', moduleId: 'multipleChoiceQuestions' },
+        { label: 'Doğru/Yanlış Soruları', moduleId: 'trueFalseQuestions' },
+        { label: 'Boşluk Doldurma Soruları', moduleId: 'fillInTheBlankQuestions' },
+        { label: 'Anagram Soruları (Kart Formatında)', moduleId: 'anagramQuestions' },
+        { label: 'Cümle Düzeltme Soruları', moduleId: 'sentenceScrambleQuestions' },
     ] as const;
 
     return (
