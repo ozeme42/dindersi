@@ -126,110 +126,105 @@ export default function DersAkisiPage() {
             <Accordion type="multiple" className="w-full space-y-4">
                 {courseGroups.map((group, groupIndex) => (
                     <AccordionItem value={group.title} key={group.title} className="border-b-0">
-                        <Card>
-                            <CardHeader className={cn("p-0 rounded-t-lg relative overflow-hidden", colorClasses[groupIndex % colorClasses.length])}>
-                                 <div className="absolute inset-0 bg-grid-slate-900/[0.04] bg-[length:32px_32px] [mask-image:linear-gradient(to_bottom,white_0,white_60%,transparent_100%)]"></div>
+                         <Card>
+                            <CardHeader className={cn(
+                                "p-0 rounded-t-lg bg-grid bg-gray-800",
+                                colorClasses[groupIndex % colorClasses.length]
+                            )}>
                                 <AccordionTrigger className="text-3xl font-bold font-headline hover:no-underline p-6 text-primary-foreground shadow-inner-lg transition-all hover:bg-black/20">
                                     {group.title}
                                 </AccordionTrigger>
                             </CardHeader>
-                            <AccordionContent className="p-4 sm:p-6">
-                                <div className="space-y-4">
+                            <AccordionContent className="p-4 sm:p-6 space-y-4">
                                 {group.courses.map((course, courseIndex) => (
-                                    <div key={course.id} className="pl-4 border-l-2 border-primary/50">
-                                        <div className="flex items-center">
-                                            <div className="w-4 h-px bg-primary/50 -ml-4 mr-2"></div>
-                                            <Accordion type="single" collapsible className="w-full">
-                                                <AccordionItem value={course.id} className="border rounded-md bg-muted/50">
-                                                        <AccordionTrigger className={cn("px-4 py-3 text-2xl font-semibold hover:no-underline text-primary-foreground", colorClasses[(courseIndex + 3) % colorClasses.length])}>
-                                                            <div className="flex items-center gap-4 w-full">
-                                                                <span className="flex-1 text-left">{course.className}</span>
-                                                            </div>
-                                                    </AccordionTrigger>
-                                                    <AccordionContent className="p-3 bg-card">
-                                                            <div className="space-y-3">
-                                                            {course.units.map((unit, unitIndex) => (
-                                                                <Accordion key={unit.id} type="multiple" className="w-full">
-                                                                    <AccordionItem value={unit.id} className="border rounded-md bg-background">
-                                                                        <AccordionTrigger className={cn("px-4 py-3 text-xl font-medium hover:no-underline text-primary-foreground", colorClasses[(unitIndex + 1) % colorClasses.length])}>
-                                                                            {unit.title}
-                                                                        </AccordionTrigger>
-                                                                        <AccordionContent className="p-3">
-                                                                            {unit.topics.length > 0 ? (
-                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                                                                                    {unit.topics.map((topic, topicIndex) => {
-                                                                                        const isLink = topic.externalLink;
-                                                                                        const hasStudentContent = (topic.steps?.length || 0) > 0;
-                                                                                        const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
-                                                                                        
-                                                                                        return (
-                                                                                            <div key={topic.id} className="relative group h-36">
-                                                                                                <Button
-                                                                                                    asChild
-                                                                                                    className={cn(
-                                                                                                        "w-full h-full p-3 justify-center items-center flex text-center font-medium",
-                                                                                                        "text-primary-foreground shadow-lg transition-transform duration-200 hover:-translate-y-1",
-                                                                                                        "break-words whitespace-normal text-base", // Ensure text wraps
-                                                                                                        colorClasses[(topicIndex + 2) % colorClasses.length]
-                                                                                                    )}
-                                                                                                >
-                                                                                                    {isLink ? (
-                                                                                                        <Link href={topic.externalLink!} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 h-full w-full">
-                                                                                                            {topic.title}
-                                                                                                            <LinkIcon className="h-3 w-3" />
-                                                                                                        </Link>
-                                                                                                    ) : (
-                                                                                                        <Link href={presentationUrl} className="flex items-center justify-center h-full w-full">
-                                                                                                            {topic.title}
-                                                                                                        </Link>
-                                                                                                    )}
+                                    <Accordion key={course.id} type="single" collapsible className="w-full">
+                                        <AccordionItem value={course.id} className="border rounded-md bg-muted/50">
+                                                <AccordionTrigger className={cn("px-4 py-3 text-2xl font-semibold hover:no-underline text-primary-foreground", colorClasses[(courseIndex + 3) % colorClasses.length])}>
+                                                    <div className="flex items-center gap-4 w-full">
+                                                        <span className="flex-1 text-left">{course.className}</span>
+                                                    </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent className="p-3 bg-card">
+                                                    <div className="space-y-3">
+                                                    {course.units.map((unit, unitIndex) => (
+                                                        <Accordion key={unit.id} type="multiple" className="w-full">
+                                                            <AccordionItem value={unit.id} className="border rounded-md bg-background">
+                                                                <AccordionTrigger className={cn("px-4 py-3 text-xl font-medium hover:no-underline text-primary-foreground", colorClasses[(unitIndex + 1) % colorClasses.length])}>
+                                                                    {unit.title}
+                                                                </AccordionTrigger>
+                                                                <AccordionContent className="p-3">
+                                                                    {unit.topics.length > 0 ? (
+                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                                                                            {unit.topics.map((topic, topicIndex) => {
+                                                                                const isLink = topic.externalLink;
+                                                                                const hasStudentContent = (topic.steps?.length || 0) > 0;
+                                                                                const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
+                                                                                
+                                                                                return (
+                                                                                    <div key={topic.id} className="relative group h-36">
+                                                                                        <Button
+                                                                                            asChild
+                                                                                            className={cn(
+                                                                                                "w-full h-full p-3 justify-center items-center flex text-center font-medium",
+                                                                                                "text-primary-foreground shadow-lg transition-transform duration-200 hover:-translate-y-1",
+                                                                                                "break-words whitespace-normal text-base", // Ensure text wraps
+                                                                                                colorClasses[(topicIndex + 2) % colorClasses.length]
+                                                                                            )}
+                                                                                        >
+                                                                                            {isLink ? (
+                                                                                                <Link href={topic.externalLink!} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 h-full w-full">
+                                                                                                    {topic.title}
+                                                                                                    <LinkIcon className="h-3 w-3" />
+                                                                                                </Link>
+                                                                                            ) : (
+                                                                                                <Link href={presentationUrl} className="flex items-center justify-center h-full w-full">
+                                                                                                    {topic.title}
+                                                                                                </Link>
+                                                                                            )}
+                                                                                        </Button>
+                                                                                        <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col gap-1">
+                                                                                            {hasStudentContent && !isLink && (
+                                                                                                <Button asChild size="icon" variant="ghost" className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20" title="Öğrenci Ders Akışını Görüntüle">
+                                                                                                    <Link href={`/student/ders/${course.id}?topicId=${topic.id}`}>
+                                                                                                        <BookOpen className="h-4 w-4" />
+                                                                                                    </Link>
                                                                                                 </Button>
-                                                                                                <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col gap-1">
-                                                                                                    {hasStudentContent && !isLink && (
-                                                                                                        <Button asChild size="icon" variant="ghost" className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20" title="Öğrenci Ders Akışını Görüntüle">
-                                                                                                            <Link href={`/student/ders/${course.id}?topicId=${topic.id}`}>
-                                                                                                                <BookOpen className="h-4 w-4" />
-                                                                                                            </Link>
-                                                                                                        </Button>
-                                                                                                    )}
-                                                                                                     <Button 
-                                                                                                        size="icon" 
-                                                                                                        variant="ghost" 
-                                                                                                        className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20"
-                                                                                                        onClick={() => handleSummaryClick(course.id, unit.id, topic.id)}
-                                                                                                        title="Konu Özeti Oluştur"
-                                                                                                    >
-                                                                                                        <Columns className="h-4 w-4" />
-                                                                                                    </Button>
-                                                                                                    <Button 
-                                                                                                        size="icon" 
-                                                                                                        variant="ghost" 
-                                                                                                        className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20"
-                                                                                                        onClick={() => handleEditClick(topic, course.id, unit.id)}
-                                                                                                        title="İçeriği Düzenle"
-                                                                                                    >
-                                                                                                        <FilePenLine className="h-4 w-4" />
-                                                                                                    </Button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        );
-                                                                                    })}
-                                                                                </div>
-                                                                            ) : <p className="text-sm text-muted-foreground text-center p-2">Bu ünite için konu bulunmuyor.</p>}
-                                                                        </AccordionContent>
-                                                                    </AccordionItem>
-                                                                </Accordion>
-                                                            ))}
-                                                        </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </Accordion>
-                                        </div>
-                                    </div>
+                                                                                            )}
+                                                                                             <Button 
+                                                                                                size="icon" 
+                                                                                                variant="ghost" 
+                                                                                                className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20"
+                                                                                                onClick={() => handleSummaryClick(course.id, unit.id, topic.id)}
+                                                                                                title="Konu Özeti Oluştur"
+                                                                                            >
+                                                                                                <Columns className="h-4 w-4" />
+                                                                                            </Button>
+                                                                                            <Button 
+                                                                                                size="icon" 
+                                                                                                variant="ghost" 
+                                                                                                className="h-7 w-7 text-primary-foreground/70 hover:text-primary-foreground hover:bg-black/20"
+                                                                                                onClick={() => handleEditClick(topic, course.id, unit.id)}
+                                                                                                title="İçeriği Düzenle"
+                                                                                            >
+                                                                                                <FilePenLine className="h-4 w-4" />
+                                                                                            </Button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                    ) : <p className="text-sm text-muted-foreground text-center p-2">Bu ünite için konu bulunmuyor.</p>}
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                        </Accordion>
+                                                    ))}
+                                                    </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
                                 ))}
-                                </div>
                             </AccordionContent>
-                        </Card>
+                         </Card>
                     </AccordionItem>
                 ))}
             </Accordion>
