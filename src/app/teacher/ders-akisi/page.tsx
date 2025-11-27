@@ -125,10 +125,10 @@ export default function DersAkisiPage() {
         return (
             <Accordion type="multiple" className="w-full space-y-4">
                 {courseGroups.map((group, groupIndex) => (
-                    <AccordionItem value={group.title} key={group.title} className="border-b-0">
-                        <Card>
-                            <CardHeader className={cn("p-0 rounded-t-lg", colorClasses[groupIndex % colorClasses.length])}>
-                                <AccordionTrigger className="text-3xl font-bold hover:no-underline p-6 text-primary-foreground">
+                    <AccordionItem value={group.title} key={group.title} className="border-b-0 overflow-hidden rounded-lg shadow-md">
+                        <Card className="border-0">
+                             <CardHeader className={cn("p-0 rounded-t-lg bg-grid bg-gray-800 bg-[size:60px_60px] bg-blend-overlay", colorClasses[groupIndex % colorClasses.length])}>
+                                <AccordionTrigger className="text-3xl font-bold font-headline hover:no-underline p-6 text-primary-foreground shadow-inner-lg transition-all hover:bg-black/20">
                                     {group.title}
                                 </AccordionTrigger>
                             </CardHeader>
