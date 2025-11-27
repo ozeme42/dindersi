@@ -1,15 +1,14 @@
 
-
 "use client"
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep } from '@/lib/types';
+import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep, UploadedImage } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video } from 'lucide-react';
+import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
 import Link from 'next/link';
@@ -180,7 +179,7 @@ function TopicEditor() {
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
             case 'flashcard': newStep = { type, title: defaultTitle, cards: [{ term: 'Terim', definition: 'Tanım' }] }; break;
-            case 'visual': newStep = { type, title: defaultTitle, imageUrl: 'https://placehold.co/600x400.png' }; break;
+            case 'visual': handleOpenLibrary(['images'], false, 'visual'); return;
             case 'mcq': newStep = { type, title: defaultTitle, question: 'Soru?', options: ['A', 'B', 'C', 'D'], correctAnswer: 'A' }; break;
             case 'tf': newStep = { type, title: defaultTitle, statement: 'Bu ifade doğru mu?', isTrue: true }; break;
             case 'trueFalseList': newStep = { type, title: defaultTitle, questions: [{ statement: 'Yeni ifade...', isTrue: true}] }; break;
@@ -233,17 +232,10 @@ function TopicEditor() {
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | { id: string, downloadUrl: string, title: string })[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | UploadedImage)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
-            case 'visual':
-                newSteps = (importedItems as { id: string, downloadUrl: string, title: string }[]).map(item => ({
-                    type: 'visual',
-                    title: item.title,
-                    imageUrl: item.downloadUrl,
-                }));
-                break;
             case 'flashcard':
                 newSteps.push({
                     type: 'flashcard',
@@ -253,6 +245,13 @@ function TopicEditor() {
                         definition: item.content.definition || '',
                     }))
                 });
+                break;
+            case 'visual':
+                newSteps = (importedItems as UploadedImage[]).map(item => ({
+                    type: 'visual',
+                    title: item.title || 'Kütüphaneden Görsel',
+                    imageUrl: item.downloadUrl,
+                }));
                 break;
             case 'anagramFlashcard':
                 newSteps.push({
@@ -452,8 +451,7 @@ function TopicEditor() {
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel / Afiş (Kütüphaneden)', action: () => handleOpenLibrary(['images'], false, 'visual') },
-        { label: 'Görsel / Afiş (URL)', type: 'visual', defaultTitle: 'Görsel' },
+        { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
         { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },
@@ -490,7 +488,6 @@ function TopicEditor() {
         { label: 'Özet (Akordiyon)', moduleId: 'summary' },
         { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
         { label: 'Öğrendiklerimiz (Liste)', moduleId: 'keyTakeaways' },
-        { label: 'Kavram Açıklamaları', moduleId: 'conceptExplanations' },
         { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
         { label: 'Bilgi Kartları', moduleId: 'flashcards' },
         { label: 'AI ile Görsel Oluştur', moduleId: 'visuals' },
@@ -623,7 +620,7 @@ function TopicEditor() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            {anlatimStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)}>{opt.label}</DropdownMenuItem>)}
+                            {anlatimStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => opt.action ? opt.action() : handleAddStep(opt.type, opt.defaultTitle)}>{opt.label}</DropdownMenuItem>)}
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <DropdownMenu>
@@ -724,7 +721,7 @@ function TopicEditor() {
     );
 }
 
-export default function SummerTopicEditorPage() {
+export default function TopicEditorPage() {
     return (
         <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <TopicEditor />

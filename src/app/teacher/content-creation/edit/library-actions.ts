@@ -3,14 +3,14 @@
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset } from "@/lib/types";
+import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset, UploadedImage } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'videos';
+    type: 'questions' | 'activities' | 'videos' | 'images';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -45,15 +45,12 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
         const coursesSnapshot = await getDocs(coursesQuery);
         const courseIds = coursesSnapshot.docs.map(doc => doc.id);
         
-        // This part has a potential issue: it fetches all units, not just those for the filtered courses.
-        // For simplicity, we'll leave it, but a more robust solution would iterate through courseIds.
         const unitIdPromises = courseIds.map(courseId => getSubCollectionIds(`courses/${courseId}`, 'units'));
-        const unitIdsArrays = await Promise.all(unitIdPromises);
-        
-        const topicIdPromises = courseIds.flatMap((courseId, index) => 
-            (unitIdsArrays[index] || []).map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
-        );
+        const unitIds = (await Promise.all(unitIdPromises)).flat();
 
+        const topicIdPromises = courseIds.flatMap(courseId => 
+            unitIds.map(unitId => getSubCollectionIds(`courses/${courseId}/units/${unitId}`, 'topics'))
+        );
         return (await Promise.all(topicIdPromises)).flat();
     }
     
@@ -62,7 +59,7 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
 }
 
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset | UploadedImage)[], error?: string }> {
     try {
         if (filters.type === 'videos') {
             const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
@@ -70,11 +67,10 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
-        
-         if (filters.type === 'imageLibrary') {
+        if (filters.type === 'images') {
             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
             const snapshot = await getDocs(imagesQuery);
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)); // Using 'any' for simplicity
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UploadedImage));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
 
@@ -92,7 +88,7 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
             finalConditions.push(where("topicId", "in", topicIds.slice(0, 30)));
         } else if (filters.topicId === 'all' && filters.unitId === 'all' && filters.courseId === 'all' && filters.classId === 'all') {
             // No topic filter, fetch all
-        } else if (filters.classId || filters.courseId || filters.unitId || filters.topicId) {
+        } else {
              // If we got here with filters applied, it means no topics were found under the hierarchy.
             // So, return no items.
              return { items: [] };
@@ -128,5 +124,3 @@ export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: 
         return { error: "Kütüphane verileri alınırken bir hata oluştu.", items: [] };
     }
 }
-
-    
