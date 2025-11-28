@@ -4,23 +4,25 @@
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Gamepad2, Star, ChevronRight, BrainCircuit, Settings
+    PartyPopper, Gamepad2, Star, ChevronRight, Settings, BrainCircuit, Checkbox as CheckboxIcon, SlidersHorizontal
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from 'next/link';
 import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
-
+import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
 
-
-// --- UI COMPONENTS (from provided template) ---
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -52,9 +54,6 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     </button>
 );
 
-
-// --- MAIN PAGE ---
-
 const steps = [
   { id: 1, name: "Ders", icon: Book },
   { id: 2, name: "Ünite", icon: Library },
@@ -69,14 +68,10 @@ export function SoruCozSetupClientPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
-  // Data State
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
 
-  // Selection State
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -93,73 +88,84 @@ export function SoruCozSetupClientPage() {
   });
 
   useEffect(() => {
-    if (!user) return;
-    setIsLoading(true);
-    const fetchInitialData = async () => {
+    const fetchCourses = async () => {
+      if (!user) {
+        setIsLoading(true);
+        return;
+      }
+      setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
-        ]);
-
-        const coursesData = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-
-        setAllCourses(coursesData);
-        setAllClasses(classesData);
-
         const studentClassName = user.class?.split(' - ')[0];
-        const studentClass = classesData.find(c => studentClassName && c.name === studentClassName);
-        const studentClassId = studentClass?.id;
+
+        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+        const classesSnapshot = await getDocs(classesQuery);
+        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        
+        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
 
         let finalCourses: Course[] = [];
-        const studentVisibleCourses = coursesData.filter(c => !c.isTeacherOnly);
 
-        if (studentClassId) {
-            finalCourses = studentVisibleCourses.filter(course =>
-                course.classId === studentClassId || !course.classId
-            );
+        if (user.role === 'teacher' || user.role === 'superadmin') {
+            finalCourses = allCourses.map(course => {
+                const courseClass = allClasses.find(c => c.id === course.classId);
+                return {
+                    ...course,
+                    className: courseClass?.name || 'Genel'
+                };
+            });
         } else {
-            finalCourses = studentVisibleCourses.filter(course => !course.classId);
+            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+            const studentClassId = studentClass?.id;
+            const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+            
+            if (studentClassId) {
+                const isFirstClass = studentClassId === firstClassId;
+                finalCourses = studentVisibleCourses.filter(course =>
+                    course.classId === studentClassId || (isFirstClass && !course.classId)
+                );
+            } else {
+                finalCourses = studentVisibleCourses.filter(course => !course.classId);
+            }
         }
-        setCourses(finalCourses.map(c => ({
-            ...c,
-            icon: '📚' // Add default icon
-        })));
-        
+        setCourses(finalCourses);
       } catch (error) {
-        console.error("Error fetching initial data: ", error);
+        console.error("Error fetching filtered courses:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchInitialData();
+    fetchCourses();
   }, [user]);
 
-  const handleSelectCourse = async (id: string, name: string) => {
+  const handleSelectCourse = (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
     const unitsRef = collection(db, `courses/${id}/units`);
     const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    setIsLoading(false);
-    setCurrentStep(2);
+    getDocs(q).then(unitsSnapshot => {
+        setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+        setTopics([]);
+        setIsLoading(false);
+        setCurrentStep(2);
+    });
   };
 
-  const handleSelectUnit = async (id: string, name: string) => {
+  const handleSelectUnit = (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
-        setCurrentStep(4); // Skip to settings
+        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
+        setCurrentStep(4);
     } else {
         setIsLoading(true);
         const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
         const q = query(topicsRef, orderBy("title"));
-        const topicsSnapshot = await getDocs(q);
-        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-        setIsLoading(false);
-        setCurrentStep(3);
+        getDocs(q).then(topicsSnapshot => {
+            setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+            setIsLoading(false);
+            setCurrentStep(3);
+        });
     }
   };
   
@@ -167,7 +173,7 @@ export function SoruCozSetupClientPage() {
     setSelection({ ...selection, topicId: id, topicName: name });
     setCurrentStep(4);
   };
-
+  
   const handleDifficultyChange = (level: string) => {
     setSettings(prev => {
         const current = prev.difficulty;
@@ -187,7 +193,11 @@ export function SoruCozSetupClientPage() {
         return {...prev, questionTypes: [...current, type]};
     });
   }
-  
+
+  const handleBack = () => {
+      if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
   const getGameUrl = () => {
     if(settings.difficulty.length === 0 || settings.questionTypes.length === 0) {
         toast({title: "Eksik Seçim", description: "Lütfen en az bir zorluk seviyesi ve soru tipi seçin.", variant: "destructive"});
@@ -207,11 +217,6 @@ export function SoruCozSetupClientPage() {
     return `/student/soru-coz/coz?${params.toString()}`;
   }
 
-  const handleBack = () => {
-      if (currentStep > 1) setCurrentStep(currentStep - 1);
-  };
-
-  // Render Content Based on Step
   const renderStepContent = () => {
       if (isLoading) {
           return (
@@ -234,7 +239,7 @@ export function SoruCozSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    {course.icon || '📚'}
+                                    <BookOpen className="h-6 w-6"/>
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
@@ -274,7 +279,7 @@ export function SoruCozSetupClientPage() {
                             active={selection.topicId === topic.id}
                         >
                             <div className="flex items-center gap-3">
-                               <ListTodo className="h-5 w-5 text-slate-400" />
+                                <ListTodo className="h-5 w-5 text-slate-400" />
                                 <span className="font-semibold text-slate-200">{topic.title}</span>
                             </div>
                             {selection.topicId === topic.id ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
@@ -284,47 +289,53 @@ export function SoruCozSetupClientPage() {
             );
           case 4:
             return (
-                <div className="animate-in fade-in slide-in-from-right-4 duration-300 w-full max-w-md mx-auto space-y-8 text-left text-white">
+                 <div className="w-full max-w-lg mx-auto space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                     <div>
-                        <Label htmlFor="question-count-slider" className="flex justify-between"><span>Soru Sayısı:</span><span className="font-bold">{settings.questionCount}</span></Label>
+                        <Label htmlFor="question-count-slider" className="flex justify-between font-bold text-white"><span>Soru Sayısı:</span><span>{settings.questionCount}</span></Label>
                         <Slider id="question-count-slider" value={[settings.questionCount]} max={20} min={5} step={1} onValueChange={(val) => setSettings(prev => ({...prev, questionCount: val[0]}))} />
                     </div>
-                     <div className="grid grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <Label className="font-semibold">Zorluk Seviyeleri</Label>
-                            {DIFFICULTY_LEVELS.map(level => (
-                                <div key={level} className="flex items-center space-x-2">
-                                    <Checkbox id={`diff-${level}`} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)} className="border-slate-500 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-400"/>
-                                    <Label htmlFor={`diff-${level}`} className="font-normal text-slate-300">{level}</Label>
-                                </div>
-                            ))}
+                     <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <Label className="font-bold text-white">Zorluk Seviyeleri</Label>
+                            <div className="space-y-2 mt-2">
+                                {DIFFICULTY_LEVELS.map(level => (
+                                    <div key={level} className="flex items-center space-x-2">
+                                        <Checkbox id={`diff-${level}`} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)} className="border-slate-500"/>
+                                        <Label htmlFor={`diff-${level}`} className="font-normal text-slate-300">{level}</Label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                         <div className="space-y-2">
-                            <Label className="font-semibold">Soru Tipleri</Label>
-                            {QUESTION_TYPES.map(type => (
-                                <div key={type.id} className="flex items-center space-x-2">
-                                    <Checkbox id={`type-${type.id}`} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)} className="border-slate-500 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-400"/>
-                                    <Label htmlFor={`type-${type.id}`} className="font-normal text-slate-300">{type.name}</Label>
-                                </div>
-                            ))}
+                         <div>
+                            <Label className="font-bold text-white">Soru Tipleri</Label>
+                             <div className="space-y-2 mt-2">
+                                {QUESTION_TYPES.map(type => (
+                                    <div key={type.id} className="flex items-center space-x-2">
+                                        <Checkbox id={`type-${type.id}`} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)} className="border-slate-500"/>
+                                        <Label htmlFor={`type-${type.id}`} className="font-normal text-slate-300">{type.name}</Label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                    <Button onClick={() => setCurrentStep(5)} className="w-full bg-indigo-600 hover:bg-indigo-500 border-indigo-800 border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-150 py-6 text-lg font-bold">
+                     <Button onClick={() => setCurrentStep(5)} className="w-full bg-indigo-600 hover:bg-indigo-500 border-indigo-800 border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-150 py-6 text-lg font-bold">
                         Ayarları Onayla <ArrowRight className="ml-2 h-5 w-5"/>
                     </Button>
                 </div>
             );
-          case 5: // CONFIRMATION
+          case 5:
             return (
                 <div className="animate-in zoom-in-95 duration-300">
                     <div className="bg-black/30 rounded-2xl p-6 border border-white/10 text-center space-y-6">
                         <div className="inline-flex p-4 rounded-full bg-green-500/20 ring-4 ring-green-500/10 mb-2">
                             <BrainCircuit className="h-12 w-12 text-green-400 animate-pulse" />
                         </div>
+                        
                         <div className="space-y-2">
-                            <h3 className="text-xl font-bold text-white">Alıştırmaya Hazır Mısın?</h3>
-                            <p className="text-slate-400 text-sm">Seçtiğin ayarlarla alıştırma oluşturulacak.</p>
+                            <h3 className="text-xl font-bold text-white">Teste Hazır Mısın?</h3>
+                            <p className="text-slate-400 text-sm">Seçtiğin ayarlarla testin oluşturulacak.</p>
                         </div>
+
                         <div className="flex flex-col gap-2 text-sm bg-white/5 p-4 rounded-xl text-left">
                             <div className="flex justify-between items-center p-2 border-b border-white/5">
                                 <span className="text-slate-400 flex items-center gap-2"><Book className="h-4 w-4"/> Ders</span>
@@ -334,15 +345,12 @@ export function SoruCozSetupClientPage() {
                                 <span className="text-slate-400 flex items-center gap-2"><Library className="h-4 w-4"/> Ünite</span>
                                 <span className="font-bold text-white">{selection.unitName}</span>
                             </div>
-                            <div className="flex justify-between items-center p-2 border-b border-white/5">
+                            <div className="flex justify-between items-center p-2">
                                 <span className="text-slate-400 flex items-center gap-2"><ListTodo className="h-4 w-4"/> Konu</span>
                                 <span className="font-bold text-white">{selection.topicName}</span>
                             </div>
-                             <div className="flex justify-between items-center p-2">
-                                <span className="text-slate-400 flex items-center gap-2"><Settings className="h-4 w-4"/> Ayarlar</span>
-                                <span className="font-bold text-white text-right">{settings.questionCount} soru, {settings.difficulty.join('/')}</span>
-                            </div>
                         </div>
+                        
                         <Link href={getGameUrl()} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
@@ -367,6 +375,10 @@ export function SoruCozSetupClientPage() {
                   <BrainCircuit className="h-6 w-6 text-indigo-400 mb-1" />
                   Soru Çöz
               </h1>
+              <div className="flex items-center gap-1 justify-center text-xs font-bold text-indigo-300/60 mt-1">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  Kurulum Modu
+              </div>
           </div>
           <div className="w-12"></div>
       </div>
@@ -427,7 +439,9 @@ export function SoruCozSetupClientPage() {
                   >
                       <ArrowLeft className="h-4 w-4" /> Geri
                   </button>
-              ) : ( <div></div> )}
+              ) : (
+                  <div></div>
+              )}
               
               <div className="text-xs text-slate-500 flex items-center italic">
                  {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
@@ -435,7 +449,6 @@ export function SoruCozSetupClientPage() {
               </div>
           </div>
       </GlassCard>
-
     </div>
   );
 }
