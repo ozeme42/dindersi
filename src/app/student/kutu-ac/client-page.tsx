@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Package, Gamepad2, Star, ChevronRight, Lock 
+    PartyPopper, Package, Gamepad2, Star, ChevronRight, Lock, BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -73,7 +73,7 @@ const MOCK_TOPICS = [
 // --- MAIN PAGE ---
 
 const steps = [
-  { id: 1, name: "Ders", icon: Book },
+  { id: 1, name: "Ders", icon: BookOpen },
   { id: 2, name: "Ünite", icon: Library },
   { id: 3, name: "Konu", icon: ListTodo },
   { id: 4, name: "Başlat", icon: Gamepad2 },
@@ -226,7 +226,7 @@ export function KutuAcSetupClientPage() {
 
                         <div className="flex flex-col gap-2 text-sm bg-white/5 p-4 rounded-xl text-left">
                             <div className="flex justify-between items-center p-2 border-b border-white/5">
-                                <span className="text-slate-400 flex items-center gap-2"><Book className="h-4 w-4"/> Ders</span>
+                                <span className="text-slate-400 flex items-center gap-2"><BookOpen className="h-4 w-4"/> Ders</span>
                                 <span className="font-bold text-white">{selection.courseName}</span>
                             </div>
                             <div className="flex justify-between items-center p-2 border-b border-white/5">
