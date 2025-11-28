@@ -4,22 +4,17 @@
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Layers, Gamepad2, Star
+    PartyPopper, Layers, Gamepad2, Star, ChevronRight, Lock 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from 'next/link';
 import { useAuth } from "@/context/auth-context";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
-import { Loader2 } from "lucide-react";
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
-// --- UI COMPONENTS ---
-
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
+// --- UI COMPONENTS (from new design) ---
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -46,6 +41,7 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     >
         <div className="relative z-10 flex items-center justify-between">
             {children}
+            {active && <div className="absolute inset-0 bg-white/10 animate-pulse rounded-2xl" />}
         </div>
     </button>
 );
@@ -60,15 +56,12 @@ const steps = [
   { id: 4, name: "Başlat", icon: Gamepad2 },
 ];
 
-export default function HafizaKartlariSetupClientPage() {
+export function HafizaKartlariSetupClientPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
-
+  // Selection State
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -78,52 +71,56 @@ export default function HafizaKartlariSetupClientPage() {
     topicName: "",
   });
 
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+
   useEffect(() => {
     const fetchCourses = async () => {
-      if (!user) {
-        setIsLoading(true);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) {
-                finalCourses = studentVisibleCourses.filter(course =>
-                    course.classId === studentClassId || !course.classId
-                );
-            } else {
-                finalCourses = studentVisibleCourses.filter(course => !course.classId);
-            }
+        if (!user) {
+            setIsLoading(false);
+            return;
         }
-        setCourses(finalCourses);
-      } catch (error) {
-        console.error("Error fetching filtered courses:", error);
-      } finally {
-        setIsLoading(false);
-      }
+        setIsLoading(true);
+        try {
+            const studentClassName = user.class?.split(' - ')[0];
+
+            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+            const classesSnapshot = await getDocs(classesQuery);
+            const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+            
+            const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+            const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+            let finalCourses: Course[] = [];
+
+            if (user.role === 'teacher' || user.role === 'superadmin') {
+                finalCourses = allCourses.map(course => {
+                    const courseClass = allClasses.find(c => c.id === course.classId);
+                    return {
+                        ...course,
+                        className: courseClass?.name || 'Genel'
+                    };
+                });
+            } else {
+                const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+                const studentClassId = studentClass?.id;
+                
+                if (studentClassId) {
+                    finalCourses = studentVisibleCourses.filter(course =>
+                        course.classId === studentClassId || !course.classId
+                    );
+                } else {
+                    finalCourses = studentVisibleCourses.filter(course => !course.classId);
+                }
+            }
+            setCourses(finalCourses);
+        } catch (error) {
+            console.error("Error fetching filtered courses:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
     fetchCourses();
   }, [user]);
@@ -142,7 +139,7 @@ export default function HafizaKartlariSetupClientPage() {
   const handleSelectUnit = async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
+        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
@@ -164,23 +161,10 @@ export default function HafizaKartlariSetupClientPage() {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
-  const getGameUrl = () => {
-    const params = new URLSearchParams({
-      courseId: selection.courseId,
-      courseName: selection.courseName,
-      unitId: selection.unitId,
-      unitName: selection.unitName,
-      topicId: selection.topicId,
-      topicName: selection.topicName,
-    });
-    return `/student/hafiza-kartlari/oyun?${params.toString()}`;
-  }
-
-  // Render Content Based on Step
   const renderStepContent = () => {
       if (isLoading) {
           return (
-              <div className="flex flex-col items-center justify-center py-12 space-y-4">
+              <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-pulse">
                   <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                   <p className="text-indigo-300 font-bold">Veriler Yükleniyor...</p>
               </div>
@@ -199,7 +183,7 @@ export default function HafizaKartlariSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    <BookOpen className="h-6 w-6"/>
+                                    <BookOpen />
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
@@ -214,16 +198,15 @@ export default function HafizaKartlariSetupClientPage() {
           case 2:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {[...units, { id: 'all', title: 'Tüm Üniteler' }].map((unit) => (
+                    {units.map((unit) => (
                         <GameButton 
                             key={unit.id} 
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
                             active={selection.unitId === unit.id}
-                            className={unit.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                {unit.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <Library className="h-5 w-5 text-slate-400" />}
-                                <span className={cn("font-semibold", unit.id === 'all' ? "text-amber-100" : "text-slate-200")}>{unit.title}</span>
+                                <Library className="h-5 w-5 text-slate-400" />
+                                <span className="font-semibold text-slate-200">{unit.title}</span>
                             </div>
                             <ChevronRight className="h-5 w-5 text-white/20" />
                         </GameButton>
@@ -233,16 +216,15 @@ export default function HafizaKartlariSetupClientPage() {
           case 3:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                     {[...topics, { id: 'all', title: 'Tüm Konular' }].map((topic) => (
+                    {topics.map((topic) => (
                         <GameButton 
                             key={topic.id} 
                             onClick={() => handleSelectTopic(topic.id, topic.title)}
                             active={selection.topicId === topic.id}
-                            className={topic.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                {topic.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <ListTodo className="h-5 w-5 text-slate-400" />}
-                                <span className={cn("font-semibold", topic.id === 'all' ? "text-amber-100" : "text-slate-200")}>{topic.title}</span>
+                                <ListTodo className="h-5 w-5 text-slate-400" />
+                                <span className="font-semibold text-slate-200">{topic.title}</span>
                             </div>
                             {selection.topicId === topic.id ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
                         </GameButton>
@@ -258,7 +240,7 @@ export default function HafizaKartlariSetupClientPage() {
                         </div>
                         
                         <div className="space-y-2">
-                            <h3 className="text-xl font-bold text-white">Maceraya Hazır Mısın?</h3>
+                            <h3 className="text-xl font-bold text-white">Oyun Başlamaya Hazır!</h3>
                             <p className="text-slate-400 text-sm">Seçtiğin ayarlarla oyun oluşturulacak.</p>
                         </div>
 
@@ -277,7 +259,7 @@ export default function HafizaKartlariSetupClientPage() {
                             </div>
                         </div>
 
-                        <Link href={getGameUrl()} className="block w-full">
+                        <Link href={`/student/hafiza-kartlari/oyun?courseId=${selection.courseId}&unitId=${selection.unitId}&topicId=${selection.topicId}`} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                                 Oyunu Başlat
@@ -345,34 +327,24 @@ export default function HafizaKartlariSetupClientPage() {
                   {steps.find(s => s.id === currentStep)?.name} Seçimi
               </h2>
               <div className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2 py-1 rounded">
-                  ADIM {currentStep}/{steps.length}
+                  ADIM {currentStep}/4
               </div>
           </div>
-
           <div className="flex-grow p-6">
               {renderStepContent()}
           </div>
-
-          {currentStep < 4 && (
-              <div className="p-6 pt-0 mt-auto flex justify-between gap-4">
-                  {currentStep > 1 ? (
-                      <button 
-                        onClick={handleBack}
-                        className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"
-                      >
-                          <ArrowLeft className="h-4 w-4" /> Geri
-                      </button>
-                  ) : (
-                      <div></div>
-                  )}
-                  
-                  <div className="text-xs text-slate-500 flex items-center italic">
-                     {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
-                     {currentStep === 2 && !selection.unitId && "Bir ünite seçin"}
-                  </div>
+          {currentStep > 1 && currentStep < 4 && (
+              <div className="p-6 pt-0 mt-auto flex justify-start gap-4">
+                  <button 
+                    onClick={handleBack}
+                    className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"
+                  >
+                      <ArrowLeft className="h-4 w-4" /> Geri
+                  </button>
               </div>
           )}
       </GlassCard>
     </div>
   );
 }
+
