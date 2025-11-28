@@ -2,7 +2,7 @@
 "use client";
 
 import { Suspense } from 'react';
-import BilBakalimSetupClientPage from './client-page';
+import { BilBakalimSetupClientPage } from './client-page';
 
 export default function BilBakalimPage() {
     return (

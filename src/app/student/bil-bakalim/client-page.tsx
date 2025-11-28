@@ -3,16 +3,14 @@
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Lightbulb, Gamepad2, Star, ChevronRight, Lock 
+    PartyPopper, Lightbulb, Gamepad2, Star, ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-// --- MOCK LINK COMPONENT (Fix for next/link error) ---
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
+import Link from 'next/link';
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { useAuth } from "@/context/auth-context";
 
 // --- UI COMPONENTS ---
 
@@ -46,28 +44,6 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     </button>
 );
 
-// --- MOCK DATA (Simüle Edilmiş Veriler) ---
-// Gerçek entegrasyonda burayı Firebase verileriyle değiştireceksiniz.
-const MOCK_COURSES = [
-    { id: 'c1', title: 'Matematik', className: '6. Sınıf', icon: '📐' },
-    { id: 'c2', title: 'Fen Bilimleri', className: '6. Sınıf', icon: '🧬' },
-    { id: 'c3', title: 'Türkçe', className: '6. Sınıf', icon: '📚' },
-    { id: 'c4', title: 'Sosyal Bilgiler', className: '6. Sınıf', icon: '🌍' },
-];
-
-const MOCK_UNITS = [
-    { id: 'u1', title: 'Doğal Sayılar' },
-    { id: 'u2', title: 'Kümeler' },
-    { id: 'u3', title: 'Tam Sayılar' },
-    { id: 'all', title: 'Tüm Üniteler (Karışık)' },
-];
-
-const MOCK_TOPICS = [
-    { id: 't1', title: 'Üslü İfadeler' },
-    { id: 't2', title: 'İşlem Önceliği' },
-    { id: 't3', title: 'Dağılma Özelliği' },
-    { id: 'all', title: 'Tüm Konular (Karışık)' },
-];
 
 // --- MAIN PAGE ---
 
@@ -78,9 +54,10 @@ const steps = [
   { id: 4, name: "Başlat", icon: Gamepad2 },
 ];
 
-export default function BilBakalimSetupClientPage() {
+export function BilBakalimSetupClientPage() {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Selection State
   const [selection, setSelection] = useState({
@@ -92,39 +69,85 @@ export default function BilBakalimSetupClientPage() {
     topicName: "",
   });
 
-  // Mock Data Loading Simulation
-  const [courses, setCourses] = useState<any[]>([]);
-  const [units, setUnits] = useState<any[]>([]);
-  const [topics, setTopics] = useState<any[]>([]);
+  // Data State
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
 
   useEffect(() => {
-    // Initial Load
-    setCourses(MOCK_COURSES);
-  }, []);
+    const fetchCourses = async () => {
+      if (!user) {
+        setIsLoading(true);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const studentClassName = user.class?.split(' - ')[0];
 
-  const handleSelectCourse = (id: string, name: string) => {
-    setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
-    // Simulate API fetch for units
-    setIsLoading(true);
-    setTimeout(() => {
-        setUnits(MOCK_UNITS);
+        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+        const classesSnapshot = await getDocs(classesQuery);
+        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        
+        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+        let finalCourses: Course[] = [];
+
+        if (user.role === 'teacher' || user.role === 'superadmin') {
+            finalCourses = allCourses.map(course => {
+                const courseClass = allClasses.find(c => c.id === course.classId);
+                return {
+                    ...course,
+                    className: courseClass?.name || 'Genel'
+                };
+            });
+        } else {
+            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+            const studentClassId = studentClass?.id;
+            
+            if (studentClassId) {
+                finalCourses = studentVisibleCourses.filter(course =>
+                    course.classId === studentClassId || !course.classId
+                );
+            } else {
+                finalCourses = studentVisibleCourses.filter(course => !course.classId);
+            }
+        }
+        setCourses(finalCourses);
+      } catch (error) {
+        console.error("Error fetching filtered courses:", error);
+      } finally {
         setIsLoading(false);
-        setCurrentStep(2);
-    }, 400);
+      }
+    };
+    fetchCourses();
+  }, [user]);
+
+  const handleSelectCourse = async (id: string, name: string) => {
+    setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
+    setIsLoading(true);
+    const unitsRef = collection(db, `courses/${id}/units`);
+    const q = query(unitsRef, orderBy("title"));
+    const unitsSnapshot = await getDocs(q);
+    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+    setIsLoading(false);
+    setCurrentStep(2);
   };
 
-  const handleSelectUnit = (id: string, name: string) => {
+  const handleSelectUnit = async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
+        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
-        setTimeout(() => {
-            setTopics(MOCK_TOPICS);
-            setIsLoading(false);
-            setCurrentStep(3);
-        }, 400);
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        setIsLoading(false);
+        setCurrentStep(3);
     }
   };
   
@@ -136,6 +159,18 @@ export default function BilBakalimSetupClientPage() {
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
+  
+  const getGameUrl = () => {
+    const params = new URLSearchParams({
+      courseId: selection.courseId,
+      courseName: selection.courseName,
+      unitId: selection.unitId,
+      unitName: selection.unitName,
+      topicId: selection.topicId,
+      topicName: selection.topicName,
+    });
+    return `/student/bil-bakalim/oyun?${params.toString()}`;
+  }
 
   // Render Content Based on Step
   const renderStepContent = () => {
@@ -160,11 +195,11 @@ export default function BilBakalimSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    {course.icon}
+                                    <Book />
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
-                                    <div className="text-xs text-slate-400">{course.className}</div>
+                                    {course.className && <div className="text-xs text-slate-400">{course.className}</div>}
                                 </div>
                             </div>
                             {selection.courseId === course.id && <Check className="h-5 w-5 text-indigo-300" />}
@@ -173,9 +208,10 @@ export default function BilBakalimSetupClientPage() {
                 </div>
             );
           case 2: // UNIT SELECTION
+            const unitItems = [...units, {id: 'all', title: 'Tüm Üniteler (Karışık)'}];
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {units.map((unit) => (
+                    {unitItems.map((unit) => (
                         <GameButton 
                             key={unit.id} 
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
@@ -192,9 +228,10 @@ export default function BilBakalimSetupClientPage() {
                 </div>
             );
           case 3: // TOPIC SELECTION
+            const topicItems = [...topics, {id: 'all', title: 'Tüm Konular (Karışık)'}];
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {topics.map((topic) => (
+                    {topicItems.map((topic) => (
                         <GameButton 
                             key={topic.id} 
                             onClick={() => handleSelectTopic(topic.id, topic.title)}
@@ -238,7 +275,7 @@ export default function BilBakalimSetupClientPage() {
                             </div>
                         </div>
 
-                        <Link href={`/student/bil-bakalim/oyun?courseId=${selection.courseId}`} className="block w-full">
+                        <Link href={getGameUrl()} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                                 Oyunu Başlat
@@ -338,6 +375,7 @@ export default function BilBakalimSetupClientPage() {
                       <div></div>
                   )}
                   
+                  {/* Note: Next button is mostly handled by item selection, but we can keep a disabled one for visuals if needed, or remove it for tap-to-advance flow */}
                   <div className="text-xs text-slate-500 flex items-center italic">
                      {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
                      {currentStep === 2 && !selection.unitId && "Bir ünite seçin"}
