@@ -1,30 +1,28 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Map, Swords, Backpack } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Swords, Map } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { ErrorReportDialog } from './error-report-dialog';
 
-const NavLink = ({ href, icon: Icon, label, isActive, onClick, isHighlight = false }: { 
-    href: string; 
-    icon: React.ElementType; 
-    label: string; 
-    isActive: boolean;
-    onClick: () => void;
-    isHighlight?: boolean;
-}) => {
-    return (
-        <Link 
-            href={href} 
+const NavLink = ({ href, icon: Icon, label, isActive, isHighlight = false, onClick }: { href?: string; icon: React.ElementType; label: string, isActive: boolean, isHighlight?: boolean, onClick?: () => void }) => {
+
+    const content = (
+        <div
             onClick={onClick}
             className={cn(
-                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full z-10",
-                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
+                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full"
             )}
         >
+            {/* Active Indicator Background */}
+            {isActive && !isHighlight && (
+                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
+            )}
+            
+            {/* Highlighted Middle Button Style */}
             {isHighlight ? (
                 <div className={cn(
                     "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
@@ -42,95 +40,64 @@ const NavLink = ({ href, icon: Icon, label, isActive, onClick, isHighlight = fal
                     )} />
                 </div>
             )}
-            
-            {!isHighlight && isActive && (
-                <span className="text-[10px] font-bold mt-1 transition-all duration-300 opacity-100 translate-y-0">
-                    {label}
+
+            {/* Label (Only visible if not highlighted middle button or if active) */}
+            {!item.highlight && (
+                <span className={cn(
+                    "text-[10px] font-bold mt-1 transition-all duration-300",
+                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                )}>
+                    {item.label}
                 </span>
             )}
-        </Link>
+        </div>
     );
+
+    if (href) {
+        return <Link href={href} className="flex-1">{content}</Link>;
+    }
+    return <button className="flex-1">{content}</button>;
 };
 
 
 export function BottomNavBar() {
     const { user } = useAuth();
     const pathname = usePathname();
-    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
 
-    if (!user || pathname === '/login' || pathname === '/register') {
+    const studentGamePaths = ['/coz', '/oyun', '/ders/', '/soru-bankasi/'];
+    if (!user || pathname === '/login' || pathname === '/register' || (user.role === 'student' && studentGamePaths.some(p => pathname.includes(p)))) {
         return null;
     }
     
-    const studentGamePaths = ['/coz', '/oyun', '/ders/', '/soru-bankasi/'];
-    if (user.role === 'student' && studentGamePaths.some(p => pathname.startsWith(p))) {
-        return null;
-    }
-
     const studentLinks = [
-        { href: '/student', icon: Home, label: 'Ana Üs' },
-        { href: '/student/soru-bankasi', icon: Map, label: 'Görevler' },
-        { href: '/student/yarismalar', icon: Swords, label: 'Arena', highlight: true },
-        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
-        { href: '/student/profile', icon: User, label: 'Profil' },
+        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
+        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
+        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
+        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
+        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
     ];
 
     const teacherLinks = [
-        { href: '/', icon: Home, label: 'Panel' },
-        { href: '/teacher/content-creation', icon: PenSquare, label: 'İçerik' },
-        { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta', highlight: true },
-        { href: '/teacher/stats', icon: Trophy, label: 'Sıralama' },
-        { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
+        { id: 'home', href: '/', icon: Home, label: 'Panel' },
+        { id: 'content', href: '/teacher/content-creation', icon: PenSquare, label: 'İçerik' },
+        { id: 'scores', href: '/teacher/score-events', icon: DollarSign, label: 'Puanlar' },
+        { id: 'smartboard', href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
+        { id: 'stats', href: '/teacher/stats', icon: Trophy, label: 'Sıralama' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;
 
-    // Find the best active link, prioritizing deeper paths
-    let activeHref = '';
-    let maxMatchLength = -1;
-    for (const link of links) {
-        if (pathname.startsWith(link.href)) {
-            if (link.href.length > maxMatchLength) {
-                maxMatchLength = link.href.length;
-                activeHref = link.href;
-            }
-        }
-    }
-    
-    const activeLinkIndex = links.findIndex(l => l.href === activeHref);
-
     return (
         <>
-            <div className="fixed bottom-4 left-4 right-4 h-16 z-50 md:hidden">
-                <div className="bg-[#1a0b2e]/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-1 h-full flex justify-around items-center relative overflow-hidden">
-                    
-                    {/* Glowing active indicator */}
-                    {activeLinkIndex !== -1 && (
-                         <div
-                            className="absolute top-0 h-full bg-indigo-500/20 rounded-xl transition-all duration-500 ease-in-out"
-                            style={{
-                                width: `${100 / links.length}%`,
-                                left: `${(activeLinkIndex / links.length) * 100}%`,
-                            }}
-                        />
-                    )}
-                
-                    {links.map(link => (
-                        <NavLink 
-                            key={link.href} 
-                            href={link.href}
-                            icon={link.icon}
-                            label={link.label}
-                            isActive={activeHref === link.href}
-                            onClick={() => {}}
-                            isHighlight={link.highlight}
-                        />
-                    ))}
-                </div>
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1a0b2e]/90 backdrop-blur-xl border-t border-white/10 shadow-2xl px-2 py-2 flex justify-around items-center overflow-hidden rounded-t-2xl">
+                {/* Alt parıltı efekti */}
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
+
+                {links.map((item) => {
+                    const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
+                    return <NavLink key={item.id} {...item} isActive={isActive} />;
+                })}
             </div>
-             {user?.role === 'student' && (
-                <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} />
-            )}
         </>
     );
 }
