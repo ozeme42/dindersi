@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { 
     ArrowLeft, RefreshCw, Heart, Trophy, HelpCircle, Skull, Home, Lightbulb, Loader2 
 } from "lucide-react";
@@ -57,7 +57,7 @@ const KEYBOARD_LETTERS = [
     "V", "Y", "Z"
 ];
 
-function HangmanGame() {
+function AdamAsmacaGamePage() {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -83,14 +83,13 @@ function HangmanGame() {
     // Derived
     const currentData = gameData[currentWordIndex];
     const targetWord = currentData?.word || "";
-    const gameContext = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
 
     // --- INITIAL DATA FETCH ---
     useEffect(() => {
         const initGame = async () => {
-            const courseId = searchParams.get('courseId') || undefined;
-            const unitId = searchParams.get('unitId') || undefined;
-            const topicId = searchParams.get('topicId') || undefined;
+            const courseId = searchParams.get('courseId');
+            const unitId = searchParams.get('unitId');
+            const topicId = searchParams.get('topicId');
 
             const res = await getAdamAsmacaAction({ courseId, unitId, topicId });
 
@@ -171,8 +170,10 @@ function HangmanGame() {
 
     const handleFinishGame = async () => {
         setIsSubmitting(true);
-        await submitAdamAsmacaScoreAction(user?.uid || null, score, gameContext);
-        router.push('/student/activities');
+        const context = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
+        await submitAdamAsmacaScoreAction(user?.uid || null, score, context);
+        // Redirect to results or back
+        router.push('/student/activities'); // Or a dedicated result screen
     };
 
     // --- RENDER HELPERS ---
@@ -197,20 +198,12 @@ function HangmanGame() {
         </div>
     );
 
-    if (!currentData) return null;
+    if (!currentData) return null; // Should not happen if loading/error handled
 
     const isGameOver = roundStatus === 'won' || roundStatus === 'lost';
 
     return (
         <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-950 via-[#2b1055] to-black text-white font-sans overflow-hidden flex flex-col">
-            
-            <style jsx global>{`
-              @keyframes draw { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
-              .animate-draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s ease-out forwards; }
-              .perspective-1000 { perspective: 1000px; }
-              .rotate-x-90 { transform: rotateX(90deg); }
-              .rotate-x-0 { transform: rotateX(0deg); }
-            `}</style>
             
             {/* --- TOP BAR --- */}
             <div className="flex items-center justify-between p-4 bg-black/20 backdrop-blur-md border-b border-white/5 z-20">
@@ -383,6 +376,7 @@ function HangmanGame() {
     );
 }
 
+
 export default function HangmanGamePageWrapper() {
   return (
     <Suspense fallback={
@@ -390,7 +384,7 @@ export default function HangmanGamePageWrapper() {
             <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
         </div>
     }>
-        <HangmanGame />
+        <AdamAsmacaGamePage />
     </Suspense>
-  )
+  );
 }
