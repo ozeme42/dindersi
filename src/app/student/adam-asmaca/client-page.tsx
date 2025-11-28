@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,11 +6,17 @@ import {
     PartyPopper, Skull, Gamepad2, Star, ChevronRight, Lock 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from 'next/link';
-import { useAuth } from "@/context/auth-context";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useAuth } from "@/context/auth-context";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+
+// --- MOCK LINK COMPONENT (Fix for next/link error) ---
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
 
 // --- UI COMPONENTS ---
 
@@ -57,8 +62,9 @@ const steps = [
 export function AdamAsmacaSetupClientPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
+  // Selection State
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -68,88 +74,85 @@ export function AdamAsmacaSetupClientPage() {
     topicName: "",
   });
 
+  // Data Loading State
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
 
   useEffect(() => {
+    if (!user) return;
+    setIsLoading(true);
     const fetchCourses = async () => {
-      if (!user) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const studentClassName = user.class?.split(' - ')[0];
+        try {
+            const studentClassName = user.class?.split(' - ')[0];
 
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
+            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+            const classesSnapshot = await getDocs(classesQuery);
+            const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             
-            if (studentClassId) {
-                finalCourses = studentVisibleCourses.filter(course =>
-                    course.classId === studentClassId || !course.classId
-                );
+            const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+            const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+            let finalCourses: Course[] = [];
+
+            if (user.role === 'teacher' || user.role === 'superadmin') {
+                finalCourses = allCourses.map(course => ({
+                    ...course,
+                    className: allClasses.find(c => c.id === course.classId)?.name || 'Genel'
+                }));
             } else {
-                finalCourses = studentVisibleCourses.filter(course => !course.classId);
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+                const studentClassId = studentClass?.id;
+                
+                if (studentClassId) {
+                    finalCourses = allCourses.filter(course =>
+                        !course.isTeacherOnly && (course.classId === studentClassId || !course.classId)
+                    ).map(course => ({
+                        ...course,
+                        className: course.classId ? allClasses.find(c => c.id === course.classId)?.name : 'Genel'
+                    }));
+                } else {
+                    finalCourses = allCourses.filter(course => !course.isTeacherOnly && !course.classId).map(c => ({...c, className: 'Genel'}));
+                }
             }
+            setCourses(finalCourses);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        } finally {
+            setIsLoading(false);
         }
-        setCourses(finalCourses.map(c => ({...c, icon: '💀'})));
-      } catch (error) {
-        console.error("Error fetching filtered courses:", error);
-      } finally {
-        setIsLoading(false);
-      }
     };
     fetchCourses();
   }, [user]);
 
-  const handleSelectCourse = (id: string, name: string) => {
+  const handleSelectCourse = async (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
-    setTimeout(async () => {
+    try {
         const unitsRef = collection(db, `courses/${id}/units`);
         const q = query(unitsRef, orderBy("title"));
         const unitsSnapshot = await getDocs(q);
-        setUnits([...unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)), {id: 'all', title: 'Tüm Üniteler'}]);
-        setIsLoading(false);
-        setCurrentStep(2);
-    }, 400);
+        setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+    } catch (e) { console.error(e); }
+    setIsLoading(false);
+    setCurrentStep(2);
   };
 
-  const handleSelectUnit = (id: string, name: string) => {
+  const handleSelectUnit = async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
         setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
-        setTimeout(async () => {
+        try {
             const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
             const q = query(topicsRef, orderBy("title"));
             const topicsSnapshot = await getDocs(q);
-            setTopics([...topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)), {id: 'all', title: 'Tüm Konular'}]);
-            setIsLoading(false);
-            setCurrentStep(3);
-        }, 400);
+            setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        } catch(e) { console.error(e) }
+        setIsLoading(false);
+        setCurrentStep(3);
     }
   };
   
@@ -174,6 +177,7 @@ export function AdamAsmacaSetupClientPage() {
     return `/student/adam-asmaca/oyun?${params.toString()}`;
   }
 
+  // Render Content Based on Step
   const renderStepContent = () => {
       if (isLoading) {
           return (
@@ -185,7 +189,7 @@ export function AdamAsmacaSetupClientPage() {
       }
 
       switch(currentStep) {
-          case 1:
+          case 1: // COURSE SELECTION
             return (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
                     {courses.map((course) => (
@@ -196,7 +200,7 @@ export function AdamAsmacaSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    {course.icon || '💀'}
+                                    <Book className="h-6 w-6"/>
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
@@ -208,10 +212,10 @@ export function AdamAsmacaSetupClientPage() {
                     ))}
                 </div>
             );
-          case 2:
+          case 2: // UNIT SELECTION
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {units.map((unit) => (
+                    {[{ id: 'all', title: 'Tüm Üniteler (Karışık)' }, ...units].map((unit) => (
                         <GameButton 
                             key={unit.id} 
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
@@ -227,10 +231,10 @@ export function AdamAsmacaSetupClientPage() {
                     ))}
                 </div>
             );
-          case 3:
+          case 3: // TOPIC SELECTION
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {topics.map((topic) => (
+                    {[{ id: 'all', title: 'Tüm Konular (Karışık)' }, ...topics].map((topic) => (
                         <GameButton 
                             key={topic.id} 
                             onClick={() => handleSelectTopic(topic.id, topic.title)}
@@ -246,7 +250,7 @@ export function AdamAsmacaSetupClientPage() {
                     ))}
                 </div>
             );
-          case 4:
+          case 4: // CONFIRMATION
             return (
                 <div className="animate-in zoom-in-95 duration-300">
                     <div className="bg-black/30 rounded-2xl p-6 border border-white/10 text-center space-y-6">
@@ -289,6 +293,7 @@ export function AdamAsmacaSetupClientPage() {
   return (
     <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-20 font-sans selection:bg-purple-500/30 text-white flex flex-col items-center">
       
+      {/* HEADER */}
       <div className="w-full max-w-2xl flex items-center justify-between mb-8">
           <Link href="/student/activities" className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-colors">
             <ArrowLeft className="h-6 w-6 text-white" />
@@ -303,11 +308,13 @@ export function AdamAsmacaSetupClientPage() {
                   Setup Modu
               </div>
           </div>
-          <div className="w-12"></div>
+          <div className="w-12"></div> {/* Spacer for center alignment */}
       </div>
 
+      {/* PROGRESS TRACKER */}
       <div className="w-full max-w-2xl mb-8">
           <div className="relative flex justify-between items-center">
+              {/* Connection Line */}
               <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -z-10 rounded-full"></div>
               <div 
                 className="absolute top-1/2 left-0 h-1 bg-indigo-500 shadow-[0_0_10px_#6366f1] -z-10 rounded-full transition-all duration-500"
@@ -340,7 +347,9 @@ export function AdamAsmacaSetupClientPage() {
           </div>
       </div>
 
+      {/* MAIN CONTENT CARD */}
       <GlassCard className="w-full max-w-lg min-h-[400px] flex flex-col">
+          {/* Card Header */}
           <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/20">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   {steps.find(s => s.id === currentStep)?.name} Seçimi
@@ -350,10 +359,12 @@ export function AdamAsmacaSetupClientPage() {
               </div>
           </div>
 
+          {/* Card Content Area */}
           <div className="flex-grow p-6">
               {renderStepContent()}
           </div>
 
+          {/* Navigation Footer */}
           {currentStep < 4 && (
               <div className="p-6 pt-0 mt-auto flex justify-between gap-4">
                   {currentStep > 1 ? (

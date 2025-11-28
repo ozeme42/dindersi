@@ -9,7 +9,15 @@ import {
     BrainCircuit, Milestone, Package, Wind, BookOpen, Play, Star
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
+
+// --- MOCK LINK COMPONENT (Fix for next/link error) ---
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+// --- THEME CONFIGURATION ---
 
 type GameTheme = 'purple' | 'amber' | 'pink' | 'teal' | 'indigo' | 'cyan' | 'orange' | 'slate' | 'rose' | 'red' | 'yellow' | 'green' | 'gray' | 'violet' | 'blue';
 
@@ -31,14 +39,11 @@ const activityTypes: ActivityItem[] = [
   { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, theme: 'cyan', difficulty: 2 },
   { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, theme: 'blue', difficulty: 1 },
   { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle, theme: 'orange', difficulty: 2 },
-  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp, theme: 'sky' as GameTheme, difficulty: 2 },
   { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, theme: 'slate', difficulty: 2 },
   { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, theme: 'rose', difficulty: 2 },
-  { href: '/student/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban, theme: 'lime' as GameTheme, difficulty: 2 },
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, theme: 'red', difficulty: 1 },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, theme: 'yellow', difficulty: 2 },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, theme: 'green', difficulty: 1 },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit, theme: 'pink', difficulty: 2 },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, theme: 'gray', difficulty: 3 },
   { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, theme: 'violet', difficulty: 3 },
   { href: '/student/labirent', label: 'Labirent', icon: Milestone, theme: 'slate', difficulty: 2 },
@@ -65,8 +70,6 @@ const getThemeStyles = (theme: GameTheme) => {
         gray: "from-gray-500 to-slate-600 border-gray-400 shadow-gray-500/40 text-gray-100",
         violet: "from-violet-600 to-purple-600 border-violet-400 shadow-violet-500/40 text-violet-50",
         blue: "from-blue-500 to-indigo-500 border-blue-400 shadow-blue-500/40 text-blue-50",
-        sky: "from-sky-500 to-cyan-500 border-sky-400 shadow-sky-500/40 text-sky-50",
-        lime: "from-lime-500 to-green-500 border-lime-400 shadow-lime-500/40 text-lime-50",
     };
     return styles[theme] || styles.indigo;
 };
