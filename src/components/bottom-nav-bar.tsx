@@ -3,20 +3,29 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, Gamepad2, ClipboardList } from 'lucide-react';
+import { Home, Trophy, User, Gamepad2, MonitorPlay, ClipboardList, DollarSign, PenSquare } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { ErrorReportDialog } from './error-report-dialog';
 
-const NavLink = ({ href, icon: Icon, label, isActive }: { href: string; icon: React.ElementType; label: string, isActive: boolean }) => {
+const NavLink = ({ href, icon: Icon, label, isActive }: { href: string; icon: React.ElementType; label: string; isActive: boolean }) => {
     return (
         <div className={cn(
-            "flex flex-col items-center justify-center gap-0.5 w-full h-full",
-            isActive ? "text-primary" : "text-muted-foreground hover:text-foreground/80"
+            "relative flex flex-col items-center justify-center gap-1 w-full text-center p-1 rounded-lg",
+            isActive ? "text-primary" : "text-muted-foreground hover:text-primary/80"
         )}>
-            <Icon className="h-5 w-5" />
-            <span className="text-xs font-medium">{label}</span>
+            <div className="relative">
+                <Icon className={cn(
+                    "h-6 w-6 transition-all duration-200",
+                    isActive && "scale-110"
+                )} />
+            </div>
+            <span className={cn(
+                "text-xs font-medium transition-opacity duration-200",
+                isActive ? "opacity-100" : "opacity-80"
+            )}>
+                {label}
+            </span>
         </div>
     );
 };
@@ -24,9 +33,7 @@ const NavLink = ({ href, icon: Icon, label, isActive }: { href: string; icon: Re
 export function BottomNavBar() {
     const { user } = useAuth();
     const pathname = usePathname();
-    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
 
-    // Hide on login/register pages or if no user
     if (!user || pathname === '/login' || pathname === '/register') {
         return null;
     }
@@ -60,9 +67,9 @@ export function BottomNavBar() {
             <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-sm border-t z-50 rounded-t-2xl">
                 <div className="flex items-stretch justify-around h-full">
                     {links.map(item => {
-                        const isActive = pathname === item.href;
+                        const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
                         return (
-                            <Link key={item.href} href={item.href} className="flex-1">
+                            <Link key={item.id} href={item.href} className="flex-1">
                                  <NavLink 
                                     href={item.href}
                                     icon={item.icon}
