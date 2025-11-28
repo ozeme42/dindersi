@@ -1,24 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Skull, Gamepad2, Star, ChevronRight, Lock 
+    PartyPopper, Skull, Gamepad2, Star, ChevronRight, BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { useAuth } from "@/context/auth-context";
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import Link from 'next/link';
+import { useAuth } from '@/context/auth-context';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
-// --- MOCK LINK COMPONENT (Fix for next/link error) ---
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
-
-// --- UI COMPONENTS ---
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -30,7 +25,7 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-const GameButton = ({ children, onClick, active, disabled, className }: any) => (
+const GameButton = ({ children, onClick, active, disabled, className }: { children: React.ReactNode, onClick: () => void, active?: boolean, disabled?: boolean, className?: string }) => (
     <button 
         onClick={onClick}
         disabled={disabled}
@@ -50,7 +45,6 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     </button>
 );
 
-// --- MAIN PAGE ---
 
 const steps = [
   { id: 1, name: "Ders", icon: Book },
@@ -61,10 +55,14 @@ const steps = [
 
 export function AdamAsmacaSetupClientPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Selection State
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -74,53 +72,52 @@ export function AdamAsmacaSetupClientPage() {
     topicName: "",
   });
 
-  // Data Loading State
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
-
-  useEffect(() => {
-    if (!user) return;
-    setIsLoading(true);
+   useEffect(() => {
     const fetchCourses = async () => {
-        try {
-            const studentClassName = user.class?.split(' - ')[0];
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const studentClassName = user.class?.split(' - ')[0];
 
-            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-            const classesSnapshot = await getDocs(classesQuery);
-            const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-            
-            const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-            const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+        const classesSnapshot = await getDocs(classesQuery);
+        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        
+        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
 
-            let finalCourses: Course[] = [];
+        let finalCourses: Course[] = [];
 
-            if (user.role === 'teacher' || user.role === 'superadmin') {
-                finalCourses = allCourses.map(course => ({
+        if (user.role === 'teacher' || user.role === 'superadmin') {
+            finalCourses = allCourses.map(course => {
+                const courseClass = allClasses.find(c => c.id === course.classId);
+                return {
                     ...course,
-                    className: allClasses.find(c => c.id === course.classId)?.name || 'Genel'
-                }));
+                    className: courseClass?.name || 'Genel'
+                };
+            });
+        } else {
+            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+            const studentClassId = studentClass?.id;
+            
+            if (studentClassId) {
+                finalCourses = studentVisibleCourses.filter(course =>
+                    course.classId === studentClassId || !course.classId
+                );
             } else {
-                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-                const studentClassId = studentClass?.id;
-                
-                if (studentClassId) {
-                    finalCourses = allCourses.filter(course =>
-                        !course.isTeacherOnly && (course.classId === studentClassId || !course.classId)
-                    ).map(course => ({
-                        ...course,
-                        className: course.classId ? allClasses.find(c => c.id === course.classId)?.name : 'Genel'
-                    }));
-                } else {
-                    finalCourses = allCourses.filter(course => !course.isTeacherOnly && !course.classId).map(c => ({...c, className: 'Genel'}));
-                }
+                finalCourses = studentVisibleCourses.filter(course => !course.classId);
             }
-            setCourses(finalCourses);
-        } catch (error) {
-            console.error("Error fetching courses:", error);
-        } finally {
-            setIsLoading(false);
         }
+        setCourses(finalCourses.map(c => ({...c, icon: '📚'})));
+      } catch (error) {
+        console.error("Error fetching filtered courses:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchCourses();
   }, [user]);
@@ -128,12 +125,10 @@ export function AdamAsmacaSetupClientPage() {
   const handleSelectCourse = async (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
-    try {
-        const unitsRef = collection(db, `courses/${id}/units`);
-        const q = query(unitsRef, orderBy("title"));
-        const unitsSnapshot = await getDocs(q);
-        setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-    } catch (e) { console.error(e); }
+    const unitsRef = collection(db, `courses/${id}/units`);
+    const q = query(unitsRef, orderBy("title"));
+    const unitsSnapshot = await getDocs(q);
+    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
     setIsLoading(false);
     setCurrentStep(2);
   };
@@ -141,16 +136,14 @@ export function AdamAsmacaSetupClientPage() {
   const handleSelectUnit = async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
+        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
-        try {
-            const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
-            const q = query(topicsRef, orderBy("title"));
-            const topicsSnapshot = await getDocs(q);
-            setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-        } catch(e) { console.error(e) }
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
         setIsLoading(false);
         setCurrentStep(3);
     }
@@ -164,7 +157,7 @@ export function AdamAsmacaSetupClientPage() {
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
-
+  
   const getGameUrl = () => {
     const params = new URLSearchParams({
       courseId: selection.courseId,
@@ -176,6 +169,7 @@ export function AdamAsmacaSetupClientPage() {
     });
     return `/student/adam-asmaca/oyun?${params.toString()}`;
   }
+
 
   // Render Content Based on Step
   const renderStepContent = () => {
@@ -200,7 +194,7 @@ export function AdamAsmacaSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    <Book className="h-6 w-6"/>
+                                    <BookOpen className="h-6 w-6"/>
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
@@ -305,7 +299,7 @@ export function AdamAsmacaSetupClientPage() {
               </h1>
               <div className="flex items-center gap-1 justify-center text-xs font-bold text-indigo-300/60 mt-1">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  Setup Modu
+                  Kurulum Modu
               </div>
           </div>
           <div className="w-12"></div> {/* Spacer for center alignment */}

@@ -1,345 +1,396 @@
-
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Skull, Heart, AlertTriangle, Save, Home, Repeat, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { 
+    ArrowLeft, RefreshCw, Heart, Trophy, HelpCircle, Skull, Home, Lightbulb, Loader2 
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import confetti from "canvas-confetti";
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { playSound } from '@/lib/audio-service';
-import { useToast } from '@/hooks/use-toast';
+import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
 
-const HANGMAN_STAGES = 6;
-const ALPHABET = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
 
-const HangmanDrawing = ({ mistakes, status }: { mistakes: number, status: 'playing' | 'won' | 'lost' }) => {
+// --- ANIMATED HANGMAN SVG COMPONENT ---
+const HangmanFigure = ({ errors }: { errors: number }) => {
+    // SVG Paths for each part
     const parts = [
-        <circle key="head" cx="140" cy="70" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" className="head-draw" />,
-        <line key="body" x1="140" y1="90" x2="140" y2="150" stroke="currentColor" strokeWidth="4" className="limb-draw" />,
-        <line key="armL" x1="140" y1="100" x2="110" y2="130" stroke="currentColor" strokeWidth="4" className="limb-draw" />,
-        <line key="armR" x1="140" y1="100" x2="170" y2="130" stroke="currentColor" strokeWidth="4" className="limb-draw" />,
-        <line key="legL" x1="140" y1="150" x2="110" y2="190" stroke="currentColor" strokeWidth="4" className="limb-draw" />,
-        <line key="legR" x1="140" y1="150" x2="170" y2="190" stroke="currentColor" strokeWidth="4" className="limb-draw" />,
+        <line key="base" x1="10" y1="250" x2="150" y2="250" className="animate-draw" />, // 0: Base
+        <line key="pole" x1="80" y1="250" x2="80" y2="20" className="animate-draw" />,   // 1: Pole
+        <line key="top" x1="80" y1="20" x2="200" y2="20" className="animate-draw" />,    // 2: Top
+        <line key="rope" x1="200" y1="20" x2="200" y2="50" className="animate-draw" />,  // 3: Rope
+        <circle key="head" cx="200" cy="80" r="30" className="animate-draw" />,          // 4: Head
+        <line key="body" x1="200" y1="110" x2="200" y2="170" className="animate-draw" />,// 5: Body
+        <line key="armL" x1="200" y1="130" x2="170" y2="160" className="animate-draw" />,// 6: Left Arm
+        <line key="armR" x1="200" y1="130" x2="230" y2="160" className="animate-draw" />,// 7: Right Arm
+        <line key="legL" x1="200" y1="170" x2="170" y2="210" className="animate-draw" />,// 8: Left Leg
+        <line key="legR" x1="200" y1="170" x2="230" y2="210" className="animate-draw" />,// 9: Right Leg
     ];
 
-    const deadEyes = status === 'lost' ? (
-        <g className="opacity-0 animate-[fadeIn_0.5s_forwards]">
-            <text x="132" y="76" fontSize="12" fill="currentColor">X</text>
-            <text x="142" y="76" fontSize="12" fill="currentColor">X</text>
-        </g>
-    ) : null;
+    // Map errors (0-6 standard game logic) to parts index
+    // 6 wrong guesses allowed.
+    // 1 wrong -> Head (4) ... 6 wrong -> Leg R (9) (GAME OVER)
+    
+    // Always show setup (0-3)
+    const visibleParts = [0, 1, 2, 3];
+    for (let i = 0; i < errors; i++) {
+        visibleParts.push(4 + i);
+    }
 
     return (
-        <svg height="250" width="200" className="mx-auto overflow-visible text-foreground">
-            <g className="path-draw stroke-muted-foreground stroke-[5px] [stroke-linecap:round]">
-                <line x1="10" y1="240" x2="150" y2="240" />
-                <line x1="80" y1="240" x2="80" y2="20" />
-                <line x1="80" y1="20" x2="140" y2="20" />
-            </g>
-            <g className={cn(status === 'lost' && "swing-animation")}>
-                <line x1="140" y1="20" x2="140" y2="50" className="path-draw stroke-muted-foreground" strokeWidth="3" />
-                {parts.slice(0, mistakes)}
-                {deadEyes}
-            </g>
+        <svg viewBox="0 0 300 270" className="w-full h-full stroke-white stroke-[4px] fill-none stroke-linecap-round stroke-linejoin-round drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            {parts.map((part, index) => (
+                <g key={index} className={cn("transition-opacity duration-500", visibleParts.includes(index) ? "opacity-100" : "opacity-0")}>
+                    {part}
+                </g>
+            ))}
         </svg>
     );
 };
 
-const Confetti = () => {
-  const [particles, setParticles] = useState<any[]>([]);
-
-  useEffect(() => {
-    const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
-    const newParticles = Array.from({ length: 100 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      delay: Math.random() * 2,
-      duration: 2 + Math.random() * 3,
-      color: colors[Math.floor(Math.random() * colors.length)],
-    }));
-    setParticles(newParticles);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
-      {particles.map(p => (
-        <div 
-          key={p.id}
-          className="confetti"
-          style={{
-            left: `${p.x}%`,
-            backgroundColor: p.color,
-            animationDuration: `${p.duration}s`,
-            animationDelay: `${p.delay}s`
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
+// --- KEYBOARD COMPONENT ---
+const KEYBOARD_LETTERS = [
+    "A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", 
+    "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", 
+    "V", "Y", "Z"
+];
 
 function HangmanGame() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const { user } = useAuth();
-    const { toast } = useToast();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const [gameData, setGameData] = useState<HangmanData[] | null>(null);
-    const [currentWordIndex, setCurrentWordIndex] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
+    // Game State
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [gameData, setGameData] = useState<HangmanData[]>([]);
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
     
+    // Round State
     const [guessedLetters, setGuessedLetters] = useState<Set<string>>(new Set());
     const [wrongGuesses, setWrongGuesses] = useState(0);
-    const [gameState, setGameState] = useState<'playing' | 'won' | 'lost' | 'finished'>('playing');
-    const [totalScore, setTotalScore] = useState(0);
-    const [isSaving, setIsSaving] = useState(false);
-    const [scoreSaved, setScoreSaved] = useState(false);
+    const [score, setScore] = useState(0);
+    const [roundStatus, setRoundStatus] = useState<'playing' | 'won' | 'lost'>('playing');
+    const [showHint, setShowHint] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Constants
+    const MAX_ERRORS = 6;
+    const POINTS_PER_WORD = 100;
 
-    const gameContext = `Adam Asmaca - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    // Derived
+    const currentData = gameData[currentWordIndex];
+    const targetWord = currentData?.word || "";
+    const gameContext = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
 
-    const fetchWords = useCallback(async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            
-            const result = await getAdamAsmacaAction(params);
-            
-            if (result.error || !result.data || result.data.length === 0) {
-                setError(result.error || 'Bu konu için oyun verisi bulunamadı.');
+    // --- INITIAL DATA FETCH ---
+    useEffect(() => {
+        const initGame = async () => {
+            const courseId = searchParams.get('courseId') || undefined;
+            const unitId = searchParams.get('unitId') || undefined;
+            const topicId = searchParams.get('topicId') || undefined;
+
+            const res = await getAdamAsmacaAction({ courseId, unitId, topicId });
+
+            if (res.error || !res.data) {
+                setError(res.error || "Veri bulunamadı.");
             } else {
-                setGameData(result.data);
+                setGameData(res.data);
             }
-        } catch (e) {
-            setError("Kelimeler getirilirken bir hata oluştu.");
-            console.error(e);
-        } finally {
-            setIsLoading(false);
-        }
+            setLoading(false);
+        };
+        initGame();
     }, [searchParams]);
-    
-    useEffect(() => {
-        fetchWords();
-    }, [fetchWords]);
 
-    const currentWordObj = useMemo(() => gameData?.[currentWordIndex], [gameData, currentWordIndex]);
-    
-    const handleGuess = (letter: string) => {
-        if (gameState !== 'playing' || guessedLetters.has(letter) || !currentWordObj) return;
+    // --- GAME LOGIC ---
 
-        const newGuessedLetters = new Set(guessedLetters).add(letter);
-        setGuessedLetters(newGuessedLetters);
+    const handleGuess = useCallback((letter: string) => {
+        if (roundStatus !== 'playing' || guessedLetters.has(letter)) return;
 
-        if (!currentWordObj.word.includes(letter)) {
-            setWrongGuesses(prev => prev + 1);
-            playSound('incorrect');
-        } else {
-            playSound('correct');
+        // Vibrate on mobile for tactile feedback
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+            navigator.vibrate(10); 
         }
-    };
-    
-    const checkGameState = useCallback(() => {
-        if (!currentWordObj) return;
 
-        const allLettersGuessed = currentWordObj.word.split('').every(letter => guessedLetters.has(letter));
-        if (allLettersGuessed) {
-            setGameState('won');
-            playSound('correct');
-        } else if (wrongGuesses >= HANGMAN_STAGES) {
-            setGameState('lost');
-            playSound('incorrect');
-        }
-    }, [currentWordObj, guessedLetters, wrongGuesses]);
-    
-    useEffect(() => {
-        checkGameState();
-    }, [checkGameState]);
+        const newGuessed = new Set(guessedLetters).add(letter);
+        setGuessedLetters(newGuessed);
 
-    const resetForNextWord = () => {
-        if (gameData && currentWordIndex < gameData.length - 1) {
-            if (gameState === 'won') {
-                setTotalScore(prev => prev + 50);
+        if (!targetWord.includes(letter)) {
+            // Wrong Guess
+            const newWrong = wrongGuesses + 1;
+            setWrongGuesses(newWrong);
+            if (newWrong >= MAX_ERRORS) {
+                setRoundStatus('lost');
+                if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate([100, 50, 100]);
             }
+        } else {
+            // Correct Guess
+            // Check win condition
+            const isWon = targetWord.split('').every(char => newGuessed.has(char));
+            if (isWon) {
+                setRoundStatus('won');
+                setScore(s => s + POINTS_PER_WORD);
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#4f46e5', '#818cf8', '#ffffff']
+                });
+            }
+        }
+    }, [guessedLetters, roundStatus, targetWord, wrongGuesses]);
+
+    // Keyboard Listener
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const char = e.key.toLocaleUpperCase('tr-TR');
+            if (KEYBOARD_LETTERS.includes(char)) {
+                handleGuess(char);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [handleGuess]);
+
+    // --- NAVIGATION LOGIC ---
+
+    const handleNextLevel = () => {
+        if (currentWordIndex + 1 < gameData.length) {
             setCurrentWordIndex(prev => prev + 1);
             setGuessedLetters(new Set());
             setWrongGuesses(0);
-            setGameState('playing');
+            setRoundStatus('playing');
+            setShowHint(false);
         } else {
-            if (gameState === 'won') {
-                setTotalScore(prev => prev + 50);
-            }
-            setGameState('finished');
+            // Game Completed
+            handleFinishGame();
         }
     };
-    
-    const handleSaveAndExit = async () => {
-        if (!user || totalScore === 0 || isSaving || scoreSaved) {
-            router.push('/student/adam-asmaca');
-            return;
-        }
-        setIsSaving(true);
-        const result = await submitAdamAsmacaScoreAction(user.uid, totalScore, gameContext);
-        if (result.success) {
-            toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
-            setScoreSaved(true);
-            router.push('/student/adam-asmaca');
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    }
-    
-    const restartGame = () => {
-        setCurrentWordIndex(0);
-        setTotalScore(0);
-        setGuessedLetters(new Set());
-        setWrongGuesses(0);
-        setGameState('playing');
-        setScoreSaved(false);
-        fetchWords();
+
+    const handleFinishGame = async () => {
+        setIsSubmitting(true);
+        await submitAdamAsmacaScoreAction(user?.uid || null, score, gameContext);
+        router.push('/student/activities');
     };
 
-    const backUrl = '/student/adam-asmaca';
+    // --- RENDER HELPERS ---
 
-    if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
-    
-    if (error) return (
-         <div className="flex h-screen w-full items-center justify-center p-4">
-             <Alert variant="destructive" className="max-w-lg">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Oyun Yüklenemedi</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                 <div className="mt-4">
-                    <Button asChild variant="secondary">
-                        <Link href={backUrl}>Geri Dön</Link>
-                    </Button>
-                </div>
-            </Alert>
+    if (loading) return (
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+            <p className="text-indigo-300 font-medium animate-pulse">Kelimeler Hazırlanıyor...</p>
         </div>
     );
-    
-    if (gameState === 'finished') {
-        return (
-            <div className="flex h-screen w-full items-center justify-center">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle>Tebrikler!</CardTitle>
-                        <CardDescription>Adam Asmaca etkinliğini tamamladınız.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-4xl font-bold text-primary">{totalScore}</p>
-                        <p className="text-muted-foreground">Toplam Puan</p>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Button onClick={handleSaveAndExit} className="w-full" disabled={isSaving || scoreSaved}>
-                            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : scoreSaved ? <CheckCircle2 className="mr-2 h-4 w-4"/> : <Save className="mr-2 h-4 w-4"/>}
-                            {scoreSaved ? "Kaydedildi" : "Puanı Kaydet ve Çık"}
-                        </Button>
-                        <Button onClick={restartGame} className="w-full" variant="secondary">
-                            <Repeat className="mr-2 h-4 w-4"/>Tekrar Oyna
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        );
-    }
+
+    if (error) return (
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white p-6 text-center">
+            <Skull className="h-20 w-20 text-red-500 mb-4 opacity-80" />
+            <h2 className="text-2xl font-bold mb-2">Eyvah! Bir Sorun Var</h2>
+            <p className="text-slate-400 mb-6">{error}</p>
+            <Link href="/student/adam-asmaca">
+                <Button variant="outline" className="border-white/20 hover:bg-white/10 text-white">
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Ayarlara Dön
+                </Button>
+            </Link>
+        </div>
+    );
+
+    if (!currentData) return null;
+
+    const isGameOver = roundStatus === 'won' || roundStatus === 'lost';
 
     return (
-        <div className={cn("flex h-screen w-full flex-col items-center justify-center p-4 bg-slate-100 dark:bg-slate-900 transition-colors duration-500", gameState === 'lost' && 'animate-shake bg-red-100 dark:bg-red-900/50')}>
-             {gameState === 'won' && <Confetti />}
-            <Card className="w-full max-w-4xl text-center">
-                <CardHeader>
-                    <CardTitle className="text-3xl font-bold font-headline">Adam Asmaca</CardTitle>
-                    <div className="flex justify-between items-center text-sm pt-2">
-                         <span className="font-semibold">Toplam Puan: {totalScore}</span>
-                         <span className="font-semibold">Kelime: {currentWordIndex + 1}/{gameData?.length}</span>
+        <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-950 via-[#2b1055] to-black text-white font-sans overflow-hidden flex flex-col">
+            
+            <style jsx global>{`
+              @keyframes draw { 0% { stroke-dashoffset: 1000; } 100% { stroke-dashoffset: 0; } }
+              .animate-draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2s ease-out forwards; }
+              .perspective-1000 { perspective: 1000px; }
+              .rotate-x-90 { transform: rotateX(90deg); }
+              .rotate-x-0 { transform: rotateX(0deg); }
+            `}</style>
+            
+            {/* --- TOP BAR --- */}
+            <div className="flex items-center justify-between p-4 bg-black/20 backdrop-blur-md border-b border-white/5 z-20">
+                <Link href="/student/adam-asmaca">
+                    <Button size="icon" variant="ghost" className="rounded-full text-slate-400 hover:text-white hover:bg-white/10">
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
+                </Link>
+                
+                <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 bg-indigo-600/20 px-3 py-1 rounded-full border border-indigo-500/30">
+                        <Trophy className="h-4 w-4 text-amber-400" />
+                        <span className="font-bold text-amber-100">{score}</span>
                     </div>
-                </CardHeader>
-                <CardContent className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                    <div className="w-full md:w-auto flex-shrink-0">
-                         <HangmanDrawing mistakes={wrongGuesses} status={gameState} />
+                    <div className="text-xs font-mono text-slate-400">
+                        {currentWordIndex + 1} / {gameData.length}
                     </div>
+                </div>
+            </div>
 
-                    <div className="flex-grow flex flex-col items-center w-full space-y-6">
-                        <p className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-bold shadow-sm border border-yellow-200">
-                             💡 İPUCU: {currentWordObj?.hint}
-                        </p>
-                        <div className="flex justify-center gap-2 md:gap-3 flex-wrap">
-                            {currentWordObj?.word.split('').map((letter, i) => (
-                                <div key={i} className={cn(
-                                    "h-12 w-10 md:h-16 md:w-12 bg-muted rounded-md flex items-center justify-center text-2xl md:text-3xl font-bold border-b-4 border-muted-foreground",
-                                    guessedLetters.has(letter) && "bg-white text-primary border-primary/50",
-                                    gameState === 'lost' && !guessedLetters.has(letter) && "text-red-500"
-                                )}>
-                                    {(guessedLetters.has(letter) || gameState === 'lost') ? letter : ''}
+            {/* --- GAME AREA --- */}
+            <div className="flex-grow flex flex-col md:flex-row max-w-6xl mx-auto w-full p-2 md:p-6 gap-6 overflow-y-auto">
+                
+                {/* LEFT: HANGMAN DRAWING */}
+                <div className="flex-1 flex items-center justify-center min-h-[250px] relative bg-black/20 rounded-3xl border border-white/5 shadow-inner">
+                    <div className="w-64 h-64 relative">
+                        <HangmanFigure errors={wrongGuesses} />
+                        
+                        {/* Status Overlay */}
+                        {roundStatus === 'won' && (
+                            <div className="absolute inset-0 flex items-center justify-center animate-in zoom-in duration-300">
+                                <div className="bg-green-600/90 p-4 rounded-2xl shadow-2xl backdrop-blur-sm text-center transform rotate-[-5deg]">
+                                    <Trophy className="h-12 w-12 text-yellow-300 mx-auto mb-2 animate-bounce" />
+                                    <h3 className="text-2xl font-black uppercase tracking-widest text-white">Harika!</h3>
                                 </div>
-                            ))}
-                        </div>
-
-                        {gameState === 'playing' ? (
-                            <div className="flex justify-center gap-1 md:gap-2 flex-wrap max-w-xl mx-auto">
-                                {ALPHABET.map(letter => {
-                                    const isGuessed = guessedLetters.has(letter);
-                                    const isCorrect = currentWordObj?.word.includes(letter);
-                                    let btnStyle = "bg-white dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 hover:bg-slate-50 hover:border-primary/50 dark:hover:bg-slate-600";
-                                    if (isGuessed) {
-                                        btnStyle = isCorrect ? "bg-green-500 border-green-700 text-white transform scale-95" : "bg-slate-300 dark:bg-slate-800 border-slate-400 text-slate-500 opacity-60 transform scale-95";
-                                    }
-
-                                    return (
-                                        <Button
-                                            key={letter}
-                                            variant="outline"
-                                            size="icon"
-                                            className={cn("key-btn h-10 w-10 md:h-12 md:w-12 text-lg border-b-4", btnStyle)}
-                                            onClick={() => handleGuess(letter)}
-                                            disabled={isGuessed}
-                                        >
-                                            {letter}
-                                        </Button>
-                                    );
-                                })}
                             </div>
-                        ) : (
-                            <div className="p-4 rounded-md min-h-[14rem] flex flex-col justify-center">
-                                <p className={cn("text-2xl font-bold", gameState === 'won' ? 'text-green-600' : 'text-red-600')}>
-                                    {gameState === 'won' ? 'Kazandın!' : 'Kaybettin!'}
-                                </p>
-                                {gameState === 'lost' && <p className="text-muted-foreground">Doğru kelime: <span className="font-bold">{currentWordObj?.word}</span></p>}
+                        )}
+                        {roundStatus === 'lost' && (
+                            <div className="absolute inset-0 flex items-center justify-center animate-in zoom-in duration-300">
+                                <div className="bg-red-600/90 p-4 rounded-2xl shadow-2xl backdrop-blur-sm text-center transform rotate-[5deg]">
+                                    <Skull className="h-12 w-12 text-white mx-auto mb-2" />
+                                    <h3 className="text-2xl font-black uppercase tracking-widest text-white">Kaybettin</h3>
+                                </div>
                             </div>
                         )}
                     </div>
-                </CardContent>
-                 <CardFooter className="flex-col gap-2">
-                    {gameState !== 'playing' && (
-                        <Button onClick={resetForNextWord} className="w-full max-w-sm">
-                            {currentWordIndex < (gameData?.length || 0) - 1 ? 'Sıradaki Kelime' : 'Sonuçları Gör'}
-                        </Button>
+                    
+                    {/* Health Hearts */}
+                    <div className="absolute top-4 left-4 flex gap-1">
+                        {[...Array(MAX_ERRORS)].map((_, i) => (
+                            <Heart 
+                                key={i} 
+                                className={cn(
+                                    "h-5 w-5 transition-all duration-300",
+                                    i < (MAX_ERRORS - wrongGuesses) ? "text-red-500 fill-red-500" : "text-slate-700 fill-slate-800"
+                                )} 
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* RIGHT: WORD & CONTROLS */}
+                <div className="flex-[1.5] flex flex-col gap-6">
+                    
+                    {/* HINT BOX */}
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 relative">
+                        <div className="flex items-start gap-3">
+                            <div className="p-2 bg-amber-500/20 rounded-lg shrink-0">
+                                <Lightbulb className={cn("h-6 w-6 text-amber-400", showHint ? "fill-amber-400" : "")} />
+                            </div>
+                            <div className="flex-grow">
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">İpucu</h4>
+                                <p className={cn("text-lg font-medium transition-all duration-500", showHint ? "text-white blur-0" : "text-white/40 blur-sm select-none")}>
+                                    {currentData.hint}
+                                </p>
+                            </div>
+                            <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => setShowHint(!showHint)}
+                                className={cn("text-xs", showHint ? "text-amber-400" : "text-slate-400")}
+                            >
+                                {showHint ? "Gizle" : "Göster"}
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* WORD DISPLAY */}
+                    <div className="flex flex-wrap justify-center gap-2 py-4 min-h-[80px]">
+                        {targetWord.split('').map((char, index) => {
+                            const isRevealed = guessedLetters.has(char) || roundStatus === 'lost';
+                            const isLostReveal = roundStatus === 'lost' && !guessedLetters.has(char);
+                            
+                            return (
+                                <div 
+                                    key={index}
+                                    className={cn(
+                                        "w-10 h-12 sm:w-12 sm:h-16 flex items-center justify-center text-2xl sm:text-3xl font-bold rounded-xl border-b-4 transition-all duration-500 transform perspective-1000",
+                                        isRevealed 
+                                            ? "bg-indigo-600 border-indigo-800 text-white rotate-x-0 opacity-100" 
+                                            : "bg-white/10 border-white/20 text-transparent rotate-x-90 opacity-80",
+                                        isLostReveal && "bg-red-500/50 border-red-500 text-red-100"
+                                    )}
+                                >
+                                    {char}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* KEYBOARD */}
+                    <div className={cn("grid grid-cols-7 sm:grid-cols-8 gap-1.5 sm:gap-2 transition-opacity duration-300", isGameOver && "opacity-50 pointer-events-none")}>
+                        {KEYBOARD_LETTERS.map((letter) => {
+                            const isGuessed = guessedLetters.has(letter);
+                            const isWrong = isGuessed && !targetWord.includes(letter);
+                            const isCorrect = isGuessed && targetWord.includes(letter);
+                            
+                            return (
+                                <button
+                                    key={letter}
+                                    onClick={() => handleGuess(letter)}
+                                    disabled={isGuessed || isGameOver}
+                                    className={cn(
+                                        "h-10 sm:h-12 rounded-lg font-bold text-sm sm:text-base transition-all duration-200 shadow-sm border-b-[3px] active:border-b-0 active:translate-y-[3px]",
+                                        isCorrect 
+                                            ? "bg-green-600 border-green-800 text-white" 
+                                            : isWrong 
+                                                ? "bg-slate-700 border-slate-800 text-slate-500 opacity-50" 
+                                                : "bg-white text-slate-900 border-slate-300 hover:bg-indigo-50"
+                                    )}
+                                >
+                                    {letter}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* GAME OVER ACTIONS */}
+                    {isGameOver && (
+                        <div className="mt-auto animate-in slide-in-from-bottom-4 fade-in duration-300">
+                             <Button 
+                                onClick={handleNextLevel}
+                                disabled={isSubmitting}
+                                className={cn(
+                                    "w-full py-6 text-lg font-black uppercase tracking-widest rounded-xl shadow-xl transition-all",
+                                    roundStatus === 'won' 
+                                        ? "bg-green-500 hover:bg-green-400 text-white shadow-green-900/40" 
+                                        : "bg-slate-600 hover:bg-slate-500 text-white"
+                                )}
+                            >
+                                {isSubmitting ? (
+                                    <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                                ) : (
+                                    currentWordIndex + 1 < gameData.length ? (
+                                        <>
+                                            Sonraki Kelime <ArrowLeft className="ml-2 h-5 w-5 rotate-180" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            Oyunu Bitir & Puanı Kaydet <Trophy className="ml-2 h-5 w-5" />
+                                        </>
+                                    )
+                                )}
+                            </Button>
+                        </div>
                     )}
-                    <Button variant="outline" asChild className="w-full max-w-sm">
-                       <Link href={backUrl}>Etkinlik Merkezine Dön</Link>
-                    </Button>
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         </div>
     );
 }
 
-export default function HangmanPage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
-            <HangmanGame />
-        </Suspense>
-    );
+export default function HangmanGamePageWrapper() {
+  return (
+    <Suspense fallback={
+        <div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+        </div>
+    }>
+        <HangmanGame />
+    </Suspense>
+  )
 }
