@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -629,15 +628,16 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-slate-700/50 border-slate-600 text-white">
-                                <p className={cn("flex-1 mb-3 md:font-bold", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 font-bold mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && !isQuestionCorrect && "opacity-50 bg-secondary",
-                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary"
+                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
+                                            isAnswered && !isQuestionCorrect && answer?.answer === true && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
+                                            isAnswered && answer?.answer === false && "opacity-50"
                                         )}
                                     >
                                         {isAnswered && isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Doğru'}
@@ -647,8 +647,9 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && isQuestionCorrect && "opacity-50 bg-secondary",
-                                            isAnswered && !isQuestionCorrect && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive"
+                                            isAnswered && !isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
+                                            isAnswered && isQuestionCorrect && answer?.answer === false && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
+                                            isAnswered && answer?.answer === true && "opacity-50"
                                         )}
                                     >
                                        {isAnswered && !isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Yanlış'}
@@ -949,7 +950,6 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onMultiAnswer,
     onAllTfAnswered,
 }: LessonContentViewerProps) {
     const { user } = useAuth();
@@ -1264,16 +1264,16 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-           <div className="flex-shrink-0 p-2 border-b bg-card/50 backdrop-blur-sm">
+           <div className="flex-shrink-0 p-4 border-b bg-card/50 backdrop-blur-sm">
                  <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader className="p-2">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-base font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
+                            <h2 className="text-xl font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
                             <p className="text-sm font-bold text-primary">Puan: {internalProgress.score}</p>
                         </div>
                     </CardHeader>
                     <CardContent className="p-2">
-                        <Progress value={((currentStepIndex + 1) / steps.length) * 100} className="w-full h-3" />
+                        <Progress value={(currentStepIndex + 1) / steps.length * 100} className="w-full h-3" />
                     </CardContent>
                 </Card>
            </div>
