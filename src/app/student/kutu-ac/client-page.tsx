@@ -215,7 +215,7 @@ export function KutuAcSetupClientPage() {
           <CardFooter className="flex justify-between pt-6">
             {currentStep === 1 ? (
                 <Button asChild variant="outline">
-                    <Link href="/student"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                    <Link href="/student/activities"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
                 </Button>
             ) : (
                 <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
