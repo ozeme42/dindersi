@@ -6,7 +6,7 @@ import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "rea
 import { useParams, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Bug, ArrowRight } from "lucide-react";
+import { BookOpen, Loader2, ArrowLeft, Bug } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, addDoc, serverTimestamp } from "firebase/firestore";
@@ -292,7 +292,7 @@ function CoursePageContent() {
     
     return (
         <>
-        <div className={cn("md:flex h-full", isFullscreen ? "h-screen" : "")}>
+        <div className={cn("md:flex", isFullscreen ? "h-screen" : "h-[calc(100vh-theme(height.16))]")}>
             <div className={cn(
                 "h-full w-full md:w-80", 
                 view === 'content' ? 'hidden md:block' : 'block',
@@ -317,17 +317,19 @@ function CoursePageContent() {
                 />
             </div>
             
-            <main ref={mainContentRef} className={cn("flex-1 bg-muted/30 flex flex-col md:h-full", view === 'map' ? 'hidden md:flex' : 'flex', isFullscreen ? 'h-screen' : 'h-[calc(100vh-theme(height.16))]')}>
-                 <div className="flex-grow flex flex-col min-h-0">
-                     {(!isFullscreen && view === 'content') && (
-                        <div className="md:hidden flex-shrink-0 flex items-center justify-between p-2 bg-background border-b">
+            <main ref={mainContentRef} className={cn("flex-1 overflow-y-auto bg-muted/30", view === 'map' ? 'hidden md:block' : 'block')}>
+                 <div className="h-full w-full">
+                     {!isFullscreen && view === 'content' && (
+                        <div className="md:hidden flex items-center justify-between p-4 bg-background border-b">
                             <Button variant="outline" onClick={() => setView('map')}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Ders Haritası
                             </Button>
-                            <div className="flex items-center">
+                            <div className="flex items-center flex-1 min-w-0">
                                 {activeTopicData && (
-                                    <p className="font-semibold text-base truncate mr-2 text-right">{activeTopicData.topic.title}</p>
+                                    <div className="flex-1 min-w-0 text-right mr-2">
+                                        <p className="font-semibold text-base truncate">{activeTopicData.topic.title}</p>
+                                    </div>
                                 )}
                                  <FullscreenToggle elementRef={mainContentRef} />
                             </div>
@@ -344,7 +346,6 @@ function CoursePageContent() {
                         progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
                         onProgressUpdate={onProgressUpdate}
                         isFullscreen={isFullscreen}
-                        user={user}
                     />
                 </div>
             </main>
