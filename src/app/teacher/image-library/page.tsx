@@ -1,14 +1,14 @@
+
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import Image from 'next/image';
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
+  CardFooter
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,8 +17,6 @@ import {
   Trash2,
   FilePenLine,
   Image as ImageIcon,
-  Upload,
-  Copy,
 } from "lucide-react";
 import {
   Dialog,
@@ -45,10 +43,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
-import { getImages, addOrUpdateImage, deleteImage, uploadImage } from "./actions";
+import { getImages, addOrUpdateImage, deleteImage } from "./actions";
 import type { ImageAsset } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from 'date-fns/locale';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Image from 'next/image';
 import { Skeleton } from "@/components/ui/skeleton";
 
 function ImageEditorDialog({
@@ -61,18 +61,20 @@ function ImageEditorDialog({
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   image: Partial<ImageAsset> | null;
-  onSave: (data: Partial<ImageAsset>) => void;
+  onSave: (data: Partial<ImageAsset>, file?: File) => void;
   isSaving: boolean;
 }) {
   const [formData, setFormData] = useState<Partial<ImageAsset>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     setFormData(image || { title: "", description: "", imageUrl: "" });
+    setImageFile(null);
   }, [image]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    onSave(formData, imageFile || undefined);
   };
 
   return (
@@ -81,7 +83,7 @@ function ImageEditorDialog({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {image?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+              {image?.id ? "Görseli Düzenle" : "Yeni Görsel Ekle"}
             </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -97,16 +99,23 @@ function ImageEditorDialog({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="image-url">Görsel URL</Label>
+              <Label htmlFor="image-file">Görsel Dosyası</Label>
               <Input
-                id="image-url"
-                value={formData.imageUrl || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, imageUrl: e.target.value })
-                }
-                required
-                placeholder="https://..."
+                id="image-file"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setImageFile(e.target.files[0]);
+                  }
+                }}
+                required={!image?.id} // Only require for new images
               />
+              {image?.imageUrl && !imageFile && (
+                <div className="mt-2 text-sm text-muted-foreground">
+                    Mevcut görsel: <a href={image.imageUrl} target="_blank" rel="noopener noreferrer" className="underline">Görüntüle</a>. Değiştirmek için yeni bir dosya seçin.
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="image-description">Açıklama (İsteğe Bağlı)</Label>
@@ -136,89 +145,15 @@ function ImageEditorDialog({
   );
 }
 
-function ImageUploadDialog({
-  isOpen,
-  onOpenChange,
-  onUploadComplete
-}: {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onUploadComplete: () => void;
-}) {
-    const { user } = useAuth();
-    const [file, setFile] = useState<File | null>(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const { toast } = useToast();
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!file || !user) return;
-        setIsUploading(true);
-
-        const result = await uploadImage(file, user.uid);
-        if (result.success && result.imageUrl) {
-            const saveResult = await addOrUpdateImage({
-                title: file.name,
-                description: `Yüklenme tarihi: ${new Date().toLocaleDateString()}`,
-                imageUrl: result.imageUrl,
-                teacherId: user.uid,
-                type: 'imageLibrary',
-            });
-            if (saveResult.success) {
-                toast({ title: 'Başarılı!', description: 'Görsel yüklendi ve kütüphaneye eklendi.' });
-                onUploadComplete();
-                onOpenChange(false);
-            } else {
-                 toast({ title: 'Hata', description: saveResult.error, variant: 'destructive'});
-            }
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive'});
-        }
-        setIsUploading(false);
-    }
-
-    return (
-        <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Görsel Yükle</DialogTitle>
-                    <DialogDescription>
-                        Bilgisayarınızdan bir görsel dosyası seçin ve kütüphaneye yükleyin.
-                    </DialogDescription>
-                </DialogHeader>
-                 <div className="py-4 space-y-4">
-                     <div className="space-y-2">
-                        <Label htmlFor="image-file">Görsel Dosyası</Label>
-                        <Input id="image-file" type="file" onChange={handleFileChange} accept="image/png, image/jpeg, image/gif, image/webp" />
-                    </div>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild><Button variant="ghost">İptal</Button></DialogClose>
-                    <Button onClick={handleUpload} disabled={isUploading || !file}>
-                        {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Yükle ve Kaydet
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )
-}
-
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const { toast } = useToast();
   const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchImages = useCallback(async () => {
     if (!user) return;
@@ -241,18 +176,42 @@ export default function ImageLibraryPage() {
     setIsEditorOpen(true);
   };
 
-  const handleSaveImage = async (data: Partial<ImageAsset>) => {
+  const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
     if (!user) return;
     setIsSaving(true);
-    const result = await addOrUpdateImage({ ...data, teacherId: user.uid, type: 'imageLibrary' });
-    if (result.success) {
-      toast({ title: "Başarılı", description: "Görsel kaydedildi." });
-      fetchImages();
-      setIsEditorOpen(false);
-    } else {
-      toast({ title: "Hata", description: result.error, variant: "destructive" });
+    
+    try {
+        let imageUrl = data.imageUrl || '';
+        
+        if (file) {
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${user.uid}/${Date.now()}_${file.name}`);
+            const snapshot = await uploadBytes(storageRef, file);
+            imageUrl = await getDownloadURL(snapshot.ref);
+        }
+
+        if (!imageUrl) {
+            throw new Error("Görsel URL'si bulunamadı veya oluşturulamadı.");
+        }
+
+        const result = await addOrUpdateImage({ 
+            ...data, 
+            teacherId: user.uid,
+            imageUrl: imageUrl 
+        });
+
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+            fetchImages();
+            setIsEditorOpen(false);
+        } else {
+            throw new Error(result.error);
+        }
+    } catch(e: any) {
+        toast({ title: "Hata", description: e.message || "Görsel kaydedilemedi.", variant: "destructive" });
+    } finally {
+        setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const handleDeleteImage = async (imageId: string) => {
@@ -265,15 +224,12 @@ export default function ImageLibraryPage() {
     }
   };
 
-  const handleCopyToClipboard = (url: string) => {
-    navigator.clipboard.writeText(url);
-    toast({ title: "Kopyalandı!", description: "Görsel URL'si panoya kopyalandı."});
-  }
-  
   const filteredImages = useMemo(() => {
+    if (!searchTerm) return images;
+    const lowercasedTerm = searchTerm.toLowerCase();
     return images.filter(image => 
-        image.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        image.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        (image.title && image.title.toLowerCase().includes(lowercasedTerm)) || 
+        (image.description && image.description.toLowerCase().includes(lowercasedTerm))
     );
   }, [images, searchTerm]);
 
@@ -291,22 +247,17 @@ export default function ImageLibraryPage() {
                 Derslerde ve etkinliklerde kullanmak üzere görsellerinizi yönetin.
               </CardDescription>
             </div>
-             <div className="flex gap-2">
-                <Button onClick={() => setIsUploadOpen(true)} variant="outline">
-                    <Upload className="mr-2 h-4 w-4" /> Bilgisayardan Yükle
-                </Button>
-                <Button onClick={() => handleOpenDialog()}>
-                  <PlusCircle className="mr-2 h-4 w-4" /> URL ile Yeni Görsel Ekle
-                </Button>
+            <Button onClick={() => handleOpenDialog()}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Yeni Görsel Yükle
+            </Button>
+          </div>
+            <div className="mt-4">
+                <Input
+                    placeholder="Görsellerde ara..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
-          </div>
-          <div className="pt-4">
-            <Input 
-                placeholder="Kütüphanede ara..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-            />
-          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -316,19 +267,15 @@ export default function ImageLibraryPage() {
           ) : filteredImages.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed rounded-lg">
                 <ImageIcon className="mx-auto h-12 w-12"/>
-                <h3 className="mt-4 text-lg font-semibold">Henüz görsel eklenmemiş.</h3>
-                <p className="mt-1 text-sm">"Yeni Görsel Ekle" veya "Görsel Yükle" butonuna tıklayarak başlayın.</p>
+                <h3 className="mt-4 text-lg font-semibold">Henüz görsel yüklenmemiş.</h3>
+                <p className="mt-1 text-sm">"Yeni Görsel Yükle" butonuna tıklayarak başlayın.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredImages.map((image) => (
                 <Card key={image.id} className="flex flex-col">
                     <div className="w-full aspect-video relative">
-                         {image.imageUrl ? (
-                            <Image src={image.imageUrl} alt={image.title} fill className="object-cover rounded-t-lg" />
-                         ) : (
-                             <Skeleton className="w-full h-full rounded-t-lg" />
-                         )}
+                         {image.imageUrl ? <Image src={image.imageUrl} alt={image.title || 'görsel'} fill className="object-cover rounded-t-lg" /> : <Skeleton className="w-full h-full rounded-t-lg"/>}
                     </div>
                   <CardHeader className="pt-4 pb-2">
                     <CardTitle className="line-clamp-2 text-base">{image.title}</CardTitle>
@@ -339,23 +286,19 @@ export default function ImageLibraryPage() {
                     </p>
                   </CardContent>
                   <CardFooter className="flex justify-end gap-2">
-                     <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleCopyToClipboard(image.imageUrl)}
-                    >
-                      <Copy className="h-4 w-4" />
-                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleOpenDialog(image)}
                     >
-                      <FilePenLine className="h-4 w-4" />
+                      <FilePenLine className="mr-2 h-4 w-4" />
+                      Düzenle
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive-outline" size="sm"><Trash2 className="h-4 w-4"/></Button>
+                            <Button variant="destructive-outline" size="sm">
+                                <Trash2 className="mr-2 h-4 w-4" /> Sil
+                            </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
@@ -384,12 +327,6 @@ export default function ImageLibraryPage() {
         onSave={handleSaveImage}
         isSaving={isSaving}
       />
-      <ImageUploadDialog
-        isOpen={isUploadOpen}
-        onOpenChange={setIsUploadOpen}
-        onUploadComplete={fetchImages}
-      />
     </div>
   );
 }
-
