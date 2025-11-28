@@ -3,29 +3,24 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, ClipboardList, ShoppingCart, MonitorPlay, PenSquare, DollarSign, Users } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Repeat, ShoppingCart, Package, Scale, Bug, DollarSign, Gamepad2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { ErrorReportDialog } from './error-report-dialog';
 
-const NavLink = ({ item, isActive }: { item: { href: string, icon: React.ElementType, label: string }, isActive: boolean }) => {
-    const { href, icon: Icon, label } = item;
+const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string }) => {
+    const pathname = usePathname();
+    const isActive = (href === '/' || href === '/student') ? pathname === href : pathname.startsWith(href);
+
     return (
-        <div className={cn(
-            "flex flex-col items-center justify-center gap-0.5 w-full h-full transition-all duration-300",
-            isActive ? "text-primary -translate-y-1" : "text-muted-foreground hover:text-foreground/80"
+        <Link href={href} className={cn(
+            "flex flex-col items-center justify-center gap-1 w-full text-center py-1 rounded-md transition-colors duration-200",
+            isActive ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground/80"
         )}>
-            <div className={cn("p-2 rounded-full transition-all duration-300", isActive && "bg-primary/10")}>
-                <Icon className="h-5 w-5" />
-            </div>
-            <span className={cn(
-                "text-[10px] font-bold mt-0 transition-all duration-300",
-                isActive ? "opacity-100" : "opacity-0"
-            )}>
-                {label}
-            </span>
-        </div>
+            <Icon className="h-5 w-5" />
+            <span className="text-xs font-medium">{label}</span>
+        </Link>
     );
 };
 
@@ -48,7 +43,7 @@ export function BottomNavBar() {
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
         { href: '/student/soru-bankasi', icon: ClipboardList, label: 'Soru Bankası' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Dükkan' },
+        { href: '/student/activities', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
@@ -59,26 +54,17 @@ export function BottomNavBar() {
         { href: '/teacher/score-events', icon: DollarSign, label: 'Puanlar' },
         { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
         { href: '/teacher/stats', icon: Trophy, label: 'Sıralama' },
-        { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;
 
     return (
         <>
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-sm border-t z-50 rounded-t-2xl">
-                <div className="flex items-stretch justify-around h-full">
-                    {links.map(item => {
-                        const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
-                        return (
-                            <Link key={item.href} href={item.href} className="flex-1">
-                                 <NavLink 
-                                    item={item}
-                                    isActive={isActive}
-                                />
-                            </Link>
-                        );
-                    })}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card/95 backdrop-blur-sm border-t z-50">
+                <div className="flex items-stretch justify-around h-full px-1">
+                    {links.map(link => (
+                        <NavLink key={link.href} {...link} />
+                    ))}
                 </div>
             </div>
         </>
