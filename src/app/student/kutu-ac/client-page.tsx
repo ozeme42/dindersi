@@ -1,16 +1,11 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Package, Gamepad2, Star, ChevronRight, Lock 
+    PartyPopper, Package, Gamepad2, Star, ChevronRight, Lock, BookOpen 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/context/auth-context";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 
 // --- MOCK LINK COMPONENT (Fix for next/link error) ---
 const Link = ({ href, children, className, ...props }: any) => (
@@ -51,19 +46,41 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     </button>
 );
 
+// --- MOCK DATA (Simüle Edilmiş Veriler) ---
+// Gerçek entegrasyonda burayı Firebase verileriyle değiştireceksiniz.
+const MOCK_COURSES = [
+    { id: 'c1', title: 'Matematik', className: '6. Sınıf', icon: '📐' },
+    { id: 'c2', title: 'Fen Bilimleri', className: '6. Sınıf', icon: '🧬' },
+    { id: 'c3', title: 'Türkçe', className: '6. Sınıf', icon: '📚' },
+    { id: 'c4', title: 'Sosyal Bilgiler', className: '6. Sınıf', icon: '🌍' },
+];
+
+const MOCK_UNITS = [
+    { id: 'u1', title: 'Doğal Sayılar' },
+    { id: 'u2', title: 'Kümeler' },
+    { id: 'u3', title: 'Tam Sayılar' },
+    { id: 'all', title: 'Tüm Üniteler (Karışık)' },
+];
+
+const MOCK_TOPICS = [
+    { id: 't1', title: 'Üslü İfadeler' },
+    { id: 't2', title: 'İşlem Önceliği' },
+    { id: 't3', title: 'Dağılma Özelliği' },
+    { id: 'all', title: 'Tüm Konular (Karışık)' },
+];
+
 // --- MAIN PAGE ---
 
 const steps = [
-  { id: 1, name: "Ders", icon: Book },
+  { id: 1, name: "Ders", icon: BookOpen },
   { id: 2, name: "Ünite", icon: Library },
   { id: 3, name: "Konu", icon: ListTodo },
   { id: 4, name: "Başlat", icon: Gamepad2 },
 ];
 
-export function KutuAcSetupClientPage() {
-  const { user } = useAuth();
+export default function KutuAcSetupClientPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Selection State
   const [selection, setSelection] = useState({
@@ -75,87 +92,39 @@ export function KutuAcSetupClientPage() {
     topicName: "",
   });
 
-  // Data State
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  // Mock Data Loading Simulation
   const [courses, setCourses] = useState<any[]>([]);
   const [units, setUnits] = useState<any[]>([]);
   const [topics, setTopics] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-        setIsLoading(true);
-        if (!user) {
-            setIsLoading(false);
-            return;
-        }
-        try {
-            const [coursesSnapshot, classesSnapshot] = await Promise.all([
-                getDocs(query(collection(db, "courses"), orderBy("title"))),
-                getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
-            ]);
-            const coursesData = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-            const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-            
-            setAllCourses(coursesData);
-            setAllClasses(classesData);
+    // Initial Load
+    setCourses(MOCK_COURSES);
+  }, []);
 
-            const studentClassName = user.class?.split(' - ')[0];
-            const studentClass = classesData.find(c => c.name === studentClassName);
-            const firstClassId = classesData.length > 0 ? classesData[0].id : null;
-
-            let finalCourses: Course[] = [];
-            if (user.role === 'teacher' || user.role === 'superadmin') {
-                finalCourses = coursesData.map(course => ({
-                    ...course,
-                    className: classesData.find(c => c.id === course.classId)?.name || 'Genel'
-                }));
-            } else {
-                const studentVisibleCourses = coursesData.filter(c => !c.isTeacherOnly);
-                if (studentClass) {
-                    const isFirstClass = studentClass.id === firstClassId;
-                    finalCourses = studentVisibleCourses.filter(course =>
-                        course.classId === studentClass.id || (!course.classId && isFirstClass)
-                    );
-                } else {
-                    finalCourses = studentVisibleCourses.filter(course => !course.classId);
-                }
-            }
-            setCourses(finalCourses);
-
-        } catch (error) {
-            console.error("Error fetching initial data:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    fetchInitialData();
-  }, [user]);
-
-  const handleSelectCourse = async (id: string, name: string) => {
+  const handleSelectCourse = (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
+    // Simulate API fetch for units
     setIsLoading(true);
-    const unitsRef = collection(db, `courses/${id}/units`);
-    const q = query(unitsRef, orderBy("title"));
-    const unitsSnapshot = await getDocs(q);
-    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, title: doc.data().title })));
-    setIsLoading(false);
-    setCurrentStep(2);
+    setTimeout(() => {
+        setUnits(MOCK_UNITS);
+        setIsLoading(false);
+        setCurrentStep(2);
+    }, 400);
   };
 
-  const handleSelectUnit = async (id: string, name: string) => {
+  const handleSelectUnit = (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
+        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
-        const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
-        const q = query(topicsRef, orderBy("title"));
-        const topicsSnapshot = await getDocs(q);
-        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, title: doc.data().title })));
-        setIsLoading(false);
-        setCurrentStep(3);
+        setTimeout(() => {
+            setTopics(MOCK_TOPICS);
+            setIsLoading(false);
+            setCurrentStep(3);
+        }, 400);
     }
   };
   
@@ -167,18 +136,6 @@ export function KutuAcSetupClientPage() {
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
-
-  const getGameUrl = () => {
-    const params = new URLSearchParams({
-      courseId: selection.courseId,
-      courseName: selection.courseName,
-      unitId: selection.unitId,
-      unitName: selection.unitName,
-      topicId: selection.topicId,
-      topicName: selection.topicName,
-    });
-    return `/student/kutu-ac/oyun?${params.toString()}`;
-  }
 
   // Render Content Based on Step
   const renderStepContent = () => {
@@ -218,26 +175,16 @@ export function KutuAcSetupClientPage() {
           case 2: // UNIT SELECTION
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <GameButton 
-                        onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
-                        active={selection.unitId === 'all'}
-                        className={'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40'}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
-                            <span className="font-semibold text-amber-100">Tüm Üniteler (Karışık)</span>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-white/20" />
-                    </GameButton>
                     {units.map((unit) => (
                         <GameButton 
                             key={unit.id} 
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
                             active={selection.unitId === unit.id}
+                            className={unit.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                <Library className="h-5 w-5 text-slate-400" />
-                                <span className="font-semibold text-slate-200">{unit.title}</span>
+                                {unit.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <Library className="h-5 w-5 text-slate-400" />}
+                                <span className={cn("font-semibold", unit.id === 'all' ? "text-amber-100" : "text-slate-200")}>{unit.title}</span>
                             </div>
                             <ChevronRight className="h-5 w-5 text-white/20" />
                         </GameButton>
@@ -247,26 +194,16 @@ export function KutuAcSetupClientPage() {
           case 3: // TOPIC SELECTION
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                     <GameButton 
-                        onClick={() => handleSelectTopic('all', 'Tüm Konular')}
-                        active={selection.topicId === 'all'}
-                        className={'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40'}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
-                            <span className="font-semibold text-amber-100">Tüm Konular (Karışık)</span>
-                        </div>
-                         {selection.topicId === 'all' ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
-                    </GameButton>
                     {topics.map((topic) => (
                         <GameButton 
                             key={topic.id} 
                             onClick={() => handleSelectTopic(topic.id, topic.title)}
                             active={selection.topicId === topic.id}
+                            className={topic.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                <ListTodo className="h-5 w-5 text-slate-400" />
-                                <span className="font-semibold text-slate-200">{topic.title}</span>
+                                {topic.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <ListTodo className="h-5 w-5 text-slate-400" />}
+                                <span className={cn("font-semibold", topic.id === 'all' ? "text-amber-100" : "text-slate-200")}>{topic.title}</span>
                             </div>
                             {selection.topicId === topic.id ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
                         </GameButton>
@@ -301,7 +238,7 @@ export function KutuAcSetupClientPage() {
                             </div>
                         </div>
 
-                        <Link href={getGameUrl()} className="block w-full">
+                        <Link href={`/student/kutu-ac/oyun?courseId=${selection.courseId}`} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                                 Oyunu Başlat
@@ -328,7 +265,7 @@ export function KutuAcSetupClientPage() {
               </h1>
               <div className="flex items-center gap-1 justify-center text-xs font-bold text-indigo-300/60 mt-1">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  Kurulum Modu
+                  Setup Modu
               </div>
           </div>
           <div className="w-12"></div> {/* Spacer for center alignment */}
@@ -346,6 +283,7 @@ export function KutuAcSetupClientPage() {
 
               {steps.map((step) => {
                   const isActive = currentStep >= step.id;
+                  const isCurrent = currentStep === step.id;
                   
                   return (
                       <div key={step.id} className="flex flex-col items-center gap-2">
@@ -359,7 +297,7 @@ export function KutuAcSetupClientPage() {
                           </div>
                           <span className={cn(
                               "text-[10px] uppercase font-bold tracking-wider transition-colors duration-300 absolute -bottom-6 w-20 text-center",
-                              isActive ? "text-white" : "text-slate-600"
+                              isCurrent ? "text-white" : isActive ? "text-indigo-300" : "text-slate-600"
                           )}>
                               {step.name}
                           </span>
@@ -400,6 +338,7 @@ export function KutuAcSetupClientPage() {
                       <div></div>
                   )}
                   
+                  {/* Note: Next button is mostly handled by item selection, but we can keep a disabled one for visuals if needed, or remove it for tap-to-advance flow */}
                   <div className="text-xs text-slate-500 flex items-center italic">
                      {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
                      {currentStep === 2 && !selection.unitId && "Bir ünite seçin"}
