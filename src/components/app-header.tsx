@@ -35,7 +35,7 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="px-4 h-16 flex items-center bg-card border-b">
+      <header className="px-4 h-16 flex items-center bg-card/95 backdrop-blur-sm border-b">
         <Link href="/" className="flex items-center justify-center">
           <BookOpenCheck className="h-6 w-6 text-primary" />
           <span className="ml-2 text-lg font-semibold font-headline">Değerler Oyunu</span>
