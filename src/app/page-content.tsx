@@ -1,15 +1,13 @@
-
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Image as ImageIcon } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
 import type { CourseGroup } from './actions/getPublicCurriculum';
 import { cn } from '@/lib/utils';
