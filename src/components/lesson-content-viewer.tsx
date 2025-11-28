@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -594,20 +595,20 @@ function ConceptMapViewer({ mapData }: { mapData: ConceptMapData }) {
 }
 
 // Interactive True/False List
-function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered, answers }: { 
+function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswered, answers }: { 
     step: TrueFalseListStep, 
     isFullscreen: boolean,
     onAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllAnswered: () => void;
+    onAllTfAnswered: () => void;
     answers: { [key: number]: { answer: boolean; isCorrect: boolean } };
  }) {
     
     useEffect(() => {
         if (!step) return;
         if (Object.keys(answers || {}).length === step.questions.length) {
-            onAllAnswered();
+            onAllTfAnswered();
         }
-    }, [answers, step, onAllAnswered]);
+    }, [answers, step, onAllTfAnswered]);
 
     return (
         <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
@@ -950,6 +951,7 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
+    onMultiAnswer,
     onAllTfAnswered,
 }: LessonContentViewerProps) {
     const { user } = useAuth();
@@ -1191,21 +1193,21 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-card/50 backdrop-blur-sm md:pb-4 pb-20">
+             <div className={cn("flex-shrink-0 flex justify-between items-center p-2 sm:p-4 border-t bg-card/50 backdrop-blur-sm", isFullscreen ? "pb-4" : "pb-16 md:pb-4")}>
                  <div className="flex gap-2">
                     {user?.role === 'student' && (
                         <Button variant="outline" size="icon" onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
                             <Bug className="h-4 w-4" />
                         </Button>
                     )}
-                    {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'default'} onClick={handleNext}>Adımı Atla</Button>}
+                    {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'sm'} onClick={handleNext}>Adımı Atla</Button>}
                  </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" size={isFullscreen ? 'lg' : 'default'} onClick={handlePrev} disabled={currentStepIndex === 0}>
+                    <Button variant="outline" size={isFullscreen ? 'lg' : 'sm'} onClick={handlePrev} disabled={currentStepIndex === 0}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Geri
                     </Button>
-                    <Button size={isFullscreen ? 'lg' : 'default'} onClick={handleContinueOrNext} disabled={!isNextButtonEnabled}>
+                    <Button size={isFullscreen ? 'lg' : 'sm'} onClick={handleContinueOrNext} disabled={!isNextButtonEnabled}>
                         {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? "Konuyu Bitir" : "İleri")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -1264,16 +1266,16 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-           <div className="flex-shrink-0 p-4 border-b bg-card/50 backdrop-blur-sm">
+           <div className="flex-shrink-0 p-2 sm:p-4 border-b bg-card/50 backdrop-blur-sm">
                  <Card className="bg-transparent border-0 shadow-none">
-                    <CardHeader className="p-2">
+                    <CardHeader className="p-1 sm:p-2">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
-                            <p className="text-sm font-bold text-primary">Puan: {internalProgress.score}</p>
+                            <h2 className="text-base sm:text-xl font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
+                            <p className="text-xs sm:text-sm font-bold text-primary">Puan: {internalProgress.score}</p>
                         </div>
                     </CardHeader>
-                    <CardContent className="p-2">
-                        <Progress value={(currentStepIndex + 1) / steps.length * 100} className="w-full h-3" />
+                    <CardContent className="p-1 sm:p-2">
+                        <Progress value={(currentStepIndex + 1) / steps.length * 100} className="w-full h-2 sm:h-3" />
                     </CardContent>
                 </Card>
            </div>
