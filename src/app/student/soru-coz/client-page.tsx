@@ -3,26 +3,24 @@
 
 import { useState, useEffect } from "react";
 import { 
-    ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Gamepad2, Star, ChevronRight, Settings, BrainCircuit, Checkbox as CheckboxIcon, SlidersHorizontal
+    ArrowLeft, ArrowRight, Check, Library, ListTodo, 
+    PartyPopper, Gamepad2, Star, ChevronRight, Lock, BrainCircuit, Settings, BookOpen, Book 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from 'next/link';
 import { useAuth } from "@/context/auth-context";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
-import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
 
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
+// --- UI COMPONENTS (Arcade Style) ---
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -34,12 +32,12 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-const GameButton = ({ children, onClick, active, disabled, className }: any) => (
+const GameButton = ({ children, onClick, active, disabled, className, icon }: { children: React.ReactNode, onClick: () => void, active?: boolean, disabled?: boolean, className?: string, icon?: string }) => (
     <button 
         onClick={onClick}
         disabled={disabled}
         className={cn(
-            "relative w-full group overflow-hidden rounded-2xl p-4 transition-all duration-200 border-b-[4px] active:border-b-0 active:translate-y-[4px]",
+            "relative w-full h-full group overflow-hidden rounded-2xl p-4 transition-all duration-200 border-b-[4px] active:border-b-0 active:translate-y-[4px]",
             active 
                 ? "bg-indigo-600 border-indigo-800 text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-[1.02]" 
                 : "bg-slate-800 border-slate-950 text-slate-300 hover:bg-slate-700",
@@ -48,11 +46,21 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
         )}
     >
         <div className="relative z-10 flex items-center justify-between">
-            {children}
-            {active && <div className="absolute inset-0 bg-white/10 animate-pulse rounded-2xl" />}
+            <div className="flex items-center gap-4">
+                {icon && (
+                    <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
+                        {icon}
+                    </div>
+                )}
+                <div className="text-left">
+                    {children}
+                </div>
+            </div>
+            {active && <Check className="h-5 w-5 text-indigo-300" />}
         </div>
     </button>
 );
+
 
 const steps = [
   { id: 1, name: "Ders", icon: Book },
@@ -66,7 +74,6 @@ export function SoruCozSetupClientPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
   
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
@@ -86,6 +93,8 @@ export function SoruCozSetupClientPage() {
     difficulty: ['Kolay', 'Orta'],
     questionTypes: ['mcq'],
   });
+
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -139,41 +148,44 @@ export function SoruCozSetupClientPage() {
     fetchCourses();
   }, [user]);
 
-  const handleSelectCourse = (id: string, name: string) => {
+  const handleSelectCourse = async (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
     const unitsRef = collection(db, `courses/${id}/units`);
     const q = query(unitsRef, orderBy("title"));
-    getDocs(q).then(unitsSnapshot => {
-        setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
-        setTopics([]);
-        setIsLoading(false);
-        setCurrentStep(2);
-    });
+    const unitsSnapshot = await getDocs(q);
+    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+    setTopics([]);
+    setIsLoading(false);
+    setCurrentStep(2);
   };
 
-  const handleSelectUnit = (id: string, name: string) => {
+  const handleSelectUnit = async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
-        setCurrentStep(4);
-    } else {
-        setIsLoading(true);
-        const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
-        const q = query(topicsRef, orderBy("title"));
-        getDocs(q).then(topicsSnapshot => {
-            setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-            setIsLoading(false);
-            setCurrentStep(3);
-        });
+      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
+      setTopics([]);
+      setCurrentStep(4);
+      return;
     }
+    setIsLoading(true);
+    const topicsRef = collection(db, `courses/${selection.courseId}/units/${id}/topics`);
+    const q = query(topicsRef, orderBy("title"));
+    const topicsSnapshot = await getDocs(q);
+    setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+    setIsLoading(false);
+    setCurrentStep(3);
   };
   
   const handleSelectTopic = (id: string, name: string) => {
     setSelection({ ...selection, topicId: id, topicName: name });
     setCurrentStep(4);
   };
-  
+
+  const handleBack = () => {
+      if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
   const handleDifficultyChange = (level: string) => {
     setSettings(prev => {
         const current = prev.difficulty;
@@ -194,10 +206,6 @@ export function SoruCozSetupClientPage() {
     });
   }
 
-  const handleBack = () => {
-      if (currentStep > 1) setCurrentStep(currentStep - 1);
-  };
-
   const getGameUrl = () => {
     if(settings.difficulty.length === 0 || settings.questionTypes.length === 0) {
         toast({title: "Eksik Seçim", description: "Lütfen en az bir zorluk seviyesi ve soru tipi seçin.", variant: "destructive"});
@@ -216,7 +224,7 @@ export function SoruCozSetupClientPage() {
     });
     return `/student/soru-coz/coz?${params.toString()}`;
   }
-
+  
   const renderStepContent = () => {
       if (isLoading) {
           return (
@@ -237,15 +245,7 @@ export function SoruCozSetupClientPage() {
                             onClick={() => handleSelectCourse(course.id, course.title)}
                             active={selection.courseId === course.id}
                         >
-                            <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    <BookOpen className="h-6 w-6"/>
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-bold text-white">{course.title}</div>
-                                    <div className="text-xs text-slate-400">{course.className}</div>
-                                </div>
-                            </div>
+                             <div className="font-bold text-white">{course.title}</div>
                             {selection.courseId === course.id && <Check className="h-5 w-5 text-indigo-300" />}
                         </GameButton>
                     ))}
@@ -287,31 +287,31 @@ export function SoruCozSetupClientPage() {
                     ))}
                 </div>
             );
-          case 4:
-            return (
-                 <div className="w-full max-w-lg mx-auto space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+            case 4:
+                return (
+                 <div className="w-full max-w-lg mx-auto space-y-8 animate-in fade-in-90 slide-in-from-bottom-4 duration-300">
                     <div>
-                        <Label htmlFor="question-count-slider" className="flex justify-between font-bold text-white"><span>Soru Sayısı:</span><span>{settings.questionCount}</span></Label>
+                        <Label htmlFor="question-count-slider" className="flex justify-between text-slate-300"><span>Soru Sayısı:</span><span className="text-white font-bold">{settings.questionCount}</span></Label>
                         <Slider id="question-count-slider" value={[settings.questionCount]} max={20} min={5} step={1} onValueChange={(val) => setSettings(prev => ({...prev, questionCount: val[0]}))} />
                     </div>
-                     <div className="grid grid-cols-2 gap-4">
+                     <div className="grid grid-cols-2 gap-6">
                         <div>
-                            <Label className="font-bold text-white">Zorluk Seviyeleri</Label>
+                            <Label className="text-slate-300">Zorluk Seviyeleri</Label>
                             <div className="space-y-2 mt-2">
                                 {DIFFICULTY_LEVELS.map(level => (
                                     <div key={level} className="flex items-center space-x-2">
-                                        <Checkbox id={`diff-${level}`} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)} className="border-slate-500"/>
+                                        <Checkbox id={`diff-${level}`} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)} className="border-slate-500 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-400"/>
                                         <Label htmlFor={`diff-${level}`} className="font-normal text-slate-300">{level}</Label>
                                     </div>
                                 ))}
                             </div>
                         </div>
                          <div>
-                            <Label className="font-bold text-white">Soru Tipleri</Label>
+                            <Label className="text-slate-300">Soru Tipleri</Label>
                              <div className="space-y-2 mt-2">
                                 {QUESTION_TYPES.map(type => (
                                     <div key={type.id} className="flex items-center space-x-2">
-                                        <Checkbox id={`type-${type.id}`} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)} className="border-slate-500"/>
+                                        <Checkbox id={`type-${type.id}`} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)} className="border-slate-500 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-400"/>
                                         <Label htmlFor={`type-${type.id}`} className="font-normal text-slate-300">{type.name}</Label>
                                     </div>
                                 ))}
@@ -332,16 +332,16 @@ export function SoruCozSetupClientPage() {
                         </div>
                         
                         <div className="space-y-2">
-                            <h3 className="text-xl font-bold text-white">Teste Hazır Mısın?</h3>
-                            <p className="text-slate-400 text-sm">Seçtiğin ayarlarla testin oluşturulacak.</p>
+                            <h3 className="text-xl font-bold text-white">Alıştırmaya Hazır Mısın?</h3>
+                            <p className="text-slate-400 text-sm">Seçtiğin ayarlarla alıştırma oluşturulacak.</p>
                         </div>
 
                         <div className="flex flex-col gap-2 text-sm bg-white/5 p-4 rounded-xl text-left">
-                            <div className="flex justify-between items-center p-2 border-b border-white/5">
+                           <div className="flex justify-between items-center p-2 border-b border-white/5">
                                 <span className="text-slate-400 flex items-center gap-2"><Book className="h-4 w-4"/> Ders</span>
                                 <span className="font-bold text-white">{selection.courseName}</span>
                             </div>
-                            <div className="flex justify-between items-center p-2 border-b border-white/5">
+                             <div className="flex justify-between items-center p-2 border-b border-white/5">
                                 <span className="text-slate-400 flex items-center gap-2"><Library className="h-4 w-4"/> Ünite</span>
                                 <span className="font-bold text-white">{selection.unitName}</span>
                             </div>
@@ -350,7 +350,7 @@ export function SoruCozSetupClientPage() {
                                 <span className="font-bold text-white">{selection.topicName}</span>
                             </div>
                         </div>
-                        
+
                         <Link href={getGameUrl()} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
@@ -366,6 +366,7 @@ export function SoruCozSetupClientPage() {
   return (
     <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-20 font-sans selection:bg-purple-500/30 text-white flex flex-col items-center">
       
+      {/* HEADER */}
       <div className="w-full max-w-2xl flex items-center justify-between mb-8">
           <Link href="/student/activities" className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-colors">
             <ArrowLeft className="h-6 w-6 text-white" />
@@ -380,9 +381,10 @@ export function SoruCozSetupClientPage() {
                   Kurulum Modu
               </div>
           </div>
-          <div className="w-12"></div>
+          <div className="w-12"></div> {/* Spacer for center alignment */}
       </div>
 
+      {/* PROGRESS TRACKER */}
       <div className="w-full max-w-2xl mb-8">
           <div className="relative flex justify-between items-center">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -z-10 rounded-full"></div>
@@ -390,7 +392,6 @@ export function SoruCozSetupClientPage() {
                 className="absolute top-1/2 left-0 h-1 bg-indigo-500 shadow-[0_0_10px_#6366f1] -z-10 rounded-full transition-all duration-500"
                 style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
               ></div>
-
               {steps.map((step) => {
                   const isActive = currentStep >= step.id;
                   const isCurrent = currentStep === step.id;
@@ -417,7 +418,7 @@ export function SoruCozSetupClientPage() {
           </div>
       </div>
 
-      <GlassCard className="w-full max-w-lg min-h-[400px] flex flex-col">
+      <GlassCard className="w-full max-w-xl min-h-[400px] flex flex-col">
           <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/20">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   {steps.find(s => s.id === currentStep)?.name} Seçimi
@@ -426,11 +427,9 @@ export function SoruCozSetupClientPage() {
                   ADIM {currentStep}/{steps.length}
               </div>
           </div>
-
           <div className="flex-grow p-6">
               {renderStepContent()}
           </div>
-
           <div className="p-6 pt-0 mt-auto flex justify-between gap-4">
               {currentStep > 1 ? (
                   <button 
@@ -439,14 +438,7 @@ export function SoruCozSetupClientPage() {
                   >
                       <ArrowLeft className="h-4 w-4" /> Geri
                   </button>
-              ) : (
-                  <div></div>
-              )}
-              
-              <div className="text-xs text-slate-500 flex items-center italic">
-                 {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
-                 {currentStep === 2 && !selection.unitId && "Bir ünite seçin"}
-              </div>
+              ) : ( <div></div> )}
           </div>
       </GlassCard>
     </div>
