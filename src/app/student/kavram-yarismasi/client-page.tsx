@@ -1,20 +1,18 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { 
-    ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Gamepad2, Star, ChevronRight, BrainCircuit
+import { useState, useEffect, useCallback } from "react";
+import {
+    ArrowLeft, ArrowRight, Check, Book, Library, ListTodo,
+    PartyPopper, Gamepad2, Star, ChevronRight, BrainCircuit, BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from 'next/link';
 import { useAuth } from "@/context/auth-context";
-import { collection, query, getDocs, orderBy } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, Unit, Topic, SchoolClass, UserProfile } from "@/lib/types";
 
-
-// --- UI COMPONENTS ---
+// --- UI COMPONENTS (as provided in the example) ---
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -27,13 +25,13 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 const GameButton = ({ children, onClick, active, disabled, className }: any) => (
-    <button 
+    <button
         onClick={onClick}
         disabled={disabled}
         className={cn(
             "relative w-full group overflow-hidden rounded-2xl p-4 transition-all duration-200 border-b-[4px] active:border-b-0 active:translate-y-[4px]",
-            active 
-                ? "bg-indigo-600 border-indigo-800 text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-[1.02]" 
+            active
+                ? "bg-indigo-600 border-indigo-800 text-white shadow-[0_0_20px_rgba(79,70,229,0.5)] scale-[1.02]"
                 : "bg-slate-800 border-slate-950 text-slate-300 hover:bg-slate-700",
             disabled && "opacity-50 cursor-not-allowed filter grayscale",
             className
@@ -59,8 +57,8 @@ const steps = [
 export function KavramYarismaSetupClientPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   // Selection State
   const [selection, setSelection] = useState({
     courseId: "",
@@ -78,55 +76,61 @@ export function KavramYarismaSetupClientPage() {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      if (!user) {
-        setIsLoading(false);
-        return;
-      }
-      setIsLoading(true);
-      try {
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) {
-                finalCourses = studentVisibleCourses.filter(course =>
-                    course.classId === studentClassId || !course.classId
-                );
-            } else {
-                finalCourses = studentVisibleCourses.filter(course => !course.classId);
-            }
+        if (!user) {
+            setIsLoading(true);
+            return;
         }
-        setCourses(finalCourses);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setIsLoading(false);
-      }
+        setIsLoading(true);
+        try {
+            const studentClassName = user.class?.split(' - ')[0];
+
+            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+            const classesSnapshot = await getDocs(classesQuery);
+            const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+            
+            const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+            const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+            let finalCourses: Course[] = [];
+
+            if (user.role === 'teacher' || user.role === 'superadmin') {
+                finalCourses = allCourses.map(course => {
+                    const courseClass = allClasses.find(c => c.id === course.classId);
+                    return {
+                        ...course,
+                        className: courseClass?.name ? `${courseClass.name}. Sınıf` : 'Genel'
+                    };
+                });
+            } else {
+                const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+                const studentClassId = studentClass?.id;
+                
+                if (studentClassId) {
+                    finalCourses = studentVisibleCourses.filter(course =>
+                        course.classId === studentClassId || !course.classId
+                    ).map(course => ({
+                        ...course,
+                        className: course.classId ? `${allClasses.find(c => c.id === course.classId)?.name}. Sınıf` : 'Genel'
+                    }));
+                } else {
+                    finalCourses = studentVisibleCourses.filter(course => !course.classId).map(course => ({
+                        ...course,
+                        className: 'Genel'
+                    }));
+                }
+            }
+            setCourses(finalCourses);
+        } catch (error) {
+            console.error("Error fetching filtered courses:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
     fetchCourses();
   }, [user]);
 
-  const handleSelectCourse = async (id: string, name: string) => {
+  const handleSelectCourse = useCallback(async (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
     const unitsRef = collection(db, `courses/${id}/units`);
@@ -135,12 +139,12 @@ export function KavramYarismaSetupClientPage() {
     setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
     setIsLoading(false);
     setCurrentStep(2);
-  };
+  }, [selection]);
 
-  const handleSelectUnit = async (id: string, name: string) => {
+  const handleSelectUnit = useCallback(async (id: string, name: string) => {
     setSelection({ ...selection, unitId: id, unitName: name, topicId: '', topicName: '' });
     if (id === 'all') {
-        setSelection(prev => ({ ...prev, unitId: id, unitName: name, topicId: 'all', topicName: 'Tüm Konular' }));
+        setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
         setCurrentStep(4);
     } else {
         setIsLoading(true);
@@ -151,7 +155,7 @@ export function KavramYarismaSetupClientPage() {
         setIsLoading(false);
         setCurrentStep(3);
     }
-  };
+  }, [selection]);
   
   const handleSelectTopic = (id: string, name: string) => {
     setSelection({ ...selection, topicId: id, topicName: name });
@@ -161,20 +165,7 @@ export function KavramYarismaSetupClientPage() {
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
-  
-  const getGameUrl = () => {
-    const params = new URLSearchParams({
-      courseId: selection.courseId,
-      courseName: selection.courseName,
-      unitId: selection.unitId,
-      unitName: selection.unitName,
-      topicId: selection.topicId,
-      topicName: selection.topicName,
-    });
-    return `/student/kavram-yarismasi/oyun?${params.toString()}`;
-  }
 
-  // Render Content Based on Step
   const renderStepContent = () => {
       if (isLoading) {
           return (
@@ -186,7 +177,7 @@ export function KavramYarismaSetupClientPage() {
       }
 
       switch(currentStep) {
-          case 1: // COURSE SELECTION
+          case 1:
             return (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
                     {courses.map((course) => (
@@ -209,7 +200,7 @@ export function KavramYarismaSetupClientPage() {
                     ))}
                 </div>
             );
-          case 2: // UNIT SELECTION
+          case 2:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
                     {units.map((unit) => (
@@ -225,20 +216,9 @@ export function KavramYarismaSetupClientPage() {
                             <ChevronRight className="h-5 w-5 text-white/20" />
                         </GameButton>
                     ))}
-                     <GameButton 
-                        onClick={() => handleSelectUnit('all', 'Tüm Üniteler (Karışık)')}
-                        active={selection.unitId === 'all'}
-                        className={'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40'}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
-                            <span className="font-semibold text-amber-100">Tüm Üniteler (Karışık)</span>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-white/20" />
-                    </GameButton>
                 </div>
             );
-          case 3: // TOPIC SELECTION
+          case 3:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
                     {topics.map((topic) => (
@@ -254,20 +234,9 @@ export function KavramYarismaSetupClientPage() {
                             {selection.topicId === topic.id ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
                         </GameButton>
                     ))}
-                    <GameButton 
-                        onClick={() => handleSelectTopic('all', 'Tüm Konular (Karışık)')}
-                        active={selection.topicId === 'all'}
-                        className={'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40'}
-                    >
-                        <div className="flex items-center gap-3">
-                            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
-                            <span className="font-semibold text-amber-100">Tüm Konular (Karışık)</span>
-                        </div>
-                         {selection.topicId === 'all' ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
-                    </GameButton>
                 </div>
             );
-          case 4: // CONFIRMATION
+          case 4:
             return (
                 <div className="animate-in zoom-in-95 duration-300">
                     <div className="bg-black/30 rounded-2xl p-6 border border-white/10 text-center space-y-6">
@@ -295,7 +264,7 @@ export function KavramYarismaSetupClientPage() {
                             </div>
                         </div>
 
-                        <Link href={getGameUrl()} className="block w-full">
+                        <Link href={`/student/kavram-yarismasi/oyun?courseId=${selection.courseId}&unitId=${selection.unitId}&topicId=${selection.topicId}&courseName=${selection.courseName}&unitName=${selection.unitName}&topicName=${selection.topicName}`} className="block w-full">
                             <button className="w-full py-4 bg-green-600 hover:bg-green-500 text-white font-black text-lg uppercase tracking-widest rounded-xl shadow-lg shadow-green-900/20 border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center gap-2 group">
                                 <PartyPopper className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                                 Oyunu Başlat
@@ -309,35 +278,30 @@ export function KavramYarismaSetupClientPage() {
 
   return (
     <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-20 font-sans selection:bg-purple-500/30 text-white flex flex-col items-center">
-      
-      {/* HEADER */}
       <div className="w-full max-w-2xl flex items-center justify-between mb-8">
-          <Link href="/student/activities" className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-colors">
+          <a href="/student/activities" className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-colors">
             <ArrowLeft className="h-6 w-6 text-white" />
-          </Link>
+          </a>
           <div className="text-center">
               <h1 className="text-2xl font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-indigo-200 flex items-center gap-2 justify-center">
-                  <BrainCircuit className="h-6 w-6 text-pink-400 mb-1" />
+                  <BrainCircuit className="h-6 w-6 text-indigo-400 mb-1" />
                   Kavram Yarışması
               </h1>
               <div className="flex items-center gap-1 justify-center text-xs font-bold text-indigo-300/60 mt-1">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  Setup Modu
+                  Kurulum Modu
               </div>
           </div>
-          <div className="w-12"></div> {/* Spacer for center alignment */}
+          <div className="w-12"></div>
       </div>
 
-      {/* PROGRESS TRACKER */}
       <div className="w-full max-w-2xl mb-8">
           <div className="relative flex justify-between items-center">
-              {/* Connection Line */}
               <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -z-10 rounded-full"></div>
               <div 
                 className="absolute top-1/2 left-0 h-1 bg-indigo-500 shadow-[0_0_10px_#6366f1] -z-10 rounded-full transition-all duration-500"
                 style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
               ></div>
-
               {steps.map((step) => {
                   const isActive = currentStep >= step.id;
                   const isCurrent = currentStep === step.id;
@@ -364,9 +328,7 @@ export function KavramYarismaSetupClientPage() {
           </div>
       </div>
 
-      {/* MAIN CONTENT CARD */}
       <GlassCard className="w-full max-w-lg min-h-[400px] flex flex-col">
-          {/* Card Header */}
           <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/20">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   {steps.find(s => s.id === currentStep)?.name} Seçimi
@@ -375,13 +337,9 @@ export function KavramYarismaSetupClientPage() {
                   ADIM {currentStep}/4
               </div>
           </div>
-
-          {/* Card Content Area */}
           <div className="flex-grow p-6">
               {renderStepContent()}
           </div>
-
-          {/* Navigation Footer */}
           {currentStep < 4 && (
               <div className="p-6 pt-0 mt-auto flex justify-between gap-4">
                   {currentStep > 1 ? (
@@ -394,7 +352,6 @@ export function KavramYarismaSetupClientPage() {
                   ) : (
                       <div></div>
                   )}
-                  
                   <div className="text-xs text-slate-500 flex items-center italic">
                      {currentStep === 1 && !selection.courseId && "Devam etmek için bir ders seçin"}
                      {currentStep === 2 && !selection.unitId && "Bir ünite seçin"}
@@ -402,7 +359,8 @@ export function KavramYarismaSetupClientPage() {
               </div>
           )}
       </GlassCard>
-
     </div>
   );
 }
+
+    
