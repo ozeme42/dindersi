@@ -1,42 +1,25 @@
+'use client';
 
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, type ReactNode, useCallback } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, Home, User
+    Loader2, Home, User, Globe, School
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from '@/components/user-avatar';
-import { Skeleton } from "@/components/ui/skeleton";
-import type { UserProfile } from "@/lib/types";
+import { Skeleton } from '@/components/ui/skeleton';
+import { getLiveLeaderboard } from '@/app/leaderboard/actions';
+import { getStudentExams } from '@/app/student/deneme/actions';
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import { Progress } from "@/components/ui/progress";
 
-// --- MOCK DATA ---
-
-const MOCK_LEADERBOARD = [
-    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
-    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
-    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
-];
-
-const MOCK_STATS = {
-    score: 15450,
-    completedTopics: 12,
-    totalTopics: 20,
-    questionBankProgress: 65, 
-    generalRank: 42,
-    classRank: 5,
-    branchRank: 3,
-};
-
-const MOCK_EXAM_STATS = {
-    pending: 2,
-    solved: 8
-};
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -91,15 +74,15 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 // --- COMPONENTS ---
 
 function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<any[]>([]);
+    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setDailyTop(MOCK_LEADERBOARD);
+        getLiveLeaderboard().then(data => {
+            setDailyTop(data.slice(0, 3));
+        }).finally(() => {
             setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+        });
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -150,19 +133,111 @@ function HardestWorkersToday() {
 }
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState(MOCK_STATS);
-  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
+    const { user, loading: authLoading } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
+    
+    const [stats, setStats] = useState({
+        score: 0,
+        completedTopics: 0,
+        totalTopics: 0,
+        questionBankProgress: 0,
+        generalRank: 0,
+        classRank: 0,
+        branchRank: 0,
+    });
+    
+    const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-        setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchData = useCallback(async () => {
+        if (!user?.uid || authLoading) return;
+        
+        setIsLoading(true);
+        try {
+            const [allUsersSnapshot, examsResult] = await Promise.all([
+                getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+                getStudentExams(user.uid)
+            ]);
+
+            // Exam Stats
+            if (examsResult.success && examsResult.data) {
+                setExamStats({
+                    pending: examsResult.data.filter(a => !a.solvedEvent).length,
+                    solved: examsResult.data.filter(a => !!a.solvedEvent).length
+                });
+            }
+
+            // Leaderboard Ranks
+            const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+            const sortedAll = [...allStudents].sort((a, b) => (b.score || 0) - (a.score || 0));
+            const generalRank = sortedAll.findIndex(s => s.uid === user.uid) + 1;
+            
+            let classRank = 0;
+            let branchRank = 0;
+            if(user.class) {
+                const gradeName = user.class.split(' - ')[0];
+                const branchName = user.class;
+                const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+                const studentsInBranch = allStudents.filter(s => s.class === branchName);
+                classRank = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+                branchRank = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            }
+
+            // Progress Stats
+            const [classesSnap, coursesSnap] = await Promise.all([
+                getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
+                getDocs(query(collection(db, 'courses'), where('isTeacherOnly', '!=', true))),
+            ]);
+            const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+            const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+            
+            const studentClassName = user.class?.split(' - ')[0];
+            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+
+            const applicableCourses = studentClass 
+                ? allCourses.filter(c => c.classId === studentClass.id || !c.classId)
+                : allCourses.filter(c => !c.classId);
+
+            let totalTopics = 0, completedTopics = 0, passedTests = 0, totalTests = 0;
+
+            for (const course of applicableCourses) {
+                 const unitsSnap = await getDocs(collection(db, 'courses', course.id, 'units'));
+                 for (const unitDoc of unitsSnap.docs) {
+                     const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                     totalTopics += topicsSnap.data().count;
+                 }
+
+                const progressSnap = await getDoc(doc(db, 'users', user.uid, 'progress', course.id));
+                if (progressSnap.exists()) {
+                    completedTopics += (progressSnap.data().completedTopics || []).length;
+                }
+                
+                const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
+                passedTests += qbStats.passedTests;
+                totalTests += qbStats.totalTests;
+            }
+            
+            setStats({
+                score: user.score || 0,
+                completedTopics,
+                totalTopics,
+                questionBankProgress: totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0,
+                generalRank,
+                classRank,
+                branchRank,
+            });
+
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [user, authLoading]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
   
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
