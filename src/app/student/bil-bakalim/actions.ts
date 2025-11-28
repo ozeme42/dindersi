@@ -2,63 +2,76 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import type { ActivityItem, Question } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
 
-
-export type TermData = {
-    id: string;
-    term: string;
-    definition: string;
-};
-
-
-// Simple array shuffle function
-const shuffleArray = <T>(array: T[]): T[] => {
+const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
     return newArray;
-}
+};
 
-export async function getBilBakalimAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ data: TermData[]; error?: string }> {
+export type TermData = {
+    id: string;
+    term: string;       // Kavram (Cevap)
+    definition: string; // Tanım (Soru)
+};
+
+
+export async function getBilBakalimAction({ courseId, unitId, topicId }: {
+    courseId?: string;
+    unitId?: string;
+    topicId?: string;
+}): Promise<{ data: TermData[]; allTerms: string[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'));
-
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
-        }
-
-        const definitionsQuery = query(baseQuery, where('type', '==', 'definition'));
-        const definitionsSnapshot = await getDocs(definitionsQuery);
+        let baseQuery;
         
-        const allDefinitions: TermData[] = definitionsSnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem))
-            .filter(item => item.content?.term && item.content?.definition)
-            .map(item => ({
-                id: item.id,
-                term: item.content.term!,
-                definition: item.content.definition!
-            }));
+        if (topicId && topicId !== 'all') {
+            baseQuery = query(collection(db, 'activityItems'), where('topicId', '==', topicId));
+        } else if (unitId && unitId !== 'all') {
+            baseQuery = query(collection(db, 'activityItems'), where('unitId', '==', unitId));
+        } else if (courseId && courseId !== 'all') {
+            baseQuery = query(collection(db, 'activityItems'), where('courseId', '==', courseId));
+        } else {
+            return { data: [], allTerms: [], error: 'Lütfen bir ders, ünite veya konu seçin.' };
+        }
+        
+        const snapshot = await getDocs(baseQuery);
+        
+        const definitions: TermData[] = [];
+        const concepts = new Set<string>();
 
-        if (allDefinitions.length < 4) {
-            return { error: "Bil Bakalım için bu konuda en az 4 uygun tanım bulunamadı.", data: [] };
+        snapshot.docs.forEach(doc => {
+            const item = doc.data() as ActivityItem;
+            if (item.type === 'definition' && item.content.term && item.content.definition) {
+                definitions.push({
+                    id: doc.id,
+                    term: item.content.term,
+                    definition: item.content.definition,
+                });
+                concepts.add(item.content.term); // Also add the term to the concept pool
+            } else if (item.type === 'concept' && item.content.text) {
+                concepts.add(item.content.text);
+            }
+        });
+
+        if (definitions.length === 0) {
+            return { data: [], allTerms: [], error: 'Bu konu için uygun tanım bulunamadı.' };
         }
 
-        return { data: JSON.parse(JSON.stringify(shuffleArray(allDefinitions))) };
+        return { 
+            data: JSON.parse(JSON.stringify(definitions)),
+            allTerms: Array.from(concepts)
+        };
+
     } catch (error: any) {
-        console.error("Error getting Bil Bakalım questions:", error);
-        return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", data: [] };
+        console.error("Error getting Bil Bakalım data:", error);
+        return { data: [], allTerms: [], error: 'Oyun verileri alınırken bir hata oluştu.' };
     }
 }
 
