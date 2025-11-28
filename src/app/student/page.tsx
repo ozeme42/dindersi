@@ -1,27 +1,28 @@
 'use client';
 
-import React, { useState, useEffect, type ReactNode, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, Home, User, Globe, School
+    Loader2, Home, User, School, Globe
 } from 'lucide-react';
-import { cn } from "@/lib/utils";
 import Link from 'next/link';
-import { useAuth } from '@/context/auth-context';
-import { UserAvatar } from '@/components/user-avatar';
-import { Skeleton } from '@/components/ui/skeleton';
-import { getLiveLeaderboard } from '@/app/leaderboard/actions';
-import { getStudentExams } from '@/app/student/deneme/actions';
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import { useAuth } from "@/context/auth-context";
+import { UserAvatar } from "@/components/user-avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getStudentExams } from "@/app/student/deneme/actions";
+import { db } from "@/lib/firebase";
+import { collection, query, where, getDocs, orderBy, getDoc, doc } from 'firebase/firestore';
+import type { Course, SchoolClass, UserProfile, UserProgress } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
-
-// --- GAMIFIED UI COMPONENTS ---
 
 const GameButton = ({ 
     children, 
@@ -71,8 +72,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 
-// --- COMPONENTS ---
-
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -112,7 +111,7 @@ function HardestWorkersToday() {
                                     <div className="h-8 w-8 flex items-center justify-center bg-black/20 rounded-lg">
                                         {rankIcons[index]}
                                     </div>
-                                    <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20 text-slate-700"/>
+                                    <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20"/>
                                     <div>
                                         <p className="font-bold text-white text-sm">{student.displayName}</p>
                                         <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
@@ -133,111 +132,120 @@ function HardestWorkersToday() {
 }
 
 export default function StudentDashboard() {
-    const { user, loading: authLoading } = useAuth();
-    const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({
+      score: 0,
+      completedTopics: 0,
+      totalTopics: 0,
+      questionBankProgress: 0, 
+      generalRank: 0,
+      classRank: 0,
+      branchRank: 0,
+  });
+  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
+
+  const fetchData = useCallback(async () => {
+    if (!user?.uid) {
+        setIsLoading(false);
+        return;
+    };
     
-    const [stats, setStats] = useState({
-        score: 0,
-        completedTopics: 0,
-        totalTopics: 0,
-        questionBankProgress: 0,
-        generalRank: 0,
-        classRank: 0,
-        branchRank: 0,
-    });
-    
-    const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+    try {
+      let completedTopicsTotal = 0;
+      let grandTotalTopics = 0;
+      const studentClassName = user.class?.split(' - ')[0];
 
-    const fetchData = useCallback(async () => {
-        if (!user?.uid || authLoading) return;
-        
-        setIsLoading(true);
-        try {
-            const [allUsersSnapshot, examsResult] = await Promise.all([
-                getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-                getStudentExams(user.uid)
-            ]);
+      const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+        getDocs(collection(db, "courses")),
+        getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+        getStudentExams(user.uid),
+      ]);
 
-            // Exam Stats
-            if (examsResult.success && examsResult.data) {
-                setExamStats({
-                    pending: examsResult.data.filter(a => !a.solvedEvent).length,
-                    solved: examsResult.data.filter(a => !!a.solvedEvent).length
-                });
-            }
+      if (examsSnapshot.success && examsSnapshot.data) {
+          setExamStats({
+              pending: examsSnapshot.data.filter(a => !a.solvedEvent).length,
+              solved: examsSnapshot.data.filter(a => a.solvedEvent).length
+          });
+      }
 
-            // Leaderboard Ranks
-            const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-            const sortedAll = [...allStudents].sort((a, b) => (b.score || 0) - (a.score || 0));
-            const generalRank = sortedAll.findIndex(s => s.uid === user.uid) + 1;
-            
-            let classRank = 0;
-            let branchRank = 0;
-            if(user.class) {
-                const gradeName = user.class.split(' - ')[0];
-                const branchName = user.class;
-                const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-                const studentsInBranch = allStudents.filter(s => s.class === branchName);
-                classRank = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
-                branchRank = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
-            }
+      const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+      const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+      const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
-            // Progress Stats
-            const [classesSnap, coursesSnap] = await Promise.all([
-                getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
-                getDocs(query(collection(db, 'courses'), where('isTeacherOnly', '!=', true))),
-            ]);
-            const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-            const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-            
-            const studentClassName = user.class?.split(' - ')[0];
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+      let classRank = 0;
+      let branchRank = 0;
+      if(user.class) {
+          const gradeName = user.class.split(' - ')[0];
+          const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+          classRank = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+          
+          const studentsInBranch = allStudents.filter(s => s.class === user.class);
+          branchRank = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+      }
 
-            const applicableCourses = studentClass 
-                ? allCourses.filter(c => c.classId === studentClass.id || !c.classId)
-                : allCourses.filter(c => !c.classId);
-
-            let totalTopics = 0, completedTopics = 0, passedTests = 0, totalTests = 0;
-
-            for (const course of applicableCourses) {
-                 const unitsSnap = await getDocs(collection(db, 'courses', course.id, 'units'));
-                 for (const unitDoc of unitsSnap.docs) {
-                     const topicsSnap = await getCountFromServer(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-                     totalTopics += topicsSnap.data().count;
-                 }
-
-                const progressSnap = await getDoc(doc(db, 'users', user.uid, 'progress', course.id));
-                if (progressSnap.exists()) {
-                    completedTopics += (progressSnap.data().completedTopics || []).length;
-                }
-                
-                const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
-                passedTests += qbStats.passedTests;
-                totalTests += qbStats.totalTests;
-            }
-            
-            setStats({
-                score: user.score || 0,
-                completedTopics,
-                totalTopics,
-                questionBankProgress: totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0,
-                generalRank,
-                classRank,
-                branchRank,
-            });
-
-        } catch (error) {
-            console.error("Error fetching dashboard data:", error);
-        } finally {
-            setIsLoading(false);
+      const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+      const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+      const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+      const studentClassId = studentClass?.id;
+      
+      const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+      const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+      
+      let filteredCourses: Course[] = [];
+       if (studentClassId) {
+            const isFirstClass = studentClassId === firstClassId;
+            filteredCourses = studentVisibleCourses.filter(course =>
+                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
+            );
+        } else {
+            filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
         }
-    }, [user, authLoading]);
+      
+      let totalQuestionBankPassedTests = 0;
+      let totalQuestionBankTests = 0;
 
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+      for (const course of filteredCourses) {
+        const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+        const qbStats = getCourseQuestionBankStats(course.id, user.uid);
+        
+        const [progressSnap, questionBankStats] = await Promise.all([ getDoc(progressRef), qbStats ]);
+
+        completedTopicsTotal += (progressSnap.data()?.completedTopics || []).length;
+        
+        const unitsSnap = await getDocs(collection(db, 'courses', course.id, 'units'));
+        let totalTopics = 0;
+        for (const unitDoc of unitsSnap.docs) {
+          const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+          totalTopics += topicsSnap.size;
+        }
+        grandTotalTopics += totalTopics;
+
+        totalQuestionBankPassedTests += questionBankStats.passedTests;
+        totalQuestionBankTests += questionBankStats.totalTests;
+      }
+
+      setStats({
+          score: user.score || 0,
+          completedTopics: completedTopicsTotal,
+          totalTopics: grandTotalTopics,
+          questionBankProgress: totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0,
+          generalRank, classRank, branchRank,
+      });
+
+    } catch (error) {
+      console.error("Error fetching student dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   
-  if (authLoading || isLoading) {
+  if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -251,14 +259,13 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
-          {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
+                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055]"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -283,7 +290,6 @@ export default function StudentDashboard() {
               </div>
           </GlassCard>
           
-          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <Link href="/student/soru-bankasi" className="group h-full">
@@ -353,7 +359,6 @@ export default function StudentDashboard() {
             </Link>
           </div>
 
-          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
@@ -367,7 +372,6 @@ export default function StudentDashboard() {
                 </GameButton>
           </div>
           
-           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
@@ -391,6 +395,7 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
+      
     </div>
   );
 }
