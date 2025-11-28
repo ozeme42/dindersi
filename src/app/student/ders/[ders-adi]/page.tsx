@@ -292,7 +292,7 @@ function CoursePageContent() {
     
     return (
         <>
-        <div className={cn("md:flex", isFullscreen ? "h-screen" : "h-[calc(100vh-theme(height.16))]")}>
+        <div className={cn("md:flex", isFullscreen ? "h-screen" : "min-h-[calc(100vh-theme(height.16))]")}>
             <div className={cn(
                 "h-full w-full md:w-80", 
                 view === 'content' ? 'hidden md:block' : 'block',
@@ -344,6 +344,7 @@ function CoursePageContent() {
                         progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
                         onProgressUpdate={onProgressUpdate}
                         isFullscreen={isFullscreen}
+                        user={user}
                     />
                 </div>
             </main>
