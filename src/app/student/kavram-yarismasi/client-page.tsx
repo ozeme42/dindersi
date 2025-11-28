@@ -148,11 +148,11 @@ export function KavramYarismaSetupClientPage() {
   const renderContent = () => {
       switch(currentStep) {
           case 1:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={(id, name) => handleSelectCourse(id, name)} isLoading={isLoading} subtitleKey="className"/>;
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} isLoading={isLoading} subtitleKey="className"/>;
           case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={(id, name) => handleSelectUnit(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} isLoading={isLoading}/>;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} isLoading={isLoading}/>;
           case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={(id, name) => handleSelectTopic(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} isLoading={isLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} isLoading={isLoading}/>;
           case 4:
             return (
               <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
@@ -222,7 +222,7 @@ export function KavramYarismaSetupClientPage() {
             ) : (
               <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
                 <Link href={getGameUrl()}>
-                    <PartyPopper className="mr-2 h-4 w-4" /> Oyunu Başlat
+                    <PartyPopper className="mr-2 h-4 w-4" /> Yarışmayı Başlat
                 </Link>
               </Button>
             )}
