@@ -1,22 +1,33 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   PlusCircle,
   Loader2,
   Trash2,
+  FilePenLine,
   Image as ImageIcon,
-  AlertTriangle,
+  Upload,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,114 +39,200 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
-import { getImages, addImageRecord, deleteImage } from "./actions";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { getImages, addOrUpdateImage, deleteImage } from "./actions";
 import type { ImageAsset } from "@/lib/types";
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { formatDistanceToNow } from "date-fns";
+import { tr } from 'date-fns/locale';
+import Image from "next/image";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+function ImageEditorDialog({
+  isOpen,
+  onOpenChange,
+  image,
+  onSave,
+  isSaving,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  image: Partial<ImageAsset> | null;
+  onSave: (data: Partial<ImageAsset>) => void;
+  isSaving: boolean;
+}) {
+  const [formData, setFormData] = useState<Partial<ImageAsset>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
 
-function ErrorWithLink({ message }: { message: string }) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    // Split the message by the URL regex. The URL itself will be in the captured groups.
-    const parts = message.split(urlRegex);
+  useEffect(() => {
+    setFormData(image || { title: "", description: "", imageUrl: "" });
+    setImageFile(null);
+  }, [image, isOpen]);
 
-    return (
-        <Alert variant="destructive" className="whitespace-pre-wrap">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>İndeks Gerekli!</AlertTitle>
-            <div className="text-sm">
-                {parts.map((part, index) =>
-                    urlRegex.test(part) ? (
-                        <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">
-                            {part}
-                        </a>
-                    ) : (
-                        <span key={index}>{part}</span>
-                    )
-                )}
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = async (): Promise<string | null> => {
+    if (!imageFile || !user) return null;
+    setIsUploading(true);
+    try {
+        const storage = getStorage();
+        const filePath = `images/${user.uid}/${Date.now()}-${imageFile.name}`;
+        const storageRef = ref(storage, filePath);
+        const snapshot = await uploadBytes(storageRef, imageFile);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        setIsUploading(false);
+        return downloadURL;
+    } catch(error) {
+        console.error("Upload failed", error);
+        toast({title: "Yükleme Hatası", description: "Görsel yüklenirken bir hata oluştu.", variant: "destructive"});
+        setIsUploading(false);
+        return null;
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let finalImageUrl = formData.imageUrl;
+    if (imageFile) {
+        const uploadedUrl = await handleUpload();
+        if (!uploadedUrl) return; // Stop if upload failed
+        finalImageUrl = uploadedUrl;
+    }
+
+    if (!finalImageUrl) {
+        toast({title: "Hata", description: "Lütfen bir görsel yükleyin veya bir URL girin.", variant: "destructive"});
+        return;
+    }
+
+    onSave({ ...formData, imageUrl: finalImageUrl });
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <form onSubmit={handleSubmit}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {image?.id ? "Görseli Düzenle" : "Yeni Görsel Ekle"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="image-title">Başlık</Label>
+              <Input
+                id="image-title"
+                value={formData.title || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                required
+              />
             </div>
-        </Alert>
-    );
+             <div className="space-y-2">
+                <Label htmlFor="image-file">Görsel Yükle</Label>
+                <Input id="image-file" type="file" onChange={handleFileChange} accept="image/*"/>
+                 {imageFile && <p className="text-xs text-muted-foreground">Seçildi: {imageFile.name}</p>}
+             </div>
+             <div className="text-center text-xs text-muted-foreground">VEYA</div>
+            <div className="space-y-2">
+              <Label htmlFor="image-url">Görsel URL</Label>
+              <Input
+                id="image-url"
+                value={formData.imageUrl || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, imageUrl: e.target.value })
+                }
+                placeholder="https://..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="image-description">Açıklama (İsteğe Bağlı)</Label>
+              <Textarea
+                id="image-description"
+                value={formData.description || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="ghost">
+                İptal
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={isSaving || isUploading}>
+              {(isSaving || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isUploading ? 'Yükleniyor...' : 'Kaydet'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
+  );
 }
 
 
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const fetchImages = useCallback(async () => {
     if (!user) return;
     setIsLoading(true);
-    setError(null);
     const result = await getImages(user.uid);
     if (result.success) {
       setImages(result.data || []);
     } else {
-      setError(result.error || "Görseller alınamadı.");
+      toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
     setIsLoading(false);
-  }, [user]);
+  }, [user, toast]);
 
   useEffect(() => {
     fetchImages();
   }, [fetchImages]);
 
-  const handleFileSelect = () => {
-    fileInputRef.current?.click();
+  const handleOpenDialog = (image: Partial<ImageAsset> | null = null) => {
+    setEditingImage(image);
+    setIsEditorOpen(true);
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!user || !event.target.files || event.target.files.length === 0) return;
-    const file = event.target.files[0];
-    setIsUploading(true);
-
-    try {
-      const storage = getStorage();
-      const storageRef = ref(storage, `images/${user.uid}/${Date.now()}-${file.name}`);
-      
-      const snapshot = await uploadBytes(storageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-
-      const recordResult = await addImageRecord({
-        teacherId: user.uid,
-        url: downloadURL,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-      });
-
-      if (recordResult.success) {
-        toast({ title: "Başarılı", description: "Görsel yüklendi ve kaydedildi." });
-        await fetchImages(); // Refresh the list
-      } else {
-        throw new Error(recordResult.error);
-      }
-    } catch (e: any) {
-      console.error("Upload error:", e);
-      toast({
-        title: "Yükleme Hatası",
-        description: e.message || "Görsel yüklenirken bir sorun oluştu.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
-      // Reset file input
-      if(fileInputRef.current) fileInputRef.current.value = "";
+  const handleSaveImage = async (data: Partial<ImageAsset>) => {
+    if (!user) return;
+    setIsSaving(true);
+    const result = await addOrUpdateImage({ ...data, teacherId: user.uid });
+    if (result.success) {
+      toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+      fetchImages();
+      setIsEditorOpen(false);
+    } else {
+      toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
+    setIsSaving(false);
   };
 
-  const handleDeleteImage = async (image: ImageAsset) => {
-    const result = await deleteImage(image);
+  const handleDeleteImage = async (imageId: string) => {
+    const result = await deleteImage(imageId);
     if (result.success) {
       toast({ title: "Başarılı", description: "Görsel silindi." });
-      fetchImages(); // Refresh the list
+      fetchImages();
     } else {
       toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
@@ -152,19 +249,11 @@ export default function ImageLibraryPage() {
                 Görsel Kütüphanesi
               </CardTitle>
               <CardDescription>
-                Ders içeriklerinde kullanmak üzere görsellerinizi yükleyin ve yönetin.
+                Derslerde kullanmak üzere görsellerinizi ekleyin ve yönetin.
               </CardDescription>
             </div>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              className="hidden"
-              accept="image/*"
-            />
-            <Button onClick={handleFileSelect} disabled={isUploading}>
-              {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <PlusCircle className="mr-2 h-4 w-4" />}
-              {isUploading ? 'Yükleniyor...' : 'Yeni Görsel Yükle'}
+            <Button onClick={() => handleOpenDialog()}>
+              <PlusCircle className="mr-2 h-4 w-4" /> Yeni Görsel Yükle
             </Button>
           </div>
         </CardHeader>
@@ -173,51 +262,69 @@ export default function ImageLibraryPage() {
             <div className="flex justify-center p-8">
               <Loader2 className="h-8 w-8 animate-spin" />
             </div>
-          ) : error ? (
-            <ErrorWithLink message={error} />
           ) : images.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground border-2 border-dashed rounded-lg">
                 <ImageIcon className="mx-auto h-12 w-12"/>
-                <h3 className="mt-4 text-lg font-semibold">Henüz görsel eklenmemiş.</h3>
+                <h3 className="mt-4 text-lg font-semibold">Henüz görsel yüklenmemiş.</h3>
                 <p className="mt-1 text-sm">"Yeni Görsel Yükle" butonuna tıklayarak başlayın.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {images.map((image) => (
-                <Card key={image.id} className="group relative overflow-hidden">
-                  <img
-                    src={image.url}
-                    alt={image.name}
-                    className="aspect-square w-full object-cover transition-transform group-hover:scale-110"
-                    data-ai-hint="library image"
-                  />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-2">
-                     <AlertDialog>
+                <Card key={image.id} className="flex flex-col">
+                    <div className="w-full aspect-video relative">
+                         <Image src={image.imageUrl} alt={image.title} fill className="object-cover rounded-t-lg" />
+                    </div>
+                  <CardHeader className="pt-4 pb-2">
+                    <CardTitle className="line-clamp-2 text-base">{image.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p className="text-xs text-muted-foreground line-clamp-3">
+                      {image.description}
+                    </p>
+                  </CardContent>
+                  <CardFooter className="flex justify-end gap-2 p-3 bg-muted/50 border-t">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleOpenDialog(image)}
+                    >
+                      <FilePenLine className="mr-2 h-4 w-4" />
+                      Düzenle
+                    </Button>
+                    <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" size="icon">
-                                <Trash2 className="h-4 w-4" />
+                            <Button variant="destructive-outline" size="sm">
+                                <Trash2 className="mr-2 h-4 w-4" /> Sil
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Bu görsel kalıcı olarak silinecektir. Bu işlem geri alınamaz.
+                                    "{image.title}" başlıklı görseli silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>İptal</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteImage(image)}>Evet, Sil</AlertDialogAction>
+                                <AlertDialogAction onClick={() => handleDeleteImage(image.id)}>Evet, Sil</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-                  </div>
+                  </CardFooter>
                 </Card>
               ))}
             </div>
           )}
         </CardContent>
       </Card>
+      <ImageEditorDialog
+        isOpen={isEditorOpen}
+        onOpenChange={setIsEditorOpen}
+        image={editingImage}
+        onSave={handleSaveImage}
+        isSaving={isSaving}
+      />
     </div>
   );
 }

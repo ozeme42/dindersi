@@ -32,15 +32,6 @@
       ]
     },
     {
-      "collectionGroup": "scoreEvents",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "gameType", "order": "ASCENDING" },
-        { "fieldPath": "context", "order": "ASCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "assignments",
       "queryScope": "COLLECTION",
       "fields": [
@@ -53,7 +44,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "assignedTo", "arrayConfig": "CONTAINS" },
-        { "fieldPath": "assignmentType", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     },
@@ -61,11 +51,11 @@
       "collectionGroup": "imageLibrary",
       "queryScope": "COLLECTION",
       "fields": [
+        { "fieldPath": "teacherId", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     }
   ],
   "fieldOverrides": []
 }
-
 

@@ -1,4 +1,5 @@
 
+
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -68,7 +69,6 @@ export type QuestionBankProgress = {
 
 export type VideoAsset = {
     id: string;
-    type: 'videoLibrary';
     title: string;
     description: string;
     url: string;
@@ -78,12 +78,12 @@ export type VideoAsset = {
 
 export type ImageAsset = {
     id: string;
-    type: 'imageLibrary';
     title: string;
-    description: string;
-    url: string;
+    description?: string;
+    imageUrl: string;
     teacherId: string;
     createdAt: any;
+    type: 'imageLibrary';
 };
 
 
@@ -222,7 +222,6 @@ export type Question = {
     isTrue?: boolean;
     classId?: string;
     className?: string;
-    createdAt?: any;
 };
 
 // Represents a class in the school
@@ -390,6 +389,7 @@ export type GetQuizOutput = {
 
 export type YaziTuraQuestions = {
     easy: Question[];
+    medium: Question[];
     hard: Question[];
 };
 

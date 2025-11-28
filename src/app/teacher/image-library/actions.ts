@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -14,22 +13,25 @@ export async function getImages(teacherId: string): Promise<{ success: boolean; 
         );
         const snapshot = await getDocs(q);
         const images = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
-        return { success: true, data: images };
+        return { success: true, data: JSON.parse(JSON.stringify(images)) };
     } catch (e: any) {
+         if (e.code === 'failed-precondition') {
+            return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${e.message}`};
+        }
         return { success: false, error: 'Görseller alınamadı.' };
     }
 }
 
 export async function addOrUpdateImage(image: Partial<ImageAsset>): Promise<{ success: boolean; id?: string; error?: string }> {
     try {
-        const dataToSave: Partial<Omit<ImageAsset, 'id'>> = {
+        const dataToSave = {
             ...image,
-            type: 'imageLibrary', // Ensure type is always set
+            type: 'imageLibrary', // Ensure type is always set correctly
         };
-        
+
         if (image.id) {
-            const { id, ...rest } = dataToSave;
-            await updateDoc(doc(db, 'imageLibrary', id as string), rest);
+            const { id, ...updateData } = dataToSave;
+            await updateDoc(doc(db, 'imageLibrary', id), updateData);
             return { success: true, id };
         } else {
             const docRef = await addDoc(collection(db, 'imageLibrary'), {
