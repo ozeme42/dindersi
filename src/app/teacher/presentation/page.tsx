@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
+import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
@@ -10,6 +10,8 @@ import { db } from '@/lib/firebase';
 import type { Topic } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 function PresentationPageContent() {
     const searchParams = useSearchParams();
@@ -66,25 +68,32 @@ function PresentationPageContent() {
     
     if (!topic) {
         return (
-            <div className="flex h-screen items-center justify-center text-muted-foreground">
-                Sunum içeriği bulunamadı.
+            <div className="flex h-screen flex-col gap-4 items-center justify-center text-muted-foreground">
+                <p>Sunum içeriği bulunamadı veya yüklenemedi.</p>
+                 <Button asChild variant="outline">
+                    <Link href="/teacher/ders-akisi">Ders Akışına Dön</Link>
+                </Button>
             </div>
-        );
+        )
     }
 
     // Teacher presentation doesn't track progress, so we provide dummy functions.
     const noOp = () => {};
 
     return (
-        <main ref={mainContentRef} className="h-screen w-screen bg-background">
-            {!isFullscreen && (
-                <div className="flex justify-between items-start p-4">
-                    <div>
-                        <h1 className="text-3xl font-bold font-headline">{topic.title}</h1>
-                    </div>
+        <main ref={mainContentRef} className="h-screen w-screen p-4 sm:p-6 md:p-8">
+            <div className="flex justify-between items-start mb-2">
+                 <div className="flex flex-col">
+                    <h1 className="text-2xl font-bold font-headline">{topic.title}</h1>
+                    <p className="text-sm text-muted-foreground">{courseName} &gt; {unitName}</p>
+                 </div>
+                 <div className="flex items-center gap-1">
                     <FullscreenToggle elementRef={mainContentRef} />
-                </div>
-            )}
+                    <Button asChild size="sm" variant="outline">
+                        <Link href="/teacher/ders-akisi">Akışa Dön</Link>
+                    </Button>
+                 </div>
+            </div>
              <LessonContentViewer
                 topic={topic}
                 courseId={courseId!}

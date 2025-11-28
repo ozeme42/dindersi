@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -36,6 +37,7 @@ export type LessonContentViewerProps = {
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
     isFullscreen: boolean;
+    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered: () => void;
 };
 
@@ -593,20 +595,20 @@ function ConceptMapViewer({ mapData }: { mapData: ConceptMapData }) {
 }
 
 // Interactive True/False List
-function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswered, answers }: { 
+function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered, answers }: { 
     step: TrueFalseListStep, 
     isFullscreen: boolean,
     onAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered: () => void;
+    onAllAnswered: () => void;
     answers: { [key: number]: { answer: boolean; isCorrect: boolean } };
  }) {
     
     useEffect(() => {
         if (!step) return;
         if (Object.keys(answers || {}).length === step.questions.length) {
-            onAllTfAnswered();
+            onAllAnswered();
         }
-    }, [answers, step, onAllTfAnswered]);
+    }, [answers, step, onAllAnswered]);
 
     return (
         <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
@@ -634,9 +636,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswere
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
-                                            isAnswered && !isQuestionCorrect && answer?.answer === true && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
-                                            isAnswered && answer?.answer === false && "opacity-50"
+                                            isAnswered && !isQuestionCorrect && "opacity-50 bg-secondary",
+                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary"
                                         )}
                                     >
                                         {isAnswered && isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Doğru'}
@@ -646,9 +647,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswere
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && !isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
-                                            isAnswered && isQuestionCorrect && answer?.answer === false && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
-                                            isAnswered && answer?.answer === true && "opacity-50"
+                                            isAnswered && isQuestionCorrect && "opacity-50 bg-secondary",
+                                            isAnswered && !isQuestionCorrect && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive"
                                         )}
                                     >
                                        {isAnswered && !isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Yanlış'}
@@ -787,7 +787,7 @@ function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
+                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                 const mapStep = step as ConceptMapStep;
                 return <ConceptMapViewer mapData={mapStep.mapData} />;
@@ -949,7 +949,8 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onAllTfAnswered: onAllTfAnsweredProp,
+    onMultiAnswer,
+    onAllTfAnswered,
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
@@ -1263,16 +1264,16 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-           <div className="flex-shrink-0 p-4 border-b bg-card/50 backdrop-blur-sm">
+           <div className="flex-shrink-0 p-2 border-b bg-card/50 backdrop-blur-sm">
                  <Card className="bg-transparent border-0 shadow-none">
                     <CardHeader className="p-2">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
+                            <h2 className="text-base font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
                             <p className="text-sm font-bold text-primary">Puan: {internalProgress.score}</p>
                         </div>
                     </CardHeader>
                     <CardContent className="p-2">
-                        <Progress value={(currentStepIndex + 1) / steps.length * 100} className="w-full h-3" />
+                        <Progress value={((currentStepIndex + 1) / steps.length) * 100} className="w-full h-3" />
                     </CardContent>
                 </Card>
            </div>
@@ -1283,7 +1284,7 @@ export function LessonContentViewer({
                  onAnswer={handleAnswer}
                  onCorrectAndNext={onCorrectAndNext}
                  onMultiAnswer={handleLocalMultiAnswer}
-                 onAllTfAnswered={onAllTfAnswered}
+                 onAllTfAnswered={handleLocalAllTfAnswered}
                  stepAnswers={internalProgress.answers[currentStepIndex]}
                  topic={topic}
                  courseId={courseId}
