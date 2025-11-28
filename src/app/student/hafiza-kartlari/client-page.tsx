@@ -4,22 +4,22 @@
 import { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Layers, Gamepad2, Star, ChevronRight, Lock 
+    PartyPopper, Layers, Gamepad2, Star
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
-import { useAuth } from "@/context/auth-context";
+import { Loader2 } from "lucide-react";
 
-// --- MOCK LINK COMPONENT (Fix for next/link error) ---
+// --- UI COMPONENTS ---
+
 const Link = ({ href, children, className, ...props }: any) => (
     <a href={href} className={className} {...props}>
         {children}
     </a>
 );
-
-// --- UI COMPONENTS ---
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -46,10 +46,12 @@ const GameButton = ({ children, onClick, active, disabled, className }: any) => 
     >
         <div className="relative z-10 flex items-center justify-between">
             {children}
-            {active && <div className="absolute inset-0 bg-white/10 animate-pulse rounded-2xl" />}
         </div>
     </button>
 );
+
+
+// --- MAIN PAGE ---
 
 const steps = [
   { id: 1, name: "Ders", icon: Book },
@@ -58,13 +60,15 @@ const steps = [
   { id: 4, name: "Başlat", icon: Gamepad2 },
 ];
 
-
-export function HafizaKartlariSetupClientPage() {
+export default function HafizaKartlariSetupClientPage() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Selection State
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -74,43 +78,56 @@ export function HafizaKartlariSetupClientPage() {
     topicName: "",
   });
 
-  // Data State
-  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
-
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchCourses = async () => {
+      if (!user) {
+        setIsLoading(true);
+        return;
+      }
       setIsLoading(true);
       try {
-        const [coursesSnapshot, classesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "courses"), orderBy("title"))),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
-        ]);
-        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
-        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+        const studentClassName = user.class?.split(' - ')[0];
+
+        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+        const classesSnapshot = await getDocs(classesQuery);
+        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        
+        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+        let finalCourses: Course[] = [];
+
+        if (user.role === 'teacher' || user.role === 'superadmin') {
+            finalCourses = allCourses.map(course => {
+                const courseClass = allClasses.find(c => c.id === course.classId);
+                return {
+                    ...course,
+                    className: courseClass?.name || 'Genel'
+                };
+            });
+        } else {
+            const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+            const studentClassId = studentClass?.id;
+            
+            if (studentClassId) {
+                finalCourses = studentVisibleCourses.filter(course =>
+                    course.classId === studentClassId || !course.classId
+                );
+            } else {
+                finalCourses = studentVisibleCourses.filter(course => !course.classId);
+            }
+        }
+        setCourses(finalCourses);
       } catch (error) {
-        console.error("Error fetching initial data: ", error);
+        console.error("Error fetching filtered courses:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchInitialData();
-  }, []);
+    fetchCourses();
+  }, [user]);
 
-  const handleSelectClass = (classId: string, className: string) => {
-    setSelection({ ...selection, classId, className, courseId: '', courseName: '', unitId: '', unitName: '', topicId: '', topicName: '' });
-    setIsLoading(true);
-    const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
-    const isFirstClass = classId === firstClassId;
-    const applicableCourses = allCourses.filter(course => course.isSummerSchool !== true && (course.classId === classId || (!course.classId && isFirstClass)));
-    setCourses(applicableCourses);
-    setIsLoading(false);
-    setCurrentStep(2);
-  };
-  
   const handleSelectCourse = async (id: string, name: string) => {
     setSelection({ ...selection, courseId: id, courseName: name, unitId: '', unitName: '', topicId: '', topicName: '' });
     setIsLoading(true);
@@ -157,13 +174,13 @@ export function HafizaKartlariSetupClientPage() {
       topicName: selection.topicName,
     });
     return `/student/hafiza-kartlari/oyun?${params.toString()}`;
-  };
+  }
 
   // Render Content Based on Step
   const renderStepContent = () => {
       if (isLoading) {
           return (
-              <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-pulse">
+              <div className="flex flex-col items-center justify-center py-12 space-y-4">
                   <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                   <p className="text-indigo-300 font-bold">Veriler Yükleniyor...</p>
               </div>
@@ -171,7 +188,7 @@ export function HafizaKartlariSetupClientPage() {
       }
 
       switch(currentStep) {
-          case 1: // COURSE SELECTION
+          case 1:
             return (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
                     {courses.map((course) => (
@@ -182,7 +199,7 @@ export function HafizaKartlariSetupClientPage() {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="h-10 w-10 rounded-lg bg-white/10 flex items-center justify-center text-2xl">
-                                    <BookOpen />
+                                    <BookOpen className="h-6 w-6"/>
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-white">{course.title}</div>
@@ -194,48 +211,50 @@ export function HafizaKartlariSetupClientPage() {
                     ))}
                 </div>
             );
-          case 2: // UNIT SELECTION
+          case 2:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {units.map((unit) => (
+                    {[...units, { id: 'all', title: 'Tüm Üniteler' }].map((unit) => (
                         <GameButton 
                             key={unit.id} 
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
                             active={selection.unitId === unit.id}
+                            className={unit.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                <Library className="h-5 w-5 text-slate-400" />
-                                <span className="font-semibold text-slate-200">{unit.title}</span>
+                                {unit.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <Library className="h-5 w-5 text-slate-400" />}
+                                <span className={cn("font-semibold", unit.id === 'all' ? "text-amber-100" : "text-slate-200")}>{unit.title}</span>
                             </div>
                             <ChevronRight className="h-5 w-5 text-white/20" />
                         </GameButton>
                     ))}
                 </div>
             );
-          case 3: // TOPIC SELECTION
+          case 3:
             return (
                 <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    {topics.map((topic) => (
+                     {[...topics, { id: 'all', title: 'Tüm Konular' }].map((topic) => (
                         <GameButton 
                             key={topic.id} 
                             onClick={() => handleSelectTopic(topic.id, topic.title)}
                             active={selection.topicId === topic.id}
+                            className={topic.id === 'all' ? 'border-amber-700 bg-amber-900/40 hover:bg-amber-800/40' : ''}
                         >
                             <div className="flex items-center gap-3">
-                                <ListTodo className="h-5 w-5 text-slate-400" />
-                                <span className="font-semibold text-slate-200">{topic.title}</span>
+                                {topic.id === 'all' ? <Star className="h-5 w-5 text-amber-400 fill-amber-400" /> : <ListTodo className="h-5 w-5 text-slate-400" />}
+                                <span className={cn("font-semibold", topic.id === 'all' ? "text-amber-100" : "text-slate-200")}>{topic.title}</span>
                             </div>
                             {selection.topicId === topic.id ? <Check className="h-5 w-5 text-green-400" /> : <div className="h-4 w-4 rounded-full border border-white/10" />}
                         </GameButton>
                     ))}
                 </div>
             );
-          case 4: // CONFIRMATION
+          case 4:
             return (
                 <div className="animate-in zoom-in-95 duration-300">
                     <div className="bg-black/30 rounded-2xl p-6 border border-white/10 text-center space-y-6">
-                        <div className="inline-flex p-4 rounded-full bg-rose-500/20 ring-4 ring-rose-500/10 mb-2">
-                            <Layers className="h-12 w-12 text-rose-400" />
+                        <div className="inline-flex p-4 rounded-full bg-green-500/20 ring-4 ring-green-500/10 mb-2">
+                            <Layers className="h-12 w-12 text-green-400 animate-pulse" />
                         </div>
                         
                         <div className="space-y-2">
@@ -273,7 +292,6 @@ export function HafizaKartlariSetupClientPage() {
   return (
     <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-20 font-sans selection:bg-purple-500/30 text-white flex flex-col items-center">
       
-      {/* HEADER */}
       <div className="w-full max-w-2xl flex items-center justify-between mb-8">
           <Link href="/student/activities" className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-colors">
             <ArrowLeft className="h-6 w-6 text-white" />
@@ -283,18 +301,12 @@ export function HafizaKartlariSetupClientPage() {
                   <Layers className="h-6 w-6 text-indigo-400 mb-1" />
                   Hafıza Kartları
               </h1>
-              <div className="flex items-center gap-1 justify-center text-xs font-bold text-indigo-300/60 mt-1">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  Setup Modu
-              </div>
           </div>
-          <div className="w-12"></div> {/* Spacer for center alignment */}
+          <div className="w-12"></div>
       </div>
 
-      {/* PROGRESS TRACKER */}
       <div className="w-full max-w-2xl mb-8">
           <div className="relative flex justify-between items-center">
-              {/* Connection Line */}
               <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -z-10 rounded-full"></div>
               <div 
                 className="absolute top-1/2 left-0 h-1 bg-indigo-500 shadow-[0_0_10px_#6366f1] -z-10 rounded-full transition-all duration-500"
@@ -327,9 +339,7 @@ export function HafizaKartlariSetupClientPage() {
           </div>
       </div>
 
-      {/* MAIN CONTENT CARD */}
-      <GlassCard className="w-full max-w-2xl min-h-[400px] flex flex-col">
-          {/* Card Header */}
+      <GlassCard className="w-full max-w-lg min-h-[400px] flex flex-col">
           <div className="p-6 border-b border-white/5 flex justify-between items-center bg-black/20">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   {steps.find(s => s.id === currentStep)?.name} Seçimi
@@ -339,12 +349,10 @@ export function HafizaKartlariSetupClientPage() {
               </div>
           </div>
 
-          {/* Card Content Area */}
           <div className="flex-grow p-6">
               {renderStepContent()}
           </div>
 
-          {/* Navigation Footer */}
           {currentStep < 4 && (
               <div className="p-6 pt-0 mt-auto flex justify-between gap-4">
                   {currentStep > 1 ? (
