@@ -1,277 +1,371 @@
+'use client';
 
-"use client";
-
-import { useState, useEffect, Suspense, useCallback, useMemo } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
-import type { Question } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Lightbulb, PartyPopper, Repeat } from 'lucide-react';
+import { useState, useEffect, useCallback } from "react";
+import { 
+    ArrowLeft, Zap, Trophy, Lightbulb, AlertTriangle, Loader2, PlayCircle, Home, RotateCcw, Shuffle 
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import confetti from "canvas-confetti";
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { playSound } from '@/lib/audio-service';
-import { cn } from '@/lib/utils';
+import type { TermData as ImportedTermData, YaziTuraQuestions } from "@/lib/types";
+import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
 
-function GuessItGame() {
-    const searchParams = useSearchParams();
+
+// --- YARDIMCI FONKSİYONLAR ---
+const shuffleArray = <T,>(array: T[]): T[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
+// --- OYUN SAYFASI ---
+export default function BilBakalimGamePage() {
     const { user } = useAuth();
-    const { toast } = useToast();
-    
-    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    // --- STATE YÖNETİMİ ---
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     
-    const [questionQueue, setQuestionQueue] = useState<Partial<Question>[]>([]);
-    const [solvedAnswers, setSolvedAnswers] = useState<string[]>([]);
+    // Veri Havuzları
+    const [allTerms, setAllTerms] = useState<ImportedTermData[]>([]); // Tüm kavramlar (Çeldirici havuzu için)
+    const [questionQueue, setQuestionQueue] = useState<ImportedTermData[]>([]); // Soru kuyruğu (Yanlışlar sona eklenir)
     
-    const [wrongFeedbackId, setWrongFeedbackId] = useState<string | null>(null);
-    const [isCorrectAnim, setIsCorrectAnim] = useState(false);
-    const [gameState, setGameState] = useState<'start' | 'playing' | 'won'>('start');
-    const [mistakeCount, setMistakeCount] = useState(0);
+    // Oyun Durumu
+    const [currentOptions, setCurrentOptions] = useState<string[]>([]); // Şu anki şıklar
     const [score, setScore] = useState(0);
-    const [scoreSaved, setScoreSaved] = useState(false);
+    const [combo, setCombo] = useState(0);
+    const [gameState, setGameState] = useState<'intro' | 'playing' | 'feedback' | 'finished'>('intro');
+    const [feedbackStatus, setFeedbackStatus] = useState<'correct' | 'wrong' | null>(null);
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const isStatic = searchParams.get('static') === 'true';
-    const gameContext = useMemo(() => `Bil Bakalım - ${searchParams.get('topicName')}`, [searchParams]);
+    // Sabitler
+    const CORRECT_POINTS = 20;
+    const WRONG_POINTS = -10; // Yanlış cevap için ceza puanı
 
-    const startGame = useCallback(() => {
-        const shuffled = [...questions].sort(() => 0.5 - Math.random());
-        setQuestionQueue(shuffled);
-        setSolvedAnswers([]);
-        setMistakeCount(0);
-        setScore(0);
-        setScoreSaved(false);
-        setGameState('playing');
-    }, [questions]);
-    
-    const handleAnswer = useCallback((selectedAnswer: string) => {
-        if (isCorrectAnim || wrongFeedbackId !== null) return;
-
-        const currentQ = questionQueue[0];
-        if (!currentQ) return;
-
-        if (selectedAnswer === currentQ.correctAnswer) {
-            playSound('correct');
-            setIsCorrectAnim(true);
-            setScore(prev => prev + 15);
-            setSolvedAnswers(prev => [...prev, selectedAnswer]);
-            setTimeout(() => {
-                setQuestionQueue(prev => prev.slice(1));
-                setIsCorrectAnim(false);
-            }, 600);
-        } else {
-            playSound('incorrect');
-            setWrongFeedbackId(selectedAnswer);
-            setScore(prev => Math.max(0, prev - 5));
-            setMistakeCount(prev => prev + 1);
-            setTimeout(() => {
-                setQuestionQueue(prev => {
-                    const wrongQ = prev[0];
-                    const remaining = prev.slice(1);
-                    return [...remaining, wrongQ];
-                });
-                setWrongFeedbackId(null);
-            }, 600);
-        }
-    }, [isCorrectAnim, wrongFeedbackId, questionQueue]);
-    
+    // --- BAŞLANGIÇ VERİSİ ---
     useEffect(() => {
-        const fetchQuestions = async () => {
-            setIsLoading(true);
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const result = await getBilBakalimAction(params);
-            if (result.error) {
-                setError(result.error);
-            } else if (result.questions && result.questions.length > 0) {
-                setQuestions(result.questions);
+        const initGame = async () => {
+            const courseId = searchParams.get('courseId');
+            const unitId = searchParams.get('unitId');
+            const topicId = searchParams.get('topicId');
+
+            const res = await getBilBakalimAction({ 
+                courseId: courseId || undefined, 
+                unitId: unitId || undefined, 
+                topicId: topicId || undefined 
+            });
+
+            if (res.error || !res.data) {
+                setError(res.error || "Veri bulunamadı.");
             } else {
-                setError("Bu konu için uygun soru bulunamadı.");
+                setAllTerms(res.data);
+                // İlk başta kuyruğu karıştırarak oluştur
+                setQuestionQueue(shuffleArray(res.data));
             }
-            setIsLoading(false);
+            setLoading(false);
         };
-        fetchQuestions();
+        initGame();
     }, [searchParams]);
 
-    useEffect(() => {
-        if (gameState === 'playing' && questions.length > 0 && questionQueue.length === 0 && solvedAnswers.length === questions.length) {
-            setGameState('won');
+    // --- SORU OLUŞTURMA MANTIĞI ---
+    const prepareNextQuestion = useCallback(() => {
+        if (questionQueue.length === 0) {
+            if (allTerms.length > 0) { // Only finish if there were questions to begin with
+                finishGame();
+            }
+            return;
         }
-    }, [questionQueue, questions, solvedAnswers, gameState]);
+
+        const currentQuestion = questionQueue[0];
+        
+        // Çeldiricileri seç (Doğru cevap hariç diğer tüm terimlerden rastgele 3 tane)
+        const distractors = allTerms
+            .filter(t => t.id !== currentQuestion.id)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 3)
+            .map(t => t.term);
+
+        // Şıkları oluştur ve karıştır
+        const options = shuffleArray([currentQuestion.term, ...distractors]);
+        
+        setCurrentOptions(options);
+        setGameState('playing');
+        setFeedbackStatus(null);
+        setSelectedOption(null);
+    }, [questionQueue, allTerms]);
+
+    // Oyunu başlatma veya devam ettirme
+    useEffect(() => {
+        if (gameState === 'playing' && currentOptions.length === 0 && questionQueue.length > 0) {
+            prepareNextQuestion();
+        }
+    }, [gameState, prepareNextQuestion, currentOptions.length, questionQueue.length]);
+
+    const startGame = () => {
+        setScore(0);
+        setCombo(0);
+        if (questionQueue.length === 0 && allTerms.length > 0) {
+            setQuestionQueue(shuffleArray(allTerms));
+        }
+        prepareNextQuestion();
+    };
+
+    // --- CEVAP KONTROL MANTIĞI ---
+    const handleAnswer = (answer: string) => {
+        if (gameState !== 'playing' || !questionQueue[0]) return;
+
+        const currentQuestion = questionQueue[0];
+        const isCorrect = answer === currentQuestion.term;
+        
+        setSelectedOption(answer);
+        setGameState('feedback');
+
+        if (isCorrect) {
+            setFeedbackStatus('correct');
+            setCombo(prev => prev + 1);
+            setScore(prev => prev + CORRECT_POINTS + (combo > 1 ? 5 : 0));
+            
+            if (combo > 1) {
+                confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 }, colors: ['#10b981', '#34d399'] });
+            }
+
+            setTimeout(() => {
+                setQuestionQueue(prev => prev.slice(1));
+            }, 1000);
+
+        } else {
+            setFeedbackStatus('wrong');
+            setCombo(0);
+            setScore(prev => prev + WRONG_POINTS);
+            
+            if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+            setTimeout(() => {
+                setQuestionQueue(prev => {
+                    const [wrongItem, ...rest] = prev;
+                    return [...rest, wrongItem];
+                });
+            }, 1000);
+        }
+
+        setTimeout(() => {
+            if (isCorrect && questionQueue.length === 1) {
+                finishGame();
+            } else {
+                setGameState('playing'); 
+            }
+        }, 1200);
+    };
 
     useEffect(() => {
-        const saveScore = async () => {
-             if (gameState === 'won' && user && score > 0 && !isStatic && !scoreSaved) {
-                setScoreSaved(true); // Prevent multiple saves
-                await submitBilBakalimScoreAction(user.uid, score, gameContext);
-             }
+        if (gameState === 'playing' && feedbackStatus === null && questionQueue.length > 0) {
+             prepareNextQuestion();
         }
-        if(gameState === 'won') {
-            saveScore();
-        }
-    }, [gameState, user, score, isStatic, gameContext, scoreSaved]);
-    
-    const backUrl = isStatic ? '/statik' : '/teacher/activities';
-    
-    const currentQuestion = questionQueue.length > 0 ? questionQueue[0] : null;
+    }, [questionQueue, gameState, feedbackStatus, prepareNextQuestion]);
 
-    if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
-    
-    if (error) return (
-        <div className="flex h-screen w-full items-center justify-center p-4">
-             <Alert variant="destructive" className="max-w-lg">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Oyun Yüklenemedi</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                <div className="mt-4">
-                    <Button asChild variant="secondary">
-                        <Link href={backUrl}>Geri Dön</Link>
-                    </Button>
-                </div>
-            </Alert>
+
+    const finishGame = async () => {
+        setGameState('finished');
+        setIsSubmitting(true);
+        const context = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Kavramlar'}`;
+        
+        await submitBilBakalimScoreAction(user?.uid || null, score, context);
+        
+        setIsSubmitting(false);
+        confetti({
+            particleCount: 200,
+            spread: 120,
+            origin: { y: 0.6 }
+        });
+    };
+
+    if (loading) return (
+        <div className="min-h-screen bg-[#2b1055] flex flex-col items-center justify-center text-white gap-4">
+            <Loader2 className="h-16 w-16 animate-spin text-amber-400" />
+            <p className="text-xl font-bold animate-pulse">Kavramlar Yükleniyor...</p>
         </div>
     );
 
-    return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 bg-rose-50 dark:bg-rose-900/50">
-            <div className="w-full max-w-7xl mx-auto">
-                <div className="w-full flex justify-between items-center mb-4 sm:mb-6">
-                    <h1 className="text-xl sm:text-2xl font-bold text-rose-600 header-font">Bil Bakalım?</h1>
-                    <div className="text-right">
-                        <div className="bg-white px-3 py-1 rounded-full shadow-sm text-sm font-bold text-gray-600 border border-rose-100">
-                            Puan: <span className="text-rose-600 text-base">{score}</span>
+    if (error || allTerms.length === 0) return (
+        <div className="min-h-screen bg-[#2b1055] flex flex-col items-center justify-center text-white p-6 text-center">
+            <AlertTriangle className="h-20 w-20 text-red-500 mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Ops! Bir Sorun Var</h2>
+            <p className="text-slate-300 mb-6">{error || "Veri bulunamadı."}</p>
+            <Link href="/student/activities">
+                <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön
+                </Button>
+            </Link>
+        </div>
+    );
+
+    const currentQuestion = questionQueue[0];
+
+    if (gameState === 'intro') {
+        return (
+            <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black flex items-center justify-center p-4 font-sans text-white">
+                <div className="bg-black/30 backdrop-blur-md border-2 border-white/10 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 to-blue-600"></div>
+                    <div className="bg-cyan-500/20 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ring-4 ring-cyan-500/10 shadow-[0_0_30px_rgba(6,182,212,0.4)]">
+                        <Shuffle className="h-12 w-12 text-cyan-400 animate-pulse" />
+                    </div>
+                    <h1 className="text-4xl font-black text-white mb-2 uppercase tracking-wide drop-shadow-lg">Bil Bakalım</h1>
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/10 mb-6 text-left space-y-2">
+                        <p className="flex items-center gap-2 text-indigo-200 text-sm">
+                            <span className="bg-green-500/20 text-green-400 p-1 rounded">✔</span> 
+                            Doğru cevaplar elenir (+{CORRECT_POINTS} Puan)
+                        </p>
+                        <p className="flex items-center gap-2 text-indigo-200 text-sm">
+                            <span className="bg-red-500/20 text-red-400 p-1 rounded">✖</span> 
+                            Yanlışlar sona atılır ({WRONG_POINTS} Puan)
+                        </p>
+                        <p className="flex items-center gap-2 text-indigo-200 text-sm">
+                            <span className="bg-amber-500/20 text-amber-400 p-1 rounded">★</span> 
+                            Tüm kavramları bitirene kadar devam!
+                        </p>
+                    </div>
+                    <Button 
+                        onClick={startGame}
+                        className="w-full h-16 text-xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg rounded-2xl transition-all hover:scale-[1.02] active:scale-95 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1"
+                    >
+                        <PlayCircle className="mr-2 h-7 w-7" /> Maceraya Başla
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    if (gameState === 'finished') {
+        return (
+            <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black flex items-center justify-center p-4 font-sans text-white">
+                <div className="bg-black/40 backdrop-blur-lg border border-white/10 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl relative animate-in zoom-in-95 duration-500">
+                    <div className="absolute -top-12 left-1/2 -translate-x-1/2">
+                        <div className="bg-gradient-to-br from-yellow-300 to-amber-600 p-4 rounded-full shadow-lg border-4 border-[#2b1055]">
+                            <Trophy className="h-16 w-16 text-white" />
                         </div>
-                         <div className="text-xs text-muted-foreground mt-1">
-                            Kalan Soru: {questionQueue.length}
+                    </div>
+                    <div className="mt-10 space-y-2">
+                        <h2 className="text-3xl font-black text-white uppercase tracking-wider">Görev Tamamlandı!</h2>
+                        <p className="text-indigo-200">Tüm kavramları başarıyla eşleştirdin.</p>
+                        <div className="bg-white/5 rounded-2xl p-6 mt-6 border border-white/10">
+                            <p className="text-slate-400 text-sm uppercase font-bold tracking-widest mb-1">Toplam Skor</p>
+                            <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-green-300 to-emerald-600 drop-shadow-sm">
+                                {score}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 mt-8">
+                        <Link href="/student/activities" className="w-full">
+                            <Button variant="outline" className="w-full h-12 border-white/10 hover:bg-white/5 text-white rounded-xl">
+                                <Home className="mr-2 h-5 w-5" /> Çıkış
+                            </Button>
+                        </Link>
+                        <Button 
+                            onClick={() => window.location.reload()} 
+                            className="w-full h-12 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl"
+                        >
+                            <RotateCcw className="mr-2 h-5 w-5" /> Tekrar
+                        </Button>
+                    </div>
+                    {isSubmitting && (
+                        <div className="flex items-center justify-center gap-2 mt-4 text-xs text-indigo-300 animate-pulse">
+                            <Loader2 className="h-3 w-3 animate-spin" /> Skor kaydediliyor...
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    }
+    
+    return (
+        <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950 via-[#2b1055] to-black text-white font-sans flex flex-col overflow-hidden">
+            <div className="px-4 py-4 flex items-center justify-between bg-black/20 backdrop-blur-sm border-b border-white/5 safe-area-top">
+                <div className="flex items-center gap-3">
+                    <div className="relative">
+                        <div className="w-12 h-12 rounded-full border-4 border-indigo-500/30 flex items-center justify-center bg-indigo-900/50">
+                            <span className="font-black text-lg">{questionQueue.length}</span>
+                        </div>
+                        <div className="absolute -bottom-1 -right-1 bg-indigo-500 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                            KALAN
                         </div>
                     </div>
                 </div>
-
-                {gameState === 'playing' && currentQuestion && (
-                    <>
-                        <div className={cn(
-                            "w-full bg-white p-4 sm:p-8 rounded-3xl shadow-lg border-b-8 border-rose-200 mb-6 text-center min-h-[140px] sm:min-h-[180px] flex flex-col justify-center items-center relative overflow-hidden transition-colors duration-300",
-                            isCorrectAnim && 'bg-green-50 border-green-200',
-                            wrongFeedbackId && 'bg-red-50 border-red-200 animate-shake',
-                            !wrongFeedbackId && 'animate-slide'
-                        )}>
-                            <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Soru</div>
-                            <h2 className={cn(
-                                "text-lg sm:text-xl md:text-2xl font-bold leading-relaxed transition-colors",
-                                wrongFeedbackId ? 'text-red-600' : 'text-gray-800'
-                            )}>
-                                {currentQuestion.text}
-                            </h2>
-
-                            {wrongFeedbackId && (
-                                <div className="absolute bottom-2 text-red-500 font-bold text-sm">
-                                    Yanlış! Bu soru sona atıldı.
-                                </div>
-                            )}
-                            {isCorrectAnim && (
-                                <div className="absolute bottom-2 text-green-600 font-bold text-sm animate-pop">
-                                    Harika! Doğru Cevap.
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 w-full">
-                            {questions.sort((a,b) => (a.correctAnswer || "").localeCompare(b.correctAnswer || "")).map((item) => {
-                                const answer = item.correctAnswer || '';
-                                const isCurrentCorrect = isCorrectAnim && currentQuestion && answer === currentQuestion.correctAnswer;
-                                const isWrong = wrongFeedbackId === answer;
-
-                                let btnClass = "concept-btn py-4 rounded-xl font-bold border-b-4 transition-all ";
-                                
-                                if (isCurrentCorrect) {
-                                    btnClass += "bg-green-500 border-green-700 text-white transform scale-105 shadow-lg z-10";
-                                } else if (isWrong) {
-                                    btnClass += "bg-red-500 border-red-700 text-white animate-shake";
-                                } else {
-                                    btnClass += "bg-white border-rose-200 text-gray-700 hover:bg-rose-50 hover:border-rose-300 hover:-translate-y-1";
-                                }
-
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => handleAnswer(answer)}
-                                        disabled={isCorrectAnim || wrongFeedbackId !== null}
-                                        className={cn("h-20 text-base", btnClass)}
-                                    >
-                                        {answer}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </>
-                )}
-
-                {gameState === 'start' && (
-                    <div className="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md border-4 border-rose-100 mt-10 mx-auto">
-                        <div className="text-6xl mb-4">🤔</div>
-                        <h1 className="text-3xl font-bold text-rose-600 mb-4 header-font">Hazır mısın?</h1>
-                        <p className="text-gray-600 mb-8 text-lg">
-                            Yukarıda soru çıkacak, aşağıdan cevabı bul. Yanlış cevaplanan sorular sona eklenecek.
-                        </p>
-                        <button 
-                            onClick={startGame}
-                            className="px-10 py-4 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 hover:scale-105 transition-all text-xl"
-                        >
-                            BAŞLA
-                        </button>
+                <div className="flex items-center gap-3">
+                    <div className="text-right">
+                        <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Skor</div>
+                        <div className="text-2xl font-black leading-none">{score}</div>
                     </div>
-                )}
-
-                {gameState === 'won' && (
-                    <div className="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-md border-4 border-green-100 mt-10 mx-auto animate-pop">
-                        <div className="text-6xl mb-4">🎉</div>
-                        <h1 className="text-3xl font-bold text-green-600 mb-2 header-font">Tebrikler!</h1>
-                        <p className="text-gray-600 mb-6">Tüm kavramları başarıyla öğrendin.</p>
-                        
-                         <div className="grid grid-cols-2 gap-4 mb-8">
-                             <div className="bg-gray-50 p-4 rounded-xl">
-                                <p className="text-sm text-gray-500">Toplam Puan</p>
-                                <p className="text-2xl font-bold text-rose-500">{score}</p>
-                            </div>
-                            <div className="bg-gray-50 p-4 rounded-xl">
-                                <p className="text-sm text-gray-500">Yapılan Hata</p>
-                                <p className="text-2xl font-bold text-rose-500">{mistakeCount}</p>
-                            </div>
+                    {combo > 1 && (
+                        <div className="bg-gradient-to-r from-orange-500 to-red-600 px-3 py-1 rounded-lg text-xs font-bold shadow-lg animate-bounce border border-orange-400/50">
+                            {combo}x 🔥
                         </div>
+                    )}
+                </div>
+            </div>
+            <div className="w-full h-1.5 bg-white/5">
+                <div 
+                    className="h-full bg-cyan-500 transition-all duration-500 shadow-[0_0_10px_#06b6d4]" 
+                    style={{ width: `${((allTerms.length - questionQueue.length) / allTerms.length) * 100}%` }}
+                />
+            </div>
+            <div className="flex-grow flex flex-col items-center justify-center p-4 max-w-2xl mx-auto w-full gap-6">
+                <div className="w-full bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-6 md:p-10 shadow-2xl relative min-h-[180px] flex flex-col items-center justify-center text-center group transition-all hover:bg-white/10">
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 p-3 rounded-2xl shadow-lg border-4 border-[#2b1055]">
+                        <Lightbulb className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-indigo-300 uppercase text-xs font-bold tracking-widest mb-4 mt-2">Bu kavram nedir?</h3>
+                    <p className="text-lg md:text-2xl font-bold leading-relaxed text-white drop-shadow-md">
+                        {currentQuestion?.definition}
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 gap-3 w-full">
+                    {currentOptions.map((option, idx) => {
+                        let buttonClass = "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-indigo-100";
+                        let icon = <span className="text-white/40 font-bold mr-3">{String.fromCharCode(65 + idx)}</span>;
 
-                        <button 
-                            onClick={startGame}
-                            className="w-full py-4 bg-rose-500 text-white font-bold rounded-full shadow-lg hover:bg-rose-600 transition-all"
-                        >
-                            TEKRAR OYNA
-                        </button>
+                        if (feedbackStatus) {
+                            if (option === currentQuestion.term) {
+                                buttonClass = "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
+                                icon = <Zap className="h-5 w-5 text-white mr-3 fill-white" />;
+                            } else if (option === selectedOption && feedbackStatus === 'wrong') {
+                                buttonClass = "bg-red-600 border-red-400 text-white opacity-100 shake z-10";
+                                icon = <AlertTriangle className="h-5 w-5 text-white mr-3" />;
+                            } else {
+                                buttonClass = "bg-black/40 border-transparent text-slate-500 opacity-40 blur-[1px]";
+                            }
+                        }
+
+                        return (
+                            <button
+                                key={idx}
+                                onClick={() => handleAnswer(option)}
+                                disabled={feedbackStatus !== null}
+                                className={cn(
+                                    "relative w-full p-4 rounded-xl border-2 font-bold text-base md:text-lg transition-all duration-200 shadow-md text-left flex items-center active:scale-98",
+                                    buttonClass
+                                )}
+                            >
+                                {icon}
+                                <span className="flex-grow">{option}</span>
+                            </button>
+                        );
+                    })}
+                </div>
+                {feedbackStatus === 'wrong' && (
+                    <div className="text-center animate-in slide-in-from-bottom-2 fade-in text-red-300 text-sm font-medium bg-red-900/30 px-4 py-2 rounded-lg border border-red-500/30">
+                        Bu kavram kuyruğun sonuna eklendi. Tekrar sorulacak!
                     </div>
                 )}
             </div>
         </div>
     );
 }
-
-function GuessItPage() {
-    return (
-        <Suspense
-            fallback={
-                <div className="flex h-screen w-full items-center justify-center">
-                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                </div>
-            }
-        >
-            <GuessItGame />
-        </Suspense>
-    );
-}
-
-export default GuessItPage;
-
-    
