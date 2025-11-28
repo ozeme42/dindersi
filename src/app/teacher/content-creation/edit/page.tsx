@@ -125,7 +125,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: ('imageLibrary' | ActivityItem['type'] | 'questions' | 'videos')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -189,7 +189,7 @@ function TopicEditor() {
             case 'anagramFlashcard': newStep = { type, title: defaultTitle, cards: [{ definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' }] }; break;
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
-            case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
+            case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\n<html lang="tr">\n<head>\n  <title>Başlık</title>\n</head>\n<body>\n  <h1>Merhaba Dünya</h1>\n</body>\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return; // Needs a dropdown to select, so handled separately.
             case 'conceptMap': newStep = { type, title: defaultTitle, mapData: { nodes: [], edges: [] } }; break;
@@ -228,20 +228,20 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: ('imageLibrary' | ActivityItem['type'] | 'questions' | 'videos')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset | VideoAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
             case 'visual':
-                newSteps = (importedItems as ImageAsset[]).map(item => ({
+                newSteps = (importedItems as ImageAsset[]).map(asset => ({
                     type: 'visual',
-                    title: item.title || 'Kütüphaneden Görsel',
-                    imageUrl: item.url,
+                    title: asset.title || 'Kütüphane Görseli',
+                    imageUrl: asset.imageUrl,
                 }));
                 break;
             case 'flashcard':
@@ -452,6 +452,7 @@ function TopicEditor() {
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
+        { label: 'Görsel / Afiş', action: () => handleOpenLibrary(['imageLibrary'], false, 'visual')},
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Kavram Haritası', type: 'conceptMap', defaultTitle: 'Kavram Haritası' },
         { label: 'Dış Sayfa / Simülasyon', type: 'iframe', defaultTitle: 'İnteraktif Etkinlik' },
@@ -517,10 +518,6 @@ function TopicEditor() {
                      <Button variant="secondary" onClick={() => setIsPreviewOpen(true)}>
                         <Eye className="mr-2 h-4 w-4" />
                         Önizle
-                    </Button>
-                    <Button variant="outline" onClick={() => setIsLibraryPanelOpen(true)}>
-                        <Library className="mr-2 h-4 w-4"/>
-                        Kütüphaneden Ekle
                     </Button>
                     <Button variant="outline" onClick={() => setIsBulkImportOpen(true)}>
                         <Upload className="mr-2 h-4 w-4"/>
@@ -622,9 +619,6 @@ function TopicEditor() {
                             {anlatimStepOptions.map(opt => <DropdownMenuItem key={opt.label} onClick={() => opt.action ? opt.action() : handleAddStep(opt.type!, opt.defaultTitle!)}>{opt.label}</DropdownMenuItem>)}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                     <Button variant="outline" onClick={() => handleOpenLibrary(['imageLibrary'], true, 'visual')}>
-                        <Library className="mr-2 h-4 w-4" /> Görsel Kütüphanesi
-                    </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline">
@@ -656,6 +650,10 @@ function TopicEditor() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
+                     <Button variant="outline" onClick={() => handleOpenLibrary(['imageLibrary'], false, 'visual')}>
+                        <Library className="mr-2 h-4 w-4" />
+                        Görsel Kütüphanesi
+                    </Button>
                 </div>
                 
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -723,10 +721,11 @@ function TopicEditor() {
     );
 }
 
-export default function TopicEditorPage() {
+export default function SummerTopicEditorPage() {
     return (
         <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <TopicEditor />
         </Suspense>
     )
 }
+
