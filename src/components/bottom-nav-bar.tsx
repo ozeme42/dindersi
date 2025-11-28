@@ -15,8 +15,8 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 
     return (
         <Link href={href} className={cn(
-            "flex flex-col items-center justify-center gap-1 w-full text-center p-1 rounded-md transition-colors",
-            isActive ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground/80"
+            "flex flex-col items-center justify-center gap-1 w-full text-center transition-colors duration-200",
+            isActive ? "text-primary font-bold" : "text-slate-400 hover:text-slate-200"
         )}>
             <Icon className="h-5 w-5" />
             <span className="text-xs">{label}</span>
@@ -60,8 +60,8 @@ export function BottomNavBar() {
 
     return (
         <>
-            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card border-t z-50">
-                <div className="flex items-stretch justify-around h-full px-1">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-slate-900 border-t border-slate-700 z-50">
+                <div className="flex items-stretch justify-around h-full">
                     {links.map(link => (
                         <NavLink key={link.href} {...link} />
                     ))}
