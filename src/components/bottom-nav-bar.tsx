@@ -3,26 +3,36 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Trophy, User, Gamepad2, MonitorPlay, ClipboardList, DollarSign, PenSquare } from 'lucide-react';
+import { Home, Trophy, User, PenSquare, Users, MonitorPlay, ClipboardList, Gamepad2, DollarSign } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { ErrorReportDialog } from './error-report-dialog';
 
-const NavLink = ({ href, icon: Icon, label, isActive }: { href: string; icon: React.ElementType; label: string; isActive: boolean }) => {
+const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.ElementType; label: string }) => {
+    const pathname = usePathname();
+    const isActive = (href === '/' || href === '/student') ? pathname === href : pathname.startsWith(href);
+
     return (
         <div className={cn(
-            "relative flex flex-col items-center justify-center gap-1 w-full text-center p-1 rounded-lg",
-            isActive ? "text-primary" : "text-muted-foreground hover:text-primary/80"
+            "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
+            isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
         )}>
-            <div className="relative">
+            {/* Active Indicator Background */}
+            {isActive && (
+                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
+            )}
+
+            <div className="relative z-10">
                 <Icon className={cn(
-                    "h-6 w-6 transition-all duration-200",
-                    isActive && "scale-110"
+                    "h-6 w-6 transition-all duration-300",
+                    isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
                 )} />
             </div>
+
             <span className={cn(
-                "text-xs font-medium transition-opacity duration-200",
-                isActive ? "opacity-100" : "opacity-80"
+                "text-[10px] font-bold mt-1 transition-all duration-300",
+                isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
             )}>
                 {label}
             </span>
@@ -33,7 +43,9 @@ const NavLink = ({ href, icon: Icon, label, isActive }: { href: string; icon: Re
 export function BottomNavBar() {
     const { user } = useAuth();
     const pathname = usePathname();
+    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
 
+    // Hide on login/register pages or if no user
     if (!user || pathname === '/login' || pathname === '/register') {
         return null;
     }
@@ -69,12 +81,11 @@ export function BottomNavBar() {
                     {links.map(item => {
                         const isActive = (item.href === '/' || item.href === '/student') ? pathname === item.href : pathname.startsWith(item.href);
                         return (
-                            <Link key={item.id} href={item.href} className="flex-1">
+                            <Link key={item.href} href={item.href} className="flex-1">
                                  <NavLink 
                                     href={item.href}
                                     icon={item.icon}
                                     label={item.label}
-                                    isActive={isActive}
                                 />
                             </Link>
                         );
