@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -594,20 +593,20 @@ function ConceptMapViewer({ mapData }: { mapData: ConceptMapData }) {
 }
 
 // Interactive True/False List
-function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered, answers }: { 
+function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswered, answers }: { 
     step: TrueFalseListStep, 
     isFullscreen: boolean,
     onAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllAnswered: () => void;
+    onAllTfAnswered: () => void;
     answers: { [key: number]: { answer: boolean; isCorrect: boolean } };
  }) {
     
     useEffect(() => {
         if (!step) return;
         if (Object.keys(answers || {}).length === step.questions.length) {
-            onAllAnswered();
+            onAllTfAnswered();
         }
-    }, [answers, step, onAllAnswered]);
+    }, [answers, step, onAllTfAnswered]);
 
     return (
         <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
@@ -628,7 +627,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         
                         return (
                             <Card key={index} className="p-4 bg-slate-700/50 border-slate-600 text-white">
-                                <p className={cn("flex-1 font-medium mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
+                                <p className={cn("flex-1 mb-3 md:font-bold", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
@@ -788,7 +787,7 @@ function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                 const mapStep = step as ConceptMapStep;
                 return <ConceptMapViewer mapData={mapStep.mapData} />;
@@ -950,7 +949,7 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onAllTfAnswered,
+    onAllTfAnswered: onAllTfAnsweredProp,
 }: LessonContentViewerProps) {
     const { user } = useAuth();
     
@@ -1284,7 +1283,7 @@ export function LessonContentViewer({
                  onAnswer={handleAnswer}
                  onCorrectAndNext={onCorrectAndNext}
                  onMultiAnswer={handleLocalMultiAnswer}
-                 onAllTfAnswered={handleLocalAllTfAnswered}
+                 onAllTfAnswered={onAllTfAnswered}
                  stepAnswers={internalProgress.answers[currentStepIndex]}
                  topic={topic}
                  courseId={courseId}
