@@ -4,7 +4,15 @@
 import { db } from '@/lib/firebase';
 import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem, Question } from '@/lib/types';
+import type { ActivityItem } from '@/lib/types';
+
+
+export type TermData = {
+    id: string;
+    term: string;
+    definition: string;
+};
+
 
 // Simple array shuffle function
 const shuffleArray = <T>(array: T[]): T[] => {
@@ -16,10 +24,9 @@ const shuffleArray = <T>(array: T[]): T[] => {
     return newArray;
 }
 
-// Re-using the Question type for the output, as it fits the structure.
 export async function getBilBakalimAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ questions: Question[]; error?: string }> {
+): Promise<{ data: TermData[]; error?: string }> {
     noStore();
     try {
         let baseQuery = query(collection(db, 'activityItems'));
@@ -35,33 +42,23 @@ export async function getBilBakalimAction(
         const definitionsQuery = query(baseQuery, where('type', '==', 'definition'));
         const definitionsSnapshot = await getDocs(definitionsQuery);
         
-        const allDefinitions = definitionsSnapshot.docs
-            .map(doc => ({ ...doc.data() as ActivityItem, id: doc.id}))
-            .filter(item => item.content?.term && item.content?.definition);
+        const allDefinitions: TermData[] = definitionsSnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem))
+            .filter(item => item.content?.term && item.content?.definition)
+            .map(item => ({
+                id: item.id,
+                term: item.content.term!,
+                definition: item.content.definition!
+            }));
 
-        if (allDefinitions.length < 1) {
-            return { error: "Bil Bakalım için bu konuda uygun tanım bulunamadı.", questions: [] };
+        if (allDefinitions.length < 4) {
+            return { error: "Bil Bakalım için bu konuda en az 4 uygun tanım bulunamadı.", data: [] };
         }
 
-        const gameQuestions: Question[] = allDefinitions.map((item, index) => {
-            return {
-                id: item.id,
-                text: item.content.definition!,
-                type: 'Çoktan Seçmeli', // This type is nominal for the Question type, game logic will differ
-                correctAnswer: item.content.term!,
-                options: allDefinitions.map(d => d.content.term!), // Provide all terms as options
-                difficulty: 'Orta',
-                courseId: item.courseId,
-                unitId: item.unitId,
-                topicId: item.topicId,
-                topic: '',
-            };
-        });
-
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+        return { data: JSON.parse(JSON.stringify(shuffleArray(allDefinitions))) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
-        return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", questions: [] };
+        return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", data: [] };
     }
 }
 
