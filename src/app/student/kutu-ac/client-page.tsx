@@ -1,22 +1,18 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-    ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Package, Gamepad2, Star, ChevronRight, Lock 
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import Link from 'next/link';
-
-// --- UI COMPONENTS ---
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { useAuth } from "@/context/auth-context";
-import { SelectionGrid } from "@/components/selection-grid";
-import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, Package } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, Unit, Topic, UserProfile, SchoolClass } from "@/lib/types";
+import { useAuth } from "@/context/auth-context";
+import { SelectionGrid } from "@/components/selection-grid";
 
 const steps = [
   { id: 1, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
@@ -27,6 +23,7 @@ const steps = [
 
 export function KutuAcSetupClientPage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -44,6 +41,20 @@ export function KutuAcSetupClientPage() {
   });
 
   useEffect(() => {
+    const courseId = searchParams.get('courseId');
+    const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
+    const courseName = searchParams.get('courseName');
+    const unitName = searchParams.get('unitName');
+    const topicName = searchParams.get('topicName');
+
+    if (courseId && unitId && topicId && courseName && unitName && topicName) {
+      setSelection({ courseId, courseName, unitId, unitName, topicId, topicName });
+      setCurrentStep(4);
+      setIsLoading(false);
+      return;
+    }
+
     const fetchCourses = async () => {
       if (!user) {
         setIsLoading(true);
@@ -91,7 +102,7 @@ export function KutuAcSetupClientPage() {
       }
     };
     fetchCourses();
-  }, [user]);
+  }, [user, searchParams]);
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection({ ...selection, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' });
@@ -229,3 +240,4 @@ export function KutuAcSetupClientPage() {
     </div>
   );
 }
+
