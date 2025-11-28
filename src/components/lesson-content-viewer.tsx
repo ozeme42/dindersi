@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -6,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, PartyPopper, Repeat, Brain, BookOpen, Gamepad2, Lightbulb, CheckCircle2, XCircle, LayersIcon, X, FilePenLine, Link as LinkIcon, Layers, Star, Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Bug, Video, Loader2, CheckCircle } from 'lucide-react';
-import type { LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, ConceptExplanationStep, ObjectiveListStep, VideoStep } from "@/lib/types";
+import type { LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, ConceptExplanationStep, ObjectiveListStep, VideoStep, UserProfile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -28,6 +27,7 @@ type LocalProgress = {
 }
 
 export type LessonContentViewerProps = {
+    user: UserProfile | null;
     topic: Topic | null;
     courseId: string;
     unitId: string;
@@ -595,20 +595,20 @@ function ConceptMapViewer({ mapData }: { mapData: ConceptMapData }) {
 }
 
 // Interactive True/False List
-function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllTfAnswered, answers }: { 
+function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered, answers }: { 
     step: TrueFalseListStep, 
     isFullscreen: boolean,
     onAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered: () => void;
+    onAllAnswered: () => void;
     answers: { [key: number]: { answer: boolean; isCorrect: boolean } };
  }) {
     
     useEffect(() => {
         if (!step) return;
         if (Object.keys(answers || {}).length === step.questions.length) {
-            onAllTfAnswered();
+            onAllAnswered();
         }
-    }, [answers, step, onAllTfAnswered]);
+    }, [answers, step, onAllAnswered]);
 
     return (
         <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
@@ -951,10 +951,10 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onMultiAnswer,
     onAllTfAnswered,
+    onMultiAnswer,
+    user
 }: LessonContentViewerProps) {
-    const { user } = useAuth();
     
     // For ContentListPlayer
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
@@ -1193,14 +1193,14 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className={cn("flex-shrink-0 flex justify-between items-center p-2 sm:p-4 border-t bg-card/50 backdrop-blur-sm", isFullscreen ? "pb-4" : "pb-16 md:pb-4")}>
+             <div className="flex-shrink-0 flex justify-between items-center p-2 sm:p-4 border-t bg-card/50 backdrop-blur-sm md:pb-4 pb-20">
                  <div className="flex gap-2">
                     {user?.role === 'student' && (
                         <Button variant="outline" size="icon" onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
                             <Bug className="h-4 w-4" />
                         </Button>
                     )}
-                    {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'sm'} onClick={handleNext}>Adımı Atla</Button>}
+                    {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'default'} onClick={handleNext}>Adımı Atla</Button>}
                  </div>
                 <div className="flex gap-2">
                     <Button variant="outline" size={isFullscreen ? 'lg' : 'sm'} onClick={handlePrev} disabled={currentStepIndex === 0}>
