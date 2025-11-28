@@ -1,6 +1,7 @@
-"use client";
 
-import React, { useState, useEffect, useCallback, type ReactNode } from "react";
+'use client';
+
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
@@ -8,20 +9,22 @@ import {
     Loader2, Home, User
 } from 'lucide-react';
 import { useAuth } from "@/context/auth-context";
-import { UserAvatar } from "@/components/user-avatar";
-import { cn } from "@/lib/utils";
-import Link from 'next/link';
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
+import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import type { UserProfile, Course } from "@/lib/types";
+
+import { Card, CardContent, CardHeader, CardFooter, CardDescription, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -72,6 +75,7 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
+// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -139,97 +143,124 @@ export default function StudentDashboard() {
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0, 
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
 
   const fetchData = useCallback(async () => {
-      if (!user?.uid) {
-          setIsLoading(false);
-          return;
-      };
-
-      setIsLoading(true);
-      
-      try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
-        
-        const [allUsersSnapshot, examsSnapshot, allCoursesSnapshot] = await Promise.all([
-            getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-            getStudentExams(user.uid),
-            getDocs(collection(db, "courses"))
-        ]);
-        
-        if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-            const solved = examsSnapshot.data.length - pending;
-            setExamStats({ pending, solved });
-        }
-
-        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
-        let classRank = 0;
-        let branchRank = 0;
-
-        if(user.class) {
-            const gradeName = user.class.split(' - ')[0];
-            const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-            const studentsInBranch = allStudents.filter(s => s.class === user.class);
-            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-        }
-
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        let totalQuestionBankPassedTests = 0;
-        let totalQuestionBankTests = 0;
-        
-        for (const course of allCourses) {
-            const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
-            totalQuestionBankPassedTests += qbStats.passedTests;
-            totalQuestionBankTests += qbStats.totalTests;
-        }
-
-        const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
-            : 0;
-        
-        setStats({
-            score: user.score || 0,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            generalRank,
-            classRank,
-            branchRank,
-            questionBankProgress: qbProgressPercentage,
-            coursesStarted: 0, // Recalculate if needed
-            coursesCompleted: 0, // Recalculate if needed
-            totalCourses: 0, // Recalculate if needed
-        });
-
-      } catch (error) {
-        console.error("Error fetching student dashboard data:", error);
-      } finally {
+    if (!user?.uid) {
         setIsLoading(false);
+        return;
+    };
+    setIsLoading(true);
+    
+    try {
+      let completedTopicsTotal = 0;
+      let grandTotalTopics = 0;
+      let userScore = user.score || 0;
+      const studentClassName = user.class?.split(' - ')[0];
+
+      const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+        getDocs(collection(db, "courses")),
+        getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+        getStudentExams(user.uid),
+      ]);
+
+      if (examsSnapshot.success && examsSnapshot.data) {
+          const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+          const solved = examsSnapshot.data.length - pending;
+          setExamStats({ pending, solved });
       }
-    }, [user]);
+
+      const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+      const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+      const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
+
+      let classRank = 0;
+      let branchRank = 0;
+      if(user.class) {
+          const gradeName = user.class.split(' - ')[0];
+          const branchName = user.class;
+
+          const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+          const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+          classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+
+          const studentsInBranch = allStudents.filter(s => s.class === branchName);
+          const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+          branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+      }
+
+      const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+      const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+      const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+      const studentClassId = studentClass?.id;
+
+      const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+      const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+      
+      let filteredCourses: Course[] = [];
+      if (studentClassId) {
+          const isFirstClass = studentClassId === firstClassId;
+          filteredCourses = studentVisibleCourses.filter(course =>
+              !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
+          );
+      } else {
+          filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
+      }
+      
+      let totalQuestionBankPassedTests = 0;
+      let totalQuestionBankTests = 0;
+
+      for (const course of filteredCourses) {
+          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+          const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
+          const progressSnap = await getDoc(progressRef);
+          
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          completedTopicsTotal += completedTopics.length;
+          
+          const unitsRef = collection(db, 'courses', course.id, 'units');
+          const unitsSnap = await getDocs(unitsRef);
+          let totalTopics = 0;
+          for (const unitDoc of unitsSnap.docs) {
+              const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+              totalTopics += topicsSnap.size;
+          }
+          grandTotalTopics += totalTopics;
+
+          totalQuestionBankPassedTests += qbStats.passedTests;
+          totalQuestionBankTests += qbStats.totalTests;
+      }
+
+      const qbProgressPercentage = totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0;
+
+      setStats({
+          score: userScore,
+          completedTopics: completedTopicsTotal,
+          totalTopics: grandTotalTopics,
+          generalRank,
+          classRank,
+          branchRank,
+          questionBankProgress: qbProgressPercentage,
+      });
+
+    } catch (error) {
+      console.error("Error fetching student dashboard data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
   
-  if (isLoading || !user) {
+  if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -243,20 +274,19 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
-          {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
-                  <div className="relative shrink-0">
-                      <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                          <div className="relative shrink-0 w-20 h-20">
-                              <UserAvatar user={user} className="w-full h-full" />
-                          </div>
-                      </div>
-                      <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
-                          LVL {Math.floor(stats.score / 1000) + 1}
-                      </div>
+                  <div className="relative z-10">
+                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
+                         <div className="relative shrink-0 w-20 h-20">
+                            <UserAvatar user={user} className="w-full h-full" />
+                         </div>
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
+                        LVL {Math.floor(stats.score / 1000) + 1}
+                    </div>
                   </div>
                   
                   <div className="flex-grow text-center sm:text-left z-10 space-y-1">
@@ -267,7 +297,7 @@ export default function StudentDashboard() {
                       </div>
                   </div>
                   
-                   <Card className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
+                  <GlassCard className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
                       <CardHeader className="p-0 mb-1">
                           <CardTitle className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
                               <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
@@ -275,13 +305,12 @@ export default function StudentDashboard() {
                           </CardTitle>
                       </CardHeader>
                       <CardContent className="p-0">
-                          <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold">Toplam Puan</p>
+                         <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold">Toplam Puan</p>
                       </CardContent>
-                  </Card>
+                  </GlassCard>
               </div>
           </GlassCard>
           
-          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <Link href="/student/soru-bankasi" className="group h-full">
@@ -320,38 +349,37 @@ export default function StudentDashboard() {
                  </GlassCard>
               </Link>
             
-            <GlassCard className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30">
-              <Link href="/leaderboard" className="block h-full">
-                  <div className="p-5 flex flex-col h-full relative">
-                      <div className="absolute top-4 right-4 bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                            <Trophy className="h-8 w-8 text-amber-400" />
-                      </div>
+            <Link href="/leaderboard" className="group h-full">
+                <GlassCard className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30">
+                    <div className="p-5 flex flex-col h-full relative">
+                        <div className="absolute top-4 right-4 bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                             <Trophy className="h-8 w-8 text-amber-400" />
+                        </div>
 
-                      <div className="mb-6">
-                            <h2 className="text-2xl font-bold text-white mb-1">Şöhret Salonu</h2>
-                            <p className="text-amber-200 text-sm">Liderlik Tablosu Sıralaman</p>
-                      </div>
-                      
-                      <div className="mt-auto grid grid-cols-3 gap-2">
-                            <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
-                                <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
-                            </div>
-                            <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
-                                <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
-                            </div>
-                            <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
-                                <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
-                            </div>
-                      </div>
-                  </div>
-              </Link>
-            </GlassCard>
+                        <div className="mb-6">
+                             <h2 className="text-2xl font-bold text-white mb-1">Şöhret Salonu</h2>
+                             <p className="text-amber-200 text-sm">Liderlik Tablosu Sıralaman</p>
+                        </div>
+                        
+                        <div className="mt-auto grid grid-cols-3 gap-2">
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
+                             </div>
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
+                             </div>
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
+                             </div>
+                        </div>
+                    </div>
+                </GlassCard>
+            </Link>
           </div>
 
-          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
@@ -365,7 +393,6 @@ export default function StudentDashboard() {
                 </GameButton>
           </div>
           
-           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
