@@ -1,17 +1,17 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, BrainCircuit } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, BrainCircuit, Gamepad2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useAuth } from "@/context/auth-context";
+import { Loader2 } from "lucide-react";
 import { SelectionGrid } from "@/components/selection-grid";
 
 const steps = [
@@ -23,9 +23,9 @@ const steps = [
 
 export function KavramYarismaSetupClientPage() {
   const { user } = useAuth();
-  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
@@ -98,13 +98,13 @@ export function KavramYarismaSetupClientPage() {
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection({ ...selection, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' });
-    setIsLoading(true);
+    setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
     const unitsSnapshot = await getDocs(q);
     setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
     setTopics([]);
-    setIsLoading(false);
+    setIsDataLoading(false);
     setCurrentStep(2);
   };
 
@@ -113,15 +113,14 @@ export function KavramYarismaSetupClientPage() {
     if (unitId === 'all') {
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
-      setCurrentStep(4);
-      return;
+    } else {
+        setIsDataLoading(true);
+        const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+        const q = query(topicsRef, orderBy("title"));
+        const topicsSnapshot = await getDocs(q);
+        setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+        setIsDataLoading(false);
     }
-    setIsLoading(true);
-    const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
-    const q = query(topicsRef, orderBy("title"));
-    const topicsSnapshot = await getDocs(q);
-    setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-    setIsLoading(false);
     setCurrentStep(3);
   };
   
@@ -146,13 +145,16 @@ export function KavramYarismaSetupClientPage() {
   }
   
   const renderContent = () => {
-      switch(currentStep) {
+    if (isLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>;
+    if (isDataLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>;
+      
+    switch(currentStep) {
           case 1:
-            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={(id, name) => handleSelectCourse(id, name)} isLoading={isLoading} subtitleKey="className"/>;
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} subtitleKey="className"/>;
           case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={(id, name) => handleSelectUnit(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} isLoading={isLoading}/>;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
           case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={(id, name) => handleSelectTopic(id, name)} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} isLoading={isLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
           case 4:
             return (
               <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
@@ -170,65 +172,75 @@ export function KavramYarismaSetupClientPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-headline flex items-center justify-center gap-2">
-            <BrainCircuit className="h-8 w-8 text-pink-500"/>
-            Kavram Yarışması
-          </h1>
-          <p className="text-muted-foreground">Tanımı verilen kavramı bularak puanları topla!</p>
+        <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-black">
+            <div className="container mx-auto p-4 sm:p-6 md:p-8">
+                <div className="max-w-4xl mx-auto">
+                    <Card className="bg-white/60 dark:bg-black/60 backdrop-blur-lg border-white/20 shadow-2xl">
+                        <CardHeader>
+                            <div className="relative flex justify-center mb-6">
+                                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/20 to-transparent -translate-y-1/2 rounded-full blur-2xl"></div>
+                                <div className="relative z-10 p-4 bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-full shadow-lg border border-white/30">
+                                    <BrainCircuit className="h-12 w-12 text-pink-500" />
+                                </div>
+                            </div>
+                            <CardTitle className="text-center text-3xl font-black uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 header-font">
+                                Kavram Yarışması
+                            </CardTitle>
+                            <CardDescription className="text-center">
+                                Tanımı verilen kavramı bularak puanları topla!
+                            </CardDescription>
+                        </CardHeader>
+
+                        <CardContent className="min-h-[400px]">
+                            <div className="flex justify-center items-center mb-8 px-4">
+                              <ol className="flex items-center w-full max-w-lg">
+                                {steps.map((step, index) => (
+                                  <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-pink-200 dark:after:border-pink-800 after:border-2 after:inline-block": index !== steps.length - 1 })}>
+                                    <span className={cn(
+                                      "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
+                                      currentStep > step.id ? "bg-pink-600 text-white" :
+                                      currentStep === step.id ? "bg-purple-500 text-white scale-110 ring-4 ring-purple-300 dark:ring-purple-700" :
+                                      "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                                    )}>
+                                      {step.icon}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ol>
+                            </div>
+                             <div className="min-h-[250px] flex items-center justify-center">
+                                {renderContent()}
+                            </div>
+                        </CardContent>
+
+                        <CardFooter className="flex justify-between pt-6 border-t border-black/5">
+                            {currentStep === 1 ? (
+                                <Button asChild variant="ghost">
+                                    <Link href="/student/activities"><ArrowLeft className="mr-2 h-4 w-4" /> Etkinlikler</Link>
+                                </Button>
+                            ) : (
+                                <Button variant="ghost" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
+                            )}
+
+                            {currentStep < steps.length ? (
+                                <Button onClick={handleNext} disabled={
+                                    (currentStep === 1 && !selection.courseId) ||
+                                    (currentStep === 2 && !selection.unitId) ||
+                                    (currentStep === 3 && !selection.topicId)
+                                } className="bg-pink-500 hover:bg-pink-600 text-white">
+                                    İleri <ArrowRight className="ml-2 h-4 w-4" />
+                                </Button>
+                            ) : (
+                                <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
+                                    <Link href={getGameUrl()}>
+                                        <PartyPopper className="mr-2 h-4 w-4" /> Oyunu Başlat
+                                    </Link>
+                                </Button>
+                            )}
+                        </CardFooter>
+                    </Card>
+                </div>
+            </div>
         </div>
-
-        <div className="flex justify-center items-center mb-8 px-4">
-          <ol className="flex items-center w-full max-w-lg">
-            {steps.map((step, index) => (
-              <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-border after:border-2 after:inline-block": index !== steps.length - 1 })}>
-                <span className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
-                  currentStep > step.id ? "bg-primary text-primary-foreground" :
-                  currentStep === step.id ? "bg-accent text-accent-foreground scale-110" :
-                  "bg-muted text-muted-foreground"
-                )}>
-                  {step.icon}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <Card className="min-h-[400px]">
-          <CardHeader>
-            <CardTitle>{steps.find(s => s.id === currentStep)?.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="min-h-[250px] flex items-center justify-center">
-            {renderContent()}
-          </CardContent>
-          <CardFooter className="flex justify-between pt-6">
-            {currentStep === 1 ? (
-                <Button asChild variant="outline">
-                    <Link href="/student/activities"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                </Button>
-            ) : (
-                <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
-            )}
-
-            {currentStep < steps.length ? (
-              <Button onClick={handleNext} disabled={
-                (currentStep === 1 && !selection.courseId) ||
-                (currentStep === 2 && !selection.unitId) ||
-                (currentStep === 3 && !selection.topicId)
-              }>İleri <ArrowRight className="ml-2 h-4 w-4" /></Button>
-            ) : (
-              <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
-                <Link href={getGameUrl()}>
-                    <PartyPopper className="mr-2 h-4 w-4" /> Oyunu Başlat
-                </Link>
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
-      </div>
-    </div>
-  );
+    );
 }
