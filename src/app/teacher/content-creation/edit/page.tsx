@@ -6,10 +6,10 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, Question, Topic, GenerateLessonContentInput, VideoStep, ImageAsset } from '@/lib/types';
+import type { LessonStep, ActivityLinkStep, AccordionStep, ConceptMapStep, AnagramStep, FitbStep, McqStep, TfStep, SentenceScrambleStep, VisualStep, IframeStep, FlashcardStep, TrueFalseListStep, HtmlSlideStep, ContentStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, VideoStep, Topic } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video } from 'lucide-react';
+import { Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Grip, LayoutTemplate, LayersIcon, ClipboardCheck, Mic, Link as LinkIcon, Pencil, ArrowDownUp, Bug, Check, Video, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
 import Link from 'next/link';
@@ -125,7 +125,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -228,20 +228,20 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary' | 'videoLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'imageLibrary')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         let newSteps: LessonStep[] = [];
         
         switch (stepType) {
             case 'visual':
-                newSteps = (importedItems as ImageAsset[]).map(asset => ({
+                newSteps = importedItems.map(item => ({
                     type: 'visual',
-                    title: asset.title || 'Kütüphane Görseli',
-                    imageUrl: asset.imageUrl,
+                    title: item.title || 'Kütüphaneden Görsel',
+                    imageUrl: item.imageUrl || '',
                 }));
                 break;
             case 'flashcard':
@@ -452,8 +452,10 @@ function TopicEditor() {
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel / Afiş', action: () => handleOpenLibrary(['imageLibrary'], false, 'visual')},
+        { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
+        { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
+        { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },
         { label: 'Kavram Haritası', type: 'conceptMap', defaultTitle: 'Kavram Haritası' },
         { label: 'Dış Sayfa / Simülasyon', type: 'iframe', defaultTitle: 'İnteraktif Etkinlik' },
         { label: 'İnteraktif HTML Sayfası', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
@@ -464,7 +466,7 @@ function TopicEditor() {
         { label: 'Doğru/Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
-        { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
+        { label: 'Anagram Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
@@ -518,6 +520,16 @@ function TopicEditor() {
                      <Button variant="secondary" onClick={() => setIsPreviewOpen(true)}>
                         <Eye className="mr-2 h-4 w-4" />
                         Önizle
+                    </Button>
+                    <Button variant="outline" asChild>
+                        <Link href="/teacher/image-library" target="_blank">
+                             <ImageIcon className="mr-2 h-4 w-4"/>
+                            Görsel Kütüphanesi
+                        </Link>
+                    </Button>
+                    <Button variant="outline" onClick={() => handleOpenLibrary(['questions', 'concept', 'definition', 'sentence', 'categorization', 'sorting', 'imageLibrary'], true, 'visual')}>
+                        <Library className="mr-2 h-4 w-4"/>
+                        Kütüphaneden Ekle
                     </Button>
                     <Button variant="outline" onClick={() => setIsBulkImportOpen(true)}>
                         <Upload className="mr-2 h-4 w-4"/>
@@ -650,10 +662,6 @@ function TopicEditor() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                     <Button variant="outline" onClick={() => handleOpenLibrary(['imageLibrary'], false, 'visual')}>
-                        <Library className="mr-2 h-4 w-4" />
-                        Görsel Kütüphanesi
-                    </Button>
                 </div>
                 
                 <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -694,7 +702,7 @@ function TopicEditor() {
                 isOpen={isLibraryPanelOpen}
                 onOpenChange={setIsLibraryPanelOpen}
                 onItemsSelected={handleItemsImportedFromLibrary}
-                context={{ courseId, unitId, topicId }}
+                context={context}
                 config={libraryConfig}
              />
              <StepEditorDialog 
@@ -721,11 +729,10 @@ function TopicEditor() {
     );
 }
 
-export default function SummerTopicEditorPage() {
+export default function TopicEditorPage() {
     return (
         <Suspense fallback={<div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <TopicEditor />
         </Suspense>
     )
 }
-
