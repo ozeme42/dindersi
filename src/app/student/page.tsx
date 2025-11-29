@@ -1,67 +1,26 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { 
-    BookOpen, Trophy, Star, Gamepad2, Users, 
-    ShoppingCart, Columns, LayoutTemplate, FileCog, 
-    Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
-    Loader2, Home, User
-} from 'lucide-react';
+import React, { useState, useEffect, type ReactNode } from "react";
+import { useRouter } from 'next/navigation';
+import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getCountFromServer, getDoc } from "firebase/firestore";
-import { getStudentExams } from "@/app/student/deneme/actions";
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from 'firebase/firestore';
+import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats } from "@/lib/types";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getStudentExams } from "@/app/student/deneme/actions";
 
-// --- UTILS & MOCKS ---
-
-function cn(...classes: (string | undefined | null | false)[]) {
-    return classes.filter(Boolean).join(" ");
-}
-
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
-
-const useAuth = () => {
-    const [user, setUser] = useState<UserProfile | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // This is a mock implementation. In a real app, this would use Firebase Auth.
-        const mockUser: UserProfile = {
-            uid: 'student-123',
-            displayName: 'Efe Can',
-            email: 'efe@okul.com',
-            role: 'student',
-            class: '6-A',
-            score: 15450,
-            avatar: null
-        };
-        setUser(mockUser);
-        setLoading(false);
-    }, []);
-
-    return { user, loading };
-};
-
-const UserAvatar = ({ user, className, ...props }: any) => (
-    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden", className)} {...props}>
-        {user?.avatar ? (
-            <img src={user.avatar} alt={user.displayName} className="w-full h-full object-cover" />
-        ) : (
-            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
-        )}
-    </div>
-);
-
-const Skeleton = ({ className }: { className?: string }) => (
-    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
-);
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Map as MapIcon } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
+import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -111,7 +70,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
         {children}
     </div>
 );
-
 
 // --- COMPONENTS ---
 
@@ -181,14 +139,15 @@ function StudentDashboard() {
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      questionBankProgress: 0, 
+      coursesStarted: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      passedTests: 0,
-      totalQuestionBankTests: 0,
+      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
+  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
     async function fetchData() {
@@ -202,72 +161,111 @@ function StudentDashboard() {
       try {
         let completedTopicsTotal = 0;
         let grandTotalTopics = 0;
+        let studentClassName: string | undefined;
+        let userScore = user.score || 0;
         
-        const [allUsersSnapshot, allCoursesSnapshot, examsResult] = await Promise.all([
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+        studentClassName = user.class?.split(' - ')[0];
+
+        let coursesData: Course[] = [];
+
+        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
+          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
         ]);
-
-        if(examsResult.success && examsResult.data) {
-            setExamStats({
-                pending: examsResult.data.filter(e => !e.solvedEvent).length,
-                solved: examsResult.data.filter(e => !!e.solvedEvent).length
-            });
-        }
         
+        // Calculate exam stats
+        if (examsSnapshot.success && examsSnapshot.data) {
+            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+            const solved = examsSnapshot.data.length - pending;
+            setExamStats({ pending, solved });
+        }
+
         const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-        
+
         let classRank = 0;
         let branchRank = 0;
+
         if(user.class) {
             const gradeName = user.class.split(' - ')[0];
             const branchName = user.class;
+
             const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            classRank = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+
             const studentsInBranch = allStudents.filter(s => s.class === branchName);
-            branchRank = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
         }
 
-        const progressCollectionRef = collection(db, `users/${user.uid}/progress`);
-        const progressSnapshot = await getDocs(progressCollectionRef);
+        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
         
-        progressSnapshot.forEach(doc => {
-            completedTopicsTotal += (doc.data().completedTopics || []).length;
-        });
+        const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+        const studentClassId = studentClass?.id;
 
-        for (const courseDoc of allCoursesSnapshot.docs) {
-            const courseData = courseDoc.data();
-             if (courseData.classId === user.class?.split(' - ')[0] || !courseData.classId) {
-                const unitsSnap = await getDocs(collection(db, 'courses', courseDoc.id, 'units'));
-                 for (const unitDoc of unitsSnap.docs) {
-                    const topicsSnap = await getDocs(collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`));
-                    grandTotalTopics += topicsSnap.size;
-                }
-             }
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        
+        const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+        
+        let filteredCourses: Course[] = [];
+        if (studentClassId) {
+            const isFirstClass = studentClassId === firstClassId;
+            filteredCourses = studentVisibleCourses.filter(course =>
+                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
+            );
+        } else {
+            filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
         }
         
         let totalQuestionBankPassedTests = 0;
         let totalQuestionBankTests = 0;
-        for (const courseDoc of allCoursesSnapshot.docs) {
-            const courseStats = await getCourseQuestionBankStats(courseDoc.id, user.uid);
-            totalQuestionBankPassedTests += courseStats.passedTests;
-            totalQuestionBankTests += courseStats.totalTests;
-        }
-        const qbProgressPercentage = totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0;
+
+        coursesData = await Promise.all(filteredCourses.map(async (course) => {
+          const courseUnitsSnapshot = await getDocs(query(collection(db, 'courses', course.id, 'units')));
+          let totalTopics = 0;
+
+          for(const unitDoc of courseUnitsSnapshot.docs) {
+              const topicsSnapshot = await getDocs(query(collection(db, 'courses', course.id, 'units', unitDoc.id, 'topics')));
+              totalTopics += topicsSnapshot.size;
+          }
+          
+          const progressSnap = await getDoc(doc(db, 'users', user.uid, 'progress', course.id));
+          
+          const completedTopics = progressSnap.exists() ? (progressSnap.data()?.completedTopics || []).length : 0;
+          completedTopicsTotal += completedTopics;
+          grandTotalTopics += totalTopics;
+
+          const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
+          totalQuestionBankPassedTests += qbStats.passedTests;
+          totalQuestionBankTests += qbStats.totalTests;
+
+          return course;
+        }));
         
+        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        
+        const qbProgressPercentage = totalQuestionBankTests > 0 
+            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
+            : 0;
+
         setStats({
-            score: user.score || 0,
+            score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            questionBankProgress: qbProgressPercentage,
-            passedTests: totalQuestionBankPassedTests,
-            totalQuestionBankTests: totalQuestionBankTests,
+            coursesStarted: coursesStartedCount,
+            coursesCompleted: coursesCompletedCount,
+            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
+            questionBankProgress: qbProgressPercentage,
         });
 
       } catch (error) {
@@ -279,10 +277,17 @@ function StudentDashboard() {
     fetchData();
   }, [user]);
   
+  if (isLoading) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
+            <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
+        </div>
+    );
+  }
+
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <>
     <div className="bg-[#0f041e] min-h-screen">
       <div className="p-4 sm:p-6 md:p-8 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a0b2e] to-transparent z-0"></div>
@@ -294,7 +299,7 @@ function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                     <UserAvatar user={user} className="w-20 h-20 text-slate-800 bg-white"/>
+                    <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -428,10 +433,15 @@ function StudentDashboard() {
         </div>
       </div>
     </div>
-    </>
   );
 }
 
 export default function StudentPage() {
-    return <StudentDashboard />;
+    return (
+        <>
+            <StudentDashboard />
+        </>
+    );
 }
+
+    
