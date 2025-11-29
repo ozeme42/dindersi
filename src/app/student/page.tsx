@@ -1,29 +1,44 @@
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
-import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentExams } from "@/app/student/deneme/actions";
-
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { getStudentExams } from "@/app/student/deneme/actions";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getDoc, doc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import type { Course, SchoolClass, Topic, Unit, UserProfile } from '@/lib/types';
+import { useAuth } from '@/context/auth-context';
+
+// --- UTILS & MOCKS ---
+
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -136,155 +151,174 @@ function HardestWorkersToday() {
     )
 }
 
-function StudentDashboard() {
-  const { user } = useAuth();
+function StudentPage() {
+    const { user, loading } = useAuth();
+  
+    if (loading || !user) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
+                <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
+            </div>
+        );
+    }
+
+    return <StudentDashboard user={user} />;
+}
+
+export default StudentPage;
+
+function StudentDashboard({ user }: { user: UserProfile }) {
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0, 
+      passedTests: 0,
+      totalQuestionBankTests: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
 
-  useEffect(() => {
-    async function fetchData() {
-      if (!user?.uid) {
-          setIsLoading(false);
-          return;
-      };
+    useEffect(() => {
+        if (!user?.uid) {
+            setIsLoading(false);
+            return;
+        };
 
-      setIsLoading(true);
-      
-      try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
-        let studentClassName: string | undefined;
-        let userScore = user.score || 0;
-        
-        studentClassName = user.class?.split(' - ')[0];
+        const fetchData = async () => {
+            setIsLoading(true);
+            
+            try {
+                let completedTopicsTotal = 0;
+                let grandTotalTopics = 0;
+                let studentClassName: string | undefined;
+                let userScore = user.score || 0;
+                
+                studentClassName = user.class?.split(' - ')[0];
 
-        let coursesData: Course[] = [];
+                const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+                    getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+                    getDocs(collection(db, "courses")),
+                    getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+                    getStudentExams(user.uid),
+                ]);
+                
+                if (examsSnapshot.success && examsSnapshot.data) {
+                    const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+                    const solved = examsSnapshot.data.length - pending;
+                    setExamStats({ pending, solved });
+                }
 
-        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-          getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-          getStudentExams(user.uid),
-        ]);
-        
-        // Calculate exam stats
-        if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-            const solved = examsSnapshot.data.length - pending;
-            setExamStats({ pending, solved });
+                const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+
+                const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+                const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
+
+                let classRank = 0;
+                let branchRank = 0;
+
+                if(user.class) {
+                    const gradeName = user.class.split(' - ')[0];
+                    const branchName = user.class;
+
+                    const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+                    const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+                    classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+
+                    const studentsInBranch = allStudents.filter(s => s.class === branchName);
+                    const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+                    branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+                }
+
+                const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+                const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+                
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+                const studentClassId = studentClass?.id;
+
+                const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+                
+                const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
+                
+                let filteredCourses: Course[] = [];
+                if (studentClassId) {
+                    const isFirstClass = studentClassId === firstClassId;
+                    filteredCourses = studentVisibleCourses.filter(course =>
+                        !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
+                    );
+                } else {
+                    filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
+                }
+                
+                let totalQuestionBankPassedTests = 0;
+                let totalQuestionBankTests = 0;
+
+                for (const course of filteredCourses) {
+                    const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+                    const unitsRef = collection(db, 'courses', course.id, 'units');
+                    
+                    const [progressSnap, unitsSnap] = await Promise.all([
+                        getDoc(progressRef),
+                        getDocs(unitsRef),
+                    ]);
+
+                    if (progressSnap.exists()) {
+                        completedTopicsTotal += (progressSnap.data().completedTopics || []).length;
+                    }
+
+                    let totalTopics = 0;
+                    for (const unitDoc of unitsSnap.docs) {
+                        const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                        totalTopics += topicsSnap.size;
+                    }
+                    grandTotalTopics += totalTopics;
+
+                    const qbProgressRef = doc(db, 'users', user.uid, 'questionBankProgress', course.id);
+                    const qbSnap = await getDoc(qbProgressRef);
+                    if (qbSnap.exists()) {
+                        const qbData = qbSnap.data();
+                        for (const topicId in qbData) {
+                            const topicProgress = qbData[topicId];
+                            const allResults = [
+                                ...Object.values(topicProgress.easy || {}),
+                                ...Object.values(topicProgress.medium || {}),
+                                ...Object.values(topicProgress.hard || {})
+                            ];
+                            totalQuestionBankTests += allResults.length;
+                            passedTests += allResults.filter((r: any) => r.status === 'passed').length;
+                        }
+                    }
+                }
+                
+                const qbProgressPercentage = totalQuestionBankTests > 0 
+                    ? Math.round((passedTests / totalQuestionBankTests) * 100)
+                    : 0;
+
+                setStats({
+                    score: userScore,
+                    completedTopics: completedTopicsTotal,
+                    totalTopics: grandTotalTopics,
+                    questionBankProgress: qbProgressPercentage,
+                    passedTests: passedTests,
+                    totalQuestionBankTests: totalQuestionBankTests,
+                    generalRank,
+                    classRank,
+                    branchRank,
+                });
+
+            } catch (error) {
+                console.error("Error fetching student dashboard data:", error);
+            } finally {
+                setIsLoading(false);
+            }
         }
 
-        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+        fetchData();
+    }, [user]);
 
-        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
-        let classRank = 0;
-        let branchRank = 0;
-
-        if(user.class) {
-            const gradeName = user.class.split(' - ')[0];
-            const branchName = user.class;
-
-            const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-            const studentsInBranch = allStudents.filter(s => s.class === branchName);
-            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-        }
-
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
-        
-        const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-        const studentClassId = studentClass?.id;
-
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        
-        const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-        
-        let filteredCourses: Course[] = [];
-        if (studentClassId) {
-            const isFirstClass = studentClassId === firstClassId;
-            filteredCourses = studentVisibleCourses.filter(course =>
-                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-            );
-        } else {
-            filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
-        }
-        
-        let totalQuestionBankPassedTests = 0;
-        let totalQuestionBankTests = 0;
-
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
-          const unitsRef = collection(db, 'courses', course.id, 'units');
-          const unitsSnap = await getDocs(unitsRef);
-          let totalTopics = 0;
-          
-          for (const unitDoc of unitsSnap.docs) {
-            const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-            totalTopics += topicsSnap.size;
-          }
-          
-          grandTotalTopics += totalTopics;
-          
-          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
-          
-          const [progressSnap, questionBankStats] = await Promise.all([
-            getDoc(progressRef),
-            qbStats
-          ]);
-
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics?.length || 0 : 0;
-          completedTopicsTotal += completedTopics;
-          
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
-
-          return course;
-        }));
-        
-        const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
-            : 0;
-
-        setStats({
-            score: userScore,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            coursesStarted: 0, // Simplified for now
-            coursesCompleted: 0, // Simplified for now
-            totalCourses: coursesData.length,
-            generalRank,
-            classRank,
-            branchRank,
-            questionBankProgress: qbProgressPercentage,
-        });
-
-      } catch (error) {
-        console.error("Error fetching student dashboard data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, [user]);
-  
   if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
@@ -307,10 +341,8 @@ function StudentDashboard() {
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
-                  <div className="relative z-10">
-                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
-                    </div>
+                  <div className="relative z-10 p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
+                     <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -446,8 +478,4 @@ function StudentDashboard() {
     </div>
     </>
   );
-}
-
-export default function StudentPage() {
-    return <StudentDashboard />;
 }
