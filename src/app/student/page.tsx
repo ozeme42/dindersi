@@ -14,51 +14,13 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, FileCog, Crown, Award, Globe, School, Target } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Target, Backpack } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-const GameButton = ({ 
-    children, 
-    className, 
-    variant = 'primary', 
-    href, 
-    badge,
-    ...props 
-}: any) => {
-    const variants: {[key: string]: string} = {
-        primary: "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40",
-        secondary: "bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40",
-        success: "bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40",
-        warning: "bg-amber-500 hover:bg-amber-400 border-amber-700 text-white shadow-amber-900/40",
-        info: "bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40",
-        violet: "bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40",
-        orange: "bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40",
-    };
-
-    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl px-4 shadow-xl group cursor-pointer";
-    
-    const content = (
-        <span className={cn(baseClass, variants[variant], className)} {...props}>
-            {children}
-            {badge && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-pulse shadow-sm">
-                    {badge}
-                </span>
-            )}
-        </span>
-    );
-
-    if (href) {
-        return <Link href={href} className="block h-full">{content}</Link>;
-    }
-    return <button className="block w-full h-full">{content}</button>;
-};
-
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
@@ -70,6 +32,20 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
+
+const StatCard = ({ title, value, subValue, icon, href }: { title: string, value: string | number, subValue?: string, icon: ReactNode, color?: string, href: string }) => (
+    <Link href={href} className="block group h-full">
+        <Card className={cn(
+            "h-full text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105",
+            "bg-primary" // Default color
+        )}>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-80" })}
+            <p className="text-4xl font-bold mt-2">{value}</p>
+            <p className="font-semibold">{title}</p>
+            {subValue && <p className="text-xs opacity-90">{subValue}</p>}
+        </Card>
+    </Link>
+);
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -103,35 +79,37 @@ function HardestWorkersToday() {
                         <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
                     </div>
                 ) : dailyTop.length > 0 ? (
-                    <div className="space-y-2">
+                     <div className="space-y-2">
                         {dailyTop.map((student, index) => (
                             <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-3 flex-grow min-w-0">
                                     <div className="h-8 w-8 flex items-center justify-center bg-black/20 rounded-lg">
-                                        {rankIcons[index]}
+                                      {rankIcons[index]}
                                     </div>
                                     <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20 text-slate-700"/>
                                     <div>
-                                        <p className="font-bold text-white text-sm">{student.displayName}</p>
-                                        <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
+                                      <p className="font-bold text-white text-sm">{student.displayName}</p>
+                                      <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()}</p>
+                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()} Puan</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse XP kazanmadı.</p>
+                    <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse puan kazanmadı.</p>
                 )}
             </div>
         </GlassCard>
     )
 }
 
+
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -163,6 +141,8 @@ export default function StudentDashboard() {
         let userScore = user.score || 0;
         
         studentClassName = user.class?.split(' - ')[0];
+
+        let coursesData: Course[] = [];
 
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
@@ -222,7 +202,7 @@ export default function StudentDashboard() {
         let totalQuestionBankPassedTests = 0;
         let totalQuestionBankTests = 0;
 
-        const coursesData = await Promise.all(filteredCourses.map(async (course) => {
+        coursesData = await Promise.all(filteredCourses.map(async (course) => {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
           const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
@@ -231,9 +211,7 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const progressData = progressSnap.exists() ? progressSnap.data() : { completedTopics: [] };
-          const completedTopics = progressData.completedTopics || [];
-
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -246,7 +224,12 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
+          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          course.topicsCount = totalTopics;
+          course.unitsCount = unitsSnap.size;
+          course.completedTopicsCount = completedTopics.length;
 
+          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
@@ -255,6 +238,8 @@ export default function StudentDashboard() {
         
         const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
         const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        
+        setCourses(coursesData);
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -289,7 +274,7 @@ export default function StudentDashboard() {
         </div>
     );
   }
-
+  
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
@@ -440,4 +425,4 @@ export default function StudentDashboard() {
   );
 }
 
-    
+
