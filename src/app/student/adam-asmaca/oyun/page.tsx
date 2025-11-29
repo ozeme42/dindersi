@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { 
-    ArrowLeft, RefreshCw, Heart, Trophy, HelpCircle, Skull, Home, Lightbulb, Loader2 
+    ArrowLeft, RefreshCw, Heart, Trophy, HelpCircle, Skull, Home, Lightbulb, Loader2, PartyPopper, ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import confetti from "canvas-confetti";
-import { useAuth } from '@/context/auth-context';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import type { HangmanData } from '../actions';
+import { useAuth } from '@/context/auth-context';
 import { getAdamAsmacaAction, submitAdamAsmacaScoreAction } from '../actions';
-import Link from "next/link";
-
+import type { HangmanData } from '../actions';
 
 // --- ANIMATED HANGMAN SVG COMPONENT ---
 const HangmanFigure = ({ errors }: { errors: number }) => {
@@ -53,6 +52,7 @@ const KEYBOARD_LETTERS = [
     "V", "Y", "Z"
 ];
 
+
 function HangmanGame() {
     const { user } = useAuth();
     const router = useRouter();
@@ -71,17 +71,15 @@ function HangmanGame() {
     const [roundStatus, setRoundStatus] = useState<'playing' | 'won' | 'lost'>('playing');
     const [isSubmitting, setIsSubmitting] = useState(false);
     
-    // Constants
     const MAX_ERRORS = 6;
     const POINTS_PER_WORD = 100;
-
-    // Derived
+    
     const currentData = gameData[currentWordIndex];
     const targetWord = currentData?.word || "";
 
-    // --- INITIAL DATA FETCH ---
     useEffect(() => {
         const initGame = async () => {
+            setLoading(true);
             const courseId = searchParams.get('courseId');
             const unitId = searchParams.get('unitId');
             const topicId = searchParams.get('topicId');
@@ -98,12 +96,9 @@ function HangmanGame() {
         initGame();
     }, [searchParams]);
 
-    // --- GAME LOGIC ---
-
     const handleGuess = useCallback((letter: string) => {
         if (roundStatus !== 'playing' || guessedLetters.has(letter)) return;
 
-        // Vibrate on mobile
         if (typeof navigator !== "undefined" && navigator.vibrate) {
             navigator.vibrate(10); 
         }
@@ -112,7 +107,6 @@ function HangmanGame() {
         setGuessedLetters(newGuessed);
 
         if (!targetWord.includes(letter)) {
-            // Wrong Guess
             const newWrong = wrongGuesses + 1;
             setWrongGuesses(newWrong);
             if (newWrong >= MAX_ERRORS) {
@@ -120,7 +114,6 @@ function HangmanGame() {
                 if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate([100, 50, 100]);
             }
         } else {
-            // Correct Guess
             const isWon = targetWord.split('').every(char => newGuessed.has(char));
             if (isWon) {
                 setRoundStatus('won');
@@ -135,7 +128,6 @@ function HangmanGame() {
         }
     }, [guessedLetters, roundStatus, targetWord, wrongGuesses]);
 
-    // Keyboard Listener
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             const char = e.key.toLocaleUpperCase('tr-TR');
@@ -147,17 +139,18 @@ function HangmanGame() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleGuess]);
 
-    // --- NAVIGATION LOGIC ---
-
     const handleNextLevel = () => {
+        setLoading(true); // Prevent flashing
+        setRoundStatus('playing');
         if (currentWordIndex + 1 < gameData.length) {
-            setRoundStatus('playing'); // Reset status BEFORE changing index
+            setCurrentWordIndex(prev => prev + 1);
             setGuessedLetters(new Set());
             setWrongGuesses(0);
-            setCurrentWordIndex(prev => prev + 1);
         } else {
             handleFinishGame();
         }
+        // Give a moment for state to update before showing content
+        setTimeout(() => setLoading(false), 10);
     };
 
     const handleFinishGame = async () => {
@@ -166,8 +159,6 @@ function HangmanGame() {
         await submitAdamAsmacaScoreAction(user?.uid || null, score, context);
         router.push('/student/activities');
     };
-
-    // --- RENDER HELPERS ---
 
     if (loading) return (
         <div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white space-y-4">
@@ -258,11 +249,9 @@ function HangmanGame() {
                             <div className="p-2 bg-amber-500/20 rounded-lg shrink-0">
                                 <Lightbulb className="h-6 w-6 text-amber-400 fill-amber-400" />
                             </div>
-                            <div className="flex-grow">
+                            <div>
                                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">İpucu</h4>
-                                <p className="text-lg font-medium text-white leading-relaxed">
-                                    {currentData.hint}
-                                </p>
+                                <p className="text-lg font-medium text-white leading-relaxed">{currentData.hint}</p>
                             </div>
                         </div>
                     </div>
@@ -276,10 +265,10 @@ function HangmanGame() {
                                 <div 
                                     key={`${currentWordIndex}-${index}`}
                                     className={cn(
-                                        "w-10 h-12 sm:w-12 sm:h-16 flex items-center justify-center text-2xl sm:text-3xl font-bold rounded-xl border-b-4 transition-all duration-500 transform perspective-1000",
+                                        "w-10 h-12 sm:w-12 sm:h-16 flex items-center justify-center text-2xl sm:text-3xl font-bold rounded-xl border-b-4 transition-all duration-500",
                                         isRevealed 
-                                            ? "bg-indigo-600 border-indigo-800 text-white rotate-x-0 opacity-100" 
-                                            : "bg-white/10 border-white/20 text-transparent rotate-x-90 opacity-80",
+                                            ? "bg-indigo-600 border-indigo-800 text-white" 
+                                            : "bg-white/10 border-white/20 text-transparent",
                                         isLostReveal && "bg-red-500/50 border-red-500 text-red-100"
                                     )}
                                 >
@@ -332,7 +321,7 @@ function HangmanGame() {
                                 ) : (
                                     currentWordIndex + 1 < gameData.length ? (
                                         <>
-                                            Sonraki Kelime <ArrowLeft className="ml-2 h-5 w-5 rotate-180" />
+                                            Sonraki Kelime <ArrowRight className="ml-2 h-5 w-5" />
                                         </>
                                     ) : (
                                         <>
@@ -348,3 +337,17 @@ function HangmanGame() {
         </div>
     );
 }
+
+function AdamAsmacaGamePageWrapper() {
+    return (
+        <Suspense fallback={
+            <div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white space-y-4">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
+            </div>
+        }>
+            <HangmanGame />
+        </Suspense>
+    );
+}
+
+export default AdamAsmacaGamePageWrapper;
