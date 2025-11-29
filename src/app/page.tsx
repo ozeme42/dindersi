@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -299,9 +298,9 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses
                                                                             {course.units.map(unit => (
                                                                             <AccordionItem value={unit.id} key={unit.id} className="border-none">
                                                                                 <AccordionTrigger className="flex items-center gap-2 mb-2 text-indigo-300 font-bold uppercase text-xs tracking-wider hover:no-underline py-2">
-                                                                                    <div className="flex items-center gap-2 justify-end w-full">
-                                                                                        <span>{unit.title}</span>
+                                                                                    <div className="flex items-center gap-2 w-full">
                                                                                         <div className="h-1.5 w-1.5 rounded-full bg-indigo-400"></div>
+                                                                                        <span>{unit.title}</span>
                                                                                     </div>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="space-y-2">
