@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
+import React, { useState, useEffect, type ReactNode, useCallback } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -14,14 +14,14 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Swords, Map, Home, Backpack } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Sparkles, Map, Swords, Backpack, Loader2, Home, User, Target } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+// --- GAMIFIED UI COMPONENTS ---
 
 const GameButton = ({ 
     children, 
@@ -70,6 +70,74 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
+// --- MOBILE BOTTOM NAVIGATION ---
+
+const MobileNav = () => {
+    const [activeTab, setActiveTab] = useState('home');
+
+    const navItems = [
+        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
+        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
+        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
+        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
+        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
+    ];
+
+    return (
+        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
+            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
+
+                {navItems.map((item) => {
+                    const isActive = activeTab === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setActiveTab(item.id)}
+                            className={cn(
+                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
+                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
+                            )}
+                        >
+                            {isActive && (
+                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
+                            )}
+                            
+                            {item.highlight ? (
+                                <div className={cn(
+                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
+                                    isActive 
+                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
+                                        : "bg-slate-800 border-slate-600 shadow-black/50"
+                                )}>
+                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
+                                </div>
+                            ) : (
+                                <div className="relative z-10">
+                                    <item.icon className={cn(
+                                        "h-6 w-6 transition-all duration-300",
+                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
+                                    )} />
+                                </div>
+                            )}
+
+                            {!item.highlight && (
+                                <span className={cn(
+                                    "text-[10px] font-bold mt-1 transition-all duration-300",
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                                )}>
+                                    {item.label}
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -130,9 +198,9 @@ function HardestWorkersToday() {
     )
 }
 
-
 export default function StudentDashboard() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
+  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -150,7 +218,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      if (!user?.uid || !user.class) {
+      if (!user?.uid) {
           setIsLoading(false);
           return;
       };
@@ -160,15 +228,21 @@ export default function StudentDashboard() {
       try {
         let completedTopicsTotal = 0;
         let grandTotalTopics = 0;
-        const studentClassName = user.class?.split(' - ')[0];
+        let studentClassName: string | undefined;
+        let userScore = user.score || 0;
+        
+        studentClassName = user.class?.split(' - ')[0];
+
+        let coursesData: Course[] = [];
 
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"]))),
+          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
         ]);
         
+        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -176,22 +250,28 @@ export default function StudentDashboard() {
         }
 
         const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
-        const gradeName = user.class.split(' - ')[0];
-        const branchName = user.class;
+        let classRank = 0;
+        let branchRank = 0;
 
-        const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-        const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+        if(user.class) {
+            const gradeName = user.class.split(' - ')[0];
+            const branchName = user.class;
 
-        const studentsInBranch = allStudents.filter(s => s.class === branchName);
-        const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+            const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+
+            const studentsInBranch = allStudents.filter(s => s.class === branchName);
+            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+        }
 
         const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const firstClassId = allClasses[0]?.id;
+        const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
         
         const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
         const studentClassId = studentClass?.id;
@@ -213,7 +293,7 @@ export default function StudentDashboard() {
         let totalQuestionBankPassedTests = 0;
         let totalQuestionBankTests = 0;
 
-        for (const course of filteredCourses) {
+        coursesData = await Promise.all(filteredCourses.map(async (course) => {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
           const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
@@ -235,22 +315,34 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
+          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          course.topicsCount = totalTopics;
+          course.unitsCount = unitsSnap.size;
+          course.completedTopicsCount = completedTopics.length;
 
+          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
-        }
 
+          return course;
+        }));
+        
+        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        
+        setCourses(coursesData);
+        
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
             : 0;
 
         setStats({
-            score: user.score || 0,
+            score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: 0, // Simplified, can be re-added if needed
-            coursesCompleted: 0,
-            totalCourses: filteredCourses.length,
+            coursesStarted: coursesStartedCount,
+            coursesCompleted: coursesCompletedCount,
+            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
@@ -263,12 +355,10 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     }
-    if (!loading) {
-      fetchData();
-    }
-  }, [user, loading]);
+    fetchData();
+  }, [user]);
   
-  if (isLoading || loading) {
+  if (isLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -282,6 +372,7 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
+          {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
@@ -313,6 +404,7 @@ export default function StudentDashboard() {
               </div>
           </GlassCard>
           
+          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <Link href="/student/soru-bankasi" className="group h-full">
@@ -382,17 +474,21 @@ export default function StudentDashboard() {
             </Link>
           </div>
 
+          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <GameButton href="/student/activities" variant="info" className="flex-col gap-2 py-6 h-auto">
+                <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
                     <span>Etkinlikler</span>
+                    <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
                 </GameButton>
-                 <GameButton href="/student/yarismalar" variant="secondary" className="flex-col gap-2 py-6 h-auto">
+                 <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
                     <Swords className="h-8 w-8 mb-1"/> 
                     <span>Çok Oyunculu</span>
+                    <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
           </div>
           
+           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
@@ -417,6 +513,11 @@ export default function StudentDashboard() {
           
       </div>
 
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <MobileNav />
+      
     </div>
   );
 }
+
+    
