@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -197,24 +198,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
             </main>
 
             <footer className="container mx-auto p-8 text-center relative z-10">
-                <div className="flex justify-center gap-6 flex-wrap">
-                    <GameButton 
-                        href="#" 
-                        variant="secondary"
-                        className="text-sm px-8"
-                    >
-                        <Smartphone className="mr-2 h-5 w-5" />
-                        Android Uygulaması
-                    </GameButton>
-                    <GameButton 
-                        href="#" 
-                        variant="info"
-                        className="text-sm px-8"
-                    >
-                        <Video className="mr-2 h-5 w-5" />
-                        Video Galerisi
-                    </GameButton>
-                </div>
                 <p className="text-white/30 text-xs mt-8 font-medium tracking-widest uppercase">Eğlenerek Öğrenmenin Adresi</p>
             </footer>
         </div>
@@ -355,5 +338,5 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
         );
     }
     
-    return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups} />;
+    return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
 }
