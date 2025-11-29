@@ -18,24 +18,25 @@ export function UserAvatar({ user, className }: { user: UserForAvatar | null; cl
   const equippedBadge = SHOP_ITEMS.find(item => item.type === 'avatarBadge' && item.id === user.equippedBadgeId);
   const BadgeIcon = equippedBadge?.component;
 
-  const hasAvatarImage = user.avatar || user.photoURL;
-
   return (
     <div className={cn("relative h-10 w-10 shrink-0", className)}>
       <Avatar className="w-full h-full">
-        {hasAvatarImage ? (
-            <AvatarImage src={user.avatar || user.photoURL || undefined} alt={user.displayName || ''} data-ai-hint="profile picture" />
+        {BadgeIcon && (!user.avatar && !user.photoURL) ? (
+            <div className="w-full h-full flex items-center justify-center bg-muted rounded-full">
+                 <BadgeIcon className="w-3/4 h-3/4" />
+            </div>
         ) : (
-            <AvatarFallback>{fallbackLetter}</AvatarFallback>
+            <>
+                <AvatarImage src={user.avatar || user.photoURL || undefined} alt={user.displayName || ''} data-ai-hint="profile picture" />
+                <AvatarFallback>{fallbackLetter}</AvatarFallback>
+            </>
         )}
       </Avatar>
-      
-      {BadgeIcon && (
-        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent rounded-full">
-             <BadgeIcon className="w-2/3 h-2/3" />
+       {BadgeIcon && (user.avatar || user.photoURL) && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-full">
+          <BadgeIcon className="w-3/4 h-3/4" />
         </div>
       )}
-
       {user.equippedFrameUrl && (
         <div
           className="absolute inset-[-4px] rounded-full pointer-events-none"
