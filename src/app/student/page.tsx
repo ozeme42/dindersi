@@ -2,8 +2,12 @@
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
-import { useAuth } from "@/context/auth-context";
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Sparkles, Map, Swords, Backpack,
+    Loader2, Home, User, Target
+} from 'lucide-react';
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
@@ -11,21 +15,54 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { 
-    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, 
-    Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, 
-    Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, 
-    Globe, School, Map, Swords, Backpack, Loader2, Home, User
-} from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { MobileNav } from "@/components/bottom-nav-bar";
+// --- UTILS & MOCKS ---
+
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const useAuth = () => {
+    const [user, setUser] = useState<UserProfile | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Mock user data
+        const mockUser = {
+            uid: 'student-123',
+            displayName: 'Efe Can',
+            email: 'efe@okul.com',
+            role: 'student' as 'student',
+            class: '6-A',
+            score: 15450,
+            avatarUrl: null
+        };
+        setUser(mockUser);
+        setLoading(false);
+    }, []);
+
+    return { user, loading };
+};
+
+
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -66,37 +103,119 @@ const GameButton = ({
     return <button className="block w-full h-full">{content}</button>;
 };
 
-const GlassCard = ({ href, children, className }: { href?: string, children: React.ReactNode, className?: string }) => {
-    const content = (
-        <div className={cn(
-            "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative group h-full",
-            href && "hover:border-sky-400/50 transition-colors hover:bg-sky-900/30",
-            className
-        )}>
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-            {children}
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn(
+        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
+        className
+    )}>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
+        {children}
+    </div>
+);
+
+
+// --- MOBILE BOTTOM NAVIGATION ---
+
+const MobileNav = () => {
+    const [activeTab, setActiveTab] = useState('home');
+
+    const navItems = [
+        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
+        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
+        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
+        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
+        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
+    ];
+
+    return (
+        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
+            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
+
+                {navItems.map((item) => {
+                    const isActive = activeTab === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setActiveTab(item.id)}
+                            className={cn(
+                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
+                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
+                            )}
+                        >
+                            {isActive && (
+                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
+                            )}
+                            
+                            {item.highlight ? (
+                                <div className={cn(
+                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
+                                    isActive 
+                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
+                                        : "bg-slate-800 border-slate-600 shadow-black/50"
+                                )}>
+                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
+                                </div>
+                            ) : (
+                                <div className="relative z-10">
+                                    <item.icon className={cn(
+                                        "h-6 w-6 transition-all duration-300",
+                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
+                                    )} />
+                                </div>
+                            )}
+
+                            {!item.highlight && (
+                                <span className={cn(
+                                    "text-[10px] font-bold mt-1 transition-all duration-300",
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                                )}>
+                                    {item.label}
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
         </div>
     );
-
-    if (href) {
-        return <Link href={href} className="block h-full">{content}</Link>;
-    }
-    return content;
 };
 
+// --- MOCK DATA ---
+
+const MOCK_LEADERBOARD = [
+    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
+    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
+    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
+];
+
+const INITIAL_STATS = {
+    score: 0,
+    completedTopics: 0,
+    totalTopics: 0,
+    questionBankProgress: 0,
+    generalRank: 0,
+    classRank: 0,
+    branchRank: 0,
+};
+
+const MOCK_EXAM_STATS = {
+    pending: 2,
+    solved: 8
+};
 
 // --- COMPONENTS ---
 
 function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
+    const [dailyTop, setDailyTop] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => {
-            setDailyTop(data.slice(0, 3));
-        }).finally(() => {
+        const timer = setTimeout(() => {
+            setDailyTop(MOCK_LEADERBOARD);
             setIsLoading(false);
-        });
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -149,19 +268,8 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-      score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
-      generalRank: 0,
-      classRank: 0,
-      branchRank: 0,
-      questionBankProgress: 0,
-  });
-  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
+  const [stats, setStats] = useState(INITIAL_STATS);
+  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
 
   useEffect(() => {
     async function fetchData() {
@@ -189,6 +297,7 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
+        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -261,19 +370,13 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
-
+          
+          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -283,9 +386,6 @@ export default function StudentDashboard() {
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
@@ -316,7 +416,7 @@ export default function StudentDashboard() {
       <div className="max-w-5xl mx-auto space-y-6">
           
           {/* PLAYER HUD HEADER */}
-           <GlassCard>
+           <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
@@ -330,14 +430,10 @@ export default function StudentDashboard() {
                   </div>
                   
                   <div className="flex-grow text-center sm:text-left z-10 space-y-1">
-                      <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">
-                          {user?.displayName}
-                      </h1>
+                      <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
                       <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
                         <Backpack className="h-4 w-4 text-indigo-300" />
-                        <span className="text-sm font-medium text-indigo-200">
-                          {user?.class || 'Sınıfsız Gezgin'}
-                        </span>
+                        <span className="text-sm font-medium text-indigo-200">{user?.class || 'Sınıfsız Gezgin'}</span>
                       </div>
                   </div>
                   
@@ -354,78 +450,84 @@ export default function StudentDashboard() {
           {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              <GlassCard href="/student/soru-bankasi">
-                  <div className="p-5 flex flex-col h-full relative">
-                      <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                          <Map className="h-8 w-8 text-sky-400" />
-                      </div>
-                      
-                      <div className="mb-6">
-                          <h2 className="text-2xl font-bold text-white mb-1">Macera Haritası</h2>
-                          <p className="text-sky-200 text-sm">Dersler ve Soru Bankası</p>
-                      </div>
+              <Link href="/student/soru-bankasi" className="group h-full">
+                 <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
+                      <div className="p-5 flex flex-col h-full relative">
+                           <div className="flex items-start justify-between">
+                              <div className="mb-6">
+                                  <h2 className="text-2xl font-bold text-white mb-1">Macera Haritası</h2>
+                                  <p className="text-sky-200 text-sm">Dersler ve Soru Bankası</p>
+                              </div>
+                              <div className="bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                                  <Map className="h-8 w-8 text-sky-400" />
+                              </div>
+                           </div>
 
-                      <div className="mt-auto space-y-4">
-                          <div>
-                              <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                  <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
-                                  <span>{lessonProgress}%</span>
+                          <div className="mt-auto space-y-4">
+                              <div>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
+                                      <span>{lessonProgress}%</span>
+                                  </div>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
+                                  </div>
                               </div>
-                              <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                  <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
-                              </div>
-                          </div>
-                          <div>
-                              <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                  <span className="flex items-center gap-1"><Target className="h-3 w-3"/> Başarı Oranı</span>
-                                  <span>{stats.questionBankProgress}%</span>
-                              </div>
-                              <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                  <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                              <div>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><Target className="h-3 w-3"/> Başarı Oranı</span>
+                                      <span>{stats.questionBankProgress}%</span>
+                                  </div>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                                  </div>
                               </div>
                           </div>
                       </div>
-                  </div>
-              </GlassCard>
+                 </GlassCard>
+              </Link>
             
-            <GlassCard href="/leaderboard">
-                <div className="p-5 flex flex-col h-full relative">
-                    <div className="absolute top-4 right-4 bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                         <Trophy className="h-8 w-8 text-amber-400" />
+            <Link href="/leaderboard" className="group h-full">
+                <GlassCard className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30">
+                    <div className="p-5 flex flex-col h-full relative">
+                        <div className="flex items-start justify-between">
+                            <div className="mb-6">
+                                 <h2 className="text-2xl font-bold text-white mb-1">Şöhret Salonu</h2>
+                                 <p className="text-amber-200 text-sm">Liderlik Tablosu Sıralaman</p>
+                            </div>
+                            <div className="bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                                 <Trophy className="h-8 w-8 text-amber-400" />
+                            </div>
+                        </div>
+                        
+                        <div className="mt-auto grid grid-cols-3 gap-2">
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
+                             </div>
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
+                             </div>
+                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
+                                 <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
+                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
+                             </div>
+                        </div>
                     </div>
-
-                    <div className="mb-6">
-                         <h2 className="text-2xl font-bold text-white mb-1">Şöhret Salonu</h2>
-                         <p className="text-amber-200 text-sm">Liderlik Tablosu Sıralaman</p>
-                    </div>
-                    
-                    <div className="mt-auto grid grid-cols-3 gap-2">
-                         <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                             <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
-                             <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
-                         </div>
-                         <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                             <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
-                             <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
-                         </div>
-                         <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                             <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
-                             <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
-                         </div>
-                    </div>
-                </div>
-            </GlassCard>
+                </GlassCard>
+            </Link>
           </div>
 
           {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
-                    <Gamepad2 className="h-8 w-8 mb-1"/> 
+                <GameButton href="/student/activities" variant="info" className="text-xl flex-col gap-2 py-6 h-auto">
+                    <Gamepad2 className="h-10 w-10 mb-1"/> 
                     <span>Etkinlikler</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
                 </GameButton>
-                 <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
-                    <Swords className="h-8 w-8 mb-1"/> 
+                 <GameButton href="/student/yarismalar" variant="secondary" className="text-xl flex-col gap-2 py-6 h-auto">
+                    <Swords className="h-10 w-10 mb-1"/> 
                     <span>Çok Oyunculu</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
@@ -433,7 +535,7 @@ export default function StudentDashboard() {
           
            {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex-col md:flex-row gap-2 items-center">
+              <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
               </GameButton>
               <GameButton href="/student/ozetler" variant="primary" className="text-sm flex flex-col md:flex-row gap-2 items-center">
@@ -462,3 +564,5 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+    
