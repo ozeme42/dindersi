@@ -14,30 +14,13 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { 
-    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, 
-    ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, 
-    ShoppingCart, Package, Columns, LayoutTemplate, Bug, 
-    Users, FileCog, ClipboardCheck, Award, Crown, Globe, School,
-    Map, Swords, Backpack,
-    Loader2, Home, User
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, FileCog, Crown, Award, Globe, School, Target } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={cn(
-        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
-        className
-    )}>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-        {children}
-    </div>
-);
-
 
 const GameButton = ({ 
     children, 
@@ -57,13 +40,13 @@ const GameButton = ({
         orange: "bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40",
     };
 
-    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer";
+    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl px-4 shadow-xl group cursor-pointer";
     
     const content = (
         <span className={cn(baseClass, variants[variant], className)} {...props}>
             {children}
             {badge && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-pulse shadow-sm">
                     {badge}
                 </span>
             )}
@@ -75,6 +58,18 @@ const GameButton = ({
     }
     return <button className="block w-full h-full">{content}</button>;
 };
+
+
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn(
+        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
+        className
+    )}>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
+        {children}
+    </div>
+);
+
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -108,7 +103,7 @@ function HardestWorkersToday() {
                         <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
                     </div>
                 ) : dailyTop.length > 0 ? (
-                     <div className="space-y-2">
+                    <div className="space-y-2">
                         {dailyTop.map((student, index) => (
                             <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
                                 <div className="flex items-center gap-3">
@@ -134,7 +129,6 @@ function HardestWorkersToday() {
         </GlassCard>
     )
 }
-
 
 export default function StudentDashboard() {
   const { user } = useAuth();
@@ -170,8 +164,6 @@ export default function StudentDashboard() {
         
         studentClassName = user.class?.split(' - ')[0];
 
-        let coursesData: Course[] = [];
-
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
@@ -179,6 +171,7 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
+        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -229,7 +222,7 @@ export default function StudentDashboard() {
         let totalQuestionBankPassedTests = 0;
         let totalQuestionBankTests = 0;
 
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
+        const coursesData = await Promise.all(filteredCourses.map(async (course) => {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
           const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
@@ -238,7 +231,9 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          const progressData = progressSnap.exists() ? progressSnap.data() : { completedTopics: [] };
+          const completedTopics = progressData.completedTopics || [];
+
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -251,10 +246,6 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
 
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
@@ -293,8 +284,8 @@ export default function StudentDashboard() {
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-background">
-            <Loader2 className="h-16 w-16 animate-spin text-primary" />
+        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
+            <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
   }
@@ -362,6 +353,15 @@ export default function StudentDashboard() {
                                       <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
                                   </div>
                               </div>
+                              <div>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
+                                      <span>{stats.questionBankProgress}%</span>
+                                  </div>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                                  </div>
+                              </div>
                           </div>
                       </div>
                  </GlassCard>
@@ -403,12 +403,12 @@ export default function StudentDashboard() {
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
                     <span>Etkinlikler</span>
-                    <span className="text-[10px] opacity-70 font-normal normal-case">Tek Kişilik Oyunlar</span>
+                    <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
                 </GameButton>
                  <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
                     <Swords className="h-8 w-8 mb-1"/> 
-                    <span>Arena</span>
-                    <span className="text-[10px] opacity-70 font-normal normal-case">Çok Oyunculu</span>
+                    <span>Çok Oyunculu</span>
+                    <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
           </div>
           
