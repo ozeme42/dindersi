@@ -14,7 +14,7 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Target, Backpack } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, FileCog, Crown, Award, Globe, School, Users, Backpack, Target, Swords } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
@@ -31,6 +31,43 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
         {children}
     </div>
 );
+
+const GameButton = ({ 
+    children, 
+    className, 
+    variant = 'primary', 
+    href, 
+    badge,
+    ...props 
+}: any) => {
+    const variants: {[key: string]: string} = {
+        primary: "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40",
+        secondary: "bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40",
+        success: "bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40",
+        warning: "bg-amber-500 hover:bg-amber-400 border-amber-700 text-white shadow-amber-900/40",
+        info: "bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40",
+        violet: "bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40",
+        orange: "bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40",
+    };
+
+    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer";
+    
+    const content = (
+        <span className={cn(baseClass, variants[variant], className)} {...props}>
+            {children}
+            {badge && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                    {badge}
+                </span>
+            )}
+        </span>
+    );
+
+    if (href) {
+        return <Link href={href} className="block h-full">{content}</Link>;
+    }
+    return <button className="block w-full h-full">{content}</button>;
+};
 
 
 const StatCard = ({ title, value, subValue, icon, href }: { title: string, value: string | number, subValue?: string, icon: ReactNode, color?: string, href: string }) => (
@@ -93,13 +130,13 @@ function HardestWorkersToday() {
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()} Puan</p>
+                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse puan kazanmadı.</p>
+                    <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse XP kazanmadı.</p>
                 )}
             </div>
         </GlassCard>
@@ -109,7 +146,6 @@ function HardestWorkersToday() {
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -239,8 +275,6 @@ export default function StudentDashboard() {
         const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
         const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
-        setCourses(coursesData);
-        
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
             : 0;
@@ -269,12 +303,12 @@ export default function StudentDashboard() {
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
+        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
   }
-  
+
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
@@ -288,7 +322,7 @@ export default function StudentDashboard() {
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
+                         <UserAvatar user={user} className="w-20 h-20 rounded-full border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -424,5 +458,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-
