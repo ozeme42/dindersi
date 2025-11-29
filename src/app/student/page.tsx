@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback, type ReactNode } from "react";
+import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -11,9 +12,9 @@ import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Target, Backpack, MapIcon, Home, User, PenSquare, Workflow, MonitorPlay, Settings, DollarSign, BrainCircuit, Milestone, Wind, Coins, Swords } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Backpack, MapIcon as Map, Swords } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
@@ -21,34 +22,44 @@ import { Progress } from "@/components/ui/progress";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const GlassCard = React.forwardRef<
-    HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-    <div
-        ref={ref}
-        className={cn(
-            "bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl",
-            className
-        )}
-        {...props}
-    />
-));
-GlassCard.displayName = 'GlassCard';
+const GlassCard = ({ className, children }: { className?: string, children: React.ReactNode }) => (
+  <div className={cn("bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl", className)}>
+      {children}
+  </div>
+);
 
 const GameButton = ({ href, variant, className, children }: { href: string, variant: 'info' | 'secondary', className?: string, children: React.ReactNode }) => {
-  const baseClasses = "text-white/90 hover:text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-lg rounded-2xl";
-  const variantClasses = {
-      info: "bg-gradient-to-br from-sky-500 to-indigo-600 hover:shadow-sky-400/30",
-      secondary: "bg-gradient-to-br from-rose-500 to-fuchsia-600 hover:shadow-rose-400/30"
-  };
-  return (
-      <Button asChild className={cn(baseClasses, variantClasses[variant], className)}>
-          <Link href={href}>{children}</Link>
-      </Button>
-  );
+    const colorClasses = {
+        info: 'from-sky-900/80 to-sky-700/80 border-sky-600/50 hover:bg-sky-700/90',
+        secondary: 'from-fuchsia-900/80 to-fuchsia-700/80 border-fuchsia-600/50 hover:bg-fuchsia-700/90'
+    };
+    return (
+        <Link href={href} className={cn(
+            buttonVariants({ variant: 'default', size: 'default' }),
+            "bg-gradient-to-br text-white/90 font-bold tracking-tight border-b-4 transition-all duration-300 transform hover:-translate-y-0.5",
+            "shadow-[0_2px_20px_rgba(0,0,0,0.5),_inset_0_1px_2px_rgba(255,255,255,0.2)]",
+            colorClasses[variant],
+            className
+        )}>
+            {children}
+        </Link>
+    );
 };
 
+
+const StatCard = ({ title, value, subValue, icon, href }: { title: string, value: string | number, subValue?: string, icon: ReactNode, color?: string, href: string }) => (
+    <Link href={href} className="block group h-full">
+        <Card className={cn(
+            "h-full text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105",
+            "bg-primary" // Default color
+        )}>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-80" })}
+            <p className="text-4xl font-bold mt-2">{value}</p>
+            <p className="font-semibold">{title}</p>
+            {subValue && <p className="text-xs opacity-90">{subValue}</p>}
+        </Card>
+    </Link>
+);
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -69,13 +80,12 @@ function HardestWorkersToday() {
     };
 
     return (
-        <Card className="bg-card/80 backdrop-blur-sm shadow-xl">
+        <GlassCard>
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Trophy className="h-6 w-6 text-amber-500"/>
+                <CardTitle className="flex items-center gap-2 text-sky-200">
+                    <Trophy className="h-6 w-6 text-amber-400"/>
                     Günün Çalışkanları
                 </CardTitle>
-                <CardDescription>Bugün en çok puan kazanan öğrenciler.</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
                 {isLoading ? (
@@ -87,31 +97,32 @@ function HardestWorkersToday() {
                 ) : dailyTop.length > 0 ? (
                      <div className="space-y-0">
                         {dailyTop.map((student, index) => (
-                            <div key={student.uid} className="flex items-center justify-between py-3 px-4 transition-all hover:bg-muted/50 border-b last:border-b-0 last:rounded-b-lg">
+                            <div key={student.uid} className="flex items-center justify-between py-3 px-4 transition-all hover:bg-white/5 border-b border-white/5 last:border-b-0 last:rounded-b-2xl">
                                 <div className="flex items-center gap-3 flex-grow min-w-0">
                                     <div className="h-8 w-8 flex items-center justify-center flex-shrink-0">
                                       {rankIcons[index]}
                                     </div>
                                     <UserAvatar user={student} className="w-10 h-10 flex-shrink-0"/>
                                     <div className="flex-grow">
-                                      <p className="font-medium text-sm sm:text-base">{student.displayName}</p>
+                                      <p className="font-medium text-sm sm:text-base text-white/90">{student.displayName}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="font-bold text-base sm:text-lg text-primary ml-4 flex-shrink-0">{(student.score || 0).toLocaleString()} Puan</p>
+                                    <p className="font-bold text-base sm:text-lg text-sky-300 ml-4 flex-shrink-0">{(student.score || 0).toLocaleString()} Puan</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-center text-muted-foreground py-4">Bugün henüz kimse puan kazanmadı.</p>
+                    <p className="text-center text-sky-200/60 py-4 px-6">Bugün henüz kimse puan kazanmadı.</p>
                 )}
             </CardContent>
-        </Card>
+        </GlassCard>
     )
 }
 
-function StudentDashboard() {
+
+export default function StudentDashboard() {
   const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -268,7 +279,7 @@ function StudentDashboard() {
     }
     fetchData();
   }, [user]);
-
+  
   if (isLoading) {
     return (
         <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-background">
@@ -283,19 +294,16 @@ function StudentDashboard() {
     <div className="bg-[#0f041e] min-h-screen">
       <div className="p-4 sm:p-6 md:p-8 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a0b2e] to-transparent z-0"></div>
+        <div className="max-w-4xl mx-auto space-y-8 relative z-10">
 
-        <div className="relative z-10 max-w-5xl mx-auto space-y-4 md:space-y-6">
-          
           {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
-                  <div className="relative shrink-0">
-                      <UserAvatar user={user} className="w-24 h-24 text-4xl border-4 border-white/10" />
-                  </div>
+                  <UserAvatar user={user} className="relative shrink-0 w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white" />
 
-                  <div className="flex-1 text-center sm:text-left">
+                  <div className="flex-grow text-center sm:text-left">
                       <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
                       <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
                         <Backpack className="h-4 w-4 text-indigo-300"/>
@@ -303,39 +311,61 @@ function StudentDashboard() {
                       </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-3 shrink-0">
-                      <div>
-                          <div className="flex justify-between text-xs font-bold text-green-100 mb-1 uppercase tracking-wide">
-                              <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Dersler</span>
-                              <span>{lessonProgress}%</span>
-                          </div>
-                          <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                              <div className="h-full bg-gradient-to-r from-green-400 to-cyan-400 rounded-full" style={{width: `${lessonProgress}%`}}></div>
-                          </div>
+                  <div className="grid grid-cols-3 gap-2 w-full sm:w-auto text-center text-white">
+                      <div className="bg-black/20 p-2 rounded-lg border border-white/5">
+                          <p className="text-2xl font-bold">{stats.generalRank > 0 ? stats.generalRank : '-'}</p>
+                          <p className="text-xs opacity-70">Genel Sıra</p>
                       </div>
-                       <div>
-                          <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                              <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
-                              <span>{stats.questionBankProgress}%</span>
-                          </div>
-                          <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                              <div className="h-full bg-gradient-to-r from-sky-400 to-indigo-400 rounded-full" style={{width: `${stats.questionBankProgress}%`}}></div>
-                          </div>
+                      <div className="bg-black/20 p-2 rounded-lg border border-white/5">
+                           <p className="text-2xl font-bold">{stats.classRank > 0 ? stats.classRank : '-'}</p>
+                           <p className="text-xs opacity-70">Sınıf Sırası</p>
                       </div>
-                       <div className="flex items-center gap-2 text-white">
-                          <Trophy className="h-5 w-5 text-amber-300"/>
-                          <span className="font-bold">{stats.generalRank > 0 ? `${stats.generalRank}.` : '-'}</span>
-                          <span className="text-xs opacity-70">Genel</span>
-                      </div>
-                       <div className="flex items-center gap-2 text-white">
-                          <Star className="h-5 w-5 text-yellow-300"/>
-                          <span className="font-bold">{stats.score.toLocaleString()}</span>
-                           <span className="text-xs opacity-70">Puan</span>
+                      <div className="bg-black/20 p-2 rounded-lg border border-white/5">
+                          <p className="text-2xl font-bold">{stats.branchRank > 0 ? stats.branchRank : '-'}</p>
+                          <p className="text-xs opacity-70">Şube Sırası</p>
                       </div>
                   </div>
               </div>
+
+               <div className="grid grid-cols-2 gap-px bg-white/10">
+                    <div className="p-3 bg-gradient-to-r from-blue-900/50 to-sky-900/50 text-sky-100">
+                          <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                              <span className="flex items-center gap-1"><Map className="h-3 w-3"/> Ders İlerlemesi</span>
+                              <span>{lessonProgress}%</span>
+                          </div>
+                          <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                              <div className="h-full bg-gradient-to-r from-sky-400 to-cyan-300 rounded-full" style={{ width: `${lessonProgress}%` }}></div>
+                          </div>
+                    </div>
+                     <div className="p-3 bg-gradient-to-r from-blue-900/50 to-sky-900/50 text-sky-100">
+                          <div>
+                              <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                  <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
+                                  <span>{stats.questionBankProgress}%</span>
+                              </div>
+                              <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                  <div className="h-full bg-gradient-to-r from-amber-400 to-yellow-300 rounded-full" style={{ width: `${stats.questionBankProgress}%` }}></div>
+                              </div>
+                          </div>
+                    </div>
+               </div>
           </GlassCard>
 
+          {/* MAIN BUTTONS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <GameButton href="/student/soru-bankasi" variant="info" className="flex-col py-8 text-2xl h-auto">
+                <BookOpen className="h-10 w-10 mb-2"/>
+                Dersler ve Testler
+              </GameButton>
+              <GameButton href="/student/gunun-gorevi" variant="secondary" className="flex-col py-8 text-2xl h-auto relative">
+                <Star className="h-10 w-10 mb-2"/>
+                Günün Görevi
+                <div className="absolute -top-3 -right-3 h-10 w-10 bg-yellow-400 text-yellow-900 rounded-full flex items-center justify-center font-black text-sm animate-tada border-2 border-white/50">
+                    +50
+                </div>
+              </GameButton>
+          </div>
+          
           {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
@@ -349,42 +379,13 @@ function StudentDashboard() {
                     <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
           </div>
+
+          <HardestWorkersToday />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <Link href="/student/soru-bankasi" className="block group">
-                  <GlassCard className="h-full">
-                      <div className="p-5 flex flex-col h-full relative">
-                          <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                              <MapIcon className="h-8 w-8 text-sky-400" />
-                          </div>
-                          
-                          <div className="mb-6">
-                              <h3 className="text-2xl font-bold text-white">Ders Haritası</h3>
-                              <p className="text-white/60 text-sm">Konuları keşfet ve testleri çöz.</p>
-                          </div>
-                          
-                          <div className="flex-grow space-y-4">
-                               <ProgressStat label="Ders İlerlemesi" value={lessonProgress} color="bg-green-400" />
-                               <ProgressStat label="Soru Bankası Başarısı" value={stats.questionBankProgress} color="bg-sky-400" />
-                          </div>
-                      </div>
-                  </GlassCard>
-              </Link>
-              <HardestWorkersToday />
-          </div>
       </div>
+    </div>
     </div>
   );
 }
 
-const ProgressStat = ({ label, value }: { label: string, value: number, color: string }) => (
-    <div>
-        <div className="flex justify-between text-xs text-white/70 mb-1">
-            <span>{label}</span>
-            <span>{value}%</span>
-        </div>
-        <Progress value={value} className="h-2 bg-black/30" indicatorClassName={color} />
-    </div>
-);
-
-export default StudentDashboard;
+    
