@@ -1,4 +1,5 @@
-'use client';
+
+"use client";
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -141,7 +142,7 @@ export default function StudentActivitiesPage() {
                         </div>
                         <div>
                             <h1 className="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-200 uppercase tracking-wide">
-                                Arcade Salonu
+                                OYUN SALONU
                             </h1>
                             <p className="text-cyan-200/60 text-sm font-medium">Favori oyununu seç ve puanları topla!</p>
                         </div>
