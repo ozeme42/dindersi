@@ -1,32 +1,30 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-// --- UTILS & MOCKS ---
-
+// --- UTILS ---
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
 import { useAuth } from "@/context/auth-context";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+
+// --- DATA FETCHING ACTIONS ---
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-import type { UserProfile } from "@/lib/types";
-import { Progress } from "@/components/ui/progress";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -144,41 +142,18 @@ const MobileNav = () => {
     );
 };
 
-// --- MOCK DATA ---
-
-const MOCK_LEADERBOARD = [
-    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
-    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
-    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
-];
-
-const MOCK_STATS = {
-    score: 15450,
-    completedTopics: 12,
-    totalTopics: 20,
-    questionBankProgress: 65, 
-    generalRank: 42,
-    classRank: 5,
-    branchRank: 3,
-};
-
-const MOCK_EXAM_STATS = {
-    pending: 2,
-    solved: 8
-};
-
 // --- COMPONENTS ---
 
 function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<any[]>([]);
+    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setDailyTop(MOCK_LEADERBOARD);
+        getLiveLeaderboard().then(data => {
+            setDailyTop(data.slice(0, 3));
+        }).finally(() => {
             setIsLoading(false);
-        }, 1000);
-        return () => clearTimeout(timer);
+        });
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -231,15 +206,72 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState(MOCK_STATS);
-  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
+  const [stats, setStats] = useState({
+      score: 0,
+      completedTopics: 0,
+      totalTopics: 0,
+      questionBankProgress: 0, 
+      generalRank: 0,
+      classRank: 0,
+      branchRank: 0,
+  });
+  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    async function fetchData() {
+      if (!user?.uid) {
+          setIsLoading(false);
+          return;
+      };
+      
+      try {
+        let studentClassName: string | undefined;
+        let userScore = user.score || 0;
+        
+        studentClassName = user.class?.split(' - ')[0];
+
+        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+          getDocs(collection(db, "courses")),
+          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+          getStudentExams(user.uid),
+        ]);
+        
+        if (examsSnapshot.success && examsSnapshot.data) {
+            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+            const solved = examsSnapshot.data.length - pending;
+            setExamStats({ pending, solved });
+        }
+
+        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
+
+        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
+        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
+
+        let classRank = 0;
+        let branchRank = 0;
+
+        if(user.class) {
+            const gradeName = user.class.split(' - ')[0];
+            const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
+            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
+            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+
+            const studentsInBranch = allStudents.filter(s => s.class === user.class);
+            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
+            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+        }
+
+        setStats(prev => ({ ...prev, score: userScore, generalRank, classRank, branchRank }));
+
+      } catch (error) {
+        console.error("Error fetching student dashboard data:", error);
+      } finally {
         setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
+      }
+    }
+    fetchData();
+  }, [user]);
   
   if (isLoading) {
     return (
@@ -249,7 +281,7 @@ export default function StudentDashboard() {
     );
   }
 
-  const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
+  const lessonProgress = 0; // This needs to be calculated
   
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
@@ -261,9 +293,7 @@ export default function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
-                    </div>
+                    <UserAvatar user={user} className="w-20 h-20"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
