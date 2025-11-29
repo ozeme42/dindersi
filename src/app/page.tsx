@@ -350,7 +350,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses
             <footer className="container mx-auto p-8 text-center relative z-10">
                 <div className="flex justify-center gap-6 flex-wrap">
                     <GameButton 
-                        href="#" 
+                        href="https://drive.google.com/file/d/19J9e8KGlR_H2VxKgsegfp3EnmcClR16E/view?usp=drive_link" 
                         variant="secondary"
                         className="text-sm px-8"
                     >
@@ -526,4 +526,3 @@ export default function App() {
     );
 }
     
-
