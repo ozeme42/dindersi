@@ -1,27 +1,29 @@
-'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { 
-    BookOpen, Trophy, Star, Gamepad2, Users, 
-    ShoppingCart, Columns, LayoutTemplate, FileCog, 
-    Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
-    Loader2, Home, User
-} from 'lucide-react';
+"use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import React, { useState, useEffect, type ReactNode } from "react";
+import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
-import { getStudentExams } from "@/app/student/deneme/actions";
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getStudentExams } from "@/app/student/deneme/actions";
+
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Map as MapIcon, Target, Backpack } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
+
 const GameButton = ({ 
     children, 
     className, 
@@ -69,19 +71,32 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-// --- AVATAR COMPONENT ---
-const UserAvatar = ({ user, className }: any) => (
-    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
-        {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
-        ) : (
-            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
-        )}
-    </div>
-);
 
+// --- MOCK DATA ---
 
-// --- LEADERBOARD COMPONENT ---
+const MOCK_LEADERBOARD = [
+    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
+    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
+    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
+];
+
+const MOCK_STATS = {
+    score: 15450,
+    completedTopics: 12,
+    totalTopics: 20,
+    questionBankProgress: 65, 
+    generalRank: 42,
+    classRank: 5,
+    branchRank: 3,
+};
+
+const MOCK_EXAM_STATS = {
+    pending: 2,
+    solved: 8
+};
+
+// --- COMPONENTS ---
+
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -138,178 +153,25 @@ function HardestWorkersToday() {
                 )}
             </div>
         </GlassCard>
-    );
+    )
 }
 
-// --- MAIN DASHBOARD COMPONENT ---
 export default function StudentDashboard() {
-  const { user, loading } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-      score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
-      generalRank: 0,
-      classRank: 0,
-      branchRank: 0,
-      questionBankProgress: 0,
-  });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  const [stats, setStats] = useState(MOCK_STATS);
+  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
 
   useEffect(() => {
-    async function fetchData() {
-      if (!user?.uid) {
-          setIsLoading(false);
-          return;
-      };
-
-      setIsLoading(true);
-      
-      try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
-        let studentClassName: string | undefined;
-        let userScore = user.score || 0;
-        
-        studentClassName = user.class?.split(' - ')[0];
-
-        let coursesData: Course[] = [];
-
-        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-          getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-          getStudentExams(user.uid),
-        ]);
-        
-        // Calculate exam stats
-        if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-            const solved = examsSnapshot.data.length - pending;
-            setExamStats({ pending, solved });
-        }
-
-        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-
-        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
-        let classRank = 0;
-        let branchRank = 0;
-
-        if(user.class) {
-            const gradeName = user.class.split(' - ')[0];
-            const branchName = user.class;
-
-            const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-            const studentsInBranch = allStudents.filter(s => s.class === branchName);
-            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-        }
-
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
-        
-        const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-        const studentClassId = studentClass?.id;
-
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        
-        const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-        
-        let filteredCourses: Course[] = [];
-        if (studentClassId) {
-            const isFirstClass = studentClassId === firstClassId;
-            filteredCourses = studentVisibleCourses.filter(course =>
-                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-            );
-        } else {
-            filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
-        }
-        
-        let totalQuestionBankPassedTests = 0;
-        let totalQuestionBankTests = 0;
-
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
-          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
-          
-          const [progressSnap, questionBankStats] = await Promise.all([
-            getDoc(progressRef),
-            qbStats
-          ]);
-
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
-          
-          const unitsRef = collection(db, 'courses', course.id, 'units');
-          const unitsSnap = await getDocs(unitsRef);
-          let totalTopics = 0;
-          
-          for (const unitDoc of unitsSnap.docs) {
-            const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-            totalTopics += topicsSnap.size;
-          }
-          
-          grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
-
-          // Also get QB stats for this course
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
-
-          return course;
-        }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
-        setCourses(coursesData);
-        
-        const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
-            : 0;
-
-        setStats({
-            score: userScore,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
-            generalRank,
-            classRank,
-            branchRank,
-            questionBankProgress: qbProgressPercentage,
-        });
-
-      } catch (error) {
-        console.error("Error fetching student dashboard data:", error);
-      } finally {
+    const timer = setTimeout(() => {
         setIsLoading(false);
-      }
-    }
-
-    if (!loading && user) {
-        fetchData();
-    } else if (!loading && !user) {
-        setIsLoading(false);
-    }
-}, [user, loading]);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
+        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
@@ -327,7 +189,7 @@ export default function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white rounded-full"/>
+                     <UserAvatar user={user} className="w-24 h-24 text-4xl"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -459,7 +321,8 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
-
     </div>
   );
 }
+
+    
