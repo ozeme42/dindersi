@@ -1,13 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { 
-    BookOpen, Trophy, Star, Gamepad2, Users, 
-    ShoppingCart, Columns, LayoutTemplate, FileCog, 
-    Crown, Award, Zap, Target, Sparkles, Swords, Backpack,
-    Loader2, Home, User, Map as MapIcon
-} from 'lucide-react';
+import React, { useState, useEffect, type ReactNode, useMemo, useCallback, useRef } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -20,13 +14,16 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
+    Loader2, Home, User
+} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import { BottomNavBar } from '@/components/bottom-nav-bar';
-
-// --- GAMIFIED UI COMPONENTS ---
 
 const GameButton = ({ 
     children, 
@@ -76,8 +73,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 );
 
 
-// --- COMPONENTS ---
-
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -124,7 +119,7 @@ function HardestWorkersToday() {
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()}</p>
+                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()} Puan</p>
                                 </div>
                             </div>
                         ))}
@@ -137,6 +132,13 @@ function HardestWorkersToday() {
     )
 }
 
+function StudentPage() {
+    const { user, loading } = useAuth();
+    if(loading) return <div className="flex h-screen items-center justify-center bg-[#2b1055]"><Loader2 className="h-16 w-16 animate-spin text-indigo-400"/></div>
+    if(!user) return null;
+    return <StudentDashboard />;
+}
+
 function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
@@ -144,14 +146,17 @@ function StudentDashboard() {
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      questionBankProgress: 0,
+      coursesStarted: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
+      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
+  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
-    useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       if (!user?.uid) {
           setIsLoading(false);
@@ -178,7 +183,7 @@ function StudentDashboard() {
         ]);
         
         if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent && (!a.dueDate || new Date(a.dueDate) > new Date())).length;
+            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
             setExamStats({ pending, solved });
         }
@@ -236,7 +241,7 @@ function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? Object.keys(progressSnap.data() || {}) : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -249,12 +254,19 @@ function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          
+          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          course.topicsCount = totalTopics;
+          course.unitsCount = unitsSnap.size;
+          course.completedTopicsCount = completedTopics.length;
+
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
+        
+        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -264,6 +276,9 @@ function StudentDashboard() {
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
+            coursesStarted: coursesStartedCount,
+            coursesCompleted: coursesCompletedCount,
+            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
@@ -278,10 +293,10 @@ function StudentDashboard() {
     }
     fetchData();
   }, [user]);
-
+  
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
+        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
@@ -290,18 +305,18 @@ function StudentDashboard() {
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <>
-    <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <div className="bg-[#0f041e] min-h-screen">
+      <div className="p-4 sm:p-6 md:p-8 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a0b2e] to-transparent z-0"></div>
+        <div className="max-w-5xl mx-auto space-y-6 relative z-10 pb-20 md:pb-0">
           
-          {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 text-slate-800 bg-white"/>
+                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -326,7 +341,6 @@ function StudentDashboard() {
               </div>
           </GlassCard>
           
-          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <Link href="/student/soru-bankasi" className="group h-full">
@@ -396,7 +410,6 @@ function StudentDashboard() {
             </Link>
           </div>
 
-          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
@@ -410,7 +423,6 @@ function StudentDashboard() {
                 </GameButton>
           </div>
           
-           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
@@ -432,13 +444,13 @@ function StudentDashboard() {
           </div>
           
           <HardestWorkersToday />
+          
       </div>
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14" /> {/* Spacer for bottom nav */}
     </div>
-    <BottomNavBar/>
-    </>
   );
 }
 
-export default function StudentPage() {
-    return <StudentDashboard />;
-}
+export default StudentPage;
+
+    
