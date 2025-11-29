@@ -14,23 +14,18 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, FileCog, Crown, Award, Globe, School, Users, Backpack, Target, Swords } from 'lucide-react';
+import { 
+    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, 
+    GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, 
+    LayoutTemplate, Bug, Users, FileCog, Crown, Award, Globe, School, Backpack, 
+    Map as MapIcon, Target, Swords
+} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={cn(
-        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
-        className
-    )}>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-        {children}
-    </div>
-);
 
 const GameButton = ({ 
     children, 
@@ -69,19 +64,14 @@ const GameButton = ({
     return <button className="block w-full h-full">{content}</button>;
 };
 
-
-const StatCard = ({ title, value, subValue, icon, href }: { title: string, value: string | number, subValue?: string, icon: ReactNode, color?: string, href: string }) => (
-    <Link href={href} className="block group h-full">
-        <Card className={cn(
-            "h-full text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105",
-            "bg-primary" // Default color
-        )}>
-            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-80" })}
-            <p className="text-4xl font-bold mt-2">{value}</p>
-            <p className="font-semibold">{title}</p>
-            {subValue && <p className="text-xs opacity-90">{subValue}</p>}
-        </Card>
-    </Link>
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn(
+        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
+        className
+    )}>
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
+        {children}
+    </div>
 );
 
 function HardestWorkersToday() {
@@ -116,17 +106,17 @@ function HardestWorkersToday() {
                         <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
                     </div>
                 ) : dailyTop.length > 0 ? (
-                     <div className="space-y-2">
+                    <div className="space-y-2">
                         {dailyTop.map((student, index) => (
                             <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
-                                <div className="flex items-center gap-3 flex-grow min-w-0">
+                                <div className="flex items-center gap-3">
                                     <div className="h-8 w-8 flex items-center justify-center bg-black/20 rounded-lg">
-                                      {rankIcons[index]}
+                                        {rankIcons[index]}
                                     </div>
                                     <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20 text-slate-700"/>
                                     <div>
-                                      <p className="font-bold text-white text-sm">{student.displayName}</p>
-                                      <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
+                                        <p className="font-bold text-white text-sm">{student.displayName}</p>
+                                        <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
@@ -143,9 +133,9 @@ function HardestWorkersToday() {
     )
 }
 
-
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -247,8 +237,9 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
+          const progressData = progressSnap.exists() ? progressSnap.data() : {};
+          const completedTopicsCount = Array.isArray(progressData.completedTopics) ? progressData.completedTopics.length : Object.keys(progressData).length;
+          completedTopicsTotal += completedTopicsCount;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
           const unitsSnap = await getDocs(unitsRef);
@@ -260,10 +251,10 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          course.progress = totalTopics > 0 ? Math.round((completedTopicsCount / totalTopics) * 100) : 0;
           course.topicsCount = totalTopics;
           course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
+          course.completedTopicsCount = completedTopicsCount;
 
           // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
@@ -274,6 +265,8 @@ export default function StudentDashboard() {
         
         const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
         const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        
+        setCourses(coursesData);
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -308,7 +301,7 @@ export default function StudentDashboard() {
         </div>
     );
   }
-
+  
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
@@ -322,7 +315,7 @@ export default function StudentDashboard() {
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 rounded-full border-4 border-[#2b1055] text-slate-800 bg-white"/>
+                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -354,7 +347,7 @@ export default function StudentDashboard() {
                  <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
                       <div className="p-5 flex flex-col h-full relative">
                           <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                              <Map className="h-8 w-8 text-sky-400" />
+                              <MapIcon className="h-8 w-8 text-sky-400" />
                           </div>
                           
                           <div className="mb-6">
