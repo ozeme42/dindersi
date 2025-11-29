@@ -119,9 +119,9 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
     };
     
     const nextQuestion = () => {
+        resetTurn();
         if (currentQIndex + 1 < questions.length) {
             setCurrentQIndex(prev => prev + 1);
-            resetTurn();
         } else {
             endGame();
         }
@@ -158,7 +158,7 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
     };
     
     if (error) {
-        return (
+         return (
              <div className="flex h-screen items-center justify-center p-4">
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
                     <strong className="font-bold">Hata! </strong>
@@ -170,7 +170,7 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
                     </div>
                 </div>
             </div>
-        )
+         )
     }
 
     if (gameState === 'start') {
