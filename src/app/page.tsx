@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
@@ -131,22 +132,6 @@ const AppHeader = () => (
             </div>
         </div>
     </header>
-);
-
-const TeacherMainButtons = () => (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-            { title: "Yeni İçerik", icon: <PenSquare />, color: "bg-orange-100 text-orange-600" },
-            { title: "Sınıf Listesi", icon: <ListOrdered />, color: "bg-blue-100 text-blue-600" },
-            { title: "Duyuru Yap", icon: <Video />, color: "bg-rose-100 text-rose-600" },
-            { title: "Ayarlar", icon: <Settings />, color: "bg-slate-100 text-slate-600" }
-        ].map((btn, idx) => (
-            <button key={idx} className="flex flex-col items-center justify-center p-4 rounded-xl border hover:bg-accent/50 transition-colors gap-2">
-                <div className={cn("p-2 rounded-lg", btn.color)}>{btn.icon}</div>
-                <span className="text-sm font-medium">{btn.title}</span>
-            </button>
-        ))}
-    </div>
 );
 
 // --- GAME THEME COMPONENTS ---
@@ -299,7 +284,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses
                                                                             {course.units.map(unit => (
                                                                             <AccordionItem value={unit.id} key={unit.id} className="border-none">
                                                                                 <AccordionTrigger className="flex items-center gap-2 mb-2 text-indigo-300 font-bold uppercase text-xs tracking-wider hover:no-underline py-2">
-                                                                                    <div className="flex items-center gap-2 w-full">
+                                                                                    <div className="justify-start flex items-center gap-2 w-full">
                                                                                         <div className="h-1.5 w-1.5 rounded-full bg-indigo-400"></div>
                                                                                         <span>{unit.title}</span>
                                                                                     </div>
@@ -373,125 +358,22 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses
     );
 };
 
-const ManagementButton = ({ href, title, icon, colorClass }: { href: string, title: string, icon: React.ReactNode, colorClass: string }) => {
-    return (
-        <Link href={href} className="block group h-full">
-            <div className={cn(
-                "h-full p-4 rounded-3xl flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
-                "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
-            )}>
-                <div className={cn("p-4 rounded-2xl mb-3 transition-colors", colorClass)}>
-                    {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-white" })}
-                </div>
-                <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">{title}</h3>
-            </div>
-        </Link>
-    );
-};
-
-const LoggedInDashboard = ({ user }: { user: any }) => {
-    
-    if (user.role === 'student') {
-        return (
-            <div className="flex h-[80vh] items-center justify-center bg-slate-50 dark:bg-slate-950">
-                <div className="flex flex-col items-center gap-4 text-center p-6">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-indigo-500 blur-xl opacity-20 animate-pulse rounded-full"></div>
-                        <Gamepad2 className="h-20 w-20 text-indigo-600 relative z-10 animate-bounce" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-slate-800">Hoşgeldin {user.displayName}!</h2>
-                    <p className="text-slate-500 font-medium animate-pulse">Oyun Alanına Yönlendiriliyorsunuz...</p>
-                </div>
-            </div>
-        );
-    }
-  
-  const managementButtons = {
-    superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "bg-red-500 shadow-red-200" },
-    contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "bg-orange-500 shadow-orange-200" },
-    studentsTeacher: { key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />, color: "bg-blue-500 shadow-blue-200" },
-    questionsTeacher: { key: 'questionsTeacher', href: '/teacher/questions', title: 'Soru Bankası', icon: <FileCog />, color: "bg-indigo-500 shadow-indigo-200" },
-    examQuestions: { key: 'examQuestions', href: '/teacher/exam-questions', title: 'Deneme Havuzu', icon: <FileQuestion />, color: "bg-violet-500 shadow-violet-200" },
-    activityDataBank: { key: 'activityDataBank', href: '/teacher/activity-data', title: 'Etkinlik Verileri', icon: <ClipboardList />, color: "bg-teal-500 shadow-teal-200" },
-    exams: { key: 'exams', href: '/teacher/exams', title: 'Deneme Oluştur', icon: <ClipboardCheck />, color: "bg-green-500 shadow-green-200" },
-    evaluationScales: { key: 'evaluationScales', href: '/teacher/scales', title: 'Ölçekler', icon: <Scale />, color: "bg-cyan-500 shadow-cyan-200" },
-    statsTeacher: { key: 'statsTeacher', href: '/teacher/stats', title: 'İstatistikler', icon: <BarChart3 />, color: "bg-pink-500 shadow-pink-200" },
-    videoLibrary: { key: 'videoLibrary', href: '/teacher/video-library', title: 'Video Arşivi', icon: <Video />, color: "bg-rose-500 shadow-rose-200" },
-    gameSettingsTeacher: { key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />, color: "bg-slate-500 shadow-slate-200" },
-    leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
-    errorReports: { key: 'errorReports', href: '/teacher/error-reports', title: 'Hata Raporları', icon: <Bug />, color: "bg-red-400 shadow-red-100" },
-    scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "bg-emerald-500 shadow-emerald-200" },
-  };
-
-  const getManagementButtons = () => {
-      const buttons = [
-          managementButtons.contentTeacher,
-          managementButtons.studentsTeacher,
-          managementButtons.questionsTeacher,
-          managementButtons.examQuestions,
-          managementButtons.activityDataBank,
-          managementButtons.exams,
-          managementButtons.evaluationScales,
-          managementButtons.statsTeacher,
-          managementButtons.videoLibrary,
-          managementButtons.gameSettingsTeacher,
-          managementButtons.leaderboard,
-          managementButtons.errorReports,
-          managementButtons.scoreEvents,
-      ];
-      if(user.role === 'superadmin') {
-          buttons.unshift(managementButtons.superAdmin);
-      }
-      return buttons;
-  }
-  
-  return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-      <AppHeader />
-      <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-10">
-        
-        <div className="text-center space-y-4 py-6">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-800 dark:text-white">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
-                Öğretmen
-            </span>{" "}
-            Paneli
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-             {user.role === 'superadmin' ? 'Sistem üzerindeki tüm kontroller elinizin altında.' : 'Sınıfını yönet, içerik ekle ve öğrencilerinin gelişimini takip et.'}
-          </p>
-        </div>
-        
-         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-             <h2 className="text-lg font-bold mb-4 text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                 <PlayCircle className="text-indigo-500"/> Hızlı İşlemler
-             </h2>
-             <TeacherMainButtons />
-         </div>
-
-        <div className="space-y-4">
-             <div className="flex items-center gap-2 px-2">
-                 <LayoutTemplate className="text-slate-400" />
-                 <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">Yönetim Araçları</h2>
-             </div>
-             
-             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                {getManagementButtons().map(({ key, href, title, icon, color }) =>
-                    <ManagementButton key={key} href={href} title={title} icon={icon} colorClass={color} />
-                )}
-            </div>
-        </div>
-
-      </main>
-    </div>
-  );
-};
-
 
 export default function App() {
     const { user, loading } = useAuth();
+    const router = useRouter();
     const [courseGroups, setCourseGroups] = useState<{ name: string; courses: PublicCourse[] }[]>([]);
     const [dataLoading, setDataLoading] = useState(true);
+
+    useEffect(() => {
+        if (!loading && user) {
+            if (user.role === 'student') {
+                router.replace('/student');
+            } else if (user.role === 'teacher' || user.role === 'superadmin') {
+                router.replace('/teacher');
+            }
+        }
+    }, [user, loading, router]);
 
     useEffect(() => {
         if (!user) {
@@ -508,7 +390,7 @@ export default function App() {
         }
     }, [user]);
 
-    if (loading || (dataLoading && !user)) {
+    if (loading || dataLoading || user) {
         return (
             <div className="flex h-screen items-center justify-center bg-[#2b1055]">
                 <Loader2 className="h-12 w-12 animate-spin text-white" />
@@ -518,11 +400,7 @@ export default function App() {
     
     return (
         <div className="relative">
-            {user ? (
-                <LoggedInDashboard user={user} />
-            ) : (
-                <LoggedOutPage courseGroups={courseGroups} />
-            )}
+            <LoggedOutPage courseGroups={courseGroups} />
         </div>
     );
 }
