@@ -2,26 +2,104 @@
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
-import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, limit } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
+    Loader2, Home, User, ClipboardList
+} from 'lucide-react';
 import { getStudentExams } from "@/app/student/deneme/actions";
-
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack, Loader2, Home, User, PenSquare, MonitorPlay, Workflow, ListTodo, GraduationCap, Library, Sun, Repeat, Package, Scale, Bug, DollarSign } from 'lucide-react';
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getDocs, collection, query, where, orderBy } from 'firebase/firestore';
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/context/auth-context";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import type { UserProfile, SchoolClass, Course } from "@/lib/types";
 
-// --- MOCK DATA ---
+// --- UTILS & MOCKS ---
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
+
+// --- GAMIFIED UI COMPONENTS ---
+
+const GameButton = ({ 
+    children, 
+    className, 
+    variant = 'primary', 
+    href, 
+    badge,
+    ...props 
+}: any) => {
+    const variants: {[key: string]: string} = {
+        primary: "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40",
+        secondary: "bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40",
+        success: "bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40",
+        warning: "bg-amber-500 hover:bg-amber-400 border-amber-700 text-white shadow-amber-900/40",
+        info: "bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40",
+        violet: "bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40",
+        orange: "bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40",
+    };
+
+    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer";
+    
+    const content = (
+        <span className={cn(baseClass, variants[variant], className)} {...props}>
+            {children}
+            {badge && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                    {badge}
+                </span>
+            )}
+        </span>
+    );
+
+    if (href) {
+        return <Link href={href} className="block h-full">{content}</Link>;
+    }
+    return <button className="block w-full h-full">{content}</button>;
+};
+
+const GlassCard = ({ href, icon, title, description, color, badge, children }: { href?: string, icon?: React.ReactNode, title?: string, description?: string, color?: string, badge?: string | number, children?: React.ReactNode }) => {
+    const content = (
+        <div className={cn("h-full w-full rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-fuchsia-500/30 bg-gradient-to-br text-white border border-white/10", color)}>
+            {badge && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                    {badge}
+                </span>
+            )}
+            {icon && <div className="bg-black/30 p-3 rounded-full mb-4 group-hover:scale-110 transition-transform">{icon}</div>}
+            {title && <h3 className="font-bold text-lg leading-tight">{title}</h3>}
+            {description && <p className="text-xs text-white/70 mt-1">{description}</p>}
+            {children}
+        </div>
+    );
+
+    if (href) {
+        return <Link href={href} className="block group h-full">{content}</Link>;
+    }
+    return <div className="h-full">{content}</div>;
+};
+
+// --- MOCK DATA & HOOKS ---
 
 const MOCK_LEADERBOARD = [
     { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
@@ -45,24 +123,6 @@ const MOCK_EXAM_STATS = {
 };
 
 // --- COMPONENTS ---
-const GlassCard = ({ href, icon, title, description, color, badge, children }: { href: string, icon: ReactNode, title: string, description: string, color: string, badge?: string | number, children?: ReactNode }) => (
-    <Link href={href} className="block group h-full">
-        <div className={cn("h-full w-full rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-fuchsia-500/30 bg-gradient-to-br text-white border border-white/10", color)}>
-            <div className="bg-black/30 p-3 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                {icon}
-            </div>
-            <h3 className="font-bold text-lg">{title}</h3>
-            <p className="text-xs text-white/70 mt-1 flex-grow">{description}</p>
-            {children}
-            {badge && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-pulse shadow-sm">
-                    {badge}
-                </span>
-            )}
-        </div>
-    </Link>
-);
-
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -123,7 +183,7 @@ function HardestWorkersToday() {
     )
 }
 
-export default function StudentDashboard() {
+function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState(MOCK_STATS);
@@ -207,14 +267,12 @@ export default function StudentDashboard() {
 
         coursesData = await Promise.all(filteredCourses.map(async (course) => {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
-          const [progressSnap, questionBankStats] = await Promise.all([
+          const [progressSnap] = await Promise.all([
             getDoc(progressRef),
-            qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -227,30 +285,43 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
+          (course as any).progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          (course as any).topicsCount = totalTopics;
+          (course as any).unitsCount = unitsSnap.size;
+          (course as any).completedTopicsCount = completedTopics.length;
+        
+          const qbProgressRef = collection(db, `users/${user.uid}/questionBankProgress`);
+          const qbSnapshot = await getDocs(query(qbProgressRef, where('courseId', '==', course.id)));
 
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
+            if (!qbSnapshot.empty) {
+                const progressData = qbSnapshot.docs[0].data();
+                for (const topicId in progressData) {
+                    const topicProgress = progressData[topicId];
+                    if (topicProgress) {
+                        const allResults = [
+                            ...Object.values(topicProgress.easy || {}),
+                            ...Object.values(topicProgress.medium || {}),
+                            ...Object.values(topicProgress.hard || {})
+                        ];
+                        totalQuestionBankTests += allResults.length;
+                        passedTests += allResults.filter((r: any) => r.status === 'passed').length;
+                    }
+                }
+            }
 
           return course;
         }));
         
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
         const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
+            ? Math.round((passedTests / totalQuestionBankTests) * 100)
             : 0;
 
         setStats({
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
+            coursesStarted: coursesData.filter(c => ((c as any).progress || 0) > 0).length,
+            coursesCompleted: coursesData.filter(c => (c as any).progress === 100).length,
             totalCourses: coursesData.length,
             generalRank,
             classRank,
@@ -269,8 +340,8 @@ export default function StudentDashboard() {
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
-            <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
+        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-background">
+            <Loader2 className="h-16 w-16 animate-spin text-primary" />
         </div>
     );
   }
@@ -282,8 +353,8 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
-           <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
-              <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
+           <GlassCard>
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
@@ -304,8 +375,8 @@ export default function StudentDashboard() {
                   </div>
                   
                   <div className="text-center sm:text-right z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
-                      <div className="flex items-center justify-center sm:justify-end gap-2 text-2xl sm:text-3xl font-black text-amber-400 drop-shadow-sm">
-                          <Star className="h-5 w-5 sm:h-6 sm:w-6 fill-amber-400 animate-pulse"/>
+                      <div className="flex items-center justify-center sm:justify-end gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
+                          <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
                           <span>{stats.score.toLocaleString()}</span>
                       </div>
                       <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
@@ -314,88 +385,68 @@ export default function StudentDashboard() {
           </GlassCard>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <GlassCard 
-                    href="/student/soru-bankasi"
-                    icon={<Map className="h-8 w-8 text-sky-300"/>} 
-                    title="Macera Haritası"
-                    description="Dersler ve Soru Bankası"
-                    color="from-sky-900/50 to-sky-800/50"
-                >
-                    <div className="w-full px-4 mt-4 space-y-3">
-                         <div>
-                              <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                  <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
-                                  <span>{lessonProgress}%</span>
-                              </div>
-                              <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                  <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
-                              </div>
+            <GlassCard href="/student/soru-bankasi" color="from-sky-900/50 to-blue-800/50" className="md:col-span-3">
+              <div className="p-5 flex flex-col h-full relative">
+                  <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                      <Map className="h-8 w-8 text-sky-400" />
+                  </div>
+                  <div className="mb-6 text-left">
+                      <h2 className="text-2xl font-bold text-white mb-1">Macera Haritası</h2>
+                      <p className="text-sky-200 text-sm">Dersler ve Soru Bankası</p>
+                  </div>
+                  <div className="mt-auto space-y-4">
+                      <div>
+                          <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                              <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
+                              <span>{lessonProgress}%</span>
                           </div>
-                          <div>
-                              <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                  <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
-                                  <span>{stats.questionBankProgress}%</span>
-                              </div>
-                              <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                  <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
-                              </div>
+                          <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                              <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
                           </div>
-                    </div>
-                </GlassCard>
+                      </div>
+                      <div>
+                          <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                              <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
+                              <span>{stats.questionBankProgress}%</span>
+                          </div>
+                          <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                              <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </GlassCard>
+          </div>
 
-                <GlassCard 
-                    href="/student/activities"
-                    icon={<Gamepad2 className="h-8 w-8 text-fuchsia-300"/>} 
-                    title="Bireysel Etkinlikler"
-                    description="Eğlenceli oyunlarla kendini sına ve puanları topla."
-                    color="from-fuchsia-900/50 to-fuchsia-800/50"
-                />
-                 <GlassCard 
-                    href="/student/yarismalar"
-                    icon={<Swords className="h-8 w-8 text-rose-300"/>} 
-                    title="Çok Oyunculu Arena"
-                    description="Arkadaşlarınla veya takımlarla yarışarak zafer için savaş."
-                    color="from-rose-900/50 to-rose-800/50"
-                />
+          <div className="grid grid-cols-2 gap-4 md:gap-6">
+            <GameButton href="/student/activities" variant="info" className="flex-col gap-2 py-6 h-auto">
+                <Gamepad2 className="h-8 w-8 mb-1"/> 
+                <span>Etkinlikler</span>
+            </GameButton>
+            <GameButton href="/student/yarismalar" variant="secondary" className="flex-col gap-2 py-6 h-auto">
+                <Swords className="h-8 w-8 mb-1"/> 
+                <span>Arena</span>
+            </GameButton>
           </div>
           
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <GlassCard 
-                href="/student/yazilacaklar"
-                icon={<Columns className="text-orange-300 h-6 w-6"/>}
-                title="Yazılacaklar"
-                description="Konu özetleri ve anahtar kavramlar."
-                color="from-orange-900/50 to-orange-800/50"
-              />
-              <GlassCard 
-                href="/student/ozetler"
-                icon={<LayoutTemplate className="text-lime-300 h-6 w-6"/>}
-                title="Özetler"
-                description="İnteraktif konu sunumları."
-                color="from-lime-900/50 to-lime-800/50"
-              />
-               <GlassCard 
-                href="/student/shop"
-                icon={<ShoppingCart className="text-emerald-300 h-6 w-6"/>}
-                title="Puan Dükkanı"
-                description="Puanlarınla profilini özelleştir."
-                color="from-emerald-900/50 to-emerald-800/50"
-              />
-               <GlassCard 
-                href="/student/deneme"
-                icon={<FileCog className="text-violet-300 h-6 w-6"/>}
-                title="Deneme Sınavları"
-                description="Sana özel atanan sınavları çöz."
-                color="from-violet-900/50 to-violet-800/50"
-                badge={examStats.pending > 0 ? `${examStats.pending} YENİ` : undefined}
-              />
+              <GlassCard href="/student/yazilacaklar" icon={<Columns className="h-6 w-6"/>} title="Yazılacaklar" description="Konu özetlerini ve notlarını görüntüle." color="from-green-900/50 to-green-800/50" />
+              <GlassCard href="/student/ozetler" icon={<LayoutTemplate className="h-6 w-6"/>} title="Özetler" description="İnteraktif sunumlarla konuları tekrar et." color="from-orange-900/50 to-orange-800/50" />
+              <GlassCard href="/student/shop" icon={<ShoppingCart className="h-6 w-6"/>} title="Puan Dükkanı" description="Puanlarınla profilini özelleştir." color="from-teal-900/50 to-teal-800/50" />
+              <GlassCard href="/student/deneme" icon={<FileCog className="h-6 w-6"/>} title="Deneme Sınavı" description="Sana atanan özel sınavları çöz." color="from-violet-900/50 to-violet-800/50" badge={examStats.pending > 0 ? `${examStats.pending} YENİ` : undefined} />
           </div>
           
           <HardestWorkersToday />
           
       </div>
+      
     </div>
     </>
   );
 }
 
+export default function StudentPage() {
+    return <StudentDashboard />;
+}
+
+    
