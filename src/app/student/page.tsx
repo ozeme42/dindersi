@@ -11,15 +11,10 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { 
-    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, 
-    ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, 
-    ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, 
-    FileCog, ClipboardCheck, Award, Crown, Globe, School, Backpack, Target, Swords
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Swords, Target } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
@@ -27,6 +22,20 @@ import { Progress } from "@/components/ui/progress";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+
+const StatCard = ({ title, value, subValue, icon, href }: { title: string, value: string | number, subValue?: string, icon: ReactNode, color?: string, href: string }) => (
+    <Link href={href} className="block group h-full">
+        <Card className={cn(
+            "h-full text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105",
+            "bg-primary" // Default color
+        )}>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-80" })}
+            <p className="text-4xl font-bold mt-2">{value}</p>
+            <p className="font-semibold">{title}</p>
+            {subValue && <p className="text-xs opacity-90">{subValue}</p>}
+        </Card>
+    </Link>
+);
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -92,6 +101,7 @@ function HardestWorkersToday() {
 
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
@@ -263,45 +273,37 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
       <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
           {/* Player Header */}
-          <Card className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
-            <CardContent className="flex flex-col items-center gap-4 p-6 relative overflow-hidden">
-                <div className="p-1.5 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                    <UserAvatar user={user} className="w-24 h-24 border-4 border-primary text-slate-800 bg-white"/>
-                </div>
-                
-                <div className="text-center z-10 space-y-1">
-                    <h1 className="text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
-                    <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
-                        <Backpack className="h-4 w-4 text-indigo-300"/>
-                        <span className="text-sm font-medium text-indigo-200">{user?.class || "Sınıfsız Gezgin"}</span>
-                    </div>
-                </div>
-                
-                <div className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
-                    <div className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
-                        <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
-                        <span>{stats.score.toLocaleString()}</span>
-                    </div>
-                    <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
-                </div>
-            </CardContent>
+           <Card className="bg-gradient-to-br from-primary to-accent text-primary-foreground">
+              <CardContent className="p-4 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                  <UserAvatar user={user} className="w-24 h-24 sm:w-20 sm:h-20 text-4xl border-4 border-white/50"/>
+                  <div className="flex-grow">
+                      <h1 className="text-2xl font-bold font-headline">{user?.displayName}</h1>
+                      <p className="text-sm opacity-80">{user?.class}</p>
+                  </div>
+                  <div className="text-center sm:text-right">
+                      <div className="flex items-center justify-center gap-1 text-4xl font-bold">
+                          <Star className="h-7 w-7"/>
+                          <span>{stats.score.toLocaleString()}</span>
+                      </div>
+                      <p className="text-xs opacity-80">Puan</p>
+                  </div>
+              </CardContent>
           </Card>
           
-          {/* MAIN QUEST BOARD */}
+          {/* Grid Menu */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              <Link href="/student/soru-bankasi" className="block group">
+              <Link href="/student/soru-bankasi" className="block group h-full">
                  <Card className="h-full bg-primary text-white flex flex-col p-4 transition-all duration-300 transform hover:scale-105 shadow-lg">
                       <CardHeader className="p-2 items-center flex-row gap-2">
-                        <div className="bg-white/20 p-2 rounded-lg">
-                            <Map className="h-6 w-6 text-white/90" />
+                        <div className="bg-white/20 p-3 rounded-lg">
+                           <BookOpen className="h-6 sm:h-8 w-6 sm:w-8 text-white/90" />
                         </div>
-                        <CardTitle className="text-2xl">Macera Haritası</CardTitle>
+                        <CardTitle className="text-xl sm:text-2xl">Dersler ve Soru Bankası</CardTitle>
                       </CardHeader>
-                      <CardContent className="flex-grow space-y-4">
+                      <CardContent className="flex-grow w-full space-y-3 pt-4">
                           <div>
                               <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
-                                  <span>Tamamlanan Konu</span>
+                                  <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
                                   <span>{lessonProgress}%</span>
                               </div>
                               <Progress value={lessonProgress} className="h-3 bg-white/30 [&>div]:bg-green-400" />
@@ -316,26 +318,25 @@ export default function StudentDashboard() {
                       </CardContent>
                  </Card>
               </Link>
-            
             <Link href="/leaderboard" className="block group h-full">
                 <Card className="h-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex flex-col p-4 transition-all duration-300 transform hover:scale-105 shadow-lg">
                     <CardHeader className="p-2 items-center flex-row gap-2">
-                        <Trophy className="h-8 w-8 text-white/90" />
-                        <CardTitle className="text-2xl">Liderlik Tablosu</CardTitle>
+                        <Trophy className="h-6 sm:h-8 w-6 sm:w-8 text-white/90" />
+                        <CardTitle className="text-xl sm:text-2xl">Liderlik Tablosu</CardTitle>
                     </CardHeader>
                      <CardContent className="flex-grow flex items-stretch justify-around w-full bg-black/20 rounded-lg backdrop-blur-sm p-2">
                         <div className="flex flex-grow flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-bold">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</p>
+                            <p className="text-3xl sm:text-4xl font-bold">{stats.generalRank > 0 ? `${stats.generalRank}.` : '-'}</p>
                             <p className="text-xs opacity-90 flex items-center gap-1"><Globe className="h-3 w-3"/> Genel</p>
                         </div>
                         <div className="w-px bg-white/30 self-stretch" />
                         <div className="flex flex-grow flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-bold">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</p>
+                            <p className="text-3xl sm:text-4xl font-bold">{stats.classRank > 0 ? `${stats.classRank}.` : '-'}</p>
                             <p className="text-xs opacity-90 flex items-center gap-1"><School className="h-3 w-3"/> Sınıf</p>
                         </div>
                         <div className="w-px bg-white/30 self-stretch" />
                         <div className="flex flex-grow flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-bold">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</p>
+                            <p className="text-3xl sm:text-4xl font-bold">{stats.branchRank > 0 ? `${stats.branchRank}.` : '-'}</p>
                             <p className="text-xs opacity-90 flex items-center gap-1"><Users className="h-3 w-3"/> Şube</p>
                         </div>
                     </CardContent>
@@ -344,39 +345,30 @@ export default function StudentDashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Link href="/student/activities" className="block group">
-              <Card className="h-full bg-cyan-600 text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                <Gamepad2 className="h-10 w-10 sm:h-12 sm:w-12 opacity-80" />
-                <p className="text-lg sm:text-xl font-bold mt-2">Etkinlikler</p>
+               <Card className="relative">
+                <Button size="lg" className="w-full h-24 text-base sm:text-lg flex-col gap-1 bg-cyan-600 hover:bg-cyan-700" asChild>
+                    <Link href="/student/activities"><Gamepad2 className="h-5 w-5"/> Etkinlikler</Link>
+                </Button>
               </Card>
-            </Link>
-            <Link href="/student/yarismalar" className="block group">
-              <Card className="h-full bg-rose-600 text-white flex flex-col items-center justify-center text-center p-4 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                <Swords className="h-10 w-10 sm:h-12 sm:w-12 opacity-80" />
-                <p className="text-lg sm:text-xl font-bold mt-2">Çok Oyunculu</p>
+               <Card className="relative">
+                <Button size="lg" className="w-full h-24 text-base sm:text-lg flex-col gap-1 bg-rose-600 hover:bg-rose-700" asChild>
+                    <Link href="/student/yarismalar"><Swords className="h-5 w-5"/> Çok Oyunculu</Link>
+                </Button>
               </Card>
-            </Link>
           </div>
           
-           {/* UTILITY BELT */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Button size="lg" className="h-20 sm:h-24 text-base sm:text-md flex-col gap-1 bg-sky-500 hover:bg-sky-600" asChild>
+                  <Link href="/student/yazilacaklar"><Columns className="h-5 w-5"/> Yazılacaklar</Link>
+              </Button>
+              <Button size="lg" className="h-20 sm:h-24 text-base sm:text-md flex-col gap-1 bg-orange-500 hover:bg-orange-600" asChild>
+                  <Link href="/student/ozetler"><LayoutTemplate className="h-5 w-5"/> Özetler</Link>
+              </Button>
+              <Button size="lg" className="h-20 sm:h-24 text-base sm:text-md flex-col gap-1 bg-green-600 hover:bg-green-700" asChild>
+                  <Link href="/student/shop"><ShoppingCart className="h-5 w-5"/> Puan Dükkanı</Link>
+              </Button>
               <Card className="relative">
-                <Button size="lg" asChild className="w-full h-20 text-md flex-col gap-1 bg-orange-500 hover:bg-orange-600">
-                    <Link href="/student/yazilacaklar"><Columns className="h-5 w-5"/> Yazılacaklar</Link>
-                </Button>
-              </Card>
-              <Card className="relative">
-                <Button size="lg" asChild className="w-full h-20 text-md flex-col gap-1 bg-sky-500 hover:bg-sky-600">
-                    <Link href="/student/ozetler"><LayoutTemplate className="h-5 w-5"/> Özetler</Link>
-                </Button>
-              </Card>
-              <Card className="relative">
-                <Button size="lg" asChild className="w-full h-20 text-md flex-col gap-1 bg-green-600 hover:bg-green-700">
-                    <Link href="/student/shop"><ShoppingCart className="h-5 w-5"/> Dükkan</Link>
-                </Button>
-              </Card>
-              <Card className="relative">
-                <Button size="lg" asChild className="w-full h-20 text-md flex-col gap-1 bg-violet-600 hover:bg-violet-700">
+                <Button size="lg" className="w-full h-20 sm:h-24 text-base sm:text-md flex-col gap-1 bg-violet-600 hover:bg-violet-700" asChild>
                     <Link href="/student/deneme">
                         <FileCog className="h-5 w-5"/> Deneme Sınavlarım
                     </Link>
@@ -391,12 +383,9 @@ export default function StudentDashboard() {
                 </CardFooter>
               </Card>
           </div>
-          
+
           <HardestWorkersToday />
-          
       </div>
     </div>
   );
 }
-
-    
