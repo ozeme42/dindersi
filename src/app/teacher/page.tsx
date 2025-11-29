@@ -1,6 +1,6 @@
-
 'use client';
 
+import React, { type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,9 @@ import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
-import type { ReactNode } from "react";
+import type { PublicClass } from '../actions/getPublicCurriculum';
 import { cn } from '@/lib/utils';
+
 
 const ManagementButton = ({ href, title, icon }: { href: string, title: string, icon: ReactNode }) => {
     return (
@@ -25,6 +26,17 @@ const ManagementButton = ({ href, title, icon }: { href: string, title: string, 
 };
 
 const LoggedInDashboard = ({ user }: { user: any }) => {
+    const router = useRouter();
+
+    if (user.role === 'student') {
+        router.replace('/student');
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
+  
   const managementButtons = {
     superAdmin: {
       key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />,
@@ -143,16 +155,13 @@ export default function TeacherPage() {
         );
     }
     
-    if (user && (user.role === 'teacher' || user.role === 'superadmin')) {
+    if (user) {
         return <LoggedInDashboard user={user} />;
     }
-
-    // This part should theoretically not be reached due to AuthGuard,
-    // but it's good practice to have a fallback.
+    
     return (
-        <div className="flex h-screen items-center justify-center">
-            <p>Erişim yetkiniz yok veya bir hata oluştu.</p>
+         <div className="flex h-screen items-center justify-center">
+                <p>Giriş yapmanız gerekiyor.</p>
         </div>
     );
 }
-
