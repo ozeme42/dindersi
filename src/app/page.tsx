@@ -7,42 +7,11 @@ import {
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
     Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User
 } from 'lucide-react';
-
-// --- UTILS & MOCKS ---
-
-// Tailwind class birleştirici (clsx/twMerge alternatifi)
-function cn(...classes: (string | undefined | null | false)[]) {
-    return classes.filter(Boolean).join(" ");
-}
-
-// Next.js Link Mock
-const Link = ({ href, children, className, target, ...props }: any) => (
-    <a href={href} target={target} className={className} {...props}>
-        {children}
-    </a>
-);
-
-// Next.js Router Mock
-const useRouter = () => ({
-    push: (path: string) => console.log(`Navigating to ${path}`),
-    replace: (path: string) => console.log(`Replacing with ${path}`),
-});
-
-// Auth Context Mock (Test için state kullanıyoruz)
-// Gerçek uygulamada burası context'ten gelecek
-const useAuthMock = (currentRole: 'guest' | 'teacher' | 'student' | 'superadmin') => {
-    if (currentRole === 'guest') return { user: null, loading: false };
-    
-    return {
-        user: {
-            uid: '123',
-            email: 'demo@example.com',
-            role: currentRole,
-            displayName: currentRole === 'teacher' ? 'Ahmet Öğretmen' : 'Öğrenci Can',
-        },
-        loading: false
-    };
-};
+import Link from 'next/link';
+import { useAuth } from '@/context/auth-context';
+import { cn } from '@/lib/utils';
+import type { PublicCourse } from './actions/getPublicCurriculum';
+import { getPublicCurriculum } from './actions/getPublicCurriculum';
 
 // --- UI COMPONENTS (SHADCN REPLACEMENTS) ---
 
@@ -79,7 +48,6 @@ const Button = ({ children, className, variant = 'default', size = 'default', as
     );
 };
 
-// Custom Accordion Implementation
 const Accordion = ({ type, defaultValue, className, children }: any) => {
     const [openItems, setOpenItems] = useState<string[]>(Array.isArray(defaultValue) ? defaultValue : (defaultValue ? [defaultValue] : []));
 
@@ -109,8 +77,6 @@ const AccordionItem = ({ value, children, className, openItems, toggleItem }: an
         <div className={cn("border-b", className)}>
             {React.Children.map(children, child => {
                 if (React.isValidElement(child)) {
-                    // Fix: Check if the child is a DOM element (string) or a Component (function/object)
-                    // We only pass custom props to Components to avoid React warnings on DOM elements.
                     if (typeof child.type === 'string') {
                         return child;
                     }
@@ -217,46 +183,12 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-// --- MOCK DATA ---
-
-type Topic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean; };
-type Unit = { id: string; title: string; topics: Topic[]; };
-type Course = { id: string; className: string; units: Unit[]; };
-type CourseGroup = { title: string; courses: Course[]; };
-
-const MOCK_COURSE_GROUPS: CourseGroup[] = [
-    {
-        title: "Ortaokul Maceraları",
-        courses: [
-            {
-                id: "c1", className: "5", units: [
-                    { id: "u1", title: "Erdemler Adası", topics: [{ id: "t1", title: "Dürüstlük Totemi", hasYazilacaklarContent: true, hasOzetContent: true }] },
-                    { id: "u2", title: "Saygı Vadisi", topics: [{ id: "t2", title: "Büyüklerin Sözü", hasYazilacaklarContent: false, hasOzetContent: true }] }
-                ]
-            },
-            {
-                id: "c2", className: "6", units: []
-            }
-        ]
-    },
-    {
-        title: "Lise Görevleri",
-        courses: [
-            {
-                id: "c3", className: "Lise", units: [
-                    { id: "u3", title: "Felsefe Taşı", topics: [{ id: "t3", title: "Etik Sorunsalı", hasYazilacaklarContent: true, hasOzetContent: false }] }
-                ]
-            }
-        ]
-    }
-];
-
-// --- MAIN PAGES ---
+type CourseGroup = {
+    name: string;
+    courses: PublicCourse[];
+}
 
 const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
-
     if (courseGroups.length === 0) {
         return (
             <div className="flex flex-col min-h-screen bg-[#2b1055] items-center justify-center p-4">
@@ -284,11 +216,26 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
         'Lise': 'text-indigo-500',
         'Genel': 'text-slate-500',
     };
+    
+    // Group courses by class name for the accordion structure
+    const groupedByCourseTitle = courseGroups.reduce((acc, group) => {
+        group.courses.forEach(course => {
+            if(!acc[course.title]) {
+                acc[course.title] = { title: course.title, coursesByClass: {} };
+            }
+            const className = group.name || 'Genel';
+            if(!acc[course.title].coursesByClass[className]) {
+                acc[course.title].coursesByClass[className] = [];
+            }
+            acc[course.title].coursesByClass[className].push(course);
+        });
+        return acc;
+    }, {} as {[key:string]: {title: string, coursesByClass: {[key: string]: PublicCourse[]}}});
+
 
     return (
         <div className="flex flex-col min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black pb-20 md:pb-8 font-sans selection:bg-purple-500/30 text-white">
              
-             {/* Hero Section */}
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8 relative z-10">
                 <div className="flex flex-col items-center justify-center py-10 space-y-6">
                     <div className="relative">
@@ -308,9 +255,8 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                     </div>
                 </div>
                  
-                {/* Content Groups */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {courseGroups.map((group, groupIndex) => (
+                    {Object.values(groupedByCourseTitle).map((group, groupIndex) => (
                         <div key={group.title} className="space-y-4">
                             <GlassCard>
                                 <Accordion type="multiple" defaultValue={[group.title]} className="w-full border-none">
@@ -327,25 +273,25 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                         <AccordionContent className="p-0 bg-white/5">
                                             <div className="p-4 space-y-3">
                                                 <Accordion type="multiple" className="w-full space-y-3">
-                                                    {group.courses.map((course) => (
-                                                        // Fix: Removed the intermediate wrapper div and moved styles to AccordionItem
+                                                    {Object.entries(group.coursesByClass).map(([className, courses]) => (
                                                         <AccordionItem 
-                                                            value={course.id} 
-                                                            key={course.id} 
+                                                            value={className} 
+                                                            key={className} 
                                                             className="border-none bg-white/5 rounded-2xl overflow-hidden border border-white/10"
                                                         >
                                                             <AccordionTrigger className="px-4 py-3 hover:bg-white/5 hover:no-underline transition-colors">
                                                                 <div className="flex items-center gap-3">
-                                                                    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center font-bold text-lg bg-white shadow-sm", classColorMap[course.className])}>
-                                                                        {course.className === 'Genel' ? 'G' : course.className}
+                                                                    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center font-bold text-lg bg-white shadow-sm", classColorMap[className])}>
+                                                                        {className === 'Genel' ? 'G' : className}
                                                                     </div>
                                                                     <span className="text-lg font-bold text-white/90">
-                                                                        {course.className === 'Genel' ? 'Genel Maceralar' : `${course.className}. Sınıf Seviyesi`}
+                                                                        {className === 'Genel' ? 'Genel Maceralar' : `${className}. Sınıf Seviyesi`}
                                                                     </span>
                                                                 </div>
                                                             </AccordionTrigger>
                                                             <AccordionContent className="px-4 pb-4 pt-0">
-                                                                <div className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
+                                                            {courses.map(course => (
+                                                                <div key={course.id} className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
                                                                     {course.units.length > 0 ? (
                                                                             course.units.map(unit => (
                                                                             <div key={unit.id} className="pt-2">
@@ -381,6 +327,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                                             ))
                                                                     ) : <p className="text-sm text-white/40 italic p-2">Henüz görev eklenmemiş.</p>}
                                                                 </div>
+                                                                ))}
                                                             </AccordionContent>
                                                         </AccordionItem>
                                                     ))}
@@ -420,8 +367,6 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
     );
 };
 
-// --- LOGGED IN DASHBOARD ---
-
 const ManagementButton = ({ href, title, icon, colorClass }: { href: string, title: string, icon: React.ReactNode, colorClass: string }) => {
     return (
         <Link href={href} className="block group h-full">
@@ -450,15 +395,11 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                     </div>
                     <h2 className="text-2xl font-bold text-slate-800">Hoşgeldin {user.displayName}!</h2>
                     <p className="text-slate-500 font-medium animate-pulse">Oyun Alanına Yönlendiriliyorsunuz...</p>
-                    <div className="mt-4 p-4 bg-white rounded-xl shadow-sm border max-w-sm">
-                        <p className="text-sm text-slate-400">Not: Bu ekran öğrenci panelidir. Öğretmen paneli için sağ alttaki butondan rol değiştiriniz.</p>
-                    </div>
                 </div>
             </div>
         );
     }
   
-  // Dashboard Konfigürasyonu
   const managementButtons = {
     superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "bg-red-500 shadow-red-200" },
     contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "bg-orange-500 shadow-orange-200" },
@@ -503,7 +444,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
       <AppHeader />
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-10">
         
-        {/* Header Section */}
         <div className="text-center space-y-4 py-6">
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-800 dark:text-white">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -516,7 +456,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           </p>
         </div>
         
-        {/* Quick Actions Component */}
          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
              <h2 className="text-lg font-bold mb-4 text-slate-700 dark:text-slate-300 flex items-center gap-2">
                  <PlayCircle className="text-indigo-500"/> Hızlı İşlemler
@@ -524,7 +463,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
              <TeacherMainButtons />
          </div>
 
-        {/* Management Grid */}
         <div className="space-y-4">
              <div className="flex items-center gap-2 px-2">
                  <LayoutTemplate className="text-slate-400" />
@@ -545,48 +483,40 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
 
 export default function App() {
-    // --- DEMO STATE MANAGEMENT ---
-    const [currentRole, setCurrentRole] = useState<'guest' | 'teacher' | 'student' | 'superadmin'>('guest');
-    const { user, loading } = useAuthMock(currentRole);
-    const [mounted, setMounted] = useState(false);
+    const { user, loading } = useAuth();
+    const [courseGroups, setCourseGroups] = useState<CourseGroup[]>([]);
+    const [dataLoading, setDataLoading] = useState(true);
 
-    useEffect(() => setMounted(true), []);
+    useEffect(() => {
+        if (!user) {
+            setDataLoading(true);
+            getPublicCurriculum()
+                .then(data => {
+                    setCourseGroups(data.classGroups as CourseGroup[]);
+                })
+                .finally(() => {
+                    setDataLoading(false);
+                });
+        } else {
+            setDataLoading(false);
+        }
+    }, [user]);
+
+    if (loading || dataLoading) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-[#2b1055]">
+                <Loader2 className="h-12 w-12 animate-spin text-white" />
+            </div>
+        );
+    }
     
-    if (!mounted) return null;
-
     return (
         <div className="relative">
-            {loading ? (
-                <div className="flex h-screen items-center justify-center bg-[#2b1055]">
-                    <Loader2 className="h-12 w-12 animate-spin text-white" />
-                </div>
-            ) : user ? (
+            {user ? (
                 <LoggedInDashboard user={user} />
             ) : (
-                <LoggedOutPage courseGroups={MOCK_COURSE_GROUPS} />
+                <LoggedOutPage courseGroups={courseGroups} />
             )}
-
-            {/* --- DEBUG/DEMO TOGGLE --- */}
-            <div className="fixed bottom-4 right-4 z-50 flex gap-2 bg-black/80 p-2 rounded-lg backdrop-blur-sm border border-white/20">
-                <button 
-                    onClick={() => setCurrentRole('guest')}
-                    className={cn("px-3 py-1 rounded text-xs font-bold transition-colors", currentRole === 'guest' ? "bg-white text-black" : "text-white hover:bg-white/20")}
-                >
-                    Misafir
-                </button>
-                <button 
-                    onClick={() => setCurrentRole('teacher')}
-                    className={cn("px-3 py-1 rounded text-xs font-bold transition-colors", currentRole === 'teacher' ? "bg-indigo-500 text-white" : "text-white hover:bg-white/20")}
-                >
-                    Öğretmen
-                </button>
-                <button 
-                    onClick={() => setCurrentRole('student')}
-                    className={cn("px-3 py-1 rounded text-xs font-bold transition-colors", currentRole === 'student' ? "bg-emerald-500 text-white" : "text-white hover:bg-white/20")}
-                >
-                    Öğrenci
-                </button>
-            </div>
         </div>
     );
 }
