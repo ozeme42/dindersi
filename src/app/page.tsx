@@ -183,12 +183,12 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-type CourseGroup = {
+type CourseData = {
     name: string;
     courses: PublicCourse[];
 }
 
-const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
+const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses: PublicCourse[] }[] }) => {
     if (courseGroups.length === 0) {
         return (
             <div className="flex flex-col min-h-screen bg-[#2b1055] items-center justify-center p-4">
@@ -217,17 +217,18 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
         'Genel': 'text-slate-500',
     };
     
-    // Group courses by class name for the accordion structure
+    // Group courses by title first, then by class name inside
     const groupedByCourseTitle = courseGroups.reduce((acc, group) => {
         group.courses.forEach(course => {
-            if(!acc[course.title]) {
-                acc[course.title] = { title: course.title, coursesByClass: {} };
+            const courseTitle = course.title || 'Diğer Dersler';
+            if(!acc[courseTitle]) {
+                acc[courseTitle] = { title: courseTitle, coursesByClass: {} };
             }
             const className = group.name || 'Genel';
-            if(!acc[course.title].coursesByClass[className]) {
-                acc[course.title].coursesByClass[className] = [];
+            if(!acc[courseTitle].coursesByClass[className]) {
+                acc[courseTitle].coursesByClass[className] = [];
             }
-            acc[course.title].coursesByClass[className].push(course);
+            acc[courseTitle].coursesByClass[className].push(course);
         });
         return acc;
     }, {} as {[key:string]: {title: string, coursesByClass: {[key: string]: PublicCourse[]}}});
@@ -293,13 +294,14 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                             {courses.map(course => (
                                                                 <div key={course.id} className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
                                                                     {course.units.length > 0 ? (
-                                                                            course.units.map(unit => (
-                                                                            <div key={unit.id} className="pt-2">
-                                                                                <div className="flex items-center gap-2 mb-2 text-indigo-300 font-bold uppercase text-xs tracking-wider">
+                                                                        <Accordion type="multiple">
+                                                                            {course.units.map(unit => (
+                                                                            <AccordionItem value={unit.id} key={unit.id} className="border-none">
+                                                                                <AccordionTrigger className="flex items-center gap-2 mb-2 text-indigo-300 font-bold uppercase text-xs tracking-wider hover:no-underline py-2">
                                                                                     <div className="h-1.5 w-1.5 rounded-full bg-indigo-400"></div>
                                                                                     {unit.title}
-                                                                                </div>
-                                                                                <div className="space-y-2">
+                                                                                </AccordionTrigger>
+                                                                                <AccordionContent className="space-y-2">
                                                                                     {unit.topics.map(topic => (
                                                                                         <div key={topic.id} className="group/topic flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/20 hover:bg-black/40 p-3 rounded-xl transition-all border border-transparent hover:border-white/10">
                                                                                             <div className="flex items-center gap-3">
@@ -322,9 +324,10 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: CourseGroup[] }) => {
                                                                                             </div>
                                                                                         </div>
                                                                                     ))}
-                                                                                </div>
-                                                                            </div>
-                                                                            ))
+                                                                                </AccordionContent>
+                                                                            </AccordionItem>
+                                                                            ))}
+                                                                        </Accordion>
                                                                     ) : <p className="text-sm text-white/40 italic p-2">Henüz görev eklenmemiş.</p>}
                                                                 </div>
                                                                 ))}
@@ -484,7 +487,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
 export default function App() {
     const { user, loading } = useAuth();
-    const [courseGroups, setCourseGroups] = useState<CourseGroup[]>([]);
+    const [courseGroups, setCourseGroups] = useState<{ name: string; courses: PublicCourse[] }[]>([]);
     const [dataLoading, setDataLoading] = useState(true);
 
     useEffect(() => {
@@ -492,14 +495,7 @@ export default function App() {
             setDataLoading(true);
             getPublicCurriculum()
                 .then(data => {
-                    const mappedData = (data.classGroups as any[]).map(group => ({
-                        title: group.name,
-                        courses: group.courses.map((course: PublicCourse) => ({
-                            ...course,
-                            className: group.name // Map class name to course for display
-                        }))
-                    }));
-                    setCourseGroups(mappedData);
+                    setCourseGroups(data.classGroups || []);
                 })
                 .finally(() => {
                     setDataLoading(false);
@@ -527,3 +523,4 @@ export default function App() {
         </div>
     );
 }
+    
