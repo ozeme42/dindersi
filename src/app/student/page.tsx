@@ -1,31 +1,30 @@
 
 "use client";
 
-import React, { useState, useEffect, type ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { 
-    BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, 
-    Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, 
-    Package, Columns, LayoutTemplate, Bug, Users, FileCog, 
-    ClipboardCheck, Award, Crown, Globe, School, Map as MapIcon, Swords, Backpack,
-    Loader2, Home, User, Target
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, MapIcon as Map, Swords, Backpack,
+    Loader2, Home, User
 } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+
+// --- GAMIFIED UI COMPONENTS ---
 
 const GameButton = ({ 
     children, 
@@ -74,72 +73,8 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
-// --- MOBILE BOTTOM NAVIGATION ---
 
-const MobileNav = () => {
-    const [activeTab, setActiveTab] = useState('home');
-
-    const navItems = [
-        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
-        { id: 'quests', icon: MapIcon, label: 'Görevler', href: '/student/soru-bankasi' },
-        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
-        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
-        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
-    ];
-
-    return (
-        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
-            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
-
-                {navItems.map((item) => {
-                    const isActive = activeTab === item.id;
-                    return (
-                        <button
-                            key={item.id}
-                            onClick={() => setActiveTab(item.id)}
-                            className={cn(
-                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
-                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
-                            )}
-                        >
-                            {isActive && (
-                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
-                            )}
-                            
-                            {item.highlight ? (
-                                <div className={cn(
-                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
-                                    isActive 
-                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
-                                        : "bg-slate-800 border-slate-600 shadow-black/50"
-                                )}>
-                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
-                                </div>
-                            ) : (
-                                <div className="relative z-10">
-                                    <item.icon className={cn(
-                                        "h-6 w-6 transition-all duration-300",
-                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
-                                    )} />
-                                </div>
-                            )}
-
-                            {!item.highlight && (
-                                <span className={cn(
-                                    "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
-                                )}>
-                                    {item.label}
-                                </span>
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
+// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -180,7 +115,7 @@ function HardestWorkersToday() {
                                     <div className="h-8 w-8 flex items-center justify-center bg-black/20 rounded-lg">
                                         {rankIcons[index]}
                                     </div>
-                                    <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20"/>
+                                    <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20 text-slate-700"/>
                                     <div>
                                         <p className="font-bold text-white text-sm">{student.displayName}</p>
                                         <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
@@ -203,18 +138,17 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
+  
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
@@ -234,16 +168,14 @@ export default function StudentDashboard() {
         
         studentClassName = user.class?.split(' - ')[0];
 
-        let coursesData: Course[] = [];
-
-        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
+        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot, qbProgressSnapshots] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
           getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
+          getDocs(collection(db, `users/${user.uid}/questionBankProgress`))
         ]);
         
-        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -294,54 +226,46 @@ export default function StudentDashboard() {
         let totalQuestionBankPassedTests = 0;
         let totalQuestionBankTests = 0;
 
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
+        for (const course of filteredCourses) {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
+          const progressSnap = await getDoc(progressRef);
+          completedTopicsTotal += (progressSnap.data()?.completedTopics || []).length;
           
-          const [progressSnap, questionBankStats] = await Promise.all([
-            getDoc(progressRef),
-            qbStats
-          ]);
-
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
-          
-          const unitsRef = collection(db, 'courses', course.id, 'units');
-          const unitsSnap = await getDocs(unitsRef);
+          const unitsSnap = await getDocs(collection(db, 'courses', course.id, 'units'));
           let totalTopics = 0;
-          
           for (const unitDoc of unitsSnap.docs) {
             const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
             totalTopics += topicsSnap.size;
           }
-          
           grandTotalTopics += totalTopics;
+        }
 
-          // Also get QB stats for this course
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
+        let passedTests = 0;
+        let totalTestsInBank = 0;
+        qbProgressSnapshots.forEach(doc => {
+            const data = doc.data();
+            for (const topicId in data) {
+                const topicProgress = data[topicId];
+                 const allResults = [
+                    ...Object.values(topicProgress.easy || {}),
+                    ...Object.values(topicProgress.medium || {}),
+                    ...Object.values(topicProgress.hard || {})
+                ];
+                totalTestsInBank += allResults.length;
+                passedTests += allResults.filter((r: any) => r.status === 'passed').length;
+            }
+        });
 
-          return course;
-        }));
+        const qbProgressPercentage = totalTestsInBank > 0 ? Math.round((passedTests / totalTestsInBank) * 100) : 0;
         
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
-        const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
-            : 0;
-
         setStats({
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
+            questionBankProgress: qbProgressPercentage,
             generalRank,
             classRank,
             branchRank,
-            questionBankProgress: qbProgressPercentage,
         });
 
       } catch (error) {
@@ -355,7 +279,7 @@ export default function StudentDashboard() {
   
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-[#0f041e]">
+        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
@@ -364,7 +288,7 @@ export default function StudentDashboard() {
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
-    <div className="min-h-full bg-[#0f041e] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#0f041e] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
+    <div className="min-h-full bg-[#0f041e] bg-gradient-to-tr from-[#1a0b2e] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
           {/* PLAYER HUD HEADER */}
@@ -373,7 +297,7 @@ export default function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <UserAvatar user={user} className="w-20 h-20"/>
+                    <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -404,7 +328,7 @@ export default function StudentDashboard() {
                  <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
                       <div className="p-5 flex flex-col h-full relative">
                           <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                              <MapIcon className="h-8 w-8 text-sky-400" />
+                              <Map className="h-8 w-8 text-sky-400" />
                           </div>
                           
                           <div className="mb-6">
@@ -503,12 +427,7 @@ export default function StudentDashboard() {
           </div>
           
           <HardestWorkersToday />
-          
       </div>
-
-      {/* MOBILE BOTTOM NAVIGATION */}
-      <MobileNav />
-      
     </div>
   );
 }
