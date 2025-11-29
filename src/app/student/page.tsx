@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect, type ReactNode, useMemo, useCallback } from "react";
+import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -11,51 +11,51 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack, Loader2, Home, User, ClipboardList } from 'lucide-react';
+import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack, Loader2, Home, User } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
+import { Progress } from "@/components/ui/progress";
 
-const GlassCard = ({ href, icon, title, description, color, badge, children }: { href?: string, icon: ReactNode, title: string, description: string, color: string, badge?: string | number, children?: ReactNode }) => {
+// --- GAMIFIED UI COMPONENTS ---
+
+const GlassCard = ({ href, icon, title, description, color, badge, children }: { href?: string, icon?: ReactNode, title: string, description: string, color: string, badge?: string | number, children?: ReactNode }) => {
     const content = (
-         <div className={cn("h-full w-full rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-fuchsia-500/30 bg-gradient-to-br text-white border border-white/10", color)}>
+        <div className={cn("h-full w-full rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-fuchsia-500/30 bg-gradient-to-br text-white border border-white/10", color)}>
             <div className="bg-black/30 p-3 rounded-full mb-4 group-hover:scale-110 transition-transform">
                 {icon}
             </div>
-            <h2 className="text-xl font-bold">{title}</h2>
-            <p className="text-sm opacity-80 mt-1 flex-grow">{description}</p>
+            <h3 className="font-bold text-lg leading-tight">{title}</h3>
+            <p className="text-xs opacity-70 mt-1 flex-grow">{description}</p>
             {children}
             {badge && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
                     {badge}
-                </span>
+                </div>
             )}
         </div>
     );
 
     if (href) {
-        return <Link href={href} className="block group h-full">{content}</Link>;
+        return (
+            <Link href={href} className="block group h-full">
+                {content}
+            </Link>
+        );
     }
     return <div className="h-full">{content}</div>;
 };
 
-// --- MOCK DATA ---
 
+// --- MOCK DATA ---
 const MOCK_LEADERBOARD = [
     { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
     { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
     { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
 ];
 
-
-const MOCK_EXAM_STATS = {
-    pending: 2,
-    solved: 8
-};
 
 // --- COMPONENTS ---
 
@@ -118,24 +118,22 @@ function HardestWorkersToday() {
     )
 }
 
-export default function StudentPage() {
+function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
-    score: 0,
-    completedTopics: 0,
-    totalTopics: 0,
-    coursesStarted: 0,
-    coursesCompleted: 0,
-    totalCourses: 0,
-    generalRank: 0,
-    classRank: 0,
-    branchRank: 0,
-    questionBankProgress: 0,
+      score: 0,
+      completedTopics: 0,
+      totalTopics: 0,
+      coursesStarted: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
+      generalRank: 0,
+      classRank: 0,
+      branchRank: 0,
+      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
-  const router = useRouter();
-
+  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
     async function fetchData() {
@@ -192,27 +190,22 @@ export default function StudentPage() {
         }
 
         const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const allClassesSnap = await getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'), limit(1)));
+        const firstClassEverId = allClassesSnap.docs[0]?.id;
         
+        const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+        const studentClassId = studentClass?.id;
+
         const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
         const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
         
         let filteredCourses: Course[] = [];
-         if (studentClassName) {
-            const studentClass = allClasses.find(c => c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) {
-                const allClassesSnap = await getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'), limit(1)));
-                const firstClassEverId = allClassesSnap.docs[0]?.id;
-                
-                const isFirstClass = studentClassId === firstClassEverId;
-                filteredCourses = studentVisibleCourses.filter(course =>
-                    !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-                );
-            } else {
-                filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
-            }
+        if (studentClassId) {
+            const isFirstClass = studentClassId === firstClassEverId;
+            filteredCourses = studentVisibleCourses.filter(course =>
+                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
+            );
         } else {
             filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
         }
@@ -222,14 +215,14 @@ export default function StudentPage() {
 
         coursesData = await Promise.all(filteredCourses.map(async (course) => {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
-          const [progressSnap] = await Promise.all([
+          const [progressSnap, questionBankStats] = await Promise.all([
             getDoc(progressRef),
+            qbStats
           ]);
-           const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
 
-
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -248,15 +241,14 @@ export default function StudentPage() {
           course.completedTopicsCount = completedTopics.length;
 
           // Also get QB stats for this course
-          totalQuestionBankPassedTests += qbStats.passedTests;
-          totalQuestionBankTests += qbStats.totalTests;
+          totalQuestionBankPassedTests += questionBankStats.passedTests;
+          totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
         
         const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
         const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -286,7 +278,7 @@ export default function StudentPage() {
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
+        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
@@ -301,7 +293,7 @@ export default function StudentPage() {
           
           {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
-               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
+              <div className="flex flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
@@ -322,7 +314,7 @@ export default function StudentPage() {
                   </div>
                   
                   <div className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
-                      <div className="flex items-center justify-center gap-2 text-2xl font-black text-amber-400 drop-shadow-sm">
+                      <div className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
                           <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
                           <span>{stats.score.toLocaleString()}</span>
                       </div>
@@ -331,90 +323,68 @@ export default function StudentPage() {
               </div>
           </GlassCard>
           
-          <GlassCard
-              href="/student/soru-bankasi"
-              icon={<Map className="h-8 w-8 text-sky-300" />}
-              title="Ders Haritası"
-              description="Ders içeriklerini ve soru bankasını keşfet."
-              color="from-sky-900/50 to-blue-900/50 hover:border-sky-400/50"
-          >
-              <div className="w-full px-4 mt-4 space-y-3">
-                  <div>
-                      <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                          <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
-                          <span>{lessonProgress}%</span>
+          {/* MAIN QUEST BOARD */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <Link href="/student/soru-bankasi" className="group h-full">
+                 <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
+                      <div className="p-5 flex flex-col h-full relative">
+                          <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                              <Map className="h-8 w-8 text-sky-400" />
+                          </div>
+                          
+                          <div className="mb-6">
+                              <h2 className="text-2xl font-bold text-white mb-1">Macera Haritası</h2>
+                              <p className="text-sky-200 text-sm">Dersler ve Soru Bankası</p>
+                          </div>
+
+                          <div className="mt-auto space-y-4">
+                              <div>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
+                                      <span>{lessonProgress}%</span>
+                                  </div>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
+                                      <span>{stats.questionBankProgress}%</span>
+                                  </div>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                      <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                          <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
-                      </div>
-                  </div>
-                  <div>
-                      <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                          <span className="flex items-center gap-1"><Target className="h-3 w-3"/> İsabet Oranı</span>
-                          <span>{stats.questionBankProgress}%</span>
-                      </div>
-                      <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                          <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
-                      </div>
-                  </div>
-              </div>
-          </GlassCard>
+                 </GlassCard>
+              </Link>
+            
+            <HardestWorkersToday />
+          </div>
 
           {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-              <GlassCard
-                  href="/student/activities"
-                  icon={<Gamepad2 className="h-8 w-8 text-cyan-300"/>}
-                  title="Etkinlikler"
-                  description="Eğlenceli oyunlarla kendini sına ve puanları topla."
-                  color="from-cyan-900/50 to-teal-800/50 hover:border-cyan-400/50"
-              />
-              <GlassCard
-                  href="/student/yarismalar"
-                  icon={<Swords className="h-8 w-8 text-rose-300"/>}
-                  title="Arena"
-                  description="Arkadaşlarınla veya takımlarla rekabet et."
-                  color="from-rose-900/50 to-red-800/50 hover:border-rose-400/50"
-              />
+                <GlassCard href="/student/activities" icon={<Gamepad2 className="h-8 w-8 text-white"/>} title="Etkinlikler" description="Arcade Modu" color="from-cyan-900/50 to-cyan-800/50" />
+                <GlassCard href="/student/yarismalar" icon={<Swords className="h-8 w-8 text-white"/>} title="Çok Oyunculu" description="PvP Arena" color="from-rose-900/50 to-rose-800/50" />
           </div>
           
            {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <GlassCard
-                href="/student/yazilacaklar"
-                icon={<Columns className="h-6 w-6 text-orange-300"/>}
-                title="Yazılacaklar"
-                description="Ders notları ve kavramlar."
-                color="from-orange-900/50 to-orange-800/50 hover:border-orange-400/50"
-              />
-              <GlassCard
-                href="/student/ozetler"
-                icon={<LayoutTemplate className="h-6 w-6 text-indigo-300"/>}
-                title="Özetler"
-                description="İnteraktif konu özetleri."
-                color="from-indigo-900/50 to-purple-800/50 hover:border-indigo-400/50"
-              />
-              <GlassCard
-                href="/student/shop"
-                icon={<ShoppingCart className="h-6 w-6 text-emerald-300"/>}
-                title="Dükkan"
-                description="Puanlarınla profilini özelleştir."
-                color="from-emerald-900/50 to-green-800/50 hover:border-emerald-400/50"
-              />
-              <GlassCard
-                href="/student/deneme"
-                icon={<FileCog className="h-6 w-6 text-violet-300"/>}
-                title="Denemeler"
-                description="Sana özel deneme sınavları."
-                color="from-violet-900/50 to-fuchsia-800/50 hover:border-violet-400/50"
-                badge={examStats.pending > 0 ? `${examStats.pending} YENİ` : undefined}
-              />
+              <GlassCard href="/student/yazilacaklar" icon={<Columns className="h-5 w-5"/>} title="Yazılacaklar" description="Ders notları ve kavramlar." color="from-orange-900/50 to-orange-800/50" />
+              <GlassCard href="/student/ozetler" icon={<LayoutTemplate className="h-5 w-5"/>} title="Özetler" description="İnteraktif konu özetleri." color="from-blue-900/50 to-blue-800/50" />
+              <GlassCard href="/student/shop" icon={<ShoppingCart className="h-5 w-5"/>} title="Puan Dükkanı" description="Puanlarını harca, profilini özelleştir." color="from-green-900/50 to-green-800/50" />
+              <GlassCard href="/student/deneme" icon={<FileCog className="h-5 w-5"/>} title="Deneme Sınavı" description="Sana özel atanan sınavlar." color="from-violet-900/50 to-violet-800/50" badge={examStats.pending > 0 ? `${examStats.pending} YENİ` : undefined} />
           </div>
-          
-          <HardestWorkersToday />
           
       </div>
     </div>
     </>
   );
+}
+
+export default function StudentPage() {
+    return <StudentDashboard />;
 }
