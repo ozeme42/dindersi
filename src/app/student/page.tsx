@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -8,19 +7,31 @@ import {
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import Link from 'next/link';
-import { Badge } from "@/components/ui/badge";
+import { UserAvatar } from "@/components/user-avatar";
+import { useAuth } from "@/context/auth-context";
+
+// --- UTILS ---
+
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -70,73 +81,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
         {children}
     </div>
 );
-
-// --- MOBILE BOTTOM NAVIGATION ---
-
-const MobileNav = () => {
-    const [activeTab, setActiveTab] = useState('home');
-
-    const navItems = [
-        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
-        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
-        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
-        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
-        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
-    ];
-
-    return (
-        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
-            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
-
-                {navItems.map((item) => {
-                    const isActive = activeTab === item.id;
-                    return (
-                        <button
-                            key={item.id}
-                            onClick={() => setActiveTab(item.id)}
-                            className={cn(
-                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
-                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
-                            )}
-                        >
-                            {isActive && (
-                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
-                            )}
-                            
-                            {item.highlight ? (
-                                <div className={cn(
-                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
-                                    isActive 
-                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
-                                        : "bg-slate-800 border-slate-600 shadow-black/50"
-                                )}>
-                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
-                                </div>
-                            ) : (
-                                <div className="relative z-10">
-                                    <item.icon className={cn(
-                                        "h-6 w-6 transition-all duration-300",
-                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
-                                    )} />
-                                </div>
-                            )}
-
-                            {!item.highlight && (
-                                <span className={cn(
-                                    "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
-                                )}>
-                                    {item.label}
-                                </span>
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
 
 // --- COMPONENTS ---
 
@@ -207,15 +151,15 @@ export default function StudentDashboard() {
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0, 
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
+  const [examStats, setExamStats] = useState({
+      pending: 0,
+      solved: 0
+  });
 
   useEffect(() => {
     async function fetchData() {
@@ -239,11 +183,10 @@ export default function StudentDashboard() {
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+          getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"]))),
           getStudentExams(user.uid),
         ]);
         
-        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -303,7 +246,7 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? progressSnap.data()?.completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -321,15 +264,11 @@ export default function StudentDashboard() {
           course.unitsCount = unitsSnap.size;
           course.completedTopicsCount = completedTopics.length;
 
-          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
         setCourses(coursesData);
         
@@ -341,9 +280,6 @@ export default function StudentDashboard() {
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
@@ -356,7 +292,7 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     }
-    if(!authLoading) {
+    if(!authLoading){
         fetchData();
     }
   }, [user, authLoading]);
@@ -382,8 +318,8 @@ export default function StudentDashboard() {
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <div className="relative shrink-0 w-20 h-20 text-slate-800">
-                            <UserAvatar user={user} className="w-20 h-20" />
+                         <div className="relative shrink-0 w-20 h-20">
+                            <UserAvatar user={user} className="w-full h-full text-slate-800"/>
                         </div>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
@@ -415,7 +351,7 @@ export default function StudentDashboard() {
               <Link href="/student/soru-bankasi" className="group h-full">
                  <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
                       <div className="p-5 flex flex-col h-full relative">
-                           <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                          <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
                               <Map className="h-8 w-8 text-sky-400" />
                           </div>
                           
@@ -426,22 +362,18 @@ export default function StudentDashboard() {
 
                           <div className="mt-auto space-y-4">
                               <div>
-                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                  <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                                       <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
                                       <span>{lessonProgress}%</span>
                                   </div>
-                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                      <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
-                                  </div>
+                                  <Progress value={lessonProgress} className="h-3 bg-white/30 [&>div]:bg-green-400" />
                               </div>
                               <div>
-                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                  <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
                                       <span className="flex items-center gap-1"><Target className="h-3 w-3"/> Başarı Oranı</span>
                                       <span>{stats.questionBankProgress}%</span>
                                   </div>
-                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
-                                  </div>
+                                  <Progress value={stats.questionBankProgress} className="h-3 bg-white/30 [&>div]:bg-amber-400"/>
                               </div>
                           </div>
                       </div>
@@ -481,13 +413,13 @@ export default function StudentDashboard() {
 
           {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
-                    <Gamepad2 className="h-8 w-8 mb-1"/> 
+                <GameButton href="/student/activities" variant="info" className="text-xl flex-col gap-2 py-6 h-auto">
+                    <Gamepad2 className="h-10 w-10 mb-1"/> 
                     <span>Etkinlikler</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
                 </GameButton>
-                 <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
-                    <Swords className="h-8 w-8 mb-1"/> 
+                 <GameButton href="/student/yarismalar" variant="secondary" className="text-xl flex-col gap-2 py-6 h-auto">
+                    <Swords className="h-10 w-10 mb-1"/> 
                     <span>Çok Oyunculu</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
@@ -517,10 +449,6 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
-
-      {/* MOBILE BOTTOM NAVIGATION */}
-      <MobileNav />
-      
     </div>
   );
 }
