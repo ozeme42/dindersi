@@ -1,11 +1,10 @@
-
 "use client";
 
 import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
@@ -14,12 +13,16 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, LayoutTemplate, Bug, Users, FileCog, ClipboardCheck, Award, Crown, Globe, School, Map as MapIcon } from 'lucide-react';
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
+    Loader2, Home, User
+} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
@@ -70,6 +73,7 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
         {children}
     </div>
 );
+
 
 // --- COMPONENTS ---
 
@@ -227,29 +231,33 @@ function StudentDashboard() {
         let totalQuestionBankTests = 0;
 
         coursesData = await Promise.all(filteredCourses.map(async (course) => {
-          const courseUnitsSnapshot = await getDocs(query(collection(db, 'courses', course.id, 'units')));
+          const unitsRef = collection(db, 'courses', course.id, 'units');
+          const unitsSnap = await getDocs(unitsRef);
           let totalTopics = 0;
-
-          for(const unitDoc of courseUnitsSnapshot.docs) {
-              const topicsSnapshot = await getDocs(query(collection(db, 'courses', course.id, 'units', unitDoc.id, 'topics')));
-              totalTopics += topicsSnapshot.size;
+          
+          for (const unitDoc of unitsSnap.docs) {
+            const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+            totalTopics += topicsSnap.size;
           }
           
-          const progressSnap = await getDoc(doc(db, 'users', user.uid, 'progress', course.id));
-          
-          const completedTopics = progressSnap.exists() ? (progressSnap.data()?.completedTopics || []).length : 0;
-          completedTopicsTotal += completedTopics;
           grandTotalTopics += totalTopics;
+          
+          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
+          
+          const [progressSnap, questionBankStats] = await Promise.all([
+            getDoc(progressRef),
+            qbStats
+          ]);
 
-          const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
-          totalQuestionBankPassedTests += qbStats.passedTests;
-          totalQuestionBankTests += qbStats.totalTests;
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics?.length || 0 : 0;
+          completedTopicsTotal += completedTopics;
+          
+          totalQuestionBankPassedTests += questionBankStats.passedTests;
+          totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
             ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
@@ -259,8 +267,8 @@ function StudentDashboard() {
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
+            coursesStarted: 0, // Simplified for now
+            coursesCompleted: 0, // Simplified for now
             totalCourses: coursesData.length,
             generalRank,
             classRank,
@@ -288,6 +296,7 @@ function StudentDashboard() {
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
+    <>
     <div className="bg-[#0f041e] min-h-screen">
       <div className="p-4 sm:p-6 md:p-8 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a0b2e] to-transparent z-0"></div>
@@ -299,7 +308,9 @@ function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
+                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
+                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
+                    </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -433,15 +444,10 @@ function StudentDashboard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
 export default function StudentPage() {
-    return (
-        <>
-            <StudentDashboard />
-        </>
-    );
+    return <StudentDashboard />;
 }
-
-    
