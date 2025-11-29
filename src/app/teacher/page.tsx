@@ -6,14 +6,13 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Workflow, MonitorPlay, Gamepad2, Sun, ArrowRight } from 'lucide-react';
+import { Loader2, Shield, PenSquare, UserCog, FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, Video, Settings, Trophy, Bug, DollarSign, Workflow, MonitorPlay, Gamepad2 } from 'lucide-react';
 import { AppHeader } from "@/components/app-header";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { TeacherMainButtons } from "@/components/teacher-main-buttons";
 import type { PublicClass } from '../actions/getPublicCurriculum';
-import { cn } from '@/lib/utils';
-
+import { cn } from "@/lib/utils";
 
 const ManagementButton = ({ href, title, icon }: { href: string, title: string, icon: ReactNode }) => {
     return (
@@ -26,13 +25,22 @@ const ManagementButton = ({ href, title, icon }: { href: string, title: string, 
     );
 };
 
-const LoggedInDashboard = ({ user }: { user: any }) => {
+export default function TeacherPage() {
+    const { user, loading } = useAuth();
     const router = useRouter();
 
-    if (user.role === 'student') {
-        router.replace('/student');
+    if (loading) {
         return (
             <div className="flex h-screen items-center justify-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        );
+    }
+  
+    if (!user || (user.role !== 'teacher' && user.role !== 'superadmin')) {
+        router.replace('/login');
+        return (
+             <div className="flex h-screen items-center justify-center">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
             </div>
         );
@@ -119,46 +127,25 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
          <TeacherMainButtons />
 
         <Card>
-            <CardHeader>
-                <CardTitle>Tüm Yönetim Panelleri</CardTitle>
-                 <CardDescription>Tüm yönetimsel araçlara buradan erişebilirsiniz.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {getManagementButtons().map(({ key, href, title, icon }) =>
-                        <ManagementButton key={key} href={href} title={title} icon={icon} />
-                    )}
-                </div>
-            </CardContent>
+            <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1" className="border-b-0">
+                    <AccordionTrigger className="p-6 hover:no-underline">
+                        <div className="text-left">
+                            <CardTitle>Tüm Yönetim Panelleri</CardTitle>
+                            <CardDescription>Tüm yönetimsel araçlara buradan erişebilirsiniz. (Genişletmek için tıklayın)</CardDescription>
+                        </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="p-6 pt-0">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                            {getManagementButtons().map(({ key, href, title, icon }) =>
+                                <ManagementButton key={key} href={href} title={title} icon={icon} />
+                            )}
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+            </Accordion>
         </Card>
       </main>
     </div>
   );
 };
-
-
-export default function TeacherPage() {
-    const { user, loading } = useAuth();
-
-    if (loading) {
-        return (
-            <div className="flex h-screen items-center justify-center">
-                <Loader2 className="h-12 w-12 animate-spin text-primary" />
-            </div>
-        );
-    }
-    
-    // This page is only for teachers/admins, so a logged-in user is expected.
-    // The AuthGuard in the layout will handle redirection if the role is wrong.
-    if (user) {
-        return <LoggedInDashboard user={user} />;
-    }
-
-    // Fallback for the brief moment before AuthGuard redirects a non-logged-in user.
-    return (
-        <div className="flex h-screen items-center justify-center">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-    );
-}
-
