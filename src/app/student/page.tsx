@@ -1,30 +1,53 @@
+"use client";
 
-'use client';
-
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
-import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardFooter, CardDescription, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+// --- UTILS & MOCKS ---
 
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(" ");
+}
+
+const Link = ({ href, children, className, ...props }: any) => (
+    <a href={href} className={className} {...props}>
+        {children}
+    </a>
+);
+
+const useAuth = () => {
+    return {
+        user: {
+            uid: 'student-123',
+            displayName: 'Efe Can',
+            email: 'efe@okul.com',
+            role: 'student',
+            class: '6-A',
+            score: 15450,
+            avatarUrl: null
+        },
+        loading: false
+    };
+};
+
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+const Skeleton = ({ className }: { className?: string }) => (
+    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
+);
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -75,18 +98,108 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
+// --- MOBILE BOTTOM NAVIGATION ---
+
+const MobileNav = () => {
+    const [activeTab, setActiveTab] = useState('home');
+
+    const navItems = [
+        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
+        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
+        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
+        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
+        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
+    ];
+
+    return (
+        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
+            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
+
+                {navItems.map((item) => {
+                    const isActive = activeTab === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setActiveTab(item.id)}
+                            className={cn(
+                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
+                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
+                            )}
+                        >
+                            {isActive && (
+                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
+                            )}
+                            
+                            {item.highlight ? (
+                                <div className={cn(
+                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
+                                    isActive 
+                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
+                                        : "bg-slate-800 border-slate-600 shadow-black/50"
+                                )}>
+                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
+                                </div>
+                            ) : (
+                                <div className="relative z-10">
+                                    <item.icon className={cn(
+                                        "h-6 w-6 transition-all duration-300",
+                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
+                                    )} />
+                                </div>
+                            )}
+
+                            {!item.highlight && (
+                                <span className={cn(
+                                    "text-[10px] font-bold mt-1 transition-all duration-300",
+                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
+                                )}>
+                                    {item.label}
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+// --- MOCK DATA ---
+
+const MOCK_LEADERBOARD = [
+    { uid: '1', displayName: 'Zeynep Yılmaz', score: 18500, class: '6-A' },
+    { uid: '2', displayName: 'Ahmet Demir', score: 17200, class: '6-B' },
+    { uid: '3', displayName: 'Ayşe Kaya', score: 16800, class: '6-A' },
+];
+
+const MOCK_STATS = {
+    score: 15450,
+    completedTopics: 12,
+    totalTopics: 20,
+    questionBankProgress: 65, 
+    generalRank: 42,
+    classRank: 5,
+    branchRank: 3,
+};
+
+const MOCK_EXAM_STATS = {
+    pending: 2,
+    solved: 8
+};
+
 // --- COMPONENTS ---
 
 function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
+    const [dailyTop, setDailyTop] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => {
-            setDailyTop(data.slice(0, 3));
-        }).finally(() => {
+        const timer = setTimeout(() => {
+            setDailyTop(MOCK_LEADERBOARD);
             setIsLoading(false);
-        });
+        }, 1000);
+        return () => clearTimeout(timer);
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -139,126 +252,15 @@ function HardestWorkersToday() {
 export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
-      score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      questionBankProgress: 0, 
-      generalRank: 0,
-      classRank: 0,
-      branchRank: 0,
-  });
-  const [examStats, setExamStats] = useState({ pending: 0, solved: 0 });
-
-  const fetchData = useCallback(async () => {
-    if (!user?.uid) {
-        setIsLoading(false);
-        return;
-    };
-    setIsLoading(true);
-    
-    try {
-      let completedTopicsTotal = 0;
-      let grandTotalTopics = 0;
-      let userScore = user.score || 0;
-      const studentClassName = user.class?.split(' - ')[0];
-
-      const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-        getDocs(collection(db, "courses")),
-        getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-        getStudentExams(user.uid),
-      ]);
-
-      if (examsSnapshot.success && examsSnapshot.data) {
-          const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
-          const solved = examsSnapshot.data.length - pending;
-          setExamStats({ pending, solved });
-      }
-
-      const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-      const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-      const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
-      let classRank = 0;
-      let branchRank = 0;
-      if(user.class) {
-          const gradeName = user.class.split(' - ')[0];
-          const branchName = user.class;
-
-          const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-          const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-          classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-          const studentsInBranch = allStudents.filter(s => s.class === branchName);
-          const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-          branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-      }
-
-      const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-      const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
-      const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-      const studentClassId = studentClass?.id;
-
-      const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-      const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
-      
-      let filteredCourses: Course[] = [];
-      if (studentClassId) {
-          const isFirstClass = studentClassId === firstClassId;
-          filteredCourses = studentVisibleCourses.filter(course =>
-              !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-          );
-      } else {
-          filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
-      }
-      
-      let totalQuestionBankPassedTests = 0;
-      let totalQuestionBankTests = 0;
-
-      for (const course of filteredCourses) {
-          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = await getCourseQuestionBankStats(course.id, user.uid);
-          const progressSnap = await getDoc(progressRef);
-          
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
-          
-          const unitsRef = collection(db, 'courses', course.id, 'units');
-          const unitsSnap = await getDocs(unitsRef);
-          let totalTopics = 0;
-          for (const unitDoc of unitsSnap.docs) {
-              const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-              totalTopics += topicsSnap.size;
-          }
-          grandTotalTopics += totalTopics;
-
-          totalQuestionBankPassedTests += qbStats.passedTests;
-          totalQuestionBankTests += qbStats.totalTests;
-      }
-
-      const qbProgressPercentage = totalQuestionBankTests > 0 ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100) : 0;
-
-      setStats({
-          score: userScore,
-          completedTopics: completedTopicsTotal,
-          totalTopics: grandTotalTopics,
-          generalRank,
-          classRank,
-          branchRank,
-          questionBankProgress: qbProgressPercentage,
-      });
-
-    } catch (error) {
-      console.error("Error fetching student dashboard data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user]);
+  const [stats, setStats] = useState(MOCK_STATS);
+  const [examStats, setExamStats] = useState(MOCK_EXAM_STATS);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const timer = setTimeout(() => {
+        setIsLoading(false);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
   
   if (isLoading) {
     return (
@@ -274,15 +276,14 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
+          {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <div className="relative shrink-0 w-20 h-20">
-                            <UserAvatar user={user} className="w-full h-full" />
-                         </div>
+                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -297,20 +298,17 @@ export default function StudentDashboard() {
                       </div>
                   </div>
                   
-                  <GlassCard className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
-                      <CardHeader className="p-0 mb-1">
-                          <CardTitle className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
-                              <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
-                              <span>{stats.score.toLocaleString()}</span>
-                          </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-0">
-                         <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold">Toplam Puan</p>
-                      </CardContent>
-                  </GlassCard>
+                  <div className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
+                      <div className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
+                          <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
+                          <span>{stats.score.toLocaleString()}</span>
+                      </div>
+                      <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
+                  </div>
               </div>
           </GlassCard>
           
+          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               <Link href="/student/soru-bankasi" className="group h-full">
@@ -380,11 +378,11 @@ export default function StudentDashboard() {
             </Link>
           </div>
 
+          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
                     <Gamepad2 className="h-8 w-8 mb-1"/> 
-                    <span>Bireysel Etkinlikler</span>
-                    <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
+                    <span>Etkinlikler</span>
                 </GameButton>
                  <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
                     <Swords className="h-8 w-8 mb-1"/> 
@@ -393,6 +391,7 @@ export default function StudentDashboard() {
                 </GameButton>
           </div>
           
+           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
                   <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
@@ -416,6 +415,10 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
+
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <MobileNav />
+      
     </div>
   );
 }
