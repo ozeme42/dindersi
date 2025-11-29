@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { type ReactNode } from "react";
@@ -44,14 +45,8 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     contentTeacher: {
       key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />,
     },
-    summerContent: {
-       key: 'summerContent', href: "/teacher/summer-school/content-creation", title: "Yaz Kursu İçerik", icon: <Sun />,
-    },
     studentsTeacher: {
         key: 'studentsTeacher', href: '/teacher/students', title: 'Öğrenci Yönetimi', icon: <UserCog />,
-    },
-    summerStudents: {
-        key: 'summerStudents', href: '/teacher/summer-school/students', title: 'Yaz Kursu Öğrencileri', icon: <UserCog />,
     },
     questionsTeacher: {
         key: 'questionsTeacher', href: '/teacher/questions', title: 'Soru Bankası', icon: <FileCog />,
@@ -91,9 +86,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   const getManagementButtons = () => {
       const buttons = [
           managementButtons.contentTeacher,
-          managementButtons.summerContent,
           managementButtons.studentsTeacher,
-          managementButtons.summerStudents,
           managementButtons.questionsTeacher,
           managementButtons.examQuestions,
           managementButtons.activityDataBank,
@@ -146,7 +139,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
 
 export default function TeacherPage() {
     const { user, loading } = useAuth();
-    
+
     if (loading) {
         return (
             <div className="flex h-screen items-center justify-center">
@@ -155,13 +148,17 @@ export default function TeacherPage() {
         );
     }
     
+    // This page is only for teachers/admins, so a logged-in user is expected.
+    // The AuthGuard in the layout will handle redirection if the role is wrong.
     if (user) {
         return <LoggedInDashboard user={user} />;
     }
-    
+
+    // Fallback for the brief moment before AuthGuard redirects a non-logged-in user.
     return (
-         <div className="flex h-screen items-center justify-center">
-                <p>Giriş yapmanız gerekiyor.</p>
+        <div className="flex h-screen items-center justify-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     );
 }
+
