@@ -1,19 +1,23 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { 
-    ArrowLeft, RefreshCw, Heart, Trophy, HelpCircle, Skull, Home, Lightbulb, Loader2 
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import confetti from "canvas-confetti";
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/context/auth-context';
+import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Loader2, ArrowLeft, Skull, Heart, AlertTriangle, Save, Home, Repeat, CheckCircle2, Lightbulb, Trophy } from 'lucide-react';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+import { playSound } from '@/lib/audio-service';
+import { useToast } from '@/hooks/use-toast';
+import confetti from "canvas-confetti";
 
 
-// --- ANIMATED HANGMAN SVG COMPONENT ---
+const HANGMAN_STAGES = 6;
+const KEYBOARD_LETTERS = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('');
+
 const HangmanFigure = ({ errors }: { errors: number }) => {
     // SVG Paths for each part
     const parts = [
@@ -28,10 +32,6 @@ const HangmanFigure = ({ errors }: { errors: number }) => {
         <line key="legL" x1="200" y1="170" x2="170" y2="210" className="animate-draw" />,// 8: Left Leg
         <line key="legR" x1="200" y1="170" x2="230" y2="210" className="animate-draw" />,// 9: Right Leg
     ];
-
-    // Map errors (0-6 standard game logic) to parts index
-    // 6 wrong guesses allowed.
-    // 1 wrong -> Head (4) ... 6 wrong -> Leg R (9) (GAME OVER)
     
     // Always show setup (0-3)
     const visibleParts = [0, 1, 2, 3];
@@ -49,13 +49,6 @@ const HangmanFigure = ({ errors }: { errors: number }) => {
         </svg>
     );
 };
-
-// --- KEYBOARD COMPONENT ---
-const KEYBOARD_LETTERS = [
-    "A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", 
-    "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", 
-    "V", "Y", "Z"
-];
 
 export default function AdamAsmacaGamePage() {
     const { user } = useAuth();
@@ -100,7 +93,7 @@ export default function AdamAsmacaGamePage() {
             setLoading(false);
         };
         initGame();
-    }, []);
+    }, [searchParams]);
 
     // --- GAME LOGIC ---
 
@@ -156,10 +149,14 @@ export default function AdamAsmacaGamePage() {
 
     const handleNextLevel = () => {
         if (currentWordIndex + 1 < gameData.length) {
-            setRoundStatus('playing'); // Reset status FIRST
-            setGuessedLetters(new Set());
-            setWrongGuesses(0);
-            setCurrentWordIndex(prev => prev + 1);
+            setLoading(true); // Show loading state
+            setTimeout(() => { // Gives time for the loader to appear
+                setRoundStatus('playing');
+                setCurrentWordIndex(prev => prev + 1);
+                setGuessedLetters(new Set());
+                setWrongGuesses(0);
+                setLoading(false);
+            }, 300); // A small delay to ensure state updates properly
         } else {
             // Game Completed
             handleFinishGame();
@@ -171,7 +168,7 @@ export default function AdamAsmacaGamePage() {
         const context = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
         await submitAdamAsmacaScoreAction(user?.uid || null, score, context);
         // Redirect to results or back
-        router.push('/student/adam-asmaca');
+        router.push('/student/activities'); // Or a dedicated result screen
     };
 
     // --- RENDER HELPERS ---
@@ -365,3 +362,13 @@ export default function AdamAsmacaGamePage() {
         </div>
     );
 }
+
+const AdamAsmacaGamePageWrapper = () => (
+    <Suspense fallback={<div className="flex h-screen w-full flex-col items-center justify-center bg-[#1a0b2e] text-white space-y-4"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /><p className="text-indigo-300 font-medium">Oyun Yükleniyor...</p></div>}>
+        <AdamAsmacaGamePage />
+    </Suspense>
+);
+
+// This is the actual export that Next.js will use.
+// It wraps the client component in Suspense for better UX.
+export { AdamAsmacaGamePageWrapper as default };
