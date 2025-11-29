@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -358,7 +359,7 @@ const LoggedOutPage = ({ courseGroups }: { courseGroups: { name: string; courses
                         Android Uygulaması
                     </GameButton>
                     <GameButton 
-                        href="#" 
+                        href="https://vimeo.com/user248310384" 
                         variant="info"
                         className="text-sm px-8"
                     >
