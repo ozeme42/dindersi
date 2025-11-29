@@ -7,82 +7,24 @@ import {
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
     Loader2, Home, User
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-import { Progress } from "@/components/ui/progress";
+
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
-import { useAuth } from "@/context/auth-context";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// --- UTILS ---
-
-function cn(...classes: (string | undefined | null | false)[]) {
-    return classes.filter(Boolean).join(" ");
-}
-
-const Link = ({ href, children, className, ...props }: any) => (
-    <a href={href} className={className} {...props}>
-        {children}
-    </a>
-);
-
-const Skeleton = ({ className }: { className?: string }) => (
-    <div className={cn("animate-pulse rounded-md bg-white/10", className)} />
-);
-
-// --- GAMIFIED UI COMPONENTS ---
-
-const GameButton = ({ 
-    children, 
-    className, 
-    variant = 'primary', 
-    href, 
-    badge,
-    ...props 
-}: any) => {
-    const variants: {[key: string]: string} = {
-        primary: "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40",
-        secondary: "bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40",
-        success: "bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40",
-        warning: "bg-amber-500 hover:bg-amber-400 border-amber-700 text-white shadow-amber-900/40",
-        info: "bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40",
-        violet: "bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40",
-        orange: "bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40",
-    };
-
-    const baseClass = "relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer";
-    
-    const content = (
-        <span className={cn(baseClass, variants[variant], className)} {...props}>
-            {children}
-            {badge && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
-                    {badge}
-                </span>
-            )}
-        </span>
-    );
-
-    if (href) {
-        return <Link href={href} className="block h-full">{content}</Link>;
-    }
-    return <button className="block w-full h-full">{content}</button>;
-};
-
-const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={cn(
-        "backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative",
-        className
-    )}>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-        {children}
-    </div>
-);
-
-// --- COMPONENTS ---
 
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
@@ -103,7 +45,8 @@ function HardestWorkersToday() {
     };
 
     return (
-        <GlassCard className="bg-gradient-to-b from-slate-800/50 to-slate-900/50">
+        <Card className="bg-gradient-to-b from-slate-800/50 to-slate-900/50 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
             <div className="p-4 border-b border-white/10 flex items-center gap-2">
                 <Trophy className="h-6 w-6 text-amber-400" />
                 <h3 className="font-bold text-white text-lg">Günün Efsaneleri</h3>
@@ -130,7 +73,7 @@ function HardestWorkersToday() {
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()}</p>
+                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()} Puan</p>
                                 </div>
                             </div>
                         ))}
@@ -139,27 +82,27 @@ function HardestWorkersToday() {
                     <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse XP kazanmadı.</p>
                 )}
             </div>
-        </GlassCard>
+        </Card>
     )
 }
 
 export default function StudentDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      questionBankProgress: 0, 
+      coursesStarted: 0,
+      coursesCompleted: 0,
+      totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
+      questionBankProgress: 0,
   });
-  const [examStats, setExamStats] = useState({
-      pending: 0,
-      solved: 0
-  });
+  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
   useEffect(() => {
     async function fetchData() {
@@ -183,7 +126,7 @@ export default function StudentDashboard() {
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
-          getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"]))),
+          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
           getStudentExams(user.uid),
         ]);
         
@@ -246,7 +189,7 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? progressSnap.data()?.completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -270,6 +213,9 @@ export default function StudentDashboard() {
           return course;
         }));
         
+        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        
         setCourses(coursesData);
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
@@ -280,6 +226,9 @@ export default function StudentDashboard() {
             score: userScore,
             completedTopics: completedTopicsTotal,
             totalTopics: grandTotalTopics,
+            coursesStarted: coursesStartedCount,
+            coursesCompleted: coursesCompletedCount,
+            totalCourses: coursesData.length,
             generalRank,
             classRank,
             branchRank,
@@ -292,15 +241,13 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     }
-    if(!authLoading){
-        fetchData();
-    }
-  }, [user, authLoading]);
+    fetchData();
+  }, [user]);
   
-  if (isLoading || authLoading) {
+  if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
-            <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
+        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-background">
+            <Loader2 className="h-16 w-16 animate-spin text-primary" />
         </div>
     );
   }
@@ -311,16 +258,15 @@ export default function StudentDashboard() {
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
       <div className="max-w-5xl mx-auto space-y-6">
           
-          {/* PLAYER HUD HEADER */}
-           <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
+           <Card className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
               <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
                          <div className="relative shrink-0 w-20 h-20">
-                            <UserAvatar user={user} className="w-full h-full text-slate-800"/>
-                        </div>
+                            <UserAvatar user={user} className="w-20 h-20"/>
+                         </div>
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
@@ -331,7 +277,7 @@ export default function StudentDashboard() {
                       <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
                       <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
                         <Backpack className="h-4 w-4 text-indigo-300"/>
-                        <span className="text-sm font-medium text-indigo-200">{user?.class || "Sınıfsız Gezgin"}</span>
+                        <span className="text-sm font-medium text-indigo-200">{user?.class || 'Sınıfsız Gezgin'}</span>
                       </div>
                   </div>
                   
@@ -343,13 +289,12 @@ export default function StudentDashboard() {
                       <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
                   </div>
               </div>
-          </GlassCard>
+          </Card>
           
-          {/* MAIN QUEST BOARD */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
               <Link href="/student/soru-bankasi" className="group h-full">
-                 <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
+                 <Card className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
                       <div className="p-5 flex flex-col h-full relative">
                           <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
                               <Map className="h-8 w-8 text-sky-400" />
@@ -362,26 +307,31 @@ export default function StudentDashboard() {
 
                           <div className="mt-auto space-y-4">
                               <div>
-                                  <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
-                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
+                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
                                       <span>{lessonProgress}%</span>
                                   </div>
-                                  <Progress value={lessonProgress} className="h-3 bg-white/30 [&>div]:bg-green-400" />
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
+                                  </div>
                               </div>
                               <div>
-                                  <div className="flex justify-between text-xs font-semibold text-white/80 mb-1">
+                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
                                       <span className="flex items-center gap-1"><Target className="h-3 w-3"/> Başarı Oranı</span>
                                       <span>{stats.questionBankProgress}%</span>
                                   </div>
-                                  <Progress value={stats.questionBankProgress} className="h-3 bg-white/30 [&>div]:bg-amber-400"/>
+                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
+                                  </div>
                               </div>
                           </div>
                       </div>
-                 </GlassCard>
+                 </Card>
               </Link>
             
             <Link href="/leaderboard" className="group h-full">
-                <GlassCard className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30">
+                <Card className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
                     <div className="p-5 flex flex-col h-full relative">
                         <div className="absolute top-4 right-4 bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
                              <Trophy className="h-8 w-8 text-amber-400" />
@@ -407,47 +357,56 @@ export default function StudentDashboard() {
                              </div>
                         </div>
                     </div>
-                </GlassCard>
+                </Card>
             </Link>
           </div>
 
-          {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <GameButton href="/student/activities" variant="info" className="text-xl flex-col gap-2 py-6 h-auto">
-                    <Gamepad2 className="h-10 w-10 mb-1"/> 
-                    <span>Etkinlikler</span>
-                    <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
-                </GameButton>
-                 <GameButton href="/student/yarismalar" variant="secondary" className="text-xl flex-col gap-2 py-6 h-auto">
-                    <Swords className="h-10 w-10 mb-1"/> 
-                    <span>Çok Oyunculu</span>
-                    <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
-                </GameButton>
+                <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40 h-auto flex-col gap-2">
+                    <Link href="/student/activities">
+                        <Gamepad2 className="h-8 w-8 mb-1"/> 
+                        <span>Etkinlikler</span>
+                        <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
+                    </Link>
+                </Button>
+                 <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40 h-auto flex-col gap-2">
+                    <Link href="/student/yarismalar">
+                        <Swords className="h-8 w-8 mb-1"/> 
+                        <span>Çok Oyunculu</span>
+                        <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
+                    </Link>
+                </Button>
           </div>
           
-           {/* UTILITY BELT */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <GameButton href="/student/yazilacaklar" variant="orange" className="text-sm flex flex-col md:flex-row gap-2 items-center">
-                  <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
-              </GameButton>
-              <GameButton href="/student/ozetler" variant="primary" className="text-sm flex flex-col md:flex-row gap-2 items-center">
-                  <LayoutTemplate className="h-5 w-5"/> <span>Özetler</span>
-              </GameButton>
-              <GameButton href="/student/shop" variant="success" className="text-sm flex flex-col md:flex-row gap-2 items-center">
-                  <ShoppingCart className="h-5 w-5"/> <span>Puan Dükkanı</span>
-              </GameButton>
-              <GameButton 
-                href="/student/deneme" 
-                variant="violet" 
-                className="text-sm flex flex-col md:flex-row gap-2 items-center"
-                badge={examStats.pending > 0 ? `${examStats.pending} YENİ` : undefined}
-              >
+              <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40 text-sm flex-col md:flex-row gap-2 items-center">
+                  <Link href="/student/yazilacaklar">
+                    <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
+                  </Link>
+              </Button>
+               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40 text-sm flex-col md:flex-row gap-2 items-center">
+                   <Link href="/student/ozetler">
+                    <LayoutTemplate className="h-5 w-5"/> <span>Özetler</span>
+                  </Link>
+              </Button>
+               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40 text-sm flex-col md:flex-row gap-2 items-center">
+                   <Link href="/student/shop">
+                    <ShoppingCart className="h-5 w-5"/> <span>Puan Dükkanı</span>
+                  </Link>
+              </Button>
+               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40 text-sm flex-col md:flex-row gap-2 items-center">
+                <Link href="/student/deneme">
                   <FileCog className="h-5 w-5"/> <span>Deneme Sınavı</span>
-              </GameButton>
+                  {examStats.pending > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
+                          {examStats.pending} YENİ
+                      </span>
+                  )}
+                </Link>
+              </Button>
           </div>
           
           <HardestWorkersToday />
-          
       </div>
     </div>
   );
