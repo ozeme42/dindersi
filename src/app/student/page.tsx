@@ -1,32 +1,27 @@
+'use client';
 
-"use client";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { 
+    BookOpen, Trophy, Star, Gamepad2, Users, 
+    ShoppingCart, Columns, LayoutTemplate, FileCog, 
+    Crown, Award, Zap, Target, Sparkles, Map as MapIcon, Swords, Backpack,
+    Loader2, Home, User
+} from 'lucide-react';
 
-import React, { useState, useEffect, type ReactNode } from "react";
-import { useRouter } from 'next/navigation';
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { useAuth } from "@/context/auth-context";
+import { getStudentExams } from "@/app/student/deneme/actions";
+import { getLiveLeaderboard } from "@/app/leaderboard/actions";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentExams } from "@/app/student/deneme/actions";
-
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { 
-    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, Rocket, 
-    GraduationCap, Library, Sun, Repeat, ShoppingCart, Package, Columns, 
-    LayoutTemplate, Bug, Users, FileCog, Crown, Award, Globe, School, Backpack, 
-    Map as MapIcon, Target, Swords
-} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
-import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+// --- GAMIFIED UI COMPONENTS ---
 const GameButton = ({ 
     children, 
     className, 
@@ -74,6 +69,19 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
     </div>
 );
 
+// --- AVATAR COMPONENT ---
+const UserAvatar = ({ user, className }: any) => (
+    <div className={cn("rounded-full bg-slate-200 flex items-center justify-center overflow-hidden relative", className)}>
+        {user?.avatarUrl ? (
+            <img src={user.avatarUrl} alt={user.displayName} className="w-full h-full object-cover" />
+        ) : (
+            <span className="font-bold text-slate-500 text-lg">{user?.displayName?.charAt(0) || "U"}</span>
+        )}
+    </div>
+);
+
+
+// --- LEADERBOARD COMPONENT ---
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -130,11 +138,12 @@ function HardestWorkersToday() {
                 )}
             </div>
         </GlassCard>
-    )
+    );
 }
 
+// --- MAIN DASHBOARD COMPONENT ---
 export default function StudentDashboard() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -237,9 +246,8 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const progressData = progressSnap.exists() ? progressSnap.data() : {};
-          const completedTopicsCount = Array.isArray(progressData.completedTopics) ? progressData.completedTopics.length : Object.keys(progressData).length;
-          completedTopicsTotal += completedTopicsCount;
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
           const unitsSnap = await getDocs(unitsRef);
@@ -251,10 +259,10 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopicsCount / totalTopics) * 100) : 0;
+          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
           course.topicsCount = totalTopics;
           course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopicsCount;
+          course.completedTopicsCount = completedTopics.length;
 
           // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
@@ -291,17 +299,22 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     }
-    fetchData();
-  }, [user]);
+
+    if (!loading && user) {
+        fetchData();
+    } else if (!loading && !user) {
+        setIsLoading(false);
+    }
+}, [user, loading]);
   
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
+        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
         </div>
     );
   }
-  
+
   const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
   
   return (
@@ -314,9 +327,7 @@ export default function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white"/>
-                    </div>
+                    <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055] text-slate-800 bg-white rounded-full"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -448,6 +459,7 @@ export default function StudentDashboard() {
           <HardestWorkersToday />
           
       </div>
+
     </div>
   );
 }
