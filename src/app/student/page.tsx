@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
@@ -15,15 +16,13 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
+import Link from 'next/link';
+
+import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-
+import { UserAvatar } from "@/components/user-avatar";
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -141,7 +140,6 @@ const MobileNav = () => {
     );
 };
 
-
 // --- COMPONENTS ---
 
 function HardestWorkersToday() {
@@ -204,9 +202,9 @@ function HardestWorkersToday() {
 }
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
+  const { user, loading } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
@@ -247,7 +245,6 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
-        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -307,7 +304,7 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -320,20 +317,19 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
+          (course as any).progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          (course as any).topicsCount = totalTopics;
+          (course as any).unitsCount = unitsSnap.size;
+          (course as any).completedTopicsCount = completedTopics.length;
 
-          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
         
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
+        const coursesStartedCount = coursesData.filter(c => ((c as any).progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => (c as any).progress === 100).length;
         
         setCourses(coursesData);
         
@@ -363,7 +359,7 @@ export default function StudentDashboard() {
     fetchData();
   }, [user]);
   
-  if (isLoading) {
+  if (isLoading || loading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -379,19 +375,17 @@ export default function StudentDashboard() {
           
           {/* PLAYER HUD HEADER */}
            <GlassCard className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50">
-              <div className="flex-col items-center gap-4 p-4 text-center md:flex-row md:p-6 md:text-left relative overflow-hidden flex">
+              <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <UserAvatar user={user} className="w-20 h-20 border-4 border-[#2b1055]"/>
-                    </div>
+                    <UserAvatar user={user} className="w-20 h-20 text-slate-800 bg-white"/>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
                   </div>
                   
-                  <div className="flex-grow z-10 space-y-1">
+                  <div className="flex-grow text-center sm:text-left z-10 space-y-1">
                       <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
                       <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
                         <Backpack className="h-4 w-4 text-indigo-300"/>
@@ -481,13 +475,13 @@ export default function StudentDashboard() {
 
           {/* GAME MODES (PvE / PvP) */}
           <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <GameButton href="/student/activities" variant="info" className="text-xl flex-col gap-2 py-6 h-auto">
-                    <Gamepad2 className="h-10 w-10 mb-1"/> 
+                <GameButton href="/student/activities" variant="info" className="flex flex-col gap-2 py-6 h-auto">
+                    <Gamepad2 className="h-8 w-8 mb-1"/> 
                     <span>Etkinlikler</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
                 </GameButton>
-                 <GameButton href="/student/yarismalar" variant="secondary" className="text-xl flex-col gap-2 py-6 h-auto">
-                    <Swords className="h-10 w-10 mb-1"/> 
+                 <GameButton href="/student/yarismalar" variant="secondary" className="flex flex-col gap-2 py-6 h-auto">
+                    <Swords className="h-8 w-8 mb-1"/> 
                     <span>Çok Oyunculu</span>
                     <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
                 </GameButton>
