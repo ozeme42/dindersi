@@ -1,7 +1,7 @@
 
-"use client";
+'use client';
 
-import React, { useState, useEffect, type ReactNode, useCallback } from "react";
+import React, { useState, useEffect, type ReactNode } from "react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
@@ -14,11 +14,17 @@ import { getStudentExams } from "@/app/student/deneme/actions";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Trophy, Star, Gamepad2, Users, ShoppingCart, Columns, LayoutTemplate, FileCog, Crown, Award, Zap, Sparkles, Map, Swords, Backpack, Loader2, Home, User, Target } from 'lucide-react';
+import { 
+    ArrowRight, BookOpen, Trophy, CheckCircle2, Star, Gamepad2, ListTodo, 
+    Rocket, GraduationCap, Library, Sun, Repeat, ShoppingCart, 
+    Package, Columns, LayoutTemplate, Bug, Users, FileCog, 
+    ClipboardCheck, Award, Crown, Globe, School, Map, Swords, Backpack, Home, User
+} from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
@@ -69,73 +75,6 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
         {children}
     </div>
 );
-
-// --- MOBILE BOTTOM NAVIGATION ---
-
-const MobileNav = () => {
-    const [activeTab, setActiveTab] = useState('home');
-
-    const navItems = [
-        { id: 'home', icon: Home, label: 'Ana Üs', href: '/student' },
-        { id: 'quests', icon: Map, label: 'Görevler', href: '/student/soru-bankasi' },
-        { id: 'arena', icon: Swords, label: 'Arena', href: '/student/yarismalar', highlight: true },
-        { id: 'rank', icon: Trophy, label: 'Liderlik', href: '/leaderboard' },
-        { id: 'profile', icon: User, label: 'Profil', href: '/student/profile' },
-    ];
-
-    return (
-        <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
-            <div className="bg-[#1a0b2e]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl px-2 py-2 flex justify-between items-center relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-500/10 to-transparent pointer-events-none"></div>
-
-                {navItems.map((item) => {
-                    const isActive = activeTab === item.id;
-                    return (
-                        <button
-                            key={item.id}
-                            onClick={() => setActiveTab(item.id)}
-                            className={cn(
-                                "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-300 w-full",
-                                isActive ? "text-white" : "text-indigo-300/60 hover:text-indigo-200"
-                            )}
-                        >
-                            {isActive && (
-                                <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-sm" />
-                            )}
-                            
-                            {item.highlight ? (
-                                <div className={cn(
-                                    "relative -mt-8 p-3 rounded-xl border-2 shadow-lg transition-transform duration-300",
-                                    isActive 
-                                        ? "bg-gradient-to-br from-amber-400 to-orange-600 border-amber-200 shadow-orange-500/50 scale-110" 
-                                        : "bg-slate-800 border-slate-600 shadow-black/50"
-                                )}>
-                                    <item.icon className={cn("h-6 w-6", isActive ? "text-white" : "text-slate-400")} />
-                                </div>
-                            ) : (
-                                <div className="relative z-10">
-                                    <item.icon className={cn(
-                                        "h-6 w-6 transition-all duration-300",
-                                        isActive ? "text-indigo-400 drop-shadow-[0_0_8px_rgba(129,140,248,0.8)] scale-110" : ""
-                                    )} />
-                                </div>
-                            )}
-
-                            {!item.highlight && (
-                                <span className={cn(
-                                    "text-[10px] font-bold mt-1 transition-all duration-300",
-                                    isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 hidden"
-                                )}>
-                                    {item.label}
-                                </span>
-                            )}
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
-    );
-};
 
 // --- COMPONENTS ---
 
@@ -200,19 +139,15 @@ function HardestWorkersToday() {
 
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
       totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
+      questionBankProgress: 0, 
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
@@ -226,14 +161,10 @@ export default function StudentDashboard() {
       setIsLoading(true);
       
       try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
         let studentClassName: string | undefined;
         let userScore = user.score || 0;
         
         studentClassName = user.class?.split(' - ')[0];
-
-        let coursesData: Course[] = [];
 
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
@@ -242,7 +173,6 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
-        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -290,59 +220,41 @@ export default function StudentDashboard() {
             filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
         }
         
-        let totalQuestionBankPassedTests = 0;
+        let totalTopicsAvailable = 0;
+        let completedTopicsCount = 0;
         let totalQuestionBankTests = 0;
+        let passedTests = 0;
 
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
+        for (const course of filteredCourses) {
           const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
           const qbStats = getCourseQuestionBankStats(course.id, user.uid);
           
-          const [progressSnap, questionBankStats] = await Promise.all([
+          const [progressSnap, questionBankStatsData] = await Promise.all([
             getDoc(progressRef),
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
+          completedTopicsCount += (progressSnap.data()?.completedTopics || []).length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
           const unitsSnap = await getDocs(unitsRef);
-          let totalTopics = 0;
-          
           for (const unitDoc of unitsSnap.docs) {
             const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-            totalTopics += topicsSnap.size;
+            totalTopicsAvailable += topicsSnap.size;
           }
-          
-          grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
 
-          // Also get QB stats for this course
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
-
-          return course;
-        }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
-        setCourses(coursesData);
+          passedTests += questionBankStatsData.passedTests;
+          totalQuestionBankTests += questionBankStatsData.totalTests;
+        }
         
         const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
+            ? Math.round((passedTests / totalQuestionBankTests) * 100)
             : 0;
 
         setStats({
             score: userScore,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
+            completedTopics: completedTopicsCount,
+            totalTopics: totalTopicsAvailable,
             generalRank,
             classRank,
             branchRank,
@@ -513,11 +425,6 @@ export default function StudentDashboard() {
           
       </div>
 
-      {/* MOBILE BOTTOM NAVIGATION */}
-      <MobileNav />
-      
     </div>
   );
 }
-
-    
