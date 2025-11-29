@@ -18,20 +18,24 @@ export function UserAvatar({ user, className }: { user: UserForAvatar | null; cl
   const equippedBadge = SHOP_ITEMS.find(item => item.type === 'avatarBadge' && item.id === user.equippedBadgeId);
   const BadgeIcon = equippedBadge?.component;
 
+  const hasAvatarImage = user.avatar || user.photoURL;
+
   return (
     <div className={cn("relative h-10 w-10 shrink-0", className)}>
       <Avatar className="w-full h-full">
-        {BadgeIcon ? (
-            <div className="w-full h-full flex items-center justify-center bg-transparent rounded-full">
-                 <BadgeIcon className="w-3/4 h-3/4" />
-            </div>
+        {hasAvatarImage ? (
+            <AvatarImage src={user.avatar || user.photoURL || undefined} alt={user.displayName || ''} data-ai-hint="profile picture" />
         ) : (
-            <>
-                <AvatarImage src={user.avatar || user.photoURL || undefined} alt={user.displayName || ''} data-ai-hint="profile picture" />
-                <AvatarFallback>{fallbackLetter}</AvatarFallback>
-            </>
+            <AvatarFallback>{fallbackLetter}</AvatarFallback>
         )}
       </Avatar>
+      
+      {BadgeIcon && (
+        <div className="absolute inset-0 w-full h-full flex items-center justify-center bg-transparent rounded-full">
+             <BadgeIcon className="w-2/3 h-2/3" />
+        </div>
+      )}
+
       {user.equippedFrameUrl && (
         <div
           className="absolute inset-[-4px] rounded-full pointer-events-none"
