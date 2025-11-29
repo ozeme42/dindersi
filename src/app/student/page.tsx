@@ -15,14 +15,12 @@ import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, 
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-
-import { cn } from "@/lib/utils";
-import Link from 'next/link';
-
 import { Skeleton } from "@/components/ui/skeleton";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
+import { Progress } from "@/components/ui/progress";
+import Link from 'next/link';
+import { Badge } from "@/components/ui/badge";
 
 // --- GAMIFIED UI COMPONENTS ---
 
@@ -202,9 +200,9 @@ function HardestWorkersToday() {
 }
 
 export default function StudentDashboard() {
-  const { user, loading } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, loading: authLoading } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
@@ -245,6 +243,7 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
+        // Calculate exam stats
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
@@ -304,7 +303,7 @@ export default function StudentDashboard() {
             qbStats
           ]);
 
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
+          const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
           completedTopicsTotal += completedTopics.length;
           
           const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -317,19 +316,20 @@ export default function StudentDashboard() {
           }
           
           grandTotalTopics += totalTopics;
-          (course as any).progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          (course as any).topicsCount = totalTopics;
-          (course as any).unitsCount = unitsSnap.size;
-          (course as any).completedTopicsCount = completedTopics.length;
+          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+          course.topicsCount = totalTopics;
+          course.unitsCount = unitsSnap.size;
+          course.completedTopicsCount = completedTopics.length;
 
+          // Also get QB stats for this course
           totalQuestionBankPassedTests += questionBankStats.passedTests;
           totalQuestionBankTests += questionBankStats.totalTests;
 
           return course;
         }));
         
-        const coursesStartedCount = coursesData.filter(c => ((c as any).progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => (c as any).progress === 100).length;
+        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
+        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
         
         setCourses(coursesData);
         
@@ -356,10 +356,12 @@ export default function StudentDashboard() {
         setIsLoading(false);
       }
     }
-    fetchData();
-  }, [user]);
+    if(!authLoading) {
+        fetchData();
+    }
+  }, [user, authLoading]);
   
-  if (isLoading || loading) {
+  if (isLoading || authLoading) {
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#2b1055]">
             <Loader2 className="h-16 w-16 animate-spin text-indigo-400" />
@@ -379,7 +381,11 @@ export default function StudentDashboard() {
                   <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                   
                   <div className="relative z-10">
-                    <UserAvatar user={user} className="w-20 h-20 text-slate-800 bg-white"/>
+                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
+                         <div className="relative shrink-0 w-20 h-20 text-slate-800">
+                            <UserAvatar user={user} className="w-20 h-20" />
+                        </div>
+                    </div>
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
                         LVL {Math.floor(stats.score / 1000) + 1}
                     </div>
@@ -409,7 +415,7 @@ export default function StudentDashboard() {
               <Link href="/student/soru-bankasi" className="group h-full">
                  <GlassCard className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30">
                       <div className="p-5 flex flex-col h-full relative">
-                          <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
+                           <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
                               <Map className="h-8 w-8 text-sky-400" />
                           </div>
                           
@@ -421,7 +427,7 @@ export default function StudentDashboard() {
                           <div className="mt-auto space-y-4">
                               <div>
                                   <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
+                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Tamamlanan Konu</span>
                                       <span>{lessonProgress}%</span>
                                   </div>
                                   <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
