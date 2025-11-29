@@ -2,23 +2,22 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
-export type CourseGroup = {
-    title: string;
-    courses: (Course & { units: (Unit & { topics: Topic[] })[] })[];
+export type PublicCourse = Omit<Course, 'units'> & {
+    units: (Omit<Unit, 'topics'> & {
+        topics: (Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean })[]
+    })[]
 };
 
-type EnrichedCourse = Course & {
-    className: string;
-    units: (Unit & {
-        topics: (Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean; })[];
-    })[];
+export type PublicClass = Omit<SchoolClass, 'courses'> & {
+    courses: PublicCourse[];
 };
 
-export async function getPublicCurriculum(): Promise<{ courseGroups: CourseGroup[] }> {
+
+export async function getPublicCurriculum(): Promise<{ classGroups: { name: string; courses: PublicCourse[] }[] }> {
     noStore();
     try {
         const [coursesSnap, classesSnap] = await Promise.all([
@@ -28,15 +27,12 @@ export async function getPublicCurriculum(): Promise<{ courseGroups: CourseGroup
 
         const allCoursesData = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const classMap = new Map(allClasses.map(c => [c.id, c.name]));
-
-        const enrichedCourses: EnrichedCourse[] = [];
+        
+        const coursesWithContent: PublicCourse[] = [];
 
         for (const course of allCoursesData) {
-            if (course.isTeacherOnly) continue;
-
             const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
-            const units: EnrichedCourse['units'] = [];
+            const units: PublicCourse['units'] = [];
 
             for (const unitDoc of unitsSnap.docs) {
                 const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
@@ -44,76 +40,58 @@ export async function getPublicCurriculum(): Promise<{ courseGroups: CourseGroup
                     const data = topicDoc.data() as Topic;
                     const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
                     const hasOzet = !!data.htmlContent;
-                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
-                }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent);
+                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet } as Topic & { hasYazilacaklarContent: boolean, hasOzetContent: boolean };
+                }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); // Only include topics with content
 
                 if (topics.length > 0) {
-                    units.push({
+                     units.push({
                         id: unitDoc.id,
                         title: unitDoc.data().title,
-                        topics: topics
+                        topics
                     });
                 }
             }
-            
-            // Also fetch topics directly under the course for summer school
-            if (course.isSummerSchool) {
-                 const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/topics`), orderBy("title")));
-                 const topics = topicsSnap.docs.map(topicDoc => {
-                    const data = topicDoc.data() as Topic;
-                    const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
-                    const hasOzet = !!data.htmlContent;
-                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
-                }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent);
-
-                 if (topics.length > 0) {
-                    // Add a placeholder "Genel" unit for summer school topics
-                     units.push({
-                        id: 'summer-topics',
-                        title: 'Konular',
-                        topics: topics
-                    });
-                 }
-            }
-
 
             if (units.length > 0) {
-                enrichedCourses.push({
-                    ...course,
-                    className: course.classId ? (classMap.get(course.classId) || 'Genel') : 'Genel',
-                    units: units,
-                });
+                 const enrichedCourse: PublicCourse = {
+                    id: course.id,
+                    title: course.title,
+                    classId: course.classId,
+                    units: units
+                };
+                coursesWithContent.push(enrichedCourse);
             }
         }
         
-        const groupedByTitle: { [title: string]: EnrichedCourse[] } = {};
-
-        enrichedCourses.forEach(course => {
-            let courseTitle = course.title;
-             if (courseTitle.toUpperCase() === 'DKAB') {
-                courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
-            } else if (courseTitle.toUpperCase() === 'SİYER') {
-                courseTitle = 'Peygamberimizin Hayatı (Siyer)';
+        const groupedByClass: { [classId: string]: PublicCourse[] } = {};
+        const generalCourses: PublicCourse[] = [];
+        
+        coursesWithContent.forEach(course => {
+            if (course.classId) {
+                if (!groupedByClass[course.classId]) {
+                    groupedByClass[course.classId] = [];
+                }
+                groupedByClass[course.classId].push(course);
+            } else {
+                generalCourses.push(course);
             }
-            if (!groupedByTitle[courseTitle]) {
-                groupedByTitle[courseTitle] = [];
-            }
-            groupedByTitle[courseTitle].push(course);
         });
         
-        const courseGroups: CourseGroup[] = Object.keys(groupedByTitle).map(title => ({
-            title: title,
-            courses: groupedByTitle[title].sort((a, b) => {
-                const aName = a.className || '';
-                const bName = b.className || '';
-                return aName.localeCompare(bName, 'tr', { numeric: true });
-            })
-        }));
-
-        return { courseGroups: JSON.parse(JSON.stringify(courseGroups)) };
+        const classGroups = allClasses
+            .map(cls => ({
+                name: cls.name,
+                courses: groupedByClass[cls.id] || []
+            }))
+            .filter(group => group.courses.length > 0);
+        
+        if (generalCourses.length > 0) {
+            classGroups.push({ name: "Genel", courses: generalCourses });
+        }
+        
+        return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
 
     } catch (e: any) {
         console.error("Error fetching public curriculum: ", e);
-        return { courseGroups: [] };
+        return { classGroups: [] };
     }
 }
