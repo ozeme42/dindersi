@@ -7,11 +7,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import confetti from "canvas-confetti";
-import { useAuth } from '@/context/auth-context';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getAdamAsmacaAction, submitAdamAsmacaScoreAction } from '../actions';
-import type { HangmanData } from '../actions';
-import Link from "next/link";
+import { useAuth } from '@/context/auth-context';
+import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
 
 
 // --- ANIMATED HANGMAN SVG COMPONENT ---
@@ -101,7 +100,7 @@ export default function AdamAsmacaGamePage() {
             setLoading(false);
         };
         initGame();
-    }, [searchParams]);
+    }, []);
 
     // --- GAME LOGIC ---
 
@@ -157,10 +156,10 @@ export default function AdamAsmacaGamePage() {
 
     const handleNextLevel = () => {
         if (currentWordIndex + 1 < gameData.length) {
-            setRoundStatus('playing'); // Reset state BEFORE changing the word
-            setCurrentWordIndex(prev => prev + 1);
+            setRoundStatus('playing'); // Reset status FIRST
             setGuessedLetters(new Set());
             setWrongGuesses(0);
+            setCurrentWordIndex(prev => prev + 1);
         } else {
             // Game Completed
             handleFinishGame();
@@ -172,7 +171,7 @@ export default function AdamAsmacaGamePage() {
         const context = `${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
         await submitAdamAsmacaScoreAction(user?.uid || null, score, context);
         // Redirect to results or back
-        router.push('/student/activities'); // Or a dedicated result screen
+        router.push('/student/adam-asmaca');
     };
 
     // --- RENDER HELPERS ---
