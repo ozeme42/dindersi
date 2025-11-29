@@ -111,7 +111,7 @@ const AccordionContent = ({ children, className, isOpen }: any) => (
 // --- APP COMPONENTS ---
 
 const AppHeader = () => (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 dark:bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur-sm">
         <div className="container flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-2 font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
                 <Gamepad2 className="h-6 w-6 text-indigo-500" />
@@ -492,7 +492,14 @@ export default function App() {
             setDataLoading(true);
             getPublicCurriculum()
                 .then(data => {
-                    setCourseGroups(data.classGroups as CourseGroup[]);
+                    const mappedData = (data.classGroups as any[]).map(group => ({
+                        title: group.name,
+                        courses: group.courses.map((course: PublicCourse) => ({
+                            ...course,
+                            className: group.name // Map class name to course for display
+                        }))
+                    }));
+                    setCourseGroups(mappedData);
                 })
                 .finally(() => {
                     setDataLoading(false);
@@ -502,7 +509,7 @@ export default function App() {
         }
     }, [user]);
 
-    if (loading || dataLoading) {
+    if (loading || (dataLoading && !user)) {
         return (
             <div className="flex h-screen items-center justify-center bg-[#2b1055]">
                 <Loader2 className="h-12 w-12 animate-spin text-white" />
