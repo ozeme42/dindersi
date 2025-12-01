@@ -18,3 +18,4 @@ src/types/
 src/utils/
 .next/
 node_modules/
+src/download_unzipped.zip_unzipped

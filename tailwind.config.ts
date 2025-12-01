@@ -19,6 +19,9 @@ export default {
     {
       pattern: colorPattern,
     },
+    {
+        pattern: /bg-chart-(1|2|3|4|5)/,
+    }
   ],
   theme: {
     container: {
