@@ -1,20 +1,16 @@
-
 'use client';
-
-import { ThemeProvider } from '@/context/theme-provider';
 import { AuthProvider } from '@/context/auth-context';
-import type { ReactNode } from 'react';
+import { ThemeProvider } from './theme-provider';
 
-export function Providers({ children }: { children: ReactNode }) {
-    return (
-        <ThemeProvider
-            storageKey="degerler-oyunu-theme"
-            defaultTheme="default"
-            defaultMode="system"
-        >
-            <AuthProvider>
-                {children}
-            </AuthProvider>
-        </ThemeProvider>
-    );
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
+  );
 }
