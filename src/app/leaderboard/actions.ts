@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -182,7 +183,11 @@ export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time'
         const usersQuery = query(collection(db, 'users'), where(documentId(), 'in', chunk));
         const usersSnapshot = await getDocs(usersQuery);
         usersSnapshot.forEach(doc => {
-            studentProfiles.push({ uid: doc.id, ...doc.data() } as UserProfile);
+            const userData = doc.data();
+            // Ensure we only add students to the leaderboard
+            if (userData.role === 'student') {
+                studentProfiles.push({ uid: doc.id, ...userData } as UserProfile);
+            }
         });
     }
     
@@ -446,5 +451,7 @@ export async function deleteAnnouncement(id: string): Promise<{ success: boolean
         return { success: false, error: "Duyuru silinemedi." };
     }
 }
+
+    
 
     
