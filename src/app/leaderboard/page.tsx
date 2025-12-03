@@ -41,7 +41,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle as AlertDialogRadixTitle,
 } from "@/components/ui/alert-dialog";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 
 function StudentScoreHistoryDialog({ student, isOpen, onOpenChange }: { student: UserProfile | null, isOpen: boolean, onOpenChange: (isOpen: boolean) => void }) {

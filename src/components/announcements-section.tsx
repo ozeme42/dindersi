@@ -175,9 +175,13 @@ export function AnnouncementsSection({ category }: { category: 'general' | 'exam
         warning: <AlertTriangle className="h-4 w-4" />,
     };
 
+    if (!hasAnnouncements && !canManage) {
+        return null; // Don't render anything if there are no announcements and user can't add them.
+    }
+
     return (
         <Card className="bg-card/80 backdrop-blur-sm shadow-xl">
-            <Accordion type="single" collapsible>
+            <Accordion type="single" collapsible className="w-full" defaultValue={hasAnnouncements ? "announcements" : undefined}>
                 <AccordionItem value="announcements" className="border-b-0">
                     <AccordionTrigger className="p-6 hover:no-underline">
                          <div className="flex items-center justify-between w-full">
@@ -236,4 +240,3 @@ export function AnnouncementsSection({ category }: { category: 'general' | 'exam
         </Card>
     );
 }
-
