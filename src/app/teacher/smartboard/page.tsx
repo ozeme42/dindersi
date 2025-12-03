@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2 } from 'lucide-react';
+import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog } from 'lucide-react';
 import React, { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -13,8 +12,8 @@ const FeatureButton = ({ href, title, description, icon, colorClass, isExternal 
             "h-full w-full rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300",
             colorClass
         )}>
-            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-90" })}
-            <h3 className="font-headline text-2xl mt-4">{title}</h3>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 opacity-90" })}
+            <h3 className="font-headline text-3xl mt-4">{title}</h3>
             <p className="mt-2 opacity-80 text-sm max-w-xs">{description}</p>
             <div className="flex-grow" />
             <ArrowRight className="mt-4 h-6 w-6 group-hover:translate-x-1 transition-transform" />
