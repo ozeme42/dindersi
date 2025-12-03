@@ -13,14 +13,104 @@ import Link from 'next/link';
 import { AppHeader } from "@/components/app-header";
 import { getHallOfFameData, getLiveLeaderboard, getGradeLeaderboard, getBranchLeaderboard, HallOfFamePeriod, ClassLeaderboardEntry } from './actions';
 import type { UserProfile } from "@/lib/types";
+import { UserAvatar } from "@/components/user-avatar";
 
 // --- UI COMPONENTS ---
 
-const UserAvatar = ({ name, className }: { name: string, className?: string }) => (
-    <div className={cn("rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-inner border border-white/20", className)}>
-        {name ? name.charAt(0) : '?'}
-    </div>
-);
+const Podium = ({ winners }: { winners: UserProfile[] }) => {
+    if (!winners || winners.length === 0) {
+        return <div className="text-center py-10 text-slate-400 bg-black/20 rounded-lg">Bu periyot için gösterilecek veri yok.</div>;
+    }
+
+    return (
+        <div className="flex items-end justify-center gap-4 sm:gap-8 w-full max-w-4xl px-4 mt-12">
+            {/* 2ND PLACE */}
+            {winners.length > 1 && (
+                <div className="flex flex-col items-center w-1/3 animate-in slide-in-from-bottom-12 duration-700 delay-100">
+                    <div className="mb-4 text-center relative group">
+                        <div className="absolute inset-0 bg-slate-400 blur-2xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity"></div>
+                        <div className="relative">
+                            <UserAvatar user={winners[1]} className="w-16 h-16 sm:w-20 sm:h-20 text-xl border-4 border-slate-300 shadow-xl mx-auto" />
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1 rounded-full border border-slate-500 whitespace-nowrap">
+                                2. Sıra
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <div className="text-white font-bold text-sm sm:text-lg truncate max-w-[120px] sm:max-w-none">{winners[1].displayName}</div>
+                            <div className="text-slate-400 text-xs">{winners[1].class}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="w-full bg-gradient-to-t from-slate-900 to-slate-700 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-slate-400 shadow-[0_0_30px_rgba(148,163,184,0.2)] h-48 sm:h-64 transition-all hover:-translate-y-1">
+                        <div className="text-4xl font-black text-slate-500 opacity-30 select-none">2</div>
+                        <div className="mt-auto mb-6 bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-600/50">
+                            <span className="text-white font-mono font-bold">{winners[1].score.toLocaleString()}</span>
+                            <span className="text-slate-400 text-xs ml-1">XP</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 1ST PLACE */}
+            {winners.length > 0 && (
+                <div className="flex flex-col items-center w-1/3 z-10 animate-in slide-in-from-bottom-12 duration-700">
+                    <div className="mb-6 text-center relative group">
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2">
+                            <Crown className="h-10 w-10 text-yellow-400 fill-yellow-400 animate-bounce drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]" />
+                        </div>
+                        <div className="absolute inset-0 bg-yellow-500 blur-2xl opacity-30 rounded-full group-hover:opacity-50 transition-opacity"></div>
+                        <div className="relative">
+                             <UserAvatar user={winners[0]} className="w-20 h-20 sm:w-28 sm:h-28 text-3xl border-4 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.5)] mx-auto" />
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-yellow-600 text-yellow-100 text-xs font-bold px-3 py-1 rounded-full border border-yellow-400 whitespace-nowrap shadow-lg">
+                                Şampiyon
+                            </div>
+                        </div>
+                        <div className="mt-5">
+                            <div className="text-yellow-100 font-bold text-base sm:text-xl truncate max-w-[140px] sm:max-w-none">{winners[0].displayName}</div>
+                            <div className="text-yellow-500/80 text-xs">{winners[0].class}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="w-full bg-gradient-to-t from-yellow-900/80 to-amber-600 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-yellow-400 shadow-[0_0_50px_rgba(245,158,11,0.4)] h-64 sm:h-80 transition-all hover:-translate-y-2">
+                        <div className="text-5xl font-black text-yellow-900 opacity-40 select-none">1</div>
+                        <div className="mt-auto mb-8 bg-black/40 backdrop-blur-sm px-6 py-2 rounded-xl border border-yellow-500/50 shadow-inner">
+                            <span className="text-white font-mono font-black text-lg sm:text-2xl">{winners[0].score.toLocaleString()}</span>
+                            <span className="text-yellow-400 text-sm ml-1 font-bold">XP</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 3RD PLACE */}
+            {winners.length > 2 && (
+                <div className="flex flex-col items-center w-1/3 animate-in slide-in-from-bottom-12 duration-700 delay-200">
+                    <div className="mb-4 text-center relative group">
+                        <div className="absolute inset-0 bg-orange-500 blur-2xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity"></div>
+                        <div className="relative">
+                            <UserAvatar user={winners[2]} className="w-16 h-16 sm:w-20 sm:h-20 text-xl border-4 border-orange-500 shadow-xl mx-auto" />
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-orange-800 text-orange-200 text-xs font-bold px-3 py-1 rounded-full border border-orange-600 whitespace-nowrap">
+                                3. Sıra
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                            <div className="text-white font-bold text-sm sm:text-lg truncate max-w-[120px] sm:max-w-none">{winners[2].displayName}</div>
+                            <div className="text-orange-400 text-xs">{winners[2].class}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="w-full bg-gradient-to-t from-orange-950 to-orange-800 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-orange-500 shadow-[0_0_30px_rgba(234,88,12,0.2)] h-40 sm:h-52 transition-all hover:-translate-y-1">
+                        <div className="text-4xl font-black text-orange-900 opacity-40 select-none">3</div>
+                        <div className="mt-auto mb-6 bg-orange-900/50 px-4 py-2 rounded-lg border border-orange-700/50">
+                            <span className="text-white font-mono font-bold">{winners[2].score.toLocaleString()}</span>
+                            <span className="text-orange-300 text-xs ml-1">XP</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
 
 // --- TAB COMPONENTS ---
 
@@ -53,9 +143,65 @@ function CurrentLeaderboardTab() {
         if (search) {
             data = data.filter(u => u.displayName.toLowerCase().includes(search.toLowerCase()));
         }
-        // The score property is now dynamic based on the filter, so no extra sorting is needed here.
         return data;
     }, [search, leaderboard]);
+
+    const renderContent = () => {
+        if (isLoading) {
+            return (
+                <div className="flex justify-center items-center h-64">
+                    <Loader2 className="h-8 w-8 animate-spin text-white" />
+                </div>
+            );
+        }
+
+        if (error) {
+            return <div className="text-center py-10 text-red-400 bg-red-900/20 rounded-lg">{error}</div>;
+        }
+
+        if (filteredUsers.length === 0) {
+            return <div className="text-center py-10 text-slate-400 bg-black/20 rounded-lg">Bu periyot için gösterilecek veri yok.</div>;
+        }
+        
+        if (filter === 'all-time') {
+            return <Podium winners={filteredUsers.slice(0, 3)} />;
+        }
+
+        return (
+            <div className="space-y-2">
+                {filteredUsers.map((user, index) => (
+                    <div 
+                        key={user.uid} 
+                        className="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all hover:scale-[1.01] hover:shadow-lg hover:border-indigo-500/30"
+                    >
+                        <div className="w-8 flex justify-center">
+                            <div className={cn(
+                                "w-8 h-8 flex items-center justify-center rounded-full font-mono font-bold text-sm",
+                                index === 0 ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/50" :
+                                index === 1 ? "bg-slate-400 text-black shadow-lg shadow-slate-400/50" :
+                                index === 2 ? "bg-orange-600 text-white shadow-lg shadow-orange-600/50" :
+                                "bg-white/5 text-slate-500 group-hover:text-white"
+                            )}>
+                                {index + 1}
+                            </div>
+                        </div>
+                        <UserAvatar user={user} className="h-10 w-10 text-sm shrink-0" />
+                        <div className="flex-grow min-w-0">
+                            <div className="font-bold text-slate-200 group-hover:text-white transition-colors truncate">{user.displayName}</div>
+                            <div className="text-xs text-slate-500">{user.class}</div>
+                        </div>
+                        <div className="text-right">
+                            <div className="font-mono font-bold text-indigo-300 group-hover:text-indigo-200 text-lg">
+                                {(user.score || 0).toLocaleString()}
+                            </div>
+                            <div className="text-[10px] text-slate-600 uppercase tracking-wide">Puan</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -78,60 +224,21 @@ function CurrentLeaderboardTab() {
                     ))}
                 </div>
                 
-                <div className="relative w-full sm:w-64">
-                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                    <input 
-                        type="text" 
-                        placeholder="Öğrenci ara..." 
-                        className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
+                {filter !== 'all-time' && (
+                    <div className="relative w-full sm:w-64">
+                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                        <input 
+                            type="text" 
+                            placeholder="Öğrenci ara..." 
+                            className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+                )}
             </div>
 
-            {/* CONTENT */}
-             {isLoading ? (
-                 <div className="flex justify-center items-center h-64">
-                     <Loader2 className="h-8 w-8 animate-spin text-white" />
-                 </div>
-             ) : error ? (
-                <div className="text-center py-10 text-red-400 bg-red-900/20 rounded-lg">{error}</div>
-             ) : filteredUsers.length === 0 ? (
-                <div className="text-center py-10 text-slate-400 bg-black/20 rounded-lg">Bu periyot için gösterilecek veri yok.</div>
-             ) : (
-                <div className="space-y-2">
-                    {filteredUsers.map((user, index) => (
-                        <div 
-                            key={user.uid} 
-                            className="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all hover:scale-[1.01] hover:shadow-lg hover:border-indigo-500/30"
-                        >
-                            <div className="w-8 flex justify-center">
-                                <div className={cn(
-                                    "w-8 h-8 flex items-center justify-center rounded-full font-mono font-bold text-sm",
-                                    index === 0 ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/50" :
-                                    index === 1 ? "bg-slate-400 text-black shadow-lg shadow-slate-400/50" :
-                                    index === 2 ? "bg-orange-600 text-white shadow-lg shadow-orange-600/50" :
-                                    "bg-white/5 text-slate-500 group-hover:text-white"
-                                )}>
-                                    {index + 1}
-                                </div>
-                            </div>
-                            <UserAvatar name={user.displayName} className="h-10 w-10 text-sm shrink-0" />
-                            <div className="flex-grow min-w-0">
-                                <div className="font-bold text-slate-200 group-hover:text-white transition-colors truncate">{user.displayName}</div>
-                                <div className="text-xs text-slate-500">{user.class}</div>
-                            </div>
-                            <div className="text-right">
-                                <div className="font-mono font-bold text-indigo-300 group-hover:text-indigo-200 text-lg">
-                                    {(user.score || 0).toLocaleString()}
-                                </div>
-                                <div className="text-[10px] text-slate-600 uppercase tracking-wide">Puan</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+            {renderContent()}
         </div>
     );
 }
@@ -310,90 +417,7 @@ function HallOfFameTab() {
                         "flex items-end justify-center gap-4 sm:gap-8 w-full max-w-4xl px-4 transition-all duration-300",
                         animating ? "opacity-0 scale-95 blur-sm" : "opacity-100 scale-100 blur-0"
                     )}>
-                        
-                        {/* 2ND PLACE */}
-                        {winners.length > 1 && (
-                            <div className="flex flex-col items-center w-1/3 animate-in slide-in-from-bottom-12 duration-700 delay-100">
-                                <div className="mb-4 text-center relative group">
-                                    <div className="absolute inset-0 bg-slate-400 blur-2xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity"></div>
-                                    <div className="relative">
-                                        <UserAvatar name={winners[1].displayName} className="w-16 h-16 sm:w-20 sm:h-20 text-xl border-4 border-slate-300 shadow-xl mx-auto" />
-                                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-700 text-slate-200 text-xs font-bold px-3 py-1 rounded-full border border-slate-500 whitespace-nowrap">
-                                            2. Sıra
-                                        </div>
-                                    </div>
-                                    <div className="mt-4">
-                                        <div className="text-white font-bold text-sm sm:text-lg truncate max-w-[120px] sm:max-w-none">{winners[1].displayName}</div>
-                                        <div className="text-slate-400 text-xs">{winners[1].class}</div>
-                                    </div>
-                                </div>
-                                
-                                <div className="w-full bg-gradient-to-t from-slate-900 to-slate-700 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-slate-400 shadow-[0_0_30px_rgba(148,163,184,0.2)] h-48 sm:h-64 transition-all hover:-translate-y-1">
-                                    <div className="text-4xl font-black text-slate-500 opacity-30 select-none">2</div>
-                                    <div className="mt-auto mb-6 bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-600/50">
-                                        <span className="text-white font-mono font-bold">{winners[1].score.toLocaleString()}</span>
-                                        <span className="text-slate-400 text-xs ml-1">XP</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 1ST PLACE */}
-                        {winners.length > 0 && (
-                            <div className="flex flex-col items-center w-1/3 z-10 animate-in slide-in-from-bottom-12 duration-700">
-                                <div className="mb-6 text-center relative group">
-                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2">
-                                        <Crown className="h-10 w-10 text-yellow-400 fill-yellow-400 animate-bounce drop-shadow-[0_0_15px_rgba(250,204,21,0.8)]" />
-                                    </div>
-                                    <div className="absolute inset-0 bg-yellow-500 blur-2xl opacity-30 rounded-full group-hover:opacity-50 transition-opacity"></div>
-                                    <div className="relative">
-                                        <UserAvatar name={winners[0].displayName} className="w-20 h-20 sm:w-28 sm:h-28 text-3xl border-4 border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.5)] mx-auto" />
-                                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-yellow-600 text-yellow-100 text-xs font-bold px-3 py-1 rounded-full border border-yellow-400 whitespace-nowrap shadow-lg">
-                                            Şampiyon
-                                        </div>
-                                    </div>
-                                    <div className="mt-5">
-                                        <div className="text-yellow-100 font-bold text-base sm:text-xl truncate max-w-[140px] sm:max-w-none">{winners[0].displayName}</div>
-                                        <div className="text-yellow-500/80 text-xs">{winners[0].class}</div>
-                                    </div>
-                                </div>
-                                
-                                <div className="w-full bg-gradient-to-t from-yellow-900/80 to-amber-600 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-yellow-400 shadow-[0_0_50px_rgba(245,158,11,0.4)] h-64 sm:h-80 transition-all hover:-translate-y-2">
-                                    <div className="text-5xl font-black text-yellow-900 opacity-40 select-none">1</div>
-                                    <div className="mt-auto mb-8 bg-black/40 backdrop-blur-sm px-6 py-2 rounded-xl border border-yellow-500/50 shadow-inner">
-                                        <span className="text-white font-mono font-black text-lg sm:text-2xl">{winners[0].score.toLocaleString()}</span>
-                                        <span className="text-yellow-400 text-sm ml-1 font-bold">XP</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* 3RD PLACE */}
-                        {winners.length > 2 && (
-                            <div className="flex flex-col items-center w-1/3 animate-in slide-in-from-bottom-12 duration-700 delay-200">
-                                <div className="mb-4 text-center relative group">
-                                    <div className="absolute inset-0 bg-orange-500 blur-2xl opacity-20 rounded-full group-hover:opacity-40 transition-opacity"></div>
-                                    <div className="relative">
-                                        <UserAvatar name={winners[2].displayName} className="w-16 h-16 sm:w-20 sm:h-20 text-xl border-4 border-orange-500 shadow-xl mx-auto" />
-                                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-orange-800 text-orange-200 text-xs font-bold px-3 py-1 rounded-full border border-orange-600 whitespace-nowrap">
-                                            3. Sıra
-                                        </div>
-                                    </div>
-                                    <div className="mt-4">
-                                        <div className="text-white font-bold text-sm sm:text-lg truncate max-w-[120px] sm:max-w-none">{winners[2].displayName}</div>
-                                        <div className="text-orange-400 text-xs">{winners[2].class}</div>
-                                    </div>
-                                </div>
-                                
-                                <div className="w-full bg-gradient-to-t from-orange-950 to-orange-800 rounded-t-2xl relative flex flex-col items-center justify-start pt-6 border-t-4 border-orange-500 shadow-[0_0_30px_rgba(234,88,12,0.2)] h-40 sm:h-52 transition-all hover:-translate-y-1">
-                                    <div className="text-4xl font-black text-orange-900 opacity-40 select-none">3</div>
-                                    <div className="mt-auto mb-6 bg-orange-900/50 px-4 py-2 rounded-lg border border-orange-700/50">
-                                        <span className="text-white font-mono font-bold">{winners[2].score.toLocaleString()}</span>
-                                        <span className="text-orange-300 text-xs ml-1">XP</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <Podium winners={winners}/>
                     </div>
                 </>
             )}
@@ -490,5 +514,3 @@ export default function LeaderboardPage() {
         </div>
     );
 }
-
-    
