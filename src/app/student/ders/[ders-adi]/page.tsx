@@ -325,11 +325,9 @@ function CoursePageContent() {
                                 <ArrowLeft className="mr-2 h-4 w-4" />
                                 Ders Haritası
                             </Button>
-                            <div className="flex items-center flex-1 min-w-0">
+                            <div className="flex items-center">
                                 {activeTopicData && (
-                                    <div className="flex-1 min-w-0 text-right mr-2">
-                                        <p className="font-semibold text-base truncate">{activeTopicData.topic.title}</p>
-                                    </div>
+                                    <p className="font-semibold text-base truncate mr-2 text-right">{activeTopicData.topic.title}</p>
                                 )}
                                  <FullscreenToggle elementRef={mainContentRef} />
                             </div>

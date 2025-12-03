@@ -21,8 +21,8 @@ export function UserAvatar({ user, className }: { user: UserForAvatar | null; cl
   return (
     <div className={cn("relative h-10 w-10 shrink-0", className)}>
       <Avatar className="w-full h-full">
-        {BadgeIcon && (!user.avatar && !user.photoURL) ? (
-            <div className="w-full h-full flex items-center justify-center bg-muted rounded-full">
+        {BadgeIcon ? (
+            <div className="w-full h-full flex items-center justify-center bg-transparent rounded-full">
                  <BadgeIcon className="w-3/4 h-3/4" />
             </div>
         ) : (
@@ -32,11 +32,6 @@ export function UserAvatar({ user, className }: { user: UserForAvatar | null; cl
             </>
         )}
       </Avatar>
-       {BadgeIcon && (user.avatar || user.photoURL) && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-full">
-          <BadgeIcon className="w-3/4 h-3/4" />
-        </div>
-      )}
       {user.equippedFrameUrl && (
         <div
           className="absolute inset-[-4px] rounded-full pointer-events-none"

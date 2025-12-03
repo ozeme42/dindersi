@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
@@ -9,11 +10,9 @@ import { db } from '@/lib/firebase';
 import type { Topic } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { useAuth } from '@/context/auth-context';
 
 function PresentationPageContent() {
     const searchParams = useSearchParams();
-    const { user } = useAuth();
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
     const topicId = searchParams.get('topicId');
@@ -73,6 +72,7 @@ function PresentationPageContent() {
         );
     }
 
+    // Teacher presentation doesn't track progress, so we provide dummy functions.
     const noOp = () => {};
 
     return (
@@ -95,7 +95,6 @@ function PresentationPageContent() {
                 onMultiAnswer={noOp}
                 onAllTfAnswered={noOp}
                 isFullscreen={isFullscreen}
-                user={user}
             />
         </main>
     );
@@ -109,3 +108,5 @@ export default function PresentationPage() {
         </Suspense>
     )
 }
+
+    

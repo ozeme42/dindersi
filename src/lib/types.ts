@@ -1,5 +1,6 @@
 
 
+
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -74,16 +75,6 @@ export type VideoAsset = {
     url: string;
     teacherId: string;
     createdAt: any;
-};
-
-export type ImageAsset = {
-    id: string;
-    title: string;
-    description?: string;
-    imageUrl: string;
-    teacherId: string;
-    createdAt: any;
-    type: 'imageLibrary';
 };
 
 

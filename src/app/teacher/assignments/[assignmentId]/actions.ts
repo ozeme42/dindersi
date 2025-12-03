@@ -3,7 +3,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy, Timestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy } from "firebase/firestore";
 import type { Assignment, UserProfile, ScoreEvent } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -87,7 +87,7 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
                     student: student,
                     scoreEvent: event ? {...event, timestamp: (event.timestamp as any).toDate().toISOString()} : null,
                 };
-            });
+            }).filter(p => p.scoreEvent !== null); // Only include students who have taken the exam
             studentProgress.push(...progressChunk);
         }
 

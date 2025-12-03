@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -35,10 +36,7 @@ export type LessonContentViewerProps = {
     onTopicComplete: (topicId: string, score: number) => void;
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
-    user: { uid: string, role?: string } | null;
     isFullscreen: boolean;
-    onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
-    onAllTfAnswered: () => void;
 };
 
 
@@ -71,29 +69,22 @@ function ContentListPlayer({ step, revealedSentencesCount, isFullscreen }: { ste
     
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
     const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const summaryColorClasses = [
-        'bg-blue-800 border-blue-600', 'bg-emerald-800 border-emerald-600', 'bg-purple-800 border-purple-600', 'bg-rose-800 border-rose-600', 
-        'bg-amber-800 border-amber-600', 'bg-indigo-800 border-indigo-600', 'bg-teal-800 border-teal-600'
-    ];
-
+    const summaryColorClasses = ['bg-blue-500/80', 'bg-emerald-500/80', 'bg-purple-500/80', 'bg-rose-500/80', 'bg-amber-500/80', 'bg-indigo-500/80', 'bg-teal-500/80'];
 
     return (
         <div className="w-full h-full flex flex-col gap-6 items-center">
-            <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-3xl" : "text-2xl")}>{step.title}</h2>
-            </Card>
+            <div className="p-4 rounded-lg shadow-md bg-primary flex-shrink-0">
+                <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{step.title}</h2>
+            </div>
             
              <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
-                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
+                    const colorClass = summaryColorClasses[index % summaryColorClasses.length];
                     return (
-                        <div key={index} className={cn(
-                            "p-3 rounded-lg shadow-md flex items-start gap-3 animate-fadeAndScaleIn text-white/90 border-l-4",
-                             colorClass
-                         )}>
-                            <Icon className={cn("flex-shrink-0 mt-1 h-6 w-6")} />
-                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-xl" : "text-base")} dangerouslySetInnerHTML={sentence} />
+                        <div key={index} className={cn("p-4 rounded-lg shadow-md flex items-start gap-4 text-primary-foreground animate-fadeAndScaleIn", colorClass)}>
+                            <Icon className={cn("flex-shrink-0 mt-1", isFullscreen ? "h-10 w-10" : "h-8 w-8")} />
+                             <div className={cn("flex-1 break-words not-prose text-justify font-bold", isFullscreen ? "text-2xl md:text-3xl" : "text-lg md:text-2xl")} dangerouslySetInnerHTML={sentence} />
                         </div>
                     )
                 })}
@@ -107,16 +98,16 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
     
     return (
         <div className='flex flex-col h-full w-full items-center'>
-            <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0 mb-4">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-3xl" : "text-2xl")}>{title}</h2>
-            </Card>
+            <div className="p-4 rounded-lg shadow-md bg-primary flex-shrink-0 mb-4">
+                <h2 className={cn("font-bold text-center text-primary-foreground", isFullscreen ? "text-4xl" : "text-3xl")}>{title}</h2>
+            </div>
             <div className="w-full flex-grow grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 md:gap-6 p-2">
                 {items.map((item, index) => (
-                    <Card key={index} className={cn("shadow-2xl bg-white/20 backdrop-blur-md border-white/30 text-white flex flex-col min-h-[150px]")}>
+                    <Card key={index} className={cn("shadow-2xl bg-white/20 backdrop-blur-md border-white/30 text-white flex flex-col", isFullscreen ? 'min-h-[200px]' : 'min-h-[150px]')}>
                         <CardHeader className="p-3 bg-white/30">
-                            <CardTitle className={cn("font-bold", isFullscreen ? "text-xl" : "text-lg")}>{item.concept}</CardTitle>
+                            <CardTitle className={cn("font-bold", isFullscreen ? "text-2xl" : "text-xl")}>{item.concept}</CardTitle>
                         </CardHeader>
-                        <CardContent className={cn("p-3 flex-grow text-sm")}>
+                        <CardContent className={cn("p-3 flex-grow", isFullscreen ? "text-base" : "text-sm")}>
                             {item.definition}
                         </CardContent>
                     </Card>
@@ -135,10 +126,10 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     const cardColors = ['bg-rose-600/80', 'bg-fuchsia-600/80', 'bg-cyan-600/80', 'bg-teal-600/80', 'bg-lime-600/80', 'bg-orange-600/80'];
 
     const getDynamicFontSize = (text: string) => {
-        const baseSize = isFullscreen ? 2.5 : 1.5; // base size in rem
+        const baseSize = isFullscreen ? 2.5 : 1.75; // base size in rem
         const maxLength = 8;
         if (text.length > maxLength) {
-            const reductionFactor = Math.min(1, (text.length - maxLength) / 6);
+            const reductionFactor = Math.min(1.2, (text.length - maxLength) / 4);
             return `${baseSize - reductionFactor}rem`;
         }
         return `${baseSize}rem`;
@@ -146,16 +137,14 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
 
     return (
         <div className="w-full">
-            <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0 mb-6">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-3xl" : "text-2xl")}>{step.title}</h2>
-            </Card>
+            <h2 className={cn("text-3xl font-bold text-center text-foreground dark:text-white mb-6", isFullscreen && "text-4xl")}>{step.title}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                 {step.cards.map((card, index) => (
                     <div
                         key={index}
                         className={cn(
                             "rounded-lg [perspective:1000px] cursor-pointer",
-                            "min-h-[7rem]"
+                            isFullscreen ? "min-h-[12rem]" : "min-h-[8rem]"
                         )}
                         onClick={() => onCardFlip(index, 'anagramFlashcard')}
                         title="Kartı çevirmek için tıkla"
@@ -167,9 +156,9 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
                             )}
                         >
                             {/* Front of the card */}
-                            <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-lg shadow-lg border-2 border-white/50 flex flex-wrap items-center justify-center p-2 text-primary-foreground break-words overflow-wrap-break-word", cardColors[index % cardColors.length])}>
+                            <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-lg shadow-lg border-2 border-white/50 flex flex-wrap items-center justify-center p-4 text-primary-foreground break-words overflow-wrap-break-word", cardColors[index % cardColors.length])}>
                                 <h3 
-                                    className="font-bold tracking-[.15em] break-all"
+                                    className="font-bold tracking-[.2em] break-all"
                                     style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
                                 >
                                     {card.scrambledWord}
@@ -178,7 +167,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
 
                             {/* Back of the card */}
                             <div className={cn(
-                                "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg shadow-lg border-2 border-white/50 flex flex-wrap items-center justify-center p-2 bg-green-600 text-primary-foreground break-words overflow-hidden"
+                                "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg shadow-lg border-2 border-white/50 flex flex-wrap items-center justify-center p-4 bg-green-600 text-primary-foreground break-words overflow-hidden"
                             )}>
                                 <h3 
                                     className="font-bold break-all"
@@ -201,13 +190,12 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     onCardFlip: (cardIndex: number, type: 'flashcard') => void,
     isFullscreen: boolean 
 }) {
+    const cardColors = ['bg-blue-600/80', 'bg-emerald-600/80', 'bg-purple-600/80', 'bg-rose-600/80', 'bg-amber-600/80', 'bg-indigo-600/80'];
 
     return (
         <div className="w-full">
-             <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0 mb-6">
-                <h2 className={cn("font-bold text-center text-white", isFullscreen ? "text-3xl" : "text-2xl")}>{step.title}</h2>
-            </Card>
-            <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", isFullscreen && "lg:grid-cols-4")}>
+            <h2 className={cn("text-3xl font-bold text-center text-foreground dark:text-white mb-6", isFullscreen && "text-4xl")}>{step.title}</h2>
+            <div className={cn("grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", isFullscreen && "lg:grid-cols-4")}>
                 {step.cards.map((card, index) => (
                     <FlashcardItem
                         key={index}
@@ -215,7 +203,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
                         definition={card.definition}
                         isFlipped={flippedCards.has(index)}
                         onFlip={() => onCardFlip(index, 'flashcard')}
-                        colorIndex={index}
+                        colorClass={cardColors[index % cardColors.length]}
                         isFullscreen={isFullscreen}
                     />
                 ))}
@@ -283,22 +271,12 @@ function HtmlSlidePlayer({ step, isFullscreen, onSlideScrolledToEnd }: { step: H
 }
 
 // Sub-component for Flashcard
-const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorIndex, isFullscreen }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, colorIndex: number, isFullscreen?: boolean }) => {
-    const cardColorClasses = [
-        'from-blue-500 to-blue-700 border-blue-400',
-        'from-emerald-500 to-emerald-700 border-emerald-400',
-        'from-purple-500 to-purple-700 border-purple-400',
-        'from-rose-500 to-rose-700 border-rose-400',
-        'from-amber-500 to-amber-700 border-amber-400',
-        'from-indigo-500 to-indigo-700 border-indigo-400'
-    ];
-    const colorClass = cardColorClasses[colorIndex % cardColorClasses.length];
-
+const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFullscreen }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, colorClass: string, isFullscreen?: boolean }) => {
     return (
         <div
             className={cn(
-                "rounded-xl [perspective:1000px] cursor-pointer",
-                isFullscreen ? "min-h-[12rem]" : "min-h-[8rem]"
+                "rounded-lg [perspective:1000px] cursor-pointer",
+                "min-h-[8rem]"
             )}
             onClick={onFlip}
             title="Kartı çevirmek için tıkla"
@@ -310,15 +288,14 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorIndex, isFull
                 )}
             >
                 {/* Front of the card */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-xl shadow-lg border flex flex-col items-center justify-center p-4 text-white bg-gradient-to-br", colorClass)}>
-                    <Layers className="h-5 w-5 absolute top-2 left-2 opacity-30" />
-                    <h3 className={cn("font-headline", isFullscreen ? "text-2xl" : "text-lg")}>{term}</h3>
+                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-lg shadow-lg border-2 border-white/50 flex flex-col items-center justify-center p-4 text-primary-foreground", colorClass)}>
+                    <h3 className={cn("font-bold", isFullscreen ? "text-2xl" : "text-lg")}>{term}</h3>
                 </div>
 
                 {/* Back of the card */}
                 <div className={cn(
-                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-xl shadow-lg border flex flex-col items-center justify-center p-4 text-white bg-gradient-to-br",
-                    colorClass
+                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg shadow-lg border-2 border-white/50 flex flex-col items-center justify-center p-4 text-primary-foreground",
+                    colorClass 
                 )}>
                     <p className={cn("font-medium", isFullscreen ? "text-lg" : "text-base")}>{definition}</p>
                 </div>
@@ -366,9 +343,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: Anagr
     
     return (
         <div className="text-center space-y-6 flex flex-col items-center">
-            <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0">
-                <h2 className="text-2xl font-bold text-center text-white italic">"{step.definition}"</h2>
-            </Card>
+            <p className="text-2xl font-semibold italic text-foreground dark:text-primary-foreground">"{step.definition}"</p>
             <div className={cn("flex justify-center flex-wrap gap-2 p-4 rounded-lg min-h-[5rem] items-center", isWrong && "animate-shake")}>
                 {Array.from({ length: step.correctAnswer.length }).map((_, index) => {
                     const letterObj = constructedLetters[index];
@@ -380,7 +355,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: Anagr
                 })}
             </div>
             {!isAnswerRevealed && (
-                 <div className="flex flex-wrap justify-center gap-2 bg-slate-800/50 p-4 rounded-lg min-h-[5rem] items-center">
+                <div className="flex flex-wrap justify-center gap-2 p-4 rounded-lg min-h-[5rem] items-center">
                     {bankLetters.map((item) => (
                         <Button key={item.id} onClick={() => handleLetterClick(item)} variant="outline" className="h-14 w-11 text-2xl font-bold">{item.letter}</Button>
                     ))}
@@ -448,14 +423,12 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 
     return (
         <div className="space-y-4 text-center">
-            <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0">
-                <h2 className="text-2xl font-bold text-center text-white italic">"Kelimeleri doğru sıraya dizin."</h2>
-            </Card>
+            <p className="text-lg italic text-muted-foreground">"Kelimeleri doğru sıraya dizin."</p>
              <div className="flex flex-wrap justify-center items-center gap-3 bg-muted p-4 rounded-lg min-h-[5rem]">
                 {constructedWords.map((wordObj) => (
                     <Button 
                         key={wordObj.id} 
-                        className={cn("text-xl h-auto py-3 px-5 animate-pop-in", bankColorClasses[wordObj.id % bankColorClasses.length])}
+                        className={cn("text-lg h-auto py-2", bankColorClasses[wordObj.id % bankColorClasses.length])}
                         disabled={true} 
                     >
                         {wordObj.word}
@@ -468,19 +441,17 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                     <p className="font-semibold text-green-600 text-lg">Harika, doğru cümle!</p>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-2 bg-background/50 p-4 rounded-lg min-h-[5rem] items-center animate-fade-in-up">
+                <div className="flex flex-wrap justify-center gap-2 bg-background/50 p-4 rounded-lg min-h-[5rem] items-center">
                     {bankWords.map((item, index) => (
                         <Button
                             key={item.id}
                             variant="default"
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "text-xl h-auto py-3 px-5 font-semibold transition-all duration-200 cursor-pointer select-none shadow-lg text-primary-foreground flex items-center gap-2",
-                                "animate-pop-in",
+                                "text-lg h-auto py-2 font-medium transition-all duration-200 cursor-pointer select-none shadow text-primary-foreground flex items-center gap-2",
                                 bankColorClasses[index % bankColorClasses.length],
                                 mistakenWordId === item.id && "animate-shake bg-destructive"
                             )}
-                            style={{ animationDelay: `${index * 50}ms` }}
                         >
                             {mistakenWordId === item.id && <X className="h-5 w-5" />}
                             {item.word}
@@ -611,15 +582,13 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
     }, [answers, step, onAllAnswered]);
 
     return (
-        <div className="w-full h-full flex flex-col bg-slate-800 rounded-lg">
-             <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 flex-shrink-0 m-4">
-                <h2 className={cn(
-                    "font-bold text-center text-white",
-                    isFullscreen ? "text-3xl" : "text-2xl"
-                )}>
-                    {step.title}
-                </h2>
-            </Card>
+        <div className="w-full h-full flex flex-col bg-background rounded-lg">
+            <h2 className={cn(
+                "text-2xl font-bold text-center text-foreground p-4 flex-shrink-0 border-b",
+                isFullscreen && "text-4xl"
+            )}>
+                {step.title}
+            </h2>
             <ScrollArea className="flex-grow">
                 <div className="space-y-4 p-4 md:p-6">
                     {step.questions.map((q, index) => {
@@ -628,17 +597,16 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                         const isQuestionCorrect = q.isTrue;
                         
                         return (
-                            <Card key={index} className="p-4 bg-slate-700/50 border-slate-600 text-white">
-                                <p className={cn("flex-1 font-bold mb-3", isFullscreen ? "text-xl" : "text-lg")}>{index + 1}. {q.statement}</p>
+                            <Card key={index} className="p-4 bg-muted/50">
+                                <p className={cn("flex-1 font-medium text-foreground mb-3", isFullscreen ? "text-2xl" : "text-lg md:text-xl")}>{index + 1}. {q.statement}</p>
                                 <div className="flex gap-3 justify-end">
                                     <Button
                                         onClick={() => !isAnswered && onAnswer(index, true)}
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
-                                            isAnswered && !isQuestionCorrect && answer?.answer === true && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
-                                            isAnswered && answer?.answer === false && "opacity-50"
+                                            isAnswered && !isQuestionCorrect && "opacity-50 bg-secondary",
+                                            isAnswered && isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary"
                                         )}
                                     >
                                         {isAnswered && isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Doğru'}
@@ -648,9 +616,8 @@ function InteractiveTrueFalseList({ step, isFullscreen, onAnswer, onAllAnswered,
                                         disabled={isAnswered}
                                         className={cn(
                                             "w-28 text-base font-bold",
-                                            isAnswered && !isQuestionCorrect && "bg-green-600 hover:bg-green-700 ring-2 ring-primary",
-                                            isAnswered && isQuestionCorrect && answer?.answer === false && "bg-red-600 hover:bg-red-700 ring-2 ring-destructive",
-                                            isAnswered && answer?.answer === true && "opacity-50"
+                                            isAnswered && isQuestionCorrect && "opacity-50 bg-secondary",
+                                            isAnswered && !isQuestionCorrect && "bg-red-600 hover:bg-red-700 ring-2 ring-primary"
                                         )}
                                     >
                                        {isAnswered && !isQuestionCorrect ? <CheckCircle2 className="h-6 w-6"/> : 'Yanlış'}
@@ -732,6 +699,7 @@ function StepContent({
     onMultiAnswer: (questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered: () => void;
 }) {
+    const noOp = () => {};
 
     const renderContent = () => {
         const buttonColorClasses = [
@@ -812,9 +780,9 @@ function StepContent({
                 const mcqStep = step as McqStep;
                 return (
                     <div className="w-full max-w-4xl mx-auto text-center">
-                        <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 mb-8">
-                            <h3 className={cn("font-bold text-white", isFullscreen ? "text-3xl" : "text-xl md:text-2xl")}>{mcqStep.question}</h3>
-                        </Card>
+                        <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
+                          <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{mcqStep.question}</h3>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {mcqStep.options.map((option, index) => {
                                 const isCorrect = option === mcqStep.correctAnswer;
@@ -825,8 +793,8 @@ function StepContent({
                                         variant="default"
                                         className={cn(
                                             "h-auto justify-start text-left whitespace-normal",
-                                            "p-3 text-base",
-                                            isFullscreen ? "p-5 text-xl" : "md:p-4 md:text-lg",
+                                            "p-3 text-base md:p-4 md:text-lg",
+                                            isFullscreen ? "p-6 text-2xl" : "",
                                             "font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-primary-foreground border-2 border-transparent",
                                             !answer && buttonColorClasses[index % buttonColorClasses.length],
                                             answer && isCorrect && "bg-green-600 hover:bg-green-700 border-white animate-tada ring-4 ring-offset-2 ring-white scale-105",
@@ -850,9 +818,9 @@ function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
                     <div className="w-full max-w-2xl mx-auto text-center text-foreground">
-                         <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 mb-8">
-                            <h3 className={cn("font-bold text-white", isFullscreen ? "text-3xl" : "text-xl md:text-2xl")}>{tfStep.statement}</h3>
-                        </Card>
+                         <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
+                            <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>{tfStep.statement}</h3>
+                        </div>
                         <div className="flex justify-center gap-4">
                             {["Doğru", "Yanlış"].map((option) => {
                                 const isSelected = answer?.answer === option;
@@ -884,11 +852,11 @@ function StepContent({
                 const fitbStep = step as FitbStep;
                 return (
                     <div className="w-full max-w-4xl mx-auto text-center text-foreground">
-                        <Card className="p-4 rounded-lg shadow-lg bg-gradient-to-r from-gray-800 to-slate-900 border-slate-700 mb-8">
-                          <h3 className={cn("font-semibold text-white", isFullscreen ? "text-3xl" : "text-xl md:text-2xl")}>
+                        <div className="p-6 md:p-8 rounded-lg shadow-lg bg-slate-800 border-2 border-slate-700 mb-8">
+                          <h3 className={cn("font-semibold text-white", isFullscreen ? "text-4xl" : "text-2xl md:text-3xl")}>
                               {fitbStep.sentenceWithBlank?.replace('___', '______')}
                           </h3>
-                        </Card>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {(fitbStep.options || []).map((option, index) => {
                                 const isCorrect = option === fitbStep.correctAnswer;
@@ -898,8 +866,8 @@ function StepContent({
                                         key={index}
                                         variant="default"
                                         className={cn(
-                                            "h-auto justify-center font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white border-2 border-transparent",
-                                            isFullscreen ? "py-6 text-xl" : "py-4 text-lg",
+                                            "h-auto justify-center text-lg md:text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg text-white border-2 border-transparent",
+                                            isFullscreen ? "py-8" : "py-6",
                                             !answer && buttonColorClasses[index % buttonColorClasses.length],
                                             answer && isCorrect && "bg-green-500 border-white animate-tada ring-4 ring-offset-2 ring-white scale-105",
                                             answer && isSelected && !isCorrect && "bg-red-600 border-white animate-shake",
@@ -950,10 +918,8 @@ export function LessonContentViewer({
     progress,
     onProgressUpdate,
     isFullscreen,
-    onAllTfAnswered,
-    onMultiAnswer,
-    user
-}: LessonContentViewerProps) {
+}: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: any }) {
+    const { user } = useAuth();
     
     // For ContentListPlayer
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
@@ -1192,20 +1158,21 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className="flex-shrink-0 flex justify-between items-center p-2 md:p-4 border-t bg-card/50 backdrop-blur-sm md:pb-4 pb-20">
+             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-background/50 backdrop-blur-sm md:pb-4 pb-20">
                  <div className="flex gap-2">
                     {user?.role === 'student' && (
-                        <Button variant="outline" size={isFullscreen ? "lg" : "icon"} className={cn(!isFullscreen && "h-8 w-8")} onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
+                        <Button variant="outline" size="icon" onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
                             <Bug className="h-4 w-4" />
                         </Button>
                     )}
+                    {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'default'} onClick={handleNext}>Adımı Atla</Button>}
                  </div>
                 <div className="flex gap-2">
-                    <Button variant="outline" size={isFullscreen ? "lg" : "default"} className={cn(!isFullscreen && "h-8 px-3")} onClick={handlePrev} disabled={currentStepIndex === 0}>
+                    <Button variant="outline" size={isFullscreen ? 'lg' : 'default'} onClick={handlePrev} disabled={currentStepIndex === 0}>
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Geri
                     </Button>
-                    <Button size={isFullscreen ? "lg" : "default"} className={cn(!isFullscreen && "h-8 px-3")} onClick={handleContinueOrNext} disabled={!isNextButtonEnabled}>
+                    <Button size={isFullscreen ? 'lg' : 'default'} onClick={handleContinueOrNext} disabled={!isNextButtonEnabled}>
                         {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? "Konuyu Bitir" : "İleri")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -1255,7 +1222,35 @@ export function LessonContentViewer({
     }
 
     const getBackgroundClass = () => {
-        return "from-slate-900 to-gray-800";
+        switch(currentStep.type) {
+            case 'content':
+            case 'objectiveList':
+            case 'accordion':
+                 return "from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-950";
+            case 'conceptExplanation':
+                return "from-indigo-200 to-purple-300 dark:from-indigo-900 dark:to-purple-950";
+            case 'mcq':
+            case 'tf':
+            case 'fitb':
+            case 'anagram':
+            case 'sentenceScramble':
+            case 'trueFalseList':
+                 return "from-slate-800 to-slate-900"; // Specific for question types
+            case 'flashcard':
+            case 'anagramFlashcard':
+                 return "from-rose-100 to-pink-200 dark:from-rose-900 dark:to-pink-950";
+            case 'visual':
+                 return "from-gray-300 to-gray-400 dark:from-gray-800 dark:to-gray-900";
+            case 'iframe':
+            case 'htmlSlide':
+                 return "from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900";
+             case 'conceptMap':
+                return "from-sky-900 to-indigo-950";
+            case 'video':
+                 return "from-gray-800 to-gray-900";
+            default:
+                 return "bg-background";
+        }
     }
 
     return (
@@ -1264,18 +1259,12 @@ export function LessonContentViewer({
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
         )}>
-           <div className="flex-shrink-0 p-2 md:p-4 border-b bg-card/50 backdrop-blur-sm">
-                <Card className="bg-transparent border-0 shadow-none">
-                    <CardHeader className="p-1 md:p-2">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-base md:text-xl font-bold">Adım {currentStepIndex + 1}/{steps.length}</h2>
-                            <p className="text-sm font-bold text-primary">Puan: {internalProgress.score}</p>
-                        </div>
-                    </CardHeader>
-                    <CardContent className="p-1 md:p-2">
-                        <Progress value={(currentStepIndex + 1) / steps.length * 100} className="w-full h-2 md:h-3" />
-                    </CardContent>
-                </Card>
+           <div className="flex-shrink-0 p-4 border-b bg-background/50 backdrop-blur-sm">
+                <Progress value={(currentStepIndex + 1) / steps.length * 100} />
+                 <div className="flex justify-between items-center text-xs text-foreground/80 pt-1">
+                    <span>Adım {currentStepIndex + 1}/{steps.length}</span>
+                    <span className="font-bold">Puan: {internalProgress.score}</span>
+                 </div>
            </div>
            <div className="flex-grow flex items-center justify-center relative p-2 sm:p-4 overflow-y-auto">
               <StepContent

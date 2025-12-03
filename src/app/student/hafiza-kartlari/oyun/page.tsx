@@ -108,7 +108,6 @@ const MemoryGame = () => {
             setDisabled(true);
             if (choiceOne.pairId === choiceTwo.pairId) {
                 // Correct match
-                playSound('correct');
                 setScore(prev => prev + 25);
                 setMatchedPairIds(prev => [...prev, choiceOne.pairId]);
                 setTimeout(resetTurn, 800);
@@ -212,12 +211,12 @@ const MemoryGame = () => {
     }
 
     return (
-         <div ref={mainContentRef} className="flex h-screen w-full flex-col items-center justify-center p-2 sm:p-4 bg-rose-50 dark:bg-rose-900/50">
+         <div ref={mainContentRef} className="flex h-screen w-full flex-col items-center justify-center p-4 bg-rose-50 dark:bg-rose-900/50">
              <div className={cn("w-full max-w-5xl text-center", isFullscreen && "px-8 h-full flex flex-col")}>
-                 <div className={cn("flex-shrink-0 flex justify-between items-center mb-4", isFullscreen && "mb-2")}>
+                 <div className={cn("flex-shrink-0 flex justify-between items-center mb-6", isFullscreen && "mb-2")}>
                     <div className="text-left">
-                        <h1 className="text-2xl sm:text-4xl font-bold">Hafıza Kartları</h1>
-                        <p className="text-muted-foreground text-sm sm:text-base">Eşleşen kavram ve tanım kartlarını bulun.</p>
+                        <h1 className="text-3xl sm:text-4xl font-bold">Hafıza Kartları</h1>
+                        <p className="text-muted-foreground">Eşleşen kavram ve tanım kartlarını bulun.</p>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="text-right">
@@ -229,7 +228,7 @@ const MemoryGame = () => {
                 </div>
 
                  <div className={cn("flex items-center justify-center", isFullscreen && "flex-grow min-h-0")}>
-                    <div className={cn("grid w-full place-content-center gap-1.5 sm:gap-2", "grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7")}>
+                    <div className="grid w-full place-content-center gap-2" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))' }}>
                         {cards.map((card, index) => {
                             const isFlipped = matchedPairIds.includes(card.pairId) || choiceOne?.id === card.id || choiceTwo?.id === card.id;
 
@@ -244,15 +243,15 @@ const MemoryGame = () => {
                                         isFlipped && "[transform:rotateY(180deg)]"
                                     )}>
                                         {/* Front */}
-                                        <div className={cn("absolute w-full h-full [backface-visibility:hidden] bg-rose-500 flex items-center justify-center transition-all group-hover:bg-rose-600 rounded-md")}>
-                                            <Layers className={cn("text-white h-6 w-6 sm:h-8 sm:w-8", isFullscreen && "h-12 w-12")} />
+                                        <div className={cn("absolute w-full h-full [backface-visibility:hidden] bg-rose-500 flex items-center justify-center transition-all group-hover:bg-rose-600 rounded-lg")}>
+                                            <Layers className={cn("text-white", isFullscreen ? "h-16 w-16" : "h-8 w-8")} />
                                         </div>
                                         {/* Back */}
                                         <div className={cn(
-                                            "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-md flex items-center justify-center p-1 sm:p-2 text-xs sm:text-sm font-semibold overflow-hidden",
+                                            "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg flex items-center justify-center p-2 text-sm font-semibold overflow-hidden",
                                             matchedPairIds.includes(card.pairId) ? "bg-green-500 text-white" : (card.type === 'concept' ? "bg-blue-200 text-blue-900" : "bg-yellow-200 text-yellow-900")
                                         )}>
-                                            <p className={cn("md:text-sm", isFullscreen ? "text-base" : "text-xs")}>
+                                            <p className={cn("md:text-base", isFullscreen ? "text-lg" : "text-sm")}>
                                                 {card.text}
                                             </p>
                                         </div>

@@ -3,18 +3,17 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
-import type { Question } from '@/lib/types';
+import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
+import type { Question } from '@/lib/types';
 
 const shuffleArray = <T>(array: T[]): T[] => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return newArray;
-};
+    return array;
+}
 
 export async function getMilyonerQuestionsAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -45,37 +44,19 @@ export async function getMilyonerQuestionsAction(
         const mediumQuestions = mediumSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         const hardQuestions = hardSnap.docs.map(d => ({id: d.id, ...d.data()} as Question));
         
-        const requiredCounts = { easy: 4, medium: 4, hard: 2 };
-        if (easyQuestions.length < requiredCounts.easy || mediumQuestions.length < requiredCounts.medium || hardQuestions.length < requiredCounts.hard) {
-            return { 
-                error: `Bu yarışma için yeterli soru bulunamadı. Gerekli: ${requiredCounts.easy} Kolay, ${requiredCounts.medium} Orta, ${requiredCounts.hard} Zor.`, 
-                questions: [] 
-            };
+        if (easyQuestions.length === 0 || mediumQuestions.length === 0 || hardQuestions.length === 0) {
+            return { error: "Bu yarışma için her zorluk seviyesinden (Kolay, Orta, Zor) en az bir adet çoktan seçmeli soru bulunamadı.", questions: [] };
         }
 
-        const selectedEasy = shuffleArray(easyQuestions).slice(0, 4);
-        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 4);
-        const selectedHard = shuffleArray(hardQuestions).slice(0, 2);
+        const selectedEasy = shuffleArray(easyQuestions).slice(0, 5);
+        const selectedMedium = shuffleArray(mediumQuestions).slice(0, 5);
+        const selectedHard = shuffleArray(hardQuestions).slice(0, 5);
 
         const allQuestions = [...selectedEasy, ...selectedMedium, ...selectedHard];
-        
-        // Shuffle options for each question
-        const questionsWithShuffledOptions = allQuestions.map(q => {
-            if (q.options) {
-                return { ...q, options: shuffleArray(q.options) };
-            }
-            return q;
-        });
 
-        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
+        return { questions: JSON.parse(JSON.stringify(allQuestions)) };
     } catch (error: any) {
         console.error("Error getting Milyoner questions:", error);
-         if (error.code === 'failed-precondition') {
-            return { 
-                error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}`, 
-                questions: [] 
-            };
-        }
         return { error: "Milyoner yarışması soruları alınırken bir hata oluştu.", questions: [] };
     }
 }
@@ -120,3 +101,4 @@ export async function submitMilyonerScoreAction(userId: string | null, score: nu
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
+

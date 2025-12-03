@@ -2,18 +2,18 @@
 "use client";
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home, Trophy } from "lucide-react";
+import { ArrowLeft, Users, AlertTriangle, Loader2, Check, Repeat, UserCheck, Award, PartyPopper, Shuffle, Crown, Home } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
+import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { playSound, stopSound } from "@/lib/audio-service";
@@ -24,141 +24,58 @@ import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from 'firebase/firestore';
-import { UserAvatar } from "@/components/user-avatar";
 
 
 type GameQuestion = GetQuizOutput['questions'][0];
 type TeamStudent = { uid: string, displayName: string, avatar?: string };
 type Team = { id: number; name: string; students: TeamStudent[]; score: number };
-type TeamForUrl = { id: number; name: string; playerUids: string[] };
-
-function CompetitionLoadingSkeleton() {
-    return (
-      <div className="container mx-auto p-4 sm:p-6 md:p-8">
-        <div className="flex justify-between items-center mb-6">
-            <div className="h-8 w-64 bg-muted rounded-md animate-pulse" />
-            <div className="h-10 w-32 bg-muted rounded-md animate-pulse" />
-        </div>
-        <Card className="p-6">
-             <div className="flex justify-between items-center mb-4">
-                <div className="h-6 w-32 bg-muted rounded-md animate-pulse" />
-                <div className="h-10 w-24 bg-muted rounded-md animate-pulse" />
-            </div>
-             <div className="h-4 w-full bg-muted rounded-full animate-pulse mb-8" />
-             <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
-                {Array.from({ length: 20 }).map((_, i) => (
-                    <div key={i} className="aspect-square bg-muted rounded-md animate-pulse" />
-                ))}
-             </div>
-        </Card>
-      </div>
-    );
-}
-
-const TeamScoreCard = ({ team, isActive, colorIndex, rank, isFullscreen }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean }) => {
-    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
-    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
-    const bgColor = colorClasses[colorIndex % colorClasses.length];
-    const ringColor = ringClasses[colorIndex % ringClasses.length];
-    
-    const getInitials = (name?: string): string => {
-        if (!name) return '?';
-        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
-    };
-
-    return (
-        <div className={cn(
-            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col",
-            bgColor,
-            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
-            isFullscreen ? "w-96" : "w-72"
-        )}>
-            <div className="flex justify-between items-start">
-                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
-                    <Users /> {team.name}
-                </h3>
-                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
-            </div>
-            <div className={cn("font-bold text-center my-4", isFullscreen ? "text-8xl" : "text-6xl")}>
-                {team.score}
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center mt-auto">
-                {team.students.length > 0 ? (
-                    team.students.map(student => (
-                        <TooltipProvider key={student.uid}>
-                             <Tooltip>
-                                <TooltipTrigger>
-                                    <Avatar className={cn(isFullscreen ? "h-12 w-12 text-lg" : "h-10 w-10")}>
-                                        <AvatarImage src={student.avatar || ''} data-ai-hint="profile picture" />
-                                        <AvatarFallback>{getInitials(student.displayName)}</AvatarFallback>
-                                    </Avatar>
-                                </TooltipTrigger>
-                                <TooltipContent><p>{student.displayName}</p></TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    ))
-                ) : <p className="text-sm text-white/70">Takımda oyuncu yok.</p>}
-            </div>
-        </div>
-    );
-};
-
+type TeamForUrl = { id: number; name: string; studentUids: string[] };
 
 function TeamCompetitionComponent() {
-    const searchParams = useSearchParams();
-    const { toast } = useToast();
-    const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isSubmittingScores, setIsSubmittingScores] = useState(false);
-    const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
+  const [isSubmittingScores, setIsSubmittingScores] = useState(false);
+  const [scoresHaveBeenSaved, setScoresHaveBeenSaved] = useState(false);
 
-    useEffect(() => {
-        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
-    
-    const pointsConfig = useMemo(() => {
-        const pointsParam = searchParams.get('points');
-        try {
-            return pointsParam ? JSON.parse(pointsParam) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
-        } catch {
-            return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
-        }
-    }, [searchParams]);
-    
-    const penaltyConfig = useMemo(() => {
-        const penaltyParam = searchParams.get('penalty');
-        try {
-            return penaltyParam ? JSON.parse(penaltyParam) : { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
-        } catch {
-            return { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
-        }
-    }, [searchParams]);
+  useEffect(() => {
+    const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+  
+  const pointsConfig = useMemo(() => {
+    const param = searchParams.get('points');
+    try {
+        return param ? JSON.parse(param) : { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
+    } catch {
+        return { mcq: { Kolay: 10, Orta: 15, Zor: 20 }, tf: { Kolay: 5, Orta: 10, Zor: 15 }, fitb: { Kolay: 10, Orta: 15, Zor: 20 }};
+    }
+  }, [searchParams]);
+  
+  const penaltyConfig = useMemo(() => {
+    const penaltyParam = searchParams.get('penalty');
+    try {
+        return penaltyParam ? JSON.parse(penaltyParam) : { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
+    } catch {
+        return { mcq: { Kolay: 5, Orta: 8, Zor: 10 }, tf: { Kolay: 3, Orta: 5, Zor: 8 }, fitb: { Kolay: 5, Orta: 8, Zor: 10 }};
+    }
+  }, [searchParams]);
 
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [teams, setTeams] = useState<Team[]>([]);
-    const [activeTeamId, setActiveTeamId] = useState<number | null>(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
-    const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
-    const [winner, setWinner] = useState<Team | 'draw' | null>(null);
-    const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
+  const [questions, setQuestions] = useState<GameQuestion[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [activeTeamId, setActiveTeamId] = useState<number | null>(null);
+  const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
+  const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
+  const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
+  const [winner, setWinner] = useState<Team | 'draw' | null>(null);
+  
+  const colorClasses = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-accent"];
 
-    
-    const colorClasses = ["bg-chart-1 text-primary-foreground hover:bg-chart-1/90", "bg-chart-2 text-primary-foreground hover:bg-chart-2/90", "bg-chart-3 text-primary-foreground hover:bg-chart-3/90", "bg-chart-4 text-primary-foreground hover:bg-chart-4/90", "bg-chart-5 text-primary-foreground hover:bg-chart-5/90", "bg-accent text-accent-foreground hover:bg-accent/90"];
-
-    const bgColors = [
-        'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-indigo-500', 'bg-pink-500', 'bg-sky-500', 'bg-rose-500',
-        'bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'
-    ];
-     const hoverBgColors = [
-        'hover:bg-blue-600', 'hover:bg-emerald-600', 'hover:bg-amber-600', 'hover:bg-indigo-600', 'hover:bg-pink-600', 'hover:bg-sky-600', 'hover:bg-rose-600',
-        'hover:bg-chart-1/90', 'hover:bg-chart-2/90', 'hover:bg-chart-3/90', 'hover:bg-chart-4/90', 'hover:bg-chart-5/90'
-    ];
-
-    const fetchGameData = useCallback(async () => {
+  const fetchGameData = useCallback(async () => {
         setIsLoading(true);
         try {
             const teamsParam = searchParams.get('teams');
@@ -206,16 +123,13 @@ function TeamCompetitionComponent() {
         fetchGameData();
     }, [fetchGameData]);
   
-  const handleSaveScores = useCallback(async (andFinish: boolean = false) => {
-    const inGameStudents = teams.flatMap(t => t.students);
-    if (scoresHaveBeenSaved || inGameStudents.length === 0) {
-        if (andFinish && gameState !== 'finished') setGameState('finished');
-        return;
-    }
+  const handleSaveScores = async (andFinish: boolean = false) => {
+    const inGameCompetitors = teams.flatMap(t => t.students);
+    if (scoresHaveBeenSaved || inGameCompetitors.length === 0) return;
 
     setIsSubmittingScores(true);
     
-    const scoreUpdates = inGameStudents.map(c => {
+    const scoreUpdates = inGameCompetitors.map(c => {
         const team = teams.find(t => t.students.some(s => s.uid === c.uid));
         return { 
             userId: c.uid, 
@@ -230,7 +144,7 @@ function TeamCompetitionComponent() {
     } else {
         const result = await updateMultipleStudentScores(scoreUpdates);
         if (result.success) {
-            toast({ title: "Skorlar Kaydedildi", description: "Takım skorları öğrenci profillerine eklendi." });
+            toast({ title: "Skorlar Kaydedildi", description: "Takım skorları oyuncu profillerine eklendi." });
             setScoresHaveBeenSaved(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -245,19 +159,19 @@ function TeamCompetitionComponent() {
         setGameState('finished');
     }
     setIsSubmittingScores(false);
-  }, [scoresHaveBeenSaved, teams, searchParams, toast, gameState]);
+  };
 
 
   useEffect(() => {
     if (gameState !== 'playing' || !questions.length || answeredQuestions.length === 0) return;
     if (answeredQuestions.length === questions.length) {
+        setGameState('finished');
         const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
         if (sortedTeams.length > 0 && sortedTeams[0].score > (sortedTeams[1]?.score ?? -Infinity)) {
              setWinner(sortedTeams[0]);
         } else {
             setWinner('draw');
         }
-        setGameState('finished');
     }
   }, [gameState, teams, answeredQuestions.length, questions.length]);
 
@@ -316,7 +230,7 @@ function TeamCompetitionComponent() {
   if (error) return (
     <div className="w-full h-full min-h-screen p-4 flex items-center justify-center bg-gradient-to-br from-indigo-300 via-purple-400 to-pink-500 dark:from-indigo-800 dark:via-purple-900 dark:to-pink-950">
         <Alert variant="destructive" className="max-w-lg bg-card/70 backdrop-blur-sm">
-          <AlertTriangle className="h-4 w-4" /> <AlertTitle>Hata!</AlertTitle> <AlertDesc>{error}</AlertDesc>
+          <AlertTriangle className="h-4 w-4" /> <AlertTitle>Hata!</AlertTitle> <AlertDescription>{error}</AlertDescription>
           <div className="mt-4"><Button asChild variant="outline"><Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Geri Dön</Link></Button></div>
         </Alert>
     </div>
@@ -329,7 +243,7 @@ function TeamCompetitionComponent() {
             <CardHeader><CardTitle className="font-headline text-3xl">Yarışma Bitti!</CardTitle></CardHeader>
             <CardContent className="flex flex-col items-center gap-4">
                 {winner === 'draw' ? <><Award className="h-24 w-24 text-muted-foreground"/><p className="text-2xl font-bold">Berabere!</p></>
-                : winner ? <><Trophy className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
+                : winner ? <><Users className="h-24 w-24 text-amber-400"/><p className="text-2xl font-bold">Kazanan: {winner.name}</p><p className="text-xl text-muted-foreground">Skor: {winner.score}</p></>
                 : <p>Sonuçlar hesaplanıyor...</p> }
 
                 <div className="w-full mt-4 border rounded-md">
@@ -370,11 +284,11 @@ function TeamCompetitionComponent() {
     <div className="w-full min-h-screen bg-gradient-to-br from-indigo-300 via-purple-400 to-pink-500 dark:from-indigo-800 dark:via-purple-900 dark:to-pink-950">
         <div className={cn("p-4 sm:p-6 md:p-8", isFullscreen ? "h-full flex flex-col" : "container mx-auto")}>
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Takım Yarışması</h1>
+                <h1 className="text-3xl font-bold font-headline text-white drop-shadow-lg">Yaz Kursu Takım Yarışması</h1>
                 <div className="flex items-center gap-2">
                     <FullscreenToggle />
                     <Button asChild variant="outline" className="bg-card/70 backdrop-blur-sm hover:bg-card/90">
-                        <Link href="/teacher/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
+                        <Link href="/teacher/summer-school/smartboard/takim"><ArrowLeft className="mr-2 h-4 w-4" /> Kurulumu Değiştir</Link>
                     </Button>
                 </div>
             </div>
@@ -424,6 +338,60 @@ function TeamCompetitionComponent() {
   );
 }
 
-export default function SmartboardTakimOyunPage() {
-    return <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}><TeamCompetitionComponent /></Suspense>
+function TeamScoreCard({ team, isActive, colorIndex, rank, isFullscreen }: { team: Team, isActive: boolean, colorIndex: number, rank: number, isFullscreen: boolean }) {
+    const colorClasses = ['bg-chart-1', 'bg-chart-2', 'bg-chart-3', 'bg-chart-4', 'bg-chart-5'];
+    const ringClasses = ['ring-chart-1', 'ring-chart-2', 'ring-chart-3', 'ring-chart-4', 'ring-chart-5'];
+    const bgColor = colorClasses[colorIndex % colorClasses.length];
+    const ringColor = ringClasses[colorIndex % ringClasses.length];
+    
+    const getInitials = (name?: string): string => {
+        if (!name) return '?';
+        return name.trim().charAt(0).toLocaleUpperCase('tr-TR');
+    };
+
+    return (
+        <div className={cn(
+            "rounded-lg text-white p-4 transition-all duration-300 shadow-xl flex flex-col",
+            bgColor,
+            isActive ? `ring-4 ${ringColor} scale-105` : "scale-100",
+            isFullscreen ? "w-96" : "w-72"
+        )}>
+            <div className="flex justify-between items-start">
+                <h3 className={cn("font-headline font-bold flex items-center gap-2", isFullscreen ? "text-4xl" : "text-2xl")}>
+                    <Users /> {team.name}
+                </h3>
+                {rank === 0 && <Crown className={cn("text-yellow-300", isFullscreen ? "h-10 w-10" : "h-7 w-7")} />}
+            </div>
+            <div className={cn("font-bold text-center my-4", isFullscreen ? "text-8xl" : "text-6xl")}>
+                {team.score}
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center mt-auto">
+                {team.students.length > 0 ? (
+                    team.students.map(student => (
+                        <TooltipProvider key={student.uid}>
+                             <Tooltip>
+                                <TooltipTrigger>
+                                    <Avatar className={cn(isFullscreen ? "h-12 w-12 text-lg" : "h-10 w-10")}>
+                                        <AvatarImage src={student.avatar || ''} data-ai-hint="profile picture" />
+                                        <AvatarFallback>{getInitials(student.displayName)}</AvatarFallback>
+                                    </Avatar>
+                                </TooltipTrigger>
+                                <TooltipContent><p>{student.displayName}</p></TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    ))
+                ) : <p className="text-sm text-white/70">Takımda oyuncu yok.</p>}
+            </div>
+        </div>
+    );
 }
+
+export default function SmartboardTakimOyunPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <TeamCompetitionComponent />
+    </Suspense>
+  )
+}
+
+    

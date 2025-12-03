@@ -10,6 +10,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { ThemeSwitcher } from './theme-switcher';
 import { ModeSwitcher } from './mode-switcher';
 import { UserAvatar } from './user-avatar';
 import { ErrorReportDialog } from './error-report-dialog';
@@ -34,12 +35,13 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="px-4 h-16 flex items-center bg-card/95 backdrop-blur-sm border-b z-50 sticky top-0">
+      <header className="px-4 h-16 flex items-center bg-card border-b">
         <Link href="/" className="flex items-center justify-center">
           <BookOpenCheck className="h-6 w-6 text-primary" />
           <span className="ml-2 text-lg font-semibold font-headline">Değerler Oyunu</span>
         </Link>
         <nav className="ml-auto flex gap-1 sm:gap-2 items-center">
+          <ThemeSwitcher />
           <ModeSwitcher />
            {user && (user.role === 'teacher' || user.role === 'superadmin') && (
             <TooltipProvider>

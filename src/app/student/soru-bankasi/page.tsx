@@ -39,22 +39,22 @@ const CourseCardWithProgress = ({ course }: { course: CourseWithAllProgress }) =
         </CardHeader>
         <CardContent className="flex-grow space-y-4">
             <div>
-                <div className="flex justify-between text-sm font-bold text-foreground/80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-muted-foreground mb-1">
                     <span>Ders İlerlemesi</span>
                     <span>{course.lessonProgress || 0}%</span>
                 </div>
                 <Progress value={course.lessonProgress || 0} className="h-2" />
-                <p className="text-xs text-muted-foreground text-right mt-1 font-medium">
+                <p className="text-xs text-muted-foreground text-right mt-1">
                     ({course.completedTopicsCount || 0} / {course.topicsCount || 0} Konu)
                 </p>
             </div>
             <div>
-                <div className="flex justify-between text-sm font-bold text-foreground/80 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-muted-foreground mb-1">
                     <span>Soru Bankası Başarısı</span>
                     <span>{course.questionBankProgress || 0}%</span>
                 </div>
                 <Progress value={course.questionBankProgress || 0} className="h-2 [&>div]:bg-amber-500" />
-                 <p className="text-xs text-muted-foreground text-right mt-1 font-medium">
+                 <p className="text-xs text-muted-foreground text-right mt-1">
                     ({course.passedTests || 0} / {course.totalQuestionBankTests || 0} Test)
                 </p>
             </div>
@@ -103,7 +103,7 @@ export default function SoruBankasiPage() {
                 const studentClassId = studentClass?.id;
 
                 const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        
+
                 let filteredCourses: Course[] = [];
                 if (studentClassId) {
                     const isFirstClass = studentClassId === firstClassId;
@@ -184,3 +184,5 @@ export default function SoruBankasiPage() {
         </div>
     );
 }
+
+    

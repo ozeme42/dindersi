@@ -20,7 +20,7 @@ import { Home } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { updateMultipleStudentScores } from "../../../../teacher/smartboard/actions";
+import { updateMultipleStudentScores } from "../../actions";
 
 type GameQuestion = Question;
 type Player = { id: string; name: string; isGuest: boolean; };

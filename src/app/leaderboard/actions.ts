@@ -161,11 +161,7 @@ export async function getLiveLeaderboard(): Promise<LeaderboardEntry[]> {
         const usersQuery = query(collection(db, 'users'), where(documentId(), 'in', chunk));
         const usersSnapshot = await getDocs(usersQuery);
         usersSnapshot.forEach(doc => {
-            const user = { uid: doc.id, ...doc.data() } as UserProfile;
-            // Filter out teachers and superadmins
-            if (user.role === 'student') {
-                studentProfiles.push(user);
-            }
+            studentProfiles.push({ uid: doc.id, ...doc.data() } as UserProfile);
         });
     }
     

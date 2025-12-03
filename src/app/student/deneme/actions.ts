@@ -51,25 +51,23 @@ export async function getStudentExams(userId?: string): Promise<{ success: boole
         const scoreEventsSnapshot = await getDocs(scoreEventsQuery);
         const allParticipantsEvents = scoreEventsSnapshot.docs.map(doc => doc.data() as ScoreEvent);
         
-        const solvedEventData = allParticipantsEvents.find(e => e.userId === userId) || null;
+        const solvedEvent = allParticipantsEvents.find(e => e.userId === userId) || null;
 
         let rank: number | undefined = undefined;
         const totalParticipants = allParticipantsEvents.length;
-        
-        let solvedEvent: EnrichedAssignment['solvedEvent'] = undefined;
-        if(solvedEventData) {
+
+        if (solvedEvent) {
             allParticipantsEvents.sort((a, b) => (b.points || 0) - (a.points || 0));
             rank = allParticipantsEvents.findIndex(e => e.userId === userId) + 1;
-            solvedEvent = {
-                 ...solvedEventData,
-                id: scoreEventsSnapshot.docs.find(d => d.data().userId === userId)!.id,
-                timestamp: (solvedEventData.timestamp as any)?.toDate().toISOString()
-            }
         }
         
         enrichedExams.push({
             ...assignment,
-            solvedEvent: solvedEvent,
+            solvedEvent: solvedEvent ? {
+                ...solvedEvent,
+                id: scoreEventsSnapshot.docs.find(d => d.data().userId === userId)!.id,
+                timestamp: (solvedEvent.timestamp as any)?.toDate().toISOString()
+            } : undefined,
             rank,
             totalParticipants,
         });

@@ -88,7 +88,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-grid">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary via-blue-700 to-rose-500">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">Giriş Yap</CardTitle>

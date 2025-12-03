@@ -235,22 +235,12 @@ function GameComponent() {
 
   return (
     <div 
-        className="h-screen bg-gradient-to-b from-violet-900 to-fuchsia-900 flex flex-col items-center overflow-y-hidden font-sans text-white select-none overscroll-y-none"
+        className="min-h-screen bg-gradient-to-b from-violet-900 to-fuchsia-900 flex flex-col items-center overflow-hidden font-sans text-white select-none"
         onMouseMove={handleMove}
         onMouseUp={handleEnd}
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
     >
-       <style jsx global>{`
-            html, body {
-                height: 100%;
-                overflow: hidden;
-            }
-            @keyframes popIn {
-                from { opacity: 0; transform: scale(0.8); }
-                to { opacity: 1; transform: scale(1); }
-            }
-        `}</style>
       
       <div className="w-full max-w-md p-4 flex justify-between items-center z-10">
         <Button asChild variant="ghost" className="text-white hover:bg-white/10 hover:text-white">
@@ -351,6 +341,13 @@ function GameComponent() {
             </div>
         </div>
       )}
+
+      <style>{`
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -362,3 +359,5 @@ export default function IlimHazinesiPage() {
         </Suspense>
     )
 }
+
+    

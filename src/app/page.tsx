@@ -1,4 +1,5 @@
 import { getPublicCurriculum } from './actions/getPublicCurriculum';
+import type { PublicClass } from './actions/getPublicCurriculum';
 import { PageContent } from './page-content';
 
 export default async function Home() {

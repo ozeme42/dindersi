@@ -1,7 +1,7 @@
 
 import { Suspense } from 'react';
 import { KavramYarismaClientPage } from './client-page';
-import { getConceptQuizAction, type ConceptQuizQuestion } from '../actions';
+import { getConceptQuizData, type ConceptQuizConcept } from '../actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,11 +13,11 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
       topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
   };
 
-  const questionData = await getConceptQuizAction(params);
+  const questionData = await getConceptQuizData(params);
 
   return (
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
-      <KavramYarismaClientPage initialQuestions={questionData.questions} initialError={questionData.error} />
+      <KavramYarismaClientPage initialConcepts={questionData.concepts} initialError={questionData.error} />
     </Suspense>
   );
 }

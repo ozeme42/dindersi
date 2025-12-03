@@ -1,10 +1,11 @@
 
 import { Suspense } from 'react';
-import { KavramYarismaClientPage } from './client-page';
-import { getConceptQuizData } from './actions';
+import KavramYarismaOyunPageWrapper from './oyun/page';
+import { getConceptQuizAction, type ConceptQuizQuestion } from './actions';
 
 export const dynamic = 'force-dynamic';
 
+// This is now a Server Component that fetches data and passes it to the client component wrapper.
 export default async function KavramYarismaOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
   const params = {
       courseId: typeof searchParams.courseId === 'string' ? searchParams.courseId : undefined,
@@ -12,11 +13,11 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
       topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
   };
 
-  const questionData = await getConceptQuizData(params);
+  const questionData = await getConceptQuizAction(params);
 
   return (
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
-      <KavramYarismaClientPage initialConcepts={questionData.concepts} initialError={questionData.error} />
+      <KavramYarismaOyunPageWrapper initialQuestions={questionData.concepts} initialError={questionData.error} />
     </Suspense>
   );
 }

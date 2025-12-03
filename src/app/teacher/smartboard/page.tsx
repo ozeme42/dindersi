@@ -1,8 +1,9 @@
+
 "use client";
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog } from 'lucide-react';
+import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2 } from 'lucide-react';
 import React, { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -12,8 +13,8 @@ const FeatureButton = ({ href, title, description, icon, colorClass, isExternal 
             "h-full w-full rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300",
             colorClass
         )}>
-            {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 opacity-90" })}
-            <h3 className="font-headline text-3xl mt-4">{title}</h3>
+            {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-90" })}
+            <h3 className="font-headline text-2xl mt-4">{title}</h3>
             <p className="mt-2 opacity-80 text-sm max-w-xs">{description}</p>
             <div className="flex-grow" />
             <ArrowRight className="mt-4 h-6 w-6 group-hover:translate-x-1 transition-transform" />
@@ -35,7 +36,6 @@ const FeatureButton = ({ href, title, description, icon, colorClass, isExternal 
 export default function SmartboardPage() {
   const yarışmalar = [
     {
-      key: 'smartboard_bireysel',
       href: "/teacher/smartboard/bireysel",
       title: "Bireysel Yarışma",
       description: "Her öğrencinin kendi başına yarıştığı klasik mod.",
@@ -43,7 +43,6 @@ export default function SmartboardPage() {
       colorClass: "bg-primary text-primary-foreground hover:bg-primary/90",
     },
     {
-      key: 'smartboard_takim',
       href: "/teacher/smartboard/takim",
       title: "Takım Yarışması",
       description: "Öğrencileri takımlara ayırarak rekabeti artırın.",
@@ -51,7 +50,6 @@ export default function SmartboardPage() {
       colorClass: "bg-cyan-600 text-cyan-50 hover:bg-cyan-700",
     },
     {
-      key: 'smartboard_duello',
       href: "/teacher/smartboard/duello",
       title: "Düello",
       description: "İki öğrenciyi veya takımı karşı karşıya getirin.",
@@ -59,7 +57,6 @@ export default function SmartboardPage() {
       colorClass: "bg-fuchsia-600 text-fuchsia-50 hover:bg-fuchsia-700",
     },
     {
-      key: 'kavram_duellosu',
       href: "/teacher/smartboard/kavram-duellosu",
       title: "Kavram Düellosu",
       description: "Tanımı verilen kavramı bularak rakibini alt et.",
@@ -67,7 +64,6 @@ export default function SmartboardPage() {
       colorClass: "bg-orange-500 text-orange-50 hover:bg-orange-600",
     },
      {
-      key: 'fetih_oyunu',
       href: "/teacher/smartboard/fetih-oyunu",
       title: "Fetih Oyunu",
       description: "Soruları doğru cevaplayarak harita üzerinde ilerleyin ve rakip kaleyi fethedin.",
@@ -75,7 +71,6 @@ export default function SmartboardPage() {
       colorClass: "bg-emerald-600 text-emerald-50 hover:bg-emerald-700",
     },
     {
-      key: 'tornado',
       href: "/teacher/smartboard/tornado",
       title: "Tornado",
       description: "Rastgele kutuları açarak sürpriz sorular ve puanlarla karşılaşın.",
@@ -83,7 +78,6 @@ export default function SmartboardPage() {
       colorClass: "bg-blue-600 text-blue-50 hover:bg-blue-700",
     },
     {
-      key: 'kutu_ac',
       href: "/teacher/smartboard/kutu-ac",
       title: "Kutu Aç",
       description: "Kutuları açarak soruları cevaplayın ve puanları toplayın.",
@@ -119,7 +113,7 @@ export default function SmartboardPage() {
         <div className="w-full max-w-screen-2xl">
           <h2 className="text-3xl font-bold font-headline mb-6 text-center">Yarışmalar</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {yarışmalar.map(({ key, ...buttonProps }) => <div key={key} className="h-80"><FeatureButton {...buttonProps} /></div>)}
+              {yarışmalar.map((buttonProps, index) => <div key={index} className="h-80"><FeatureButton {...buttonProps} /></div>)}
           </div>
         </div>
 

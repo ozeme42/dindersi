@@ -4,23 +4,22 @@
 import { db } from '@/lib/firebase';
 import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem, TermData } from '@/lib/types';
-
+import type { ActivityItem, Question } from '@/lib/types';
 
 // Simple array shuffle function
-const shuffleArray = <T,>(array: T[]): T[] => {
+const shuffleArray = <T>(array: T[]): T[] => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
     return newArray;
-};
+}
 
-// Re-using the TermData type for the output.
+// Re-using the Question type for the output, as it fits the structure.
 export async function getBilBakalimAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ data: TermData[]; error?: string }> {
+): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
         let baseQuery = query(collection(db, 'activityItems'));
@@ -37,23 +36,32 @@ export async function getBilBakalimAction(
         const definitionsSnapshot = await getDocs(definitionsQuery);
         
         const allDefinitions = definitionsSnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() as ActivityItem }))
-            .filter(item => item.content?.term && item.content?.definition)
-            .map(item => ({
-                id: item.id,
-                term: item.content.term!,
-                definition: item.content.definition!,
-            }));
-
+            .map(doc => ({ ...doc.data() as ActivityItem, id: doc.id}))
+            .filter(item => item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 1) {
-            return { error: "Bil Bakalım için bu konuda uygun tanım bulunamadı.", data: [] };
+            return { error: "Bil Bakalım için bu konuda uygun tanım bulunamadı.", questions: [] };
         }
-        
-        return { data: JSON.parse(JSON.stringify(allDefinitions)) };
+
+        const gameQuestions: Question[] = allDefinitions.map((item, index) => {
+            return {
+                id: item.id,
+                text: item.content.definition!,
+                type: 'Çoktan Seçmeli', // This type is nominal for the Question type, game logic will differ
+                correctAnswer: item.content.term!,
+                options: [], // Not used in this new game version
+                difficulty: 'Orta',
+                courseId: item.courseId,
+                unitId: item.unitId,
+                topicId: item.topicId,
+                topic: '',
+            };
+        });
+
+        return { questions: JSON.parse(JSON.stringify(shuffleArray(gameQuestions))) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
-        return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", data: [] };
+        return { error: "Bil Bakalım görevi alınırken bir hata oluştu.", questions: [] };
     }
 }
 
@@ -99,4 +107,3 @@ export async function submitBilBakalimScoreAction(userId: string | null, score: 
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
-

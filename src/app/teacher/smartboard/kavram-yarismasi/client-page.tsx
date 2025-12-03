@@ -1,291 +1,218 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { SelectionGrid } from "@/components/selection-grid";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/auth-context";
-import { Loader2, ArrowLeft, Home, PartyPopper, Repeat } from "lucide-react";
-import { useSearchParams } from 'next/navigation';
-import type { ConceptQuizConcept } from "./actions";
 
-export function KavramYarismaClientPage({ initialConcepts, initialError }: { initialConcepts: ConceptQuizConcept[] | null, initialError?: string }) {
-    const { user } = useAuth();
-    const { toast } = useToast();
-    const searchParams = useSearchParams();
+const steps = [
+  { id: 1, name: "Sınıf Seçimi", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite Seçimi", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu Seçimi", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 5, name: "Onay", icon: <Check className="h-5 w-5" /> },
+];
 
-    const [gameState, setGameState] = useState('start');
-    const [currentQIndex, setCurrentQIndex] = useState(0);
-    const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(15);
-    const [wrongGuesses, setWrongGuesses] = useState(0);
-    const [feedbackMsg, setFeedbackMsg] = useState('');
-    const [disabledCards, setDisabledCards] = useState<string[]>([]);
-    const [correctCard, setCorrectCard] = useState<string | null>(null);
-    const [isRoundOver, setIsRoundOver] = useState(false);
-    
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const [questions, setQuestions] = useState<ConceptQuizConcept[]>(initialConcepts || []);
-    const [error, setError] = useState<string | null>(initialError || null);
-    
-    const gameContext = `Kavram Yarışması - ${searchParams.get('topicName') || 'Genel'}`;
+export function KavramYarismaSetupClientPage() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const { toast } = useToast();
 
-    const startGame = useCallback(() => {
-        if (questions.length === 0) {
-            setError("Oyun için soru yüklenemedi veya bulunamadı.");
-            setGameState('error');
-            return;
-        }
-        setCurrentQIndex(0);
-        setScore(0);
-        setGameState('playing');
-        resetTurn();
-    }, [questions]);
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  
+  const [selection, setSelection] = useState({
+    classId: "",
+    className: "",
+    courseId: "",
+    courseName: "",
+    unitId: "",
+    unitName: "",
+    topicId: "",
+    topicName: "",
+  });
 
-    useEffect(() => {
-        if (initialError) {
-            setError(initialError);
-            setGameState('error');
-        } else if (initialConcepts) {
-            setQuestions(initialConcepts);
-            setGameState('start');
-        }
-    }, [initialConcepts, initialError]);
-    
-     const resetTurn = useCallback(() => {
-        setTimeLeft(15);
-        setWrongGuesses(0);
-        setFeedbackMsg('');
-        setDisabledCards([]);
-        setCorrectCard(null);
-        setIsRoundOver(false);
-
-        if (timerRef.current) clearInterval(timerRef.current);
-        timerRef.current = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev <= 1) {
-                    if(timerRef.current) clearInterval(timerRef.current);
-                    // handleTimeUp();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-    }, []);
-
-    const handleCardClick = (concept: string) => {
-        if (disabledCards.includes(concept) || correctCard || isRoundOver) return;
-
-        const currentQ = questions[currentQIndex];
-        if (!currentQ) return;
-
-        if (concept === currentQ.name) {
-            if (timerRef.current) clearInterval(timerRef.current);
-            setScore(prev => prev + (20 - (wrongGuesses * 10)));
-            setCorrectCard(concept);
-            setFeedbackMsg('Harika! Doğru Cevap.');
-            setIsRoundOver(true);
-        } else {
-            const newWrongGuesses = wrongGuesses + 1;
-            setWrongGuesses(newWrongGuesses);
-            setDisabledCards(prev => [...prev, concept]);
-            
-            if (newWrongGuesses >= 2) {
-                if (timerRef.current) clearInterval(timerRef.current);
-                setFeedbackMsg('Hakkın Kalmadı!');
-                setCorrectCard(currentQ.name);
-                setIsRoundOver(true);
-            } else {
-                setFeedbackMsg('Yanlış! 1 Hakkın daha var.');
-            }
-        }
+   useEffect(() => {
+    const fetchInitialData = async () => {
+      setIsLoading(true);
+      try {
+        const [coursesSnapshot, classesSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "courses"), orderBy("title"))),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        ]);
+        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
+        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+      } catch (error) {
+        console.error("Error fetching initial data: ", error);
+        toast({ title: "Hata", description: "Veriler getirilirken bir sorun oluştu.", variant: "destructive" });
+      } finally {
+        setIsLoading(false);
+      }
     };
-    
-    const nextQuestion = () => {
-        if (currentQIndex + 1 < questions.length) {
-            setCurrentQIndex(prev => prev + 1);
-            resetTurn();
-        } else {
-            endGame();
-        }
-    };
-    
-    const endGame = () => {
-        if(timerRef.current) clearInterval(timerRef.current);
-        setGameState('end');
-    };
-
-    const restartGame = () => {
-        setScore(0);
-        setGameState('start');
-    };
-
-    if (error) {
-         return (
-             <div className="flex h-screen items-center justify-center p-4">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
-                    <strong className="font-bold">Hata! </strong>
-                    <span className="block sm:inline">{error}</span>
-                     <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href="/teacher/smartboard/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
-                        </Button>
-                    </div>
-                </div>
-            </div>
-         )
+    fetchInitialData();
+  }, [toast]);
+  
+  const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
+  const handleBack = () => {
+    if (currentStep > 1) {
+      if (currentStep === 2) setSelection(s => ({...s, classId: '', className: ''}));
+      if (currentStep === 3) setSelection(s => ({...s, courseId: '', courseName: ''}));
+      if (currentStep === 4) setSelection(s => ({...s, unitId: '', unitName: ''}));
+      if (currentStep === 5) setSelection(s => ({...s, topicId: '', topicName: ''}));
+      setCurrentStep(currentStep - 1);
     }
+  };
 
-    if (gameState === 'start') {
-        return (
-            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
-                    <div className="text-6xl mb-4">🧩</div>
-                    <h2 className="text-3xl font-bold text-indigo-800 mb-4 header-font">Kavram Avcısı</h2>
-                    <ul className="text-left text-gray-600 mb-8 space-y-2 bg-blue-50 p-6 rounded-xl">
-                        <li>⏱️ Her soru için <strong>15 Saniye</strong> süren var.</li>
-                        <li>❤️ Her soruda <strong>2 Cevap Hakkın</strong> var.</li>
-                        <li>🎯 Doğru kavramı bul, puanları topla!</li>
-                    </ul>
-                    <button 
-                        onClick={startGame}
-                        className="w-full py-4 bg-indigo-600 text-white text-xl font-bold rounded-xl hover:bg-indigo-700 transition-transform hover:scale-105 shadow-lg"
-                    >
-                        OYUNA BAŞLA
-                    </button>
-                </div>
-            </div>
-        );
-    }
+  const handleSelectClass = async (classId: string, className: string) => {
+    setSelection(prev => ({ ...prev, classId, className, courseId: '', courseName: '', unitId: '', unitName: '', topicId: '' }));
     
-     if (gameState === 'end') {
-        return (
-            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
-                    <div className="text-6xl mb-4">🏁</div>
-                    <h2 className="text-3xl font-bold text-indigo-800 mb-2">Yarışma Bitti!</h2>
-                    <p className="text-gray-500 mb-8">Tüm kavramları tamamladın.</p>
-                    
-                    <div className="bg-indigo-50 p-6 rounded-2xl mb-8 inline-block w-full">
-                        <p className="text-sm text-indigo-400 font-bold tracking-widest uppercase">TOPLAM SKOR</p>
-                        <p className="text-5xl font-black text-indigo-600 header-font mt-2">{score}</p>
-                    </div>
-                     <div className="space-y-2">
-                        <Button onClick={restartGame} className="w-full py-4 text-xl" variant="secondary">
-                            TEKRAR OYNA
-                        </Button>
-                        <Button asChild variant="outline" className="w-full">
-                            <Link href="/teacher/smartboard">Ana Menü</Link>
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        );
+    const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+    const isFirstClass = classId === firstClassId;
+    const applicableCourses = allCourses.filter(course => course.classId === classId || (!course.classId && isFirstClass));
+    setCourses(applicableCourses);
+    setUnits([]);
+    setTopics([]);
+    handleNext();
+  };
+
+  const handleSelectCourse = async (courseId: string, courseName: string) => {
+    setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
+    setIsLoading(true);
+    const unitsRef = collection(db, `courses/${courseId}/units`);
+    const q = query(unitsRef, orderBy("title"));
+    const unitsSnapshot = await getDocs(q);
+    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+    setTopics([]);
+    setIsLoading(false);
+    handleNext();
+  };
+
+  const handleSelectUnit = async (unitId: string, unitName: string) => {
+    setSelection(prev => ({ ...prev, unitId, unitName, topicId: '', topicName: '' }));
+    if (unitId === 'all') {
+      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
+      setTopics([]);
+    } else {
+      setIsLoading(true);
+      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+      const q = query(topicsRef, orderBy("title"));
+      const topicsSnapshot = await getDocs(q);
+      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+      setIsLoading(false);
     }
+    handleNext();
+  };
+  
+  const handleSelectTopic = (topicId: string, topicName: string) => {
+    setSelection(prev => ({...prev, topicId, topicName}));
+    handleNext();
+  };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center p-4 pb-24">
-            
-            <style jsx global>{`
-                .header-font { font-family: 'Fredoka', sans-serif; }
-            `}</style>
+  const getGameUrl = () => {
+    const params = new URLSearchParams({
+      courseId: selection.courseId,
+      unitId: selection.unitId,
+      topicId: selection.topicId,
+    });
+    return `/teacher/smartboard/kavram-duellosu/oyun?${params.toString()}`;
+  };
 
-            <div className="w-full max-w-3xl flex justify-between items-center bg-white p-4 rounded-xl shadow-md mb-6">
-                <div className="flex items-center gap-2">
-                    <span className="text-2xl">🏆</span>
-                    <div>
-                        <p className="text-xs text-gray-500 font-bold">PUAN</p>
-                        <p className="text-2xl font-bold text-indigo-600 header-font">{score}</p>
-                    </div>
-                </div>
-                <div><h1 className="text-xl font-bold text-gray-700 hidden md:block header-font">Kavram Avcısı</h1></div>
-                <div className="text-right">
-                    <p className="text-xs text-gray-500 font-bold">SORU</p>
-                    <p className="text-xl font-bold text-gray-700">
-                        {gameState === 'playing' ? `${currentQIndex + 1}/${questions.length}` : '-/-'}
-                    </p>
-                </div>
-            </div>
+  const renderContent = () => {
+    if (isLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>;
+    
+    switch(currentStep) {
+        case 1:
+            return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
+        case 2:
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading}/>;
+        case 3:
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
+        case 4:
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
+        case 5:
+            return (
+              <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
+                 <h3 className="text-xl font-semibold font-headline text-center mb-4">Onay</h3>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
+                    <p><strong>Sınıf:</strong></p><p>{selection.className}</p>
+                    <p><strong>Ders:</strong></p><p>{selection.courseName}</p>
+                    <p><strong>Ünite:</strong></p><p>{selection.unitName}</p>
+                    <p><strong>Konu:</strong></p><p>{selection.topicName}</p>
+                 </div>
+              </div>
+            );
+        default:
+            return null;
+    }
+  };
 
-            {/* MAIN GAME AREA */}
-            <div className="w-full max-w-3xl relative">
-                
-                {gameState === 'playing' && questions.length > 0 && (
-                    <div>
-                        <div className="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden border border-gray-300 relative">
-                            <div 
-                                className={`h-full timer-bar transition-all duration-1000 linear ${timeLeft > 10 ? 'bg-green-500' : timeLeft > 5 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                                style={{ width: `${(timeLeft / 15) * 100}%` }}
-                            ></div>
-                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-600">
-                                {timeLeft} sn
-                            </div>
-                        </div>
-
-                        <div className="bg-white p-8 rounded-2xl shadow-lg mb-6 min-h-[160px] flex flex-col justify-center items-center text-center relative border-l-8 border-indigo-500">
-                            
-                            <div className="absolute top-3 right-3 flex gap-1">
-                                {[0, 1].map(i => (
-                                    <span key={i} className={`text-xl ${i < (2 - wrongGuesses) ? 'opacity-100' : 'opacity-20 grayscale'}`}>
-                                        ❤️
-                                    </span>
-                                ))}
-                            </div>
-
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed">
-                                {questions[currentQIndex]?.question}
-                            </h3>
-                            
-                            {feedbackMsg && (
-                                <div className={`mt-4 font-bold py-1 px-4 rounded-full animate-pulse ${feedbackMsg.includes('Doğru') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                    {feedbackMsg}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {questions[currentQIndex]?.options.map((option, index) => {
-                                let btnStyle = "py-8 rounded-xl font-bold text-xl shadow-md transition-all transform active:scale-95 border-b-4 ";
-                                
-                                if (correctCard === option) {
-                                    btnStyle += "bg-green-500 border-green-700 text-white scale-105 ring-4 ring-green-200";
-                                } else if (disabledCards.includes(option)) {
-                                    btnStyle += "bg-red-100 border-red-200 text-red-300 cursor-not-allowed";
-                                } else {
-                                    btnStyle += "bg-white border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-300 hover:-translate-y-1";
-                                }
-
-                                return (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleCardClick(option)}
-                                        className={btnStyle}
-                                        disabled={disabledCards.includes(option) || correctCard !== null || isRoundOver}
-                                    >
-                                        {option}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {isRoundOver && (
-                            <div className="fixed bottom-8 left-0 right-0 flex justify-center z-50 animate-bounce-in">
-                                <button
-                                    onClick={nextQuestion}
-                                    className="px-10 py-4 bg-green-500 text-white text-xl font-bold rounded-full shadow-2xl hover:bg-green-600 transform hover:scale-110 transition-all border-4 border-green-200 flex items-center gap-2"
-                                >
-                                    {currentQIndex + 1 < questions.length ? 'SIRADAKİ SORU ➔' : 'BİTİR'}
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-            
-            <div className="mt-10 text-center opacity-40 text-xs text-gray-500">
-                {searchParams.get('courseName')} - {searchParams.get('topicName')}
-            </div>
+  return (
+    <div className="container mx-auto p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold font-headline">Kavram Yarışması Kurulumu</h1>
+          <p className="text-muted-foreground">Yarışmayı başlatmak için adımları takip edin.</p>
         </div>
-    );
+        <div className="flex justify-center items-center mb-8 px-4">
+          <ol className="flex items-center w-full max-w-lg">
+            {steps.map((step, index) => (
+              <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-border after:border-2 after:inline-block": index !== steps.length - 1 })}>
+                <span className={cn(
+                  "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
+                  currentStep > step.id ? "bg-primary text-primary-foreground" :
+                  currentStep === step.id ? "bg-accent text-accent-foreground scale-110" :
+                  "bg-muted text-muted-foreground")}>{step.icon}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <Card className="min-h-[400px]">
+          <CardHeader>
+            <CardTitle>{steps.find(s => s.id === currentStep)?.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="min-h-[250px] flex justify-center items-center">
+            {renderContent()}
+          </CardContent>
+          <CardFooter className="flex justify-between pt-6">
+            {currentStep === 1 ? (
+                <Button asChild variant="outline">
+                    <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                </Button>
+            ) : (
+                <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
+            )}
+            {currentStep < steps.length ? (
+              <Button onClick={handleNext} disabled={
+                  (currentStep === 1 && !selection.classId) ||
+                  (currentStep === 2 && !selection.courseId) ||
+                  (currentStep === 3 && !selection.unitId) ||
+                  (currentStep === 4 && !selection.topicId)
+              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
+            ) : (
+              <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
+                <Link href={getGameUrl()}>
+                  Yarışmayı Başlat
+                </Link>
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
 }

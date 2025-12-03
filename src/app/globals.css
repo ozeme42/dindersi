@@ -316,8 +316,9 @@
     to { opacity: 1; transform: translateY(0); }
 }
 @keyframes bounce-infographic {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
 }
 
 .animate-fade-in-slow { animation: fadeIn 1s ease-out forwards; }
@@ -346,22 +347,3 @@
   100% { transform: rotate(0deg); }
 }
 .swing-animation { transform-origin: 140px 20px; animation: swing 3s ease-in-out infinite; }
-
-
-@keyframes bounce-in {
-  0% {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  70% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.4s ease-out forwards;
-}

@@ -119,10 +119,9 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
     };
     
     const nextQuestion = () => {
-        // Reset state BEFORE changing index to prevent flash of old state
-        resetTurn();
         if (currentQIndex + 1 < questions.length) {
             setCurrentQIndex(prev => prev + 1);
+            resetTurn();
         } else {
             endGame();
         }
@@ -153,6 +152,8 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
     const restartGame = () => {
         setScore(0);
         setGameState('start');
+        setRotation(0);
+        setCoinSide(null);
         setIsSaving(false);
     };
     
@@ -161,7 +162,7 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
              <div className="flex h-screen items-center justify-center p-4">
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
                     <strong className="font-bold">Hata! </strong>
-                    <span className="block sm:inline ml-2">{error}</span>
+                    <span className="block sm:inline">{error}</span>
                      <div className="mt-4">
                         <Button asChild variant="outline">
                             <Link href="/student/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
@@ -169,7 +170,7 @@ export function KavramYarismaClientPage({ initialQuestions, initialError }: { in
                     </div>
                 </div>
             </div>
-         )
+        )
     }
 
     if (gameState === 'start') {
