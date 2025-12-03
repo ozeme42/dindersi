@@ -206,15 +206,12 @@ export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time'
 export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], weekly: HallOfFamePeriod[], monthly: HallOfFamePeriod[] }> {
     noStore();
 
-    // Trigger daily prize check
     await awardDailyPrizes();
 
-    // --- Get all student profiles at once ---
     const usersSnapshot = await getDocs(query(collection(db, 'users'), where("role", "==", "student")));
     const allStudents = usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const studentsMap = new Map(allStudents.map(s => [s.uid, s]));
     
-    // --- Daily Winners ---
     const dailyWinners: HallOfFamePeriod[] = [];
     const dailyPrizesQuery = query(collection(db, 'dailyPrizes'), orderBy('timestamp', 'desc'), limit(7));
     const dailyPrizesSnapshot = await getDocs(dailyPrizesQuery);
@@ -222,10 +219,18 @@ export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], 
     for (const doc of dailyPrizesSnapshot.docs) {
         const data = doc.data();
         const winnersData = data.winners || [];
-        const leaderboard: LeaderboardEntry[] = winnersData.map((winner: any) => {
-            const student = studentsMap.get(winner.userId);
-            return student ? { ...student, score: winner.score } : null;
-        }).filter((w: any): w is LeaderboardEntry => w !== null);
+        
+        const winnerUids = winnersData.map((winner: any) => winner.userId);
+        if (winnerUids.length === 0) continue;
+
+        const winnersProfiles = allStudents.filter(s => winnerUids.includes(s.uid));
+        const leaderboard: LeaderboardEntry[] = winnersProfiles.map((profile) => {
+             const winnerData = winnersData.find((w:any) => w.userId === profile.uid);
+             return {
+                 ...profile,
+                 score: winnerData.score || 0
+             }
+        }).sort((a, b) => b.score - a.score);
         
         if(leaderboard.length > 0) {
             dailyWinners.push({
@@ -235,12 +240,9 @@ export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], 
         }
     }
 
-
-    // --- Weekly and Monthly Winners ---
     const now = new Date();
     const startDate = subMonths(now, 6);
     
-    // --- Weekly Winners ---
     const weeklyWinners: HallOfFamePeriod[] = [];
     const weeks = eachWeekOfInterval({ start: startDate, end: now }, { weekStartsOn: 1 });
     
@@ -281,7 +283,6 @@ export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], 
         }
     }
     
-    // --- Monthly Winners ---
     const monthlyWinners: HallOfFamePeriod[] = [];
     const months = eachMonthOfInterval({ start: startDate, end: now });
 
@@ -451,7 +452,3 @@ export async function deleteAnnouncement(id: string): Promise<{ success: boolean
         return { success: false, error: "Duyuru silinemedi." };
     }
 }
-
-    
-
-    

@@ -111,6 +111,36 @@ const Podium = ({ winners }: { winners: UserProfile[] }) => {
     );
 };
 
+const LeaderboardRow = ({ user, index }: { user: UserProfile, index: number }) => (
+    <div 
+        key={user.uid} 
+        className="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all hover:scale-[1.01] hover:shadow-lg hover:border-indigo-500/30"
+    >
+        <div className="w-8 flex justify-center">
+            <div className={cn(
+                "w-8 h-8 flex items-center justify-center rounded-full font-mono font-bold text-sm",
+                index === 0 ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/50" :
+                index === 1 ? "bg-slate-400 text-black shadow-lg shadow-slate-400/50" :
+                index === 2 ? "bg-orange-600 text-white shadow-lg shadow-orange-600/50" :
+                "bg-white/5 text-slate-500 group-hover:text-white"
+            )}>
+                {index + 1}
+            </div>
+        </div>
+        <UserAvatar user={user} className="h-10 w-10 text-sm shrink-0" />
+        <div className="flex-grow min-w-0">
+            <div className="font-bold text-slate-200 group-hover:text-white transition-colors truncate">{user.displayName}</div>
+            <div className="text-xs text-slate-500">{user.class}</div>
+        </div>
+        <div className="text-right">
+            <div className="font-mono font-bold text-indigo-300 group-hover:text-indigo-200 text-lg">
+                {(user.score || 0).toLocaleString()}
+            </div>
+            <div className="text-[10px] text-slate-600 uppercase tracking-wide">Puan</div>
+        </div>
+    </div>
+);
+
 
 // --- TAB COMPONENTS ---
 
@@ -164,39 +194,23 @@ function CurrentLeaderboardTab() {
         }
         
         if (filter === 'all-time') {
-            return <Podium winners={filteredUsers.slice(0, 3)} />;
+            return (
+                <div className="space-y-8">
+                    <Podium winners={filteredUsers.slice(0, 3)} />
+                    <div className="space-y-2 pt-8">
+                        <h3 className="text-lg font-bold text-center text-slate-400 mb-4">Tam Sıralama</h3>
+                        {filteredUsers.slice(3).map((user, index) => (
+                           <LeaderboardRow user={user} index={index + 3} key={user.uid} />
+                        ))}
+                    </div>
+                </div>
+            );
         }
 
         return (
             <div className="space-y-2">
                 {filteredUsers.map((user, index) => (
-                    <div 
-                        key={user.uid} 
-                        className="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all hover:scale-[1.01] hover:shadow-lg hover:border-indigo-500/30"
-                    >
-                        <div className="w-8 flex justify-center">
-                            <div className={cn(
-                                "w-8 h-8 flex items-center justify-center rounded-full font-mono font-bold text-sm",
-                                index === 0 ? "bg-yellow-500 text-black shadow-lg shadow-yellow-500/50" :
-                                index === 1 ? "bg-slate-400 text-black shadow-lg shadow-slate-400/50" :
-                                index === 2 ? "bg-orange-600 text-white shadow-lg shadow-orange-600/50" :
-                                "bg-white/5 text-slate-500 group-hover:text-white"
-                            )}>
-                                {index + 1}
-                            </div>
-                        </div>
-                        <UserAvatar user={user} className="h-10 w-10 text-sm shrink-0" />
-                        <div className="flex-grow min-w-0">
-                            <div className="font-bold text-slate-200 group-hover:text-white transition-colors truncate">{user.displayName}</div>
-                            <div className="text-xs text-slate-500">{user.class}</div>
-                        </div>
-                        <div className="text-right">
-                            <div className="font-mono font-bold text-indigo-300 group-hover:text-indigo-200 text-lg">
-                                {(user.score || 0).toLocaleString()}
-                            </div>
-                            <div className="text-[10px] text-slate-600 uppercase tracking-wide">Puan</div>
-                        </div>
-                    </div>
+                   <LeaderboardRow user={user} index={index} key={user.uid} />
                 ))}
             </div>
         );
@@ -224,18 +238,16 @@ function CurrentLeaderboardTab() {
                     ))}
                 </div>
                 
-                {filter !== 'all-time' && (
-                    <div className="relative w-full sm:w-64">
-                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                        <input 
-                            type="text" 
-                            placeholder="Öğrenci ara..." 
-                            className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                )}
+                <div className="relative w-full sm:w-64">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                    <input 
+                        type="text" 
+                        placeholder="Öğrenci ara..." 
+                        className="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
             </div>
 
             {renderContent()}
