@@ -1,11 +1,10 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, Timestamp, orderBy, addDoc, serverTimestamp, deleteDoc, writeBatch, getDoc, setDoc, increment, limit, runTransaction, doc, documentId } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { UserProfile, ScoreEvent, Announcement } from "@/lib/types";
-import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachWeekOfInterval, eachMonthOfInterval, subMonths, startOfDay, endOfDay, subDays, format } from 'date-fns';
+import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachWeekOfInterval, eachMonthOfInterval, subMonths, startOfDay, endOfDay, subDays, format, startOfToday, endOfToday, subWeeks } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
 
@@ -127,15 +126,38 @@ async function awardDailyPrizes() {
     }
 }
 
-export async function getLiveLeaderboard(): Promise<LeaderboardEntry[]> {
+export async function getLiveLeaderboard(period: 'daily' | 'weekly' | 'all-time' = 'daily'): Promise<LeaderboardEntry[]> {
     noStore();
-    const todayStart = startOfDay(new Date());
-    const todayEnd = endOfDay(new Date());
+
+    if (period === 'all-time') {
+        const usersQuery = query(
+            collection(db, 'users'), 
+            where('role', '==', 'student'), 
+            orderBy('score', 'desc'), 
+            limit(100)
+        );
+        const usersSnapshot = await getDocs(usersQuery);
+        const leaderboard = usersSnapshot.docs.map(doc => ({
+            ...doc.data(),
+            uid: doc.id,
+            score: doc.data().score || 0
+        } as LeaderboardEntry));
+        return JSON.parse(JSON.stringify(leaderboard));
+    }
+
+    let startDate: Date;
+    const now = new Date();
+
+    if (period === 'daily') {
+        startDate = startOfToday();
+    } else { // weekly
+        startDate = startOfWeek(now, { weekStartsOn: 1 });
+    }
 
     const eventsQuery = query(
         collection(db, 'scoreEvents'),
-        where('timestamp', '>=', Timestamp.fromDate(todayStart)),
-        where('timestamp', '<=', Timestamp.fromDate(todayEnd))
+        where('timestamp', '>=', Timestamp.fromDate(startDate)),
+        where('timestamp', '<=', Timestamp.fromDate(now))
     );
 
     const eventsSnapshot = await getDocs(eventsQuery);
@@ -424,3 +446,5 @@ export async function deleteAnnouncement(id: string): Promise<{ success: boolean
         return { success: false, error: "Duyuru silinemedi." };
     }
 }
+
+    

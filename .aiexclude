@@ -1,3 +1,4 @@
 node_modules/
 .next/
 src/app/student
+src/app/teacher

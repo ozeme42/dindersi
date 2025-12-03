@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     Crown, Award, Trophy, Users, List, Flame, Search, 
-    Calendar as CalendarIcon, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2
+    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,8 +13,6 @@ import Link from 'next/link';
 import { AppHeader } from "@/components/app-header";
 import { getHallOfFameData, getLiveLeaderboard, getGradeLeaderboard, getBranchLeaderboard, HallOfFamePeriod, ClassLeaderboardEntry } from './actions';
 import type { UserProfile } from "@/lib/types";
-import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
 
 // --- UI COMPONENTS ---
 
@@ -28,32 +26,34 @@ const UserAvatar = ({ name, className }: { name: string, className?: string }) =
 
 // 1. CURRENT LEADERBOARD
 function CurrentLeaderboardTab() {
-    const [filter, setFilter] = useState<'daily' | 'all'>('daily');
+    const [filter, setFilter] = useState<'daily' | 'weekly' | 'all-time'>('daily');
     const [search, setSearch] = useState("");
     const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
-        // "all" filter is not implemented in actions, so we will use daily for both for now.
-        // A proper implementation would require a function to get all-time scores.
-        getLiveLeaderboard().then(data => {
-            if (filter === 'all') {
-                // Sorting by the main score for "all-time"
-                const allTime = data.sort((a,b) => (b.score || 0) - (a.score || 0));
-                 setLeaderboard(allTime);
-            } else {
-                 setLeaderboard(data);
-            }
-            setIsLoading(false);
-        });
+        setError(null);
+        getLiveLeaderboard(filter)
+            .then(data => {
+                setLeaderboard(data);
+            })
+            .catch(err => {
+                console.error("Error fetching leaderboard:", err);
+                setError("Sıralama verileri yüklenirken bir hata oluştu.");
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [filter]);
 
-    const users = useMemo(() => {
+    const filteredUsers = useMemo(() => {
         let data = [...leaderboard];
         if (search) {
             data = data.filter(u => u.displayName.toLowerCase().includes(search.toLowerCase()));
         }
+        // The score property is now dynamic based on the filter, so no extra sorting is needed here.
         return data;
     }, [search, leaderboard]);
 
@@ -62,7 +62,7 @@ function CurrentLeaderboardTab() {
             {/* FILTERS */}
             <div className="flex flex-col sm:flex-row gap-4 justify-between items-center bg-black/20 p-2 rounded-2xl border border-white/5">
                 <div className="flex bg-white/5 p-1 rounded-xl">
-                    {(['daily', 'all'] as const).map((f) => (
+                    {(['daily', 'weekly', 'all-time'] as const).map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
@@ -73,7 +73,7 @@ function CurrentLeaderboardTab() {
                                     : "text-slate-400 hover:text-white hover:bg-white/5"
                             )}
                         >
-                            {f === 'daily' ? 'Bugün' : 'Tümü'}
+                            {f === 'daily' ? 'Bugün' : f === 'weekly' ? 'Bu Hafta' : 'Tümü'}
                         </button>
                     ))}
                 </div>
@@ -90,14 +90,18 @@ function CurrentLeaderboardTab() {
                 </div>
             </div>
 
-            {/* FULL LIST */}
+            {/* CONTENT */}
              {isLoading ? (
                  <div className="flex justify-center items-center h-64">
                      <Loader2 className="h-8 w-8 animate-spin text-white" />
                  </div>
-            ) : (
+             ) : error ? (
+                <div className="text-center py-10 text-red-400 bg-red-900/20 rounded-lg">{error}</div>
+             ) : filteredUsers.length === 0 ? (
+                <div className="text-center py-10 text-slate-400 bg-black/20 rounded-lg">Bu periyot için gösterilecek veri yok.</div>
+             ) : (
                 <div className="space-y-2">
-                    {users.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                         <div 
                             key={user.uid} 
                             className="group flex items-center gap-4 p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all hover:scale-[1.01] hover:shadow-lg hover:border-indigo-500/30"
@@ -282,7 +286,7 @@ function HallOfFameTab() {
 
                         <div className="text-center">
                             <h2 className="text-xl font-bold text-white uppercase tracking-widest flex items-center gap-2 justify-center">
-                                <CalendarIcon className="h-4 w-4 text-amber-500" />
+                                <Calendar className="h-4 w-4 text-amber-500" />
                                 {currentPeriod.periodName}
                             </h2>
                             <p className="text-xs text-amber-500/70 font-mono mt-1">
@@ -414,31 +418,9 @@ export default function LeaderboardPage() {
         );
     }
     
-    const isTeacher = user.role === 'teacher' || user.role === 'superadmin';
-
-    // A simpler header for students, a more complex one (from previous implementation) for teachers
-    const PageHeader = () => {
-        if (isTeacher) {
-            // Re-using the full AppHeader for teachers
-            return <AppHeader />;
-        }
-        // Simplified header for students
-        return (
-            <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#1a0b2e]/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container flex h-16 items-center justify-between px-4">
-                    <div className="flex items-center gap-2 font-bold text-xl text-white">
-                        <Trophy className="h-6 w-6 text-amber-400" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">Liderlik Tablosu</span>
-                    </div>
-                    <Link href="/student" className="text-sm font-medium text-slate-300 hover:text-white">Geri Dön</Link>
-                </div>
-            </header>
-        );
-    };
-
     return (
         <div className="flex flex-col min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black text-white font-sans selection:bg-purple-500/30">
-            <PageHeader />
+            <AppHeader title="Şampiyonlar Arenası" />
             
             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 pb-24 md:pb-12">
                 
@@ -508,3 +490,5 @@ export default function LeaderboardPage() {
         </div>
     );
 }
+
+    
