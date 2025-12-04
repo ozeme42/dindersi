@@ -1,5 +1,5 @@
 
-'use client'; // This directive is added to resolve the ChunkLoadError
+'use client';
 
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
@@ -26,15 +26,13 @@ export default function RootLayout({
         <meta name="description" content="Değerler Oyunu - Eğlenerek Değerlerimizi Öğrenelim" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <div className="bg-gradient-to-br from-primary/10 via-blue-50/50 to-rose-100/50 dark:from-slate-900 dark:via-slate-800 dark:to-rose-950">
           <Providers>
               {children}
               <Toaster />
           </Providers>
-        </div>
       </body>
     </html>
   );
