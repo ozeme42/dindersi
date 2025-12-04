@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { MilyonerSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Trophy, Loader2 } from 'lucide-react';
 
-export default function MilyonerYarismasiPage() {
+function MilyonerYarismasiPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <MilyonerSetupClientPage />
+        <OyunKurulum 
+            gameName="Milyoner Yarışması"
+            gameIcon={Trophy}
+            gamePath="milyoner-yarismasi"
+        />
+    );
+}
+
+export default function MilyonerYarismasiSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <MilyonerYarismasiPage />
         </Suspense>
     );
 }

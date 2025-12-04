@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { CumleOlusturmaSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Shuffle, Loader2 } from 'lucide-react';
 
-export default function CumleOlusturmaPage() {
+function CumleOlusturmaPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <CumleOlusturmaSetupClientPage />
+        <OyunKurulum 
+            gameName="Cümle Oluşturma"
+            gameIcon={Shuffle}
+            gamePath="cumle-olusturma"
+        />
+    );
+}
+
+export default function CumleOlusturmaSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <CumleOlusturmaPage />
         </Suspense>
     );
 }

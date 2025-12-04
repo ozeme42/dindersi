@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { KelimeAviSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Search, Loader2 } from 'lucide-react';
 
-export default function KelimeAviSetupPage() {
+function KelimeAviPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <KelimeAviSetupClientPage />
+        <OyunKurulum 
+            gameName="Kelime Avı"
+            gameIcon={Search}
+            gamePath="kelime-avi"
+        />
+    );
+}
+
+export default function KelimeAviSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <KelimeAviPage />
         </Suspense>
     );
 }

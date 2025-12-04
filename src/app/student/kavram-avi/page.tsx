@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { KavramAviSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Crosshair, Loader2 } from 'lucide-react';
 
-export default function KavramAviPage() {
+function KavramAviPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <KavramAviSetupClientPage />
+        <OyunKurulum 
+            gameName="Kavram Avı"
+            gameIcon={Crosshair}
+            gamePath="kavram-avi"
+        />
+    );
+}
+
+export default function KavramAviSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <KavramAviPage />
         </Suspense>
     );
 }

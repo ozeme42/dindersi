@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { AcikUcluCevaplaSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Pencil, Loader2 } from 'lucide-react';
 
-export default function AcikUcluCevaplaPage() {
+function AcikUcluCevaplaPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <AcikUcluCevaplaSetupClientPage />
+        <OyunKurulum 
+            gameName="Açık Uçlu Cevapla"
+            gameIcon={Pencil}
+            gamePath="acik-uclu-cevapla"
+        />
+    );
+}
+
+export default function AcikUcluCevaplaSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <AcikUcluCevaplaPage />
         </Suspense>
     );
 }

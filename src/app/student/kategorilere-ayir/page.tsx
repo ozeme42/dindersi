@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { KategorilereAyirSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { FolderKanban, Loader2 } from 'lucide-react';
 
-export default function KategorilereAyirPage() {
+function KategorilereAyirPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <KategorilereAyirSetupClientPage />
+        <OyunKurulum 
+            gameName="Kategorilere Ayır"
+            gameIcon={FolderKanban}
+            gamePath="kategorilere-ayir"
+        />
+    );
+}
+
+export default function KategorilereAyirSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <KategorilereAyirPage />
         </Suspense>
     );
 }

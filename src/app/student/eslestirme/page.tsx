@@ -1,13 +1,23 @@
-
 "use client";
 
-import { Suspense } from 'react';
-import { EslestirmeSetupClientPage } from './client-page';
+import React, { Suspense } from 'react';
+import OyunKurulum from '../oyun-kurulum/page';
+import { Puzzle, Loader2 } from 'lucide-react';
 
-export default function EslestirmePage() {
+function EslestirmePage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
-            <EslestirmeSetupClientPage />
+        <OyunKurulum 
+            gameName="Eşleştirme"
+            gameIcon={Puzzle}
+            gamePath="eslestirme"
+        />
+    );
+}
+
+export default function EslestirmeSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <EslestirmePage />
         </Suspense>
     );
 }
