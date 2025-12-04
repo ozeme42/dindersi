@@ -176,7 +176,7 @@
       @apply my-2;
   }
   .prose p {
-      @apply text-justify;
+      @apply text-left;
   }
 
   .dark .prose {
@@ -347,3 +347,5 @@
   100% { transform: rotate(0deg); }
 }
 .swing-animation { transform-origin: 140px 20px; animation: swing 3s ease-in-out infinite; }
+
+    
