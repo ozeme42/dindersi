@@ -1,21 +1,33 @@
 
-"use client";
+'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { Loader2, Info } from 'lucide-react';
-import { normalizeNameToEmailLocalPart } from '@/lib/utils';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import type { UserProfile } from '@/lib/types';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+
+// --- UI COMPONENTS ---
+
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn(
+        "backdrop-blur-xl bg-[#1a0b2e]/60 border-2 border-white/10 rounded-3xl shadow-2xl overflow-hidden relative transition-all duration-300",
+        className
+    )}>
+        {/* Top Glow Line */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50"></div>
+        {children}
+    </div>
+);
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,6 +38,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setLoginAttemptFailed(false);
 
     const formData = new FormData(e.currentTarget);
     const displayNameInput = (formData.get('display-name') as string).trim();
@@ -75,56 +88,115 @@ export default function LoginPage() {
                  toast({ title: "Giriş Hatası", description: "Ad Soyad veya şifre hatalı.", variant: "destructive" });
                  setLoginAttemptFailed(true);
              } else {
-                 toast({ title: "Giriş Hatası", description: error.message || "Giriş sırasında bilinmeyen bir hata oluştu.", variant: "destructive" });
+                 toast({ title: "Giriş Hatası", description: "Giriş sırasında bir hata oluştu.", variant: "destructive" });
              }
         }
 
     } catch (error) {
-        console.error("Login process error (Firestore lookup):", error);
-        toast({ title: "Beklenmedik Hata", description: "Giriş sırasında bir sorun oluştu. Lütfen tekrar deneyin.", variant: "destructive" });
+        console.error("Login process error:", error);
+        toast({ title: "Beklenmedik Hata", description: "Giriş sırasında bir sorun oluştu.", variant: "destructive" });
     } finally {
         setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-primary via-blue-700 to-rose-500">
-      <Card className="mx-auto max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl font-headline">Giriş Yap</CardTitle>
-          <CardDescription>Hesabınıza erişmek için bilgilerinizi girin</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loginAttemptFailed && (
-            <Alert className="mb-4">
-              <Info className="h-4 w-4" />
-              <AlertTitle>Giriş İpucu</AlertTitle>
-              <AlertDescription>
-                  Kullanıcı adınızı hatalı girmiş olabilirsiniz. Lütfen liderlik tablosundan adınızı kontrol edip tekrar deneyiniz.
-              </AlertDescription>
-            </Alert>
-          )}
-          <form onSubmit={handleSubmit} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="display-name">Ad Soyad</Label>
-              <Input id="display-name" name="display-name" type="text" placeholder="Adınız ve Soyadınız" />
+    <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black flex items-center justify-center p-4 font-sans text-white">
+      
+      <div className="w-full max-w-md animate-in zoom-in-95 duration-500">
+        
+        {/* LOGO AREA */}
+        <div className="text-center mb-8">
+            <div className="bg-cyan-500/20 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 ring-4 ring-cyan-500/10 shadow-[0_0_30px_rgba(6,182,212,0.4)] rotate-3">
+                <Gamepad2 className="h-10 w-10 text-cyan-400" />
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Şifre</Label>
-              </div>
-              <Input id="password" name="password" type="password" />
-            </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Giriş Yap
-            </Button>
-            <Button variant="outline" className="w-full" asChild>
-                <Link href="/">Ana Sayfaya Dön</Link>
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+            <h1 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-white drop-shadow-sm">
+                OYUNA GİRİŞ
+            </h1>
+            <p className="text-indigo-200/60 font-medium mt-2">Maceraya kaldığın yerden devam et.</p>
+        </div>
+
+        <GlassCard className="p-8">
+            
+            {/* ALERT BOX */}
+            {loginAttemptFailed && (
+                <div className="mb-6 bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3 animate-in slide-in-from-top-2">
+                    <Info className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                    <div>
+                        <h4 className="font-bold text-red-300 text-sm">Giriş Başarısız</h4>
+                        <p className="text-xs text-red-200/70 mt-1">
+                            Kullanıcı adınızı veya şifrenizi kontrol edin. Liderlik tablosundan tam isminize bakabilirsiniz.
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                
+                {/* USERNAME INPUT */}
+                <div className="space-y-2 group">
+                    <Label htmlFor="display-name" className="text-xs font-bold text-indigo-300 uppercase tracking-wider ml-1">Ad Soyad</Label>
+                    <div className="relative">
+                        <User className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
+                        <Input 
+                            id="display-name" 
+                            name="display-name" 
+                            type="text" 
+                            placeholder="Adınız ve Soyadınız" 
+                            className="pl-10 bg-black/20 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500 transition-all"
+                        />
+                    </div>
+                </div>
+
+                {/* PASSWORD INPUT */}
+                <div className="space-y-2 group">
+                    <Label htmlFor="password" className="text-xs font-bold text-indigo-300 uppercase tracking-wider ml-1">Şifre</Label>
+                    <div className="relative">
+                        <Lock className="absolute left-3 top-3 h-5 w-5 text-indigo-400 group-focus-within:text-cyan-400 transition-colors" />
+                        <Input 
+                            id="password" 
+                            name="password" 
+                            type="password" 
+                            className="pl-10 bg-black/20 border-white/10 text-white h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500 transition-all"
+                        />
+                    </div>
+                </div>
+
+                {/* SUBMIT BUTTON */}
+                <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-cyan-900/20 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all"
+                >
+                    {isLoading ? (
+                        <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Yükleniyor...
+                        </>
+                    ) : (
+                        <>
+                            <LogIn className="mr-2 h-5 w-5" /> Başla
+                        </>
+                    )}
+                </Button>
+
+                {/* BACK LINK */}
+                <div className="pt-2 text-center">
+                    <Button variant="link" asChild className="text-indigo-300 hover:text-white transition-colors">
+                        <Link href="/" className="flex items-center gap-2">
+                            <ArrowLeft className="h-4 w-4" /> Ana Sayfaya Dön
+                        </Link>
+                    </Button>
+                </div>
+
+            </form>
+        </GlassCard>
+        
+        {/* Footer Text */}
+        <p className="text-center text-indigo-300/30 text-xs mt-8 font-mono">
+            PRESS START TO BEGIN
+        </p>
+
+      </div>
     </div>
   );
 }
