@@ -32,7 +32,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
 
         for (const course of allCoursesData) {
             const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
-            const units: PublicCourse['units'] = [];
+            const unitsWithContent: PublicCourse['units'] = [];
 
             for (const unitDoc of unitsSnap.docs) {
                 const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
@@ -44,7 +44,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                 }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); // Only include topics with content
 
                 if (topics.length > 0) {
-                     units.push({
+                     unitsWithContent.push({
                         id: unitDoc.id,
                         title: unitDoc.data().title,
                         topics
@@ -52,12 +52,12 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                 }
             }
 
-            if (units.length > 0) {
+            if (unitsWithContent.length > 0) {
                  const enrichedCourse: PublicCourse = {
                     id: course.id,
                     title: course.title,
                     classId: course.classId,
-                    units: units
+                    units: unitsWithContent
                 };
                 coursesWithContent.push(enrichedCourse);
             }
