@@ -32,7 +32,6 @@ const activityTypes = [
   { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
   { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
   { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
   { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-blue-500 hover:bg-blue-600 text-white" },
   { href: '/student/deneme', label: 'Deneme Sınavı', icon: ClipboardCheck, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
 ];

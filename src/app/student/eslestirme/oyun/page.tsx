@@ -1,19 +1,27 @@
-
-"use client";
+'use client';
 
 import { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getMatchingGameAction, submitMatchingGameScoreAction, type MatchItem } from '../actions';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, Home, ArrowLeft } from 'lucide-react';
-import { useAuth } from '@/context/auth-context';
-import { playSound } from '@/lib/audio-service';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Loader2, Repeat, CheckCircle2, Save } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Home, Repeat, Trophy, Puzzle, Check, X, Link as LinkIcon, Zap, Ghost } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
+
+// --- RENK PALETİ ---
+const PAIR_COLORS = [
+    "bg-emerald-500/20 border-emerald-500 text-emerald-300",
+    "bg-blue-500/20 border-blue-500 text-blue-300",
+    "bg-rose-500/20 border-rose-500 text-rose-300",
+    "bg-amber-500/20 border-amber-500 text-amber-300",
+    "bg-violet-500/20 border-violet-500 text-violet-300",
+    "bg-cyan-500/20 border-cyan-500 text-cyan-300",
+    "bg-fuchsia-500/20 border-fuchsia-500 text-fuchsia-300",
+    "bg-lime-500/20 border-lime-500 text-lime-300",
+];
 
 type CardItem = {
     id: number;
@@ -26,49 +34,76 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     return array.slice().sort(() => Math.random() - 0.5);
 };
 
-const colorClasses = [
-    'bg-green-500 border-green-700',
-    'bg-blue-500 border-blue-700',
-    'bg-purple-500 border-purple-700',
-    'bg-pink-500 border-pink-700',
-    'bg-orange-500 border-orange-700',
-    'bg-teal-500 border-teal-700',
-    'bg-indigo-500 border-indigo-700',
-];
+// --- GÖRSEL BİLEŞENLER ---
 
-const MatchingGame = () => {
-    const { user } = useAuth();
-    const router = useRouter();
+const GameBackground = () => (
+    <div className="fixed inset-0 pointer-events-none z-0 bg-slate-950 overflow-hidden">
+        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-violet-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[40%] right-[30%] w-[30%] h-[30%] bg-purple-500/5 rounded-full blur-[100px]" />
+    </div>
+);
+
+const GameHUD = ({ score, matched, total }: { score: number, matched: number, total: number }) => {
+    return (
+        <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6 pointer-events-none">
+            <div className="max-w-6xl mx-auto flex justify-between items-start pointer-events-auto">
+                <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-indigo-500/30 px-4 py-2 rounded-full shadow-lg shadow-indigo-500/10">
+                    <Trophy className="w-5 h-5 lg:w-6 lg:h-6 text-indigo-400 animate-bounce" />
+                    <span className="text-xl lg:text-2xl font-black text-indigo-100 font-mono">
+                        {score}
+                    </span>
+                </div>
+                
+                <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-full">
+                    <Puzzle className="w-4 h-4 lg:w-5 lg:h-5 text-slate-400" />
+                    <span className="text-sm lg:text-base text-slate-400 font-bold uppercase tracking-wider">Eşleşen:</span>
+                    <span className="text-xl lg:text-2xl font-black text-white font-mono">
+                        {matched}/{total}
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- ANA OYUN ---
+
+function MatchingGame() {
     const searchParams = useSearchParams();
+    const router = useRouter();
+    const { user } = useAuth();
     const { toast } = useToast();
     
+    // State
     const [concepts, setConcepts] = useState<CardItem[]>([]);
     const [definitions, setDefinitions] = useState<CardItem[]>([]);
     
     const [choiceOne, setChoiceOne] = useState<CardItem | null>(null);
     const [choiceTwo, setChoiceTwo] = useState<CardItem | null>(null);
-
-    const [matchedPairs, setMatchedPairs] = useState<number[]>([]);
+    
+    const [matchedPairs, setMatchedPairs] = useState<number[]>([]); 
     const [disabled, setDisabled] = useState(false);
-
-    const [gameState, setGameState] = useState<'playing' | 'finished'>('playing');
-    const [isLoading, setIsLoading] = useState(true);
+    
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
     const [error, setError] = useState<string | null>(null);
     const [score, setScore] = useState(0);
     const [isSaving, setIsSaving] = useState(false);
-    
-    const isStatic = searchParams.get('static') === 'true';
+    const [shakeIds, setShakeIds] = useState<number[]>([]);
+
     const gameContext = `Eşleştirme - ${searchParams.get('topicName')}`;
 
     const resetTurn = useCallback(() => {
         setChoiceOne(null);
         setChoiceTwo(null);
         setDisabled(false);
+        setShakeIds([]);
     }, []);
 
+    // Veri Çekme
     useEffect(() => {
         const fetchGameData = async () => {
-            setIsLoading(true);
+            setGameState('loading');
             const params = {
                 courseId: searchParams.get('courseId') || undefined,
                 unitId: searchParams.get('unitId') || undefined,
@@ -78,213 +113,259 @@ const MatchingGame = () => {
 
             if (error || !items || items.length === 0) {
                 setError(error || "Bu konu için uygun veri bulunamadı.");
-                setIsLoading(false);
+                setGameState('error');
                 return;
             }
             
-            const concepts = items.map((item, i) => ({ 
+            const conceptsData = items.map((item, i) => ({ 
                 id: i, 
                 pairId: i, 
-                type: 'concept', 
+                type: 'concept' as const, 
                 text: item.concept,
             }));
-            const definitions = shuffleArray(items.map((item, i) => ({ 
+            
+            const definitionsData = shuffleArray(items.map((item, i) => ({ 
                 id: i + items.length, 
                 pairId: i, 
-                type: 'definition', 
+                type: 'definition' as const, 
                 text: item.definition,
             })));
 
-            setConcepts(concepts);
-            setDefinitions(definitions);
+            setConcepts(conceptsData);
+            setDefinitions(definitionsData);
             resetTurn();
             setMatchedPairs([]);
             setScore(0);
-            setIsLoading(false);
+            setGameState('playing');
         };
 
         fetchGameData();
     }, [searchParams, resetTurn]);
 
-
+    // Kart Seçimi
     const handleChoice = (card: CardItem) => {
         if (disabled || matchedPairs.includes(card.pairId)) return;
-        choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+        if (choiceOne && choiceOne.id === card.id) return;
+        
+        playSound('pop');
+
+        if (!choiceOne) {
+            setChoiceOne(card);
+        } else if (!choiceTwo) {
+            setChoiceTwo(card);
+        }
     };
 
+    // Eşleşme Kontrolü
     useEffect(() => {
         if (choiceOne && choiceTwo) {
             setDisabled(true);
+            
             if (choiceOne.pairId === choiceTwo.pairId) {
-                // Correct match
                 playSound('correct');
                 setScore(prev => prev + 25);
                 setMatchedPairs(prev => [...prev, choiceOne.pairId]);
-                setTimeout(resetTurn, 800);
+                setTimeout(() => resetTurn(), 500);
             } else {
-                // Incorrect match
                 playSound('incorrect');
-                setTimeout(resetTurn, 1000);
+                setShakeIds([choiceOne.id, choiceTwo.id]);
+                setTimeout(() => resetTurn(), 800);
             }
         }
     }, [choiceOne, choiceTwo, resetTurn]);
 
-
-     useEffect(() => {
-        if (concepts.length > 0 && matchedPairs.length === concepts.length) {
-            setGameState('finished');
+    // Bitiş Kontrolü
+    useEffect(() => {
+        if (gameState === 'playing' && concepts.length > 0 && matchedPairs.length === concepts.length) {
+            setTimeout(() => {
+                setGameState('finished');
+                playSound('win');
+            }, 500);
         }
-    }, [matchedPairs, concepts]);
+    }, [matchedPairs, concepts, gameState]);
 
-
+    // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (isSaving || !user || score <= 0) {
-             router.push('/student/activities');
-             return;
-        };
-
+        if (!user || score <= 0 || isSaving) {
+            router.push('/student/activities');
+            return;
+        }
         setIsSaving(true);
         const result = await submitMatchingGameScoreAction(user.uid, score, gameContext);
-        
         if (result.success) {
             toast({ title: 'Başarılı!', description: 'Puanın başarıyla kaydedildi.' });
+            router.push('/student/activities');
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+            setIsSaving(false);
         }
-        setIsSaving(false);
-        router.push('/student/activities');
     };
-    
-    const restartGame = () => {
-        setScore(0);
-        setGameState('playing');
-        setMatchedPairs([]);
-        resetTurn();
-        setDefinitions(shuffleArray(definitions));
-    };
-    
-    const backUrl = '/student/eslestirme';
 
-    if (isLoading) {
-        return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>;
+    // --- RENDER ---
+
+    if (gameState === 'loading') {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+                <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
+            </div>
+        );
     }
 
     if (error) {
         return (
-            <div className="flex h-screen w-full items-center justify-center p-4">
-                 <Alert variant="destructive" className="max-w-lg">
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertTitle>Hata!</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                    <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                        </Button>
-                    </div>
-                </Alert>
+             <div className="flex h-screen w-full items-center justify-center p-4 bg-slate-950">
+                 <div className="text-center space-y-4 max-w-md bg-indigo-950/50 p-6 rounded-3xl border border-indigo-500/30">
+                    <Ghost className="h-16 w-16 text-indigo-500 mx-auto" />
+                    <h3 className="text-xl font-bold text-indigo-100">Oyun Başlatılamadı</h3>
+                    <p className="text-indigo-200/70">{error}</p>
+                     <Button asChild variant="secondary" className="w-full">
+                        <Link href="/student/eslestirme">Geri Dön</Link>
+                    </Button>
+                </div>
             </div>
         );
     }
-    
+
+    // --- BİTİŞ EKRANI ---
     if (gameState === 'finished') {
         return (
-             <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-bold">Tebrikler!</CardTitle>
-                        <CardDescription>Eşleştirme oyununu tamamladın.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto mb-4" />
-                        <p className="text-xl">Kazandığın Puan: <span className="font-bold text-primary">{score}</span></p>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Button className="w-full" onClick={handleSaveAndExit} disabled={isSaving || score <= 0}>
-                            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null}
-                            Puanı Kaydet ve Çık
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+                <GameBackground />
+                <div className="relative z-20 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
+                    <div className="relative inline-block">
+                        <div className="absolute inset-0 bg-indigo-500/20 rounded-full blur-2xl animate-pulse" />
+                        <Trophy className="w-32 h-32 text-indigo-400 mx-auto drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tight">TÜMÜ EŞLEŞTİ!</h1>
+                        <p className="text-slate-400 text-lg">Toplam Skorun</p>
+                    </div>
+                    
+                    {/* SKOR KARTI - Düzeltildi */}
+                    <div className="bg-slate-900/80 border border-indigo-500/30 rounded-3xl p-8 backdrop-blur-xl shadow-2xl">
+                        <div className="text-7xl font-black text-indigo-400 drop-shadow-lg">
+                            {score}
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <Button 
+                            onClick={handleSaveAndExit} 
+                            size="lg" 
+                            disabled={isSaving}
+                            className="w-full h-16 text-xl font-bold rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-xl shadow-indigo-500/20 transition-all hover:scale-105"
+                        >
+                            {isSaving ? <Loader2 className="mr-3 h-6 w-6 animate-spin" /> : <Save className="mr-3 h-6 w-6" />}
+                            PUANI KAYDET VE ÇIK
                         </Button>
-                        <Button className="w-full" variant="secondary" onClick={restartGame}><Repeat className="mr-2 h-4 w-4" /> Tekrar Oyna</Button>
-                    </CardFooter>
-                </Card>
+                        
+                        {/* Diğer seçenekler, ana menü vb. buraya eklenebilir eğer istenirse */}
+                        {/* Bu örnekte sadece tek buton istendiği varsayılmıştır ama esnektir */}
+                    </div>
+                </div>
             </div>
-        )
+        );
     }
 
-    const isCardSelected = (card: CardItem) => choiceOne?.id === card.id || choiceTwo?.id === card.id;
-    const isCardMatched = (card: CardItem) => matchedPairs.includes(card.pairId);
-
-    const getItemStyle = (card: CardItem, side: 'left' | 'right') => {
-        const isSelected = isCardSelected(card);
-        const isMatched = isCardMatched(card);
-
-        if (isMatched) {
-            return `opacity-20 cursor-not-allowed scale-95 ${colorClasses[card.pairId % colorClasses.length]} text-white`;
-        }
-        if (isSelected) {
-            return "ring-4 ring-blue-500 bg-blue-100 scale-105 z-10";
-        }
-        if (side === 'left') {
-            return `${colorClasses[card.id % colorClasses.length]} text-white`;
-        }
-        return "bg-background hover:bg-muted/80";
-    };
-
-
     return (
-         <div className="p-4 sm:p-8 max-w-6xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl font-bold text-center mb-2">Eşleştirme Oyunu</h1>
-            <p className="text-center text-muted-foreground mb-6">İlişkili kartlara tıklayarak eşleştirin.</p>
-            <div className="text-center mb-6 text-2xl font-bold text-primary">Puan: {score}</div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-start">
-                <div className="space-y-3">
-                    <h3 className="text-center font-semibold text-muted-foreground">KAVRAMLAR</h3>
-                    {concepts.map(item => (
-                        <Button 
-                            key={item.id}
-                            onClick={() => handleChoice(item)}
-                            disabled={isCardMatched(item) || disabled}
-                            variant="outline"
-                            className={cn(
-                                "h-auto w-full justify-start text-left whitespace-normal p-3 transition-all",
-                                "text-base md:text-lg",
-                                getItemStyle(item, 'left')
-                            )}
-                        >
-                           {item.text}
-                        </Button>
-                    ))}
-                </div>
+        <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col">
+            <GameBackground />
+            <GameHUD score={score} matched={matchedPairs.length} total={concepts.length} />
 
-                <div className="space-y-3">
-                    <h3 className="text-center font-semibold text-muted-foreground">TANIMLAR</h3>
-                    {definitions.map(item => (
-                         <Button 
-                            key={item.id}
-                            onClick={() => handleChoice(item)}
-                            disabled={isCardMatched(item) || disabled}
-                            variant="outline"
-                             className={cn(
-                                "h-auto w-full justify-start text-left whitespace-normal p-3 transition-all",
-                                "text-base md:text-lg",
-                                getItemStyle(item, 'right')
-                            )}
-                        >
-                           {item.text}
-                        </Button>
-                    ))}
+            <main className="flex-grow flex flex-col items-center justify-center p-4 lg:p-8 relative z-10 mt-16 lg:mt-12">
+                <div className="w-full max-w-7xl grid grid-cols-2 gap-4 lg:gap-12 h-full">
+                    
+                    {/* SOL SÜTUN: KAVRAMLAR */}
+                    <div className="flex flex-col gap-3 lg:gap-4">
+                        <div className="text-center mb-2">
+                            <span className="text-indigo-400 font-bold tracking-widest text-xs lg:text-sm uppercase bg-slate-900/50 px-3 py-1 rounded-full border border-indigo-500/30">Kavramlar</span>
+                        </div>
+                        {concepts.map((item) => {
+                            const isSelected = choiceOne?.id === item.id || choiceTwo?.id === item.id;
+                            const isMatched = matchedPairs.includes(item.pairId);
+                            const isShake = shakeIds.includes(item.id);
+                            
+                            const matchColor = isMatched ? PAIR_COLORS[item.pairId % PAIR_COLORS.length] : "";
+
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleChoice(item)}
+                                    disabled={isMatched || disabled}
+                                    className={cn(
+                                        "relative w-full min-h-[80px] lg:min-h-[100px] p-4 rounded-xl lg:rounded-2xl border-2 transition-all duration-300 flex items-center justify-center text-center",
+                                        "active:scale-95 touch-manipulation",
+                                        isShake && "animate-shake border-red-500/50 bg-red-900/20 text-red-200",
+                                        
+                                        // Normal
+                                        !isSelected && !isMatched && !isShake && "bg-slate-800/40 border-white/10 hover:bg-slate-800/60 hover:border-indigo-500/30 text-slate-300",
+                                        
+                                        // Seçili
+                                        isSelected && !isMatched && "bg-indigo-500/20 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.3)] text-indigo-100 z-10 scale-105",
+                                        
+                                        // Eşleşmiş
+                                        isMatched && cn("opacity-80 scale-95 border-l-4 font-bold shadow-none cursor-default", matchColor)
+                                    )}
+                                >
+                                    <span className="text-sm lg:text-xl font-bold">{item.text}</span>
+                                    {isMatched && <Check className="absolute top-2 right-2 w-4 h-4 opacity-50" />}
+                                    {isSelected && !isMatched && <Zap className="absolute top-2 right-2 w-4 h-4 text-indigo-400 animate-pulse" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* SAĞ SÜTUN: TANIMLAR */}
+                    <div className="flex flex-col gap-3 lg:gap-4">
+                        <div className="text-center mb-2">
+                            <span className="text-purple-400 font-bold tracking-widest text-xs lg:text-sm uppercase bg-slate-900/50 px-3 py-1 rounded-full border border-purple-500/30">Tanımlar</span>
+                        </div>
+                        {definitions.map((item) => {
+                            const isSelected = choiceOne?.id === item.id || choiceTwo?.id === item.id;
+                            const isMatched = matchedPairs.includes(item.pairId);
+                            const isShake = shakeIds.includes(item.id);
+                            
+                            const matchColor = isMatched ? PAIR_COLORS[item.pairId % PAIR_COLORS.length] : "";
+
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleChoice(item)}
+                                    disabled={isMatched || disabled}
+                                    className={cn(
+                                        "relative w-full min-h-[80px] lg:min-h-[100px] p-4 rounded-xl lg:rounded-2xl border-2 transition-all duration-300 flex items-center justify-center text-center",
+                                        "active:scale-95 touch-manipulation",
+                                        isShake && "animate-shake border-red-500/50 bg-red-900/20 text-red-200",
+                                        
+                                        // Normal
+                                        !isSelected && !isMatched && !isShake && "bg-slate-800/40 border-white/10 hover:bg-slate-800/60 hover:border-purple-500/30 text-slate-300",
+                                        
+                                        // Seçili
+                                        isSelected && !isMatched && "bg-purple-500/20 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)] text-purple-100 z-10 scale-105",
+                                        
+                                        // Eşleşmiş
+                                        isMatched && cn("opacity-80 scale-95 border-r-4 font-bold shadow-none cursor-default", matchColor)
+                                    )}
+                                >
+                                    <span className="text-xs lg:text-base font-medium leading-relaxed">{item.text}</span>
+                                    {isMatched && <Check className="absolute top-2 left-2 w-4 h-4 opacity-50" />}
+                                    {isSelected && !isMatched && <LinkIcon className="absolute top-2 left-2 w-4 h-4 text-purple-400 animate-pulse" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+
                 </div>
-            </div>
+            </main>
         </div>
     );
-};
+}
 
-const MatchingGamePage = () => {
+// --- WRAPPER ---
+export default function MatchingGamePage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>}>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>}>
             <MatchingGame />
         </Suspense>
     );
-};
-
-export default MatchingGamePage;
+}
