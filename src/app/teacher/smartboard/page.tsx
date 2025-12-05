@@ -1,69 +1,80 @@
 
 'use client';
 
-import { useState } from "react";
-import Link from 'next/link';
-import { Gamepad2, BrainCircuit, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link as LinkIcon, Coins, Pencil, ClipboardCheck } from 'lucide-react';
+import React, { Suspense } from 'react';
+import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/context/auth-context";
-import { Loader2 } from "lucide-react";
-import { AuthGuard } from "@/components/auth-guard";
+import { AuthGuard } from '@/components/auth-guard';
+import { Gamepad2, BrainCircuit, Users, MonitorPlay, Search, Crosshair, Puzzle, Shuffle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
-const smartboardGames = [
-  { href: '/teacher/smartboard/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "from-purple-500 to-purple-800 border-purple-500/50 text-purple-100 hover:shadow-purple-500/40" },
-  { href: '/teacher/smartboard/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "from-amber-500 to-amber-800 border-amber-500/50 text-amber-100 hover:shadow-amber-500/40" },
-  { href: '/teacher/smartboard/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "from-pink-500 to-pink-800 border-pink-500/50 text-pink-100 hover:shadow-pink-500/40" },
-  { href: '/teacher/smartboard/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "from-teal-500 to-teal-800 border-teal-500/50 text-teal-100 hover:shadow-teal-500/40" },
-  { href: '/teacher/smartboard/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "from-cyan-500 to-cyan-800 border-cyan-500/50 text-cyan-100 hover:shadow-cyan-500/40" },
-  { href: '/teacher/smartboard/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "from-indigo-500 to-indigo-800 border-indigo-500/50 text-indigo-100 hover:shadow-indigo-500/40" },
-  { href: '/teacher/smartboard/cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle, colorClass: "from-orange-500 to-orange-800 border-orange-500/50 text-orange-100 hover:shadow-orange-500/40" },
-  { href: '/teacher/smartboard/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp, colorClass: "from-sky-500 to-sky-800 border-sky-500/50 text-sky-100 hover:shadow-sky-500/40" },
-  { href: '/teacher/smartboard/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "from-slate-500 to-slate-800 border-slate-500/50 text-slate-100 hover:shadow-slate-500/40" },
-  { href: '/teacher/smartboard/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "from-rose-500 to-rose-800 border-rose-500/50 text-rose-100 hover:shadow-rose-500/40" },
-  { href: '/teacher/smartboard/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban, colorClass: "from-lime-500 to-lime-800 border-lime-500/50 text-lime-100 hover:shadow-lime-500/40" },
-  { href: '/teacher/smartboard/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "from-red-500 to-red-800 border-red-500/50 text-red-100 hover:shadow-red-500/40" },
-  { href: '/teacher/smartboard/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "from-yellow-500 to-yellow-800 border-yellow-500/50 text-yellow-100 hover:shadow-yellow-500/40" },
-  { href: '/teacher/smartboard/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: LinkIcon, colorClass: "from-green-500 to-green-800 border-green-500/50 text-green-100 hover:shadow-green-500/40" },
-  { href: '/teacher/smartboard/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "from-blue-500 to-blue-800 border-blue-500/50 text-blue-100 hover:shadow-blue-500/40" },
-  { href: '/teacher/smartboard/deneme', label: 'Deneme Sınavı', icon: ClipboardCheck, colorClass: "from-violet-500 to-violet-800 border-violet-500/50 text-violet-100 hover:shadow-violet-500/40" },
-];
-
-
-const GameButton = ({ href, label, icon: Icon, colorClass }: { href: string; label: string; icon: React.ElementType; colorClass: string; }) => (
-    <Link href={href} passHref>
+const GameButton = ({ href, title, description, icon, colorClass, comingSoon }: { href: string; title: string; description: string; icon: React.ReactNode; colorClass: string; comingSoon?: boolean }) => {
+    const content = (
         <div className={cn(
-            "relative overflow-hidden rounded-2xl p-4 h-28 sm:h-36 flex flex-col items-center justify-center gap-2 text-center transition-all duration-300 border bg-gradient-to-br shadow-lg",
+            "relative group h-full w-full rounded-2xl p-6 flex flex-col text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1",
             colorClass,
-            "hover:shadow-lg hover:scale-105 hover:-translate-y-1"
+            comingSoon && "grayscale opacity-60 cursor-not-allowed"
         )}>
-            <Icon className="w-8 h-8 sm:w-12 sm:h-12 drop-shadow-md" />
-            <span className="font-bold text-sm sm:text-base">{label}</span>
+             {comingSoon && <div className="absolute top-2 right-2 bg-slate-900 text-white text-xs font-bold px-2 py-1 rounded-full">YAKINDA</div>}
+            <div className="flex-shrink-0">{React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 opacity-80" })}</div>
+            <div className="flex-grow mt-4">
+                <h3 className="text-2xl font-bold">{title}</h3>
+                <p className="mt-1 text-sm opacity-90">{description}</p>
+            </div>
+            {!comingSoon && <div className="mt-4 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">Oyunu Başlat &rarr;</div>}
         </div>
-    </Link>
-);
+    );
+    
+    if (comingSoon) {
+        return <div className="h-full">{content}</div>
+    }
 
+    return <Link href={href} className="block h-full">{content}</Link>;
+};
 
-function SmartboardPageContent() {
+function SmartboardClientPage() {
+
+    const gameButtons = [
+        { href: '/teacher/smartboard/takim-yarismasi', title: 'Takım Yarışması', description: 'İki takım arasında bilgi ve hız dolu bir mücadele.', icon: <Users />, colorClass: "bg-gradient-to-br from-purple-500 to-indigo-600"},
+        { href: '/teacher/smartboard/duello', title: 'Düello', description: 'İki öğrenci arasındaki kıyasıya rekabet.', icon: <Gamepad2 />, colorClass: "bg-gradient-to-br from-red-500 to-orange-600"},
+        { href: '/teacher/smartboard/kelime-avi', title: 'Kelime Avı', description: 'Harflerin arasında gizlenmiş kelimeleri bulun.', icon: <Search />, colorClass: "bg-gradient-to-br from-teal-500 to-cyan-600"},
+        { href: '/teacher/smartboard/kavram-avi', title: 'Kavram Avı', description: 'Uçuşan kavramları doğru tanımlarıyla vurun.', icon: <Crosshair />, colorClass: "bg-gradient-to-br from-sky-500 to-blue-600" },
+        { href: '/teacher/smartboard/eslestirme', title: 'Eşleştirme', description: 'Birbiriyle ilişkili kartları bulun ve eşleştirin.', icon: <Puzzle />, colorClass: "bg-gradient-to-br from-indigo-500 to-violet-600" },
+        { href: '/teacher/smartboard/cumle-olusturma', title: 'Cümle Oluşturma', description: 'Karışık kelimelerden anlamlı cümleler kurun.', icon: <Shuffle />, colorClass: "bg-gradient-to-br from-orange-500 to-amber-600" },
+        { href: '/teacher/smartboard/adam-asmaca', title: 'Adam Asmaca', description: 'Klasik kelime tahmin oyunu, zamana karşı!', icon: <Skull />, colorClass: "bg-gradient-to-br from-slate-600 to-gray-800" },
+        { href: '/teacher/smartboard/hafiza-kartlari', title: 'Hafıza Kartları', description: 'Görsel veya metinsel eşleri bulun.', icon: <Layers />, colorClass: "bg-gradient-to-br from-rose-500 to-pink-600" },
+        { href: '/teacher/smartboard/kategorilere-ayir', title: 'Kategorize Et', description: 'Öğeleri doğru gruplara sürükleyin.', icon: <FolderKanban />, colorClass: "bg-gradient-to-br from-lime-500 to-green-600" },
+        { href: '/teacher/smartboard/hedefi-vur', title: 'Hedefi Vur', description: 'Doğru cevapları hızla hedef alarak vurun.', icon: <MousePointerClick />, colorClass: "bg-gradient-to-br from-red-600 to-rose-700" },
+        { href: '/teacher/smartboard/milyoner-yarismasi', title: 'Milyoner', description: 'Kim bir sonraki milyoner olmak ister?', icon: <Trophy />, colorClass: "bg-gradient-to-br from-purple-600 to-indigo-700" },
+        { href: '/teacher/smartboard/olay-siralama', title: 'Olay Sıralama', description: 'Olayları kronolojik olarak doğru sıraya koyun.', icon: <ArrowDownUp />, colorClass: "bg-gradient-to-br from-sky-600 to-cyan-700" },
+        { href: '/teacher/smartboard/dogru-yanlis-zinciri', title: 'D/Y Zinciri', description: 'Doğru veya yanlış cevaplarla en uzun zinciri oluşturun.', icon: <Link2 />, colorClass: "bg-gradient-to-br from-green-600 to-teal-700" },
+    ];
+    
     return (
-        <div className="flex flex-col min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black text-white">
-            <AppHeader title="Akıllı Tahta Oyunları" />
-            <main className="flex-1 container mx-auto px-4 py-8">
-                <div className="text-center mb-10">
-                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-indigo-300 drop-shadow-sm">
-                        Akıllı Tahta Merkezi
+         <div className="flex flex-col min-h-screen bg-slate-100 dark:bg-slate-900">
+            <AppHeader />
+            <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8">
+
+                 <div className="text-center mb-10">
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-800 dark:text-white flex items-center justify-center gap-3">
+                        <MonitorPlay className="h-10 w-10 text-primary" />
+                        Akıllı Tahta Oyunları
                     </h1>
-                    <p className="text-indigo-200/60 font-medium max-w-lg mx-auto mt-2">
-                        Sınıfınızla birlikte oynayabileceğiniz etkileşimli oyunları buradan başlatın.
+                    <p className="mt-3 text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+                        Sınıfınızla birlikte oynayabileceğiniz, rekabet dolu ve öğretici oyunlar.
                     </p>
                 </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                    {smartboardGames.map((game) => (
-                        <GameButton key={game.href} {...game} />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {gameButtons.map((game, index) => (
+                        <div key={index} className="h-64">
+                            <GameButton {...game} />
+                        </div>
                     ))}
                 </div>
+
             </main>
         </div>
     );
@@ -72,8 +83,11 @@ function SmartboardPageContent() {
 
 export default function SmartboardPage() {
     return (
-        <AuthGuard role={['teacher', 'superadmin']}>
-            <SmartboardPageContent />
+        <AuthGuard role="teacher">
+            <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>}>
+                <SmartboardClientPage />
+            </Suspense>
         </AuthGuard>
     );
 }
+
