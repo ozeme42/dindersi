@@ -1,148 +1,73 @@
-"use client";
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog } from 'lucide-react';
-import React, { type ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+'use client';
 
-const FeatureButton = ({ href, title, description, icon, colorClass, isExternal }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string, isExternal?: boolean }) => {
-    const linkContent = (
+import { useState } from "react";
+import Link from "next/link";
+import { Gamepad2, Users, User, Trophy, BarChart3, Settings, MonitorPlay, BrainCircuit, Search, Crosshair, Shuffle, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Lightbulb, Link2, Pencil, ClipboardCheck, Coins, ArrowDownUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AppHeader } from "@/components/app-header";
+import { cn } from "@/lib/utils";
+
+const games = [
+    { name: 'Bireysel Yarışma', href: '/teacher/bireysel', icon: User, color: 'bg-blue-500 hover:bg-blue-600' },
+    { name: 'Takım Yarışması', href: '/teacher/takim', icon: Users, color: 'bg-green-500 hover:bg-green-600' },
+    { name: 'Düello', href: '/teacher/duello', icon: Trophy, color: 'bg-red-500 hover:bg-red-600' },
+    { name: 'Yazı Tura', href: '/teacher/yazi-tura-oyunu', icon: Coins, color: 'bg-amber-500 hover:bg-amber-600' },
+    { name: 'Kelime Avı', href: '/teacher/kelime-avi', icon: Search, color: 'bg-teal-600 hover:bg-teal-700' },
+    { name: 'Kavram Avı', href: '/teacher/kavram-avi', icon: Crosshair, color: 'bg-cyan-600 hover:bg-cyan-700' },
+    { name: 'Cümle Oluşturma', href: '/teacher/cumle-olusturma', icon: Shuffle, color: 'bg-orange-500 hover:bg-orange-600' },
+    { name: 'Eşleştirme', href: '/teacher/eslestirme', icon: Puzzle, color: 'bg-indigo-600 hover:bg-indigo-700' },
+    { name: 'Adam Asmaca', href: '/teacher/adam-asmaca', icon: Skull, color: 'bg-slate-600 hover:bg-slate-700' },
+    { name: 'Hafıza Kartları', href: '/teacher/hafiza-kartlari', icon: Layers, color: 'bg-rose-600 hover:bg-rose-700' },
+    { name: 'Kategorilere Ayır', href: '/teacher/kategorilere-ayir', icon: FolderKanban, color: 'bg-lime-600 hover:bg-lime-700' },
+    { name: 'Hedefi Vur', href: '/teacher/hedefi-vur', icon: MousePointerClick, color: 'bg-pink-500 hover:bg-pink-600' },
+    { name: 'Bil Bakalım', href: '/teacher/bil-bakalim', icon: Lightbulb, color: 'bg-yellow-500 hover:bg-yellow-600' },
+    { name: 'D/Y Zinciri', href: '/teacher/dogru-yanlis-zinciri', icon: Link2, color: 'bg-emerald-600 hover:bg-emerald-700' },
+    { name: 'Açık Uçlu', href: '/teacher/acik-uclu-cevapla', icon: Pencil, color: 'bg-sky-500 hover:bg-sky-600' },
+    { name: 'Olay Sıralama', href: '/teacher/olay-siralama', icon: ArrowDownUp, color: 'bg-violet-500 hover:bg-violet-600' },
+];
+
+const GameButton = ({ name, href, icon: Icon, color }: typeof games[0]) => (
+    <Link href={href} className="block group">
         <div className={cn(
-            "h-full w-full rounded-lg p-6 flex flex-col items-center justify-center text-center shadow-lg hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300",
-            colorClass
+            "relative overflow-hidden rounded-2xl p-4 h-28 sm:h-36 flex flex-col items-center justify-center gap-2 text-center text-white font-bold transition-all duration-300 border border-white/20 shadow-lg",
+            color,
+            "hover:shadow-2xl hover:scale-105 hover:-translate-y-1"
         )}>
-            {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 opacity-90" })}
-            <h3 className="font-headline text-3xl mt-4">{title}</h3>
-            <p className="mt-2 opacity-80 text-sm max-w-xs">{description}</p>
-            <div className="flex-grow" />
-            <ArrowRight className="mt-4 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+            <div className="absolute -bottom-4 -right-4 w-16 h-16 opacity-10 group-hover:opacity-20 group-hover:scale-125 transition-all duration-300">
+                <Icon className="w-full h-full" />
+            </div>
+            <Icon className="h-8 w-8 sm:h-10 sm:w-10 drop-shadow-md" />
+            <span className="text-sm sm:text-base">{name}</span>
         </div>
-    );
-    
-    if (isExternal) {
-        return <a href={href} target="_blank" rel="noopener noreferrer" className="block group h-full">{linkContent}</a>
-    }
-
-    return (
-        <Link href={href} className="block group h-full">
-            {linkContent}
-        </Link>
-    )
-};
+    </Link>
+);
 
 
 export default function SmartboardPage() {
-  const yarışmalar = [
-    {
-      href: "/teacher/smartboard/bireysel",
-      title: "Bireysel Yarışma",
-      description: "Her öğrencinin kendi başına yarıştığı klasik mod.",
-      icon: <User />,
-      colorClass: "bg-primary text-primary-foreground hover:bg-primary/90",
-    },
-    {
-      href: "/teacher/smartboard/takim",
-      title: "Takım Yarışması",
-      description: "Öğrencileri takımlara ayırarak rekabeti artırın.",
-      icon: <Users />,
-      colorClass: "bg-cyan-600 text-cyan-50 hover:bg-cyan-700",
-    },
-    {
-      href: "/teacher/smartboard/duello",
-      title: "Düello",
-      description: "İki öğrenciyi veya takımı karşı karşıya getirin.",
-      icon: <Swords />,
-      colorClass: "bg-fuchsia-600 text-fuchsia-50 hover:bg-fuchsia-700",
-    },
-    {
-      href: "/teacher/smartboard/kavram-duellosu",
-      title: "Kavram Düellosu",
-      description: "Tanımı verilen kavramı bularak rakibini alt et.",
-      icon: <BrainCircuit />,
-      colorClass: "bg-orange-500 text-orange-50 hover:bg-orange-600",
-    },
-     {
-      href: "/teacher/smartboard/fetih-oyunu",
-      title: "Fetih Oyunu",
-      description: "Soruları doğru cevaplayarak harita üzerinde ilerleyin ve rakip kaleyi fethedin.",
-      icon: <GitBranch />,
-      colorClass: "bg-emerald-600 text-emerald-50 hover:bg-emerald-700",
-    },
-    {
-      href: "/teacher/smartboard/tornado",
-      title: "Tornado",
-      description: "Rastgele kutuları açarak sürpriz sorular ve puanlarla karşılaşın.",
-      icon: <Wind />,
-      colorClass: "bg-blue-600 text-blue-50 hover:bg-blue-700",
-    },
-    {
-      href: "/teacher/smartboard/kutu-ac",
-      title: "Kutu Aç",
-      description: "Kutuları açarak soruları cevaplayın ve puanları toplayın.",
-      icon: <Package />,
-      colorClass: "bg-indigo-500 text-indigo-50 hover:bg-indigo-600",
-    },
-  ];
-  
-   const sunumlar = [
-     {
-      href: "/teacher/smartboard/ozetler",
-      title: "Özetler",
-      description: "Konu özetlerini ve interaktif HTML içeriklerini tahtada gösterin.",
-      icon: <LayoutTemplate />,
-      colorClass: "bg-rose-500 text-rose-50 hover:bg-rose-600",
-    },
-     {
-      href: "/teacher/smartboard/yazilacaklar",
-      title: "Yazılacaklar",
-      description: "Konu özetlerini, kavramları ve notları tahtada gösterin.",
-      icon: <Columns />,
-      colorClass: "bg-teal-500 text-teal-50 hover:bg-teal-600",
-    },
-  ];
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 space-y-12 min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
-        <div className="text-center animate-fade-in-up">
-            <h1 className="font-headline text-5xl md:text-7xl font-bold text-primary">Akıllı Tahta</h1>
-            <p className="text-muted-foreground mt-4 text-xl md:text-2xl">Sınıfınız için bir yarışma veya sunum türü seçin.</p>
-        </div>
-        
-        <div className="w-full max-w-screen-2xl">
-          <h2 className="text-3xl font-bold font-headline mb-6 text-center">Yarışmalar</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {yarışmalar.map((buttonProps, index) => <div key={index} className="h-80"><FeatureButton {...buttonProps} /></div>)}
-          </div>
-        </div>
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
+        <AppHeader />
+        <main className="container mx-auto p-4 md:p-8">
+            <div className="text-center mb-12">
+                <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-800 dark:text-white">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
+                        Akıllı Tahta
+                    </span>
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
+                    Sınıfınızla birlikte oynamak için bir etkinlik seçin.
+                </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                {games.map(game => (
+                    <GameButton key={game.href} {...game} />
+                ))}
+            </div>
 
-        <div className="w-full max-w-screen-2xl">
-          <h2 className="text-3xl font-bold font-headline mb-6 text-center">Sunumlar ve Araçlar</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {sunumlar.map((buttonProps, index) => <div key={index} className="h-80"><FeatureButton {...buttonProps} /></div>)}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-6 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-            <Button asChild variant="default" size="lg">
-                <Link href="/teacher/smartboard/leaderboard">
-                    <Trophy className="mr-2 h-5 w-5" />
-                    Turnuva Liderliği
-                </Link>
-            </Button>
-            <Button asChild variant="link" className="text-muted-foreground">
-                <Link href="/teacher/guest-students">
-                    <UserCog className="mr-2 h-4 w-4" />
-                    Sanal Öğrencileri Yönet
-                </Link>
-            </Button>
-             <Button asChild variant="link" className="text-muted-foreground">
-                <Link href="/teacher/game-settings">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Oyun Ayarlarını Yönet
-                </Link>
-            </Button>
-        </div>
+        </main>
     </div>
   );
 }
