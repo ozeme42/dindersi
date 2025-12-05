@@ -1,172 +1,217 @@
+'use client';
 
-"use client";
-
-import { useState, useEffect, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { getBilBakalimAction, submitBilBakalimScoreAction } from '../actions';
-import type { Question } from '@/lib/types';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
+import { Loader2, HelpCircle, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, ArrowLeft, Send, CheckCircle2, XCircle, AlertTriangle, Brain } from 'lucide-react';
-import Link from 'next/link';
-import { updateScore } from '../../actions';
+import { useToast } from '@/hooks/use-toast';
+import { GameEndScreen } from '@/components/game-end-screen';
+import { saveScore } from '@/app/student/actions';
 import { useAuth } from '@/context/auth-context';
+import Confetti from 'react-dom-confetti';
 import { playSound } from '@/lib/audio-service';
-import { Progress } from '@/components/ui/progress';
+import type { Question } from '@/lib/types';
+import { AppHeader } from '@/components/app-header';
+
+type DefinitionItem = { term: string; definition: string; };
 
 function GuessItGame() {
-    const searchParams = useSearchParams();
     const { user } = useAuth();
-    
-    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [isFlipped, setIsFlipped] = useState(false);
-    const [score, setScore] = useState(0);
-    const [isFinished, setIsFinished] = useState(false);
+    const searchParams = useSearchParams();
+    const { toast } = useToast();
 
-    const isStatic = searchParams.get('static') === 'true';
-    const gameContext = `Bil Bakalım - ${searchParams.get('topicName')}`;
+    const [definitions, setDefinitions] = useState<DefinitionItem[]>([]);
+    const [terms, setTerms] = useState<string[]>([]);
+    const [currentDefinition, setCurrentDefinition] = useState<DefinitionItem | null>(null);
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'ended'>('loading');
+    const [score, setScore] = useState(0);
+    const [scoreSaved, setScoreSaved] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isConfettiActive, setIsConfettiActive] = useState(false);
+
+    const questionCount = useMemo(() => parseInt(searchParams.get('questionCount') as string) || 10, [searchParams]);
+    const difficulty = useMemo(() => searchParams.getAll('difficulty') as string[], [searchParams]);
+    const courseId = useMemo(() => searchParams.get('courseId') || '', [searchParams]);
+    const unitId = useMemo(() => searchParams.get('unitId') || '', [searchParams]);
+    const topicId = useMemo(() => searchParams.get('topicId') || '', [searchParams]);
+
+    const fetchGameData = useCallback(async () => {
+        setGameState('loading');
+        const { questions, error } = await getQuestionsFromBank({
+            questionCount,
+            difficulty,
+            courseId,
+            unitId,
+            topicId,
+            questionTypes: ['fitb'], // 'fitb' often have good term/definition pairs
+        });
+
+        if (error || questions.length === 0) {
+            toast({
+                title: 'Soru Yüklenemedi',
+                description: error || 'Bu konu için uygun soru bulunamadı. Lütfen farklı bir konu seçin.',
+                variant: 'destructive',
+            });
+            // Redirect or show error message
+            setGameState('ended'); // End game if no questions
+            return;
+        }
+
+        // We need pairs of term and definition. We can simulate this from FITB questions.
+        const gameData: DefinitionItem[] = questions.map(q => ({
+            definition: (q.text || '').replace(/___/g, '...'),
+            term: q.correctAnswer || ''
+        })).filter(item => item.term && item.definition);
+        
+        if (gameData.length < 2) {
+             toast({
+                title: 'Yetersiz Veri',
+                description: 'Bu oyun için yeterli tanım/terim çifti bulunamadı. Lütfen başka bir konu seçin.',
+                variant: 'destructive',
+            });
+            setGameState('ended');
+            return;
+        }
+
+        setDefinitions(gameData);
+        setTerms(gameData.map(d => d.term).sort(() => 0.5 - Math.random()));
+        setCurrentDefinition(gameData[0]);
+        setScore(0);
+        setScoreSaved(false);
+        setGameState('playing');
+    }, [questionCount, difficulty, courseId, unitId, topicId, toast]);
 
     useEffect(() => {
-        const fetchQuestions = async () => {
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const result = await getBilBakalimAction(params);
-            if (result.error) {
-                setError(result.error);
-            } else if (result.questions && result.questions.length > 0) {
-                setQuestions(result.questions);
+        fetchGameData();
+    }, [fetchGameData]);
+
+    const handleAnswer = (selectedTerm: string) => {
+        if (!currentDefinition) return;
+
+        const isCorrect = selectedTerm === currentDefinition.term;
+
+        if (isCorrect) {
+            playSound('correct');
+            setScore(prev => prev + 100);
+            setIsConfettiActive(true);
+            setTimeout(() => setIsConfettiActive(false), 300);
+
+            const remainingDefinitions = definitions.slice(1);
+            if (remainingDefinitions.length > 0) {
+                setDefinitions(remainingDefinitions);
+                setCurrentDefinition(remainingDefinitions[0]);
+                // Keep the terms list the same to avoid confusion
             } else {
-                setError("Bu konu için uygun soru bulunamadı.");
+                setGameState('ended');
             }
-            setIsLoading(false);
-        };
-        fetchQuestions();
-    }, [searchParams, isStatic]);
-    
-    const currentQuestion = questions[currentQuestionIndex];
-
-    const handleFlip = () => {
-        setIsFlipped(true);
-        playSound('correct'); // Simple sound for reveal
-    };
-
-    const handleNext = async (knewIt: boolean) => {
-        const points = knewIt ? 10 : 0;
-        const newTotalScore = score + points;
-        setScore(newTotalScore);
-
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
-            setIsFlipped(false);
         } else {
-            if (user && newTotalScore > 0 && !isStatic) {
-                await submitBilBakalimScoreAction(user.uid, newTotalScore, gameContext);
-            }
-            setIsFinished(true);
+            playSound('incorrect');
+            toast({
+                title: 'Yanlış Cevap!',
+                description: 'Tekrar dene.',
+                variant: 'destructive',
+            });
         }
     };
 
-    const backUrl = isStatic ? '/statik' : '/teacher/activities';
-    
-    if (isLoading) return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
-    
-    if (error) return (
-        <div className="flex h-screen w-full items-center justify-center p-4">
-             <Alert variant="destructive" className="max-w-lg">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Oyun Yüklenemedi</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                 <div className="mt-4">
-                    <Button asChild variant="secondary">
-                        <Link href={backUrl}>Geri Dön</Link>
-                    </Button>
-                </div>
-            </Alert>
-        </div>
-    );
+    const handleSaveScore = async () => {
+        if (!user || score <= 0 || scoreSaved) return;
+        setIsSaving(true);
+        await saveScore({
+            userId: user.uid,
+            gameType: 'Bil Bakalım',
+            score: score,
+            context: `Konu: ${topicId || 'Genel'}`,
+        });
+        setScoreSaved(true);
+        setIsSaving(false);
+        toast({
+            title: 'Puan Kaydedildi!',
+            description: `${score} puan kazandın.`,
+        });
+    };
 
-    if (isFinished) {
+    if (gameState === 'loading') {
         return (
-            <div className="flex h-screen w-full items-center justify-center">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle>Tebrikler!</CardTitle>
-                        <CardDescription>Bil Bakalım etkinliğini tamamladınız.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-4xl font-bold text-primary">{score}</p>
-                        <p className="text-muted-foreground">Toplam Puan</p>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Button onClick={() => window.location.reload()} className="w-full">Tekrar Oyna</Button>
-                        <Button variant="outline" asChild className="w-full">
-                           <Link href={backUrl}>Etkinlik Merkezine Dön</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
+            <div className="flex h-screen w-full items-center justify-center bg-gray-900 text-white">
+                <Loader2 className="h-12 w-12 animate-spin" />
+                <p className="ml-4 text-xl">Oyun verileri yükleniyor...</p>
             </div>
         );
     }
-    
-    if (!currentQuestion) return null;
+
+    if (gameState === 'ended') {
+        return (
+            <GameEndScreen
+                score={score}
+                onSave={handleSaveScore}
+                isSaving={isSaving}
+                scoreSaved={scoreSaved}
+                onRestart={fetchGameData}
+                backUrl="/student/bil-bakalim"
+            />
+        );
+    }
 
     return (
-        <div className="flex h-screen w-full items-center justify-center p-4 bg-teal-50 dark:bg-teal-900/50">
-            <Card className="w-full max-w-xl text-center">
-                 <CardHeader>
-                    <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="mb-4" />
-                    <div className="flex justify-between items-center">
-                        <CardTitle className="text-2xl">Kart {currentQuestionIndex + 1}/{questions.length}</CardTitle>
-                        <div className="text-lg font-bold text-primary">Puan: {score}</div>
-                    </div>
-                </CardHeader>
-                <CardContent 
-                    className="h-64 w-full rounded-lg text-white flex items-center justify-center p-6 cursor-pointer [perspective:1000px]"
-                    onClick={!isFlipped ? handleFlip : undefined}
-                >
-                    <div className={`relative w-full h-full text-center transition-transform duration-700 [transform-style:preserve-3d] ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}>
-                         {/* Front */}
-                        <div className="absolute w-full h-full [backface-visibility:hidden] rounded-lg bg-teal-600 flex flex-col items-center justify-center p-4">
-                            <Brain className="h-8 w-8 mb-2" />
-                            <p className="text-xl font-semibold">{currentQuestion.text?.replace('___', '...')}</p>
-                        </div>
-                        {/* Back */}
-                        <div className="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-lg bg-green-600 flex flex-col items-center justify-center p-4">
-                             <p className="text-3xl font-bold">{currentQuestion.correctAnswer}</p>
-                        </div>
-                    </div>
-                </CardContent>
-                <CardFooter className="flex justify-center gap-4 mt-6">
-                    {isFlipped ? (
-                        <>
-                            <Button onClick={() => handleNext(false)} variant="destructive" className="w-32">
-                                <XCircle className="mr-2 h-5 w-5"/> Bilemedim
-                            </Button>
-                             <Button onClick={() => handleNext(true)} className="w-32 bg-green-600 hover:bg-green-700">
-                                <CheckCircle2 className="mr-2 h-5 w-5"/> Bildim
-                            </Button>
-                        </>
-                    ) : (
-                        <Button onClick={handleFlip}>
-                           Cevabı Göster
-                        </Button>
-                    )}
-                </CardFooter>
-            </Card>
+        <div className="relative flex h-screen w-full flex-col items-center justify-center bg-gradient-to-br from-indigo-900 to-purple-900 p-4 md:p-8 text-white">
+            <AppHeader />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                 <Confetti active={isConfettiActive} config={{
+                    angle: 90,
+                    spread: 360,
+                    startVelocity: 40,
+                    elementCount: 70,
+                    dragFriction: 0.12,
+                    duration: 3000,
+                    stagger: 3,
+                    width: "10px",
+                    height: "10px",
+                    perspective: "500px",
+                    colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
+                }}/>
+            </div>
+            
+            <main className="flex flex-col items-center justify-center w-full max-w-5xl">
+                <div className="mb-8 w-full rounded-2xl bg-black/30 p-4 text-center shadow-lg border border-white/20">
+                    <p className="text-sm uppercase tracking-widest text-purple-300">Bu Tanım Hangi Kavrama Ait?</p>
+                    <p className="mt-2 text-xl md:text-2xl lg:text-3xl font-bold italic">
+                        "{currentDefinition?.definition}"
+                    </p>
+                </div>
+
+                <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 md:gap-4">
+                    {terms.map((term, index) => {
+                        const isCorrect = term === currentDefinition?.term;
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => handleAnswer(term)}
+                                className="relative flex h-24 items-center justify-center rounded-lg bg-white/10 p-2 text-center text-lg font-semibold transition-all hover:scale-105 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                            >
+                                {term}
+                                {isCorrect && <CheckCircle2 className="absolute top-1 right-1 w-4 h-4 lg:w-6 lg:h-6 text-white/50" />}
+                            </button>
+                        );
+                    })}
+                </div>
+                 <div className="mt-8 text-xl font-bold">
+                    Puan: <span className="text-yellow-400 font-mono">{score}</span>
+                </div>
+            </main>
         </div>
     );
 }
 
+
 export default function GuessItPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <Suspense fallback={
+            <div className="flex h-screen w-full items-center justify-center bg-gray-900 text-white">
+                <Loader2 className="h-12 w-12 animate-spin" />
+            </div>
+        }>
             <GuessItGame />
         </Suspense>
     );
