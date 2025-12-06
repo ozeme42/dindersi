@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
@@ -23,6 +24,7 @@ function TrueFalseChainGame() {
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const feedbackTimer = useRef<NodeJS.Timeout>();
 
     const [questions, setQuestions] = useState<Question[]>([]);
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
@@ -33,7 +35,6 @@ function TrueFalseChainGame() {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
-    const feedbackTimer = useRef<NodeJS.Timeout>();
 
 
     const gameContext = `Doğru/Yanlış Zinciri - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
@@ -183,15 +184,15 @@ function TrueFalseChainGame() {
                 <Progress value={timeProgress} className={cn("w-full h-3", timeLeft <= 10 ? "[&>div]:bg-red-500" : "[&>div]:bg-green-500")} />
                 
                 <div className="bg-black/40 border-2 border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-2xl min-h-[200px] flex items-center justify-center">
-                    <p className="text-lg md:text-4xl font-bold leading-tight">{currentQuestion.text}</p>
+                    <p className="text-lg md:text-2xl font-bold leading-tight">{currentQuestion.text}</p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-20 text-lg md:h-24 md:text-2xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <CheckCircle className="mr-2 h-5 w-5 md:mr-4 md:h-8 md:w-8"/> DOĞRU
+                <div className="grid grid-cols-2 gap-4">
+                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-16 text-base md:h-24 md:text-2xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <CheckCircle className="mr-2 h-4 w-4 md:mr-4 md:h-8 md:w-8"/> DOĞRU
                     </Button>
-                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-20 text-lg md:h-24 md:text-2xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <XCircle className="mr-2 h-5 w-5 md:mr-4 md:h-8 md:w-8"/> YANLIŞ
+                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-16 text-base md:h-24 md:text-2xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <XCircle className="mr-2 h-4 w-4 md:mr-4 md:h-8 md:w-8"/> YANLIŞ
                     </Button>
                 </div>
             </div>
