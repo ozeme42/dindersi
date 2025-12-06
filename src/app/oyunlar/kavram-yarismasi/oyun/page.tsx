@@ -1,42 +1,40 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { getKavramYarismasiAction, submitKavramYarismasiScoreAction } from '../actions';
-import type { Question } from '@/lib/types';
-import { useAuth } from '@/context/auth-context';
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Loader2, BrainCircuit, Check, X, Timer, Ghost, Send } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useToast } from '@/hooks/use-toast';
-import { playSound } from '@/lib/audio-service';
-import { Progress } from '@/components/ui/progress';
-import { GameEndScreen } from '@/components/game-end-screen';
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
+import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
+import type { ConceptQuizQuestion } from '../actions';
+import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy } from "lucide-react";
+import { useSearchParams } from 'next/navigation';
+import { cn } from "@/lib/utils";
 
-const ROUND_TIME = 10; // Soru başına süre
-
-function ConceptRaceGame() {
+function KavramYarismaGame() {
     const { user } = useAuth();
-    const searchParams = useSearchParams();
-    const router = useRouter();
     const { toast } = useToast();
-    const inputRef = useRef<HTMLInputElement>(null);
+    const searchParams = useSearchParams();
 
-    const [questions, setQuestions] = useState<Partial<Question>[]>([]);
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
-    const [error, setError] = useState<string | null>(null);
-
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [userAnswer, setUserAnswer] = useState('');
+    const [gameState, setGameState] = useState('loading');
+    const [currentQIndex, setCurrentQIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(ROUND_TIME);
-
+    const [timeLeft, setTimeLeft] = useState(15);
+    const [wrongGuesses, setWrongGuesses] = useState(0);
+    const [feedbackMsg, setFeedbackMsg] = useState('');
+    const [disabledCards, setDisabledCards] = useState<string[]>([]);
+    const [correctCard, setCorrectCard] = useState<string | null>(null);
+    const [isRoundOver, setIsRoundOver] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [scoreSaved, setScoreSaved] = useState(false);
     
-    const gameContext = `Kavram Yarışması - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [questions, setQuestions] = useState<ConceptQuizQuestion[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    
+    const gameContext = `Kavram Yarışması - ${searchParams.get('topicName') || 'Genel'}`;
+    const topicName = searchParams.get('topicName') || 'Kavram Yarışması';
 
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -45,153 +43,300 @@ function ConceptRaceGame() {
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
         };
-        const result = await getKavramYarismasiAction(params);
-        if (result.error || !result.questions || result.questions.length === 0) {
-            setError(result.error || "Bu konu için oyun verisi bulunamadı.");
+        const { questions: fetchedQuestions, error: fetchError } = await getConceptQuizAction(params);
+        
+        if (fetchError || !fetchedQuestions) {
+            setError(fetchError || "Sorular yüklenemedi.");
             setGameState('error');
         } else {
-            setQuestions(result.questions);
-            setGameState('playing');
+            setQuestions(fetchedQuestions);
+            setGameState('start');
         }
     }, [searchParams]);
 
     useEffect(() => {
         fetchGameData();
     }, [fetchGameData]);
+
+    const startGame = useCallback(() => {
+        if (questions.length === 0) {
+            setError("Oyun için soru yüklenemedi veya bulunamadı.");
+            setGameState('error');
+            return;
+        }
+        setCurrentQIndex(0);
+        setScore(0);
+        setScoreSaved(false);
+        setGameState('playing');
+        resetTurn();
+    }, [questions]);
     
-    const resetRound = useCallback(() => {
-        setUserAnswer('');
-        setTimeLeft(ROUND_TIME);
-        inputRef.current?.focus();
+     const resetTurn = useCallback(() => {
+        setTimeLeft(15);
+        setWrongGuesses(0);
+        setFeedbackMsg('');
+        setDisabledCards([]);
+        setCorrectCard(null);
+        setIsRoundOver(false);
+
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    handleTimeUp();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
     }, []);
 
-    const nextQuestion = useCallback(() => {
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
-            resetRound();
-        } else {
-            setGameState('finished');
+    const handleTimeUp = useCallback(() => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        if (isRoundOver) return;
+        setFeedbackMsg('Süre Bitti!');
+        const currentQ = questions[currentQIndex];
+        if (currentQ) {
+            setCorrectCard(currentQ.correctAnswer);
         }
-    }, [currentQuestionIndex, questions.length, resetRound]);
+        setDisabledCards(questions[currentQIndex]?.options.map(c => c) || []);
+        setIsRoundOver(true);
+    }, [currentQIndex, questions, isRoundOver]);
+
+
+    const handleCardClick = (concept: string) => {
+        if (disabledCards.includes(concept) || correctCard || isRoundOver) return;
+
+        const currentQ = questions[currentQIndex];
+        if (!currentQ) return;
+
+        if (concept === currentQ.correctAnswer) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            setScore(prev => prev + Math.max(5, 20 - (wrongGuesses * 10)));
+            setCorrectCard(concept);
+            setFeedbackMsg('Harika! Doğru Cevap.');
+            setIsRoundOver(true);
+        } else {
+            const newWrongGuesses = wrongGuesses + 1;
+            setWrongGuesses(newWrongGuesses);
+            setDisabledCards(prev => [...prev, concept]);
+            
+            if (newWrongGuesses >= 2) {
+                if (timerRef.current) clearInterval(timerRef.current);
+                setFeedbackMsg('Hakkın Kalmadı!');
+                setCorrectCard(currentQ.correctAnswer);
+                setIsRoundOver(true);
+            } else {
+                setFeedbackMsg('Yanlış! Son hakkın.');
+            }
+        }
+    };
     
-    useEffect(() => {
-        if (gameState === 'playing') {
-            const timer = setInterval(() => {
-                setTimeLeft(prev => {
-                    if (prev <= 1) {
-                        nextQuestion();
-                        return ROUND_TIME;
-                    }
-                    return prev - 1;
-                });
-            }, 1000);
-            return () => clearInterval(timer);
-        }
-    }, [gameState, nextQuestion]);
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!userAnswer.trim()) return;
-
-        const currentQuestion = questions[currentQuestionIndex];
-        const isCorrect = userAnswer.trim().toLocaleLowerCase('tr') === currentQuestion.correctAnswer?.toLocaleLowerCase('tr');
-
-        if (isCorrect) {
-            playSound('correct');
-            setScore(prev => prev + (5 + timeLeft)); // Zaman bonusu
-            toast({ title: "Doğru!", description: `+${5 + timeLeft} puan kazandın!`, className: "bg-green-500 text-white" });
+    const nextQuestion = () => {
+        if (currentQIndex + 1 < questions.length) {
+            setCurrentQIndex(prev => prev + 1);
+            resetTurn();
         } else {
-            playSound('incorrect');
-            toast({ title: "Yanlış!", description: `Doğru cevap: ${currentQuestion.correctAnswer}`, variant: "destructive" });
+            endGame();
         }
-        nextQuestion();
+    };
+    
+    const endGame = () => {
+        if(timerRef.current) clearInterval(timerRef.current);
+        setGameState('end');
     };
 
-    const handleSave = async () => {
-        if (!user || score <= 0 || isSaving || isScoreSaved) {
+    const withdrawAndSave = async () => {
+        if (!user || score === 0 || scoreSaved || isSaving) {
             router.push('/oyunlar/kavram-yarismasi');
             return;
         }
         setIsSaving(true);
-        const result = await submitKavramYarismasiScoreAction(user.uid, score, gameContext);
+        const result = await submitConceptQuizScoreAction(user.uid, score, gameContext);
         if (result.success) {
-            setIsScoreSaved(true);
-            toast({ title: "Kaydedildi!", description: "Puanın başarıyla kaydedildi." });
+            setScoreSaved(true);
+            toast({ title: 'Başarılı!', description: `${score} puan kazandın ve profiline eklendi.` });
+            router.push('/oyunlar/kavram-yarismasi');
         } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
         setIsSaving(false);
     };
 
-    const handleRestart = () => {
-        setScore(0);
-        setCurrentQuestionIndex(0);
-        setIsScoreSaved(false);
-        setGameState('loading');
-        fetchGameData();
+    const restartGame = () => {
+        setIsSaving(false);
+        startGame();
     };
+    
+    if (gameState === 'loading') {
+        return <div className="flex h-screen items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>
+    }
 
-    if (gameState === 'loading') return <div className="flex h-screen w-full items-center justify-center bg-pink-950"><Loader2 className="h-12 w-12 animate-spin text-pink-300" /></div>;
-    if (gameState === 'error') return (
-        <div className="flex h-screen w-full items-center justify-center p-4 bg-pink-950 text-white">
-            <div className="text-center space-y-4 max-w-md bg-red-950/50 p-6 rounded-3xl border border-red-500/30">
-                <Ghost className="h-16 w-16 text-red-500 mx-auto" />
-                <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
-                <p className="text-red-200/70">{error}</p>
-                 <Button asChild variant="secondary" className="w-full">
-                    <Link href="/oyunlar/kavram-yarismasi">Geri Dön</Link>
-                </Button>
+    if (error) {
+        return (
+             <div className="flex h-screen items-center justify-center p-4">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
+                    <strong className="font-bold">Hata! </strong>
+                    <span className="block sm:inline">{error}</span>
+                     <div className="mt-4">
+                        <Button asChild variant="outline">
+                            <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (gameState === 'start') {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
+                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
+                    <div className="text-6xl mb-4">🧩</div>
+                    <h2 className="text-3xl font-bold text-indigo-800 mb-4 font-headline">Kavram Avcısı</h2>
+                    <ul className="text-left text-gray-600 mb-8 space-y-2 bg-blue-50 p-6 rounded-xl">
+                        <li>⏱️ Her soru için <strong>15 Saniye</strong> süren var.</li>
+                        <li>❤️ Her soruda <strong>2 Cevap Hakkın</strong> var.</li>
+                        <li>🎯 Doğru kavramı bul, puanları topla!</li>
+                    </ul>
+                    <Button 
+                        onClick={startGame}
+                        className="w-full py-4 bg-indigo-600 text-white text-xl font-bold rounded-xl hover:bg-indigo-700 transition-transform hover:scale-105 shadow-lg"
+                    >
+                        OYUNA BAŞLA
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+    
+     if (gameState === 'end') {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
+                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
+                    <div className="text-6xl mb-4">🏁</div>
+                    <h2 className="text-3xl font-bold text-indigo-800 mb-2 font-headline">Yarışma Bitti!</h2>
+                    <p className="text-gray-500 mb-8">Tüm kavramları tamamladın.</p>
+                    
+                    <div className="bg-indigo-50 p-6 rounded-2xl mb-8 inline-block w-full">
+                        <p className="text-sm text-indigo-400 font-bold tracking-widest uppercase">TOPLAM SKOR</p>
+                        <p className="text-5xl font-black text-indigo-600 font-headline mt-2">{score}</p>
+                    </div>
+                     <div className="space-y-2">
+                        <Button onClick={withdrawAndSave} disabled={isSaving || scoreSaved || score === 0} className="w-full py-4 text-xl">
+                            {isSaving ? <Loader2 className="h-6 w-6 animate-spin"/> : (scoreSaved ? 'Puan Kaydedildi!' : 'Puanı Kaydet ve Çık')}
+                        </Button>
+                        <Button onClick={restartGame} className="w-full py-4 text-xl" variant="secondary">
+                            TEKRAR OYNA
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const currentQ = questions[currentQIndex];
+
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center p-4 pb-24 md:pt-8">
+            
+            <div className="w-full max-w-4xl space-y-6">
+                {/* HEADER */}
+                <div className="w-full flex justify-between items-center bg-white p-3 rounded-xl shadow-md">
+                    <div className="flex items-center gap-2">
+                        <Trophy className="h-6 w-6 text-amber-500"/>
+                        <div>
+                            <p className="text-xs text-gray-500 font-bold">PUAN</p>
+                            <p className="text-xl font-bold text-indigo-600 font-headline">{score}</p>
+                        </div>
+                    </div>
+                    <div className="text-center">
+                        <p className="text-xs text-gray-500 font-bold">SORU</p>
+                        <p className="text-xl font-bold text-gray-700">
+                            {currentQIndex + 1}/{questions.length}
+                        </p>
+                    </div>
+                </div>
+
+                {/* MAIN GAME AREA */}
+                {currentQ && (
+                    <div>
+                        {/* Timer Bar */}
+                        <div className="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden border border-gray-300 relative">
+                            <div 
+                                className={`h-full timer-bar transition-all duration-1000 linear ${timeLeft > 10 ? 'bg-green-500' : timeLeft > 5 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                style={{ width: `${(timeLeft / 15) * 100}%` }}
+                            ></div>
+                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-600">
+                                {timeLeft} sn
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-6 min-h-[160px] flex flex-col justify-center items-center text-center relative border-l-8 border-indigo-500">
+                            <div className="absolute top-3 right-3 flex gap-1">
+                                {[0, 1].map(i => (
+                                    <span key={i} className={`text-xl ${i < (2 - wrongGuesses) ? 'opacity-100' : 'opacity-20 grayscale'}`}>
+                                        ❤️
+                                    </span>
+                                ))}
+                            </div>
+
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed">
+                                {currentQ.definition}
+                            </h3>
+                            
+                            {feedbackMsg && (
+                                <div className={`mt-4 font-bold py-1 px-4 rounded-full animate-pulse ${feedbackMsg.includes('Doğru') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                    {feedbackMsg}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {currentQ.options.map((option) => {
+                                let btnStyle = "py-6 rounded-xl font-bold text-lg shadow-md transition-all transform active:scale-95 border-b-4 ";
+                                
+                                if (correctCard === option) {
+                                    btnStyle += "bg-green-500 border-green-700 text-white scale-105 ring-4 ring-green-200";
+                                } else if (disabledCards.includes(option)) {
+                                    btnStyle += "bg-red-200 border-red-300 text-red-400 cursor-not-allowed";
+                                } else {
+                                    btnStyle += "bg-white border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-300 hover:-translate-y-1";
+                                }
+
+                                return (
+                                    <button
+                                        key={option}
+                                        onClick={() => handleCardClick(option)}
+                                        className={btnStyle}
+                                        disabled={disabledCards.includes(option) || correctCard !== null || isRoundOver}
+                                    >
+                                        {option}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {isRoundOver && (
+                            <div className="text-center mt-6">
+                                <Button
+                                    onClick={nextQuestion}
+                                    className="px-10 py-3 text-lg font-bold rounded-full shadow-lg"
+                                >
+                                    {currentQIndex + 1 < questions.length ? 'Sıradaki Soru ➔' : 'Sonuçları Gör'}
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
-    
-    if (gameState === 'finished') {
-        return <GameEndScreen score={score} onSave={handleSave} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleRestart} backUrl="/oyunlar/kavram-yarismasi" />;
-    }
-    
-    const currentQuestion = questions[currentQuestionIndex];
-
-    return (
-        <div className="flex flex-col min-h-screen bg-pink-950 text-white p-4 sm:p-8 items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-10"/>
-
-            <div className="w-full max-w-3xl z-10 space-y-8 animate-in fade-in-50 duration-500">
-                <div className="flex flex-col sm:flex-row justify-between items-center bg-black/30 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                    <div className="text-2xl font-bold">Skor: <span className="text-pink-400 font-mono">{score}</span></div>
-                    <div className="text-5xl font-black text-white font-mono">{timeLeft}</div>
-                    <div className="text-lg font-semibold">Soru: {currentQuestionIndex + 1} / {questions.length}</div>
-                </div>
-                 <Progress value={(timeLeft / ROUND_TIME) * 100} className="w-full h-3 [&>div]:bg-pink-500" />
-                
-                <div className="bg-black/40 border-2 border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-2xl min-h-[200px] flex flex-col items-center justify-center">
-                    <p className="text-sm uppercase tracking-widest text-pink-300 mb-2">Tanım</p>
-                    <p className="text-xl md:text-2xl font-semibold leading-relaxed">{currentQuestion.text}</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="flex gap-2">
-                    <Input 
-                        ref={inputRef}
-                        type="text"
-                        value={userAnswer}
-                        onChange={(e) => setUserAnswer(e.target.value)}
-                        placeholder="Kavramı yaz..."
-                        className="h-14 text-xl text-center bg-black/40 border-white/20 text-white placeholder:text-white/30 focus:border-pink-500"
-                        autoFocus
-                    />
-                    <Button type="submit" className="h-14 px-6 bg-pink-600 hover:bg-pink-500">
-                        <Send className="h-6 w-6"/>
-                    </Button>
-                </form>
-            </div>
-        </div>
-    )
 }
 
 export default function Page() {
-     return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-pink-950"><Loader2 className="h-12 w-12 animate-spin text-pink-300" /></div>}>
-            <ConceptRaceGame />
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>}>
+            <KavramYarismaClientPage initialQuestions={null} />
         </Suspense>
-    );
+    )
 }
-
