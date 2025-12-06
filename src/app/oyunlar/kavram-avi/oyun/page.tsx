@@ -228,7 +228,7 @@ function ConceptHuntGame() {
 
     if (gameState === 'finished') {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
                 <GameBackground />
                 <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
                     <div className="relative inline-block">
@@ -347,3 +347,4 @@ export default function ConceptHuntPage() {
         </Suspense>
     );
 }
+
