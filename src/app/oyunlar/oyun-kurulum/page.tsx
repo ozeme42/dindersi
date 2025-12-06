@@ -112,9 +112,10 @@ type OyunKurulumProps = {
     gameName: string;
     gameIcon: React.ElementType;
     gamePath: string; // e.g., 'acik-uclu-cevapla'
+    isGame?: boolean;
 };
 
-export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath }: OyunKurulumProps) {
+export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, isGame = true }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -209,15 +210,19 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath }: 
   };
 
   const getGameUrl = () => {
-    const params = new URLSearchParams({
-      courseId: selection.courseId,
-      courseName: selection.courseName,
-      unitId: selection.unitId,
-      unitName: selection.unitName,
-      topicId: selection.topicId,
-      topicName: selection.topicName,
-    });
-    return `/oyunlar/${gamePath}/oyun?${params.toString()}`;
+    if(isGame) {
+      const params = new URLSearchParams({
+        courseId: selection.courseId,
+        courseName: selection.courseName,
+        unitId: selection.unitId,
+        unitName: selection.unitName,
+        topicId: selection.topicId,
+        topicName: selection.topicName,
+      });
+      return `/oyunlar/${gamePath}/oyun?${params.toString()}`;
+    } else {
+      return `/student/${gamePath}/${selection.courseId}/${selection.unitId}/${selection.topicId}`;
+    }
   }
 
   const renderStepContent = () => {
