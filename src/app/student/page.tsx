@@ -364,7 +364,7 @@ export default function StudentDashboard() {
                 {/* İkincil Kartlar Grid */}
                 <div className="grid grid-cols-2 gap-4">
                      {/* Denemeler */}
-                    <Link href="/student/deneme" className="col-span-1 group relative">
+                    <Link href="/oyunlar/deneme" className="col-span-1 group relative">
                         <div className="h-full min-h-[140px] rounded-3xl bg-slate-900/60 border border-white/5 p-5 relative overflow-hidden transition-all hover:bg-slate-800 hover:border-red-500/20">
                                 {examStats.pending > 0 && (
                                     <span className="absolute top-4 right-4 flex h-3 w-3 z-10">
@@ -410,7 +410,7 @@ export default function StudentDashboard() {
                     </Link>
 
                     {/* Etkinlikler & Yarışmalar */}
-                    <Link href="/student/activities" className="col-span-1 group">
+                    <Link href="/oyunlar" className="col-span-1 group">
                         <div className="h-28 rounded-2xl bg-slate-900/40 border border-white/5 p-4 flex flex-col justify-center gap-2 hover:bg-slate-800 hover:border-cyan-500/20 transition-all">
                             <Gamepad2 className="h-6 w-6 text-cyan-400 group-hover:scale-110 transition-transform" />
                             <span className="text-sm font-semibold text-slate-300">Etkinlikler</span>
