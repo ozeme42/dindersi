@@ -73,14 +73,21 @@ const generateGrid = (words: string[]) => {
 type Cell = { r: number, c: number };
 
 // --- COMPONENTS ---
-const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<string> }) => (
+const WordList = ({ words, foundWords, fontSize }: { words: string[], foundWords: Set<string>, fontSize: number }) => (
     <div className="w-full lg:w-72 flex-shrink-0 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-4">
         <h3 className="font-bold text-lg mb-2 text-teal-300 flex items-center gap-2">
             <Search className="h-5 w-5"/> Aranacak Kelimeler ({foundWords.size}/{words.length})
         </h3>
         <div className="grid grid-cols-2 gap-2">
             {words.map(word => (
-                <div key={word} className={cn("transition-all duration-300 text-sm sm:text-base font-semibold p-2 rounded-md", foundWords.has(word) ? "line-through text-slate-500 bg-slate-800/50" : "text-slate-200")}>
+                <div 
+                    key={word} 
+                    className={cn(
+                        "transition-all duration-300 font-semibold p-2 rounded-md", 
+                        foundWords.has(word) ? "line-through text-slate-500 bg-slate-800/50" : "text-slate-200"
+                    )}
+                    style={{ fontSize: `${fontSize * 1.1}rem` }} // Apply font size, slightly larger than grid
+                >
                     {word}
                 </div>
             ))}
@@ -244,7 +251,7 @@ function WordSearchGame() {
             setIsScoreSaved(true);
             toast({ title: 'Başarılı!', description: 'Puanınız kaydedildi.' });
         } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+            toast({ title: 'Hata', description: result.error, variant: "destructive" });
         }
         setIsSaving(false);
     };
@@ -300,7 +307,7 @@ function WordSearchGame() {
                     </div>
                 </div>
                 <div className="w-full flex flex-col lg:flex-row gap-6">
-                    <WordList words={wordsToFind} foundWords={foundWords} />
+                    <WordList words={wordsToFind} foundWords={foundWords} fontSize={fontSize} />
                     <div className="flex-grow aspect-square relative">
                         <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
                     </div>
@@ -320,3 +327,4 @@ export default function Page() {
     
 
     
+
