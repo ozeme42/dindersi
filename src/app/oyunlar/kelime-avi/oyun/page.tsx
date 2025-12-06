@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKelimeAviAction, submitKelimeAviScoreAction } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, Ghost } from 'lucide-react';
+import { Loader2, Search, Ghost, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -74,11 +74,11 @@ type Cell = { r: number, c: number };
 
 // --- COMPONENTS ---
 const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<string> }) => (
-    <div className="w-full lg:w-64 flex-shrink-0 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-4">
+    <div className="w-full lg:w-72 flex-shrink-0 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-4">
         <h3 className="font-bold text-lg mb-2 text-teal-300 flex items-center gap-2">
             <Search className="h-5 w-5"/> Aranacak Kelimeler ({foundWords.size}/{words.length})
         </h3>
-        <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
+        <div className="grid grid-cols-2 gap-2">
             {words.map(word => (
                 <div key={word} className={cn("transition-all duration-300 text-sm font-semibold p-2 rounded-md", foundWords.has(word) ? "line-through text-slate-500 bg-slate-800/50" : "text-slate-200")}>
                     {word}
@@ -88,34 +88,45 @@ const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<stri
     </div>
 );
 
-const Grid = ({ grid, onSelect, selection, foundPaths }: { grid: string[][], onSelect: (cell: Cell) => void, selection: Cell[], foundPaths: Cell[][] }) => (
-    <div className="grid gap-1 p-2 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl aspect-square" style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))` }}>
-        {grid.flat().map((letter, i) => {
-            const r = Math.floor(i / GRID_SIZE);
-            const c = i % GRID_SIZE;
-            const isSelected = selection.some(cell => cell.r === r && cell.c === c);
-            const isFound = foundPaths.some(path => path.some(cell => cell.r === r && cell.c === c));
-            const foundPathIndex = foundPaths.findIndex(path => path.some(cell => cell.r === r && cell.c === c));
-            
-            const colorClasses = ["bg-teal-500", "bg-emerald-500", "bg-sky-500", "bg-lime-500", "bg-cyan-500", "bg-green-500"];
+const Grid = ({ grid, onSelect, selection, foundPaths, zoomLevel }: { grid: string[][], onSelect: (cell: Cell) => void, selection: Cell[], foundPaths: Cell[][], zoomLevel: number }) => (
+    <div className="p-2 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl overflow-auto w-full h-full flex items-center justify-center">
+        <div 
+            className="grid gap-1 transition-transform duration-300" 
+            style={{ 
+                gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
+                transform: `scale(${zoomLevel})`,
+                width: '100%',
+                height: '100%',
+            }}
+        >
+            {grid.flat().map((letter, i) => {
+                const r = Math.floor(i / GRID_SIZE);
+                const c = i % GRID_SIZE;
+                const isSelected = selection.some(cell => cell.r === r && cell.c === c);
+                const isFound = foundPaths.some(path => path.some(cell => cell.r === r && cell.c === c));
+                const foundPathIndex = foundPaths.findIndex(path => path.some(cell => cell.r === r && cell.c === c));
+                
+                const colorClasses = ["bg-teal-500", "bg-emerald-500", "bg-sky-500", "bg-lime-500", "bg-cyan-500", "bg-green-500"];
 
-            return (
-                <button
-                    key={`${r}-${c}`}
-                    onMouseDown={() => onSelect({ r, c })}
-                    onMouseEnter={(e) => e.buttons === 1 && onSelect({ r, c })}
-                    className={cn(
-                        "flex items-center justify-center rounded-md aspect-square select-none touch-none text-xs sm:text-base font-bold transition-all duration-150",
-                        isSelected ? "bg-yellow-400 text-slate-900 scale-110" : "bg-slate-800 text-slate-300 hover:bg-slate-700",
-                        isFound && `${colorClasses[foundPathIndex % colorClasses.length]} text-white scale-105 shadow-lg`
-                    )}
-                >
-                    {letter}
-                </button>
-            );
-        })}
+                return (
+                    <button
+                        key={`${r}-${c}`}
+                        onMouseDown={() => onSelect({ r, c })}
+                        onMouseEnter={(e) => e.buttons === 1 && onSelect({ r, c })}
+                        className={cn(
+                            "flex items-center justify-center rounded-md aspect-square select-none touch-none text-xs sm:text-base font-bold transition-all duration-150",
+                            isSelected ? "bg-yellow-400 text-slate-900 scale-110 ring-2 ring-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700",
+                            isFound && `${colorClasses[foundPathIndex % colorClasses.length]} text-white scale-105 shadow-lg`
+                        )}
+                    >
+                        {letter}
+                    </button>
+                );
+            })}
+        </div>
     </div>
 );
+
 
 // --- MAIN GAME COMPONENT ---
 function WordSearchGame() {
@@ -136,6 +147,7 @@ function WordSearchGame() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
     
     const backUrl = '/oyunlar/kelime-avi';
 
@@ -175,12 +187,15 @@ function WordSearchGame() {
     const checkSelection = useCallback(() => {
         if (selection.length < 2) return;
         const selectedWord = selection.map(cell => grid[cell.r][cell.c]).join('');
+        const reversedSelectedWord = selectedWord.split('').reverse().join('');
         
-        if (wordsToFind.includes(selectedWord) && !foundWords.has(selectedWord)) {
+        const found = wordsToFind.find(word => (word === selectedWord || word === reversedSelectedWord) && !foundWords.has(word));
+
+        if (found) {
             playSound('correct');
-            setFoundWords(prev => new Set(prev).add(selectedWord));
+            setFoundWords(prev => new Set(prev).add(found));
             setFoundPaths(prev => [...prev, selection]);
-            setScore(prev => prev + selectedWord.length * 10);
+            setScore(prev => prev + found.length * 10);
         }
     }, [selection, grid, wordsToFind, foundWords]);
     
@@ -221,6 +236,7 @@ function WordSearchGame() {
         setFoundWords(new Set());
         setFoundPaths([]);
         setIsScoreSaved(false);
+        setZoomLevel(1);
         fetchGameData();
     };
 
@@ -256,8 +272,13 @@ function WordSearchGame() {
             </div>
             <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
                 <WordList words={wordsToFind} foundWords={foundWords} />
-                <div className="flex-grow">
-                    <Grid grid={grid} onSelect={handleSelect} selection={selection} foundPaths={foundPaths} />
+                <div className="flex-grow aspect-square relative">
+                    <Grid grid={grid} onSelect={handleSelect} selection={selection} foundPaths={foundPaths} zoomLevel={zoomLevel} />
+                    <div className="absolute bottom-2 right-2 flex gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(z => Math.min(z + 0.2, 2))}><ZoomIn className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(z => Math.max(z - 0.2, 0.6))}><ZoomOut className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(1)}><RotateCw className="h-4 w-4"/></Button>
+                    </div>
                 </div>
             </div>
         </div>
