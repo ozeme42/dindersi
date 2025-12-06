@@ -188,11 +188,11 @@ function TrueFalseChainGame() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-28 md:h-40 text-2xl md:text-3xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <CheckCircle className="mr-4 h-8 w-8 md:h-12 md:w-12"/> DOĞRU
+                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-20 md:h-40 text-lg md:text-3xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <CheckCircle className="mr-4 h-5 w-5 md:h-12 md:w-12"/> DOĞRU
                     </Button>
-                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-28 md:h-40 text-2xl md:text-3xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <XCircle className="mr-4 h-8 w-8 md:h-12 md:w-12"/> YANLIŞ
+                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-20 md:h-40 text-lg md:text-3xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <XCircle className="mr-4 h-5 w-5 md:h-12 md:w-12"/> YANLIŞ
                     </Button>
                 </div>
             </div>
