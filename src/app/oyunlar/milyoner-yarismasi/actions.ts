@@ -1,8 +1,10 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer } from 'firebase/firestore';
+import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer, getDoc } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
+import type { Question } from '@/lib/types';
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10; // Allow 10 wins/withdraws per day for the same context
 
@@ -20,7 +22,7 @@ export async function addScore(userId: string, score: number, context: string): 
     const attemptsQuery = query(
       scoreEventsRef,
       where('userId', '==', userId),
-      where('gameType', '==', 'Milyoner'),
+      where('gameType', '==', 'Kim 1000 Puan İster?'),
       where('context', '==', context)
     );
     const attemptsSnapshot = await getCountFromServer(attemptsQuery);
@@ -40,7 +42,7 @@ export async function addScore(userId: string, score: number, context: string): 
       transaction.set(newScoreEventRef, {
           userId: userId,
           points: score,
-          gameType: 'Milyoner',
+          gameType: 'Kim 1000 Puan İster?',
           context: context,
           timestamp: serverTimestamp()
       });
@@ -80,4 +82,54 @@ export async function checkAndAwardMillionaireBadge(userId: string): Promise<{ s
     console.error("Error awarding badge:", error);
     return { success: false, error: "Rozet verilirken bir hata oluştu." };
   }
+}
+
+
+export async function getMillionaireQuestions({ courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string }): Promise<{ questions: Question[], error?: string}> {
+    noStore();
+    
+    const difficulties: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Kolay', 'Kolay', 'Orta', 'Orta', 'Orta', 'Orta', 'Zor', 'Zor', 'Zor'];
+    
+    try {
+        const questionPromises = difficulties.map(difficulty => 
+            getQuestionsFromBank({
+                courseId,
+                unitId,
+                topicId,
+                questionCount: 5, // Fetch a small pool for each difficulty to pick one from
+                difficulty: [difficulty],
+                questionTypes: ['Çoktan Seçmeli']
+            })
+        );
+
+        const results = await Promise.all(questionPromises);
+
+        const finalQuestions: Question[] = [];
+        const usedQuestionIds = new Set<string>();
+
+        for (const result of results) {
+            if (result.error || result.questions.length === 0) {
+                // If a specific difficulty is missing, we can try to get another question from a different difficulty
+                // For simplicity now, we will just have fewer questions.
+                continue;
+            }
+            // Find a question that hasn't been used yet
+            const unusedQuestion = result.questions.find(q => q && q.id && !usedQuestionIds.has(q.id));
+            
+            if(unusedQuestion) {
+                finalQuestions.push(unusedQuestion as Question);
+                usedQuestionIds.add(unusedQuestion.id);
+            }
+        }
+        
+        if (finalQuestions.length < 5) {
+            return { questions: [], error: "Bu yarışma için yeterli sayıda (en az 5) farklı zorlukta soru bulunamadı." };
+        }
+
+        return { questions: JSON.parse(JSON.stringify(finalQuestions)) };
+
+    } catch (e: any) {
+        console.error("Error getting millionaire questions:", e);
+        return { questions: [], error: "Sorular getirilirken bir hata oluştu." };
+    }
 }

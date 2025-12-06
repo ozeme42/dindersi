@@ -33,7 +33,7 @@ const colorMap: Record<string, string> = {
 };
 
 const activityTypes = [
-  { href: '/oyunlar/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, color: 'purple' },
+  { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?', icon: Trophy, color: 'purple' },
   { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins, color: 'amber' },
   { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, color: 'pink' },
   { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, color: 'teal' },

@@ -1,34 +1,21 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart } from 'lucide-react';
+import { Phone, Users, X, Loader2, Star, LifeBuoy, Heart, Ghost, Trophy } from 'lucide-react';
 import { playSound, stopSound } from '@/lib/audio-service';
 import { cn } from '@/lib/utils';
 import Confetti from 'react-dom-confetti';
-import { addScore, checkAndAwardMillionaireBadge } from '../actions';
+import { addScore, checkAndAwardMillionaireBadge, getMillionaireQuestions } from '../actions';
+import type { Question } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-// SORULAR (Zorluk Seviyesine Göre)
 const MONEY_LEVELS = [
-  "100", "200", "300", "400", "500", 
-  "600", "700", "800", "900", "1.000"
-];
-
-// OYUN SORULARI - BU KISMI DINAMIK HALE GETIREBILIRIZ (actions.ts'den çekilebilir)
-const QUESTIONS = [
-  { money: "100", q: "Ramazan ayı, Hicri takvimin kaçıncı ayıdır?", options: ["1", "7", "9", "12"], correct: 2 },
-  { money: "200", q: "Oruca başlama vaktine ne ad verilir?", options: ["İftar", "Sahur", "İmsak", "Teravih"], correct: 2 },
-  { money: "300", q: "Orucun açıldığı vakte ne denir?", options: ["İmsak", "İftar", "Kuşluk", "Teheccüd"], correct: 1 },
-  { money: "400", q: "Ramazan'a özgü, yatsıdan sonra kılınan namaz hangisidir?", options: ["Bayram Namazı", "Cuma Namazı", "Teravih Namazı", "Vitir Namazı"], correct: 2 },
-  { money: "500", q: "Kur'an-ı Kerim'in indirilmeye başlandığı gece hangisidir?", options: ["Miraç", "Berat", "Kadir", "Regaip"], correct: 2 },
-  { money: "600", q: "Ramazan ayında verilmesi vacip olan sadaka hangisidir?", options: ["Zekat", "Fitre", "Fidye", "Sadaka-i Cariye"], correct: 1 },
-  { money: "700", q: "Minareler arasına asılan ışıklı yazılara ne ad verilir?", options: ["Hat", "Tezhip", "Mahya", "Kandil"], correct: 2 },
-  { money: "800", q: "Oruç tutmak için gece kalkılan ve yemek yenen vaktin adı nedir?", options: ["Sahur", "Seher", "İmsak", "Kuşluk"], correct: 0 },
-  { money: "900", q: "Peygamberimiz ile Cebrail'in (as) karşılıklı Kur'an okuması geleneğine ne denir?", options: ["Hatim", "Hafızlık", "Mukabele", "Tefsir"], correct: 2 },
-  { money: "1.000", q: "Oruç tutanların cennette gireceği bildirilen özel kapının adı nedir?", options: ["Rıdvan", "Reyyan", "Adn", "Firdevs"], correct: 1 }
-];
-
+  "100", "200", "300", "500", "1.000", 
+  "2.000", "5.000", "10.000", "20.000", "50.000", "100.000", "1.000.000"
+].slice(0, 10); // Start with 10 questions
 
 const confettiConfig = {
   angle: 90,
@@ -44,32 +31,57 @@ const confettiConfig = {
   colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
 };
 
-export default function MilyonerGamePage() {
+function MilyonerGame() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading: userLoading } = useAuth();
   
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string|null>(null);
+
   const [qIndex, setQIndex] = useState(0);
-  const [gameState, setGameState] = useState('playing'); // playing, won, lost, withdraw
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [revealState, setRevealState] = useState('none'); // none, selected, revealed
+  const [gameState, setGameState] = useState('playing');
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [revealState, setRevealState] = useState('none');
   const [lifelines, setLifelines] = useState({ fifty: true, phone: true, audience: true });
-  const [eliminatedOptions, setEliminatedOptions] = useState<number[]>([]);
+  const [eliminatedOptions, setEliminatedOptions] = useState<string[]>([]);
   const [modalContent, setModalContent] = useState<any>(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  
+  const gameContext = `Kim 1000 Puan İster? - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+
+  const fetchGameData = useCallback(async () => {
+    setIsLoading(true);
+    const params = {
+        courseId: searchParams.get('courseId') || undefined,
+        unitId: searchParams.get('unitId') || undefined,
+        topicId: searchParams.get('topicId') || undefined,
+    };
+    const result = await getMillionaireQuestions(params);
+    if (result.error || result.questions.length === 0) {
+        setError(result.error || "Bu konu için oyun verisi bulunamadı.");
+    } else {
+        setQuestions(result.questions);
+    }
+    setIsLoading(false);
+  }, [searchParams]);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    fetchGameData();
+  }, [fetchGameData]);
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
       setQIndex(0);
       setGameState('playing');
-      resetQuestion();
+      setSelectedOption(null);
+      setRevealState('none');
+      setEliminatedOptions([]);
+      setModalContent(null);
       setLifelines({ fifty: true, phone: true, audience: true });
       setShowConfetti(false);
-  };
+      fetchGameData();
+  }, [fetchGameData]);
 
   const resetQuestion = useCallback(() => {
     setSelectedOption(null);
@@ -78,100 +90,98 @@ export default function MilyonerGamePage() {
     setModalContent(null);
   }, []);
 
-  const handleEndGame = useCallback(async (endState: 'lost' | 'withdraw', prize: number, context: string) => {
+  const handleEndGame = useCallback(async (endState: 'lost' | 'withdraw', prize: number) => {
     setGameState(endState);
     if (user && prize > 0) {
-      await addScore(user.uid, prize, context);
+      await addScore(user.uid, prize, gameContext);
     }
-  }, [user]);
+  }, [user, gameContext]);
 
-  const checkAnswer = useCallback((index: number) => {
-    const correctIndex = QUESTIONS[qIndex].correct;
-
-    if (index === correctIndex) {
-      if(isClient) playSound('correct');
+  const checkAnswer = useCallback((answer: string) => {
+    const currentQ = questions[qIndex];
+    if (!currentQ) return;
+    
+    if (answer === currentQ.correctAnswer) {
+      playSound('correct');
       setTimeout(async () => {
-        if (qIndex < QUESTIONS.length - 1) {
+        if (qIndex < questions.length - 1) {
           setQIndex(prev => prev + 1);
           resetQuestion();
         } else {
           setGameState('won');
           setShowConfetti(true);
           if (user) {
-            const finalPrize = parseInt(QUESTIONS[qIndex].money.replace(/\./g, ''));
-            await addScore(user.uid, finalPrize, "Milyoner Yarışmasını Kazandı");
+            const finalPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
+            await addScore(user.uid, finalPrize, `Kim 1000 Puan İster? yarışmasını kazandı.`);
             await checkAndAwardMillionaireBadge(user.uid);
           }
         }
       }, 2000);
     } else {
-      if(isClient) playSound('incorrect');
+      playSound('incorrect');
       setTimeout(() => {
-        const prize = 0; // Baraj sistemi şimdilik yok, yanlışta sıfırlanıyor.
-        handleEndGame('lost', prize, "Milyoner Yarışmasında Elendi");
+        const prize = 0; // Baraj sistemi şimdilik yok
+        handleEndGame('lost', prize);
       }, 2000);
     }
-  }, [qIndex, resetQuestion, user, handleEndGame, isClient]);
+  }, [qIndex, questions, resetQuestion, user, handleEndGame]);
 
-  const handleOptionSelect = useCallback((index: number) => {
-    if (revealState !== 'none' || eliminatedOptions.includes(index)) return;
+  const handleOptionSelect = useCallback((option: string) => {
+    if (revealState !== 'none' || eliminatedOptions.includes(option)) return;
     
-    setSelectedOption(index);
+    setSelectedOption(option);
     setRevealState('selected');
-    if(isClient) playSound('timer'); // Seçim yapıldığında ses başlat
+    playSound('timer');
     
     setTimeout(() => {
-      if(isClient) stopSound('timer');
+      stopSound('timer');
       setRevealState('revealed');
-      checkAnswer(index);
+      checkAnswer(option);
     }, 3000);
-  }, [revealState, eliminatedOptions, checkAnswer, isClient]);
+  }, [revealState, eliminatedOptions, checkAnswer]);
   
   const withdraw = useCallback(() => {
-    const currentPrize = qIndex > 0 ? parseInt(QUESTIONS[qIndex - 1].money.replace(/\./g, '')) : 0;
-    handleEndGame('withdraw', currentPrize, "Milyoner Yarışması'ndan Çekildi");
+    const currentPrize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
+    handleEndGame('withdraw', currentPrize);
   }, [qIndex, handleEndGame]);
 
-  // JOKERLER
   const useFiftyFifty = () => {
-    if (!lifelines.fifty) return;
+    if (!lifelines.fifty || !questions[qIndex]) return;
     
-    const correct = QUESTIONS[qIndex].correct;
-    let wrongs = [0, 1, 2, 3].filter(i => i !== correct);
+    const currentQ = questions[qIndex];
+    let wrongOptions = (currentQ.options || []).filter(opt => opt !== currentQ.correctAnswer);
     
-    wrongs = wrongs.sort(() => Math.random() - 0.5).slice(0, 2);
+    wrongOptions = wrongOptions.sort(() => Math.random() - 0.5).slice(0, 2);
     
-    setEliminatedOptions(wrongs);
+    setEliminatedOptions(wrongOptions);
     setLifelines(prev => ({ ...prev, fifty: false }));
   };
 
   const usePhone = () => {
-    if (!lifelines.phone) return;
-    
-    const correct = QUESTIONS[qIndex].correct;
-    const correctLetter = ["A", "B", "C", "D"][correct];
-    
-    const suggestion = Math.random() < 0.8 ? correctLetter : ["A", "B", "C", "D"][Math.floor(Math.random() * 4)];
+    if (!lifelines.phone || !questions[qIndex]) return;
+    const currentQ = questions[qIndex];
+    const suggestion = Math.random() < 0.8 ? currentQ.correctAnswer : currentQ.options?.[Math.floor(Math.random() * 4)];
 
     setModalContent({
       title: "Telefon Jokeri",
       icon: <Phone size={32} className="text-yellow-500" />,
-      text: `Arkadaşın Abdullah düşünüyor...\n\n"Bence cevap %90 ${suggestion} şıkkı dostum. Ama son karar senin."`
+      text: `Arkadaşın Abdullah düşünüyor...\n\n"Bence cevap kesinlikle ${suggestion}. Ama son karar senin."`
     });
     setLifelines(prev => ({ ...prev, phone: false }));
   };
 
   const useAudience = () => {
-    if (!lifelines.audience) return;
-    
-    const correct = QUESTIONS[qIndex].correct;
-    const percentages = [0, 0, 0, 0];
+    if (!lifelines.audience || !questions[qIndex]) return;
+    const currentQ = questions[qIndex];
+    const correct = currentQ.correctAnswer;
+    const options = currentQ.options || [];
+    const percentages: { [key: string]: number } = {};
     let remaining = 100;
     
-    percentages[correct] = Math.floor(Math.random() * 30) + 40;
-    remaining -= percentages[correct];
+    percentages[correct!] = Math.floor(Math.random() * 30) + 40;
+    remaining -= percentages[correct!];
     
-    const wrongOptions = [0,1,2,3].filter(i => i !== correct);
+    const wrongOptions = options.filter(opt => opt !== correct);
     const firstWrongShare = Math.floor(Math.random() * remaining);
     percentages[wrongOptions[0]] = firstWrongShare;
     remaining -= firstWrongShare;
@@ -180,38 +190,56 @@ export default function MilyonerGamePage() {
     percentages[wrongOptions[1]] = secondWrongShare;
     remaining -= secondWrongShare;
     
-    percentages[wrongOptions[2]] = remaining;
+    if (wrongOptions[2]) {
+      percentages[wrongOptions[2]] = remaining;
+    }
 
     setModalContent({
       title: "Seyirci Jokeri",
       icon: <Users size={32} className="text-yellow-500" />,
-      chart: percentages
+      chartData: options.map(opt => ({ name: opt, value: percentages[opt] || 0 }))
     });
     setLifelines(prev => ({ ...prev, audience: false }));
   };
   
-   const goHome = () => router.push('/');
+   const goHome = () => router.push('/student');
 
-  if (userLoading) {
+  if (isLoading || userLoading) {
     return <div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
+  }
+  
+  if (error) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center p-4 bg-[#000022]">
+             <div className="text-center space-y-4 max-w-md bg-red-950/50 p-6 rounded-3xl border border-red-500/30">
+                <Ghost className="h-16 w-16 text-red-500 mx-auto" />
+                <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
+                <p className="text-red-200/70">{error}</p>
+                 <Button asChild variant="secondary" className="w-full">
+                    <Link href="/oyunlar/milyoner-yarismasi">Geri Dön</Link>
+                </Button>
+            </div>
+        </div>
+    );
   }
 
   if (gameState === 'won' || gameState === 'lost' || gameState === 'withdraw') {
     let prize = 0;
-    if (gameState === 'won') prize = 1000;
-    else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(QUESTIONS[qIndex - 1].money.replace(/\./g, '')) : 0;
-    else prize = 0; // Baraj sistemi şimdilik yok, yanlışta sıfırlanıyor.
+    if (gameState === 'won') prize = parseInt(MONEY_LEVELS[questions.length - 1].replace(/\./g, ''));
+    else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
+    else prize = 0; 
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center p-4 bg-[#000022] relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
+        <Confetti active={gameState === 'won'} config={confettiConfig} />
         
         <h1 className={`text-4xl font-bold mb-4 ${gameState === 'won' ? 'text-green-500' : 'text-yellow-500'}`}>
           {gameState === 'won' ? 'TEBRİKLER! BÜYÜK ÖDÜLÜ KAZANDIN! 🏆' : (gameState === 'withdraw' ? 'YARIŞMADAN ÇEKİLDİN' : 'ELENDİNİZ')}
         </h1>
         <div className="bg-blue-900/50 p-8 rounded-2xl border-2 border-blue-500 mb-8 shadow-2xl backdrop-blur-sm">
           <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Kazanılan Ödül</p>
-          <p className="text-6xl font-black text-white drop-shadow-md">{prize} Puan</p>
+          <p className="text-6xl font-black text-white drop-shadow-md">{prize.toLocaleString()} Puan</p>
         </div>
         <div className="flex gap-4">
             <button 
@@ -231,22 +259,23 @@ export default function MilyonerGamePage() {
     );
   }
 
-  const currentQ = QUESTIONS[qIndex];
+  const currentQ = questions[qIndex];
+  if (!currentQ) {
+      return (
+        <div className="flex h-screen items-center justify-center bg-[#000022]">
+          <p className="text-white">Sorular yükleniyor veya bulunamadı...</p>
+        </div>
+      );
+  }
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row text-white overflow-hidden bg-[#000022] font-sans relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a5c_0%,_#000022_100%)] -z-10"></div>
       
       <style>{`
-        .hex-box {
-            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
-        }
-        .hex-box::before {
-            content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-            background: #000033;
-            clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
-            z-index: -1;
-        }
+        .hex-box { clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); }
+        .hex-box::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; background: #000033; clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%); z-index: -1; }
         .answer-correct { animation: blink 0.5s 3; }
         @keyframes blink { 0%, 100% { background-color: #059669; } 50% { background-color: #34d399; } }
       `}</style>
@@ -278,26 +307,26 @@ export default function MilyonerGamePage() {
         <div className="flex-1 flex flex-col items-center justify-center">
             <div className="hex-box w-full min-h-[120px] px-12 py-6 mb-8 bg-gradient-to-b from-[#1e3c72] to-[#2a5298] border-2 border-[#d4af37] flex items-center justify-center text-center shadow-[0_0_15px_rgba(212,175,55,0.3)] relative z-10">
                 <h2 className="text-lg md:text-2xl font-bold text-white leading-relaxed z-20">
-                    {currentQ.q}
+                    {currentQ.text}
                 </h2>
             </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 w-full">
-            {currentQ.options.map((opt, idx) => {
+            {(currentQ.options || []).map((opt, idx) => {
                 let bgClass = "bg-gradient-to-r from-[#000044] via-[#1e3c72] to-[#000044]";
                 let borderClass = "border-gray-500";
                 let textClass = "text-white";
-                if (revealState === 'selected' && selectedOption === idx) { bgClass = "bg-[#d97706]"; borderClass = "border-white"; }
+                if (revealState === 'selected' && selectedOption === opt) { bgClass = "bg-[#d97706]"; borderClass = "border-white"; }
                 if (revealState === 'revealed') {
-                    if (idx === currentQ.correct) { bgClass = "bg-[#059669] answer-correct"; borderClass = "border-[#34d399]"; } 
-                    else if (idx === selectedOption) { bgClass = "bg-[#dc2626]"; borderClass = "border-[#f87171]"; }
+                    if (opt === currentQ.correctAnswer) { bgClass = "bg-[#059669] answer-correct"; borderClass = "border-[#34d399]"; } 
+                    else if (opt === selectedOption) { bgClass = "bg-[#dc2626]"; borderClass = "border-[#f87171]"; }
                 }
 
-                if (eliminatedOptions.includes(idx)) { return <div key={idx} className="h-[52px] md:h-[60px]"></div>; }
+                if (eliminatedOptions.includes(opt)) { return <div key={idx} className="h-[52px] md:h-[60px]"></div>; }
                 return (
-                    <button key={idx} onClick={() => handleOptionSelect(idx)} disabled={revealState !== 'none'} className={`py-3 px-6 text-left flex items-center rounded-full border hover:border-white hover:text-yellow-300 transition-all ${bgClass} ${borderClass} ${textClass} h-auto justify-start`}>
-                        <span className="text-[#d4af37] font-bold mr-3 w-6 text-lg">{['A','B','C','D'][idx]}:</span>
+                    <button key={idx} onClick={() => handleOptionSelect(opt)} disabled={revealState !== 'none'} className={`py-3 px-6 text-left flex items-center rounded-full border hover:border-white hover:text-yellow-300 transition-all ${bgClass} ${borderClass} ${textClass} h-auto justify-start`}>
+                        <span className="text-[#d4af37] font-bold mr-3 w-6 text-lg">{String.fromCharCode(65 + idx)}:</span>
                         <span className="flex-1 font-semibold">{opt}</span>
                     </button>
                 );
@@ -307,7 +336,7 @@ export default function MilyonerGamePage() {
 
       <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-last md:order-last">
         <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
-            {MONEY_LEVELS.map((money, idx) => (
+            {MONEY_LEVELS.slice(0, questions.length).map((money, idx) => (
                 <div key={idx} className={cn(
                     "flex justify-center items-center px-3 py-1 text-sm font-mono rounded-md text-center",
                     idx === qIndex ? 'bg-[#d4af37] text-[#000033] font-bold scale-105 shadow-lg text-base' : 'text-[#d4af37]',
@@ -328,13 +357,13 @@ export default function MilyonerGamePage() {
                     <h3 className="text-xl font-bold text-[#d4af37]">{modalContent.title}</h3>
                 </div>
                 {modalContent.text && <p className="text-white whitespace-pre-line text-lg leading-relaxed">{modalContent.text}</p>}
-                {modalContent.chart && (
+                {modalContent.chartData && (
                     <div className="flex justify-around items-end h-40 gap-2 pt-4 bg-blue-900/30 rounded-lg p-4">
-                        {modalContent.chart.map((val:number, i:number) => (
+                        {modalContent.chartData.map((data: {name: string, value: number}, i: number) => (
                             <div key={i} className="flex flex-col items-center w-1/4 h-full justify-end group">
-                                <div className="text-xs text-yellow-300 mb-1 font-bold">{val}%</div>
-                                <div className="w-full bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t transition-all duration-500" style={{ height: `${val}%` }}></div>
-                                <div className="text-sm font-bold mt-2 text-yellow-500">{['A','B','C','D'][i]}</div>
+                                <div className="text-xs text-yellow-300 mb-1 font-bold">{data.value}%</div>
+                                <div className="w-full bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t transition-all duration-500" style={{ height: `${data.value}%` }}></div>
+                                <div className="text-sm font-bold mt-2 text-yellow-500">{data.name}</div>
                             </div>
                         ))}
                     </div>
@@ -345,9 +374,14 @@ export default function MilyonerGamePage() {
             </div>
         </div>
       )}
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <Confetti active={showConfetti} config={confettiConfig} />
-       </div>
     </div>
   );
+}
+
+export default function MilyonerOyunPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>}>
+            <MilyonerGame />
+        </Suspense>
+    )
 }
