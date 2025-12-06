@@ -133,12 +133,11 @@ function OzetlerDisplayPage() {
                             </div>
                         </div>
 
-                        {/* SAĞ: Tam Ekran Butonu (RENGİ AÇILDI) */}
+                        {/* SAĞ: Tam Ekran Butonu */}
                         <div className="flex items-center gap-2">
                              <FullscreenToggle 
                                 elementRef={mainContentRef} 
-                                // GÜNCELLENEN KISIM: Arka plan bg-slate-800, yazı text-white ve border daha belirgin
-                                className="bg-slate-800 border-2 border-white/20 text-white hover:bg-slate-700 hover:border-white/40 h-10 w-10 rounded-xl transition-colors shadow-lg shadow-black/50" 
+                                className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-10 w-10 rounded-xl transition-colors shadow-lg" 
                             />
                         </div>
                     </div>
