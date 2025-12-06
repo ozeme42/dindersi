@@ -6,7 +6,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import type { Question } from '@/lib/types';
 
-const MAX_ATTEMPTS_PER_CONTEXT = 10; // Allow 10 wins/withdraws per day for the same context
+const MAX_ATTEMPTS_PER_CONTEXT = 10; 
 
 export async function addScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
   noStore();
@@ -27,7 +27,7 @@ export async function addScore(userId: string, score: number, context: string): 
     );
     const attemptsSnapshot = await getCountFromServer(attemptsQuery);
     if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
-      return { success: false, error: "Günlük puan kazanma limitine ulaştınız." };
+      return { success: false, error: "Bu konudan daha fazla puan kazanamazsınız." };
     }
 
     await runTransaction(db, async (transaction) => {
@@ -98,7 +98,7 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
                 topicId,
                 questionCount: 5, // Fetch a small pool for each difficulty to pick one from
                 difficulty: [difficulty],
-                questionTypes: ['Çoktan Seçmeli']
+                questionTypes: ['mcq']
             })
         );
 
@@ -118,7 +118,7 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
             
             if(unusedQuestion) {
                 finalQuestions.push(unusedQuestion as Question);
-                usedQuestionIds.add(unusedQuestion.id);
+                usedQuestionIds.add(unusedQuestion.id!);
             }
         }
         
@@ -126,7 +126,7 @@ export async function getMillionaireQuestions({ courseId, unitId, topicId }: { c
             return { questions: [], error: "Bu yarışma için yeterli sayıda (en az 5) farklı zorlukta soru bulunamadı." };
         }
 
-        return { questions: JSON.parse(JSON.stringify(finalQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(finalQuestions.slice(0, 10))) };
 
     } catch (e: any) {
         console.error("Error getting millionaire questions:", e);
