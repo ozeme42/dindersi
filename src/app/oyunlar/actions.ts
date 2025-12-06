@@ -220,19 +220,17 @@ export async function getDogruYanlisZinciriAction(
         const querySnapshot = await getDocs(q);
         let questions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
         
+        if (questions.length < 5) {
+            return { questions: [], error: "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };
+        }
+        
         // Shuffle the array
         for (let i = questions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [questions[i], questions[j]] = [questions[j], questions[i]];
         }
         
-        const selectedQuestions = questions;
-
-        if (selectedQuestions.length < 5) {
-            return { questions: [], error: "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };
-        }
-
-        return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(questions)) };
 
     } catch (e: any) {
         console.error("Error getting D/Y Zinciri questions:", e);
