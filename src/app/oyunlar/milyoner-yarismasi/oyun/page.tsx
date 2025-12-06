@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
@@ -13,9 +14,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 const MONEY_LEVELS = [
-  "100", "200", "300", "500", "1.000", 
-  "2.000", "5.000", "10.000", "20.000", "50.000", "100.000", "1.000.000"
-].slice(0, 10); // Start with 10 questions
+  "100", "200", "300", "400", "500", "600", "700", "800", "900", "1.000"
+];
 
 const confettiConfig = {
   angle: 90,
@@ -62,7 +62,7 @@ function MilyonerGame() {
     if (result.error || result.questions.length === 0) {
         setError(result.error || "Bu konu için oyun verisi bulunamadı.");
     } else {
-        setQuestions(result.questions);
+        setQuestions(result.questions.slice(0, 10)); // Ensure we only have 10 questions to match money levels
     }
     setIsLoading(false);
   }, [searchParams]);
@@ -225,7 +225,7 @@ function MilyonerGame() {
 
   if (gameState === 'won' || gameState === 'lost' || gameState === 'withdraw') {
     let prize = 0;
-    if (gameState === 'won') prize = parseInt(MONEY_LEVELS[questions.length - 1].replace(/\./g, ''));
+    if (gameState === 'won') prize = 1000;
     else if (gameState === 'withdraw') prize = qIndex > 0 ? parseInt(MONEY_LEVELS[qIndex - 1].replace(/\./g, '')) : 0;
     else prize = 0; 
 
@@ -378,10 +378,14 @@ function MilyonerGame() {
   );
 }
 
-export default function MilyonerOyunPage() {
+// This is a wrapper to use Suspense
+function MilyonerOyunPage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-[#000022]"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>}>
             <MilyonerGame />
         </Suspense>
     )
 }
+
+// We are now exporting the wrapped component as the default.
+export default MilyonerOyunPage;
