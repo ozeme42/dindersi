@@ -202,3 +202,82 @@ export async function submitCumleOlusturmaScoreAction(
         return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
     }
 }
+
+export async function getDogruYanlisZinciriAction(
+    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+): Promise<{ questions: Question[]; error?: string }> {
+    noStore();
+    try {
+        let q = query(collection(db, "questions"), where("type", "==", "Doğru/Yanlış"));
+
+        if (topicId && topicId !== 'all') {
+            q = query(q, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            q = query(q, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            q = query(q, where("courseId", "==", courseId));
+        }
+        
+        const querySnapshot = await getDocs(q);
+        let questions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
+        
+        // Shuffle the array
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+        
+        // Take up to 50 questions
+        const selectedQuestions = questions.slice(0, 50);
+
+        if (selectedQuestions.length < 5) {
+            return { questions: [], error: "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };
+        }
+
+        return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
+
+    } catch (e: any) {
+        console.error("Error getting D/Y Zinciri questions:", e);
+        return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
+    }
+}
+
+export async function submitDogruYanlisZinciriScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+    if (!userId || score <= 0) {
+        return { success: true };
+    }
+
+    try {
+        const attemptsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('gameType', '==', 'Doğru/Yanlış Zinciri'),
+            where('context', '==', context)
+        );
+        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
+        if (attemptsSnapshot.data().count >= 10) {
+            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
+        }
+
+        const batch = writeBatch(db);
+        
+        const userRef = doc(db, 'users', userId);
+        batch.update(userRef, { score: increment(score) });
+
+        const eventRef = doc(collection(db, 'scoreEvents'));
+        batch.set(eventRef, {
+            userId: userId,
+            points: score,
+            timestamp: serverTimestamp(),
+            gameType: 'Doğru/Yanlış Zinciri',
+            context: context,
+        });
+
+        await batch.commit();
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error submitting D/Y Zinciri score:", error);
+        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
+    }
+}
