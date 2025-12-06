@@ -77,9 +77,9 @@ export default function StudentActivitiesPage() {
                     </div>
                     <div>
                         <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-                            ETKİNLİK <span className="text-cyan-400">MERKEZİ</span>
+                            Oyunlar
                         </h1>
-                        <p className="text-slate-400 text-sm">Kendini geliştir, eğlen ve kazan!</p>
+                        <p className="text-slate-400 text-sm">Eğlenerek öğrenmek için bir oyun seç.</p>
                     </div>
                 </div>
                 
