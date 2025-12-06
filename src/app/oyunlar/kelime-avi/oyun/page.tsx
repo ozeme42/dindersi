@@ -293,7 +293,7 @@ function WordSearchGame() {
                     <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
                     <div className="absolute bottom-2 right-2 flex gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.min(z + 0.2, 2.5))}><ZoomIn className="h-4 w-4"/></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.5))}><ZoomOut className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.4))}><ZoomOut className="h-4 w-4"/></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(1)}><RotateCw className="h-4 w-4"/></Button>
                     </div>
                 </div>
