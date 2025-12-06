@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
@@ -62,7 +61,13 @@ function MilyonerGame() {
     if (result.error || result.questions.length === 0) {
         setError(result.error || "Bu konu için oyun verisi bulunamadı.");
     } else {
-        setQuestions(result.questions.slice(0, 10)); // Ensure we only have 10 questions to match money levels
+        const shuffledQuestions = result.questions
+            .map(q => ({
+                ...q,
+                options: q.options ? [...q.options].sort(() => Math.random() - 0.5) : []
+            }))
+            .slice(0, 10);
+        setQuestions(shuffledQuestions);
     }
     setIsLoading(false);
   }, [searchParams]);
@@ -389,3 +394,4 @@ function MilyonerOyunPage() {
 
 // We are now exporting the wrapped component as the default.
 export default MilyonerOyunPage;
+
