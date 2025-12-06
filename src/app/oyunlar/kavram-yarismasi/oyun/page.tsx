@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
@@ -349,14 +348,14 @@ function KavramYarismaGame() {
                 {/* Geri Bildirim Mesajı */}
                 {feedbackMsg && (
                     <div className={cn(
-                        "absolute top-[-20px] left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg animate-in zoom-in duration-300 z-50",
+                        "my-2 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg animate-in zoom-in duration-300 z-50",
                         feedbackMsg.includes('Doğru') ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
                     )}>
                         {feedbackMsg}
                     </div>
                 )}
 
-                {/* Seçenekler - GÜNCELLEME: Masaüstü için grid-cols-2 (2x2) */}
+                {/* Seçenekler - GÜNCELLEME: Masaüstünde grid-cols-2 (2x2) */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                     {currentQ.options.map((option) => {
                         let btnStyle = "h-auto py-6 text-lg md:text-xl font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group ";
