@@ -2,10 +2,19 @@
 "use client";
 
 import React, { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import OyunKurulum from '../oyun-kurulum/page';
 import { Lightbulb, Loader2 } from 'lucide-react';
+import QuizGame from '@/app/oyunlar/soru-coz/page';
 
 function BilBakalimPage() {
+    const searchParams = useSearchParams();
+    const hasGameParams = searchParams.has('topicId');
+
+    if (hasGameParams) {
+        return <QuizGame />;
+    }
+
     return (
         <OyunKurulum 
             gameName="Bil Bakalım"
