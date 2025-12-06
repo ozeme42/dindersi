@@ -49,7 +49,7 @@ export const textToSpeechFlow = ai.defineFlow(
   async ({ text }) => {
     try {
       const { media } = await ai.generate({
-        model: 'googleai/tts-1',
+        model: googleAI.model('tts-1'),
         config: {
           responseModalities: ['AUDIO'],
           speechConfig: {
