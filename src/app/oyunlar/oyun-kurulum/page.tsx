@@ -209,7 +209,7 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath }: 
       topicId: selection.topicId,
       topicName: selection.topicName,
     });
-    return `/oyunlar/${gamePath}?${params.toString()}`;
+    return `/oyunlar/${gamePath}/oyun?${params.toString()}`;
   }
 
   const renderStepContent = () => {
