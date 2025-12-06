@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -18,22 +17,20 @@ import { useToast } from "@/hooks/use-toast";
 import { ScrollArea } from "./ui/scroll-area";
 
 const activityTypes = [
-  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "bg-purple-600 hover:bg-purple-700 text-white" },
-  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "bg-amber-500 hover:bg-amber-600 text-white" },
-  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
-  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "bg-teal-600 hover:bg-teal-700 text-white" },
-  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
-  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
-  { href: '/student/cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
-  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp, colorClass: "bg-sky-600 hover:bg-sky-700 text-white" },
-  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
-  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
-  { href: '/student/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban, colorClass: "bg-lime-600 hover:bg-lime-700 text-white" },
-  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
-  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
-  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
-  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-blue-500 hover:bg-blue-600 text-white" },
-  { href: '/student/deneme', label: 'Deneme Sınavı', icon: ClipboardCheck, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
+  { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, colorClass: "bg-blue-500 hover:bg-blue-600 text-white" },
+  { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca', icon: Skull, colorClass: "bg-slate-600 hover:bg-slate-700 text-white" },
+  { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb, colorClass: "bg-yellow-500 hover:bg-yellow-600 text-white" },
+  { href: '/oyunlar/cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle, colorClass: "bg-orange-500 hover:bg-orange-600 text-white" },
+  { href: '/oyunlar/deneme', label: 'Deneme Sınavı', icon: ClipboardCheck, colorClass: "bg-indigo-500 hover:bg-indigo-600 text-white" },
+  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2, colorClass: "bg-green-600 hover:bg-green-700 text-white" },
+  { href: '/oyunlar/eslestirme', label: 'Eşleştirme', icon: Puzzle, colorClass: "bg-indigo-600 hover:bg-indigo-700 text-white" },
+  { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers, colorClass: "bg-rose-600 hover:bg-rose-700 text-white" },
+  { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick, colorClass: "bg-red-500 hover:bg-red-600 text-white" },
+  { href: '/oyunlar/kavram-avi', label: 'Kavram Avı', icon: Crosshair, colorClass: "bg-cyan-600 hover:bg-cyan-700 text-white" },
+  { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit, colorClass: "bg-pink-500 hover:bg-pink-600 text-white" },
+  { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search, colorClass: "bg-teal-600 hover:bg-teal-700 text-white" },
+  { href: '/oyunlar/milyoner-yarismasi', label: 'Milyoner', icon: Trophy, colorClass: "bg-purple-600 hover:bg-purple-700 text-white" },
+  { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins, colorClass: "bg-amber-500 hover:bg-amber-600 text-white" },
 ];
 
 type StudentActivityDialogProps = {
