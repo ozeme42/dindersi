@@ -9,7 +9,7 @@ import { useAuth } from "@/context/auth-context";
 import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
 import type { ConceptQuizQuestion } from '../actions';
 import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy } from "lucide-react";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
 
 function KavramYarismaGame() {
@@ -335,7 +335,7 @@ function KavramYarismaGame() {
 }
 
 export default function Page() {
-    return (
+     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>}>
             <KavramYarismaGame />
         </Suspense>
