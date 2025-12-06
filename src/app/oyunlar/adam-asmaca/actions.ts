@@ -1,103 +1,143 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
+import { 
+  doc, 
+  updateDoc, 
+  increment, 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  writeBatch, 
+  query, 
+  where, 
+  getDocs, 
+  getCountFromServer,
+  limit 
+} from 'firebase/firestore';
+import { unstable_noStore as noStore } from 'next/cache';
+import type { ActivityItem } from '@/lib/types';
 
 export type HangmanData = {
     word: string;
     hint: string;
 };
 
-// Bu fonksiyon, Adam Asmaca oyunu için gerekli kelime ve ipuçlarını veritabanından çeker.
-// Özellikle "Boşluk Doldurma" ve "Tanım" türündeki verileri kullanarak oyun için uygun formatı oluşturur.
-export async function getAdamAsmacaAction(params: { courseId?: string, unitId?: string, topicId?: string }): Promise<{ data?: HangmanData[], error?: string }> {
-    const { courseId, unitId, topicId } = params;
+const MAX_ATTEMPTS_PER_CONTEXT = 10;
+const POOL_SIZE_LIMIT = 100; // Okuma maliyetini düşürmek için sınır
 
+export async function getAdamAsmacaAction(
+    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+): Promise<{ data: HangmanData[] | null; error?: string }> {
+    noStore();
     try {
-        let conditions = [];
-        
-        // Konu, ünite veya derse göre filtreleme
+        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+
         if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
+            baseQuery = query(baseQuery, where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
+            baseQuery = query(baseQuery, where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
-        }
-        
-        // Oyun için uygun veri türlerini seçme
-        conditions.push(where("type", "in", ["definition", "fitb"]));
-
-        const activityItemsRef = collection(db, "activityItems");
-        const finalQuery = conditions.length > 0 ? query(activityItemsRef, ...conditions) : query(activityItemsRef);
-        
-        const querySnapshot = await getDocs(finalQuery);
-        
-        const allData: HangmanData[] = [];
-        querySnapshot.forEach(doc => {
-            const data = doc.data();
-            if (data.type === 'definition' && data.content.term && data.content.definition) {
-                // Tanım verisinden kelime ve ipucu oluştur
-                allData.push({
-                    word: data.content.term.toLocaleUpperCase('tr-TR'),
-                    hint: data.content.definition,
-                });
-            } else if (data.type === 'fitb' && data.content.sentenceWithBlank && data.content.correctAnswer) {
-                // Boşluk doldurma verisinden kelime ve ipucu oluştur
-                 allData.push({
-                    word: data.content.correctAnswer.toLocaleUpperCase('tr-TR'),
-                    hint: data.content.sentenceWithBlank.replace('___', '...'),
-                });
-            }
-        });
-
-        if (allData.length === 0) {
-            return { error: "Bu konu için Adam Asmaca oyununa uygun veri (tanım veya boşluk doldurma) bulunamadı." };
+            baseQuery = query(baseQuery, where("courseId", "==", courseId));
         }
 
-        // Verileri karıştır ve 10 tanesini seç
-        const shuffled = allData.sort(() => 0.5 - Math.random());
-        const selectedData = shuffled.slice(0, 10);
+        // ! ÖNEMLİ: Firestore maliyetini korumak için limit ekliyoruz.
+        const limitedQuery = query(baseQuery, limit(POOL_SIZE_LIMIT));
+        const querySnapshot = await getDocs(limitedQuery);
         
-        return { data: JSON.parse(JSON.stringify(selectedData)) };
+        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem);
+        
+        // Türkçe karakterleri ve sadece harfleri içeren Regex
+        // Boşluk (space) karakterine izin vermiyoruz çünkü Adam Asmaca genelde tek kelime veya bitişik kelimelerle daha iyi çalışır.
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
 
-    } catch (e: any) {
-        console.error("Adam Asmaca verisi alınırken hata:", e);
-        if (e.code === 'failed-precondition') {
-            return { error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${e.message}` };
+        const suitableItems = allDefinitions.filter(item => 
+            item.content &&
+            item.content.term && 
+            item.content.definition &&
+            item.content.term.trim().length >= 4 && // En az 4 harf (Çok kısa kelimeler sıkıcı olur)
+            item.content.term.trim().length <= 14 && // En çok 14 harf (Mobil ekrana sığması için)
+            !item.content.term.includes(' ') && // Tek kelime olmalı
+            turkishAlphabetRegex.test(item.content.term.trim()) // Sadece harf içermeli (Rakam/Sembol yok)
+        );
+
+        if (suitableItems.length < 3) {
+            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı.", data: null };
         }
-        return { error: 'Oyun verileri alınırken bir veritabanı hatası oluştu.' };
+        
+        // Fisher-Yates Shuffle
+        const shuffled = [...suitableItems];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+
+        const gameData: HangmanData[] = shuffled.slice(0, 10).map(item => ({
+            word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
+            hint: item.content.definition!,
+        }));
+
+        return { data: JSON.parse(JSON.stringify(gameData)) };
+
+    } catch (error: any) {
+        console.error("Server Action Error (getAdamAsmacaAction):", error);
+        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", data: null };
     }
 }
 
-// Oyuncunun skorunu veritabanına kaydeder.
-export async function submitAdamAsmacaScoreAction(userId: string, score: number, context: string): Promise<{ success: boolean, error?: string }> {
-     if (!userId || score === undefined) {
-        return { success: false, error: 'Kullanıcı ID veya skor eksik.' };
-    }
-
+export async function submitAdamAsmacaScoreAction(
+    userId: string | null, 
+    score: number, 
+    context: string
+): Promise<{ success: boolean; error?: string }> {
+    if (!userId) return { success: true };
+    if (score <= 0) return { success: true };
+    
     try {
-        const { collection, addDoc, serverTimestamp, increment, runTransaction, doc } = await import("firebase/firestore");
+        // 1. Limit Kontrolü
+        const attemptsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('gameType', '==', 'Adam Asmaca'),
+            where('context', '==', context)
+        );
         
-        const userRef = doc(db, "users", userId);
+        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         
-        await runTransaction(db, async (transaction) => {
-            transaction.update(userRef, { score: increment(score) });
+        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+            return { 
+                success: false, 
+                error: `Günlük etkinlik limitine (${MAX_ATTEMPTS_PER_CONTEXT}) ulaştınız. Yarın tekrar deneyin!` 
+            };
+        }
 
-            const scoreEventRef = doc(collection(db, 'scoreEvents'));
-            transaction.set(scoreEventRef, {
-                userId: userId,
-                points: score,
-                gameType: 'Adam Asmaca',
-                context: context,
-                timestamp: serverTimestamp(),
-            });
+        // 2. Batch İşlemi
+        const batch = writeBatch(db);
+        
+        // Kullanıcı puanını güncelle
+        const userRef = doc(db, 'users', userId);
+        batch.update(userRef, { score: increment(score) });
+
+        // Etkinlik kaydını oluştur
+        const eventRef = doc(collection(db, 'scoreEvents'));
+        batch.set(eventRef, {
+            userId: userId,
+            points: score,
+            timestamp: serverTimestamp(),
+            gameType: 'Adam Asmaca',
+            context: context,
+            metadata: {
+                platform: 'web',
+                version: '2.0'
+            }
         });
+
+        await batch.commit();
 
         return { success: true };
     } catch (error: any) {
-        console.error("Adam Asmaca skoru kaydedilirken hata:", error);
-        return { success: false, error: "Skor kaydedilirken bir veritabanı hatası oluştu." };
+        console.error("Server Action Error (submitAdamAsmacaScoreAction):", error);
+        return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
     }
 }

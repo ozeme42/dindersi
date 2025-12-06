@@ -1,23 +1,24 @@
+
 "use client";
 
 import React, { Suspense } from 'react';
 import OyunKurulum from '../oyun-kurulum/page';
-import { Puzzle, Loader2 } from 'lucide-react';
+import { Pencil, Loader2 } from 'lucide-react';
 
-function EslestirmePage() {
+function AcikUcluCevaplaPage() {
     return (
         <OyunKurulum 
-            gameName="Eşleştirme"
-            gameIcon={Puzzle}
-            gamePath="eslestirme"
+            gameName="Açık Uçlu Cevapla"
+            gameIcon={Pencil}
+            gamePath="acik-uclu-cevapla"
         />
     );
 }
 
-export default function EslestirmeSuspense() {
+export default function AcikUcluCevaplaSuspense() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
-            <EslestirmePage />
+            <AcikUcluCevaplaPage />
         </Suspense>
     );
 }
