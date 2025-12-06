@@ -16,6 +16,7 @@ function KavramYarismaGame() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     const [gameState, setGameState] = useState('loading');
     const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -336,7 +337,7 @@ function KavramYarismaGame() {
 export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>}>
-            <KavramYarismaClientPage initialQuestions={null} />
+            <KavramYarismaGame />
         </Suspense>
     )
 }
