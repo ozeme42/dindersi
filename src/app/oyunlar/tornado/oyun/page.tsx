@@ -33,7 +33,7 @@ function TornadoGame() {
     const { toast } = useToast();
 
     const [takimSayisi, setTakimSayisi] = useState(1);
-    const [gameState, setGameState] = useState<'setup' | 'playing' | 'finished' | 'error'>('setup');
+    const [gameState, setGameState<'setup' | 'playing' | 'finished' | 'error'>>('setup');
     const [soruBankasi, setSoruBankasi] = useState<Question[]>([]);
     const [kutuIcerikleri, setKutuIcerikleri] = useState<KutuIcerik[]>([]);
     const [puanlar, setPuanlar] = useState<Record<string, number>>({});
@@ -342,15 +342,15 @@ function TornadoGame() {
     }
     
     return (
-        <div id="ana-kapsayici" className="w-full max-w-7xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col h-screen">
+        <div id="ana-kapsayici" className="w-full max-w-7xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col min-h-screen">
              <style jsx global>{`
                 :root {
                     --arka-plan: #1a202c; --ana-renk: #2b6cb0; --vurgu-renk: #4fd1c5; --basari-renk: #48bb78;
                     --hata-renk: #f56565; --odul-renk: #f6e05e; --ceza-renk: #f56565; --bos-renk: #a0aec0;
                 }
                 body { background-color: var(--arka-plan); font-family: 'Inter', sans-serif; }
-                #ana-kapsayici { height: 100vh; overflow-y: hidden; }
-                :fullscreen #ana-kapsayici { height: 100vh !important; overflow-y: hidden !important; }
+                #ana-kapsayici { height: auto; min-height: 100vh; overflow-y: auto; }
+                :fullscreen #ana-kapsayici { height: 100vh !important; overflow-y: auto !important; }
              `}</style>
             
             <div className="flex items-center justify-between mb-2 relative px-2">
