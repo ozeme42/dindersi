@@ -17,16 +17,17 @@ import {
   limit 
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
+import type { ActivityItem, Anagram } from '@/lib/types';
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
-export async function getKavramAviAction(
+// Renamed from getKavramAviAction to getConceptHuntAction
+export async function getConceptHuntAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ concepts: string[] | null; error?: string }> {
+): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
+        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
 
         if (topicId && topicId !== 'all') {
             baseQuery = query(baseQuery, where("topicId", "==", topicId));
@@ -38,35 +39,43 @@ export async function getKavramAviAction(
 
         const querySnapshot = await getDocs(baseQuery);
         
-        const allConcepts = querySnapshot.docs
-            .map(doc => (doc.data() as ActivityItem).content?.text)
-            .filter((text): text is string => 
-                typeof text === 'string' && 
-                text.trim().length > 2 &&
-                text.trim().length <= 12 &&
-                !text.includes(' ')
-            )
-            .map(text => text.toLocaleUpperCase('tr-TR'));
+        const allItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
+            .filter(item => 
+                item.content?.term && 
+                item.content?.definition &&
+                item.content.term.trim().length > 2 &&
+                !item.content.term.includes(' ')
+            );
 
-        if (allConcepts.length < 5) {
-            return { error: "Kavram Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
+        if (allItems.length < 3) {
+            return { error: "Kavram Avı oynamak için bu konuda en az 3 adet uygun kelime bulunmalıdır.", questions: null };
         }
         
         // Fisher-Yates Shuffle
-        for (let i = allConcepts.length - 1; i > 0; i--) {
+        for (let i = allItems.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [allConcepts[i], allConcepts[j]] = [allConcepts[j], allConcepts[i]];
+            [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
         }
+        
+        const anagramQuestions: Anagram[] = allItems.map(item => {
+            const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
+            return {
+                definition: item.content.definition!,
+                scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
+                correctAnswer: correctAnswer,
+            }
+        });
 
-        return { concepts: JSON.parse(JSON.stringify(allConcepts)) };
+        return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
 
     } catch (error: any) {
-        console.error("Server Action Error (getKavramAviAction):", error);
-        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", concepts: null };
+        console.error("Server Action Error (getConceptHuntAction):", error);
+        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", questions: null };
     }
 }
 
-export async function submitKavramAviScoreAction(
+// Renamed from submitKavramAviScoreAction to submitConceptHuntScoreAction
+export async function submitConceptHuntScoreAction(
     userId: string | null, 
     score: number, 
     context: string
@@ -86,7 +95,7 @@ export async function submitKavramAviScoreAction(
         if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { 
                 success: false, 
-                error: `Günlük etkinlik limitine (${MAX_ATTEMPTS_PER_CONTEXT}) ulaştınız. Yarın tekrar deneyin!` 
+                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
             };
         }
 
@@ -108,7 +117,7 @@ export async function submitKavramAviScoreAction(
 
         return { success: true };
     } catch (error: any) {
-        console.error("Server Action Error (submitKavramAviScoreAction):", error);
+        console.error("Server Action Error (submitConceptHuntScoreAction):", error);
         return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
     }
 }
