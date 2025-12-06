@@ -83,7 +83,7 @@ const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<stri
                 <div 
                     key={word} 
                     className={cn(
-                        "transition-all duration-300 font-semibold p-2 rounded-md sm:text-base",
+                        "transition-all duration-300 font-semibold p-2 rounded-md sm:text-lg",
                         foundWords.has(word) ? "line-through text-slate-500 bg-slate-800/50" : "text-slate-200"
                     )}
                 >
@@ -326,5 +326,6 @@ export default function Page() {
     
 
     
+
 
 
