@@ -24,7 +24,7 @@ export async function getKavramYarismasiAction(
         
         conditions.push(where('type', '==', 'definition'));
 
-        const finalQuery = query(baseQuery, ...conditions, limit(30));
+        const finalQuery = query(baseQuery, ...conditions);
         const definitionsSnapshot = await getDocs(finalQuery);
         
         const allDefinitions = definitionsSnapshot.docs
@@ -51,7 +51,7 @@ export async function getKavramYarismasiAction(
             [gameQuestions[i], gameQuestions[j]] = [gameQuestions[j], gameQuestions[i]];
         }
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions.slice(0, 15))) };
+        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
 
     } catch (error: any) {
         console.error("Error getting Kavram Yarışması questions:", error);

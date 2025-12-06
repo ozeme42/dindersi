@@ -128,8 +128,7 @@ export async function getCumleOlusturmaAction(
             baseQuery = query(baseQuery, where("courseId", "==", courseId));
         }
 
-        const limitedQuery = query(baseQuery, limit(50));
-        const querySnapshot = await getDocs(limitedQuery);
+        const querySnapshot = await getDocs(baseQuery);
         
         const allSentences = querySnapshot.docs.map(doc => (doc.data() as ActivityItem).content?.text)
             .filter((text): text is string => typeof text === 'string' && text.trim().length > 0 && text.trim().split(' ').length > 2);
@@ -144,7 +143,7 @@ export async function getCumleOlusturmaAction(
             [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
         }
 
-        const gameData: ScrambledSentenceData[] = allSentences.slice(0, 10).map(sentence => ({
+        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
             correctSentence: sentence.trim(),
         }));
 
@@ -227,8 +226,7 @@ export async function getDogruYanlisZinciriAction(
             [questions[i], questions[j]] = [questions[j], questions[i]];
         }
         
-        // Take up to 50 questions
-        const selectedQuestions = questions.slice(0, 50);
+        const selectedQuestions = questions;
 
         if (selectedQuestions.length < 5) {
             return { questions: [], error: "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };

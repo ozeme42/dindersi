@@ -41,8 +41,7 @@ export async function getEslestirmeAction(
             baseQuery = query(baseQuery, where("courseId", "==", courseId));
         }
         
-        const limitedQuery = query(baseQuery, limit(50));
-        const querySnapshot = await getDocs(limitedQuery);
+        const querySnapshot = await getDocs(baseQuery);
         
         const allItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
             .filter(item => item.content?.term && item.content?.definition);
@@ -52,7 +51,7 @@ export async function getEslestirmeAction(
         }
 
         // Shuffle and pick 8 pairs for the game
-        const selectedItems = allItems.sort(() => 0.5 - Math.random()).slice(0, 8);
+        const selectedItems = allItems.sort(() => 0.5 - Math.random());
 
         const gamePairs: MatchingPair[] = [];
         selectedItems.forEach((item, index) => {

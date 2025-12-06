@@ -33,8 +33,8 @@ export async function getAcikUcluCevaplaAction(
             return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
         }
         
-        // Shuffle and pick up to 10 definitions for the game
-        const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random()).slice(0, 10);
+        // Shuffle and pick all definitions for the game
+        const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
 
         const gameQuestions: Question[] = selectedDefinitions.map((item, index) => {
             return {

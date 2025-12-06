@@ -25,7 +25,6 @@ export type HangmanData = {
 };
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
-const POOL_SIZE_LIMIT = 100; // Okuma maliyetini düşürmek için sınır
 
 export async function getAdamAsmacaAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
@@ -42,9 +41,7 @@ export async function getAdamAsmacaAction(
             baseQuery = query(baseQuery, where("courseId", "==", courseId));
         }
 
-        // ! ÖNEMLİ: Firestore maliyetini korumak için limit ekliyoruz.
-        const limitedQuery = query(baseQuery, limit(POOL_SIZE_LIMIT));
-        const querySnapshot = await getDocs(limitedQuery);
+        const querySnapshot = await getDocs(baseQuery);
         
         const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem);
         
@@ -73,7 +70,7 @@ export async function getAdamAsmacaAction(
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
 
-        const gameData: HangmanData[] = shuffled.slice(0, 10).map(item => ({
+        const gameData: HangmanData[] = shuffled.map(item => ({
             word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
             hint: item.content.definition!,
         }));
