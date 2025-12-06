@@ -14,7 +14,7 @@ import {
   where, 
   getDocs, 
   getCountFromServer,
-  limit
+  limit 
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
@@ -73,11 +73,10 @@ export async function getIlimHazinesiAction(
         }
         
         const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
-        const selectedForGame = shuffled.slice(0, 5); // Oyunda 5 seviye olsun
         
         const gameLevels: IlimHazinesiLevel[] = [];
 
-        for (const item of selectedForGame) {
+        for (const item of shuffled) {
             const mainWord = item.content.term!;
             const info = item.content.definition!;
             const letters = generateLetters(mainWord);
