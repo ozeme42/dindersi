@@ -33,7 +33,7 @@ function TornadoGame() {
     const { toast } = useToast();
 
     const [takimSayisi, setTakimSayisi] = useState(1);
-    const [gameState, setGameState<'setup' | 'playing' | 'finished' | 'error'>>('setup');
+    const [gameState, setGameState] = useState<'setup' | 'playing' | 'finished' | 'error'>('setup');
     const [soruBankasi, setSoruBankasi] = useState<Question[]>([]);
     const [kutuIcerikleri, setKutuIcerikleri] = useState<KutuIcerik[]>([]);
     const [puanlar, setPuanlar] = useState<Record<string, number>>({});
@@ -342,7 +342,7 @@ function TornadoGame() {
     }
     
     return (
-        <div id="ana-kapsayici" className="w-full max-w-7xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col min-h-screen">
+        <div id="ana-kapsayici" className="w-full max-w-7xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col" style={{ height: '100vh', overflowY: 'auto' }}>
              <style jsx global>{`
                 :root {
                     --arka-plan: #1a202c; --ana-renk: #2b6cb0; --vurgu-renk: #4fd1c5; --basari-renk: #48bb78;
