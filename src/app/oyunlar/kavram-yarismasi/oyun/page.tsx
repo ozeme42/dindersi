@@ -8,15 +8,19 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
 import type { ConceptQuizQuestion } from '../actions';
-import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy } from "lucide-react";
+import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy, Timer, Heart, Zap, CheckCircle2, XCircle, Play } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
+import { playSound, stopSound } from '@/lib/audio-service';
+import { GameEndScreen } from '@/components/game-end-screen';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
 function KavramYarismaGame() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [gameState, setGameState] = useState('loading');
     const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -35,7 +39,7 @@ function KavramYarismaGame() {
     const [error, setError] = useState<string | null>(null);
     
     const gameContext = `Kavram Yarışması - ${searchParams.get('topicName') || 'Genel'}`;
-    const topicName = searchParams.get('topicName') || 'Kavram Yarışması';
+    const backUrl = '/oyunlar/kavram-yarismasi';
 
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -87,6 +91,7 @@ function KavramYarismaGame() {
                     handleTimeUp();
                     return 0;
                 }
+                if (prev <= 6) playSound('timer');
                 return prev - 1;
             });
         }, 1000);
@@ -94,7 +99,10 @@ function KavramYarismaGame() {
 
     const handleTimeUp = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current);
+        stopSound('timer');
         if (isRoundOver) return;
+        
+        playSound('incorrect');
         setFeedbackMsg('Süre Bitti!');
         const currentQ = questions[currentQIndex];
         if (currentQ) {
@@ -113,17 +121,21 @@ function KavramYarismaGame() {
 
         if (concept === currentQ.correctAnswer) {
             if (timerRef.current) clearInterval(timerRef.current);
+            stopSound('timer');
+            playSound('correct');
             setScore(prev => prev + Math.max(5, 20 - (wrongGuesses * 10)));
             setCorrectCard(concept);
             setFeedbackMsg('Harika! Doğru Cevap.');
             setIsRoundOver(true);
         } else {
+            playSound('incorrect');
             const newWrongGuesses = wrongGuesses + 1;
             setWrongGuesses(newWrongGuesses);
             setDisabledCards(prev => [...prev, concept]);
             
             if (newWrongGuesses >= 2) {
                 if (timerRef.current) clearInterval(timerRef.current);
+                stopSound('timer');
                 setFeedbackMsg('Hakkın Kalmadı!');
                 setCorrectCard(currentQ.correctAnswer);
                 setIsRoundOver(true);
@@ -144,11 +156,13 @@ function KavramYarismaGame() {
     
     const endGame = () => {
         if(timerRef.current) clearInterval(timerRef.current);
+        stopSound('timer');
+        playSound('win');
         setGameState('end');
     };
 
-    const withdrawAndSave = async () => {
-        if (!user || score === 0 || scoreSaved || isSaving) {
+    const handleSaveAndExit = async () => {
+        if (!user || score <= 0 || scoreSaved || isSaving) {
             router.push('/oyunlar/kavram-yarismasi');
             return;
         }
@@ -169,21 +183,22 @@ function KavramYarismaGame() {
         startGame();
     };
     
+    // --- RENDER ---
+
     if (gameState === 'loading') {
-        return <div className="flex h-screen items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>
+        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-emerald-500"/></div>
     }
 
     if (error) {
         return (
-             <div className="flex h-screen items-center justify-center p-4">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
-                    <strong className="font-bold">Hata! </strong>
-                    <span className="block sm:inline">{error}</span>
-                     <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
-                        </Button>
-                    </div>
+             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
+                <div className="bg-slate-900 border border-red-500/30 text-white px-8 py-6 rounded-3xl relative max-w-md text-center shadow-2xl">
+                    <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold mb-2">Hata Oluştu</h3>
+                    <p className="text-slate-400 mb-6">{error}</p>
+                    <Button asChild className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 rounded-xl">
+                        <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                    </Button>
                 </div>
             </div>
         )
@@ -191,20 +206,41 @@ function KavramYarismaGame() {
 
     if (gameState === 'start') {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
-                    <div className="text-6xl mb-4">🧩</div>
-                    <h2 className="text-3xl font-bold text-indigo-800 mb-4 font-headline">Kavram Avcısı</h2>
-                    <ul className="text-left text-gray-600 mb-8 space-y-2 bg-blue-50 p-6 rounded-xl">
-                        <li>⏱️ Her soru için <strong>15 Saniye</strong> süren var.</li>
-                        <li>❤️ Her soruda <strong>2 Cevap Hakkın</strong> var.</li>
-                        <li>🎯 Doğru kavramı bul, puanları topla!</li>
-                    </ul>
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
+                {/* Arka Plan */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-900/20 via-slate-950 to-slate-950" />
+                
+                <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
+                    <div className="relative inline-block">
+                        <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
+                        <Zap className="w-32 h-32 text-emerald-400 mx-auto drop-shadow-[0_0_25px_rgba(52,211,153,0.6)] animate-bounce" />
+                    </div>
+                    
+                    <div>
+                        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 mb-2">KAVRAM AVCISI</h1>
+                        <p className="text-slate-400 text-lg">Bilgini test etmeye hazır mısın?</p>
+                    </div>
+
+                    <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 backdrop-blur-xl text-left space-y-4">
+                        <div className="flex items-center gap-4 text-slate-300">
+                            <Timer className="w-6 h-6 text-emerald-500" />
+                            <span>Her soru için <strong>15 saniye</strong> süren var.</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-slate-300">
+                            <Heart className="w-6 h-6 text-red-500" />
+                            <span>Her soruda <strong>2 can</strong> hakkın var.</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-slate-300">
+                            <Trophy className="w-6 h-6 text-yellow-500" />
+                            <span>Doğru cevaplarla puanları topla!</span>
+                        </div>
+                    </div>
+
                     <Button 
                         onClick={startGame}
-                        className="w-full py-4 bg-indigo-600 text-white text-xl font-bold rounded-xl hover:bg-indigo-700 transition-transform hover:scale-105 shadow-lg"
+                        className="w-full h-16 text-xl font-bold rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02]"
                     >
-                        OYUNA BAŞLA
+                        OYUNA BAŞLA <Play className="ml-3 h-6 w-6 fill-current" />
                     </Button>
                 </div>
             </div>
@@ -213,130 +249,149 @@ function KavramYarismaGame() {
     
      if (gameState === 'end') {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-                <div className="bg-white p-10 rounded-3xl shadow-xl text-center">
-                    <div className="text-6xl mb-4">🏁</div>
-                    <h2 className="text-3xl font-bold text-indigo-800 mb-2 font-headline">Yarışma Bitti!</h2>
-                    <p className="text-gray-500 mb-8">Tüm kavramları tamamladın.</p>
-                    
-                    <div className="bg-indigo-50 p-6 rounded-2xl mb-8 inline-block w-full">
-                        <p className="text-sm text-indigo-400 font-bold tracking-widest uppercase">TOPLAM SKOR</p>
-                        <p className="text-5xl font-black text-indigo-600 font-headline mt-2">{score}</p>
-                    </div>
-                     <div className="space-y-2">
-                        <Button onClick={withdrawAndSave} disabled={isSaving || scoreSaved || score === 0} className="w-full py-4 text-xl">
-                            {isSaving ? <Loader2 className="h-6 w-6 animate-spin"/> : (scoreSaved ? 'Puan Kaydedildi!' : 'Puanı Kaydet ve Çık')}
-                        </Button>
-                        <Button onClick={restartGame} className="w-full py-4 text-xl" variant="secondary">
-                            TEKRAR OYNA
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <GameEndScreen 
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={scoreSaved}
+                onRestart={restartGame}
+                backUrl="/oyunlar/kavram-yarismasi"
+            />
         );
     }
 
     const currentQ = questions[currentQIndex];
+    const progressPercentage = ((currentQIndex + 1) / questions.length) * 100;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center p-4 pb-24 md:pt-8">
-            
-            <div className="w-full max-w-4xl space-y-6">
-                {/* HEADER */}
-                <div className="w-full flex justify-between items-center bg-white p-3 rounded-xl shadow-md">
-                    <div className="flex items-center gap-2">
-                        <Trophy className="h-6 w-6 text-amber-500"/>
-                        <div>
-                            <p className="text-xs text-gray-500 font-bold">PUAN</p>
-                            <p className="text-xl font-bold text-indigo-600 font-headline">{score}</p>
-                        </div>
-                    </div>
-                    <div className="text-center">
-                        <p className="text-xs text-gray-500 font-bold">SORU</p>
-                        <p className="text-xl font-bold text-gray-700">
-                            {currentQIndex + 1}/{questions.length}
-                        </p>
-                    </div>
-                </div>
+        <div 
+            ref={mainContentRef}
+            className="min-h-screen bg-slate-950 text-white flex flex-col items-center relative overflow-hidden select-none"
+        >
+            {/* Arka Plan Efektleri */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
+            </div>
 
-                {/* MAIN GAME AREA */}
-                {currentQ && (
-                    <div>
-                        {/* Timer Bar */}
-                        <div className="w-full bg-gray-200 rounded-full h-4 mb-6 overflow-hidden border border-gray-300 relative">
-                            <div 
-                                className={`h-full timer-bar transition-all duration-1000 linear ${timeLeft > 10 ? 'bg-green-500' : timeLeft > 5 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                                style={{ width: `${(timeLeft / 15) * 100}%` }}
-                            ></div>
-                            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-600">
-                                {timeLeft} sn
+            {/* --- HUD --- */}
+            <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-emerald-500/20 p-2 rounded-xl hidden md:block">
+                                <Zap className="h-6 w-6 text-emerald-400" />
+                            </div>
+                            <div>
+                                <h1 className="text-lg font-bold text-white">Kavram Avcısı</h1>
+                                <p className="text-slate-400 text-xs font-mono">SORU {currentQIndex + 1}/{questions.length}</p>
                             </div>
                         </div>
 
-                        <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-6 min-h-[160px] flex flex-col justify-center items-center text-center relative border-l-8 border-indigo-500">
-                            <div className="absolute top-3 right-3 flex gap-1">
+                        <div className="flex items-center gap-3 md:gap-6">
+                            {/* Kalan Haklar */}
+                            <div className="flex gap-1">
                                 {[0, 1].map(i => (
-                                    <span key={i} className={`text-xl ${i < (2 - wrongGuesses) ? 'opacity-100' : 'opacity-20 grayscale'}`}>
-                                        ❤️
-                                    </span>
+                                    <Heart key={i} className={cn("w-6 h-6 transition-all", i < (2 - wrongGuesses) ? "text-red-500 fill-red-500" : "text-slate-700")} />
                                 ))}
                             </div>
 
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed">
-                                {currentQ.definition}
-                            </h3>
-                            
-                            {feedbackMsg && (
-                                <div className={`mt-4 font-bold py-1 px-4 rounded-full animate-pulse ${feedbackMsg.includes('Doğru') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                    {feedbackMsg}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {currentQ.options.map((option) => {
-                                let btnStyle = "py-6 rounded-xl font-bold text-lg shadow-md transition-all transform active:scale-95 border-b-4 ";
-                                
-                                if (correctCard === option) {
-                                    btnStyle += "bg-green-500 border-green-700 text-white scale-105 ring-4 ring-green-200";
-                                } else if (disabledCards.includes(option)) {
-                                    btnStyle += "bg-red-200 border-red-300 text-red-400 cursor-not-allowed";
-                                } else {
-                                    btnStyle += "bg-white border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-300 hover:-translate-y-1";
-                                }
-
-                                return (
-                                    <button
-                                        key={option}
-                                        onClick={() => handleCardClick(option)}
-                                        className={btnStyle}
-                                        disabled={disabledCards.includes(option) || correctCard !== null || isRoundOver}
-                                    >
-                                        {option}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                        {isRoundOver && (
-                            <div className="text-center mt-6">
-                                <Button
-                                    onClick={nextQuestion}
-                                    className="px-10 py-3 text-lg font-bold rounded-full shadow-lg"
-                                >
-                                    {currentQIndex + 1 < questions.length ? 'Sıradaki Soru ➔' : 'Sonuçları Gör'}
-                                </Button>
+                            {/* Puan */}
+                            <div className="flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
+                                <Trophy className="h-4 w-4 text-yellow-400" />
+                                <span className="font-mono font-bold text-white">{score}</span>
                             </div>
-                        )}
+
+                            <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 rounded-xl" />
+                        </div>
+                    </div>
+
+                    {/* Süre Çubuğu */}
+                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden relative">
+                        <div 
+                            className={cn(
+                                "h-full transition-all duration-1000 ease-linear",
+                                timeLeft > 5 ? "bg-emerald-500" : "bg-red-500 animate-pulse"
+                            )}
+                            style={{ width: `${(timeLeft / 15) * 100}%` }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* --- OYUN ALANI --- */}
+            <main className="relative flex-grow flex flex-col items-center justify-center p-4 w-full max-w-4xl z-10 pb-24 md:pb-8">
+                
+                {/* Soru Kartı */}
+                <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-3xl shadow-2xl mb-6 relative group animate-in slide-in-from-bottom-4 duration-500">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-3xl" />
+                    <h3 className="text-xl md:text-3xl font-bold text-white leading-relaxed text-center">
+                        {currentQ.definition}
+                    </h3>
+                </div>
+
+                {/* Geri Bildirim Mesajı */}
+                {feedbackMsg && (
+                    <div className={cn(
+                        "absolute top-[-40px] left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg animate-in zoom-in duration-300",
+                        feedbackMsg.includes('Doğru') ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
+                    )}>
+                        {feedbackMsg}
                     </div>
                 )}
-            </div>
+
+                {/* Seçenekler */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                    {currentQ.options.map((option) => {
+                        let btnStyle = "h-auto py-6 text-lg md:text-xl font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group ";
+                        
+                        if (correctCard === option) {
+                            btnStyle += "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
+                        } else if (disabledCards.includes(option)) {
+                            btnStyle += "bg-slate-800 border-red-500/50 text-red-400 opacity-50 cursor-not-allowed";
+                        } else {
+                            btnStyle += "bg-slate-900/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-emerald-500/50 hover:text-white hover:shadow-lg";
+                        }
+
+                        return (
+                            <button
+                                key={option}
+                                onClick={() => handleCardClick(option)}
+                                className={btnStyle}
+                                disabled={disabledCards.includes(option) || correctCard !== null || isRoundOver}
+                            >
+                                <span className="relative z-10">{option}</span>
+                                {correctCard === option && (
+                                    <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-emerald-200 animate-in zoom-in duration-300" />
+                                )}
+                                {disabledCards.includes(option) && correctCard !== option && (
+                                    <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-red-400 animate-in zoom-in duration-300" />
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Sonraki Soru Butonu */}
+                {isRoundOver && (
+                    <div className="mt-8 w-full flex justify-center animate-in slide-in-from-bottom-4 duration-300">
+                        <Button
+                            onClick={nextQuestion}
+                            className="px-10 py-6 text-xl font-bold rounded-2xl bg-white text-slate-900 hover:bg-emerald-50 shadow-lg transition-all hover:scale-105"
+                        >
+                            {currentQIndex + 1 < questions.length ? 'Sıradaki Soru' : 'Sonuçları Gör'} 
+                            <ArrowLeft className="ml-3 h-6 w-6 rotate-180" />
+                        </Button>
+                    </div>
+                )}
+            </main>
         </div>
     );
 }
 
 export default function Page() {
      return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-blue-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-600"/></div>}>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-emerald-500"/></div>}>
             <KavramYarismaGame />
         </Suspense>
     )
