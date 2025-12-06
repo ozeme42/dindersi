@@ -1,11 +1,10 @@
-
 "use client";
 
 import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import OyunKurulum from '../oyun-kurulum/page';
 import { Lightbulb, Loader2 } from 'lucide-react';
-import QuizGame from '@/app/oyunlar/soru-coz/page';
+import QuizGame from '../soru-coz/oyun/page';
 
 function BilBakalimPage() {
     const searchParams = useSearchParams();
