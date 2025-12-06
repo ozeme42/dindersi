@@ -46,7 +46,7 @@ export async function getIlimHazinesiAction(
 ): Promise<{ levels: IlimHazinesiLevel[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
 
         if (topicId && topicId !== 'all') {
             baseQuery = query(baseQuery, where("topicId", "==", topicId));
@@ -58,27 +58,26 @@ export async function getIlimHazinesiAction(
 
         const querySnapshot = await getDocs(baseQuery);
         
-        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
+        const allConcepts = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
              .filter(item => 
                 item.content &&
-                item.content.term && 
-                item.content.definition &&
-                item.content.term.trim().length >= 4 &&
-                item.content.term.trim().length <= 8 &&
-                !item.content.term.includes(' ')
+                item.content.text && 
+                item.content.text.trim().length >= 4 &&
+                item.content.text.trim().length <= 8 &&
+                !item.content.text.includes(' ')
             );
 
-        if (allDefinitions.length < 3) {
+        if (allConcepts.length < 3) {
             return { error: "İlim Hazinesi oynamak için bu konuda en az 3 adet (4-8 harfli) kelime bulunmalıdır.", levels: null };
         }
         
-        const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
+        const shuffled = [...allConcepts].sort(() => 0.5 - Math.random());
         
         const gameLevels: IlimHazinesiLevel[] = [];
 
         for (const item of shuffled) {
-            const mainWord = item.content.term!;
-            const info = item.content.definition!;
+            const mainWord = item.content.text!;
+            const info = `Bu kelime ${mainWord.length} harflidir ve '${mainWord[0]}' harfi ile başlar.`;
             const letters = generateLetters(mainWord);
             
             // Bu harflerle oluşturulabilecek diğer kelimeleri bul (basit bir yaklaşım)
