@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -11,6 +12,7 @@ import { Loader2, ArrowLeft, Save, Home, Repeat, Lightbulb, BrainCircuit, Zap, T
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 // --- GÖRSEL BİLEŞENLER ---
 
@@ -22,7 +24,7 @@ const GameBackground = () => (
     </div>
 );
 
-const GameHUD = ({ score, remaining }: { score: number, remaining: number }) => {
+const GameHUD = ({ score, remaining, onFinish }: { score: number, remaining: number, onFinish: () => void }) => {
     return (
         <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
             <div className="max-w-6xl mx-auto flex justify-between items-start">
@@ -33,6 +35,8 @@ const GameHUD = ({ score, remaining }: { score: number, remaining: number }) => 
                     </span>
                 </div>
                 
+                 <Button onClick={onFinish} variant="destructive" size="sm" className="font-bold">Oyunu Bitir</Button>
+
                 <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-full">
                     <span className="text-sm lg:text-base text-slate-400 font-bold uppercase tracking-wider">Kalan</span>
                     <span className="text-xl lg:text-2xl font-black text-white font-mono">
@@ -56,11 +60,12 @@ function BilBakalimGame() {
     const [queue, setQueue] = useState<Partial<Question>[]>([]); 
     const [allTerms, setAllTerms] = useState<string[]>([]);
     
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'won' | 'error'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'won' | 'error' | 'finished'>('loading');
     const [score, setScore] = useState(0);
     const [mistakeCount, setMistakeCount] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
     
     // Animasyon State'leri
     const [feedbackState, setFeedbackState] = useState<'idle' | 'correct' | 'wrong'>('idle');
@@ -68,6 +73,7 @@ function BilBakalimGame() {
     const [activeTermId, setActiveTermId] = useState<string | null>(null); 
 
     const gameContext = `Bil Bakalım - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    const backUrl = '/oyunlar/bil-bakalim';
 
     // Veri Çekme
     const fetchGameData = useCallback(async () => {
@@ -115,7 +121,6 @@ function BilBakalimGame() {
                 setFeedbackState('idle');
                 setActiveTermId(null);
                 
-                // Oyun bitti mi?
                 if (queue.length <= 1) { 
                     setGameState('won');
                 }
@@ -145,19 +150,27 @@ function BilBakalimGame() {
 
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (!user || score <= 0) {
-            router.push('/oyunlar/bil-bakalim');
+        if (!user || score <= 0 || isSaving || isScoreSaved) {
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
         const result = await submitBilBakalimScoreAction(user.uid, score, gameContext);
         if(result.success) {
+            setIsScoreSaved(true);
             toast({ title: "Başarılı", description: "Puanın kaydedildi." });
-            router.push('/student'); // Dashboard'a dön
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
             setIsSaving(false);
         }
+    };
+    
+     const handleRestart = () => {
+        setScore(0);
+        setIsScoreSaved(false);
+        setMistakeCount(0);
+        setGameState('loading');
+        fetchGameData();
     };
 
     // --- RENDER ---
@@ -173,7 +186,7 @@ function BilBakalimGame() {
         );
     }
 
-    if (error) {
+    if (gameState === 'error') {
         return (
              <div className="flex h-screen w-full items-center justify-center p-4 bg-slate-950">
                  <div className="text-center space-y-4 max-w-md bg-amber-950/50 p-6 rounded-3xl border border-amber-500/30">
@@ -181,64 +194,32 @@ function BilBakalimGame() {
                     <h3 className="text-xl font-bold text-amber-100">Oyun Başlatılamadı</h3>
                     <p className="text-amber-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/bil-bakalim">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
         );
     }
+    
+    const isFinished = gameState === 'won' || gameState === 'finished';
 
-    if (gameState === 'won') {
+    if (isFinished) {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-                <GameBackground />
-                <div className="relative z-10 w-full max-w-lg text-center space-y-8 animate-in zoom-in-95 duration-500">
-                    <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-3xl animate-pulse" />
-                        <Trophy className="w-32 h-32 text-amber-400 mx-auto drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl lg:text-6xl font-black text-white mb-2 tracking-tight">MUHTEŞEM!</h1>
-                        <p className="text-slate-400 text-lg">Tüm kavramları eşleştirdin.</p>
-                    </div>
-                    <div className="bg-slate-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-xl space-y-2">
-                        <p className="text-amber-400 text-sm uppercase font-bold tracking-widest">Toplam Puan</p>
-                        <div className="text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                            {score}
-                        </div>
-                        {mistakeCount > 0 && (
-                            <p className="text-slate-500 text-sm">{mistakeCount} kez yanlış yaptın.</p>
-                        )}
-                    </div>
-                    
-                    {/* TEK VE BÜYÜK BUTON */}
-                    <div className="pt-4">
-                        <Button 
-                            onClick={handleSaveAndExit} 
-                            size="lg" 
-                            disabled={isSaving}
-                            className="w-full h-20 text-xl lg:text-2xl font-black rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-xl shadow-amber-500/25 transition-all transform hover:scale-105"
-                        >
-                            {isSaving ? (
-                                <>
-                                    <Loader2 className="mr-3 h-8 w-8 animate-spin" /> KAYDEDİLİYOR...
-                                </>
-                            ) : (
-                                <>
-                                    <Save className="mr-3 h-8 w-8" /> PUANI KAYDET VE ÇIK
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <GameEndScreen 
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={handleRestart}
+                backUrl={backUrl}
+            />
         );
     }
 
     return (
-        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col", shakeScreen && "animate-shake")}>
+        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col pb-24 md:pb-8", shakeScreen && "animate-shake")}>
             <GameBackground />
-            <GameHUD score={score} remaining={queue.length} />
+            <GameHUD score={score} remaining={queue.length} onFinish={() => setGameState('finished')} />
 
             <main className="flex-grow flex flex-col items-center justify-start p-4 lg:p-8 relative z-10 mt-20 lg:mt-24 max-w-7xl mx-auto w-full">
                 
@@ -254,7 +235,7 @@ function BilBakalimGame() {
                          
                          <div className="relative z-10">
                             <div className="inline-flex items-center justify-center gap-2 mb-4 text-amber-400 font-bold tracking-widest text-xs lg:text-sm uppercase">
-                                <Zap className="w-4 h-4 fill-amber-400" /> Soru
+                                <Zap className="w-4 h-4 fill-amber-400" /> Soru {allTerms.length - queue.length + 1} / {allTerms.length}
                             </div>
                             
                             <h2 className={cn(

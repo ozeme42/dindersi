@@ -14,9 +14,13 @@ import Link from 'next/link';
 import { Textarea } from '@/components/ui/textarea';
 import { playSound } from '@/lib/audio-service';
 import { Progress } from '@/components/ui/progress';
+import { GameEndScreen } from '@/components/game-end-screen';
+import { useToast } from '@/hooks/use-toast';
 
 const OpenEndedGame = () => {
     const { user } = useAuth();
+    const { toast } = useToast();
+    const router = useRouter();
     const searchParams = useSearchParams();
     const isStatic = searchParams.get('static') === 'true';
 
@@ -28,6 +32,9 @@ const OpenEndedGame = () => {
     const [userAnswer, setUserAnswer] = useState('');
     const [isAnswered, setIsAnswered] = useState(false);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
+
 
     const gameContext = useMemo(() => ({
         courseName: searchParams.get('courseName') || 'Bilinmeyen Ders',
@@ -36,28 +43,33 @@ const OpenEndedGame = () => {
     }), [searchParams]);
     
     const contextString = `Açık Uçlu Cevaplama - ${gameContext.courseName} > ${gameContext.topicName}`;
+    const backUrl = '/oyunlar/acik-uclu-cevapla';
+
+    const fetchQuestions = useCallback(async () => {
+        setGameState('loading');
+        const params = {
+            courseId: searchParams.get('courseId') || undefined,
+            unitId: searchParams.get('unitId') || undefined,
+            topicId: searchParams.get('topicId') || undefined,
+        };
+        const { questions: fetchedQuestions, error: fetchError } = await getAcikUcluCevaplaAction(params);
+
+        if (fetchError) {
+            setError(fetchError);
+             setGameState('error');
+        } else if (fetchedQuestions.length > 0) {
+            setQuestions(fetchedQuestions as Question[]);
+            setGameState('playing');
+        } else {
+            setError("Bu kriterlere uygun soru bulunamadı.");
+            setGameState('error');
+        }
+    }, [searchParams]);
+
 
     useEffect(() => {
-        async function fetchQuestions() {
-            setGameState('loading');
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const { questions: fetchedQuestions, error: fetchError } = await getAcikUcluCevaplaAction(params);
-
-            if (fetchError) {
-                setError(fetchError);
-            } else if (fetchedQuestions.length > 0) {
-                setQuestions(fetchedQuestions as Question[]);
-                setGameState('playing');
-            } else {
-                setError("Bu kriterlere uygun soru bulunamadı.");
-            }
-        }
         fetchQuestions();
-    }, [searchParams]);
+    }, [fetchQuestions]);
 
     const handleSubmitAnswer = () => {
         if (!userAnswer.trim() || isAnswered) return;
@@ -86,22 +98,43 @@ const OpenEndedGame = () => {
             setIsAnswered(false);
             setIsCorrect(null);
         } else {
-            if (user) {
-                submitAcikUcluCevaplaScoreAction(user.uid, score, contextString);
-            }
             setGameState('finished');
         }
     }
 
-    const restartGame = () => window.location.reload();
-    
-    const backUrl = '/oyunlar/acik-uclu-cevapla';
+    const restartGame = () => {
+        setScore(0);
+        setCurrentQuestionIndex(0);
+        setIsScoreSaved(false);
+        setGameState('loading');
+        setUserAnswer('');
+        setIsAnswered(false);
+        setIsCorrect(null);
+        fetchQuestions();
+    };
 
+    const handleSaveAndExit = async () => {
+        if (isSaving || isScoreSaved || !user || score <= 0) {
+            router.push(backUrl);
+            return;
+        }
+        setIsSaving(true);
+        const result = await submitAcikUcluCevaplaScoreAction(user.uid, score, contextString);
+        if (result.success) {
+            setIsScoreSaved(true);
+            toast({ title: 'Başarılı!', description: 'Puanınız kaydedildi.' });
+        } else {
+            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+        }
+        setIsSaving(false);
+    };
+
+    
     if (gameState === 'loading') {
         return <div className="flex h-screen w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin" /></div>;
     }
 
-    if (error) {
+    if (gameState === 'error') {
          return (
             <div className="flex h-screen w-full items-center justify-center p-4">
                  <Alert variant="destructive" className="max-w-lg">
@@ -120,22 +153,14 @@ const OpenEndedGame = () => {
 
     if (gameState === 'finished') {
         return (
-             <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
-                <Card className="w-full max-w-md text-center">
-                    <CardHeader>
-                        <CardTitle className="text-3xl font-bold">Harika!</CardTitle>
-                        <CardDescription>Etkinliği tamamladın.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto mb-4" />
-                        <p className="text-xl">Kazandığın Puan: <span className="font-bold text-primary">{score}</span></p>
-                    </CardContent>
-                    <CardFooter className="flex justify-center gap-4">
-                        <Button onClick={restartGame}><Repeat className="mr-2 h-4 w-4" /> Yeni Test</Button>
-                        <Button variant="outline" asChild><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Etkinlik Merkezine Dön</Link></Button>
-                    </CardFooter>
-                </Card>
-            </div>
+             <GameEndScreen 
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={restartGame}
+                backUrl={backUrl}
+            />
         );
     }
 
@@ -143,11 +168,15 @@ const OpenEndedGame = () => {
     if (!currentQuestion) return null;
 
     return (
-        <div className="p-4 md:p-8 max-w-3xl mx-auto flex flex-col h-screen justify-center">
+        <div className="p-4 md:p-8 max-w-3xl mx-auto flex flex-col h-screen justify-center pb-24 md:pb-8">
              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-3xl font-bold text-center">Açık Uçlu Cevaplama</h1>
-                <span className="font-bold text-lg">Puan: {score}</span>
+                <h1 className="text-xl md:text-3xl font-bold text-center">Açık Uçlu Cevaplama</h1>
+                <div className="flex items-center gap-4">
+                    <span className="font-bold text-lg">Puan: {score}</span>
+                     <Button variant="outline" size="sm" onClick={() => setGameState('finished')}>Bitir</Button>
+                </div>
             </div>
+            <div className="text-center text-sm text-muted-foreground mb-2">Soru {currentQuestionIndex + 1} / {questions.length}</div>
              <Progress value={((currentQuestionIndex + 1) / questions.length) * 100} className="w-full mb-4" />
             <Card>
                 <CardHeader>
