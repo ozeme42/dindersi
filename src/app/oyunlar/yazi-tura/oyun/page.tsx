@@ -1,24 +1,31 @@
-
 'use client';
 
-import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
 import { submitYaziTuraScoreAction, getYaziTuraQuestionsAction } from '../actions';
-import type { YaziTuraQuestions, Question } from "@/lib/types";
-import { Loader2, AlertTriangle, ArrowLeft, Coins } from "lucide-react";
+import type { Question } from "@/lib/types";
+import { Loader2, AlertTriangle, ArrowLeft, Coins, Trophy, Save, RotateCw, CheckCircle2, XCircle, XOctagon } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { playSound } from '@/lib/audio-service';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
+
+// --- BİLEŞENLER ---
 
 const GameScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
     const isVisible = gameState === 'start' || gameState === 'flipping' || gameState === 'result';
     if (!isVisible) return null;
     return (
-        <div className="bg-white rounded-3xl shadow-xl p-8 text-center relative overflow-hidden">
-            {children}
+        <div className="w-full max-w-md mx-auto bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl p-8 text-center relative overflow-hidden animate-in zoom-in-95 duration-500">
+            {/* Arka Plan Işığı */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-indigo-500/20 rounded-full blur-[60px]" />
+            <div className="relative z-10">
+                {children}
+            </div>
         </div>
     );
 };
@@ -27,17 +34,22 @@ const QuestionScreen = ({ gameState, children }: { gameState: string, children: 
     const isVisible = gameState === 'question' || gameState === 'feedback';
     if (!isVisible) return null;
     return (
-         <div className="bg-white rounded-3xl shadow-xl p-8 border-t-8 border-indigo-500 relative">
+         <div className="w-full max-w-2xl mx-auto bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl p-6 md:p-10 relative animate-in slide-in-from-bottom-8 duration-500">
+            {/* Neon Border Top */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
             {children}
          </div>
     );
 }
+
+// --- ANA OYUN ---
 
 export function YaziTuraClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
     const router = useRouter();
+    const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [score, setScore] = useState(0);
     const [gameState, setGameState] = useState('loading'); 
@@ -54,7 +66,6 @@ export function YaziTuraClientPage() {
     const [error, setError] = useState<string | null>(null);
     
     const backUrl = '/oyunlar/yazi-tura';
-
     const gameContext = `Yazı Tura - ${searchParams.get('topicName') || 'Genel'}`;
     const topicName = searchParams.get('topicName') || 'Yazı Tura';
 
@@ -83,11 +94,13 @@ export function YaziTuraClientPage() {
     const flipCoin = () => {
         setGameState('flipping');
         setSelectedOption(null);
+        playSound('coin-flip'); // Para sesi (varsa)
         
         const isYazi = Math.random() < 0.5;
         const result = isYazi ? 'yazi' : 'tura';
         
-        const baseRotation = 1800;
+        // Çok turlu dönüş animasyonu
+        const baseRotation = 1800 + (360 * 5); // En az 5 tur
         const targetRotation = isYazi ? baseRotation : baseRotation + 180;
         
         setRotation(prev => prev + targetRotation);
@@ -96,19 +109,21 @@ export function YaziTuraClientPage() {
             setCoinSide(result);
             setGameState('result');
             pickQuestion(result);
+            playSound(result === 'yazi' ? 'pop' : 'pop'); 
         }, 2500);
     };
 
     const pickQuestion = (side: string) => {
         const questionPool = side === 'yazi' ? questionsYazi : questionsTura;
-        const availableQuestions = questionPool.filter(q => q.id !== currentQuestion?.id);
+        // Basitçe rastgele seçelim, aynı soru gelebilir (daha gelişmiş mantık eklenebilir)
+        const randomQ = questionPool[Math.floor(Math.random() * questionPool.length)];
         
-        if(availableQuestions.length === 0) {
-            toast({title: "Soru Kalmadı!", description: `Bu zorlukta başka soru bulunamadı.`, variant: "destructive"});
-            setGameState('start');
-            return;
+        if(!randomQ) {
+             // Soru havuzu boşsa veya hata varsa
+             toast({title: "Soru Bulunamadı", description: "Yeterli soru yok.", variant: "destructive"});
+             setGameState('start');
+             return;
         }
-        const randomQ = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
         setCurrentQuestion(randomQ);
     };
 
@@ -121,13 +136,17 @@ export function YaziTuraClientPage() {
         setIsCorrect(isCorrectCheck);
 
         if (isCorrectCheck) {
+            playSound('correct');
             const points = coinSide === 'yazi' ? 10 : 20;
             setScore(score + points);
+        } else {
+            playSound('incorrect');
         }
     };
 
     const nextTurn = () => {
         setGameState('start');
+        setCoinSide(null);
     };
 
     const handleSaveAndExit = async () => {
@@ -140,6 +159,7 @@ export function YaziTuraClientPage() {
         if (result.success) {
             setIsScoreSaved(true);
             toast({ title: 'Başarılı!', description: `${score} puan kazandın ve profiline eklendi.` });
+            router.push('/oyunlar/yazi-tura');
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
@@ -155,21 +175,22 @@ export function YaziTuraClientPage() {
         setIsScoreSaved(false);
     };
     
+    // --- RENDER ---
+
     if (gameState === 'loading') {
-        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin"/></div>
+        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500"/></div>
     }
 
     if (error) {
          return (
-             <div className="flex h-screen items-center justify-center p-4">
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md" role="alert">
-                    <strong className="font-bold">Hata! </strong>
-                    <span className="block sm:inline ml-2">{error}</span>
-                     <div className="mt-4">
-                        <Button asChild variant="outline">
-                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
-                        </Button>
-                    </div>
+             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
+                <div className="bg-slate-900 border border-red-500/30 text-white px-8 py-6 rounded-3xl relative max-w-md text-center shadow-2xl">
+                    <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold mb-2">Hata Oluştu</h3>
+                    <p className="text-slate-400 mb-6">{error}</p>
+                    <Button asChild className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 rounded-xl">
+                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                    </Button>
                 </div>
             </div>
          );
@@ -189,76 +210,111 @@ export function YaziTuraClientPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-purple-100 font-body pb-24 md:pb-8">
-             <style jsx global>{`
-                .header-font { font-family: 'Fredoka', sans-serif; }
-                .coin-container { perspective: 1000px; width: 150px; height: 150px; margin: 0 auto; cursor: pointer; }
-                .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 3s ease-out; }
-                .coin.flipping { animation: flipCoin 2s infinite linear; }
-                .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 8px solid #FCD34D; }
-                .coin-front { background-color: #4F46E5; /* Indigo */ color: white; transform: rotateY(0deg); }
-                .coin-back { background-color: #EC4899; /* Pink */ color: white; transform: rotateY(180deg); }
-                .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-            
-            <div className="w-full max-w-2xl flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-lg">
-                <Button asChild variant="outline" size="sm">
-                    <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Geri Dön</Link>
-                </Button>
-                <div>
-                    <h1 className="text-2xl font-bold text-indigo-800 header-font">{topicName}</h1>
-                </div>
-                <div className="text-right">
-                    <p className="text-sm text-gray-500">PUANIN</p>
-                    <p className="text-4xl font-bold text-indigo-600 header-font">{score}</p>
+        <div ref={mainContentRef} className="min-h-screen flex flex-col items-center bg-slate-950 text-white relative overflow-hidden select-none">
+             
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
+            </div>
+
+            {/* --- HUD --- */}
+            <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
+                <div className="max-w-4xl mx-auto flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
+                            <Link href={backUrl}><ArrowLeft className="h-6 w-6" /></Link>
+                        </Button>
+                        <div>
+                            <h1 className="font-bold text-lg text-white leading-tight">{topicName}</h1>
+                            <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Şansını Dene!</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <Button 
+                            onClick={() => setGameState('finished')}
+                            variant="ghost"
+                            className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10 hidden sm:flex"
+                        >
+                            <XOctagon className="h-4 w-4 mr-1.5" />
+                            Bitir
+                        </Button>
+
+                        <div className="flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
+                            <Trophy className="h-4 w-4 text-yellow-400" />
+                            <span className="font-mono font-bold text-white">{score}</span>
+                        </div>
+                        <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 rounded-xl" />
+                    </div>
                 </div>
             </div>
 
-            <div className="w-full max-w-md">
+            {/* --- OYUN ALANI --- */}
+            <div className="flex-grow flex flex-col items-center justify-center p-4 w-full relative z-10 pb-24 md:pb-8">
                 
+                {/* CSS for 3D Coin */}
+                <style jsx global>{`
+                    .coin-container { perspective: 1000px; width: 180px; height: 180px; margin: 0 auto; cursor: pointer; }
+                    .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+                    .coin-face { 
+                        position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 50%; 
+                        display: flex; align-items: center; justify-content: center; 
+                        box-shadow: 0 0 30px rgba(234, 179, 8, 0.3), inset 0 0 20px rgba(255,255,255,0.2); 
+                        border: 8px solid #FCD34D; 
+                        background: radial-gradient(circle at 30% 30%, #F59E0B, #B45309);
+                    }
+                    .coin-front { transform: rotateY(0deg); }
+                    .coin-back { transform: rotateY(180deg); }
+                    .coin-text { font-weight: 900; font-size: 2rem; color: #FFFBEB; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+                    .coin-sub { font-size: 0.75rem; font-weight: bold; color: #FEF3C7; text-transform: uppercase; margin-top: 0.25rem; letter-spacing: 0.1em; }
+                `}</style>
+
                 <GameScreen gameState={gameState}>
-                    <div className="mb-8 mt-4">
-                        <div className="coin-container">
+                    <div className="mb-8 mt-2">
+                        <div className="coin-container" onClick={gameState === 'start' ? flipCoin : undefined}>
                             <div className="coin" style={{ transform: `rotateY(${rotation}deg)` }}>
-                                <div className="coin-face coin-front">
-                                    <div>
-                                        <div>YAZI</div>
-                                        <div className="text-xs opacity-75">10 Puan</div>
-                                    </div>
+                                <div className="coin-face coin-front flex-col">
+                                    <Coins className="h-10 w-10 text-yellow-100 mb-1 opacity-80" />
+                                    <div className="coin-text">YAZI</div>
+                                    <div className="coin-sub">10 Puan</div>
                                 </div>
-                                <div className="coin-face coin-back">
-                                    <div>
-                                        <div>TURA</div>
-                                        <div className="text-xs opacity-75">20 Puan</div>
-                                    </div>
+                                <div className="coin-face coin-back flex-col">
+                                    <Trophy className="h-10 w-10 text-yellow-100 mb-1 opacity-80" />
+                                    <div className="coin-text">TURA</div>
+                                    <div className="coin-sub">20 Puan</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {gameState === 'start' && (
-                        <div className="space-y-4">
-                            <button onClick={flipCoin} className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-lg">
-                                PARAYI AT
+                        <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+                            <p className="text-slate-400 mb-4">Parayı at, şansına gelen zorlukta soruyu bil!</p>
+                            <button 
+                                onClick={flipCoin} 
+                                className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-2xl font-bold text-xl transition-all transform hover:scale-105 shadow-xl shadow-indigo-500/20 border-b-4 border-indigo-800 active:border-b-0 active:translate-y-1"
+                            >
+                                PARAYI AT <RotateCw className="inline-block ml-2 h-5 w-5" />
                             </button>
-                            <Button onClick={() => setGameState('finished')} disabled={isSaving} variant="secondary" className="w-full">
-                                Oyunu Bitir
-                            </Button>
                         </div>
                     )}
 
-                    {gameState === 'flipping' && <p className="text-indigo-400 font-semibold animate-pulse">Para dönüyor...</p>}
+                    {gameState === 'flipping' && <p className="text-indigo-400 font-bold text-lg animate-pulse mt-4">Şansın dönüyor...</p>}
 
                     {gameState === 'result' && (
-                        <div className="animate-bounce">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                        <div className="animate-in zoom-in duration-300">
+                            <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 mb-2 drop-shadow-sm">
                                 {coinSide === 'yazi' ? 'YAZI GELDİ!' : 'TURA GELDİ!'}
                             </h2>
-                            <p className="text-gray-500 mb-4">
+                            <div className={`inline-block px-4 py-1 rounded-full text-sm font-bold mb-6 ${coinSide === 'yazi' ? 'bg-blue-500/20 text-blue-300' : 'bg-pink-500/20 text-pink-300'}`}>
                                 {coinSide === 'yazi' ? 'Kolay Soru (10 Puan)' : 'Zor Soru (20 Puan)'}
-                            </p>
-                            <button onClick={() => setGameState('question')} className="px-8 py-2 bg-green-500 text-white rounded-full font-bold hover:bg-green-600 transition-colors">
+                            </div>
+                            
+                            <button 
+                                onClick={() => setGameState('question')} 
+                                className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold border border-white/10 transition-colors"
+                            >
                                 Soruyu Gör
                             </button>
                         </div>
@@ -268,35 +324,29 @@ export function YaziTuraClientPage() {
                 <QuestionScreen gameState={gameState}>
                     {currentQuestion && (
                         <>
-                            {gameState === 'question' && (
-                                <button onClick={() => setGameState('finished')} disabled={isSaving} className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 text-xs px-3 py-1 rounded-full font-bold transition-colors flex items-center gap-1" title="Oyunu bitir ve puanı kaydet">
-                                    <span>✖</span> Bitir
-                                </button>
-                            )}
-
-                            <div className="mb-4 flex justify-center mt-2">
-                                <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${coinSide === 'yazi' ? 'bg-blue-500' : 'bg-pink-500'}`}>
+                            <div className="mb-6 text-center">
+                                <span className={`px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${coinSide === 'yazi' ? 'bg-indigo-500' : 'bg-pink-500'}`}>
                                     {coinSide === 'yazi' ? '10 PUANLIK SORU' : '20 PUANLIK SORU'}
                                 </span>
                             </div>
                             
-                            <h3 className="text-xl font-bold text-gray-800 mb-6 text-center min-h-[60px] flex items-center justify-center">
+                            <h3 className="text-xl md:text-3xl font-bold text-white mb-8 text-center leading-relaxed drop-shadow-md">
                                 {currentQuestion.text}
                             </h3>
 
-                            <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {currentQuestion.options?.map((option, index) => {
-                                    let btnClass = "w-full py-3 px-4 rounded-xl font-semibold text-left transition-all border-2 ";
+                                    let btnClass = "py-4 px-6 rounded-2xl font-bold text-lg transition-all border-2 relative overflow-hidden group ";
                                     
                                     if (gameState === 'question') {
-                                        btnClass += "bg-white border-gray-200 text-gray-700 hover:border-indigo-400 hover:bg-indigo-50";
+                                        btnClass += "bg-slate-900/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-indigo-500/50 hover:text-white hover:shadow-lg";
                                     } else if (gameState === 'feedback') {
                                         if (option === currentQuestion.correctAnswer) {
-                                            btnClass += "bg-green-100 border-green-500 text-green-800";
+                                            btnClass += "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
                                         } else if (option === selectedOption) {
-                                            btnClass += "bg-red-100 border-red-500 text-red-800";
+                                            btnClass += "bg-red-900/50 border-red-500/50 text-red-400 opacity-80";
                                         } else {
-                                            btnClass += "bg-gray-50 border-gray-100 text-gray-400 opacity-60";
+                                            btnClass += "bg-slate-900/30 border-transparent text-slate-600 opacity-50";
                                         }
                                     }
 
@@ -307,20 +357,28 @@ export function YaziTuraClientPage() {
                                             disabled={gameState === 'feedback'}
                                             className={btnClass}
                                         >
-                                            {['A', 'B', 'C', 'D'][index] ? `${['A', 'B', 'C', 'D'][index]}) ` : ''} {option}
+                                            <span className="relative z-10">{option}</span>
+                                            {gameState === 'feedback' && option === currentQuestion.correctAnswer && (
+                                                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-emerald-200 animate-in zoom-in" />
+                                            )}
+                                            {gameState === 'feedback' && option === selectedOption && option !== currentQuestion.correctAnswer && (
+                                                <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-red-400 animate-in zoom-in" />
+                                            )}
                                         </button>
                                     );
                                 })}
                             </div>
 
                             {gameState === 'feedback' && (
-                                <div className="mt-6 text-center animate-fade-in">
-                                    <p className={`text-lg font-bold mb-4 ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
+                                <div className="mt-8 text-center animate-in slide-in-from-bottom-4 duration-300">
+                                    <div className={`inline-flex items-center gap-2 px-6 py-2 rounded-full font-bold text-lg mb-4 ${isCorrect ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}`}>
+                                        {isCorrect ? <CheckCircle2 className="h-5 w-5"/> : <XCircle className="h-5 w-5"/>}
                                         {isCorrect ? 'Tebrikler! Doğru Cevap.' : 'Maalesef Yanlış.'}
-                                    </p>
+                                    </div>
+                                    <br/>
                                     <button 
                                         onClick={nextTurn}
-                                        className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg transition-transform hover:scale-105"
+                                        className="px-10 py-4 bg-white text-slate-900 rounded-2xl font-bold hover:bg-indigo-50 shadow-lg shadow-white/10 transition-transform hover:scale-105"
                                     >
                                         Sıradaki Tur
                                     </button>
@@ -331,17 +389,13 @@ export function YaziTuraClientPage() {
                 </QuestionScreen>
 
             </div>
-            
-            <div className="mt-8 text-center opacity-50 text-xs">
-                <p>© 2025 Din Kültürü ve Ahlak Bilgisi Etkinlik Oyunu</p>
-            </div>
         </div>
     );
 }
 
 export default function YaziTuraOyunPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>}>
             <YaziTuraClientPage/>
         </Suspense>
     )
