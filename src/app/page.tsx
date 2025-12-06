@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -11,8 +10,8 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getPublicCurriculum } from './actions';
-import type { PublicClass } from './actions/getPublicCurriculum';
+import { getPublicCurriculum } from '@/app/actions/getPublicCurriculum';
+import type { PublicClass } from '@/app/actions/getPublicCurriculum';
 
 // --- UTILS ---
 import { cn } from '@/lib/utils';

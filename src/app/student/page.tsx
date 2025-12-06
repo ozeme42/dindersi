@@ -9,7 +9,7 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getPublicCurriculum, type PublicClass } from '../actions/getPublicCurriculum';
+import { getPublicCurriculum, type PublicClass } from '@/app/actions/getPublicCurriculum';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
