@@ -147,7 +147,7 @@ function WordSearchGame() {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [fontSize, setFontSize] = useState(1); // rem unit
-    const [gridWidth, setGridWidth] = useState(100); // percentage
+    const [containerSize, setContainerSize] = useState('max-w-5xl');
     
     const backUrl = '/oyunlar/kelime-avi';
 
@@ -255,7 +255,7 @@ function WordSearchGame() {
         setFoundPaths([]);
         setIsScoreSaved(false);
         setFontSize(1);
-        setGridWidth(100);
+        setContainerSize('max-w-5xl');
         fetchGameData();
     };
 
@@ -282,24 +282,27 @@ function WordSearchGame() {
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 lg:p-8 gap-6 pb-24 md:pb-8">
-            <div className="w-full max-w-5xl flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-teal-300">Kelime Avı</h1>
-                 <div className="flex items-center gap-2">
-                    <div className="text-xl font-bold">Puan: <span className="text-amber-400 font-mono">{score}</span></div>
-                    <Button variant="destructive" size="sm" onClick={() => setGameState('finished')}>Bitir</Button>
+            <div className={cn("w-full flex flex-col gap-6 transition-all duration-300", containerSize)}>
+                <div className="w-full flex justify-between items-center">
+                    <h1 className="text-3xl font-bold text-teal-300">Kelime Avı</h1>
+                    <div className="flex items-center gap-2">
+                        <div className="text-xl font-bold">Puan: <span className="text-amber-400 font-mono">{score}</span></div>
+                        <div className="flex flex-wrap gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.min(z + 0.2, 2.5))}><ZoomIn className="h-4 w-4"/></Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.4))}><ZoomOut className="h-4 w-4"/></Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(1)}><RotateCw className="h-4 w-4"/></Button>
+                            <div className="w-px h-6 bg-white/10 mx-1"></div>
+                            <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setContainerSize('max-w-3xl')}>S</Button>
+                            <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setContainerSize('max-w-5xl')}>M</Button>
+                            <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setContainerSize('max-w-7xl')}>L</Button>
+                        </div>
+                        <Button variant="destructive" size="sm" onClick={() => setGameState('finished')}>Bitir</Button>
+                    </div>
                 </div>
-            </div>
-            <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
-                <WordList words={wordsToFind} foundWords={foundWords} />
-                <div className="flex-grow aspect-square relative" style={{ width: `${gridWidth}%`, margin: '0 auto' }}>
-                    <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
-                    <div className="absolute bottom-2 right-2 flex flex-wrap gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.min(z + 0.2, 2.5))}><ZoomIn className="h-4 w-4"/></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.4))}><ZoomOut className="h-4 w-4"/></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(1)}><RotateCw className="h-4 w-4"/></Button>
-                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(50)}>50%</Button>
-                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(75)}>75%</Button>
-                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(100)}>100%</Button>
+                <div className="w-full flex flex-col lg:flex-row gap-6">
+                    <WordList words={wordsToFind} foundWords={foundWords} />
+                    <div className="flex-grow aspect-square relative">
+                        <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
                     </div>
                 </div>
             </div>
@@ -314,5 +317,6 @@ export default function Page() {
         </Suspense>
     );
 }
+    
 
     
