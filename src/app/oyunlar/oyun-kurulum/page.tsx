@@ -12,7 +12,10 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCoursesForSetup } from './actions';
+import { getCoursesForSetup as getCoursesForOyunKurulum } from './actions';
+import { getCurriculumForYazilacaklar } from '@/app/student/yazilacaklar/actions';
+import { getCurriculumForOzetler } from '@/app/student/ozetler/actions';
+
 
 // Type Definitions
 type Topic = { id: string; title: string; };
@@ -140,7 +143,18 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
   useEffect(() => {
     const fetchInitialData = async () => {
         setIsLoading(true);
-        const courseData = await getCoursesForSetup();
+
+        let courseData: any[] = [];
+        if (gamePath === 'yazilacaklar' && user) {
+            const { courses } = await getCurriculumForYazilacaklar(user.uid);
+            courseData = courses;
+        } else if (gamePath === 'ozetler' && user) {
+             const { courses } = await getCurriculumForOzetler(user.uid);
+             courseData = courses;
+        } else {
+            courseData = await getCoursesForOyunKurulum();
+        }
+        
         const enrichedCourses = courseData.map((c, i) => ({
             ...c,
             icon: ICONS[i % ICONS.length],
@@ -160,7 +174,7 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
     if (user) {
         fetchInitialData();
     }
-  }, [user]);
+  }, [user, gamePath]);
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -205,8 +219,9 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
   };
 
   const handleBack = () => {
+      const backUrl = gamePath === 'yazilacaklar' || gamePath === 'ozetler' ? '/student' : '/oyunlar';
       if (currentStep > 1) setCurrentStep(currentStep - 1);
-      else router.push('/student');
+      else router.push(backUrl);
   };
 
   const getGameUrl = () => {
@@ -408,7 +423,7 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
         </div>
 
         <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] md:min-h-[500px] flex flex-col">
-            <div className="p-3 md:p-8 border-b border-white/5 bg-black/20 flex justify-between items-center">
+            <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
                     {/* Mobilde ikonu gizledim, sadece yazı */}
                     <span className="md:hidden">{steps.find(s => s.id === currentStep)?.name} Seçimi</span>

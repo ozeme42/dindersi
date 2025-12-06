@@ -78,6 +78,13 @@ export async function getCurriculumForOzetler(userId: string): Promise<{ courses
             }
         }
         
+        // Sort courses to put "Din Kültürü ve Ahlak Bilgisi" first
+        enrichedCourses.sort((a, b) => {
+            if (a.title.includes('Din Kültürü')) return -1;
+            if (b.title.includes('Din Kültürü')) return 1;
+            return a.title.localeCompare(b.title);
+        });
+
         return { courses: JSON.parse(JSON.stringify(enrichedCourses)) };
         
     } catch (e: any) {
