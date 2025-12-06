@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
 import type { ConceptQuizQuestion } from '../actions';
-import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy, Timer, Heart, Zap, CheckCircle2, XCircle, Play } from "lucide-react";
+import { Loader2, ArrowLeft, Home, PartyPopper, Repeat, Trophy, Timer, Heart, Zap, CheckCircle2, XCircle, Play, XOctagon } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { playSound, stopSound } from '@/lib/audio-service';
@@ -162,7 +162,7 @@ function KavramYarismaGame() {
     };
 
     const handleSaveAndExit = async () => {
-        if (!user || score <= 0 || scoreSaved || isSaving) {
+        if (!user || score === 0 || scoreSaved || isSaving) {
             router.push('/oyunlar/kavram-yarismasi');
             return;
         }
@@ -206,11 +206,16 @@ function KavramYarismaGame() {
 
     if (gameState === 'start') {
         return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
+            // GÜNCELLENDİ: 'pb-24' eklendi ve 'overflow-hidden' yerine 'overflow-y-auto' yapıldı.
+            // Böylece mobilde buton altta kalmaz.
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 pb-24 md:p-8 relative overflow-y-auto">
                 {/* Arka Plan */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-900/20 via-slate-950 to-slate-950" />
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-emerald-900/20 rounded-full blur-[120px] animate-pulse" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-900/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+                </div>
                 
-                <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
+                <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500 my-auto">
                     <div className="relative inline-block">
                         <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
                         <Zap className="w-32 h-32 text-emerald-400 mx-auto drop-shadow-[0_0_25px_rgba(52,211,153,0.6)] animate-bounce" />
@@ -223,15 +228,15 @@ function KavramYarismaGame() {
 
                     <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 backdrop-blur-xl text-left space-y-4">
                         <div className="flex items-center gap-4 text-slate-300">
-                            <Timer className="w-6 h-6 text-emerald-500" />
+                            <Timer className="w-6 h-6 text-emerald-500 shrink-0" />
                             <span>Her soru için <strong>15 saniye</strong> süren var.</span>
                         </div>
                         <div className="flex items-center gap-4 text-slate-300">
-                            <Heart className="w-6 h-6 text-red-500" />
+                            <Heart className="w-6 h-6 text-red-500 shrink-0" />
                             <span>Her soruda <strong>2 can</strong> hakkın var.</span>
                         </div>
                         <div className="flex items-center gap-4 text-slate-300">
-                            <Trophy className="w-6 h-6 text-yellow-500" />
+                            <Trophy className="w-6 h-6 text-yellow-500 shrink-0" />
                             <span>Doğru cevaplarla puanları topla!</span>
                         </div>
                     </div>
@@ -288,11 +293,11 @@ function KavramYarismaGame() {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3 md:gap-6">
+                        <div className="flex items-center gap-2 md:gap-4">
                             {/* Kalan Haklar */}
                             <div className="flex gap-1">
                                 {[0, 1].map(i => (
-                                    <Heart key={i} className={cn("w-6 h-6 transition-all", i < (2 - wrongGuesses) ? "text-red-500 fill-red-500" : "text-slate-700")} />
+                                    <Heart key={i} className={cn("w-5 h-5 md:w-6 md:h-6 transition-all", i < (2 - wrongGuesses) ? "text-red-500 fill-red-500" : "text-slate-700")} />
                                 ))}
                             </div>
 
@@ -301,6 +306,16 @@ function KavramYarismaGame() {
                                 <Trophy className="h-4 w-4 text-yellow-400" />
                                 <span className="font-mono font-bold text-white">{score}</span>
                             </div>
+                            
+                            {/* Bitir Butonu */}
+                            <Button 
+                                onClick={endGame}
+                                variant="ghost"
+                                className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10 hidden sm:flex"
+                            >
+                                <XOctagon className="h-4 w-4 mr-1.5" />
+                                Bitir
+                            </Button>
 
                             <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 rounded-xl" />
                         </div>
@@ -320,6 +335,7 @@ function KavramYarismaGame() {
             </div>
 
             {/* --- OYUN ALANI --- */}
+            {/* GÜNCELLENDİ: 'pb-24' eklendi ve 'justify-center' yerine 'pt-8' gibi bir yapı ile hizalama düzeltilebilir. */}
             <main className="relative flex-grow flex flex-col items-center justify-center p-4 w-full max-w-4xl z-10 pb-24 md:pb-8">
                 
                 {/* Soru Kartı */}
@@ -333,15 +349,15 @@ function KavramYarismaGame() {
                 {/* Geri Bildirim Mesajı */}
                 {feedbackMsg && (
                     <div className={cn(
-                        "absolute top-[-40px] left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg animate-in zoom-in duration-300",
+                        "absolute top-[-20px] left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest shadow-lg animate-in zoom-in duration-300 z-50",
                         feedbackMsg.includes('Doğru') ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
                     )}>
                         {feedbackMsg}
                     </div>
                 )}
 
-                {/* Seçenekler */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                {/* Seçenekler - GÜNCELLEME: Masaüstü için grid-cols-2 (2x2) */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                     {currentQ.options.map((option) => {
                         let btnStyle = "h-auto py-6 text-lg md:text-xl font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group ";
                         
