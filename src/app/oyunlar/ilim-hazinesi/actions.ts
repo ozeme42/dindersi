@@ -18,35 +18,22 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
-import { GENERIC_TURKISH_WORDS } from '@/lib/generic-words';
 
 export type IlimHazinesiLevel = {
     letters: string[];
-    words: string[];
     mainWord: string;
-    info: string;
+    info: string; // This will now hold the definition
 };
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
-// Yeni harf üretme fonksiyonu
-const generateLetters = (mainWord: string): string[] => {
-    const mainWordLetters = mainWord.toLocaleUpperCase('tr-TR').split('');
-    const alphabet = "ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ";
-    const additionalLettersCount = Math.max(0, 8 - mainWordLetters.length);
-    let letters = [...mainWordLetters];
-    for (let i = 0; i < additionalLettersCount; i++) {
-        letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
-    }
-    return letters.sort(() => Math.random() - 0.5);
-}
-
+// This function now fetches definitions and prepares levels based on them.
 export async function getIlimHazinesiAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
 ): Promise<{ levels: IlimHazinesiLevel[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
+        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
 
         if (topicId && topicId !== 'all') {
             baseQuery = query(baseQuery, where("topicId", "==", topicId));
@@ -58,48 +45,35 @@ export async function getIlimHazinesiAction(
 
         const querySnapshot = await getDocs(baseQuery);
         
-        const allConcepts = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
+        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
              .filter(item => 
                 item.content &&
-                item.content.text && 
-                item.content.text.trim().length >= 4 &&
-                item.content.text.trim().length <= 8 &&
-                !item.content.text.includes(' ')
+                item.content.term &&
+                item.content.definition &&
+                item.content.term.trim().length >= 3 &&
+                item.content.term.trim().length <= 10 && // Keep word length reasonable
+                !item.content.term.includes(' ')
             );
 
-        if (allConcepts.length < 3) {
-            return { error: "İlim Hazinesi oynamak için bu konuda en az 3 adet (4-8 harfli) kelime bulunmalıdır.", levels: null };
+        if (allDefinitions.length === 0) {
+            return { error: "İlim Hazinesi oynamak için bu konuda en az 1 adet tanımı olan kavram bulunmalıdır.", levels: null };
         }
         
-        const shuffled = [...allConcepts].sort(() => 0.5 - Math.random());
+        const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
         
         const gameLevels: IlimHazinesiLevel[] = [];
 
         for (const item of shuffled) {
-            const mainWord = item.content.text!;
-            const info = `Bu kelime ${mainWord.length} harflidir ve '${mainWord[0]}' harfi ile başlar.`;
-            const letters = generateLetters(mainWord);
+            const mainWord = item.content.term!.toLocaleUpperCase('tr-TR');
+            const definition = item.content.definition!;
             
-            // Bu harflerle oluşturulabilecek diğer kelimeleri bul (basit bir yaklaşım)
-            const otherWords = GENERIC_TURKISH_WORDS.filter(word => {
-                if (word.length < 3 || word.toLocaleUpperCase('tr-TR') === mainWord) return false;
-                const wordLetters = word.toLocaleUpperCase('tr-TR').split('');
-                const availableLetters = [...letters];
-                return wordLetters.every(letter => {
-                    const index = availableLetters.indexOf(letter);
-                    if (index > -1) {
-                        availableLetters.splice(index, 1);
-                        return true;
-                    }
-                    return false;
-                });
-            }).map(w => w.toLocaleUpperCase('tr-TR')).slice(0, 5);
-
+            // The letters will only be from the main word itself.
+            const letters = mainWord.split('').sort(() => Math.random() - 0.5);
+            
             gameLevels.push({
                 mainWord,
-                info,
+                info: definition, // The definition is now the info
                 letters,
-                words: [mainWord, ...otherWords],
             });
         }
         

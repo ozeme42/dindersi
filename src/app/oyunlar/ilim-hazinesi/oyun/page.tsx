@@ -1,15 +1,14 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-// DÜZELTME: 'Trophy' buraya eklendi
-import { Lightbulb, RefreshCw, ChevronRight, Star, BookOpen, Loader2, AlertTriangle, Home, PartyPopper, Repeat, ArrowLeft, Hexagon, Sparkles, Trophy } from 'lucide-react';
+import { Lightbulb, RefreshCw, ChevronRight, Star, BookOpen, Loader2, AlertTriangle, Home, PartyPopper, Repeat, ArrowLeft, Trophy } from 'lucide-react';
 import { getIlimHazinesiAction, submitIlimHazinesiScoreAction, type IlimHazinesiLevel } from '../actions';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
@@ -29,7 +28,6 @@ function GameComponent() {
     const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
     const [score, setScore] = useState(0);
     const [showInfo, setShowInfo] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -45,9 +43,8 @@ function GameComponent() {
         if (!levels || levels.length === 0 || levelIndex >= levels.length) return;
         
         const current = levels[levelIndex];
-        const letters = current.letters;
-        const mixed = [...letters].sort(() => Math.random() - 0.5);
-        setShuffledLetters(mixed);
+        // The letters are already shuffled in the action
+        setShuffledLetters(current.letters);
         setFoundWords([]);
         setCurrentSelection([]);
         setShowInfo(false);
@@ -82,17 +79,17 @@ function GameComponent() {
     };
 
     const useHint = () => {
-        if (!currentLevel || foundWords.includes(currentLevel.mainWord)) return;
+        if (!currentLevel) return;
         if (score >= 50) {
             setScore(s => s - 50);
-            toast({ title: 'İpucu', description: `Ana kelime '${currentLevel.mainWord[0]}' harfi ile başlıyor.` });
+            toast({ title: 'İpucu', description: `Kelime '${currentLevel.mainWord[0]}' harfi ile başlıyor ve ${currentLevel.mainWord.length} harfli.` });
         } else {
             toast({ title: 'Yetersiz Puan', description: 'İpucu için en az 50 puan gerekli!', variant: 'destructive' });
         }
     };
 
     const getLetterPosition = (index: number, total: number) => {
-        const radius = 90; // Yarıçapı biraz artırdık
+        const radius = 90;
         const angle = (index * (360 / total)) - 90;
         const radian = (angle * Math.PI) / 180;
         const x = radius * Math.cos(radian);
@@ -120,19 +117,10 @@ function GameComponent() {
             if (!currentSelection.includes(index)) {
                 setCurrentSelection(prev => [...prev, index]);
             } else {
-                // Geri alma mantığı
                 if (currentSelection.length > 1 && currentSelection[currentSelection.length - 2] === index) {
                     setCurrentSelection(prev => prev.slice(0, -1));
                 }
             }
-        }
-        
-        if (wheelRef.current) {
-            const rect = wheelRef.current.getBoundingClientRect();
-            setMousePos({
-                x: clientX - rect.left - rect.width / 2,
-                y: clientY - rect.top - rect.height / 2
-            });
         }
     };
 
@@ -146,13 +134,10 @@ function GameComponent() {
         if (!currentLevel || currentSelection.length === 0) return;
         const formedWord = currentSelection.map(idx => shuffledLetters[idx]).join("");
         
-        if (currentLevel.words.includes(formedWord) && !foundWords.includes(formedWord)) {
-            setFoundWords(prev => [...prev, formedWord]);
-            setScore(score + (formedWord.length * 10));
-            
-            if (formedWord === currentLevel.mainWord) {
-                setTimeout(() => setShowInfo(true), 500);
-            }
+        if (formedWord === currentLevel.mainWord && !foundWords.includes(formedWord)) {
+          setFoundWords(prev => [...prev, formedWord]);
+          setScore(score + (formedWord.length * 10));
+          setTimeout(() => setShowInfo(true), 500);
         }
     };
     
@@ -182,8 +167,6 @@ function GameComponent() {
 
     const currentWordString = currentSelection.map(idx => shuffledLetters[idx]).join("");
     
-    // --- RENDER ---
-
     if (isLoading) {
         return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-fuchsia-500" /></div>;
     }
@@ -206,7 +189,6 @@ function GameComponent() {
     if (isFinished) {
         return (
             <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-                {/* Arka Plan */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-fuchsia-900/20 via-slate-950 to-slate-950" />
                 
                 <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
@@ -253,13 +235,11 @@ function GameComponent() {
             onTouchMove={handleMove}
             onTouchEnd={handleEnd}
         >
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
 
-            {/* --- HUD (Üst Panel) --- */}
             <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
                 <div className="max-w-4xl mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-3">
@@ -282,10 +262,7 @@ function GameComponent() {
                 </div>
             </div>
             
-            {/* --- OYUN ALANI --- */}
             <div className="relative flex-grow flex flex-col justify-center items-center w-full max-w-4xl z-10 pb-12">
-                
-                {/* Seçilen Kelime Göstergesi */}
                 <div className="h-16 flex items-center justify-center mb-8">
                     <div className={cn(
                         "text-4xl md:text-5xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all",
@@ -295,12 +272,10 @@ function GameComponent() {
                     </div>
                 </div>
 
-                {/* Oyun Çarkı */}
                 <div 
                     ref={wheelRef}
                     className="relative w-[300px] h-[300px] md:w-[350px] md:h-[350px] bg-slate-900/40 backdrop-blur-sm rounded-full border border-white/10 shadow-[0_0_50px_rgba(192,132,252,0.1)] flex items-center justify-center"
                 >
-                    {/* Kontrol Butonları (Çarkın Üstünde) */}
                     <div className="absolute -top-20 left-0 right-0 flex justify-center gap-12 w-full z-20 pointer-events-auto">
                         <button onClick={shuffleCurrent} className="group p-4 rounded-full bg-slate-800/80 border border-white/10 text-slate-300 hover:text-white hover:bg-fuchsia-500 hover:border-fuchsia-400 hover:shadow-[0_0_20px_rgba(217,70,239,0.4)] transition-all duration-300">
                             <RefreshCw className="h-6 w-6 group-hover:rotate-180 transition-transform duration-500" />
@@ -310,19 +285,16 @@ function GameComponent() {
                         </button>
                     </div>
 
-                    {/* Çizgi İzi (SVG) */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible filter drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]">
                         {currentSelection.length > 0 && isTouching && (
                             <path 
                                 d={`M ${currentSelection.map((idx) => {
                                     const pos = getLetterPosition(idx, shuffledLetters.length);
-                                    // Merkez noktası (width/2)
-                                    // Dinamik width almak yerine ortalama bir değer kullanıyoruz
                                     const center = (wheelRef.current?.offsetWidth || 300) / 2;
                                     return `${center + pos.x} ${center + pos.y}`;
                                 }).join(' L ')}`}
                                 fill="none"
-                                stroke="#d946ef" // Fuchsia-500
+                                stroke="#d946ef"
                                 strokeWidth="6"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -331,7 +303,6 @@ function GameComponent() {
                         )}
                     </svg>
 
-                    {/* Harfler */}
                     {shuffledLetters.map((char, i) => {
                         const pos = getLetterPosition(i, shuffledLetters.length);
                         const isSelected = currentSelection.includes(i);
@@ -361,20 +332,16 @@ function GameComponent() {
                 </div>
             </div>
 
-            {/* Bilgi Pop-up (Glassmorphism) */}
             {showInfo && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-300">
                     <div className="relative bg-slate-900/90 border border-emerald-500/30 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl animate-in zoom-in-95 duration-300">
-                        
-                        {/* Glow Efekti */}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-emerald-500/20 rounded-full blur-[60px]" />
-
                         <div className="relative z-10">
                             <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                                <Sparkles className="w-10 h-10 text-emerald-400" />
+                                <BookOpen className="w-10 h-10 text-emerald-400" />
                             </div>
                             
-                            <h2 className="text-xl font-bold text-emerald-400 mb-1 uppercase tracking-widest">Kavram Öğrenildi!</h2>
+                            <h2 className="text-xl font-bold text-emerald-400 mb-1 uppercase tracking-widest">KAVRAM ÖĞRENİLDİ!</h2>
                             <h3 className="text-4xl font-black text-white mb-6 drop-shadow-md">{currentLevel.mainWord}</h3>
                             
                             <div className="bg-black/30 p-4 rounded-xl border border-white/5 mb-8 text-slate-300 text-lg leading-relaxed">
