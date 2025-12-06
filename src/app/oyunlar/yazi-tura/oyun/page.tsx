@@ -8,9 +8,10 @@ import { useAuth } from "@/context/auth-context";
 import { submitYaziTuraScoreAction, getYaziTuraQuestionsAction } from '../actions';
 import type { YaziTuraQuestions, Question } from "@/lib/types";
 import { Loader2, AlertTriangle, ArrowLeft, Coins } from "lucide-react";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 const GameScreen = ({ gameState, children }: { gameState: string, children: React.ReactNode }) => {
     const isVisible = gameState === 'start' || gameState === 'flipping' || gameState === 'result';
@@ -36,6 +37,7 @@ export function YaziTuraClientPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     const [score, setScore] = useState(0);
     const [gameState, setGameState] = useState('loading'); 
@@ -45,10 +47,13 @@ export function YaziTuraClientPage() {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
 
     const [questionsYazi, setQuestionsYazi] = useState<Question[]>([]);
     const [questionsTura, setQuestionsTura] = useState<Question[]>([]);
     const [error, setError] = useState<string | null>(null);
+    
+    const backUrl = '/oyunlar/yazi-tura';
 
     const gameContext = `Yazı Tura - ${searchParams.get('topicName') || 'Genel'}`;
     const topicName = searchParams.get('topicName') || 'Yazı Tura';
@@ -125,20 +130,20 @@ export function YaziTuraClientPage() {
         setGameState('start');
     };
 
-    const withdrawAndSave = async () => {
-        if (!user || score === 0) {
-            setGameState('finished');
+    const handleSaveAndExit = async () => {
+        if (isSaving || isScoreSaved || !user || score <= 0) {
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
         const result = await submitYaziTuraScoreAction(user.uid, score, gameContext);
         if (result.success) {
+            setIsScoreSaved(true);
             toast({ title: 'Başarılı!', description: `${score} puan kazandın ve profiline eklendi.` });
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
         setIsSaving(false);
-        setGameState('finished');
     };
 
     const restartGame = () => {
@@ -147,6 +152,7 @@ export function YaziTuraClientPage() {
         setRotation(0);
         setCoinSide(null);
         setIsSaving(false);
+        setIsScoreSaved(false);
     };
     
     if (gameState === 'loading') {
@@ -161,7 +167,7 @@ export function YaziTuraClientPage() {
                     <span className="block sm:inline ml-2">{error}</span>
                      <div className="mt-4">
                         <Button asChild variant="outline">
-                            <Link href="/oyunlar/yazi-tura"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
+                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Link>
                         </Button>
                     </div>
                 </div>
@@ -169,8 +175,21 @@ export function YaziTuraClientPage() {
          );
     }
 
+    if (gameState === 'finished') {
+        return (
+            <GameEndScreen 
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={restartGame}
+                backUrl={backUrl}
+            />
+        );
+    }
+
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-purple-100 font-body">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-50 to-purple-100 font-body pb-24 md:pb-8">
              <style jsx global>{`
                 .header-font { font-family: 'Fredoka', sans-serif; }
                 .coin-container { perspective: 1000px; width: 150px; height: 150px; margin: 0 auto; cursor: pointer; }
@@ -185,7 +204,7 @@ export function YaziTuraClientPage() {
             
             <div className="w-full max-w-2xl flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-lg">
                 <Button asChild variant="outline" size="sm">
-                    <Link href="/oyunlar/yazi-tura"><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Geri Dön</Link>
+                    <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Kuruluma Geri Dön</Link>
                 </Button>
                 <div>
                     <h1 className="text-2xl font-bold text-indigo-800 header-font">{topicName}</h1>
@@ -223,11 +242,9 @@ export function YaziTuraClientPage() {
                             <button onClick={flipCoin} className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xl transition-all transform hover:scale-105 shadow-lg">
                                 PARAYI AT
                             </button>
-                            {score > 0 && (
-                                <button onClick={withdrawAndSave} disabled={isSaving} className="w-full py-2 bg-gray-100 text-gray-600 rounded-lg font-semibold text-sm hover:bg-gray-200">
-                                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin mx-auto"/> : 'Oyunu Bitir ve Puanı Kaydet'}
-                                </button>
-                            )}
+                            <Button onClick={() => setGameState('finished')} disabled={isSaving} variant="secondary" className="w-full">
+                                Oyunu Bitir
+                            </Button>
                         </div>
                     )}
 
@@ -252,8 +269,8 @@ export function YaziTuraClientPage() {
                     {currentQuestion && (
                         <>
                             {gameState === 'question' && (
-                                <button onClick={withdrawAndSave} disabled={isSaving} className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 text-xs px-3 py-1 rounded-full font-bold transition-colors flex items-center gap-1" title="Oyunu bitir ve puanı kaydet">
-                                    <span>✖</span> Çekil
+                                <button onClick={() => setGameState('finished')} disabled={isSaving} className="absolute top-2 right-2 bg-red-100 hover:bg-red-200 text-red-600 text-xs px-3 py-1 rounded-full font-bold transition-colors flex items-center gap-1" title="Oyunu bitir ve puanı kaydet">
+                                    <span>✖</span> Bitir
                                 </button>
                             )}
 
@@ -312,26 +329,6 @@ export function YaziTuraClientPage() {
                         </>
                     )}
                 </QuestionScreen>
-
-                {gameState === 'finished' && (
-                    <div className="bg-white rounded-3xl shadow-xl p-8 text-center animate-fade-in">
-                        <div className="mb-6 text-6xl">🏆</div>
-                        <h2 className="text-3xl font-bold text-indigo-800 mb-2">Oyun Bitti!</h2>
-                        <p className="text-gray-500 mb-6">Tebrikler, harika bir yarışma çıkardın.</p>
-                        
-                        <div className="bg-indigo-50 rounded-xl p-6 mb-8">
-                            <p className="text-sm text-indigo-400 font-bold uppercase tracking-wider">Toplam Skorun</p>
-                            <p className="text-5xl font-black text-indigo-600 header-font">{score}</p>
-                        </div>
-
-                        <button 
-                            onClick={restartGame}
-                            className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg transition-transform hover:scale-105"
-                        >
-                            YENİDEN OYNA
-                        </button>
-                    </div>
-                )}
 
             </div>
             

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -14,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];
@@ -39,12 +41,11 @@ function KutuAcGame() {
 
     const [isFinished, setIsFinished] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const activityCenterLink = useMemo(() => {
-        if (user?.role === 'student') return '/student/activities';
-        return '/teacher/activities';
-    }, [user]);
+    const backUrl = '/oyunlar/kutu-ac';
+    const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -85,20 +86,21 @@ function KutuAcGame() {
     };
 
     const handleSaveAndExit = async () => {
-        if (isSubmitting) return;
+        if (isSubmitting || score <= 0 || isScoreSaved) {
+            router.push(backUrl);
+            return;
+        }
 
-        if (user?.role !== 'student' || score <= 0) {
-            router.push(activityCenterLink);
+        if (user?.role !== 'student') {
+            router.push(backUrl);
             return;
         }
 
         setIsSubmitting(true);
-        const context = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
-        
-        const result = await submitKutuAcScoreAction(user.uid, score, context);
+        const result = await submitKutuAcScoreAction(user.uid, score, gameContext);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Puanların kaydedildi." });
-            router.push(activityCenterLink);
+            setIsScoreSaved(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
             setIsSubmitting(false); // Allow retry
@@ -110,6 +112,7 @@ function KutuAcGame() {
         setScore(0);
         setOpenedBoxes(new Set());
         setOpenedQuestion(null);
+        setIsScoreSaved(false);
         fetchQuestions();
     };
 
@@ -120,54 +123,38 @@ function KutuAcGame() {
     if (error) {
         return (
             <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4")}>
-                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
+                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
             </div>
         );
     }
     
     if (isFinished) {
         return (
-             <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4")}>
-                <Card className={cn("w-full text-center", isFullscreen ? "h-screen rounded-none border-none flex flex-col justify-center" : "max-w-md")}>
-                    <CardHeader>
-                        <div className="mx-auto bg-amber-100 rounded-full p-3 w-fit"><PartyPopper className={cn("h-10 w-10 text-amber-500", isFullscreen && "h-16 w-16")}/></div>
-                        <CardTitle className={cn("font-headline text-2xl md:text-3xl mt-4", isFullscreen && "text-5xl")}>Tebrikler!</CardTitle>
-                        <CardDescription>Tüm kutuları açtın.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {user?.role === 'student' && <p className={cn("text-lg md:text-xl", isFullscreen && "text-2xl")}>Toplam Puanın: <span className="font-bold text-primary">{score}</span></p>}
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2 pt-6">
-                        {user?.role === 'student' ? (
-                            <Button onClick={handleSaveAndExit} className="w-full" disabled={isSubmitting}>
-                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                                {isSubmitting ? 'Kaydediliyor...' : 'Puanı Kaydet ve Çık'}
-                            </Button>
-                        ) : (
-                             <Button asChild className="w-full"><Link href={activityCenterLink}><Home className="mr-2 h-4 w-4"/>Etkinlik Merkezine Dön</Link></Button>
-                        )}
-                        <Button onClick={handleRestart} variant="secondary" className="w-full">
-                           <Repeat className="mr-2 h-4 w-4" /> Tekrar Oyna
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
+            <GameEndScreen
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSubmitting}
+                scoreSaved={isScoreSaved}
+                onRestart={handleRestart}
+                backUrl={backUrl}
+            />
         )
     }
 
     const timerDuration = openedQuestion?.question.type === 'Doğru/Yanlış' ? 10 : 20;
 
     return (
-        <div className={cn("w-full h-full min-h-screen flex flex-col items-center justify-center p-2", isFullscreen ? "" : "md:p-8")}>
+        <div className={cn("w-full h-full min-h-screen flex flex-col items-center justify-center pb-24 md:pb-8", isFullscreen ? "" : "md:p-8")}>
             <div className="w-full max-w-5xl mx-auto">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-3xl font-bold font-headline flex items-center gap-2"><Package/> Kutu Aç</h1>
                     <div className="flex items-center gap-2">
                          {user?.role === 'student' && <span className="font-bold text-xl text-primary">Puan: {score}</span>}
-                        <Button asChild variant="outline" size="sm"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Link></Button>
+                        <Button variant="destructive" size="sm" onClick={() => setIsFinished(true)}>Bitir</Button>
                         <FullscreenToggle />
                     </div>
                 </div>
+                <div className="text-sm text-muted-foreground mb-2">{openedBoxes.size} / {questions.length} kutu açıldı.</div>
                  <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-4">
                     {questions.map((q, i) => {
                         const questionNumber = i + 1;
@@ -187,11 +174,6 @@ function KutuAcGame() {
                         )
                     })}
                 </div>
-                <div className="mt-6 text-center">
-                    <Button onClick={() => setIsFinished(true)} variant="secondary">
-                        <PartyPopper className="mr-2 h-4 w-4" /> Bitir ve Puanı Kaydet
-                    </Button>
-                </div>
             </div>
              {openedQuestion && (
                 <QuestionDialog
@@ -202,6 +184,7 @@ function KutuAcGame() {
                     onAnswer={handleAnswerQuestion}
                     timerDuration={timerDuration}
                     pointsConfig={{ default: { points: 10 }}}
+                    showCorrectAnswerOnWrong={true}
                 />
             )}
         </div>

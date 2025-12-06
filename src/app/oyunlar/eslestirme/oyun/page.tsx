@@ -33,6 +33,7 @@ function MatchingGame() {
     const [showConfetti, setShowConfetti] = useState(false);
 
     const gameContext = `Eşleştirme - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    const backUrl = '/oyunlar/eslestirme';
 
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -94,7 +95,7 @@ function MatchingGame() {
 
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user || score <= 0) {
-            router.push('/oyunlar/eslestirme');
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
@@ -136,7 +137,7 @@ function MatchingGame() {
                     <h3 className="text-xl font-bold text-indigo-100">Oyun Başlatılamadı</h3>
                     <p className="text-indigo-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/eslestirme">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -159,19 +160,26 @@ function MatchingGame() {
                     isSaving={isSaving}
                     scoreSaved={isScoreSaved}
                     onRestart={handleRestart}
-                    backUrl="/oyunlar/eslestirme"
+                    backUrl={backUrl}
                 />
             </div>
         );
     }
 
+    const matchedPairs = matchedIds.size / 2;
+    const totalPairs = pairs.length / 2;
+
     return (
-        <div className="min-h-screen bg-slate-900 p-4 md:p-8 flex flex-col">
+        <div className="min-h-screen bg-slate-900 p-4 md:p-8 flex flex-col pb-24 md:pb-8">
             <div className="w-full max-w-6xl mx-auto flex justify-between items-center mb-6">
                 <div className="flex items-center gap-4">
                      <h1 className="text-3xl font-bold text-indigo-300">Eşleştirme</h1>
+                     <span className="font-mono text-slate-400 text-sm">Eşleşen: {matchedPairs} / {totalPairs}</span>
                 </div>
-                <div className="text-2xl font-bold text-white">Puan: <span className="text-amber-400 font-mono">{score}</span></div>
+                <div className="flex items-center gap-2">
+                    <div className="text-2xl font-bold text-white">Puan: <span className="text-amber-400 font-mono">{score}</span></div>
+                    <Button variant="destructive" size="sm" onClick={() => setGameState('finished')}>Bitir</Button>
+                </div>
             </div>
 
             <div className="w-full max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 flex-grow">

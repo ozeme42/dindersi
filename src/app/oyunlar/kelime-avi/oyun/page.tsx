@@ -76,7 +76,7 @@ type Cell = { r: number, c: number };
 const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<string> }) => (
     <div className="w-full lg:w-64 flex-shrink-0 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-4">
         <h3 className="font-bold text-lg mb-2 text-teal-300 flex items-center gap-2">
-            <Search className="h-5 w-5"/> Aranacak Kelimeler
+            <Search className="h-5 w-5"/> Aranacak Kelimeler ({foundWords.size}/{words.length})
         </h3>
         <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
             {words.map(word => (
@@ -136,6 +136,8 @@ function WordSearchGame() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    
+    const backUrl = '/oyunlar/kelime-avi';
 
     const gameContext = `Kelime Avı - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
 
@@ -200,7 +202,7 @@ function WordSearchGame() {
 
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user || score <= 0) {
-            router.push('/oyunlar/kelime-avi');
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
@@ -233,19 +235,25 @@ function WordSearchGame() {
                     <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
                     <p className="text-red-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/kelime-avi">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
         );
     }
     if (gameState === 'finished') {
-        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleRestart} backUrl="/oyunlar/kelime-avi" />;
+        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} scoreSaved={isScoreSaved} onRestart={handleRestart} backUrl={backUrl} />;
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 lg:p-8 gap-6">
-            <h1 className="text-3xl font-bold text-teal-300">Kelime Avı</h1>
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 lg:p-8 gap-6 pb-24 md:pb-8">
+            <div className="w-full max-w-5xl flex justify-between items-center">
+                <h1 className="text-3xl font-bold text-teal-300">Kelime Avı</h1>
+                 <div className="flex items-center gap-2">
+                    <div className="text-xl font-bold">Puan: <span className="text-amber-400 font-mono">{score}</span></div>
+                    <Button variant="destructive" size="sm" onClick={() => setGameState('finished')}>Bitir</Button>
+                </div>
+            </div>
             <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
                 <WordList words={wordsToFind} foundWords={foundWords} />
                 <div className="flex-grow">

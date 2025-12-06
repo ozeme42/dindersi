@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { Badge } from '@/components/ui/badge';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 // Maze generation using Randomized Depth-First Search
 const generateMaze = (width: number, height: number, questionDensity: number): { grid: number[][], questions: [number, number][] } => {
@@ -82,19 +83,16 @@ function MazeGame() {
 
     const [score, setScore] = useState(0);
     const [mistakeCount, setMistakeCount] = useState(0);
-    const [finalBonus, setFinalBonus] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
 
     const MAZE_WIDTH = 21;
     const MAZE_HEIGHT = 15;
+    
+    const gameContext = `Labirent - ${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
+    const backUrl = '/oyunlar/labirent';
 
-    const activityCenterLink = useMemo(() => {
-        if (user?.role === 'teacher' || user?.role === 'superadmin') {
-            return '/teacher/activities';
-        }
-        return '/student/labirent';
-    }, [user]);
 
     const fetchGame = useCallback(async () => {
         setIsLoading(true);
@@ -118,8 +116,8 @@ function MazeGame() {
             setAnsweredQuestions(new Set());
             setScore(0);
             setMistakeCount(0);
-            setFinalBonus(0);
             setIsFinished(false);
+            setIsScoreSaved(false);
         }
         setIsLoading(false);
     }, [searchParams]);
@@ -150,9 +148,6 @@ function MazeGame() {
                 }
             } else if (newCell === 3) {
                  playSound('correct');
-                 const bonus = Math.max(0, 200 - (mistakeCount * 25));
-                 setFinalBonus(bonus);
-                 setScore(prev => prev + 50 + bonus); // Finish base score + bonus
                  setIsFinished(true);
             }
         }
@@ -172,12 +167,12 @@ function MazeGame() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [handleMove]);
 
-    const handleAnswerQuestion = (qIndex: number, isCorrect: boolean) => {
+    const handleAnswerQuestion = (qIndex: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
         if (isCorrect) {
             setAnsweredQuestions(prev => new Set(prev).add(`${questionLocations[qIndex][0]}-${questionLocations[qIndex][1]}`));
-            setScore(prev => prev + 10);
-            toast({ title: 'Doğru Cevap!', description: '+10 Puan kazandın. Yola devam!' });
+            setScore(prev => prev + scoreChange);
+            toast({ title: 'Doğru Cevap!', description: `+${scoreChange} Puan kazandın. Yola devam!` });
         } else {
             setMistakeCount(prev => prev + 1);
             toast({ title: 'Yanlış Cevap!', description: 'Labirentin başına döndün.', variant: 'destructive'});
@@ -186,20 +181,16 @@ function MazeGame() {
     };
     
     const handleSaveAndExit = async () => {
-        if (isSubmitting) return;
-
-        if (user?.role !== 'student' || score <= 0) {
-            router.push(activityCenterLink);
+        if (isSubmitting || isScoreSaved || !user || score <= 0) {
+            router.push(backUrl);
             return;
         }
 
         setIsSubmitting(true);
-        const context = `${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
-        
-        const result = await submitMazeScoreAction(user.uid, score, context);
+        const result = await submitMazeScoreAction(user.uid, score, gameContext);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Puanların kaydedildi." });
-            router.push(activityCenterLink);
+            setIsScoreSaved(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
             setIsSubmitting(false); // Allow retry
@@ -213,54 +204,36 @@ function MazeGame() {
     if (error) {
         return (
             <div className="w-full h-full min-h-screen flex items-center justify-center p-4">
-                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
+                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
             </div>
         );
     }
     
     if (isFinished) {
         return (
-             <div className="w-full h-full min-h-screen flex items-center justify-center p-4">
-                <Card className="w-full text-center max-w-md">
-                    <CardHeader>
-                        <div className="mx-auto bg-amber-100 rounded-full p-3 w-fit"><PartyPopper className="h-10 w-10 text-amber-500"/></div>
-                        <CardTitle className="font-headline text-2xl md:text-3xl mt-4">Labirent Tamamlandı!</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        {user?.role === 'student' && (
-                            <div className="text-center space-y-2">
-                                <p className="text-muted-foreground">Bitiş Puanı: <span className="font-bold text-foreground">50</span></p>
-                                <p className="text-muted-foreground">Performans Bonusu: <span className="font-bold text-foreground">{finalBonus}</span> ({mistakeCount} hata)</p>
-                                <hr className="my-2"/>
-                                <p className="text-lg">Kazandığın Toplam Puan:</p>
-                                <p className="text-5xl font-bold text-primary">{score}</p>
-                            </div>
-                        )}
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2 pt-6">
-                        {user?.role === 'student' ? (
-                            <Button onClick={handleSaveAndExit} className="w-full" disabled={isSubmitting}>
-                                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                                {isSubmitting ? 'Kaydediliyor...' : 'Puanı Kaydet ve Çık'}
-                            </Button>
-                        ) : (
-                             <Button asChild className="w-full"><Link href={activityCenterLink}><Home className="mr-2 h-4 w-4"/>Etkinlik Merkezine Dön</Link></Button>
-                        )}
-                        <Button onClick={fetchGame} variant="secondary" className="w-full">
-                           <Repeat className="mr-2 h-4 w-4" /> Yeni Labirent
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
+            <GameEndScreen
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSubmitting}
+                scoreSaved={isScoreSaved}
+                onRestart={fetchGame}
+                backUrl={backUrl}
+            />
         )
     }
 
+    const answeredQuestionCount = answeredQuestions.size;
+    const totalQuestionCount = questionLocations.length;
+
     return (
-        <div className="w-full h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-gray-200 dark:bg-gray-900 gap-8">
+        <div className="w-full h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-gray-200 dark:bg-gray-900 gap-8 pb-24 md:pb-8">
             <div className="flex-grow flex flex-col items-center gap-4">
                 <h1 className="text-3xl font-bold font-headline text-foreground">Labirent Oyunu</h1>
-                <p className="text-muted-foreground text-center">Ok tuşlarını kullanarak hareket et. <HelpCircle className="inline h-4 w-4"/> kutularındaki soruları cevapla ve <Flag className="inline h-4 w-4"/> bayrağına ulaş!</p>
-                <Badge variant="secondary" className="text-lg">Skor: {score}</Badge>
+                <p className="text-muted-foreground text-center">Ok tuşlarını kullanarak hareket et. <HelpCircle className="inline h-4 w-4"/> kutularındaki soruları cevapla ve <Flag className="inline h--4 w-4"/> bayrağına ulaş!</p>
+                <div className="flex gap-4">
+                    <Badge variant="secondary" className="text-lg">Skor: {score}</Badge>
+                    <Badge variant="outline" className="text-lg">Soru: {answeredQuestionCount} / {totalQuestionCount}</Badge>
+                </div>
                 
                 <div className="aspect-[21/15] w-full max-w-2xl bg-card p-2 rounded-lg shadow-lg overflow-hidden">
                     <div className="grid w-full h-full" style={{ gridTemplateColumns: `repeat(${MAZE_WIDTH}, 1fr)` }}>
@@ -280,6 +253,7 @@ function MazeGame() {
                         )))}
                     </div>
                 </div>
+                 <Button variant="destructive" size="sm" onClick={() => setIsFinished(true)}>Oyunu Bitir</Button>
             </div>
 
             <div className="grid grid-cols-3 grid-rows-3 gap-2 w-48 h-48 flex-shrink-0">
@@ -302,8 +276,9 @@ function MazeGame() {
                     isOpen={!!openedQuestion}
                     onClose={() => setOpenedQuestion(null)}
                     questionData={openedQuestion}
-                    onAnswer={(qIndex, isCorrect) => handleAnswerQuestion(qIndex, isCorrect, 0)}
+                    onAnswer={(qIndex, isCorrect, score) => handleAnswerQuestion(qIndex, isCorrect, score)}
                     showCorrectAnswerOnWrong={false}
+                    pointsConfig={{ default: { points: 10 }}}
                 />
             )}
         </div>
