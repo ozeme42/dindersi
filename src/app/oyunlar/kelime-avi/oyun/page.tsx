@@ -88,13 +88,12 @@ const WordList = ({ words, foundWords }: { words: string[], foundWords: Set<stri
     </div>
 );
 
-const Grid = ({ grid, onSelect, selection, foundPaths, zoomLevel }: { grid: string[][], onSelect: (cell: Cell) => void, selection: Cell[], foundPaths: Cell[][], zoomLevel: number }) => (
+const Grid = ({ grid, onSelectCell, selection, foundPaths, fontSize }: { grid: string[][], onSelectCell: (cell: Cell) => void, selection: Cell[], foundPaths: Cell[][], fontSize: number }) => (
     <div className="p-2 bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl overflow-auto w-full h-full flex items-center justify-center">
         <div 
-            className="grid gap-1 transition-transform duration-300" 
+            className="grid gap-1" 
             style={{ 
                 gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))`,
-                transform: `scale(${zoomLevel})`,
                 width: '100%',
                 height: '100%',
             }}
@@ -111,13 +110,13 @@ const Grid = ({ grid, onSelect, selection, foundPaths, zoomLevel }: { grid: stri
                 return (
                     <button
                         key={`${r}-${c}`}
-                        onMouseDown={() => onSelect({ r, c })}
-                        onMouseEnter={(e) => e.buttons === 1 && onSelect({ r, c })}
+                        onClick={() => onSelectCell({ r, c })}
                         className={cn(
-                            "flex items-center justify-center rounded-md aspect-square select-none touch-none text-xs sm:text-base font-bold transition-all duration-150",
+                            "flex items-center justify-center rounded-md aspect-square select-none touch-none font-bold transition-all duration-150",
                             isSelected ? "bg-yellow-400 text-slate-900 scale-110 ring-2 ring-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700",
                             isFound && `${colorClasses[foundPathIndex % colorClasses.length]} text-white scale-105 shadow-lg`
                         )}
+                         style={{ fontSize: `${fontSize}rem` }}
                     >
                         {letter}
                     </button>
@@ -147,7 +146,7 @@ function WordSearchGame() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
-    const [zoomLevel, setZoomLevel] = useState(1);
+    const [fontSize, setFontSize] = useState(1); // rem unit
     
     const backUrl = '/oyunlar/kelime-avi';
 
@@ -177,36 +176,54 @@ function WordSearchGame() {
         fetchGameData();
     }, [fetchGameData]);
 
-    const handleSelect = (cell: Cell) => {
-        setSelection(prev => {
-            if (prev.some(c => c.r === cell.r && c.c === cell.c)) return prev;
-            return [...prev, cell];
-        });
-    };
-
-    const checkSelection = useCallback(() => {
-        if (selection.length < 2) return;
-        const selectedWord = selection.map(cell => grid[cell.r][cell.c]).join('');
-        const reversedSelectedWord = selectedWord.split('').reverse().join('');
+    const getCellsInLine = (start: Cell, end: Cell): Cell[] | null => {
+        const dx = Math.sign(end.c - start.c);
+        const dy = Math.sign(end.r - start.r);
         
-        const found = wordsToFind.find(word => (word === selectedWord || word === reversedSelectedWord) && !foundWords.has(word));
+        const isDiagonal = Math.abs(end.c - start.c) === Math.abs(end.r - start.r);
+        const isStraight = start.c === end.c || start.r === end.r;
 
-        if (found) {
-            playSound('correct');
-            setFoundWords(prev => new Set(prev).add(found));
-            setFoundPaths(prev => [...prev, selection]);
-            setScore(prev => prev + found.length * 10);
+        if (!isDiagonal && !isStraight) return null;
+
+        const line: Cell[] = [];
+        let { r, c } = start;
+        while (r !== end.r + dy || c !== end.c + dx) {
+            line.push({ r, c });
+            r += dy;
+            c += dx;
         }
-    }, [selection, grid, wordsToFind, foundWords]);
+        return line;
+    }
     
-    useEffect(() => {
-        const handleMouseUp = () => {
-            checkSelection();
+    const handleSelectCell = (cell: Cell) => {
+        if (selection.length === 0) {
+            setSelection([cell]);
+        } else if (selection.length === 1) {
+            const startCell = selection[0];
+            const endCell = cell;
+
+            const line = getCellsInLine(startCell, endCell);
+            if (!line) { 
+                setSelection([cell]); // Invalid line, start new selection
+                return;
+            }
+            
+            const selectedWord = line.map(c => grid[c.r][c.c]).join('');
+            const reversedSelectedWord = selectedWord.split('').reverse().join('');
+            
+            const found = wordsToFind.find(word => (word === selectedWord || word === reversedSelectedWord) && !foundWords.has(word));
+
+            if (found) {
+                playSound('correct');
+                setFoundWords(prev => new Set(prev).add(found));
+                setFoundPaths(prev => [...prev, line]);
+                setScore(prev => prev + found.length * 10);
+            }
             setSelection([]);
-        };
-        window.addEventListener('mouseup', handleMouseUp);
-        return () => window.removeEventListener('mouseup', handleMouseUp);
-    }, [checkSelection]);
+        } else {
+            setSelection([cell]);
+        }
+    };
     
     useEffect(() => {
         if (wordsToFind.length > 0 && foundWords.size === wordsToFind.length) {
@@ -236,7 +253,7 @@ function WordSearchGame() {
         setFoundWords(new Set());
         setFoundPaths([]);
         setIsScoreSaved(false);
-        setZoomLevel(1);
+        setFontSize(1);
         fetchGameData();
     };
 
@@ -273,11 +290,11 @@ function WordSearchGame() {
             <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
                 <WordList words={wordsToFind} foundWords={foundWords} />
                 <div className="flex-grow aspect-square relative">
-                    <Grid grid={grid} onSelect={handleSelect} selection={selection} foundPaths={foundPaths} zoomLevel={zoomLevel} />
+                    <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
                     <div className="absolute bottom-2 right-2 flex gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(z => Math.min(z + 0.2, 2))}><ZoomIn className="h-4 w-4"/></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(z => Math.max(z - 0.2, 0.6))}><ZoomOut className="h-4 w-4"/></Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setZoomLevel(1)}><RotateCw className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.min(z + 0.2, 2.5))}><ZoomIn className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.5))}><ZoomOut className="h-4 w-4"/></Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(1)}><RotateCw className="h-4 w-4"/></Button>
                     </div>
                 </div>
             </div>
@@ -292,3 +309,5 @@ export default function Page() {
         </Suspense>
     );
 }
+
+    
