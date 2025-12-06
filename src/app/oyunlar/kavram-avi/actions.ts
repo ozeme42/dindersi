@@ -47,8 +47,8 @@ export async function getConceptHuntAction(
                 !item.content.term.includes(' ')
             );
 
-        if (allItems.length < 3) {
-            return { error: "Kavram Avı oynamak için bu konuda en az 3 adet uygun kelime bulunmalıdır.", questions: null };
+        if (allItems.length < 1) { // Changed from 3 to 1 to allow smaller topics
+            return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
         }
         
         // Fisher-Yates Shuffle

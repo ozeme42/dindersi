@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { getConceptHuntAction, submitConceptHuntScoreAction } from '../actions';
 import type { Anagram } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
-import { Loader2, ArrowLeft, Save, Trophy, Repeat, Home, Ghost, Zap, Crosshair } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Trophy, Repeat, Home, Ghost, Zap, Crosshair, XOctagon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -33,7 +33,7 @@ const GameBackground = () => (
     </div>
 );
 
-const GameHUD = ({ score, current, total }: { score: number, current: number, total: number }) => {
+const GameHUD = ({ score, current, total, onFinish }: { score: number, current: number, total: number, onFinish: () => void }) => {
     const progress = total > 0 ? ((current + 1) / total) * 100 : 0;
     return (
         <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
@@ -43,12 +43,20 @@ const GameHUD = ({ score, current, total }: { score: number, current: number, to
                         className="absolute top-0 left-0 h-full bg-gradient-to-r from-teal-500 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(45,212,191,0.5)]"
                         style={{ width: `${progress}%` }}
                     />
+                     <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-slate-300 drop-shadow-md">{current + 1} / {total}</span>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-teal-500/30 px-4 py-2 rounded-full shadow-lg shadow-teal-500/10 min-w-[100px] justify-center">
-                    <Trophy className="w-4 h-4 lg:w-5 lg:h-5 text-teal-400 animate-bounce" />
-                    <span className="text-lg lg:text-xl font-black text-teal-100 font-mono tracking-widest">
-                        {score}
-                    </span>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-teal-500/30 px-4 py-2 rounded-full shadow-lg shadow-teal-500/10 min-w-[100px] justify-center">
+                        <Trophy className="w-4 h-4 lg:w-5 lg:h-5 text-teal-400 animate-bounce" />
+                        <span className="text-lg lg:text-xl font-black text-teal-100 font-mono tracking-widest">
+                            {score}
+                        </span>
+                    </div>
+                     <Button size="sm" variant="destructive" className="rounded-full font-bold h-10 w-10 p-0" onClick={onFinish} title="Oyunu Bitir">
+                        <XOctagon className="h-5 w-5" />
+                    </Button>
                 </div>
             </div>
         </div>
@@ -125,18 +133,12 @@ function ConceptHuntGame() {
     const currentQuestion = questions[currentQuestionIndex];
 
     // Harf Seçimi (Havuzdan -> Cevaba)
-    // Kavram Avı'nda sıralı gitmek zorunda değiliz, oyuncu harfleri seçer, doğru sırada olup olmadığına oyun sonunda bakılır (genelde).
-    // Ancak daha önceki kodda "sıradaki doğru harf mi?" kontrolü vardı. Bunu koruyalım çünkü daha eğitici.
-    
     const handlePoolClick = (letter: { char: string; id: number, colorClass: string }) => {
         if (isCorrect) return;
 
         const nextCharIndex = userAnswer.length;
-        // API'den gelen correctAnswer bazen büyük/küçük harf farklı olabilir, kontrol edelim.
-        // Genelde hepsi uppercase olması iyidir.
         const correctChar = questions[currentQuestionIndex].correctAnswer[nextCharIndex];
 
-        // Harf Eşleşmesi (Büyük/Küçük harf duyarsız)
         if (letter.char.toLowerCase() === correctChar.toLowerCase()) {
             playSound('pop');
             setUserAnswer(prev => [...prev, letter]);
@@ -152,19 +154,18 @@ function ConceptHuntGame() {
         }
     };
 
-    // Harf İadesi (Cevaptan -> Havuza) - Sadece son harfi geri almaya izin verelim
+    // Harf İadesi (Cevaptan -> Havuza)
     const handleUndo = () => {
         if (isCorrect || userAnswer.length === 0) return;
         
         const lastLetter = userAnswer[userAnswer.length - 1];
         setUserAnswer(prev => prev.slice(0, -1));
-        setPoolLetters(prev => [...prev, lastLetter].sort((a,b) => a.id - b.id)); // ID'ye göre sırala ki yerleri çok karışmasın
+        setPoolLetters(prev => [...prev, lastLetter].sort((a,b) => a.id - b.id));
     };
 
     // Bölüm Tamamlama Kontrolü
     useEffect(() => {
         if (gameState === 'playing' && questions.length > 0 && userAnswer.length === questions[currentQuestionIndex].correctAnswer.length) {
-            // Tüm harfler doğru seçildiyse (zaten seçim anında doğruluyoruz)
             setIsCorrect(true);
             playSound('correct');
             setScore(prev => prev + 25);
@@ -262,7 +263,7 @@ function ConceptHuntGame() {
     return (
         <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col", gameShake && "animate-shake")}>
             <GameBackground />
-            <GameHUD score={score} current={currentQuestionIndex} total={questions.length} />
+            <GameHUD score={score} current={currentQuestionIndex} total={questions.length} onFinish={() => setGameState('finished')} />
 
             <main className="flex-grow flex flex-col items-center justify-center p-4 lg:p-8 relative z-10 mt-16 lg:mt-12">
                 <div className="w-full max-w-4xl space-y-8 lg:space-y-12">
