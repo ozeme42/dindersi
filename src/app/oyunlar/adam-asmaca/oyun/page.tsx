@@ -1,10 +1,11 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getAdamAsmacaAction, submitAdamAsmacaScoreAction, type HangmanData } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Skull, Save, Trophy, Lightbulb, Ghost, Home, Repeat } from 'lucide-react';
+import { Loader2, Skull, Save, Trophy, Lightbulb, Ghost, Home, Repeat, XOctagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { playSound } from '@/lib/audio-service';
@@ -68,40 +69,25 @@ const NeonHangman = ({ mistakes, status }: { mistakes: number, status: 'playing'
     );
 };
 
-const GameHUD = ({ score, current, total, onFinishAndSave }: { score: number, current: number, total: number, onFinishAndSave: () => void }) => {
+const GameHUD = ({ score, current, total, onFinish }: { score: number, current: number, total: number, onFinish: () => void }) => {
     const progress = total > 0 ? ((current + 1) / total) * 100 : 0;
     return (
-        <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
-            <div className="max-w-5xl mx-auto flex items-center gap-4">
-                <div className="flex-grow h-4 lg:h-6 bg-slate-900/50 backdrop-blur-md rounded-full border border-white/10 relative overflow-hidden">
-                    <div 
-                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-rose-500 to-pink-600 transition-all duration-700 ease-out shadow-[0_0_15px_rgba(244,63,94,0.5)]"
-                        style={{ width: `${progress}%` }}
-                    />
+        <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6 bg-slate-950/50 backdrop-blur-md border-b border-white/5">
+            <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+                 <div className="flex items-center gap-2 text-rose-300 font-mono text-sm">
+                    <span>KELİME</span>
+                    <span className="font-bold text-white text-base">{current + 1} / {total}</span>
                 </div>
-                <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-rose-500/30 px-4 py-2 rounded-full shadow-lg shadow-rose-500/10 min-w-[120px] justify-center">
+                <div className="flex items-center gap-2 bg-slate-900/80 border border-rose-500/30 px-4 py-2 rounded-full shadow-lg shadow-rose-500/10 min-w-[120px] justify-center">
                     <Trophy className="w-5 h-5 lg:w-6 lg:h-6 text-rose-400 fill-rose-400 animate-bounce" />
                     <span className="text-xl lg:text-2xl font-black text-rose-100 font-mono tracking-widest">
                         {score}
                     </span>
                 </div>
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive" className="rounded-full font-bold">Bitir ve Çık</Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Emin misin?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Oyundan çıkmak istediğinizden emin misiniz? Mevcut puanınız kaydedilecektir.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>İptal</AlertDialogCancel>
-                            <AlertDialogAction onClick={onFinishAndSave}>Evet, Bitir</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <Button size="sm" variant="destructive" className="rounded-full font-bold" onClick={onFinish}>
+                    <XOctagon className="mr-2 h-4 w-4" />
+                    Bitir ve Çık
+                </Button>
             </div>
         </div>
     );
@@ -139,6 +125,7 @@ function HangmanGame() {
     const transitionLockRef = useRef(false);
 
     const gameContext = `Adam Asmaca - ${courseName} > ${topicName}`;
+    const backUrl = '/oyunlar/adam-asmaca';
 
     // Veri Çekme
     const fetchWords = useCallback(async () => {
@@ -276,7 +263,7 @@ function HangmanGame() {
                     <h3 className="text-xl font-bold text-rose-100">Oyun Başlatılamadı</h3>
                     <p className="text-rose-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/adam-asmaca">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -292,17 +279,17 @@ function HangmanGame() {
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                backUrl="/oyunlar/adam-asmaca"
+                backUrl={backUrl}
             />
         );
     }
 
     return (
-        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col", gameShake && "animate-shake")}>
+        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col pt-24", gameShake && "animate-shake")}>
             <GameBackground />
-            <GameHUD score={totalScore} current={currentWordIndex} total={gameData?.length || 0} onFinishAndSave={() => setGameState('finished')} />
+            <GameHUD score={totalScore} current={currentWordIndex} total={gameData?.length || 0} onFinish={() => setGameState('finished')} />
 
-            <main className="flex-grow flex flex-col items-center justify-center p-2 lg:p-8 relative z-10 mt-20 lg:mt-10">
+            <main className="flex-grow flex flex-col items-center justify-center p-2 lg:p-8 relative z-10">
                 <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-start">
                     
                     {/* SOL TARAF */}
