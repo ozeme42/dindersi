@@ -10,7 +10,6 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { ThemeSwitcher } from './theme-switcher';
 import { ModeSwitcher } from './mode-switcher';
 import { UserAvatar } from './user-avatar';
 import { ErrorReportDialog } from './error-report-dialog';
@@ -66,7 +65,6 @@ export function AppHeader({ title }: { title?: string }) {
         <nav className="ml-auto flex gap-1 sm:gap-2 items-center">
           {!isLeaderboardPage && (
               <>
-                <ThemeSwitcher />
                 <ModeSwitcher />
               </>
           )}
@@ -153,5 +151,3 @@ export function AppHeader({ title }: { title?: string }) {
     </>
   );
 }
-
-    
