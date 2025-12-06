@@ -1,10 +1,11 @@
+
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   Home, Trophy, User, PenSquare, Users, MonitorPlay, 
-  ClipboardList, ShoppingCart, DollarSign, LayoutGrid 
+  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2 
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
@@ -77,7 +78,7 @@ export function BottomNavBar() {
     const studentLinks = [
         { href: '/student', icon: Home, label: 'Panel' },
         { href: '/student/soru-bankasi', icon: LayoutGrid, label: 'Çalışmalar' },
-        { href: '/student/shop', icon: ShoppingCart, label: 'Market' },
+        { href: '/oyunlar', icon: Gamepad2, label: 'Etkinlikler' },
         { href: '/leaderboard', icon: Trophy, label: 'Sıralama' },
         { href: '/student/profile', icon: User, label: 'Profil' },
     ];
