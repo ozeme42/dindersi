@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getDogruYanlisZinciriAction, submitDogruYanlisZinciriScoreAction } from '@/app/oyunlar/actions';
 import type { Question } from '@/lib/types';
