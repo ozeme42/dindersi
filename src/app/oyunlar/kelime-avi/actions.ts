@@ -88,7 +88,7 @@ export async function submitKelimeAviScoreAction(
         if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { 
                 success: false, 
-                error: `Günlük etkinlik limitine (${MAX_ATTEMPTS_PER_CONTEXT}) ulaştınız. Yarın tekrar deneyin!` 
+                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
             };
         }
 

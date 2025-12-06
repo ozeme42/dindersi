@@ -61,7 +61,7 @@ export async function submitIlimHazinesiScore(userId: string | null, score: numb
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         if (attemptsSnapshot.data().count >= 10) {
-            return { success: false, error: "Bu konudan daha fazla puan kazanamazsınız." };
+            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
         const batch = writeBatch(db);

@@ -176,7 +176,7 @@ export async function submitCumleOlusturmaScoreAction(
         if (attemptsSnapshot.data().count >= 10) {
             return { 
                 success: false, 
-                error: `Günlük etkinlik limitine ulaştınız. Yarın tekrar deneyin!` 
+                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
             };
         }
 

@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -90,8 +91,7 @@ export async function submitAdamAsmacaScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    if (!userId) return { success: true };
-    if (score <= 0) return { success: true };
+    if (!userId || score <= 0) return { success: true };
     
     try {
         // 1. Limit Kontrolü
@@ -107,7 +107,7 @@ export async function submitAdamAsmacaScoreAction(
         if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { 
                 success: false, 
-                error: `Günlük etkinlik limitine (${MAX_ATTEMPTS_PER_CONTEXT}) ulaştınız. Yarın tekrar deneyin!` 
+                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
             };
         }
 
