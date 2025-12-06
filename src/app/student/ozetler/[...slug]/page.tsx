@@ -137,7 +137,7 @@ function OzetlerDisplayPage() {
                         <div className="flex items-center gap-2">
                              <FullscreenToggle 
                                 elementRef={mainContentRef} 
-                                className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-10 w-10 rounded-xl transition-colors shadow-lg" 
+                                className="bg-white text-black hover:bg-slate-200 h-10 w-10 rounded-xl" 
                             />
                         </div>
                     </div>
@@ -194,3 +194,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+    
