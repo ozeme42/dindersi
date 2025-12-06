@@ -6,12 +6,14 @@ import { Columns, Loader2 } from 'lucide-react';
 
 function YazilacaklarPage() {
     return (
-        <OyunKurulum 
-            gameName="Yazılacaklar"
-            gameIcon={Columns}
-            gamePath="yazilacaklar"
-            isGame={false}
-        />
+        <div className="pb-20 md:pb-0">
+            <OyunKurulum 
+                gameName="Yazılacaklar"
+                gameIcon={Columns}
+                gamePath="yazilacaklar"
+                isGame={false}
+            />
+        </div>
     );
 }
 

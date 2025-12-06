@@ -346,7 +346,7 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
 
   return (
     // Ana padding düşürüldü: p-2
-    <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 font-sans text-white">
+    <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 md:pb-10 font-sans text-white">
         
         {/* Header - Daha sıkı yerleşim */}
         <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
@@ -407,7 +407,7 @@ export default function OyunKurulum({ gameName, gameIcon: GameIcon, gamePath, is
             </div>
         </div>
 
-        <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-180px)] md:min-h-[500px] flex flex-col">
+        <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] md:min-h-[500px] flex flex-col">
             <div className="p-3 md:p-8 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
                     {/* Mobilde ikonu gizledim, sadece yazı */}
