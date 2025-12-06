@@ -1,16 +1,14 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     Crown, Award, Trophy, Users, List, Flame, Search, 
-    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2
+    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2, BookOpenCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
 import Link from 'next/link';
-import { AppHeader } from "@/components/app-header";
 import { getHallOfFameData, getLiveLeaderboard, getGradeLeaderboard, getBranchLeaderboard, HallOfFamePeriod, ClassLeaderboardEntry } from './actions';
 import type { UserProfile } from "@/lib/types";
 import { UserAvatar } from "@/components/user-avatar";
@@ -456,8 +454,16 @@ export default function LeaderboardPage() {
     
     return (
         <div className="flex flex-col min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black text-white font-sans selection:bg-purple-500/30">
-            <AppHeader title="Şampiyonlar Arenası" />
             
+            <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#1a0b2e]/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="container flex h-16 items-center justify-between px-4">
+                    <Link href="/" className="flex items-center justify-center gap-2">
+                        <BookOpenCheck className="h-6 w-6 text-amber-400" />
+                        <span className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">Değerler Oyunu</span>
+                    </Link>
+                </div>
+            </header>
+
             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 pb-24 md:pb-12">
                 
                 {/* PAGE TITLE */}

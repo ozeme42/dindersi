@@ -18,7 +18,6 @@ import type { PublicClass } from './actions/getPublicCurriculum';
 // --- UI COMPONENTS ---
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { AppHeader } from '@/components/app-header';
 import { TeacherMainButtons } from '@/components/teacher-main-buttons';
 
 // --- GAME THEME COMPONENTS ---
@@ -293,7 +292,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
-      <AppHeader />
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-10">
         
         {/* Header Section */}

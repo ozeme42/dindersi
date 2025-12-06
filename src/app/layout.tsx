@@ -1,10 +1,10 @@
-
 'use client';
 
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { Providers } from '@/components/providers';
+import { BottomNavBar } from '@/components/bottom-nav-bar';
 
 // Metadata can still be exported from a client component layout in Next.js 13+
 // but it's often better to move it to the page level if the layout is client-side.
@@ -32,6 +32,7 @@ export default function RootLayout({
           <Providers>
               {children}
               <Toaster />
+              <BottomNavBar />
           </Providers>
       </body>
     </html>

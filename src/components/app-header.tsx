@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -10,11 +9,9 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { ModeSwitcher } from './mode-switcher';
 import { UserAvatar } from './user-avatar';
 import { ErrorReportDialog } from './error-report-dialog';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from './ui/tooltip';
-import { BottomNavBar } from '@/components/bottom-nav-bar';
 import { cn } from '@/lib/utils';
 
 export function AppHeader({ title }: { title?: string }) {
@@ -35,24 +32,10 @@ export function AppHeader({ title }: { title?: string }) {
 
   const isLeaderboardPage = !!title;
 
-  if (isLeaderboardPage && user?.role === 'student') {
-        return (
-            <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#1a0b2e]/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container flex h-16 items-center justify-between px-4">
-                    <div className="flex items-center gap-2 font-bold text-xl text-white">
-                        <Trophy className="h-6 w-6 text-amber-400" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">{title}</span>
-                    </div>
-                    <Link href="/student" className="text-sm font-medium text-slate-300 hover:text-white">Geri Dön</Link>
-                </div>
-            </header>
-        );
-  }
-
   return (
     <>
       <header className={cn(
-          "px-4 h-16 flex items-center border-b",
+          "px-4 h-16 hidden md:flex items-center border-b",
           isLeaderboardPage ? "bg-transparent text-white border-white/10" : "bg-card"
       )}>
         <Link href="/" className="flex items-center justify-center">
@@ -63,11 +46,6 @@ export function AppHeader({ title }: { title?: string }) {
           )}>{title || 'Değerler Oyunu'}</span>
         </Link>
         <nav className="ml-auto flex gap-1 sm:gap-2 items-center">
-          {!isLeaderboardPage && (
-              <>
-                <ModeSwitcher />
-              </>
-          )}
           
            {user && (user.role === 'teacher' || user.role === 'superadmin') && (
             <TooltipProvider>
@@ -144,7 +122,6 @@ export function AppHeader({ title }: { title?: string }) {
           )}
         </nav>
       </header>
-       <BottomNavBar />
       {user?.role === 'student' && (
           <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} />
       )}
