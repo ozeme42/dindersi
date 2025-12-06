@@ -167,6 +167,17 @@ function GameComponent() {
 
     const currentWordString = currentSelection.map(idx => shuffledLetters[idx]).join("");
     
+    const buttonColorClasses = [
+        "bg-blue-600 border-blue-800 text-white",
+        "bg-emerald-600 border-emerald-800 text-white",
+        "bg-amber-500 border-amber-700 text-slate-900",
+        "bg-rose-500 border-rose-700 text-white",
+        "bg-sky-500 border-sky-700 text-white",
+        "bg-lime-500 border-lime-700 text-slate-900",
+        "bg-pink-600 border-pink-800 text-white",
+        "bg-cyan-500 border-cyan-700 text-slate-900",
+    ];
+
     if (isLoading) {
         return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-fuchsia-500" /></div>;
     }
@@ -317,7 +328,7 @@ function GameComponent() {
                                     `absolute w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-black cursor-pointer shadow-lg transition-all duration-200 z-10 select-none border-b-4 active:border-b-0 active:translate-y-1`,
                                     isSelected 
                                         ? 'bg-fuchsia-500 border-fuchsia-700 text-white scale-110 shadow-[0_0_25px_rgba(217,70,239,0.6)]' 
-                                        : 'bg-white border-slate-300 text-slate-900 hover:bg-fuchsia-50'
+                                        : cn("hover:scale-105", buttonColorClasses[i % buttonColorClasses.length])
                                 )}
                                 style={{ 
                                     left: '50%', 
