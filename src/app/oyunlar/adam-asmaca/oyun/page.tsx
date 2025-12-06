@@ -285,7 +285,7 @@ function HangmanGame() {
     }
 
     return (
-        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col pt-24", gameShake && "animate-shake")}>
+        <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col pt-24 pb-24 md:pb-8", gameShake && "animate-shake")}>
             <GameBackground />
             <GameHUD score={totalScore} current={currentWordIndex} total={gameData?.length || 0} onFinish={() => setGameState('finished')} />
 
