@@ -15,6 +15,7 @@ import { QuestionDialog } from "@/components/question-dialog";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const KUTU_SAYISI = 30;
 const SORU_SAYISI = 15;
@@ -342,24 +343,23 @@ function TornadoGame() {
     }
     
     return (
-        <div id="ana-kapsayici" className="w-full max-w-7xl mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col" style={{ height: '100vh', overflowY: 'auto' }}>
+        <div id="ana-kapsayici" className="w-full max-w-7xl h-screen mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col">
              <style jsx global>{`
                 :root {
                     --arka-plan: #1a202c; --ana-renk: #2b6cb0; --vurgu-renk: #4fd1c5; --basari-renk: #48bb78;
                     --hata-renk: #f56565; --odul-renk: #f6e05e; --ceza-renk: #f56565; --bos-renk: #a0aec0;
                 }
                 body { background-color: var(--arka-plan); font-family: 'Inter', sans-serif; }
-                #ana-kapsayici { height: auto; min-height: 100vh; overflow-y: auto; }
-                :fullscreen #ana-kapsayici { height: 100vh !important; overflow-y: auto !important; }
+                :fullscreen #ana-kapsayici { height: 100vh !important; }
              `}</style>
             
-            <div className="flex items-center justify-between mb-2 relative px-2">
+            <div className="flex items-center justify-between mb-2 relative px-2 shrink-0">
                 <Button asChild variant="outline" size="sm"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Link></Button>
                 <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-center text-teal-300">Tornado Oyunu</h1>
                 <div />
             </div>
 
-            <div id="puan-durumu-alani" className={cn("grid gap-2 mb-2", `grid-cols-2 md:grid-cols-${takimSayisi}`)}>
+            <div id="puan-durumu-alani" className={cn("grid gap-2 mb-2 shrink-0", `grid-cols-2 md:grid-cols-${takimSayisi}`)}>
                 {GRUPLAR.map((grup, index) => {
                     const renkler = ['#3182ce', '#e53e3e', '#38a169', '#d69e2e'];
                     const isActive = GRUPLAR[siraIndeksi] === grup && !cezaliGruplar.has(grup);
@@ -376,28 +376,32 @@ function TornadoGame() {
                 })}
             </div>
 
-             <div className="flex-grow grid grid-cols-6 grid-rows-5 gap-1 p-2">
-                {Array.from({ length: KUTU_SAYISI }).map((_, i) => {
-                    const kutucukNo = i + 1;
-                    const isOpened = acilanKutular.has(kutucukNo);
-                    return (
-                        <div key={kutucukNo}
-                            id={`kutucuk-${kutucukNo}`}
-                            onClick={() => kutucukSecildi(i)}
-                            className={cn(
-                                "flex items-center justify-center rounded-lg text-white font-extrabold text-2xl sm:text-3xl transition-all duration-300",
-                                isOpened
-                                    ? "bg-gray-700/50 cursor-not-allowed"
-                                    : "bg-teal-600 cursor-pointer hover:bg-teal-500 hover:scale-105"
-                            )}
-                        >
-                            {isOpened ? <CheckCheck className="h-8 w-8 text-green-400" /> : kutucukNo}
-                        </div>
-                    )
-                })}
+            <div className="flex-grow min-h-0">
+              <ScrollArea className="h-full">
+                <div className="grid grid-cols-6 grid-rows-5 gap-1 p-2">
+                    {Array.from({ length: KUTU_SAYISI }).map((_, i) => {
+                        const kutucukNo = i + 1;
+                        const isOpened = acilanKutular.has(kutucukNo);
+                        return (
+                            <div key={kutucukNo}
+                                id={`kutucuk-${kutucukNo}`}
+                                onClick={() => kutucukSecildi(i)}
+                                className={cn(
+                                    "flex items-center justify-center rounded-lg text-white font-extrabold text-2xl sm:text-3xl transition-all duration-300 aspect-square",
+                                    isOpened
+                                        ? "bg-gray-700/50 cursor-not-allowed"
+                                        : "bg-teal-600 cursor-pointer hover:bg-teal-500 hover:scale-105"
+                                )}
+                            >
+                                {isOpened ? <CheckCheck className="h-8 w-8 text-green-400" /> : kutucukNo}
+                            </div>
+                        )
+                    })}
+                </div>
+              </ScrollArea>
             </div>
             
-            {isMultiplayer && <p className="text-center text-teal-300 text-lg mb-2">Sıradaki Takım: <span className="font-bold">{GRUPLAR[siraIndeksi]}</span></p>}
+            {isMultiplayer && <p className="text-center text-teal-300 text-lg my-2 shrink-0">Sıradaki Takım: <span className="font-bold">{GRUPLAR[siraIndeksi]}</span></p>}
             
             {mesaj && (
                  <AlertDialog open={!!mesaj}>
