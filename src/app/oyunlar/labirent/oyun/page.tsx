@@ -234,7 +234,7 @@ function MazeGame() {
     const totalQuestionCount = questionLocations.length;
 
     return (
-        <div className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-slate-950 text-white gap-8 relative">
+        <div className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-slate-950 text-white gap-8 relative pb-24 md:pb-4">
             
             {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
@@ -246,7 +246,7 @@ function MazeGame() {
             <div className="relative z-10 flex-grow flex flex-col items-center gap-4 w-full max-w-4xl flex-shrink-0">
                 
                 {/* HUD */}
-                <div className="w-full bg-slate-900/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl flex justify-between items-center shadow-lg">
+                <div className="w-full bg-slate-900/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl flex justify-between items-center shadow-lg shrink-0">
                     <div className="flex items-center gap-3">
                         <div className="bg-blue-500/20 p-2 rounded-xl">
                             <Gamepad2 className="h-6 w-6 text-blue-400" />
