@@ -30,6 +30,7 @@ function TrueFalseChainGame() {
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
+    const [correctStreak, setCorrectStreak] = useState(0);
     const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -69,6 +70,7 @@ function TrueFalseChainGame() {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         } else if (timeLeft <= 0 && gameState === 'playing') {
             playSound('timeUp');
+            setCorrectStreak(0); // Reset streak on time up
             setGameState('finished');
         }
         return () => clearTimeout(timer);
@@ -82,11 +84,15 @@ function TrueFalseChainGame() {
 
         if (isCorrect) {
             playSound('correct');
-            setScore(prev => prev + 10);
+            const newStreak = correctStreak + 1;
+            const pointsToAdd = newStreak * 10;
+            setScore(prev => prev + pointsToAdd);
+            setCorrectStreak(newStreak);
             setTimeLeft(prev => prev + CORRECT_BONUS);
             setFeedback('correct');
         } else {
             playSound('incorrect');
+            setCorrectStreak(0); // Reset streak on wrong answer
             setTimeLeft(prev => Math.max(0, prev - WRONG_PENALTY));
             setFeedback('wrong');
         }
@@ -120,6 +126,7 @@ function TrueFalseChainGame() {
 
     const handleRestart = () => {
         setScore(0);
+        setCorrectStreak(0);
         setCurrentQuestionIndex(0);
         setTimeLeft(INITIAL_TIME);
         setGameState('loading');
@@ -168,15 +175,15 @@ function TrueFalseChainGame() {
 
             <div className="w-full max-w-4xl z-10 space-y-8">
                 <div className="flex justify-between items-center bg-black/30 backdrop-blur-md p-4 rounded-2xl border border-white/10">
-                    <div className="text-2xl font-bold">Skor: <span className="text-green-400 font-mono">{score}</span></div>
+                    <div className="text-xl md:text-2xl font-bold">Skor: <span className="text-green-400 font-mono">{score}</span></div>
                     
-                    <div className={cn("relative text-4xl font-black text-white font-mono", feedback && 'animate-tada')}>
+                    <div className={cn("relative text-3xl md:text-4xl font-black text-white font-mono", feedback && 'animate-tada')}>
                         {timeLeft}s
                         {feedback === 'correct' && <div className="absolute -top-4 -right-8 text-green-400 text-lg font-bold flex items-center gap-1 animate-in slide-in-from-bottom fade-in"><PlusCircle className="h-4 w-4"/> +{CORRECT_BONUS}</div>}
                         {feedback === 'wrong' && <div className="absolute -top-4 -right-8 text-red-400 text-lg font-bold flex items-center gap-1 animate-in slide-in-from-bottom fade-in"><MinusCircle className="h-4 w-4"/> -{WRONG_PENALTY}</div>}
                     </div>
 
-                    <div className="text-lg font-semibold">Soru: {currentQuestionIndex + 1} / {questions.length}</div>
+                    <div className="text-sm md:text-lg font-semibold">Soru: {currentQuestionIndex + 1} / {questions.length}</div>
                     <Button onClick={() => setGameState('finished')} variant="ghost" size="sm" className="text-red-400 hover:bg-red-900/50 hover:text-red-300">
                         <XOctagon className="h-4 w-4 mr-2"/> Bitir
                     </Button>
@@ -184,15 +191,15 @@ function TrueFalseChainGame() {
                 <Progress value={timeProgress} className={cn("w-full h-3", timeLeft <= 10 ? "[&>div]:bg-red-500" : "[&>div]:bg-green-500")} />
                 
                 <div className="bg-black/40 border-2 border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-2xl min-h-[200px] flex items-center justify-center">
-                    <p className="text-lg md:text-2xl font-bold leading-tight">{currentQuestion.text}</p>
+                    <p className="text-lg md:text-xl font-bold leading-tight">{currentQuestion.text}</p>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-16 text-base md:h-24 md:text-2xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <CheckCircle className="mr-2 h-4 w-4 md:mr-4 md:h-8 md:w-8"/> DOĞRU
+                    <Button onClick={() => handleAnswer(true)} disabled={!!feedback} className="h-20 text-xl md:h-24 md:text-2xl font-black bg-green-600 hover:bg-green-500 shadow-lg shadow-green-900 border-b-8 border-green-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <CheckCircle className="mr-2 h-6 w-6 md:mr-4 md:h-8 md:w-8"/> DOĞRU
                     </Button>
-                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-16 text-base md:h-24 md:text-2xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
-                        <XCircle className="mr-2 h-4 w-4 md:mr-4 md:h-8 md:w-8"/> YANLIŞ
+                    <Button onClick={() => handleAnswer(false)} disabled={!!feedback} className="h-20 text-xl md:h-24 md:text-2xl font-black bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900 border-b-8 border-red-800 active:border-b-0 active:translate-y-2 transition-all">
+                        <XCircle className="mr-2 h-6 w-6 md:mr-4 md:h-8 md:w-8"/> YANLIŞ
                     </Button>
                 </div>
             </div>
