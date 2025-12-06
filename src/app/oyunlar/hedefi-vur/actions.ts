@@ -12,10 +12,86 @@ import {
   writeBatch, 
   query, 
   where, 
+  getDocs, 
   getCountFromServer,
+  limit 
 } from 'firebase/firestore';
+import { unstable_noStore as noStore } from 'next/cache';
+import type { ActivityItem } from '@/lib/types';
 
-export async function submitHedefiVurScoreAction(
+export type HitTheTargetRound = {
+    definition: string;
+    target: string;
+    words: string[];
+};
+
+const MAX_ATTEMPTS_PER_CONTEXT = 10;
+
+export async function getHitTheTargetAction(
+    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+): Promise<{ data: HitTheTargetRound[] | null; error?: string }> {
+    noStore();
+    try {
+        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+
+        if (topicId && topicId !== 'all') {
+            baseQuery = query(baseQuery, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            baseQuery = query(baseQuery, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        }
+
+        const querySnapshot = await getDocs(baseQuery);
+        
+        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
+             .filter(item => 
+                item.content &&
+                item.content.term && 
+                item.content.definition &&
+                item.content.term.trim().length > 2 &&
+                !item.content.term.includes(' ')
+            );
+
+        if (allDefinitions.length < 5) {
+            return { error: "Hedefi Vur oynamak için bu konuda en az 5 adet uygun tanım (tek kelimelik kavramlar) bulunmalıdır.", data: null };
+        }
+        
+        const shuffled = [...allDefinitions].sort(() => 0.5 - Math.random());
+        const rounds: HitTheTargetRound[] = [];
+
+        for (const targetDef of shuffled) {
+            const targetWord = targetDef.content.term!;
+            const definition = targetDef.content.definition!;
+            
+            const otherWords = allDefinitions
+                .filter(d => d.content.term !== targetWord)
+                .map(d => d.content.term!);
+            
+            const shuffledOthers = otherWords.sort(() => 0.5 - Math.random());
+            const decoys = shuffledOthers.slice(0, 4);
+
+            const wordsForRound = [targetWord, ...decoys].sort(() => 0.5 - Math.random());
+
+            rounds.push({
+                definition: definition,
+                target: targetWord,
+                words: wordsForRound,
+            });
+        }
+        
+        const finalRounds = rounds.slice(0, 10); // Limit to 10 rounds per game
+
+        return { data: JSON.parse(JSON.stringify(finalRounds)) };
+
+    } catch (error: any) {
+        console.error("Server Action Error (getHitTheTargetAction):", error);
+        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", data: null };
+    }
+}
+
+
+export async function submitHitTheTargetScoreAction(
     userId: string | null, 
     score: number, 
     context: string
@@ -32,7 +108,7 @@ export async function submitHedefiVurScoreAction(
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         
-        if (attemptsSnapshot.data().count >= 10) {
+        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
@@ -57,7 +133,7 @@ export async function submitHedefiVurScoreAction(
 
         return { success: true };
     } catch (error: any) {
-        console.error("Server Action Error (submitHedefiVurScoreAction):", error);
+        console.error("Server Action Error (submitHitTheTargetScoreAction):", error);
         return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
     }
 }
