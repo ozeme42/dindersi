@@ -1,492 +1,311 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, type ReactNode } from "react";
-import Link from "next/link";
-import { useAuth } from "@/context/auth-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, query, where, orderBy, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, QuestionBankStats } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
-import { getLiveLeaderboard } from "@/app/leaderboard/actions";
-import { getStudentExams } from "@/app/student/deneme/actions";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
-import { UserAvatar } from "@/components/user-avatar";
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
-  Trophy, Star, Gamepad2, Users, ShoppingCart, 
-  FileCog, Crown, Award, Zap, Target, BookOpen, 
-  LayoutTemplate, Columns, Loader2, ChevronRight, School
+    Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
+    FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
+    Video, Settings, Trophy, Bug, DollarSign, LogIn, Gamepad2, Star, Sparkles, PlayCircle
 } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { useAuth } from '@/context/auth-context';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { getPublicCurriculum, type PublicClass } from '../actions/getPublicCurriculum';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { AppHeader } from '@/components/app-header';
+import { TeacherMainButtons } from '@/components/teacher-main-buttons';
 
-// --- Yardımcı Bileşenler ---
+// --- OPTIMIZED COMPONENTS ---
 
-const StatBadge = ({ icon, value, label, colorClass }: { icon: ReactNode, value: string | number, label: string, colorClass: string }) => (
-    <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900/50 border border-white/5 backdrop-blur-sm shadow-inner min-w-[80px] w-full transition-transform hover:scale-105">
-        <div className={cn("p-2 rounded-full mb-1 shadow-lg", colorClass)}>
-            {React.cloneElement(icon as React.ReactElement, { className: "w-4 h-4 text-white" })}
-        </div>
-        <span className="text-lg font-bold text-white tracking-tight">{value}</span>
-        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold text-center leading-tight">{label}</span>
+// Daha performanslı ve hafif kart yapısı
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={cn(
+        "backdrop-blur-sm bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/5 rounded-2xl shadow-xl overflow-hidden transform transition-all",
+        className
+    )}>
+        {children}
     </div>
 );
 
-function HardestWorkersToday() {
-    const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+// Skeleton Loader (Daha hızlı açılış hissi için)
+const LoadingSkeleton = () => (
+    <div className="flex flex-col min-h-screen bg-[#2b1055] items-center p-4 space-y-6 animate-pulse">
+        <div className="h-12 w-3/4 bg-white/10 rounded-lg mt-10"></div>
+        <div className="flex gap-4 w-full justify-center">
+            <div className="h-12 w-32 bg-white/10 rounded-xl"></div>
+            <div className="h-12 w-32 bg-white/10 rounded-xl"></div>
+        </div>
+        <div className="w-full space-y-4 mt-8">
+            {[1, 2, 3].map((i) => (
+                <div key={i} className="h-24 w-full bg-white/5 rounded-2xl border border-white/10"></div>
+            ))}
+        </div>
+    </div>
+);
 
-    useEffect(() => {
-        getLiveLeaderboard().then(data => {
-            setDailyTop(data.slice(0, 5)); // Masaüstünde daha fazla kişi gösterebiliriz
-        }).finally(() => {
-            setIsLoading(false);
-        });
-    }, []);
+const GameButton = ({ children, className, variant = 'primary', href, target, ...props }: any) => {
+    const variants: {[key: string]: string} = {
+        primary: "bg-indigo-500 active:bg-indigo-600 border-indigo-700 text-white shadow-indigo-900/20",
+        secondary: "bg-rose-500 active:bg-rose-600 border-rose-700 text-white shadow-rose-900/20",
+        success: "bg-emerald-500 active:bg-emerald-600 border-emerald-700 text-white shadow-emerald-900/20",
+        warning: "bg-amber-500 active:bg-amber-600 border-amber-700 text-white shadow-amber-900/20",
+    };
+
+    const baseClass = "relative w-full sm:w-auto inline-flex items-center justify-center font-bold uppercase tracking-wide transition-transform duration-100 border-b-[4px] active:border-b-0 active:translate-y-[4px] rounded-xl py-3 px-6 shadow-lg text-sm sm:text-base";
     
-    const rankColors: { [key: number]: string } = {
-        0: "from-yellow-300 to-yellow-600 border-yellow-400/50 text-yellow-100 shadow-yellow-900/20",
-        1: "from-slate-300 to-slate-500 border-slate-400/50 text-slate-100 shadow-slate-900/20",
-        2: "from-orange-300 to-orange-600 border-orange-400/50 text-orange-100 shadow-orange-900/20",
+    const content = (
+        <span className={cn(baseClass, variants[variant], className)} {...props}>
+            {children}
+        </span>
+    );
+
+    if (href) return <Link href={href} target={target} className="w-full sm:w-auto block sm:inline-block text-center">{content}</Link>;
+    return <button className="w-full sm:w-auto block sm:inline-block">{content}</button>;
+};
+
+// --- LOGGED OUT PAGE (Public View) ---
+const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
+    if (!classGroups || classGroups.length === 0) {
+        return (
+            <div className="flex flex-col min-h-[100dvh] bg-[#2b1055] items-center justify-center p-6 text-center">
+                 <div className="p-8 rounded-3xl bg-white/10 backdrop-blur border border-white/20">
+                    <Gamepad2 className="w-12 h-12 text-white/50 mx-auto mb-4" />
+                    <p className="text-white text-lg font-bold">Macera yükleniyor veya bulunamadı.</p>
+                </div>
+            </div>
+        );
+    }
+
+    const groupColors = [
+        'from-purple-500 to-indigo-600', 'from-pink-500 to-rose-600', 
+        'from-emerald-400 to-teal-600', 'from-amber-400 to-orange-600', 'from-sky-400 to-blue-600'
+    ];
+    
+    const classColorMap: { [key: string]: string } = {
+        '5': 'text-sky-500', '6': 'text-emerald-500', '7': 'text-amber-500', 
+        '8': 'text-rose-500', 'Lise': 'text-indigo-500', 'Genel': 'text-slate-500',
     };
 
     return (
-        <Card className="border-0 bg-slate-900/40 backdrop-blur-md shadow-xl overflow-hidden h-full">
-            <CardHeader className="pb-3 border-b border-white/5">
-                <CardTitle className="flex items-center gap-2 text-white text-lg">
-                    <Crown className="h-5 w-5 text-amber-500 fill-amber-500 animate-pulse" />
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500 font-bold">
-                        Günün Efsaneleri
-                    </span>
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 space-y-3">
-                {isLoading ? (
-                    <div className="space-y-3">
-                        <Skeleton className="h-12 w-full rounded-xl bg-slate-800/50" />
-                        <Skeleton className="h-12 w-full rounded-xl bg-slate-800/50" />
-                        <Skeleton className="h-12 w-full rounded-xl bg-slate-800/50" />
+        <div className="flex flex-col min-h-[100dvh] bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black pb-10 font-sans selection:bg-purple-500/30 text-white overflow-x-hidden">
+             
+             <main className="flex-1 container mx-auto px-4 sm:px-6 py-6 space-y-6 relative z-10 max-w-5xl">
+                {/* Hero Mobile Optimized */}
+                <div className="flex flex-col items-center justify-center py-6 sm:py-10 space-y-6">
+                    <div className="relative text-center">
+                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 opacity-60 blur-xl animate-pulse"></div>
+                        <h1 className="relative text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-white drop-shadow-sm tracking-tight leading-tight">
+                            DEĞERLER<br className="sm:hidden"/> OYUNU
+                        </h1>
                     </div>
-                ) : dailyTop.length > 0 ? (
-                    dailyTop.map((student, index) => (
-                        <div key={student.uid} className="relative group">
-                            {/* Hover Efekti */}
-                            <div className={cn(
-                                "absolute inset-0 rounded-xl bg-gradient-to-r opacity-0 group-hover:opacity-10 transition-opacity duration-300",
-                                rankColors[index] || "from-slate-700 to-slate-800"
-                            )} />
-                            
-                            <div className="relative flex items-center justify-between p-2.5 rounded-xl border border-white/5 bg-slate-800/30 hover:bg-slate-800/50 transition-all">
-                                <div className="flex items-center gap-3">
-                                    <div className={cn(
-                                        "flex items-center justify-center w-7 h-7 rounded-full font-bold text-xs bg-gradient-to-br shadow-lg border",
-                                        rankColors[index] || "bg-slate-700 border-slate-600 text-slate-300"
-                                    )}>
-                                        {index + 1}
-                                    </div>
-                                    <UserAvatar user={student} className="w-8 h-8 border border-slate-700/50" />
-                                    <div className="flex flex-col">
-                                        <p className="font-bold text-slate-200 text-sm leading-none">{student.displayName}</p>
-                                        <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">{student.class || 'Öğrenci'}</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <span className="font-mono font-bold text-amber-400 text-sm">
-                                        {(student.score || 0).toLocaleString()}
-                                    </span>
-                                </div>
-                            </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-4 sm:px-0">
+                        <GameButton href="/login" variant="success">
+                            <LogIn className="mr-2 h-5 w-5" /> Giriş Yap
+                        </GameButton>
+                        <GameButton href="/leaderboard" variant="warning">
+                            <Trophy className="mr-2 h-5 w-5" /> Liderlik
+                        </GameButton>
+                    </div>
+                </div>
+                 
+                {/* Content Groups */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    {classGroups.map((group, groupIndex) => (
+                        <div key={group.name}>
+                            <GlassCard>
+                                <Accordion type="single" collapsible className="w-full border-none">
+                                    <AccordionItem value={group.name} className="border-none">
+                                        <AccordionTrigger className={cn(
+                                            "px-5 py-4 text-lg sm:text-xl font-black text-white hover:no-underline transition-all active:scale-[0.99]",
+                                            `bg-gradient-to-r ${groupColors[groupIndex % groupColors.length]}`
+                                        )}>
+                                            <div className="flex items-center gap-3">
+                                                <Star className="h-5 w-5 text-yellow-300 fill-yellow-300 shrink-0" />
+                                                <span>{isNaN(parseInt(group.name)) ? group.name : `${group.name}. Sınıf`}</span>
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent className="p-0 bg-black/10">
+                                            <div className="p-3 space-y-2">
+                                                <Accordion type="single" collapsible className="w-full space-y-2">
+                                                    {group.courses.map((course) => (
+                                                        <AccordionItem key={course.id} value={course.id} className="border border-white/10 bg-white/5 rounded-xl overflow-hidden">
+                                                            <AccordionTrigger className="px-3 py-2.5 hover:bg-white/5 hover:no-underline">
+                                                                <div className="flex items-center gap-3 text-left">
+                                                                    <div className={cn("h-8 w-8 rounded-lg flex items-center justify-center font-bold text-sm bg-white shrink-0", classColorMap[group.name] || 'text-slate-500')}>
+                                                                         {group.name.charAt(0)}
+                                                                    </div>
+                                                                    <span className="text-base font-bold text-white/90 leading-tight">
+                                                                        {course.title}
+                                                                    </span>
+                                                                </div>
+                                                            </AccordionTrigger>
+                                                            <AccordionContent className="px-3 pb-3 pt-1">
+                                                                {/* Mobile padding fix: pl-2 instead of pl-5 */}
+                                                                <Accordion type="single" collapsible className="mt-1 space-y-1 pl-1 border-l border-dashed border-white/20 ml-2">
+                                                                    {course.units.length > 0 ? course.units.map(unit => (
+                                                                        <AccordionItem value={unit.id} key={unit.id} className="border-none">
+                                                                            <AccordionTrigger className="font-bold uppercase text-[10px] sm:text-xs tracking-wider text-indigo-300 hover:no-underline py-2 text-left">
+                                                                                {unit.title}
+                                                                            </AccordionTrigger>
+                                                                            <AccordionContent className="space-y-2 pt-1">
+                                                                                {unit.topics.map(topic => (
+                                                                                    <div key={topic.id} className="flex flex-col gap-2 bg-black/20 p-2.5 rounded-lg border border-white/5">
+                                                                                        <div className="flex items-start gap-2">
+                                                                                            <Sparkles className="h-4 w-4 text-yellow-200 shrink-0 mt-0.5" />
+                                                                                            <span className="font-medium text-sm text-white/90 leading-snug">{topic.title}</span>
+                                                                                        </div>
+                                                                                        {(topic.hasYazilacaklarContent || topic.hasOzetContent) && (
+                                                                                            <div className="flex gap-2 ml-6">
+                                                                                                {topic.hasYazilacaklarContent && (
+                                                                                                    <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex-1 text-center bg-sky-600/80 p-1.5 rounded text-[10px] font-bold text-white border-b-2 border-sky-800 active:border-b-0 active:translate-y-[1px]">
+                                                                                                        <Columns className="h-3 w-3 inline mr-1"/> Yazılacaklar
+                                                                                                    </Link>
+                                                                                                )}
+                                                                                                {topic.hasOzetContent && (
+                                                                                                    <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex-1 text-center bg-amber-600/80 p-1.5 rounded text-[10px] font-bold text-white border-b-2 border-amber-800 active:border-b-0 active:translate-y-[1px]">
+                                                                                                        <BookOpen className="h-3 w-3 inline mr-1"/> Özet
+                                                                                                    </Link>
+                                                                                                )}
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </AccordionContent>
+                                                                        </AccordionItem>
+                                                                    )) : <p className="text-xs text-white/40 italic p-1">İçerik hazırlanıyor.</p>}
+                                                                </Accordion>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    ))}
+                                                </Accordion>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </GlassCard>
                         </div>
-                    ))
-                ) : (
-                    <div className="text-center py-8 bg-slate-800/20 rounded-xl border border-dashed border-slate-700/50">
-                        <Trophy className="h-8 w-8 text-slate-600 mx-auto mb-2 opacity-50"/>
-                        <p className="text-slate-500 text-xs">Henüz liderlik tablosu boş.</p>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
-    )
-}
-
-// --- Ana Sayfa ---
-
-export default function StudentDashboard() {
-  const { user } = useAuth();
-  
-  type StatsType = {
-      score: number;
-      completedTopics: number;
-      totalTopics: number;
-      coursesStarted: number;
-      coursesCompleted: number;
-      totalCourses: number;
-      generalRank: number;
-      classRank: number;
-      branchRank: number;
-      questionBankProgress: number;
-  };
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState<StatsType>({
-      score: 0, completedTopics: 0, totalTopics: 0, coursesStarted: 0, 
-      coursesCompleted: 0, totalCourses: 0, generalRank: 0, classRank: 0, 
-      branchRank: 0, questionBankProgress: 0,
-  });
-  const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
-
-  useEffect(() => {
-    async function fetchData() {
-      if (!user?.uid) { setIsLoading(false); return; };
-      setIsLoading(true);
-      try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
-        let studentClassName = user.class?.split(' - ')[0];
-        let userScore = user.score || 0;
-
-        const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
-             getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-             getDocs(collection(db, "courses")),
-             getDocs(query(collection(db, "users"), where("role", "==", "student"))),
-             getStudentExams(user.uid),
-        ]);
-
-        if (examsSnapshot.success && examsSnapshot.data) {
-             const pending = examsSnapshot.data.filter((a:any) => !a.solvedEvent).length;
-             const solved = examsSnapshot.data.length - pending;
-             setExamStats({ pending, solved });
-        }
-
-        const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-        const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
-        const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
-
-        let classRank = 0;
-        let branchRank = 0;
-
-        if(user.class) {
-             const gradeName = user.class.split(' - ')[0];
-             const branchName = user.class;
-             const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-             const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-             classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
-
-             const studentsInBranch = allStudents.filter(s => s.class === branchName);
-             const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-             branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
-        }
-
-        // Simüle edilmiş veri (Sizin orijinal lojikten gelecek)
-        setStats({
-            score: userScore,
-            completedTopics: 45, 
-            totalTopics: 100, 
-            coursesStarted: 3,
-            coursesCompleted: 1,
-            totalCourses: 5,
-            generalRank,
-            classRank,
-            branchRank,
-            questionBankProgress: 65
-        });
-
-      } catch (error) {
-        console.error("Error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, [user]);
-  
-  if (isLoading) {
-    return (
-        <div className="flex h-screen w-full items-center justify-center bg-slate-950">
-            <div className="flex flex-col items-center gap-4">
-                <div className="relative">
-                    <div className="absolute inset-0 blur-xl bg-cyan-500/30 rounded-full animate-pulse"></div>
-                    <Loader2 className="h-12 w-12 animate-spin text-cyan-400 relative z-10" />
+                    ))}
                 </div>
-                {/* Desktop için Skeleton Layout */}
-                <div className="hidden lg:grid grid-cols-3 gap-6 w-[800px] opacity-20 mt-8">
-                    <div className="h-64 bg-slate-800 rounded-2xl col-span-1" />
-                    <div className="h-64 bg-slate-800 rounded-2xl col-span-2" />
-                </div>
-            </div>
+            </main>
+
+            <footer className="p-6 text-center z-10 mt-auto">
+                <p className="text-white/30 text-[10px] font-medium tracking-widest uppercase">Eğlenerek Öğrenmenin Adresi</p>
+            </footer>
         </div>
     );
-  }
+};
 
-  const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
+// --- LOGGED IN DASHBOARD ---
+const ManagementButton = React.memo(({ href, title, icon, colorClass }: { href: string, title: string, icon: React.ReactNode, colorClass: string }) => (
+    <Link href={href} className="block group h-full touch-manipulation">
+        <div className={cn(
+            "h-full p-3 sm:p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-200 border-b-[4px] active:border-b-0 active:translate-y-[4px]",
+            "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-sm active:shadow-none"
+        )}>
+            <div className={cn("p-3 rounded-xl mb-2 sm:mb-3", colorClass)}>
+                {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 sm:h-8 sm:w-8 text-white" })}
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-tight">{title}</h3>
+        </div>
+    </Link>
+));
+ManagementButton.displayName = 'ManagementButton';
+
+const LoggedInDashboard = ({ user }: { user: any }) => {
+    const router = useRouter();
+
+    useEffect(() => {
+        if (user.role === 'student') router.replace('/student');
+    }, [user, router]);
+    
+    if (user.role === 'student') return <LoadingSkeleton />;
+  
+    const buttons = useMemo(() => {
+        const list = [
+            { href: "/teacher/content-creation", title: "İçerik", icon: <PenSquare />, color: "bg-orange-500" },
+            { href: '/teacher/students', title: 'Öğrenci', icon: <UserCog />, color: "bg-blue-500" },
+            { href: '/teacher/questions', title: 'Sorular', icon: <FileCog />, color: "bg-indigo-500" },
+            { href: '/teacher/exam-questions', title: 'Havuz', icon: <FileQuestion />, color: "bg-violet-500" },
+            { href: '/teacher/activity-data', title: 'Veriler', icon: <ClipboardList />, color: "bg-teal-500" },
+            { href: '/teacher/exams', title: 'Denemeler', icon: <ClipboardCheck />, color: "bg-green-500" },
+            { href: '/teacher/scales', title: 'Ölçekler', icon: <Scale />, color: "bg-cyan-500" },
+            { href: '/teacher/stats', title: 'İstatistik', icon: <BarChart3 />, color: "bg-pink-500" },
+            { href: '/teacher/video-library', title: 'Videolar', icon: <Video />, color: "bg-rose-500" },
+            { href: '/teacher/game-settings', title: 'Ayarlar', icon: <Settings />, color: "bg-slate-500" },
+            { href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500" },
+            { href: '/teacher/error-reports', title: 'Hatalar', icon: <Bug />, color: "bg-red-400" },
+            { href: '/teacher/score-events', title: 'Puanlar', icon: <DollarSign />, color: "bg-emerald-500" },
+        ];
+        if(user.role === 'superadmin') {
+            list.unshift({ href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "bg-red-600" });
+        }
+        return list;
+    }, [user.role]);
   
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pb-24 lg:pb-12 overflow-x-hidden selection:bg-cyan-500/30">
+    <div className="flex flex-col min-h-[100dvh] bg-slate-50 dark:bg-slate-950 transition-colors pb-10">
+      <AppHeader />
+      <main className="flex-1 container mx-auto px-4 py-6 space-y-6">
+        <div className="text-center space-y-2 py-2">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight text-slate-800 dark:text-white">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">Öğretmen</span> Paneli
+          </h1>
+        </div>
         
-        {/* Optimize Edilmiş Arkaplan Efektleri (GPU Accelerated) */}
-        <div className="fixed inset-0 pointer-events-none transform-gpu">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-900/10 rounded-full blur-[80px]" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-900/10 rounded-full blur-[80px]" />
-            <div className="absolute top-[20%] right-[30%] w-[20%] h-[20%] bg-indigo-500/5 rounded-full blur-[60px]" />
+        {/* Hızlı İşlemler - Mobile Optimized */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+             <h2 className="text-base font-bold mb-3 text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                 <PlayCircle className="text-indigo-500 w-5 h-5"/> Hızlı İşlemler
+             </h2>
+             <TeacherMainButtons />
         </div>
 
-      {/* --- ANA LAYOUT KAPSAYICI --- */}
-      <div className="relative max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            {/* SOL KOLON (Profil & İstatistikler) - Desktop'ta 3 birim */}
-            <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-8">
-                
-                {/* Profil Kartı */}
-                <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 rounded-3xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
-                    <div className="relative bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-5 shadow-2xl flex flex-row lg:flex-col items-center gap-4 text-left lg:text-center">
-                        <div className="relative flex-shrink-0">
-                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-violet-500 rounded-full animate-spin-slow opacity-70 blur-[2px]" />
-                            <UserAvatar user={user} className="w-16 h-16 lg:w-24 lg:h-24 border-4 border-slate-900 relative z-10" />
-                            <div className="absolute -bottom-1 -right-1 lg:bottom-0 lg:right-0 bg-slate-900 rounded-full p-1 z-20">
-                                <div className="bg-amber-500 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-lg">
-                                    <Crown className="w-3 h-3" />
-                                    <span>#{stats.generalRank > 0 ? stats.generalRank : '-'}</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="flex-grow min-w-0">
-                            <h1 className="text-xl lg:text-2xl font-black tracking-tight text-white mb-1 truncate">{user?.displayName}</h1>
-                            <p className="text-sm text-slate-400 font-medium flex items-center lg:justify-center gap-1.5 mb-2">
-                                <School className="w-3 h-3 text-cyan-400" />
-                                {user?.class}
-                            </p>
-                            
-                            {/* XP Bar */}
-                            <div className="relative w-full h-2.5 bg-slate-800 rounded-full overflow-hidden shadow-inner">
-                                <div 
-                                    style={{ width: `${lessonProgress}%` }} 
-                                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-1000" 
-                                />
-                            </div>
-                            <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
-                                <span>LVL {Math.floor(lessonProgress / 10) + 1}</span>
-                                <span>{lessonProgress}% EXP</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* İstatistik Grid'i (Mobilde Scroll, Desktopta Grid) */}
-                <div className="flex lg:grid lg:grid-cols-2 gap-3 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-                    <StatBadge 
-                        icon={<Star />} 
-                        value={stats.score.toLocaleString()} 
-                        label="Puan" 
-                        colorClass="bg-amber-500/20 text-amber-500" 
-                    />
-                    <StatBadge 
-                        icon={<Award />} 
-                        value={stats.classRank > 0 ? `#${stats.classRank}` : '-'} 
-                        label="Sınıf" 
-                        colorClass="bg-cyan-500/20 text-cyan-500" 
-                    />
-                    <StatBadge 
-                        icon={<Target />} 
-                        value={stats.questionBankProgress + '%'} 
-                        label="Soru B." 
-                        colorClass="bg-violet-500/20 text-violet-500" 
-                    />
-                    <StatBadge 
-                        icon={<Zap />} 
-                        value={stats.completedTopics} 
-                        label="Konu" 
-                        colorClass="bg-emerald-500/20 text-emerald-500" 
-                    />
-                </div>
-                
-                {/* Desktop'ta Yazılacaklar/Özetler Sol Alta Gelebilir */}
-                <div className="hidden lg:grid grid-cols-2 gap-3">
-                     <Link href="/student/yazilacaklar" className="block group">
-                        <div className="bg-slate-900/50 border border-white/5 p-3 rounded-xl flex flex-col items-center gap-2 hover:bg-slate-800 hover:border-sky-500/30 transition-all">
-                            <Columns className="h-5 w-5 text-sky-400 group-hover:scale-110 transition-transform"/>
-                            <span className="text-xs text-slate-300 font-medium">Yazılacaklar</span>
-                        </div>
-                    </Link>
-                    <Link href="/student/ozetler" className="block group">
-                        <div className="bg-slate-900/50 border border-white/5 p-3 rounded-xl flex flex-col items-center gap-2 hover:bg-slate-800 hover:border-orange-500/30 transition-all">
-                            <LayoutTemplate className="h-5 w-5 text-orange-400 group-hover:scale-110 transition-transform"/>
-                            <span className="text-xs text-slate-300 font-medium">Özetler</span>
-                        </div>
-                    </Link>
-                </div>
+        {/* Grid - Mobile: 2 columns, Desktop: 4+ */}
+        <div className="space-y-3">
+             <div className="flex items-center gap-2 px-1">
+                 <LayoutTemplate className="text-slate-400 w-5 h-5" />
+                 <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">Araçlar</h2>
+             </div>
+             
+             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+                {buttons.map((btn) => (
+                    <ManagementButton key={btn.href} {...btn} colorClass={btn.color} />
+                ))}
             </div>
-
-            {/* ORTA KOLON (Ana Aksiyonlar) - Desktop'ta 6 birim */}
-            <div className="lg:col-span-6 space-y-4">
-                
-                {/* Ana Buton: Dersler (Hero Card) */}
-                <Link href="/student/soru-bankasi" className="block group">
-                    <div className="relative h-40 lg:h-56 overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 lg:p-8 transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl hover:shadow-indigo-500/20 border border-white/10">
-                        {/* Arkaplan Deseni */}
-                        <div className="absolute top-0 right-0 p-16 bg-white/5 rounded-full blur-3xl transform translate-x-10 -translate-y-10 group-hover:bg-white/10 transition-colors" />
-                        <div className="absolute bottom-0 right-0 w-32 h-32 bg-indigo-500/30 blur-2xl rounded-full" />
-                        
-                        <div className="relative z-10 h-full flex flex-col justify-between">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="p-2 bg-white/20 rounded-lg backdrop-blur-md shadow-sm">
-                                            <BookOpen className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
-                                        </div>
-                                        <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/20 backdrop-blur-md border-white/10">
-                                            Ana Görev
-                                        </Badge>
-                                    </div>
-                                    <h3 className="text-2xl lg:text-4xl font-black text-white tracking-tight drop-shadow-md">Dersler</h3>
-                                    <p className="text-indigo-100 text-sm lg:text-base opacity-90 mt-1 max-w-[200px] lg:max-w-xs leading-relaxed">
-                                        Konu anlatımları, testler ve soru bankası ile seviyeni yükselt.
-                                    </p>
-                                </div>
-                                <div className="text-right hidden sm:block">
-                                    <div className="text-4xl lg:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors">
-                                        %{lessonProgress}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div className="w-full bg-black/20 rounded-full h-1.5 mt-auto overflow-hidden backdrop-blur-sm">
-                                <div style={{ width: `${lessonProgress}%` }} className="h-full bg-white/80 shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-
-                {/* İkincil Kartlar Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                     {/* Denemeler */}
-                    <Link href="/oyunlar/deneme" className="col-span-1 group relative">
-                        <div className="h-full min-h-[140px] rounded-3xl bg-slate-900/60 border border-white/5 p-5 relative overflow-hidden transition-all hover:bg-slate-800 hover:border-red-500/20">
-                                {examStats.pending > 0 && (
-                                    <span className="absolute top-4 right-4 flex h-3 w-3 z-10">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                    </span>
-                                )}
-                            <div className="absolute -right-6 -top-6 bg-gradient-to-br from-red-500/10 to-transparent w-32 h-32 rounded-full blur-2xl group-hover:from-red-500/20 transition-all" />
-                            <FileCog className="h-8 w-8 text-red-500 mb-4 drop-shadow-lg" />
-                            <h3 className="font-bold text-slate-100 text-lg">Denemeler</h3>
-                            <p className="text-xs text-slate-400 mt-1 font-medium">
-                                {examStats.pending > 0 ? `${examStats.pending} yeni sınav seni bekliyor!` : 'Geçmiş sınavlarını incele.'}
-                            </p>
-                        </div>
-                    </Link>
-
-                    {/* Liderlik Tablosu (Mobilde gizli değil ama burada gösteriyoruz, desktopta sağda olacak) */}
-                    <Link href="/leaderboard" className="col-span-1 group lg:hidden">
-                        <div className="h-full min-h-[140px] rounded-3xl bg-slate-900/60 border border-white/5 p-5 relative overflow-hidden transition-all hover:bg-slate-800 hover:border-amber-500/20">
-                            <div className="absolute -right-6 -top-6 bg-gradient-to-br from-amber-500/10 to-transparent w-32 h-32 rounded-full blur-2xl" />
-                            <Trophy className="h-8 w-8 text-amber-500 mb-4 drop-shadow-lg" />
-                            <h3 className="font-bold text-slate-100 text-lg">Liderlik</h3>
-                            <p className="text-xs text-slate-400 mt-1 font-medium">Rakiplerini gör.</p>
-                        </div>
-                    </Link>
-                    
-                     {/* Puan Dükkanı (Desktop Orta Alanda da güzel durur) */}
-                     <Link href="/student/shop" className="col-span-2 hidden lg:block group">
-                        <div className="rounded-3xl bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 border border-emerald-500/10 p-4 flex items-center justify-between px-6 hover:bg-emerald-900/40 hover:border-emerald-500/30 transition-all">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 bg-emerald-500/10 rounded-2xl group-hover:bg-emerald-500/20 transition-colors">
-                                    <ShoppingCart className="h-6 w-6 text-emerald-400" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-base font-bold text-emerald-100">Puan Dükkanı</span>
-                                    <span className="text-xs text-emerald-400/70">Puanlarını harca, ödülleri kap!</span>
-                                </div>
-                            </div>
-                            <div className="bg-emerald-500/10 p-2 rounded-full group-hover:translate-x-1 transition-transform">
-                                 <ChevronRight className="h-5 w-5 text-emerald-500" />
-                            </div>
-                        </div>
-                    </Link>
-
-                    {/* Etkinlikler & Yarışmalar */}
-                    <Link href="/oyunlar" className="col-span-1 group">
-                        <div className="h-28 rounded-2xl bg-slate-900/40 border border-white/5 p-4 flex flex-col justify-center gap-2 hover:bg-slate-800 hover:border-cyan-500/20 transition-all">
-                            <Gamepad2 className="h-6 w-6 text-cyan-400 group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-semibold text-slate-300">Etkinlikler</span>
-                        </div>
-                    </Link>
-
-                    <Link href="/student/yarismalar" className="col-span-1 group">
-                        <div className="h-28 rounded-2xl bg-slate-900/40 border border-white/5 p-4 flex flex-col justify-center gap-2 hover:bg-slate-800 hover:border-pink-500/20 transition-all">
-                            <Users className="h-6 w-6 text-pink-400 group-hover:scale-110 transition-transform" />
-                            <span className="text-sm font-semibold text-slate-300">Yarışmalar</span>
-                        </div>
-                    </Link>
-                </div>
-                
-                 {/* Mobil İçin Yazılacaklar/Özetler/Shop (Desktopta solda veya sağda) */}
-                <div className="lg:hidden grid grid-cols-2 gap-3 mt-4">
-                    <Link href="/student/shop" className="col-span-2">
-                        <div className="rounded-2xl bg-gradient-to-r from-emerald-900/40 to-emerald-800/40 border border-emerald-500/20 p-3 flex items-center justify-between px-6 hover:bg-emerald-900/30 transition-colors">
-                            <div className="flex items-center gap-3">
-                                <ShoppingCart className="h-5 w-5 text-emerald-400" />
-                                <span className="text-sm font-bold text-emerald-100">Dükkan</span>
-                            </div>
-                            <ChevronRight className="h-5 w-5 text-emerald-500/50" />
-                        </div>
-                    </Link>
-                    <Link href="/student/yazilacaklar" className="block">
-                        <div className="bg-slate-900/50 border border-white/5 p-3 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-colors">
-                            <Columns className="h-4 w-4 text-sky-400"/>
-                            <span className="text-xs text-slate-300 font-medium">Yazılacaklar</span>
-                        </div>
-                    </Link>
-                    <Link href="/student/ozetler" className="block">
-                        <div className="bg-slate-900/50 border border-white/5 p-3 rounded-xl flex items-center gap-3 hover:bg-slate-800 transition-colors">
-                            <LayoutTemplate className="h-4 w-4 text-orange-400"/>
-                            <span className="text-xs text-slate-300 font-medium">Özetler</span>
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="lg:hidden mt-6">
-                     <HardestWorkersToday />
-                </div>
-            </div>
-
-            {/* SAĞ KOLON (Liderlik & Ekstralar) - Desktop'ta 3 birim */}
-            <div className="hidden lg:flex lg:col-span-3 flex-col space-y-4 lg:sticky lg:top-8 h-[calc(100vh-100px)]">
-                <Link href="/leaderboard" className="block group">
-                    <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-white/5 hover:border-amber-500/30 transition-all cursor-pointer">
-                        <CardContent className="p-4 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-amber-500/10 rounded-lg">
-                                    <Trophy className="h-5 w-5 text-amber-500" />
-                                </div>
-                                <div>
-                                    <p className="font-bold text-white text-sm">Genel Sıralama</p>
-                                    <p className="text-xs text-slate-400">Tüm okulu gör</p>
-                                </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-slate-500 group-hover:translate-x-1 transition-transform" />
-                        </CardContent>
-                    </Card>
-                </Link>
-                
-                <div className="flex-grow">
-                     <HardestWorkersToday />
-                </div>
-                
-                <div className="p-4 rounded-2xl bg-slate-900/30 border border-dashed border-slate-700/50 text-center">
-                    <p className="text-xs text-slate-500">
-                        "Başarı, her gün tekrarlanan küçük çabaların toplamıdır."
-                    </p>
-                </div>
-            </div>
-            
-          </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
+};
+
+export default function Home() {
+  const { user, loading } = useAuth();
+  const [classGroups, setClassGroups] = useState<PublicClass[]>([]);
+  // Başlangıçta boş array ile başla, loading skeleton göster
+  const [contentLoading, setContentLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user && !loading) {
+      getPublicCurriculum()
+        .then(data => {
+          setClassGroups(data.classGroups);
+          setContentLoading(false);
+        })
+        .catch(err => {
+          console.error("Fetch error:", err);
+          setContentLoading(false);
+        });
+    } else if (user) {
+        setContentLoading(false);
+    }
+  }, [user, loading]);
+
+  // Auth yüklenirken veya Veri çekilirken Skeleton göster
+  if (loading || (contentLoading && !user)) {
+    return <LoadingSkeleton />;
+  }
+  
+  return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups} />;
 }

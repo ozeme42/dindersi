@@ -11,7 +11,7 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getPublicCurriculum } from './actions/getPublicCurriculum';
+import { getPublicCurriculum } from './actions';
 import type { PublicClass } from './actions/getPublicCurriculum';
 
 // --- UTILS ---
