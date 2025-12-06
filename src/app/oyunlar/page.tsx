@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -49,7 +50,6 @@ const activityTypes = [
   { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil, color: 'slate' },
   { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen, color: 'violet' },
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Milestone, color: 'zinc' },
-  { href: '/oyunlar/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck, color: 'indigo' },
   { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'cyan' },
 ];
 
