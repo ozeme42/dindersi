@@ -1,0 +1,24 @@
+
+"use client";
+
+import React, { Suspense } from 'react';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/page';
+import { Puzzle, Loader2 } from 'lucide-react';
+
+function EslestirmePage() {
+    return (
+        <OyunKurulum 
+            gameName="Eşleştirme"
+            gameIcon={Puzzle}
+            gamePath="eslestirme"
+        />
+    );
+}
+
+export default function EslestirmeSuspense() {
+    return (
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
+            <EslestirmePage />
+        </Suspense>
+    );
+}
