@@ -147,6 +147,7 @@ function WordSearchGame() {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [fontSize, setFontSize] = useState(1); // rem unit
+    const [gridWidth, setGridWidth] = useState(100); // percentage
     
     const backUrl = '/oyunlar/kelime-avi';
 
@@ -254,6 +255,7 @@ function WordSearchGame() {
         setFoundPaths([]);
         setIsScoreSaved(false);
         setFontSize(1);
+        setGridWidth(100);
         fetchGameData();
     };
 
@@ -289,12 +291,15 @@ function WordSearchGame() {
             </div>
             <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-6">
                 <WordList words={wordsToFind} foundWords={foundWords} />
-                <div className="flex-grow aspect-square relative">
+                <div className="flex-grow aspect-square relative" style={{ width: `${gridWidth}%`, margin: '0 auto' }}>
                     <Grid grid={grid} onSelectCell={handleSelectCell} selection={selection} foundPaths={foundPaths} fontSize={fontSize} />
-                    <div className="absolute bottom-2 right-2 flex gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
+                    <div className="absolute bottom-2 right-2 flex flex-wrap gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/10">
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.min(z + 0.2, 2.5))}><ZoomIn className="h-4 w-4"/></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(z => Math.max(z - 0.2, 0.4))}><ZoomOut className="h-4 w-4"/></Button>
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={() => setFontSize(1)}><RotateCw className="h-4 w-4"/></Button>
+                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(50)}>50%</Button>
+                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(75)}>75%</Button>
+                        <Button variant="ghost" className="h-8 text-xs px-2 text-white" onClick={() => setGridWidth(100)}>100%</Button>
                     </div>
                 </div>
             </div>
