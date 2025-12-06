@@ -7,7 +7,7 @@ import { getHafizaKartlariAction, submitHafizaKartlariScoreAction, type Matching
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Ghost } from 'lucide-react';
+import { Loader2, ArrowLeft, Ghost, Layers } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
