@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -7,14 +8,14 @@ import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Save, Home, Repeat, CheckCircle, XCircle, Link2, Ghost } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Home, Repeat, CheckCircle, XCircle, Link2, Ghost, XOctagon } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import { Progress } from '@/components/ui/progress';
 import { GameEndScreen } from '@/components/game-end-screen';
 
-const GAME_DURATION = 60; // 60 saniye
+const ROUND_DURATION = 15; // Her soru için 15 saniye
 
 function TrueFalseChainGame() {
     const { user } = useAuth();
@@ -26,12 +27,13 @@ function TrueFalseChainGame() {
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
+    const [timeLeft, setTimeLeft] = useState(ROUND_DURATION);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
 
     const gameContext = `Doğru/Yanlış Zinciri - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    const backUrl = '/oyunlar/dogru-yanlis-zinciri';
 
     const fetchGameData = useCallback(async () => {
         setGameState('loading');
@@ -54,15 +56,25 @@ function TrueFalseChainGame() {
         fetchGameData();
     }, [fetchGameData]);
 
-    useEffect(() => {
-        if (gameState === 'playing' && timeLeft > 0) {
-            const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-            return () => clearTimeout(timer);
-        }
-        if (timeLeft === 0 && gameState === 'playing') {
+    const nextQuestion = useCallback(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(prev => prev + 1);
+            setTimeLeft(ROUND_DURATION);
+        } else {
             setGameState('finished');
         }
-    }, [timeLeft, gameState]);
+    }, [currentQuestionIndex, questions.length]);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (gameState === 'playing' && timeLeft > 0) {
+            timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+        } else if (timeLeft === 0 && gameState === 'playing') {
+            playSound('incorrect');
+            setGameState('finished');
+        }
+        return () => clearTimeout(timer);
+    }, [timeLeft, gameState, nextQuestion]);
     
     const handleAnswer = (answer: boolean) => {
         if (gameState !== 'playing') return;
@@ -73,12 +85,7 @@ function TrueFalseChainGame() {
         if (isCorrect) {
             playSound('correct');
             setScore(prev => prev + 10);
-            if (currentQuestionIndex < questions.length - 1) {
-                setCurrentQuestionIndex(prev => prev + 1);
-            } else {
-                // Last question answered correctly
-                setGameState('finished');
-            }
+            nextQuestion();
         } else {
             playSound('incorrect');
             setGameState('finished');
@@ -87,7 +94,7 @@ function TrueFalseChainGame() {
     
     const handleSaveAndExit = async () => {
         if (isSaving || isScoreSaved || !user || score <= 0) {
-            router.push('/oyunlar/dogru-yanlis-zinciri');
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
@@ -104,7 +111,7 @@ function TrueFalseChainGame() {
     const handleRestart = () => {
         setScore(0);
         setCurrentQuestionIndex(0);
-        setTimeLeft(GAME_DURATION);
+        setTimeLeft(ROUND_DURATION);
         setGameState('loading');
         setIsScoreSaved(false);
         fetchGameData();
@@ -122,7 +129,7 @@ function TrueFalseChainGame() {
                     <h3 className="text-xl font-bold text-red-100">Oyun Başlatılamadı</h3>
                     <p className="text-red-200/70">{error}</p>
                      <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/dogru-yanlis-zinciri">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -137,7 +144,7 @@ function TrueFalseChainGame() {
                 isSaving={isSaving}
                 scoreSaved={isScoreSaved}
                 onRestart={handleRestart}
-                backUrl="/oyunlar/dogru-yanlis-zinciri"
+                backUrl={backUrl}
             />
         );
     }
@@ -153,8 +160,11 @@ function TrueFalseChainGame() {
                     <div className="text-2xl font-bold">Skor: <span className="text-green-400 font-mono">{score}</span></div>
                     <div className="text-4xl font-black text-white font-mono">{timeLeft}</div>
                     <div className="text-lg font-semibold">Soru: {currentQuestionIndex + 1} / {questions.length}</div>
+                    <Button onClick={() => setGameState('finished')} variant="ghost" size="sm" className="text-red-400 hover:bg-red-900/50 hover:text-red-300">
+                        <XOctagon className="h-4 w-4 mr-2"/> Bitir
+                    </Button>
                 </div>
-                <Progress value={(timeLeft / GAME_DURATION) * 100} className="w-full h-3 [&>div]:bg-green-500" />
+                <Progress value={(timeLeft / ROUND_DURATION) * 100} className="w-full h-3 [&>div]:bg-green-500" />
                 
                 <div className="bg-black/40 border-2 border-white/20 p-8 md:p-12 rounded-3xl text-center shadow-2xl min-h-[200px] flex items-center justify-center">
                     <p className="text-2xl md:text-4xl font-bold leading-tight">{currentQuestion.text}</p>
