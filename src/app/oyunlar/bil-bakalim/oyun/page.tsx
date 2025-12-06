@@ -8,7 +8,7 @@ import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Save, Home, Repeat, Lightbulb, BrainCircuit, Zap, Trophy, Ghost, CheckCircle2 } from 'lucide-react';
+import { Loader2, ArrowLeft, Save, Home, Repeat, Lightbulb, BrainCircuit, Zap, Trophy, Ghost, CheckCircle2, Flame } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
@@ -24,7 +24,7 @@ const GameBackground = () => (
     </div>
 );
 
-const GameHUD = ({ score, remaining, onFinish }: { score: number, remaining: number, onFinish: () => void }) => {
+const GameHUD = ({ score, remaining, streak, onFinish }: { score: number, remaining: number, streak: number, onFinish: () => void }) => {
     return (
         <div className="fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
             <div className="max-w-6xl mx-auto flex justify-between items-start">
@@ -37,11 +37,19 @@ const GameHUD = ({ score, remaining, onFinish }: { score: number, remaining: num
                 
                  <Button onClick={onFinish} variant="destructive" size="sm" className="font-bold">Oyunu Bitir</Button>
 
-                <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-full">
-                    <span className="text-sm lg:text-base text-slate-400 font-bold uppercase tracking-wider">Kalan</span>
-                    <span className="text-xl lg:text-2xl font-black text-white font-mono">
-                        {remaining}
-                    </span>
+                <div className="flex items-center gap-2">
+                    {streak > 1 && (
+                        <div className="flex items-center gap-1.5 bg-slate-900/80 backdrop-blur-md border border-rose-500/30 px-3 py-2 rounded-full text-rose-400 font-bold text-sm animate-in fade-in">
+                            <Flame className="w-4 h-4 fill-current"/>
+                            x{streak} Seri
+                        </div>
+                    )}
+                    <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 px-4 py-2 rounded-full">
+                        <span className="text-sm lg:text-base text-slate-400 font-bold uppercase tracking-wider">Kalan</span>
+                        <span className="text-xl lg:text-2xl font-black text-white font-mono">
+                            {remaining}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,7 +70,7 @@ function BilBakalimGame() {
     
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'won' | 'error' | 'finished'>('loading');
     const [score, setScore] = useState(0);
-    const [mistakeCount, setMistakeCount] = useState(0);
+    const [correctStreak, setCorrectStreak] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
@@ -112,9 +120,12 @@ function BilBakalimGame() {
 
         if (selectedTerm === currentQuestion.correctAnswer) {
             // DOĞRU
+            const newStreak = correctStreak + 1;
+            const pointsToAdd = 10 + (newStreak * 10); // 20, 30, 40...
+            setCorrectStreak(newStreak);
+            setScore(prev => prev + pointsToAdd);
             setFeedbackState('correct');
             playSound('correct');
-            setScore(prev => prev + 20);
 
             setTimeout(() => {
                 setQueue(prev => prev.slice(1)); // Kuyruktan çıkar
@@ -128,10 +139,10 @@ function BilBakalimGame() {
 
         } else {
             // YANLIŞ
+            setCorrectStreak(0); // Seriyi sıfırla
+            setScore(prev => Math.max(0, prev - 10));
             setFeedbackState('wrong');
             playSound('incorrect');
-            setScore(prev => Math.max(0, prev - 10));
-            setMistakeCount(prev => prev + 1);
             setShakeScreen(true);
 
             setTimeout(() => {
@@ -167,8 +178,8 @@ function BilBakalimGame() {
     
      const handleRestart = () => {
         setScore(0);
+        setCorrectStreak(0);
         setIsScoreSaved(false);
-        setMistakeCount(0);
         setGameState('loading');
         fetchGameData();
     };
@@ -219,7 +230,7 @@ function BilBakalimGame() {
     return (
         <div className={cn("min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col pb-24 md:pb-8", shakeScreen && "animate-shake")}>
             <GameBackground />
-            <GameHUD score={score} remaining={queue.length} onFinish={() => setGameState('finished')} />
+            <GameHUD score={score} remaining={queue.length} streak={correctStreak} onFinish={() => setGameState('finished')} />
 
             <main className="flex-grow flex flex-col items-center justify-start p-4 lg:p-8 relative z-10 mt-20 lg:mt-24 max-w-7xl mx-auto w-full">
                 
