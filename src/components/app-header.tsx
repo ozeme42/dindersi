@@ -11,7 +11,6 @@ import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { UserAvatar } from './user-avatar';
-import { ErrorReportDialog } from './error-report-dialog';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from './ui/tooltip';
 import { cn } from '@/lib/utils';
 import {
@@ -30,7 +29,6 @@ import { useToast } from '@/hooks/use-toast';
 export function AppHeader({ title }: { title?: string }) {
   const { user } = useAuth();
   const router = useRouter();
-  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { toast } = useToast();
 
@@ -123,10 +121,6 @@ export function AppHeader({ title }: { title?: string }) {
                           <span>Profilim</span>
                         </Link>
                       </DropdownMenuItem>
-                       <DropdownMenuItem onClick={() => setIsReportDialogOpen(true)}>
-                        <Bug className="mr-2 h-4 w-4" />
-                        <span>Hata Bildir</span>
-                      </DropdownMenuItem>
                     </>
                   )}
                   <DropdownMenuSeparator />
@@ -148,9 +142,6 @@ export function AppHeader({ title }: { title?: string }) {
           )}
         </nav>
       </header>
-      {user?.role === 'student' && (
-          <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} />
-      )}
     </>
   );
 }
