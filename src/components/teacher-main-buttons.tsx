@@ -43,7 +43,7 @@ export function TeacherMainButtons() {
     },
     {
       key: 'activityCenterTeacher',
-      href: '/teacher/activities',
+      href: '/oyunlar',
       title: 'Etkinlik Merkezi',
       description: 'Tüm öğrenci etkinliklerini buradan test edin.',
       icon: <Gamepad2 />,
