@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -107,96 +108,88 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 </div>
                  
                 {/* Content Groups */}
-                {classGroups.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {classGroups.map((group, groupIndex) => (
-                            <div key={group.name} className="space-y-4">
-                                <GlassCard>
-                                    <Accordion type="multiple" defaultValue={[group.name]} className="w-full border-none">
-                                        <AccordionItem value={group.name} className="border-none">
-                                            <AccordionTrigger className={cn(
-                                                "px-6 py-5 text-xl sm:text-2xl font-black text-white hover:no-underline rounded-t-3xl data-[state=closed]:rounded-b-3xl transition-all",
-                                                `bg-gradient-to-r ${groupColors[groupIndex % groupColors.length]}`
-                                            )}>
-                                                <div className="flex items-center gap-3">
-                                                    <Star className="h-6 w-6 text-yellow-300 fill-yellow-300" />
-                                                    {formatGroupName(group.name)}
-                                                </div>
-                                            </AccordionTrigger>
-                                            <AccordionContent className="p-0 bg-white/5">
-                                                <div className="p-4 space-y-3">
-                                                    <Accordion type="multiple" className="w-full space-y-3">
-                                                        {group.courses.map((course) => (
-                                                            <AccordionItem 
-                                                                value={course.id} 
-                                                                key={course.id} 
-                                                                className="border-none bg-white/5 rounded-2xl overflow-hidden border border-white/10"
-                                                            >
-                                                                <AccordionTrigger className="px-4 py-3 hover:bg-white/5 hover:no-underline transition-colors">
-                                                                    <div className="flex items-center gap-3">
-                                                                        <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center font-bold text-lg bg-white shadow-sm", classColorMap[group.name] || 'text-slate-500')}>
-                                                                            {group.name.charAt(0)}
-                                                                        </div>
-                                                                        <span className="text-lg font-bold text-white/90">
-                                                                            {course.title}
-                                                                        </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {classGroups.map((group, groupIndex) => (
+                        <div key={group.name} className="space-y-4">
+                            <GlassCard>
+                                <Accordion type="multiple" defaultValue={[group.name]} className="w-full border-none">
+                                    <AccordionItem value={group.name} className="border-none">
+                                        <AccordionTrigger className={cn(
+                                            "px-6 py-5 text-xl sm:text-2xl font-black text-white hover:no-underline rounded-t-3xl data-[state=closed]:rounded-b-3xl transition-all",
+                                            `bg-gradient-to-r ${groupColors[groupIndex % groupColors.length]}`
+                                        )}>
+                                            <div className="flex items-center gap-3">
+                                                <Star className="h-6 w-6 text-yellow-300 fill-yellow-300" />
+                                                {formatGroupName(group.name)}
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent className="p-0 bg-white/5">
+                                            <div className="p-4 space-y-3">
+                                                <Accordion type="multiple" className="w-full space-y-3">
+                                                    {group.courses.map((course) => (
+                                                        <AccordionItem 
+                                                            value={course.id} 
+                                                            key={course.id} 
+                                                            className="border-none bg-white/5 rounded-2xl overflow-hidden border border-white/10"
+                                                        >
+                                                            <AccordionTrigger className="px-4 py-3 hover:bg-white/5 hover:no-underline transition-colors">
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center font-bold text-lg bg-white shadow-sm", classColorMap[group.name] || 'text-slate-500')}>
+                                                                        {group.name.charAt(0)}
                                                                     </div>
-                                                                </AccordionTrigger>
-                                                                <AccordionContent className="px-4 pb-4 pt-0">
-                                                                    <Accordion type="multiple" className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
-                                                                        {course.units.length > 0 ? (
-                                                                                course.units.map(unit => (
-                                                                                <AccordionItem value={unit.id} key={unit.id} className="border-none">
-                                                                                    <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-indigo-300 hover:no-underline py-2">
-                                                                                        {unit.title}
-                                                                                    </AccordionTrigger>
-                                                                                    <AccordionContent className="space-y-2 pt-2">
-                                                                                        {unit.topics.map(topic => (
-                                                                                            <div key={topic.id} className="group/topic flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/20 hover:bg-black/40 p-3 rounded-xl transition-all border border-transparent hover:border-white/10">
-                                                                                                <div className="flex items-center gap-3">
-                                                                                                    <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center group-hover/topic:scale-110 transition-transform">
-                                                                                                        <Sparkles className="h-4 w-4 text-yellow-200" />
-                                                                                                    </div>
-                                                                                                    <span className="font-medium text-white/90">{topic.title}</span>
+                                                                    <span className="text-lg font-bold text-white/90">
+                                                                        {course.title}
+                                                                    </span>
+                                                                </div>
+                                                            </AccordionTrigger>
+                                                            <AccordionContent className="px-4 pb-4 pt-0">
+                                                                <Accordion type="multiple" className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
+                                                                    {course.units.length > 0 ? (
+                                                                            course.units.map(unit => (
+                                                                            <AccordionItem value={unit.id} key={unit.id} className="border-none">
+                                                                                <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-indigo-300 hover:no-underline py-2">
+                                                                                    {unit.title}
+                                                                                </AccordionTrigger>
+                                                                                <AccordionContent className="space-y-2 pt-2">
+                                                                                    {unit.topics.map(topic => (
+                                                                                        <div key={topic.id} className="group/topic flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/20 hover:bg-black/40 p-3 rounded-xl transition-all border border-transparent hover:border-white/10">
+                                                                                            <div className="flex items-center gap-3">
+                                                                                                <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center group-hover/topic:scale-110 transition-transform">
+                                                                                                    <Sparkles className="h-4 w-4 text-yellow-200" />
                                                                                                 </div>
-                                                                                                <div className="flex gap-2 self-end sm:self-center">
-                                                                                                    {topic.hasYazilacaklarContent && (
-                                                                                                        <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-600/80 hover:bg-sky-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-sky-800 active:border-b-0 active:translate-y-[2px]">
-                                                                                                            <Columns className="h-3.5 w-3.5"/> Yazılacaklar
-                                                                                                        </Link>
-                                                                                                    )}
-                                                                                                    {topic.hasOzetContent && (
-                                                                                                        <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-600/80 hover:bg-amber-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-amber-800 active:border-b-0 active:translate-y-[2px]">
-                                                                                                            <BookOpen className="h-3.5 w-3.5"/> Özet
-                                                                                                        </Link>
-                                                                                                    )}
-                                                                                                </div>
+                                                                                                <span className="font-medium text-white/90">{topic.title}</span>
                                                                                             </div>
-                                                                                        ))}
-                                                                                    </AccordionContent>
-                                                                                </AccordionItem>
-                                                                                ))
-                                                                        ) : <p className="text-sm text-white/40 italic p-2">Henüz görev eklenmemiş.</p>}
-                                                                    </Accordion>
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                        ))}
-                                                    </Accordion>
-                                                </div>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    </Accordion>
-                                </GlassCard>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center p-8 rounded-3xl bg-white/10 backdrop-blur-lg border border-dashed border-white/20">
-                        <Gamepad2 className="w-16 h-16 text-white/50 mx-auto mb-4" />
-                        <p className="text-white text-xl font-bold">Gösterilecek herkese açık içerik bulunmuyor.</p>
-                        <p className="text-white/60 mt-2">Öğrenci girişi yaparak derslere başlayabilirsiniz.</p>
-                    </div>
-                )}
+                                                                                            <div className="flex gap-2 self-end sm:self-center">
+                                                                                                {topic.hasYazilacaklarContent && (
+                                                                                                    <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-600/80 hover:bg-sky-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-sky-800 active:border-b-0 active:translate-y-[2px]">
+                                                                                                        <Columns className="h-3.5 w-3.5"/> Yazılacaklar
+                                                                                                    </Link>
+                                                                                                )}
+                                                                                                {topic.hasOzetContent && (
+                                                                                                    <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-600/80 hover:bg-amber-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-amber-800 active:border-b-0 active:translate-y-[2px]">
+                                                                                                        <BookOpen className="h-3.5 w-3.5"/> Özet
+                                                                                                    </Link>
+                                                                                                )}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </AccordionContent>
+                                                                            </AccordionItem>
+                                                                            ))
+                                                                    ) : <p className="text-sm text-white/40 italic p-2">Henüz görev eklenmemiş.</p>}
+                                                                </Accordion>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    ))}
+                                                </Accordion>
+                                            </div>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            </GlassCard>
+                        </div>
+                    ))}
+                </div>
             </main>
 
             <footer className="container mx-auto p-8 text-center relative z-10">
@@ -212,7 +205,7 @@ const ManagementButton = ({ href, title, icon, colorClass }: { href: string, tit
     return (
         <Link href={href} className="block group h-full">
             <div className={cn(
-                "h-full p-4 rounded-3xl flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
+                "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
                 "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
             )}>
                 <div className={cn("p-4 rounded-2xl mb-3 transition-colors", colorClass)}>
