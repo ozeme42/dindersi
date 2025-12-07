@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { SHOP_ITEMS } from '@/lib/shop-config';
 import type { ShopItem, UserProfile } from '@/lib/types';
@@ -13,6 +13,7 @@ import { UserAvatar } from '@/components/user-avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // --- ÜRÜN KARTI BİLEŞENİ ---
 function ItemCard({ item, user, onPurchase, onEquip }: { 
@@ -173,8 +174,9 @@ const UnequipCard = ({ type, onUnequip, user }: {
 
 
 export default function ShopPage() {
-    const { user, loading, force_refresh_user } = useAuth() as any;
+    const { user, loading } = useAuth();
     const { toast } = useToast();
+    const router = useRouter();
 
     // Satın Alma
     const handlePurchase = async (itemId: string, price: number) => {
@@ -185,7 +187,7 @@ export default function ShopPage() {
         const result = await purchaseItem(user.uid, itemId, price);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Ürün başarıyla satın alındı." });
-            force_refresh_user();
+            router.refresh();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -197,7 +199,7 @@ export default function ShopPage() {
         const result = await equipItem(user.uid, item.type, assetValue);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Seçiminiz güncellendi." });
-            force_refresh_user();
+            router.refresh();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -209,7 +211,7 @@ export default function ShopPage() {
         const result = await equipItem(user.uid, type, null);
          if (result.success) {
             toast({ title: "Başarılı!", description: "Eşya çıkarıldı." });
-            force_refresh_user();
+            router.refresh();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }

@@ -1,9 +1,9 @@
 
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { doc, onSnapshot, DocumentData, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, DocumentData, Timestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
 
@@ -50,46 +50,38 @@ function serializeFirestoreTimestamps(data: any): any {
   return data;
 }
 
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 const userDocRef = doc(db, 'users', firebaseUser.uid);
-                // Use onSnapshot for real-time updates
-                const unsubFromDoc = onSnapshot(userDocRef, (docSnap) => {
+                try {
+                    const docSnap = await getDoc(userDocRef);
                     if (docSnap.exists()) {
                         const firestoreData = docSnap.data();
-                        // Serialize Timestamps to prevent Next.js hydration errors
                         const serializedData = serializeFirestoreTimestamps(firestoreData);
                         
                         setUser({
                             ...firebaseUser,
                             ...serializedData,
-                            uid: firebaseUser.uid, // ensure uid from auth is used
+                            uid: firebaseUser.uid,
                         } as AuthUser);
                     } else {
-                        // If Firestore doc doesn't exist, they are authenticated but have no profile data.
                         setUser(firebaseUser as AuthUser);
                     }
-                    setLoading(false);
-                }, (error) => {
-                    console.error("Error fetching user document with onSnapshot:", error);
-                    setUser(firebaseUser as AuthUser); // Fallback to auth data
-                    setLoading(false);
-                });
-                // Return the unsubscribe function for the snapshot listener
-                return () => unsubFromDoc();
+                } catch (error) {
+                    console.error("Error fetching user document:", error);
+                    setUser(firebaseUser as AuthUser);
+                }
             } else {
                 setUser(null);
-                setLoading(false);
             }
+            setLoading(false);
         });
 
-        // Return the unsubscribe function for the auth state listener
         return () => unsubscribe();
     }, []);
 
