@@ -18,7 +18,6 @@ import { QuestionDialog } from '@/components/question-dialog';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-
 const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
@@ -28,9 +27,24 @@ const shuffleArray = <T,>(array: T[]): T[] => {
     return newArray;
 };
 
-// Bu yeni tipler ve bileşenler, çok oyunculu mantık için eklendi.
+// This is a more robust type to handle all variations of questions coming from different parts of the app
+type GameQuestion = Partial<Question> & {
+    id: string; // Ensure id is always present
+    text?: string;
+    type: 'Çoktan Seçmeli' | 'Doğru/Yanlış' | 'Boşluk Doldurma';
+    difficulty: 'Kolay' | 'Orta' | 'Zor';
+    question?: string; // For MCQ from student-side
+    statement?: string; // for TF from student-side
+    isTrue?: boolean; // for TF from student-side
+    sentenceWithBlank?: string; // for FITB from student-side
+    soru?: string; // For Tornado 'soru'
+    secenekler?: Record<string, string>; // For Tornado 'secenekler'
+    cevap?: string; // For Tornado 'cevap'
+};
+
+
 type KutuIcerik =
-    | { type: 'soru'; data: Question }
+    | { type: 'soru'; data: GameQuestion }
     | { type: 'bos'; mesaj: string; puan: number; renk: string; ikon: string; }
     | { type: 'odul'; mesaj: string; puan: number; renk: string; ikon: string; }
     | { type: 'ceza'; mesaj: string; puan: number; renk: string; ikon: string; }
@@ -45,12 +59,12 @@ function KutuAcGame() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isLoading, setIsLoading] = useState(true);
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     
     const [openedBoxes, setOpenedBoxes] = useState<Set<number>>(new Set());
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question } | null>(null);
+    const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: GameQuestion } | null>(null);
     const [score, setScore] = useState(0);
 
     const [isFinished, setIsFinished] = useState(false);
@@ -93,7 +107,7 @@ function KutuAcGame() {
     ];
 
 
-    const oyunuBaslat = useCallback((soruBankasi: Question[]) => {
+    const oyunuBaslat = useCallback((soruBankasi: GameQuestion[]) => {
         if (soruBankasi.length === 0) {
             setError(`Oyun için soru bulunamadı.`);
             setGameState('error');
@@ -118,7 +132,7 @@ function KutuAcGame() {
         
         setKutuIcerikleri(icerikHavuzu.sort(() => Math.random() - 0.5));
         setSiraIndeksi(0);
-        setAcilanKutular(new Set());
+        setOpenedBoxes(new Set());
         setCezaliGruplar(new Set());
         setIsFinished(false);
         setWinner(null);
@@ -141,8 +155,8 @@ function KutuAcGame() {
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Bu konu için soru bulunamadı.");
         } else {
-            setQuestions(result.questions);
-            oyunuBaslat(result.questions);
+            setQuestions(result.questions as GameQuestion[]);
+            oyunuBaslat(result.questions as GameQuestion[]);
         }
         setIsLoading(false);
     }, [searchParams, oyunuBaslat]);
@@ -209,20 +223,38 @@ function KutuAcGame() {
     }, [GRUPLAR, siraIndeksi, siraDegistir, toast, isMultiplayer]);
 
     const kutucukSecildi = useCallback((kutucukNo: number) => {
-        if (isProcessing || acilanKutular.has(kutucukNo + 1)) return;
+        if (isProcessing || openedBoxes.has(kutucukNo + 1)) return;
         
         const icerik = kutuIcerikleri[kutucukNo];
         if (!icerik) return;
 
         setIsProcessing(true);
-        setAcilanKutular(prev => new Set(prev).add(kutucukNo + 1));
+        setOpenedBoxes(prev => new Set(prev).add(kutucukNo + 1));
 
         if (icerik.type === 'soru') {
             setOpenedQuestion({ number: kutucukNo + 1, question: icerik.data });
         } else {
             ozelKutuEtkisiUygula(icerik);
         }
-    }, [isProcessing, acilanKutular, kutuIcerikleri, ozelKutuEtkisiUygula]);
+    }, [isProcessing, openedBoxes, kutuIcerikleri, ozelKutuEtkisiUygula]);
+    
+    const handleEndGame = useCallback(() => {
+        const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
+       if (isMultiplayer) {
+           if (sortedScores.length > 0 && (sortedScores.length === 1 || sortedScores[0][1] > sortedScores[1][1])) {
+               setWinner(sortedScores[0][0]);
+           } else {
+               setWinner(null); // Draw
+           }
+       }
+       setIsFinished(true);
+   }, [isMultiplayer, puanlar]);
+
+    useEffect(() => {
+        if (openedBoxes.size >= kutuIcerikleri.length && kutuIcerikleri.length > 0 && !isFinished) {
+            handleEndGame();
+        }
+    }, [openedBoxes, kutuIcerikleri.length, isFinished, handleEndGame]);
 
     const handleAnswerQuestion = useCallback((questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
@@ -240,31 +272,7 @@ function KutuAcGame() {
              if(isCorrect) setScore(s => s + scoreChange);
              setIsProcessing(false);
         }
-       
-        if (acilanKutular.size >= kutuIcerikleri.length) {
-            handleEndGame();
-        }
-
-    }, [siraIndeksi, GRUPLAR, siraDegistir, acilanKutular, kutuIcerikleri.length, isMultiplayer]);
-
-    const handleEndGame = () => {
-         const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
-        if (isMultiplayer) {
-            if (sortedScores.length > 0 && (sortedScores.length === 1 || sortedScores[0][1] > sortedScores[1][1])) {
-                setWinner(sortedScores[0][0]);
-            } else {
-                setWinner(null); // Draw
-            }
-        }
-        setIsFinished(true);
-    }
-    
-    useEffect(() => {
-        if (acilanKutular.size >= kutuIcerikleri.length && !isFinished) {
-            handleEndGame();
-        }
-    }, [acilanKutular, kutuIcerikleri.length, isFinished, handleEndGame]);
-
+    }, [siraIndeksi, GRUPLAR, siraDegistir, isMultiplayer]);
 
     const handleRestart = () => {
         oyunuBaslat(questions);
@@ -274,13 +282,19 @@ function KutuAcGame() {
 
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /> <span className="ml-2">Oyun Yükleniyor...</span></div>;
+        return <div className="flex h-screen items-center justify-center bg-gray-900"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>;
     }
 
     if (error) {
-        return (
-            <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4")}>
-                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
+         return (
+            <div className="w-full h-full min-h-screen p-4 flex items-center justify-center bg-gray-900">
+                <Alert variant="destructive" className="max-w-lg bg-card text-card-foreground">
+                    <AlertTitle>Hata!</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                     <div className="mt-4">
+                        <Button asChild variant="outline"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button>
+                    </div>
+                </Alert>
             </div>
         );
     }
@@ -313,25 +327,28 @@ function KutuAcGame() {
                     </CardContent>
                     <CardFooter className="flex-col sm:flex-row justify-center gap-4">
                         <Button size="lg" onClick={handleRestart}><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
-                        <Button asChild variant="outline"><Link href={'/teacher/smartboard'}><Home className="mr-2 h-5 w-5"/> Ana Menü</Link></Button>
+                        <Button asChild variant="outline"><Link href={backUrl}><Home className="mr-2 h-5 w-5"/> Ana Menü</Link></Button>
                     </CardFooter>
                 </Card>
             </div>
         )
     }
-
+    
     const timerDuration = openedQuestion?.question.type === 'Doğru/Yanlış' ? 10 : 20;
 
     return (
         <div id="ana-kapsayici" className="w-full max-w-7xl h-screen mx-auto bg-gray-900 rounded-2xl shadow-2xl p-2 sm:p-3 flex flex-col">
              <style jsx global>{`
                 :root { --arka-plan: #1a202c; --ana-renk: #2b6cb0; --vurgu-renk: #4fd1c5; --basari-renk: #48bb78; --hata-renk: #f56565; --odul-renk: #f6e05e; --ceza-renk: #f56565; --bos-renk: #a0aec0; }
+                body { background-color: var(--arka-plan); font-family: 'Inter', sans-serif; }
+                #ana-kapsayici { height: 100vh; overflow-y: hidden; }
+                :fullscreen #ana-kapsayici { height: 100vh !important; overflow-y: hidden !important; }
              `}</style>
             
             <div className="flex items-center justify-between mb-2 relative px-2 shrink-0">
                 <Button asChild variant="outline" size="sm"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Link></Button>
                 <h1 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-center text-teal-300">Kutu Açma Oyunu</h1>
-                 <FullscreenToggle />
+                 <Button onClick={() => handleEndGame()} variant="destructive" size="sm">Oyunu Bitir</Button>
             </div>
 
             {isMultiplayer && (
@@ -358,7 +375,7 @@ function KutuAcGame() {
                 <div className={cn("grid gap-1 p-2", isMultiplayer ? "grid-cols-6 grid-rows-5" : "grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8")}>
                     {kutuIcerikleri.map((_, i) => {
                         const kutucukNo = i + 1;
-                        const isOpened = acilanKutular.has(kutucukNo);
+                        const isOpened = openedBoxes.has(kutucukNo);
                         return (
                             <div key={kutucukNo}
                                 id={`kutucuk-${kutucukNo}`}
@@ -410,9 +427,7 @@ function KutuAcGame() {
 }
 
 export default function KutuAcOyunPage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
-            <KutuAcGame />
-        </Suspense>
-    )
+    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-gray-900"><Loader2 className="h-12 w-12 animate-spin text-white"/></div>}><KutuAcGame/></Suspense>
 }
+
+    
