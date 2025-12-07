@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db } from '@/lib/firebase';
 import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
@@ -282,3 +282,5 @@ export default function ProfilePageSuspense() {
         </Suspense>
     )
 }
+
+    
