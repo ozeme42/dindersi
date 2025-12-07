@@ -56,20 +56,20 @@ export async function equipItem(userId: string, itemType: ShopItem['type'], asse
   const userRef = doc(db, 'users', userId);
 
   try {
-    let fieldToUpdate: 'equippedFrameUrl' | 'equippedBadgeId' | null = null;
+    let fieldToUpdate: 'equippedFrameUrl' | 'equippedBadgeId';
+    
     if (itemType === 'avatarFrame') {
         fieldToUpdate = 'equippedFrameUrl';
     } else if (itemType === 'avatarBadge') {
         fieldToUpdate = 'equippedBadgeId';
-    }
-    
-    if (!fieldToUpdate) {
+    } else {
         return { success: false, error: "Geçersiz eşya tipi." };
     }
     
     await updateDoc(userRef, {
-      [fieldToUpdate]: assetValue, // Use null to unequip, or the item's ID for badges
+      [fieldToUpdate]: assetValue, // assetValue null ise kuşanılmış olanı çıkarır
     });
+
     return { success: true };
   } catch (error: any) {
     console.error("Error equipping item:", error);

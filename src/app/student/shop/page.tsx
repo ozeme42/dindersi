@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/auth-context';
-import { SHOP_ITEMS } from '@/lib/shop-config';
+import { SHOP_ITEMS } from '@/lib/shop-config.tsx';
 import type { ShopItem, UserProfile } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Loader2, ShoppingCart, Gem, CheckCircle2, Package, Sparkles, Frame, Award, ArrowLeft, Shirt, Crown, Palette } from 'lucide-react';
@@ -19,7 +19,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
     item: ShopItem, 
     user: UserProfile, 
     onPurchase: (itemId: string, price: number) => Promise<void>,
-    onEquip: (itemId: string, itemType: 'avatarFrame' | 'avatarBadge', assetUrl: string | null) => Promise<void> 
+    onEquip: (itemType: 'avatarFrame' | 'avatarBadge', assetValue: string | null) => Promise<void> 
 }) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isEquipping, setIsEquipping] = useState(false);
@@ -39,7 +39,8 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
   
   const handleEquip = async () => {
       setIsEquipping(true);
-      await onEquip(item.id, item.type, item.assetUrl || item.id);
+      const valueToEquip = item.type === 'avatarFrame' ? item.assetUrl || null : item.id;
+      await onEquip(item.type, valueToEquip);
       setIsEquipping(false);
   }
 
@@ -183,7 +184,7 @@ export default function ShopPage() {
         }
     };
     
-    const handleEquip = async (itemId: string, itemType: 'avatarFrame' | 'avatarBadge', assetValue: string | null) => {
+    const handleEquip = async (itemType: 'avatarFrame' | 'avatarBadge', assetValue: string | null) => {
         if (!user) return;
         const result = await equipItem(user.uid, itemType, assetValue);
         if (result.success) {
@@ -266,7 +267,7 @@ export default function ShopPage() {
 
                     <TabsContent value="frames" className="animate-in fade-in slide-in-from-bottom-4 duration-500 outline-none">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            <UnequipCard type="avatarFrame" onEquip={(type, val) => handleEquip('none-frame', type, val)} user={user} />
+                            <UnequipCard type="avatarFrame" onEquip={handleEquip} user={user} />
                             {SHOP_ITEMS.filter(item => item.type === 'avatarFrame').map(item => (
                                 <ItemCard key={item.id} item={item} user={user} onPurchase={handlePurchase} onEquip={handleEquip} />
                             ))}
@@ -275,7 +276,7 @@ export default function ShopPage() {
                     
                     <TabsContent value="badges" className="animate-in fade-in slide-in-from-bottom-4 duration-500 outline-none">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                             <UnequipCard type="avatarBadge" onEquip={(type, val) => handleEquip('none-badge', type, val)} user={user} />
+                             <UnequipCard type="avatarBadge" onEquip={handleEquip} user={user} />
                             {SHOP_ITEMS.filter(item => item.type === 'avatarBadge').map(item => (
                                 <ItemCard key={item.id} item={item} user={user} onPurchase={handlePurchase} onEquip={handleEquip} />
                             ))}
