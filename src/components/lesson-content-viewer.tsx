@@ -585,7 +585,7 @@ function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+                return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                  return <div className="text-center p-8 text-slate-500 text-2xl">Kavram haritası bu görünümde desteklenmiyor.</div>; 
             case 'video': {
