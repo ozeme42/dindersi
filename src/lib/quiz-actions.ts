@@ -76,11 +76,20 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
         
-        if (selectedQuestions.length === 0) {
+        // Shuffle options for each question
+        const questionsWithShuffledOptions = selectedQuestions.map(question => {
+            if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
+                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+                return { ...question, options: shuffledOptions };
+            }
+            return question;
+        });
+
+        if (questionsWithShuffledOptions.length === 0) {
             return { questions: [], error: "Belirtilen kriterlere uygun soru bulunamadı." };
         }
 
-        return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
+        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
 
     } catch (e: any) {
         console.error("Error fetching questions:", e);
@@ -90,5 +99,3 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
 }
-
-    
