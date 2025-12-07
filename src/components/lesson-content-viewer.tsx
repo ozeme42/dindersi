@@ -1158,7 +1158,7 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-background/50 backdrop-blur-sm md:pb-4 pb-20">
+             <div className="flex-shrink-0 flex justify-between items-center p-4 border-t bg-background/50 backdrop-blur-sm pb-4 md:pb-4">
                  <div className="flex gap-2">
                     {user?.role === 'student' && (
                         <Button variant="outline" size="icon" onClick={() => setIsReportDialogOpen(true)} title="Hata Bildir">
@@ -1254,7 +1254,7 @@ export function LessonContentViewer({
     }
 
     return (
-      <div className="h-full w-full flex flex-col">
+      <div className="h-full w-full flex flex-col pb-24 md:pb-0">
         <div className={cn(
           "w-full flex-1 flex flex-col overflow-hidden", // Added overflow-hidden
            `bg-gradient-to-br ${getBackgroundClass()}`
