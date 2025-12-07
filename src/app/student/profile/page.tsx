@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, ArrowLeft, User, Mail, GraduationCap, Trophy, Shield, Star, Award, Medal, BookOpen, Edit, Save, X } from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { getStudentAchievements } from './actions';
@@ -282,5 +282,3 @@ export default function ProfilePageSuspense() {
         </Suspense>
     )
 }
-
-    
