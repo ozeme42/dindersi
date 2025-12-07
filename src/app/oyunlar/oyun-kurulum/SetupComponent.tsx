@@ -109,7 +109,13 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
-export default function OyunKurulum() {
+type OyunKurulumProps = {
+    gameName?: string;
+    gamePath?: string;
+    gameIcon?: React.ElementType;
+}
+
+export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePathProp, gameIcon: GameIconProp }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -122,8 +128,9 @@ export default function OyunKurulum() {
   const [topics, setTopics] = useState<Topic[]>([]);
 
   // Props are not available in this component anymore, so we get them from searchParams
-  const gameName = searchParams.get('gameName') || "Etkinlik Kurulumu";
-  const gamePath = searchParams.get('gamePath') || "";
+  const gameName = gameNameProp || searchParams.get('gameName') || "Etkinlik Kurulumu";
+  const gamePath = gamePathProp || searchParams.get('gamePath') || "";
+  const GameIcon = GameIconProp || Gamepad2;
 
   const [selection, setSelection] = useState({
     courseId: "",
@@ -210,15 +217,17 @@ export default function OyunKurulum() {
 
   const getGameUrl = () => {
     const isGame = !['yazilacaklar', 'ozetler'].includes(gamePath);
+    const params = new URLSearchParams({
+      gameName,
+      gamePath,
+      courseId: selection.courseId,
+      courseName: selection.courseName,
+      unitId: selection.unitId,
+      unitName: selection.unitName,
+      topicId: selection.topicId,
+      topicName: selection.topicName,
+    });
     if(isGame) {
-      const params = new URLSearchParams({
-        courseId: selection.courseId,
-        courseName: selection.courseName,
-        unitId: selection.unitId,
-        unitName: selection.unitName,
-        topicId: selection.topicId,
-        topicName: selection.topicName,
-      });
       return `/oyunlar/${gamePath}/oyun?${params.toString()}`;
     } else {
       return `/student/${gamePath}/${selection.courseId}/${selection.unitId}/${selection.topicId}`;
@@ -343,9 +352,6 @@ export default function OyunKurulum() {
             );
       }
   };
-
-  // The actual component is now a "dumb" component that receives props
-  const GameIcon = ICONS[0]; // Fallback icon
 
   return (
     // Ana padding düşürüldü: p-2
