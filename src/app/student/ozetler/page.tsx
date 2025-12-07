@@ -1,18 +1,18 @@
-
 'use client';
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/page';
 import { BookOpen, Loader2 } from 'lucide-react';
+import { TopicSelectionClient } from '@/components/topic-selection-client';
+
 
 function OzetlerPage() {
     return (
         <div className="pb-20 md:pb-0">
-            <OyunKurulum 
-                gameName="Konu Özetleri"
-                gameIcon={BookOpen}
-                gamePath="ozetler"
-                isGame={false}
+            <TopicSelectionClient 
+                pageTitle="Konu Özetleri"
+                pageIcon={BookOpen}
+                targetPath="student/ozetler"
+                dataType="ozetler"
             />
         </div>
     );

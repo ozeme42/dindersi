@@ -1,17 +1,17 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/page';
 import { Columns, Loader2 } from 'lucide-react';
+import { TopicSelectionClient } from '@/components/topic-selection-client';
 
 function YazilacaklarPage() {
     return (
         <div className="pb-20 md:pb-0">
-            <OyunKurulum 
-                gameName="Yazılacaklar"
-                gameIcon={Columns}
-                gamePath="yazilacaklar"
-                isGame={false}
+            <TopicSelectionClient
+                pageTitle="Yazılacaklar"
+                pageIcon={Columns}
+                targetPath="student/yazilacaklar"
+                dataType="yazilacaklar"
             />
         </div>
     );
