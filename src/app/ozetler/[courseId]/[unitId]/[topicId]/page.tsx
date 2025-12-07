@@ -1,4 +1,3 @@
-'use client';
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, LayoutTemplate, AlertTriangle } from 'lucide-react';
@@ -25,6 +24,7 @@ async function getTopicOzet(courseId: string, unitId: string, topicId: string): 
 }
 
 function OzetlerDisplayPage({ topic }: { topic: Topic | null }) {
+    'use client';
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
@@ -131,8 +131,8 @@ function OzetlerDisplayPage({ topic }: { topic: Topic | null }) {
 }
 
 
-export default async function Page({ params }: { params: { slug: string[] } }) {
-    const [courseId, unitId, topicId] = params.slug;
+export default async function Page({ params }: { params: { courseId: string, unitId: string, topicId: string } }) {
+    const { courseId, unitId, topicId } = params;
     
     if (!courseId || !unitId || !topicId) {
         notFound();
@@ -140,9 +140,9 @@ export default async function Page({ params }: { params: { slug: string[] } }) {
 
     const topic = await getTopicOzet(courseId, unitId, topicId);
     
-    if (!topic) {
-        notFound();
-    }
-    
-    return <OzetlerDisplayPage topic={topic} />;
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-800 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>}>
+            <OzetlerDisplayPage topic={topic} />
+        </Suspense>
+    );
 }

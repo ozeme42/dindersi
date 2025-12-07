@@ -1,4 +1,3 @@
-'use client';
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote, AlertTriangle } from 'lucide-react';
@@ -29,16 +28,7 @@ async function getTopicYazilacaklar(topicId: string): Promise<YazilacaklarConten
         }).filter(item => item.concept && item.definition);
 
         // Fetching notes from the topic document itself
-        // Note: This requires knowing the full path to the topic. This is a simplification.
-        // In a real scenario, we might need to search for the topic document.
-        // For now, let's assume we can't get notes this way easily and focus on definitions.
-        // To properly get notes, we'd need courseId and unitId.
-        
-        // Let's modify the assumption: a separate call will fetch the Topic document.
-        const topicsQuery = query(collection(db, 'topics'), where('__name__', '==', topicId));
         let notes: string[] = [];
-
-        // This is inefficient. Ideally we'd have the full path.
         const allCourses = await getDocs(collection(db, 'courses'));
         let topicDocSnap;
         for (const courseDoc of allCourses.docs) {
@@ -68,6 +58,7 @@ async function getTopicYazilacaklar(topicId: string): Promise<YazilacaklarConten
         return null;
     }
 }
+
 async function getTopicTitle(topicId: string): Promise<string | null> {
     try {
          const allCourses = await getDocs(collection(db, 'courses'));
@@ -89,6 +80,7 @@ async function getTopicTitle(topicId: string): Promise<string | null> {
 
 
 function YazilacaklarDisplayPage({ content, topicTitle }: { content: YazilacaklarContent | null, topicTitle: string | null }) {
+    'use client';
     const [isDownloading, setIsDownloading] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -301,20 +293,22 @@ function YazilacaklarDisplayPage({ content, topicTitle }: { content: Yazilacakla
 }
 
 async function Page({ params }: { params: { courseId: string; unitId: string; topicId: string; } }) {
-    const { courseId, unitId, topicId } = params;
+    const { topicId } = params;
     
     if (!topicId) {
         notFound();
     }
     
-    // Fetch both content and title in parallel
     const [content, topicTitle] = await Promise.all([
         getTopicYazilacaklar(topicId),
         getTopicTitle(topicId)
     ]);
     
-    // Pass fetched data to the client component
-    return <YazilacaklarDisplayPage content={content} topicTitle={topicTitle} />;
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-950 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-500"/></div>}>
+            <YazilacaklarDisplayPage content={content} topicTitle={topicTitle} />
+        </Suspense>
+    );
 }
 
 export default Page;
