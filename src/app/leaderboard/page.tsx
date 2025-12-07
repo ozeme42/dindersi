@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     Crown, Award, Trophy, Users, List, Flame, Search, 
-    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2, BookOpenCheck
+    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2, BookOpenCheck, LogIn
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -441,13 +442,12 @@ function HallOfFameTab() {
 
 export default function LeaderboardPage() {
     const [activeTab, setActiveTab] = useState("current");
-    const { user } = useAuth(); // Assuming this returns the logged-in user
+    const { user, loading } = useAuth();
 
-    if (!user) {
-        // Or a redirect
+    if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin" />
+            <div className="flex h-screen items-center justify-center bg-[#2b1055]">
+                <Loader2 className="h-8 w-8 animate-spin text-white" />
             </div>
         );
     }
@@ -461,6 +461,11 @@ export default function LeaderboardPage() {
                         <BookOpenCheck className="h-6 w-6 text-amber-400" />
                         <span className="text-lg font-semibold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">Değerler Oyunu</span>
                     </Link>
+                    {!user && (
+                        <Button asChild size="sm" variant="ghost" className="text-white hover:bg-white/10 hover:text-white">
+                            <Link href="/login"><LogIn className="mr-2 h-4 w-4"/> Giriş Yap</Link>
+                        </Button>
+                    )}
                 </div>
             </header>
 
