@@ -6,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,20 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { AppHeader } from '@/components/app-header';
 import { TeacherMainButtons } from '@/components/teacher-main-buttons';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
 
 // --- GAME THEME COMPONENTS ---
 const GameButton = ({ children, className, variant = 'primary', href, target, ...props }: any) => {
@@ -190,7 +204,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         </div>
                     ))}
                 </div>
-            </main>
+             </main>
 
             <footer className="container mx-auto p-8 text-center relative z-10">
                 <p className="text-white/30 text-xs mt-8 font-medium tracking-widest uppercase">Eğlenerek Öğrenmenin Adresi</p>
@@ -201,25 +215,43 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
 // --- LOGGED IN DASHBOARD ---
 
-const ManagementButton = ({ href, title, icon, colorClass }: { href: string, title: string, icon: React.ReactNode, colorClass: string }) => {
-    return (
-        <Link href={href} className="block group h-full">
-            <div className={cn(
-                "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
-                "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
-            )}>
-                <div className={cn("p-4 rounded-2xl mb-3 transition-colors", colorClass)}>
-                    {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-white" })}
-                </div>
-                <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">{title}</h3>
+const ManagementButton = ({ href, title, icon, colorClass }: { href?: string, title: string, icon: React.ReactNode, colorClass: string, onClick?: () => void }) => {
+    const content = (
+        <div className={cn(
+            "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
+            "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
+        )}>
+            <div className={cn("p-4 rounded-2xl mb-3 transition-colors", colorClass)}>
+                {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-white" })}
             </div>
-        </Link>
+            <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">{title}</h3>
+        </div>
     );
+
+    if (href) {
+        return <Link href={href} className="block group h-full">{content}</Link>;
+    }
+    return <button className="block group h-full w-full">{content}</button>;
 };
 
 const LoggedInDashboard = ({ user }: { user: any }) => {
     const router = useRouter();
-    const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+    const { toast } = useToast();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    const handleLogout = async () => {
+        setIsLoggingOut(true);
+        try {
+            await signOut(auth);
+            toast({ title: "Başarılı", description: "Oturumunuz güvenli bir şekilde kapatıldı." });
+            router.push('/login');
+        } catch (error) {
+            console.error("Logout error:", error);
+            toast({ title: "Hata", description: "Çıkış yapılırken bir hata oluştu.", variant: "destructive" });
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
 
     useEffect(() => {
         if (user.role === 'student') {
@@ -242,7 +274,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         );
     }
   
-  // Dashboard Konfigürasyonu
   const managementButtons = {
     superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "bg-red-500 shadow-red-200" },
     contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "bg-orange-500 shadow-orange-200" },
@@ -319,6 +350,36 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                 {getManagementButtons().map(({ key, href, title, icon, color }) =>
                     <ManagementButton key={key} href={href} title={title} icon={icon} colorClass={color} />
                 )}
+                 <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                         <button className="block group h-full w-full">
+                            <div className={cn(
+                                "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
+                                "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
+                            )}>
+                                <div className={cn("p-4 rounded-2xl mb-3 transition-colors", "bg-red-500 shadow-red-200 dark:bg-red-600 dark:shadow-red-900")}>
+                                    <LogOut className="h-8 w-8 text-white" />
+                                </div>
+                                <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">Çıkış Yap</h3>
+                            </div>
+                        </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Oturumunuzu güvenli bir şekilde sonlandırmak istediğinizden emin misiniz?
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>İptal</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout} disabled={isLoggingOut} className="bg-destructive hover:bg-destructive/90">
+                                {isLoggingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                                Evet, Çıkış Yap
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
 

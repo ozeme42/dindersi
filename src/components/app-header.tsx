@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -13,15 +14,38 @@ import { UserAvatar } from './user-avatar';
 import { ErrorReportDialog } from './error-report-dialog';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from './ui/tooltip';
 import { cn } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from '@/hooks/use-toast';
 
 export function AppHeader({ title }: { title?: string }) {
   const { user } = useAuth();
   const router = useRouter();
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { toast } = useToast();
 
   const handleLogout = async () => {
-    await signOut(auth);
-    router.push('/');
+    setIsLoggingOut(true);
+    try {
+        await signOut(auth);
+        toast({ title: "Başarılı", description: "Oturumunuz güvenli bir şekilde kapatıldı." });
+        router.push('/login');
+    } catch (error) {
+        console.error("Logout error:", error);
+        toast({ title: "Hata", description: "Çıkış yapılırken bir hata oluştu.", variant: "destructive" });
+    } finally {
+        setIsLoggingOut(false);
+    }
   };
   
   const getDashboardLink = () => {
@@ -48,21 +72,23 @@ export function AppHeader({ title }: { title?: string }) {
         <nav className="ml-auto flex gap-1 sm:gap-2 items-center">
           
            {user && (user.role === 'teacher' || user.role === 'superadmin') && (
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" asChild>
-                            <Link href="/teacher/score-events">
-                                <DollarSign className="h-5 w-5" />
-                                <span className="sr-only">Puan Hareketleri</span>
-                            </Link>
-                        </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Puan Hareketleri</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+            <>
+              <TooltipProvider>
+                  <Tooltip>
+                      <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" asChild>
+                              <Link href="/teacher/score-events">
+                                  <DollarSign className="h-5 w-5" />
+                                  <span className="sr-only">Puan Hareketleri</span>
+                              </Link>
+                          </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                          <p>Puan Hareketleri</p>
+                      </TooltipContent>
+                  </Tooltip>
+              </TooltipProvider>
+            </>
           )}
           {user ? (
             <DropdownMenu>
