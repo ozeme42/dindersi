@@ -1,15 +1,77 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote, AlertTriangle } from 'lucide-react';
-import type { Topic, YazilacaklarContent } from '@/lib/types';
+import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
-export function YazilacaklarClientPage({ content, topicTitle }: { content: YazilacaklarContent | null, topicTitle: string | null }) {
+async function getTopicYazilacaklar(topicId: string): Promise<{ content: YazilacaklarContent | null, topicTitle: string | null }> {
+    if (!topicId) return { content: null, topicTitle: null };
+    try {
+        let topicData: Topic | null = null;
+        let courseId, unitId;
+
+        // Find topic anywhere to get its data and path
+        const allCourses = await getDocs(collection(db, 'courses'));
+        for (const courseDoc of allCourses.docs) {
+            const allUnits = await getDocs(collection(db, `courses/${courseDoc.id}/units`));
+            for (const unitDoc of allUnits.docs) {
+                const topicRef = doc(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`, topicId);
+                const tempSnap = await getDoc(topicRef);
+                if (tempSnap.exists()) {
+                    topicData = tempSnap.data() as Topic;
+                    courseId = courseDoc.id;
+                    unitId = unitDoc.id;
+                    break;
+                }
+            }
+            if (topicData) break;
+        }
+
+        if (!topicData) {
+            return { content: null, topicTitle: null };
+        }
+
+        const definitionsQuery = query(
+            collection(db, "activityItems"), 
+            where("topicId", "==", topicId), 
+            where("type", "==", "definition")
+        );
+        const definitionsSnapshot = await getDocs(definitionsQuery);
+        const conceptDefinitions = definitionsSnapshot.docs.map(doc => {
+            const item = doc.data() as ActivityItem;
+            return { concept: item.content.term || '', definition: item.content.definition || '' };
+        }).filter(item => item.concept && item.definition);
+
+        const notes: string[] = topicData.writingContent?.notes || [];
+
+        if (conceptDefinitions.length === 0 && notes.length === 0) {
+            return { content: null, topicTitle: topicData.title };
+        }
+        
+        return { content: { conceptDefinitions, notes }, topicTitle: topicData.title };
+    } catch (error) {
+        console.error("Error fetching yazilacaklar content:", error);
+        return { content: null, topicTitle: null };
+    }
+}
+
+
+export function YazilacaklarClientPage() {
+    const params = useParams();
+    const topicId = Array.isArray(params.topicId) ? params.topicId[0] : params.topicId;
+
+    const [content, setContent] = useState<YazilacaklarContent | null>(null);
+    const [topicTitle, setTopicTitle] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -26,6 +88,27 @@ export function YazilacaklarClientPage({ content, topicTitle }: { content: Yazil
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
+
+    useEffect(() => {
+        const fetchContent = async () => {
+            if (!topicId) {
+                setError("Konu ID'si bulunamadı.");
+                setIsLoading(false);
+                return;
+            }
+            setIsLoading(true);
+            const { content: fetchedContent, topicTitle: fetchedTitle } = await getTopicYazilacaklar(topicId);
+            if (fetchedContent) {
+                setContent(fetchedContent);
+                setTopicTitle(fetchedTitle);
+            } else {
+                setError('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
+            }
+            setIsLoading(false);
+        };
+
+        fetchContent();
+    }, [topicId]);
     
     const handleDownloadPDF = async () => {
         if (!content || !topicTitle) return;
@@ -72,12 +155,21 @@ export function YazilacaklarClientPage({ content, topicTitle }: { content: Yazil
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.1, 2.5));
     const decreaseFontSize = () => setFontSize(fs => Math.max(0.8, fs - 0.1));
 
-    if (!content) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+                <Loader2 className="h-12 w-12 animate-spin text-cyan-500"/>
+                <p className="text-slate-400 animate-pulse">İçerik Yükleniyor...</p>
+            </div>
+        );
+    }
+
+    if (error || !content) {
         return (
             <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-900/50 p-8 rounded-3xl border border-red-500/20 max-w-md w-full backdrop-blur-sm">
                     <AlertTriangle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-                    <p className="text-red-400 mb-6 font-medium text-lg">Bu konu için "Yazılacaklar" içeriği bulunamadı.</p>
+                    <p className="text-red-400 mb-6 font-medium text-lg">{error}</p>
                     <Button asChild className="bg-white/10 hover:bg-white/20 text-white border border-white/10 w-full">
                         <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Ana Sayfaya Dön</Link>
                     </Button>
