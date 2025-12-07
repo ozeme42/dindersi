@@ -1,7 +1,8 @@
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -44,6 +45,7 @@ function QuestionTest({
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const { user } = useAuth();
+    const router = useRouter();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | null)[]>([]);
@@ -80,7 +82,7 @@ function QuestionTest({
         let isCorrect = false;
 
         if (question.type === 'Doğru/Yanlış') {
-            isCorrect = (answer === 'Doğru') === (question.isTrue ?? (question.correctAnswer === 'Doğru'));
+            isCorrect = String(answer).toLowerCase() === String(question.correctAnswer).toLowerCase();
         } else {
             isCorrect = answer === question.correctAnswer;
         }
@@ -180,7 +182,6 @@ function QuestionTest({
     const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
     return (
-        // DÜZELTME: justify-start ve pb-32 ile mobil hizalama sorunu çözüldü
         <div className="w-full min-h-full flex flex-col items-center justify-start md:justify-center p-4 pb-32 md:pb-8">
             
             <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative flex flex-col">
@@ -252,17 +253,18 @@ function QuestionTest({
                         })}
                         
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
-                            const isCorrect = (option === 'Doğru') === (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru'));
-                            const isSelected = String(currentAnswer) === option;
+                            const isCorrect = option === currentQuestion.correctAnswer;
+                            const isSelected = currentAnswer === option;
                              
                             let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
                              if (currentAnswer) {
-                                if ((option === 'Doğru' && isCorrect) || (option === 'Yanlış' && !isCorrect && currentAnswer === 'Doğru')) { 
-                                     if(isSelected && isCorrect) btnStyle += "bg-green-500/20 border-green-500 text-green-100";
-                                     else if(isSelected && !isCorrect) btnStyle += "bg-red-500/20 border-red-500 text-red-100";
-                                     else if(!isSelected && isCorrect) btnStyle += "bg-green-500/20 border-green-500 text-green-100 opacity-50"; 
-                                     else btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
-                                } 
+                                if (isCorrect) {
+                                     btnStyle += "bg-green-500/20 border-green-500 text-green-100";
+                                } else if (isSelected) {
+                                     btnStyle += "bg-red-500/20 border-red-500 text-red-100";
+                                } else {
+                                     btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
+                                }
                             } else {
                                 btnStyle += "bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white";
                             }
@@ -282,7 +284,6 @@ function QuestionTest({
                     </div>
                 </CardContent>
                 
-                {/* DÜZELTME: Sticky Footer ile buton her zaman görünür */}
                 <CardFooter className="flex justify-end pt-4 pb-6 px-6 border-t border-white/5 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
@@ -323,7 +324,6 @@ function QuestionBankCoursePageComponent() {
     const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
     
-    // ... (Mantık Kodu Aynen Korundu) ...
     const isTopicCompleted = useCallback((topicId: string) => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
@@ -423,12 +423,10 @@ function QuestionBankCoursePageComponent() {
      useEffect(() => {
         if (isLoading || isCountsLoading || !course || activeTopic) return;
         const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        // İlk açılmamış veya tamamlanmamış konuyu bul
         let targetTopic = allTopics.find(t => !isTopicCompleted(t.id)) || allTopics[0];
         setActiveTopic(targetTopic);
     }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic]);
 
-    // ... (Stats calculation memoized code remains same) ...
      const courseStats = useMemo(() => {
          if (isCountsLoading || !course) return { totalTests: 0, completedTests: 0, passedTests: 0, completionPercentage: 0, totalCorrect: 0, totalIncorrect: 0, totalScore: 0, classRank: 0, classTotal: 0 };
         
@@ -469,13 +467,10 @@ function QuestionBankCoursePageComponent() {
     }, [isCountsLoading, course, testCounts, topicProgress, classRank]);
 
 
-    // --- ANA İÇERİK RENDER ---
     const mainContent = () => {
         if (activeTest) {
             return (
-                // MOBİL DÜZELTME: h-[100dvh] ile mobil tarayıcıda tam ekran ve flex-col
                 <div className="flex flex-col h-[100dvh] md:h-full bg-slate-950 relative">
-                     {/* Test Arka Planı */}
                      <div className="fixed inset-0 pointer-events-none z-0">
                          <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-blue-900/10 rounded-full blur-[120px]" />
                          <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-indigo-900/10 rounded-full blur-[120px]" />
@@ -496,7 +491,6 @@ function QuestionBankCoursePageComponent() {
         if (activeTopic) {
             const difficultyLevels: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Orta', 'Zor'];
             const difficultyIcons = { 'Kolay': ShieldCheck, 'Orta': Shield, 'Zor': ShieldAlert };
-            // Modern Neon Renkler
             const difficultyColors = { 
                 'Kolay': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:border-emerald-500/40', 
                 'Orta': 'text-amber-400 bg-amber-500/10 border-amber-500/20 hover:border-amber-500/40', 
@@ -526,20 +520,17 @@ function QuestionBankCoursePageComponent() {
             return (
                 <ScrollArea className="h-full bg-slate-950">
                     <div className="p-4 md:p-8 space-y-8 pb-24">
-                        {/* Mobil Geri Butonu */}
                         <div className="md:hidden mb-4">
                              <Button variant="ghost" size="sm" onClick={() => setActiveTopic(null)} className="text-slate-400 hover:text-white">
                                 <ArrowLeft className="mr-2 h-4 w-4"/> Konulara Dön
                             </Button>
                         </div>
 
-                        {/* Başlık */}
                         <div className="text-center space-y-2">
                             <h2 className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">{activeTopic.title}</h2>
                             <p className="text-slate-400">Seviyeni seç ve kendini test et.</p>
                         </div>
 
-                        {/* Seviye Kartları */}
                         <div className="grid gap-6">
                             {difficultyLevels.map(level => {
                                 const levelKey = difficultyMap[level];
@@ -557,7 +548,6 @@ function QuestionBankCoursePageComponent() {
                                         "relative overflow-hidden rounded-3xl border backdrop-blur-sm transition-all duration-300",
                                         levelLocked ? "opacity-50 grayscale border-white/5 bg-slate-900/30" : `bg-slate-900/60 ${colorClass}`
                                     )}>
-                                        {/* Kilit Overlay */}
                                         {levelLocked && (
                                             <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
                                                 <div className="bg-black/60 p-3 rounded-full border border-white/10">
@@ -632,13 +622,11 @@ function QuestionBankCoursePageComponent() {
     return (
         <div ref={mainContentRef} className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative">
             
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-900/20 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-900/20 rounded-full blur-[120px]" />
             </div>
 
-            {/* Üst Panel (HUD / İstatistikler) */}
             {!activeTest && (
                 <div className="flex-shrink-0 z-20 border-b border-white/5 bg-slate-900/80 backdrop-blur-md">
                     <Accordion type="single" collapsible className="w-full">
@@ -688,10 +676,8 @@ function QuestionBankCoursePageComponent() {
                 </div>
             )}
 
-            {/* İçerik Alanı (Split View) */}
             <div className="flex-grow flex flex-col md:flex-row overflow-hidden relative z-10">
                 
-                {/* Sol Menü (Desktop: Sidebar, Mobile: Liste) */}
                 <div className={cn(
                     "w-full md:w-80 lg:w-96 bg-slate-900/50 border-r border-white/5 flex-shrink-0 transition-all duration-300",
                     activeTest ? "hidden md:flex" : (activeTopic ? "hidden md:flex" : "flex")
@@ -707,7 +693,6 @@ function QuestionBankCoursePageComponent() {
                     />
                 </div>
 
-                {/* Sağ Panel (İçerik) */}
                 <main className={cn(
                     "flex-grow bg-slate-950/50 relative overflow-hidden",
                     !activeTest && !activeTopic ? "hidden md:block" : "block"
