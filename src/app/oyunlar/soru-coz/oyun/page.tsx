@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
@@ -184,7 +185,7 @@ function QuizGame() {
     const currentAnswer = answers[currentQuestionIndex];
 
     return (
-        <div className="w-full h-full min-h-screen flex items-center justify-center p-2 sm:p-6 md:p-8">
+        <div className="w-full h-full min-h-screen flex items-center justify-center p-2 sm:p-6 md:p-8 pb-24 md:pb-8">
             <Card className="w-full max-w-2xl">
                 <CardHeader>
                      <div className="flex justify-between items-center">

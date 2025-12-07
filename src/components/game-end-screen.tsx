@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, PartyPopper, Repeat, Save, CheckCircle2, Home, Trophy, Star } from "lucide-react";
 import Link from 'next/link';
@@ -10,15 +11,14 @@ type GameEndScreenProps = {
     score: number;
     onSave: () => void;
     isSaving: boolean;
+    scoreSaved?: boolean;
     onRestart: () => void;
     backUrl: string;
-    scoreSaved?: boolean;
 };
 
 export function GameEndScreen({ score, onSave, isSaving, onRestart, backUrl, scoreSaved }: GameEndScreenProps) {
     return (
-        // GÜNCELLENDİ: "pb-24" sınıfı eklendi. Bu, mobilde alt menü için güvenli boşluk bırakır.
-        <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 pb-24 md:p-4 relative overflow-hidden">
+        <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
             
             {/* Arka Plan Efektleri (Altın/Zafer Teması) */}
             <div className="fixed inset-0 pointer-events-none z-0">

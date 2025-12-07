@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
@@ -210,7 +211,7 @@ export function YaziTuraClientPage() {
     }
 
     return (
-        <div ref={mainContentRef} className="min-h-screen flex flex-col items-center bg-slate-950 text-white relative overflow-hidden select-none">
+        <div ref={mainContentRef} className="min-h-screen flex flex-col items-center bg-slate-950 text-white relative overflow-hidden select-none pb-24 md:pb-8">
              
              {/* Arka Plan Efektleri */}
              <div className="fixed inset-0 pointer-events-none z-0">
@@ -251,7 +252,7 @@ export function YaziTuraClientPage() {
             </div>
 
             {/* --- OYUN ALANI --- */}
-            <div className="flex-grow flex flex-col items-center justify-center p-4 w-full relative z-10 pb-24 md:pb-8">
+            <div className="flex-grow flex flex-col items-center justify-center p-4 w-full relative z-10">
                 
                 {/* CSS for 3D Coin */}
                 <style jsx global>{`

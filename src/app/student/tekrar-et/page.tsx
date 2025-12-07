@@ -170,7 +170,8 @@ function ReviewQuiz() {
     return (
         <div className={cn(
             "w-full h-full min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-teal-100 dark:from-green-950 dark:to-teal-950",
-            !isFullscreen && "p-4 sm:p-6 md:p-8"
+            !isFullscreen && "p-4 sm:p-6 md:p-8",
+            "pb-24 md:pb-8"
         )}>
             <Card className={cn(
                 "w-full",

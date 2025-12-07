@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
@@ -205,8 +206,6 @@ function KavramYarismaGame() {
 
     if (gameState === 'start') {
         return (
-            // GÜNCELLENDİ: 'pb-24' eklendi ve 'overflow-hidden' yerine 'overflow-y-auto' yapıldı.
-            // Böylece mobilde buton altta kalmaz.
             <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 pb-24 md:p-8 relative overflow-y-auto">
                 {/* Arka Plan */}
                 <div className="fixed inset-0 pointer-events-none z-0">
@@ -334,7 +333,6 @@ function KavramYarismaGame() {
             </div>
 
             {/* --- OYUN ALANI --- */}
-            {/* GÜNCELLENDİ: 'pb-24' eklendi ve 'justify-center' yerine 'pt-8' gibi bir yapı ile hizalama düzeltilebilir. */}
             <main className="relative flex-grow flex flex-col items-center justify-center p-4 w-full max-w-4xl z-10 pb-24 md:pb-8">
                 
                 {/* Soru Kartı */}
@@ -355,7 +353,7 @@ function KavramYarismaGame() {
                     </div>
                 )}
 
-                {/* Seçenekler - GÜNCELLEME: Masaüstünde grid-cols-2 (2x2) */}
+                {/* Seçenekler */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                     {currentQ.options.map((option) => {
                         let btnStyle = "h-auto py-6 text-lg md:text-xl font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group ";
