@@ -2,71 +2,96 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, and, limit as firestoreLimit } from "firebase/firestore";
-import type { Question } from "@/lib/types";
+import { 
+  doc, 
+  updateDoc, 
+  increment, 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  writeBatch,
+  query,
+  where,
+  getCountFromServer,
+} from 'firebase/firestore';
+import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import type { Question } from '@/lib/types';
+import { unstable_noStore as noStore } from 'next/cache';
 
-// This is a simplified version for now. 
-// A more robust solution might use getQuestionsFromBank from quiz-actions.
-export async function getTornadoGameQuestions(params: {
-    courseId?: string;
-    unitId?: string;
-    topicId?: string;
-    questionCount: number;
-}): Promise<{ questions: Question[], error?: string }> {
-    const { courseId, unitId, topicId, questionCount } = params;
+export async function getTornadoGameQuestions(
+    { courseId, unitId, topicId, questionCount = 30 }: { courseId?: string; unitId?: string; topicId?: string; questionCount?: number; }
+): Promise<{ questions: Question[]; error?: string }> {
+    noStore();
     try {
-        let q: Query = collection(db, "questions");
+        const params = {
+            courseId,
+            unitId,
+            topicId,
+            questionCount,
+            difficulty: ['Kolay', 'Orta', 'Zor'],
+            questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
+        };
         
-        const conditions = [];
-        if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
+        const result = await getQuestionsFromBank(params);
+        
+        if (result.error) {
+             return { questions: [], error: result.error };
         }
-
-        if (conditions.length > 0) {
-            q = query(q, and(...conditions));
-        }
         
-        const querySnapshot = await getDocs(q);
-        
-        let allQuestions = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            // This is the critical part: ensure the output format is consistent
-            // for the QuestionDialog component.
-            const question: Question = {
-                id: doc.id,
-                text: data.text || data.statement || data.sentenceWithBlank || '',
-                type: data.type,
-                options: data.options || (data.type === 'Doğru/Yanlış' ? ['Doğru', 'Yanlış'] : []),
-                correctAnswer: data.correctAnswer || (data.isTrue ? 'Doğru' : 'Yanlış'),
-                difficulty: data.difficulty || 'Orta',
-                isTrue: data.isTrue,
-                // Context fields
-                courseId: data.courseId,
-                unitId: data.unitId,
-                topicId: data.topicId,
-                topic: data.topic,
-            };
+        // Shuffle options for each question to ensure randomness in the game
+        const questionsWithShuffledOptions = (result.questions as Question[]).map(question => {
+            if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
+                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+                return { ...question, options: shuffledOptions };
+            }
             return question;
         });
 
-        if (allQuestions.length < questionCount) {
-            return { error: `Bu kriterlere uygun yeterli soru bulunamadı. Gerekli: ${questionCount}, Bulunan: ${allQuestions.length}.`, questions: [] };
+        return { questions: questionsWithShuffledOptions };
+        
+    } catch (e: any) {
+        console.error("Error getting Tornado questions:", e);
+        return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
+    }
+}
+
+
+export async function submitTornadoScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+    if (!userId || score <= 0) {
+        return { success: true };
+    }
+
+    try {
+        const attemptsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('gameType', '==', 'Tornado'),
+            where('context', '==', context)
+        );
+        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
+        if (attemptsSnapshot.data().count >= 10) {
+            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
-        const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-        const selectedQuestions = shuffled.slice(0, questionCount);
+        const batch = writeBatch(db);
+        
+        const userRef = doc(db, 'users', userId);
+        batch.update(userRef, { score: increment(score) });
 
-        return { questions: JSON.parse(JSON.stringify(selectedQuestions)) };
+        const eventRef = doc(collection(db, 'scoreEvents'));
+        batch.set(eventRef, {
+            userId: userId,
+            points: score,
+            timestamp: serverTimestamp(),
+            gameType: 'Tornado',
+            context: context,
+        });
 
+        await batch.commit();
+
+        return { success: true };
     } catch (error: any) {
-        console.error("Error fetching questions for Tornado Game:", error);
-        if (error.code === 'failed-precondition') {
-            return { error: `Veritabanı indeksi eksik veya oluşturuluyor. Lütfen birkaç dakika sonra tekrar deneyin. Hata: ${error.message}`, questions: [] };
-        }
-        return { error: 'Sorular alınırken bir hata oluştu.', questions: [] };
+        console.error("Error submitting Tornado score:", error);
+        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
