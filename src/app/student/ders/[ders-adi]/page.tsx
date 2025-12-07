@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "rea
 import { useParams, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Bug, Menu, Map } from "lucide-react";
+import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react"; // Bug ikonu silindi
 import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, addDoc, serverTimestamp } from "firebase/firestore";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { ErrorReportDialog } from "@/components/error-report-dialog";
+// ErrorReportDialog importu silindi
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -37,8 +37,9 @@ function CoursePageContent() {
     const [localProgressMap, setLocalProgressMap] = useState<{ [topicId: string]: LocalProgress }>({});
     const mainContentRef = useRef<HTMLElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+    // isReportDialogOpen state'i silindi
     const [isSaving, setIsSaving] = useState(false);
+
 
     // Get a stable reference to topicId from searchParams
     const startTopicIdFromUrl = useMemo(() => searchParams.get('topicId'), [searchParams]);
@@ -321,12 +322,6 @@ function CoursePageContent() {
                             activeTopic={activeTopic}
                             onSelectTopic={handleSelectTopic}
                             isTopicUnlocked={(topicIndex, unitIndex) => {
-                                // Bu fonksiyon CourseSidebar içinde topic id'sine erişimi kolaylaştırmak için var
-                                // Asıl kontrolü isTopicUnlocked ile yapıyoruz, sidebar'a o fonksiyonu prop olarak geçebiliriz
-                                // Veya burada index bazlı tekrar hesaplayabiliriz.
-                                // Basitleştirme: Sidebar topic objesini dönüyorsa direkt ID kullanalım.
-                                // CourseSidebar yapısına bağlı olarak burası değişebilir, 
-                                // ama eldeki kodda index bazlı bir prop var. Onu kullanalım:
                                 if (!course) return false;
                                 const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
                                 const allTopics = course.units?.flatMap(u => u.topics || []) || [];
@@ -336,7 +331,7 @@ function CoursePageContent() {
                             }}
                             isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
                             topicProgress={localProgressMap}
-                            testCounts={{}} // Ders anlatımında test sayısı göstermeye gerek yok
+                            testCounts={{}} 
                         />
                     </div>
                 </div>
@@ -347,7 +342,7 @@ function CoursePageContent() {
                     view === 'map' ? 'hidden md:flex' : 'flex'
                 )}>
                     
-                    {/* Mobil Navigasyon Barı (Sadece İçerik Modunda ve Fullscreen Değilse) */}
+                    {/* Mobil Navigasyon Barı */}
                     {!isFullscreen && view === 'content' && (
                         <div className="md:hidden flex items-center justify-between p-3 bg-slate-900/90 backdrop-blur-md border-b border-white/5 z-20 shrink-0">
                             <Button 
@@ -392,25 +387,12 @@ function CoursePageContent() {
                         )}
                     </div>
 
-                    {/* Hata Bildir Butonu (Floating) */}
-                    {activeTopic && (
-                        <div className="absolute bottom-6 right-6 z-30">
-                            <Button
-                                size="icon"
-                                variant="secondary"
-                                className="h-10 w-10 rounded-full bg-slate-800/80 border border-white/10 text-slate-400 hover:text-red-400 hover:bg-slate-800 shadow-lg backdrop-blur-sm transition-all hover:scale-110"
-                                onClick={() => setIsReportDialogOpen(true)}
-                                title="Hata Bildir"
-                            >
-                                <Bug className="h-5 w-5" />
-                            </Button>
-                        </div>
-                    )}
+                    {/* Hata Bildir Butonu KALDIRILDI */}
 
                 </main>
             </div>
 
-            <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} itemToReport={activeTopic} />
+            {/* ErrorReportDialog çağrısı da silindi */}
         </div>
     )
 }

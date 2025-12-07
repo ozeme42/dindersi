@@ -1,17 +1,21 @@
-
 'use client';
 
-import { useState, useEffect, Suspense, useCallback } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db, auth } from '@/lib/firebase';
-import { doc, updateDoc, collection, getDocs, getDoc, query, where } from 'firebase/firestore';
+import { doc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import type { UserProfile, SchoolClass, Achievement } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ArrowLeft, Mail, GraduationCap, Trophy, Award, Medal, BookOpen, Edit, KeySquare, LogOut, Crown, Save } from 'lucide-react';
+// DÜZELTME: ShieldCheck ve diğer tüm gerekli ikonlar buraya eklendi
+import { 
+  Loader2, ArrowLeft, Mail, GraduationCap, Trophy, Award, Medal, 
+  BookOpen, Edit, KeySquare, LogOut, Crown, Save, Shield, Star, 
+  Lock, ShieldCheck 
+} from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,10 +36,10 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, Di
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow'; 
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { getReviewQuestions } from '@/app/student/tekrar-et/actions';
 
-// --- Edit Profile Form Component (Küçük İyileştirmeler) ---
+// --- Edit Profile Form Component ---
 function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: UserProfile, classes: SchoolClass[], onSave: (data: any) => void, onCancel: () => void, isSaving: boolean }) {
-    // user.displayName null gelebilir, başlangıç değeri boş string yapıldı
     const [displayName, setDisplayName] = useState(user.displayName || ''); 
     const [selectedClassId, setSelectedClassId] = useState('');
     const [selectedBranch, setSelectedBranch] = useState('');
@@ -44,7 +48,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
         if (user.class) {
             const parts = user.class.split(' - ');
             const className = parts[0];
-            const branchName = parts[1] || ''; // Şube olmayabilir
+            const branchName = parts[1] || '';
             const userClass = classes.find(c => c.name === className);
             if (userClass) {
                 setSelectedClassId(userClass.id);
@@ -57,9 +61,8 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
         const selectedClass = classes.find(c => c.id === selectedClassId);
         const newClassString = selectedClass ? `${selectedClass.name} - ${selectedBranch}` : user.class;
         
-        // Sadece değişen verileri kaydetmek için ek kontrol
         if (displayName === user.displayName && newClassString === user.class) {
-            onCancel(); // Değişiklik yoksa iptal et
+            onCancel();
             return;
         }
 
@@ -69,40 +72,40 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
     const selectedClassData = classes.find(c => c.id === selectedClassId);
 
     return (
-        // Animasyon eklendi
-        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 pt-0 bg-white md:bg-transparent dark:bg-slate-800/50"> 
-            <div>
-                <Label htmlFor="displayName">Ad Soyad</Label>
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 bg-slate-900/50 rounded-xl border border-white/5 backdrop-blur-md"> 
+            <div className="space-y-2">
+                <Label htmlFor="displayName" className="text-slate-300 font-medium">Ad Soyad</Label>
                 <Input 
                     id="displayName" 
                     value={displayName} 
                     onChange={(e) => setDisplayName(e.target.value)} 
                     placeholder="Ad Soyad Giriniz"
+                    className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50 rounded-lg transition-all"
                 />
             </div>
             <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <Label htmlFor="class">Sınıf</Label>
+                <div className="space-y-2">
+                    <Label htmlFor="class" className="text-slate-300 font-medium">Sınıf</Label>
                     <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); }}>
-                        <SelectTrigger id="class"><SelectValue placeholder="Sınıf Seçin" /></SelectTrigger>
-                        <SelectContent>
+                        <SelectTrigger id="class" className="bg-slate-950 border-white/10 text-white h-11 rounded-lg"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white">
                             {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                         </SelectContent>
                     </Select>
                 </div>
-                <div>
-                    <Label htmlFor="branch">Şube</Label>
+                <div className="space-y-2">
+                    <Label htmlFor="branch" className="text-slate-300 font-medium">Şube</Label>
                     <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClassData || selectedClassData.branches?.length === 0}>
-                        <SelectTrigger id="branch"><SelectValue placeholder="Şube Seçin" /></SelectTrigger>
-                        <SelectContent>
+                        <SelectTrigger id="branch" className="bg-slate-950 border-white/10 text-white h-11 rounded-lg"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white">
                             {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                         </SelectContent>
                     </Select>
                 </div>
             </div>
-            <div className="flex justify-end gap-2 pt-4">
-                <Button variant="ghost" onClick={onCancel} disabled={isSaving}>İptal</Button>
-                <Button onClick={handleSave} disabled={isSaving || !displayName || !selectedClassId || !selectedBranch}>
+            <div className="flex justify-end gap-3 pt-4 border-t border-white/5 mt-2">
+                <Button variant="ghost" onClick={onCancel} disabled={isSaving} className="text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">İptal</Button>
+                <Button onClick={handleSave} disabled={isSaving || !displayName || !selectedClassId || !selectedBranch} className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-lg shadow-indigo-900/20">
                     {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                     <Save className="mr-2 h-4 w-4"/> Kaydet
                 </Button>
@@ -111,7 +114,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
     );
 }
 
-// --- Password Change Dialog (Küçük İyileştirmeler) ---
+// --- Password Change Dialog ---
 function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, onPasswordChanged: () => void }) {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -152,30 +155,30 @@ function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                 <Button variant="outline" size="sm" className="w-full justify-start"> 
-                    <KeySquare className="mr-2 h-4 w-4"/>
+                 <Button variant="outline" className="w-full justify-start h-12 bg-slate-900/50 border-white/10 hover:border-indigo-500/50 hover:bg-slate-900 text-slate-300 hover:text-white transition-all group"> 
+                    <KeySquare className="mr-3 h-5 w-5 text-indigo-400 group-hover:text-indigo-300"/>
                     Şifre Değiştir
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>Şifre Değiştir</DialogTitle>
-                    <DialogDescription>Yeni bir şifre belirleyin. Güvenliğiniz için bu işlem sonrası oturumunuz kapatılacaktır.</DialogDescription>
+                    <DialogDescription className="text-slate-400">Yeni bir şifre belirleyin. Güvenliğiniz için bu işlem sonrası oturumunuz kapatılacaktır.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                     <div className="space-y-2">
                         <Label htmlFor="new-password">Yeni Şifre</Label>
-                        <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+                        <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-slate-950 border-white/10 text-white focus:border-indigo-500/50" />
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="confirm-password">Yeni Şifre (Tekrar)</Label>
-                        <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                        <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-slate-950 border-white/10 text-white focus:border-indigo-500/50" />
                     </div>
-                    {error && <p className="text-sm text-destructive">{error}</p>}
+                    {error && <p className="text-sm text-red-400 bg-red-400/10 p-2 rounded border border-red-500/20">{error}</p>}
                 </div>
                  <DialogFooter>
-                    <DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose>
-                    <Button onClick={handlePasswordChange} disabled={isSaving}>
+                    <DialogClose asChild><Button type="button" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5">İptal</Button></DialogClose>
+                    <Button onClick={handlePasswordChange} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-500 text-white">
                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                         Güncelle
                     </Button>
@@ -185,9 +188,43 @@ function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, 
     )
 }
 
-// ----------------------------------------------------------------------
-// --- Ana Bileşen: ProfilePage ---
-// ----------------------------------------------------------------------
+// --- Review Questions Card ---
+function ReviewQuestionsCard({ userId }: { userId: string }) {
+    const [reviewCount, setReviewCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!userId) return;
+        getReviewQuestions(userId).then(result => {
+            setReviewCount(result.questions?.length || 0);
+        }).finally(() => setIsLoading(false));
+    }, [userId]);
+
+    return (
+        <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex items-center justify-between group hover:border-indigo-500/30 transition-all shadow-lg">
+            <div className="flex items-center gap-4">
+                <div className="p-3 bg-indigo-500/20 rounded-2xl group-hover:bg-indigo-500/30 transition-colors">
+                    <BookOpen className="h-8 w-8 text-indigo-400" />
+                </div>
+                <div>
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                        Tekrar Et
+                        {reviewCount > 0 && (
+                            <span className="bg-indigo-500 text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">{reviewCount} Soru</span>
+                        )}
+                    </h3>
+                    <p className="text-sm text-slate-400">Yanlışlarını pekiştir.</p>
+                </div>
+            </div>
+            <Button asChild className="h-12 px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-indigo-900/20">
+                <Link href="/student/tekrar-et">
+                    Başla <ArrowLeft className="ml-2 h-4 w-4 rotate-180" />
+                </Link>
+            </Button>
+        </div>
+    )
+}
+
 
 function ProfilePage() {
   const { user, loading } = useAuth();
@@ -195,18 +232,16 @@ function ProfilePage() {
   const { toast } = useToast();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isLoadingAchievements, setIsLoadingAchievements] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-
   const [ranks, setRanks] = useState<{ classRank: number; generalRank: number }>({ classRank: 0, generalRank: 0 });
 
   // Fetch classes and ranks
   useEffect(() => {
     async function fetchData() {
         if (!user) return;
-        setIsLoadingData(true);
         try {
             const classesQuery = query(collection(db, "classes"), where("name", "!=", ""));
             const studentsQuery = query(collection(db, "users"), where("role", "==", "student"));
@@ -236,20 +271,19 @@ function ProfilePage() {
 
         } catch (error) {
             console.error("Error fetching data: ", error);
-            toast({ title: "Hata", description: "Gerekli veriler alınamadı.", variant: "destructive" });
         }
     }
     
     if (user) {
         fetchData();
     }
-  }, [user, toast]);
+  }, [user]);
 
   // Fetch achievements
   useEffect(() => {
     async function fetchAchievements() {
         if (!user) return;
-        setIsLoadingData(true);
+        setIsLoadingAchievements(true);
         try {
             const result = await getStudentAchievements(user.uid, user.createdAt || null);
             if (result.success && result.achievements) {
@@ -259,7 +293,7 @@ function ProfilePage() {
         } catch (error) {
              console.error("Error fetching achievements:", error);
         } finally {
-            setIsLoadingData(false);
+            setIsLoadingAchievements(false);
         }
     }
     
@@ -268,7 +302,6 @@ function ProfilePage() {
     }
   }, [user]);
 
-  // Handle Save Profile
   const handleSaveProfile = async (data: { displayName: string, class: string }) => {
     if (!user) return;
     setIsSaving(true);
@@ -289,7 +322,6 @@ function ProfilePage() {
     }
   };
   
-  // Handle Logout
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
@@ -303,82 +335,99 @@ function ProfilePage() {
     }
   };
 
-  if (loading || isLoadingData) {
-    return <div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
+  if (loading) {
+    return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
   }
 
   if (!user) {
     return (
-        <div className="flex h-screen items-center justify-center flex-col gap-4">
-            <p className="text-muted-foreground">Lütfen giriş yapın.</p>
+        <div className="flex h-screen items-center justify-center flex-col gap-4 bg-slate-950 text-white">
+            <p className="text-slate-400">Lütfen giriş yapın.</p>
             <Link href="/login"><Button>Giriş Yap</Button></Link>
         </div>
     );
   }
 
-  // Başarı Sırası İkonu (Rank Icon)
   const rankIcon = (rank: number) => {
     const defaultClasses = "h-6 w-6";
-    if (rank === 1) return <Crown className={`${defaultClasses} text-yellow-500 fill-yellow-500`} />;
-    if (rank === 2) return <Medal className={`${defaultClasses} text-slate-400 fill-slate-400/50`} />;
-    if (rank === 3) return <Medal className={`${defaultClasses} text-amber-700 fill-amber-700/50`} />;
-    return <Trophy className={`${defaultClasses} text-slate-500`} />;
+    if (rank === 1) return <Crown className={`${defaultClasses} text-yellow-500 fill-yellow-500/20`} />;
+    if (rank === 2) return <Medal className={`${defaultClasses} text-slate-400 fill-slate-400/20`} />;
+    if (rank === 3) return <Medal className={`${defaultClasses} text-amber-700 fill-amber-700/20`} />;
+    return <Trophy className={`${defaultClasses} text-slate-600`} />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-20 pt-8 px-4 md:px-6">
-        <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-950 pb-24 md:pb-12 text-slate-100 relative overflow-hidden font-sans selection:bg-indigo-500/30">
+        
+        {/* Arka Plan Efektleri */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px]" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
             
-            {/* 1. Header Area */}
+            {/* Header Area */}
             <div className="flex items-center justify-between">
                  <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" asChild className="text-slate-500 hover:text-primary">
-                         <Link href="/student"><ArrowLeft className="h-5 w-5"/></Link>
+                    <Button variant="ghost" size="icon" asChild className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl hidden md:flex">
+                         <Link href="/student"><ArrowLeft className="h-6 w-6"/></Link>
                     </Button>
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Profilim</h1>
-                        <p className="text-slate-500 text-sm dark:text-slate-400">Hesap bilgilerinizi ve başarılarınızı yönetin.</p>
+                        <h1 className="text-3xl font-black tracking-tight text-white">Profilim</h1>
+                        <p className="text-slate-400 text-sm font-medium">Hesap bilgilerin ve başarıların.</p>
                     </div>
                  </div>
-                 <div className="flex items-center gap-4">
-                     <Button asChild variant="outline" className="hidden md:flex">
+                 
+                 <div className="flex items-center gap-3">
+                     <Button asChild variant="outline" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl">
                          <Link href="/student">Panele Dön</Link>
                      </Button>
+                     
                      <AlertDialog>
-                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" size="sm" className="hidden md:flex" disabled={isLoggingOut}>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" className="bg-red-600 hover:bg-red-500 text-white font-bold px-6 shadow-lg shadow-red-900/20 rounded-xl" disabled={isLoggingOut}>
                                 {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <LogOut className="mr-2 h-4 w-4"/>}
-                                Oturumu Kapat
+                                <span className="hidden sm:inline">Çıkış Yap</span>
                             </Button>
-                         </AlertDialogTrigger>
-                         <AlertDialogContent>
-                             <AlertDialogHeader>
-                                 <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
-                                 <AlertDialogDescription>Oturumunuzu kapatmak istediğinize emin misiniz?</AlertDialogDescription>
-                             </AlertDialogHeader>
-                             <AlertDialogFooter>
-                                 <AlertDialogCancel>İptal</AlertDialogCancel>
-                                 <AlertDialogAction onClick={handleLogout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Çıkış Yap</AlertDialogAction>
-                             </AlertDialogFooter>
-                         </AlertDialogContent>
-                     </AlertDialog>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Çıkış Yapılıyor</AlertDialogTitle>
+                                <AlertDialogDescription className="text-slate-400">
+                                    Oturumunuzu kapatmak istediğinize emin misiniz?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg">İptal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleLogout} className="bg-red-600 text-white hover:bg-red-500 rounded-lg">Evet, Çıkış Yap</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                  </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
                 {/* 2. Sol Kolon: Profil Kartı ve İşlemler */}
-                <div className="lg:col-span-1 space-y-6">
-                     <Card className="overflow-hidden border-t-4 border-t-primary shadow-lg dark:border-t-indigo-500">
-                        <div className="h-24 bg-gradient-to-r from-primary/10 to-indigo-100 dark:from-slate-800 dark:to-slate-700"></div>
-                        <CardContent className="relative pt-0 pb-6 px-6 flex flex-col items-center text-center">
-                            
-                            {/* Avatar */}
-                            <div className="absolute -top-12">
-                                <UserAvatar user={user as UserProfile} className="w-24 h-24 border-4 border-white dark:border-slate-900 text-4xl shadow-xl bg-white dark:bg-slate-800" />
-                            </div>
+                <div className="lg:col-span-1 space-y-8">
+                     
+                     {/* KAHRAMAN PROFİL KARTI */}
+                     <Card className="overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
+                        {/* Üst Dekorasyon */}
+                        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full p-1 bg-gradient-to-br from-cyan-500 via-violet-500 to-fuchsia-500 shadow-[0_0_50px_rgba(139,92,246,0.4)] z-20 group-hover:scale-105 transition-transform duration-500">
+                             <div className="w-full h-full rounded-full bg-slate-900 p-1">
+                                <UserAvatar user={user} className="w-full h-full text-4xl rounded-full" />
+                             </div>
+                             {/* Rozet Simgesi */}
+                             <div className="absolute bottom-0 right-0 bg-slate-900 rounded-full p-2 border border-white/10 shadow-lg">
+                                <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                             </div>
+                        </div>
 
-                            <div className="mt-14 w-full">
+                        <CardContent className="pt-20 pb-8 px-6 flex flex-col items-center text-center">
+                            
+                            <div className="w-full">
                                 {isEditMode ? (
                                     <EditProfileForm 
                                         user={user as UserProfile} 
@@ -388,22 +437,25 @@ function ProfilePage() {
                                         isSaving={isSaving}
                                     />
                                 ) : (
-                                    <div className="space-y-1 animate-in fade-in duration-300">
-                                        <div className="flex items-center justify-center gap-2">
-                                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{user.displayName}</h2>
-                                            <Button variant="ghost" size="icon" className="h-6 w-6 text-slate-400 hover:text-primary dark:hover:text-indigo-400" onClick={() => setIsEditMode(true)}>
-                                                <Edit className="h-4 w-4" />
-                                            </Button>
+                                    <div className="space-y-6 animate-in fade-in duration-500">
+                                        <div>
+                                            <div className="flex items-center justify-center gap-3">
+                                                <h2 className="text-3xl font-black text-white tracking-tight">{user.displayName}</h2>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" onClick={() => setIsEditMode(true)}>
+                                                    <Edit className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                            <p className="text-sm text-slate-400 flex items-center justify-center gap-2 mt-2 font-medium">
+                                                <Mail className="h-3.5 w-3.5 opacity-70"/> {user.email}
+                                            </p>
                                         </div>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1.5">
-                                            <Mail className="h-3.5 w-3.5"/> {user.email}
-                                        </p>
-                                        <div className="flex items-center justify-center gap-2 pt-2">
-                                             <Badge variant="secondary" className="flex items-center gap-1 dark:bg-slate-700 dark:text-white">
-                                                <GraduationCap className="h-3.5 w-3.5"/> {user.class || 'Sınıf Belirtilmemiş'}
+
+                                        <div className="flex flex-wrap items-center justify-center gap-3">
+                                             <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium">
+                                                <GraduationCap className="h-4 w-4 mr-2 text-indigo-400"/> {user.class || 'Sınıf Belirtilmemiş'}
                                              </Badge>
-                                             <Badge variant="outline" className="flex items-center gap-1 border-primary/20 text-primary bg-primary/5 dark:bg-indigo-900/30 dark:border-indigo-500/50 dark:text-indigo-400">
-                                                {(user.score || 0).toLocaleString()} Puan
+                                             <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/10 py-2 px-4 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                                <Star className="h-4 w-4 mr-2 fill-amber-400/20"/> {user.score?.toLocaleString() || 0} Puan
                                              </Badge>
                                         </div>
                                     </div>
@@ -412,111 +464,112 @@ function ProfilePage() {
                         </CardContent>
                      </Card>
 
-                     {/* Hızlı Erişim ve İşlemler */}
-                     <Card className="shadow-lg dark:bg-slate-800 dark:border-slate-700">
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-lg">Hesap İşlemleri</CardTitle>
+                     {/* İşlemler Kartı */}
+                     <Card className="bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-3xl shadow-lg overflow-hidden">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
+                        <CardHeader className="pb-3 border-b border-white/5">
+                            <CardTitle className="text-lg font-bold text-slate-200 flex items-center gap-2">
+                                <Lock className="h-4 w-4 text-indigo-400"/> Güvenlik
+                            </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-3">
+                        <CardContent className="pt-4 space-y-3">
                             <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
-                             <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button variant="destructive-outline" className="w-full justify-start" disabled={isLoggingOut}>
-                                        <LogOut className="mr-2 h-4 w-4"/> Oturumu Kapat
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
-                                        <AlertDialogDescription>Oturumunuzu kapatmak istediğinize emin misiniz?</AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>İptal</AlertDialogCancel>
-                                        <AlertDialogAction onClick={handleLogout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Çıkış Yap</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
                         </CardContent>
                      </Card>
                 </div>
 
                 {/* 3. Sağ Kolon: İstatistikler ve Başarılar */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="lg:col-span-2 space-y-8">
                     
                     {/* Hızlı İstatistikler */}
-                    <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
-                        <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
-                            <CardContent className="p-4 flex flex-col items-center text-center">
-                                <Trophy className="h-7 w-7 text-primary mb-2 opacity-80 dark:text-indigo-400" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">{achievements.length}</div>
-                                <div className="text-sm text-muted-foreground font-medium">Kazanılan Rozet</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
-                             <CardContent className="p-4 flex flex-col items-center text-center">
-                                <Award className="h-7 w-7 text-orange-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{ranks.classRank || '-'}</div> 
-                                <div className="text-sm text-muted-foreground font-medium">Sınıf Sıralaması</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
-                             <CardContent className="p-4 flex flex-col items-center text-center">
-                                <Crown className="h-7 w-7 text-yellow-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{ranks.generalRank || '-'}</div> 
-                                <div className="text-sm text-muted-foreground font-medium">Genel Sıralama</div>
-                            </CardContent>
-                        </Card>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-cyan-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
+                            <div className="p-3 bg-cyan-500/10 rounded-2xl mb-3 group-hover:bg-cyan-500/20 transition-colors border border-cyan-500/20">
+                                <Trophy className="h-7 w-7 text-cyan-400" />
+                            </div>
+                            <div className="text-3xl font-black text-white tracking-tight">{achievements.length}</div>
+                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Rozet</div>
+                        </div>
+
+                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-orange-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
+                             <div className="p-3 bg-orange-500/10 rounded-2xl mb-3 group-hover:bg-orange-500/20 transition-colors border border-orange-500/20">
+                                <Award className="h-7 w-7 text-orange-400" />
+                            </div>
+                            <div className="text-3xl font-black text-white tracking-tight">#{ranks.classRank || '-'}</div> 
+                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Sınıf Sırası</div>
+                        </div>
+
+                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-yellow-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg col-span-2 sm:col-span-1">
+                             <div className="p-3 bg-yellow-500/10 rounded-2xl mb-3 group-hover:bg-yellow-500/20 transition-colors border border-yellow-500/20">
+                                <Crown className="h-7 w-7 text-yellow-400" />
+                            </div>
+                            <div className="text-3xl font-black text-white tracking-tight">#{ranks.generalRank || '-'}</div> 
+                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Genel Sıra</div>
+                        </div>
                     </div>
 
                     {/* Başarılar Listesi */}
-                    <Card className="shadow-lg dark:bg-slate-800 dark:border-slate-700">
-                        <CardHeader className="border-b dark:border-slate-700">
-                            <CardTitle className="text-xl flex items-center gap-2">
-                                <Medal className="h-5 w-5 text-indigo-500"/> 
-                                Sıralama Başarıları
-                            </CardTitle>
-                            <CardDescription>Kazandığın en son dereceler ve puanlar.</CardDescription>
+                    <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2.5rem] shadow-xl overflow-hidden relative">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
+                        
+                        <CardHeader className="border-b border-white/5 bg-slate-900/50 p-6 md:p-8">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <CardTitle className="text-2xl font-black flex items-center gap-3 text-white">
+                                        <div className="p-2 bg-purple-500/20 rounded-lg">
+                                            <Medal className="h-6 w-6 text-purple-400"/> 
+                                        </div>
+                                        Sıralama Başarıları
+                                    </CardTitle>
+                                    <CardDescription className="text-slate-400 mt-2 ml-1">Kazandığın en son dereceler.</CardDescription>
+                                </div>
+                            </div>
                         </CardHeader>
-                        <CardContent className="p-4">
-                            {isLoadingData ? (
-                                <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground/50"/></div>
+                        <CardContent className="p-6 md:p-8">
+                            {isLoadingAchievements ? (
+                                <div className="flex justify-center py-12"><Loader2 className="h-10 w-10 animate-spin text-indigo-500"/></div>
                             ) : achievements.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {achievements.slice(0, 6).map((ach, i) => ( // En fazla 6 başarı göster
-                                        <div key={i} className="flex items-center gap-4 p-4 rounded-xl border bg-slate-50 hover:bg-slate-100 transition-colors dark:bg-slate-900 dark:border-slate-700 dark:hover:bg-slate-700/50">
-                                            <div className="p-2 rounded-full shadow-md">
+                                    {achievements.slice(0, 6).map((ach, i) => ( 
+                                        <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-950/50 border border-white/5 hover:border-white/10 hover:bg-slate-900 transition-all group">
+                                            <div className="p-3 rounded-full bg-slate-900 border border-white/5 shadow-md group-hover:scale-110 transition-transform">
                                                 {rankIcon(ach.rank)}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="font-semibold text-base truncate dark:text-white">{ach.periodName}</p>
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <Badge variant={ach.periodType === 'monthly' ? 'default' : 'secondary'} className="text-xs px-2 h-6 dark:bg-indigo-600 dark:text-white">
+                                                <p className="font-bold text-base truncate text-slate-200">{ach.periodName}</p>
+                                                <div className="flex items-center gap-2 mt-1.5">
+                                                    <Badge variant={ach.periodType === 'monthly' ? 'default' : 'secondary'} className="text-[10px] px-2 h-5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/5">
                                                         {ach.periodType === 'monthly' ? 'Aylık' : 'Haftalık'}
                                                     </Badge>
-                                                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">#{ach.rank}. Sıra</span>
+                                                    <span className="text-xs font-bold text-cyan-400">#{ach.rank}. Sıra</span>
                                                 </div>
                                             </div>
-                                            <div className="ml-auto text-right">
-                                                <span className="block font-bold text-lg text-primary dark:text-indigo-400">{ach.score.toLocaleString()}</span>
-                                                <span className="text-xs text-muted-foreground">Puan</span>
+                                            <div className="text-right pl-3 border-l border-white/5">
+                                                <span className="block font-black text-lg text-white tracking-tight">{ach.score.toLocaleString()}</span>
+                                                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Puan</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
-                                <div className="text-center py-8 bg-slate-50 rounded-xl border border-dashed dark:bg-slate-900 dark:border-slate-700">
-                                    <Trophy className="h-10 w-10 text-slate-300 mx-auto mb-2" />
-                                    <p className="text-slate-500 font-medium dark:text-slate-400">Henüz listelenecek bir başarınız yok.</p>
-                                    <p className="text-xs text-slate-400 mt-1 dark:text-slate-500">Sınavlara katılarak puan toplayın!</p>
+                                <div className="text-center py-16 bg-slate-950/30 rounded-3xl border border-dashed border-white/10">
+                                    <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
+                                        <Trophy className="h-8 w-8 text-slate-600" />
+                                    </div>
+                                    <p className="text-slate-400 font-bold text-lg">Henüz listelenecek bir başarınız yok.</p>
+                                    <p className="text-sm text-slate-600 mt-2">Sınavlara katılarak puan toplayın!</p>
                                 </div>
                             )}
                         </CardContent>
-                         <CardFooter className="flex justify-center gap-4 bg-muted/50 p-4 border-t dark:bg-slate-800/50 dark:border-slate-700">
-                            <Button asChild variant="outline">
-                                <Link href="/student/tekrar-et">
-                                     <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
-                                </Link>
-                            </Button>
+                        
+                         <CardFooter className="bg-slate-950/30 border-t border-white/5 p-6 flex justify-center">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                                <Button asChild variant="outline" className="h-12 border-white/10 hover:bg-white/5 text-slate-300 hover:text-white rounded-xl px-6 group transition-all hover:border-indigo-500/30 w-full">
+                                    <Link href="/student/tekrar-et">
+                                        <BookOpen className="mr-2 h-4 w-4 group-hover:text-indigo-400 transition-colors"/> Yanlışlarımı Tekrar Et
+                                    </Link>
+                                </Button>
+                            </div>
                         </CardFooter>
                     </Card>
 
@@ -529,10 +582,8 @@ function ProfilePage() {
 
 export default function ProfilePageSuspense() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary"/></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500"/></div>}>
             <ProfilePage/>
         </Suspense>
     )
 }
-
-    

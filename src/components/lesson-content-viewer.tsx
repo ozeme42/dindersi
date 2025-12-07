@@ -1,16 +1,15 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { 
-    ArrowLeft, ArrowRight, PartyPopper, Repeat, Brain, BookOpen, Gamepad2, Lightbulb, 
+    ArrowLeft, ArrowRight, PartyPopper, Repeat, BookOpen, Gamepad2, Lightbulb, 
     CheckCircle2, XCircle, LayersIcon, X, FilePenLine, Link as LinkIcon, Layers, Star, 
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
-    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Play, Minus, Plus 
+    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus 
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -28,7 +27,6 @@ import { playSound } from "@/lib/audio-service";
 import { addQuestionToReviewList } from "@/app/student/tekrar-et/actions";
 import type { Question } from '@/lib/types';
 import { useAuth } from "@/context/auth-context";
-import { Badge } from "./ui/badge";
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -79,53 +77,59 @@ function getEmbedUrl(url: string): string {
     return url; 
 }
 
-// --- DAKTİLO EFEKTİ BİLEŞENİ ---
-const TypewriterText = ({ content, onComplete, speed = 50 }: { content: string, onComplete?: () => void, speed?: number }) => {
+// --- DÜZELTİLMİŞ DAKTİLO EFEKTİ ---
+const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, onComplete?: () => void, speed?: number }) => {
     const [displayedContent, setDisplayedContent] = useState('');
-    const [isFinished, setIsFinished] = useState(false);
-    const onCompleteRef = useRef(onComplete);
-
-    useEffect(() => {
-        onCompleteRef.current = onComplete;
-    }, [onComplete]);
-
+    const [isCompleted, setIsCompleted] = useState(false);
+    
+    // İçerik değiştiğinde resetle
     useEffect(() => {
         setDisplayedContent('');
-        setIsFinished(false);
-        let currentIndex = 0;
-        let timeoutId: NodeJS.Timeout;
-
-        const typeChar = () => {
-            if (currentIndex < content.length) {
-                let char = content.charAt(currentIndex);
-                let nextChunk = char;
-                
-                if (char === '<') {
-                    const closingIndex = content.indexOf('>', currentIndex);
-                    if (closingIndex !== -1) {
-                        nextChunk = content.substring(currentIndex, closingIndex + 1);
-                        currentIndex = closingIndex;
-                    }
-                }
-
-                setDisplayedContent((prev) => prev + nextChunk);
-                currentIndex++;
-                timeoutId = setTimeout(typeChar, speed);
-            } else {
-                setIsFinished(true);
-            }
-        };
-
-        typeChar();
-
-        return () => clearTimeout(timeoutId);
-    }, [content, speed]);
+        setIsCompleted(false);
+    }, [content]);
 
     useEffect(() => {
-        if (isFinished && onCompleteRef.current) {
-            onCompleteRef.current();
+        if (isCompleted) return;
+
+        let currentIndex = 0;
+        // Eğer içerik çoktan yazılmışsa (hızlı renderlarda) tekrar başlatma
+        if (displayedContent === content) {
+            setIsCompleted(true);
+            if (onComplete) onComplete();
+            return;
         }
-    }, [isFinished]);
+
+        const intervalId = setInterval(() => {
+            if (currentIndex >= content.length) {
+                clearInterval(intervalId);
+                setIsCompleted(true);
+                if (onComplete) onComplete();
+                return;
+            }
+
+            let char = content.charAt(currentIndex);
+            let nextChunk = char;
+
+            // HTML tag kontrolü (Tagleri tek seferde bas)
+            if (char === '<') {
+                const closingIndex = content.indexOf('>', currentIndex);
+                if (closingIndex !== -1) {
+                    nextChunk = content.substring(currentIndex, closingIndex + 1);
+                    currentIndex = closingIndex;
+                }
+            }
+
+            setDisplayedContent((prev) => prev + nextChunk);
+            currentIndex++;
+        }, speed);
+
+        return () => clearInterval(intervalId);
+    }, [content, speed, onComplete, isCompleted]); 
+
+    // Eğer tamamlandıysa direkt içeriği göster (SSR uyumluluğu için)
+    if (isCompleted) {
+        return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    }
 
     return <div dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
@@ -186,9 +190,7 @@ function ContentListPlayer({
     }, [visibleSentences.length, isTeacher, onAnimationStart]);
 
     return (
-        <div className={cn("w-full h-full flex flex-col gap-6 items-center p-2 md:p-4", 
-            isTeacher ? "max-w-full justify-start pt-4" : "max-w-4xl mx-auto justify-center"
-        )}>
+        <div className={cn("w-full h-full flex flex-col gap-6 items-center p-2 md:p-4", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
             {/* BAŞLIK */}
             <div className={cn(
                 "p-4 rounded-2xl md:rounded-3xl shadow-lg md:shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 w-full text-center", 
@@ -220,7 +222,7 @@ function ContentListPlayer({
                                     <TypewriterText 
                                         content={sentence} 
                                         onComplete={() => onAnimationEnd?.()} 
-                                        speed={50} // HIZ AYARI: 50ms (Daha yavaş)
+                                        speed={50} 
                                     />
                                 ) : (
                                     <div dangerouslySetInnerHTML={{ __html: sentence }} />
@@ -376,7 +378,7 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFull
         <div
             className={cn(
                 "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
-                isTeacher ? "min-h-[24rem]" : "min-h-[10rem] md:min-h-[14rem]"
+                isTeacher ? "min-h-[24rem]" : "min-h-[14rem]"
             )}
             onClick={onFlip}
         >
@@ -388,7 +390,7 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFull
             >
                 {/* Front */}
                 <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] border-b-8 flex flex-col items-center justify-center p-4 md:p-8 backdrop-blur-md transition-all", colorClass)}>
-                    <h3 className={cn("font-black uppercase drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-xl md:text-2xl"))}>{term}</h3>
+                    <h3 className={cn("font-black uppercase drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{term}</h3>
                     <p className="mt-4 text-[10px] md:text-sm opacity-80 uppercase tracking-widest font-bold border-t border-white/30 pt-2 w-full">Çevir</p>
                 </div>
 
@@ -822,6 +824,7 @@ function HtmlSlidePlayer({ step, isFullscreen, onSlideScrolledToEnd }: { step: H
 function StepContent({ 
     step, answer, onAnswer, onCorrectAndNext, stepAnswers, topic, courseId, unitId, courseTitle, unitTitle, isFullscreen, 
     revealedSentencesCount, flippedCards, flippedAnagramCards, onCardFlip, onSlideScrolledToEnd, onMultiAnswer, onAllTfAnswered,
+    // Animasyon durumlarını parent'a bildirmek için
     onAnimationStart, onAnimationEnd 
 }: any) {
     const isTeacher = useTeacherMode();
@@ -1050,6 +1053,7 @@ export function LessonContentViewer({
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
     const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
     const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
+    // isReportDialogOpen kaldırıldı
     
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(
         () => ({ answers: {}, score: 0 })
@@ -1070,6 +1074,7 @@ export function LessonContentViewer({
     }, [topic]);
     
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
     const [isFinished, setIsFinished] = useState(false);
     
     useEffect(() => {
@@ -1256,8 +1261,9 @@ export function LessonContentViewer({
         }
 
         return (
-             <div className={cn("flex-shrink-0 flex justify-between items-center bg-slate-900/80 backdrop-blur-md absolute bottom-0 w-full z-20 border-t border-white/5", isTeacher ? "h-20 p-4" : "h-12 p-2")}>
+             <div className={cn("flex-shrink-0 flex justify-between items-center p-4 border-t border-white/5 bg-slate-900/80 backdrop-blur-md absolute bottom-0 w-full z-20", isTeacher ? "h-20 p-4" : "h-12 p-2")}>
                  <div className="flex gap-2">
+                    {/* Hata Bildir Butonu KALDIRILDI */}
                     {user?.role !== 'student' && <Button variant="secondary" size={isFullscreen ? 'lg' : 'default'} onClick={handleNext}>Atla</Button>}
                  </div>
                 <div className="flex gap-2 md:gap-3">
