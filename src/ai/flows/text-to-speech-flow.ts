@@ -6,7 +6,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import wav from 'wav';
-import { googleAI } from '@genkit-ai/googleai';
+import { googleAI } from '@genkit-ai/google-genai';
 
 const TextToSpeechInputSchema = z.object({
   text: z.string().min(1, 'Metin boş olamaz.'),
@@ -48,17 +48,12 @@ export const textToSpeechFlow = ai.defineFlow(
   },
   async ({ text }) => {
     try {
-      const { media } = await ai.generate({
+      const { output: media } = await ai.generate({
         model: googleAI.model('tts-1'),
-        config: {
-          responseModalities: ['AUDIO'],
-          speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: 'Algenib' },
-            },
-          },
-        },
         prompt: text,
+        output: {
+            media: true
+        }
       });
 
       if (!media) {

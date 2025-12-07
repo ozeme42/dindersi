@@ -8,7 +8,7 @@
  */
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { googleAI } from '@genkit-ai/googleai';
+import { googleAI } from '@genkit-ai/google-genai';
 
 const GenerateHtmlSlideInputSchema = z.object({
   topicSummary: z.string().describe('A summary of the topic for which to generate an HTML slide.'),

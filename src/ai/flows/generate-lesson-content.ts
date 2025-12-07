@@ -12,7 +12,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateLessonContentInputSchema = z.object({
   topicSummary: z
@@ -153,11 +153,11 @@ ${requestedInstructions}
     
     if (input.modules.visuals) {
       try {
-        const { media } = await ai.generate({
+        const { output: media } = await ai.generate({
             model: googleAI.model('gemini-1.5-flash'),
             prompt: `Generate an educational and visually appealing image or diagram that illustrates the concept of '${input.topicSummary}'. The style should be simple, clean, and suitable for a classroom setting. Avoid text unless it is essential for the diagram.`,
-            config: {
-                responseModalities: ['TEXT', 'IMAGE'],
+            output: {
+                media: true
             },
         });
         if (media?.url) {
