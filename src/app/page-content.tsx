@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -5,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -19,6 +20,20 @@ import type { PublicClass } from './actions/getPublicCurriculum';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { TeacherMainButtons } from '@/components/teacher-main-buttons';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useToast } from '@/hooks/use-toast';
 
 // --- GAME THEME COMPONENTS ---
 const GameButton = ({ children, className, variant = 'primary', href, target, ...props }: any) => {
@@ -228,12 +243,27 @@ const ManagementButton = ({ href, title, icon, colorClass }: { href: string, tit
 
 const LoggedInDashboard = ({ user }: { user: any }) => {
     const router = useRouter();
+    const { toast } = useToast();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     useEffect(() => {
         if (user.role === 'student') {
             router.replace('/student');
         }
     }, [user, router]);
+
+    const handleLogout = async () => {
+        setIsLoggingOut(true);
+        try {
+            await signOut(auth);
+            toast({ title: "Başarılı", description: "Oturumunuz güvenli bir şekilde kapatıldı." });
+            router.push('/login');
+        } catch (error) {
+            console.error("Logout error:", error);
+            toast({ title: "Hata", description: "Çıkış yapılırken bir hata oluştu.", variant: "destructive" });
+            setIsLoggingOut(false);
+        }
+    };
     
     if (user.role === 'student') {
         return (
@@ -295,7 +325,29 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-10">
         
         {/* Header Section */}
-        <div className="text-center space-y-4 py-6">
+        <div className="relative text-center space-y-4 py-6">
+            <div className="absolute top-0 right-0">
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="ghost" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" disabled={isLoggingOut}>
+                            {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <LogOut className="mr-2 h-4 w-4"/>}
+                            Çıkış Yap
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Çıkış yapmak istediğinizden emin misiniz?
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>İptal</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout} className="bg-destructive hover:bg-destructive/90">Çıkış Yap</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
           <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-800 dark:text-white">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
                 Öğretmen
