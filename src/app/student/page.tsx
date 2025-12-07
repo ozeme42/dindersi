@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useMemo, memo } from "react";
@@ -16,7 +17,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { 
   Trophy, Star, Gamepad2, Users, ShoppingCart, 
   FileCog, Crown, Award, Zap, Target, BookOpen, 
-  LayoutTemplate, Columns, ChevronRight, School, Loader2
+  LayoutTemplate, Columns, ChevronRight, School, Loader2, FileText
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
@@ -275,7 +276,7 @@ export default function StudentDashboard() {
                 <div className="grid grid-cols-2 gap-3">
                     
                     {/* Denemeler */}
-                    <Link href="/oyunlar/deneme" className="col-span-1 block group active:scale-95 transition-transform">
+                    <Link href="/student/deneme" className="col-span-1 block group active:scale-95 transition-transform">
                         <div className="h-[120px] rounded-2xl bg-slate-900/60 border border-white/5 p-4 relative overflow-hidden flex flex-col justify-between hover:bg-slate-800">
                              {examAlerts > 0 && (
                                 <span className="absolute top-3 right-3 flex h-2.5 w-2.5 z-10">
@@ -283,7 +284,7 @@ export default function StudentDashboard() {
                                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                                 </span>
                             )}
-                            <FileCog className="h-6 w-6 text-red-500" />
+                            <FileText className="h-6 w-6 text-red-500" />
                             <div>
                                 <h3 className="font-bold text-slate-100 text-sm">Denemeler</h3>
                                 <p className="text-[10px] text-slate-400 leading-tight mt-0.5">
