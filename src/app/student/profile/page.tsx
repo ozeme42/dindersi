@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
@@ -27,6 +26,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow';
@@ -294,7 +294,6 @@ function ProfilePage() {
                                 <Button variant="ghost" size="icon" className="hover:bg-white/10" onClick={() => setIsEditMode(true)}>
                                     <Edit className="h-5 w-5" />
                                 </Button>
-                                <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout}/>
                              </div>
                          )}
                      </div>
@@ -351,11 +350,7 @@ function ProfilePage() {
                              <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
                         </Link>
                     </Button>
-                     <Button asChild variant="outline">
-                        <Link href="/teacher/reports">
-                           <BookOpen className="mr-2 h-4 w-4"/> Raporlarımı Görüntüle
-                        </Link>
-                    </Button>
+                    <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive-outline">
