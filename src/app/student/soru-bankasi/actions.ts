@@ -7,7 +7,7 @@ import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, wri
 import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats } from "@/lib/types";
 
 
-export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string}> {
+export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
         const courseRef = doc(db, 'courses', courseId);
         const courseSnap = await getDoc(courseRef);
@@ -59,7 +59,8 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
         const q = query(
             collection(db, 'questions'), 
             where('topicId', '==', topicId),
-            where('difficulty', '==', difficulty)
+            where('difficulty', '==', difficulty),
+            where('type', 'in', ['Çoktan Seçmeli', 'Doğru/Yanlış'])
         );
 
         const snapshot = await getDocs(q);
