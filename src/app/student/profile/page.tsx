@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useCallback } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db, auth } from '@/lib/firebase';
-import { doc, updateDoc, collection, getDocs, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, getDocs, getDoc, query, where } from 'firebase/firestore';
 import type { UserProfile, SchoolClass, Achievement } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow'; 
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -70,7 +70,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
 
     return (
         // Animasyon eklendi
-        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 pt-0 bg-white md:bg-transparent"> 
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 pt-0 bg-white md:bg-transparent dark:bg-slate-800/50"> 
             <div>
                 <Label htmlFor="displayName">Ad Soyad</Label>
                 <Input 
@@ -195,45 +195,71 @@ function ProfilePage() {
   const { toast } = useToast();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isLoadingAchievements, setIsLoadingAchievements] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false); // Çıkış işlemi loading state'i eklendi
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Sınıfları çekme (Fetch Classes)
+  const [ranks, setRanks] = useState<{ classRank: number; generalRank: number }>({ classRank: 0, generalRank: 0 });
+
+  // Fetch classes and ranks
   useEffect(() => {
-    async function fetchClasses() {
+    async function fetchData() {
+        if (!user) return;
+        setIsLoadingData(true);
         try {
-            const classesSnapshot = await getDocs(collection(db, "classes"));
+            const classesQuery = query(collection(db, "classes"), where("name", "!=", ""));
+            const studentsQuery = query(collection(db, "users"), where("role", "==", "student"));
+            
+            const [classesSnapshot, studentsSnapshot] = await Promise.all([
+                getDocs(classesQuery),
+                getDocs(studentsQuery)
+            ]);
+
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-            // Sınıf adına göre sıralama
             classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(classesData);
+
+            // Rank calculation
+            const allStudents = studentsSnapshot.docs.map(doc => ({ uid: doc.id, score: doc.data().score || 0, class: doc.data().class }));
+            allStudents.sort((a, b) => b.score - a.score);
+            
+            const generalRank = allStudents.findIndex(s => s.uid === user.uid) + 1;
+            
+            let classRank = 0;
+            if (user.class) {
+                 const gradeName = user.class.split(' - ')[0]; 
+                 const classStudents = allStudents.filter(s => s.class?.startsWith(gradeName)); 
+                 classRank = classStudents.findIndex(s => s.uid === user.uid) + 1;
+            }
+            setRanks({ generalRank, classRank });
+
         } catch (error) {
-            console.error("Error fetching classes: ", error);
-             toast({ title: "Hata", description: "Sınıf bilgileri alınamadı.", variant: "destructive" });
+            console.error("Error fetching data: ", error);
+            toast({ title: "Hata", description: "Gerekli veriler alınamadı.", variant: "destructive" });
         }
     }
     
-    fetchClasses();
-  }, [toast]);
+    if (user) {
+        fetchData();
+    }
+  }, [user, toast]);
 
-  // Başarıları çekme (Fetch Achievements)
+  // Fetch achievements
   useEffect(() => {
     async function fetchAchievements() {
         if (!user) return;
-        setIsLoadingAchievements(true);
+        setIsLoadingData(true);
         try {
             const result = await getStudentAchievements(user.uid, user.createdAt || null);
             if (result.success && result.achievements) {
-                // Başarıları puana göre sırala (yüksekten düşüğe)
                 result.achievements.sort((a, b) => b.score - a.score); 
                 setAchievements(result.achievements);
             }
         } catch (error) {
              console.error("Error fetching achievements:", error);
         } finally {
-            setIsLoadingAchievements(false);
+            setIsLoadingData(false);
         }
     }
     
@@ -242,7 +268,7 @@ function ProfilePage() {
     }
   }, [user]);
 
-  // Profil Kaydetme (Handle Save Profile)
+  // Handle Save Profile
   const handleSaveProfile = async (data: { displayName: string, class: string }) => {
     if (!user) return;
     setIsSaving(true);
@@ -254,7 +280,7 @@ function ProfilePage() {
         });
         toast({ title: "Başarılı", description: "Profil bilgileriniz güncellendi." });
         setIsEditMode(false);
-        router.refresh(); // Veri bağlamını (context) ve Next.js önbelleğini (cache) güncellemek için
+        router.refresh(); 
     } catch (error) {
         console.error("Error updating profile: ", error);
         toast({ title: "Hata", description: "Profil güncellenirken bir sorun oluştu.", variant: "destructive" });
@@ -263,7 +289,7 @@ function ProfilePage() {
     }
   };
   
-  // Oturumu Kapatma (Handle Logout)
+  // Handle Logout
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
@@ -277,7 +303,7 @@ function ProfilePage() {
     }
   };
 
-  if (loading) {
+  if (loading || isLoadingData) {
     return <div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>;
   }
 
@@ -429,14 +455,14 @@ function ProfilePage() {
                         <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
                              <CardContent className="p-4 flex flex-col items-center text-center">
                                 <Award className="h-7 w-7 text-orange-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{user.classRank || '-'}</div> 
+                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{ranks.classRank || '-'}</div> 
                                 <div className="text-sm text-muted-foreground font-medium">Sınıf Sıralaması</div>
                             </CardContent>
                         </Card>
                         <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
                              <CardContent className="p-4 flex flex-col items-center text-center">
                                 <Crown className="h-7 w-7 text-yellow-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{user.generalRank || '-'}</div> 
+                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{ranks.generalRank || '-'}</div> 
                                 <div className="text-sm text-muted-foreground font-medium">Genel Sıralama</div>
                             </CardContent>
                         </Card>
@@ -452,7 +478,7 @@ function ProfilePage() {
                             <CardDescription>Kazandığın en son dereceler ve puanlar.</CardDescription>
                         </CardHeader>
                         <CardContent className="p-4">
-                            {isLoadingAchievements ? (
+                            {isLoadingData ? (
                                 <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground/50"/></div>
                             ) : achievements.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -485,7 +511,7 @@ function ProfilePage() {
                                 </div>
                             )}
                         </CardContent>
-                         <CardFooter className="flex justify-center gap-4 bg-muted/50 p-4 border-t">
+                         <CardFooter className="flex justify-center gap-4 bg-muted/50 p-4 border-t dark:bg-slate-800/50 dark:border-slate-700">
                             <Button asChild variant="outline">
                                 <Link href="/student/tekrar-et">
                                      <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
