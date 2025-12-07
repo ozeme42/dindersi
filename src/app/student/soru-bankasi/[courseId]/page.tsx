@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react'; // useRef eklendi
+import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
@@ -45,6 +45,7 @@ function QuestionTest({
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const { user } = useAuth();
+    const router = useRouter();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | null)[]>([]);
@@ -479,7 +480,11 @@ function QuestionBankCoursePageComponent() {
                 <div className="flex-grow min-h-0 bg-slate-950 relative pb-24 md:pb-0">
                      <div className="relative z-10 h-full overflow-y-auto">
                         <QuestionTest
-                           //...
+                            topic={activeTest.topic}
+                            difficulty={activeTest.difficulty}
+                            testIndex={activeTest.testIndex}
+                            onComplete={handleTestComplete}
+                            onBack={() => setActiveTest(null)}
                         />
                      </div>
                 </div>
@@ -711,4 +716,12 @@ function QuestionBankCoursePageComponent() {
             </div>
         </div>
     );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
+            <QuestionBankCoursePageComponent />
+        </Suspense>
+    )
 }
