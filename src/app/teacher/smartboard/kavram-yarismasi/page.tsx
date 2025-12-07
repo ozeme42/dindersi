@@ -1,26 +1,28 @@
+
 'use server';
 
 import { Suspense } from 'react';
 import KavramYarismaOyunPageWrapper from './oyun/page';
 import { getConceptQuizAction, type ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions';
 
-export const dynamic = 'force-dynamic';
 
 export default async function SmartboardKavramYarismasiPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
   const params = {
-    courseId: searchParams.courseId as string | undefined,
-    unitId: searchParams.unitId as string | undefined,
-    topicId: searchParams.topicId as string | undefined,
+    courseId: searchParams.courseId as string,
+    unitId: searchParams.unitId as string,
+    topicId: searchParams.topicId as string,
   };
-
-  const { questions, error } = await getConceptQuizAction(params);
   
-  const context = {
-    courseName: searchParams.courseName as string,
-    topicName: searchParams.topicName as string,
-  }
+  const { questions, error } = await getConceptQuizAction(params);
 
+  if (error) {
+    return <div className="flex h-screen items-center justify-center bg-red-900 text-white p-8">Hata: {error}</div>;
+  }
+  
   return (
-    <KavramYarismaOyunPageWrapper questions={questions} error={error} context={context} />
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-gray-900"><p>Yükleniyor...</p></div>}>
+      <KavramYarismaOyunPageWrapper initialQuestions={questions as ConceptQuizQuestion[]} />
+    </Suspense>
   );
 }
+
