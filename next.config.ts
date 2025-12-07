@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // The experimental block is removed from here
 };
 
 export default nextConfig;
