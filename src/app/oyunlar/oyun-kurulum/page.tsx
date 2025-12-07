@@ -1,19 +1,13 @@
-// THIS IS A GENERALIZED, REUSABLE SETUP PAGE COMPONENT.
-// IT IS NOT ACCESSED VIA A URL BUT IMPORTED BY OTHER pages.
 
-'use client';
+"use client";
 
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import OyunKurulum from './SetupComponent';
 
-
 function OyunKurulumWrapper() {
-    // This is now a Client Component because it uses `useSearchParams`.
-    // The OyunKurulum component can now be rendered here.
     return <OyunKurulum />;
 }
-
 
 export default function OyunKurulumSuspense() {
     return (

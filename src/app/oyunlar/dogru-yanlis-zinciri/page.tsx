@@ -1,7 +1,8 @@
+
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/page';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
 import { Link2, Loader2 } from 'lucide-react';
 
 function DogruYanlisZinciriPage() {

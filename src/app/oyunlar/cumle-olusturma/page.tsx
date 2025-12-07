@@ -1,7 +1,8 @@
+
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/page';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
 import { Shuffle, Loader2 } from 'lucide-react';
 
 function CumleOlusturmaPage() {

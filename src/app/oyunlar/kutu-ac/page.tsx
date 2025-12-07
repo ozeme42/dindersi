@@ -1,7 +1,8 @@
+
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '../oyun-kurulum/page';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
 import { Package, Loader2 } from 'lucide-react';
 
 function KutuAcPage() {
