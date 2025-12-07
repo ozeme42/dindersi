@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
 import type { UserProfile, SchoolClass, Achievement } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ArrowLeft, User, Mail, GraduationCap, Trophy, Shield, Star, Award, Medal, BookOpen, Edit, Save, X } from 'lucide-react';
+import { Loader2, ArrowLeft, User, Mail, GraduationCap, Trophy, Shield, Star, Award, Medal, BookOpen, Edit, Save, X, KeySquare, LogOut } from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { updateUserPassword } from '@/ai/flows/update-user-password-flow';
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 // --- Edit Profile Form Component ---
 function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: UserProfile, classes: SchoolClass[], onSave: (data: any) => void, onCancel: () => void, isSaving: boolean }) {
@@ -91,9 +95,84 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
     );
 }
 
+// --- Password Change Dialog ---
+function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, onPasswordChanged: () => void }) {
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const { toast } = useToast();
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handlePasswordChange = async () => {
+        if (newPassword !== confirmPassword) {
+            setError("Şifreler uyuşmuyor.");
+            return;
+        }
+        if (newPassword.length < 6) {
+            setError("Şifre en az 6 karakter olmalıdır.");
+            return;
+        }
+        setError(null);
+        setIsSaving(true);
+        try {
+            const result = await updateUserPassword({ uid: user.uid, password: newPassword });
+            if (result.success) {
+                toast({ title: "Başarılı", description: "Şifreniz başarıyla güncellendi." });
+                setNewPassword('');
+                setConfirmPassword('');
+                setIsOpen(false);
+                onPasswordChanged();
+            } else {
+                setError(result.error || "Bir hata oluştu.");
+            }
+        } catch (e: any) {
+            setError(e.message || "Beklenmedik bir hata oluştu.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+    
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                 <Button variant="outline" size="sm">
+                    <KeySquare className="mr-2 h-4 w-4"/>
+                    Şifre Değiştir
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Şifre Değiştir</DialogTitle>
+                    <DialogDescription>Yeni bir şifre belirleyin. Bu işlem sonrası mevcut oturumunuz kapanacaktır.</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="new-password">Yeni Şifre</Label>
+                        <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="confirm-password">Yeni Şifre (Tekrar)</Label>
+                        <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                    </div>
+                    {error && <p className="text-sm text-destructive">{error}</p>}
+                </div>
+                 <DialogFooter>
+                    <DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose>
+                    <Button onClick={handlePasswordChange} disabled={isSaving}>
+                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                        Güncelle
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
 
 function ProfilePage() {
   const { user, loading } = useAuth();
+  const router = useRouter();
   const { toast } = useToast();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -102,33 +181,34 @@ function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    async function fetchClassesAndAchievements() {
-        if (!user) return;
-        setIsLoadingAchievements(true);
+    async function fetchClasses() {
         try {
             const classesSnapshot = await getDocs(collection(db, "classes"));
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             setClasses(classesData);
-
-            const result = await getStudentAchievements(user.uid, user.createdAt || null);
-            if (result.success && result.achievements) {
-                setAchievements(result.achievements);
-            } else {
-                 toast({ title: "Başarılar Yüklenemedi", description: result.error, variant: 'destructive' });
-            }
-
         } catch (error) {
-            console.error("Error fetching initial data: ", error);
-             toast({ title: "Hata", description: "Veriler yüklenirken bir sorun oluştu.", variant: 'destructive' });
-        } finally {
-            setIsLoadingAchievements(false);
+            console.error("Error fetching classes: ", error);
         }
     }
     
-    if (user) {
-        fetchClassesAndAchievements();
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    async function fetchAchievements() {
+        if (!user) return;
+        setIsLoadingAchievements(true);
+        const result = await getStudentAchievements(user.uid, user.createdAt || null);
+        if (result.success && result.achievements) {
+            setAchievements(result.achievements);
+        }
+        setIsLoadingAchievements(false);
     }
-  }, [user, toast]);
+    
+    if (user) {
+        fetchAchievements();
+    }
+  }, [user]);
 
   const handleSaveProfile = async (data: { displayName: string, class: string }) => {
     if (!user) return;
@@ -147,6 +227,11 @@ function ProfilePage() {
     } finally {
         setIsSaving(false);
     }
+  };
+  
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/login');
   };
 
   if (loading) {
@@ -205,9 +290,12 @@ function ProfilePage() {
                             )}
                         </div>
                          {!isEditMode && (
-                             <Button variant="ghost" size="icon" className="absolute top-2 right-2 hover:bg-white/10" onClick={() => setIsEditMode(true)}>
-                                <Edit className="h-5 w-5" />
-                            </Button>
+                             <div className="absolute top-2 right-2 flex flex-col gap-2">
+                                <Button variant="ghost" size="icon" className="hover:bg-white/10" onClick={() => setIsEditMode(true)}>
+                                    <Edit className="h-5 w-5" />
+                                </Button>
+                                <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout}/>
+                             </div>
                          )}
                      </div>
                 </div>
@@ -257,7 +345,7 @@ function ProfilePage() {
                      )}
                      
                 </CardContent>
-                <CardFooter className="flex justify-center gap-4 bg-muted/50 p-4 border-t">
+                <CardFooter className="flex-col md:flex-row justify-center gap-4 bg-muted/50 p-4 border-t">
                     <Button asChild variant="outline">
                         <Link href="/student/tekrar-et">
                              <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
@@ -268,6 +356,25 @@ function ProfilePage() {
                            <BookOpen className="mr-2 h-4 w-4"/> Raporlarımı Görüntüle
                         </Link>
                     </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive-outline">
+                                <LogOut className="mr-2 h-4 w-4"/> Oturumu Kapat
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Çıkış yapmak istediğinizden emin misiniz?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleLogout}>Evet, Çıkış Yap</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </CardFooter>
             </Card>
         </div>
