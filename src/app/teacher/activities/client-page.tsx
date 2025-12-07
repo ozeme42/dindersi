@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -17,27 +16,27 @@ import { ErrorReportDialog } from '@/components/error-report-dialog';
 
 
 const activityTypes = [
-  { href: '/student/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
-  { href: '/student/yazi-tura', label: 'Yazı Tura', icon: Coins },
-  { href: '/student/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit },
-  { href: '/student/kelime-avi', label: 'Kelime Avı', icon: Search },
-  { href: '/student/kutu-ac', label: 'Kutu Aç', icon: Package },
-  { href: '/student/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
-  { href: '/student/eslestirme', label: 'Eşleştirme', icon: Puzzle },
-  { href: '/student/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle },
-  { href: '/student/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
-  { href: '/student/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
-  { href: '/student/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
-  { href: '/student/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
-  { href: '/student/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
-  { href: '/student/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
-  { href: '/student/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
-  { href: '/student/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
-  { href: '/student/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
-  { href: '/student/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
-  { href: '/student/labirent', label: 'Labirent', icon: Puzzle },
-  { href: '/student/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
-  { href: '/student/tornado', label: 'Tornado', icon: Wind },
+  { href: '/oyunlar/milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
+  { href: '/oyunlar/yazi-tura', label: 'Yazı Tura', icon: Coins },
+  { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması', icon: BrainCircuit },
+  { href: '/oyunlar/kelime-avi', label: 'Kelime Avı', icon: Search },
+  { href: '/oyunlar/kutu-ac', label: 'Kutu Aç', icon: Package },
+  { href: '/oyunlar/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
+  { href: '/oyunlar/eslestirme', label: 'Eşleştirme', icon: Puzzle },
+  { href: '/oyunlar/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle },
+  { href: '/oyunlar/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
+  { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
+  { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
+  { href: '/oyunlar/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
+  { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
+  { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
+  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
+  { href: '/oyunlar/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
+  { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
+  { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
+  { href: '/oyunlar/labirent', label: 'Labirent', icon: Puzzle },
+  { href: '/oyunlar/soru-coz', label: 'Soru Çöz', icon: ClipboardCheck },
+  { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind },
 ];
 
 export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
