@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -73,8 +74,19 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
         if (allQuestions.length < startIndex) {
             return { questions: [], error: 'Bu test için yeterli soru bulunamadı.' };
         }
+        
+        const selectedQuestions = allQuestions.slice(startIndex, endIndex);
 
-        return { questions: JSON.parse(JSON.stringify(allQuestions.slice(startIndex, endIndex))) };
+        // Shuffle options for each question
+        const questionsWithShuffledOptions = selectedQuestions.map(question => {
+            if ((question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
+                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+                return { ...question, options: shuffledOptions };
+            }
+            return question;
+        });
+
+        return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
 
     } catch (e: any) {
         console.error("Error getting questions for test:", e);

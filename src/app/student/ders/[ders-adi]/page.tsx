@@ -1,12 +1,10 @@
-
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Bug } from "lucide-react";
+import { BookOpen, Loader2, ArrowLeft, Bug, Menu, Map } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, addDoc, serverTimestamp } from "firebase/firestore";
@@ -42,7 +40,6 @@ function CoursePageContent() {
     const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-
     // Get a stable reference to topicId from searchParams
     const startTopicIdFromUrl = useMemo(() => searchParams.get('topicId'), [searchParams]);
 
@@ -62,6 +59,7 @@ function CoursePageContent() {
             if (!courseId || !user) return;
             setIsLoading(true);
             
+            // Eğer URL'de topicId varsa direkt içeriği aç, yoksa haritayı göster
             setView(startTopicIdFromUrl ? 'content' : 'map');
             setLocalProgressMap({});
 
@@ -138,7 +136,10 @@ function CoursePageContent() {
     const handleSelectTopic = (topic: Topic) => {
         setActiveTopic(topic);
         setView('content');
-        mainContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+        // Mobilde scroll'u yukarı al
+        if (window.innerWidth < 768) {
+             window.scrollTo(0,0);
+        }
     };
 
     const onProgressUpdate = useCallback((topicId: string, newProgress: LocalProgress) => {
@@ -155,18 +156,18 @@ function CoursePageContent() {
         const currentCompletionCount = completedTopics[topicId]?.completionCount || 0;
         
         let completionBonus = 0;
-        let toastTitle = "Konu Tekrarı Tamamlandı!";
-        let toastDescription = "Bu konuyu tekrar tamamladın, harika bir iş çıkardın!";
+        let toastTitle = "Konu Tamamlandı!";
+        let toastDescription = "Tebrikler, bu konuyu başarıyla bitirdin!";
         let totalScore = 0;
 
         if (currentCompletionCount < 2) {
             completionBonus = score;
             totalScore = score + completionBonus;
-            toastTitle = currentCompletionCount === 0 ? "Harika! Konuyu Bitirdin!" : "Konuyu Tekrar Ettin!";
-            toastDescription = `Adımlardan ${score} puan ve tamamlama bonusu olarak ${completionBonus} puan kazandın. Toplam: ${totalScore} puan!`;
+            toastTitle = currentCompletionCount === 0 ? "Harika! Konu Bitti!" : "Konu Tekrarı!";
+            toastDescription = `Adımlardan ${score} ve bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
         } else {
             totalScore = 0;
-            toastDescription = "Bu konuyu daha önce tamamladığın için tekrar puan kazanmadın, ama tekrar etmek en iyisidir!";
+            toastDescription = "Bu konuyu daha önce tamamladığın için tekrar puan kazanmadın.";
         }
 
         if (user.role !== 'student') {
@@ -201,7 +202,7 @@ function CoursePageContent() {
                     points: totalScore,
                     timestamp: serverTimestamp(),
                     gameType: 'Ders Tamamlama',
-                    context: `${course.title} - ${activeTopicData.topic.title} (${newCompletionCount}. tamamlama)`,
+                    context: `${course.title} - ${activeTopicData.topic.title} (${newCompletionCount}. kez)`,
                 });
             }
             
@@ -215,15 +216,11 @@ function CoursePageContent() {
                 }
             }));
             
-            toast({ title: toastTitle, description: toastDescription, duration: 6000 });
+            toast({ title: toastTitle, description: toastDescription, duration: 5000 });
 
         } catch(error) {
-            console.error("Error saving progress and score:", error);
-            toast({
-                title: "Hata",
-                description: "İlerleme ve puan kaydedilirken bir hata oluştu.",
-                variant: "destructive"
-            });
+            console.error("Error saving progress:", error);
+            toast({ title: "Hata", description: "İlerleme kaydedilemedi.", variant: "destructive" });
         } finally {
             setIsSaving(false);
         }
@@ -234,12 +231,14 @@ function CoursePageContent() {
             return newLocalProgress;
         });
 
+        // Bir sonraki konuya geç
         const allTopics = course.units.flatMap(u => u.topics);
         const currentIndex = allTopics.findIndex(t => t.id === topicId);
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
-             if (isTopicUnlocked(nextTopic.id)) {
+             // Bir sonraki konunun kilidini kontrol et (Teacher hariç)
+             if (user.role === 'teacher' || user.role === 'superadmin' || isTopicUnlocked(nextTopic.id)) {
                  setActiveTopic(nextTopic);
                  return; 
              }
@@ -275,95 +274,151 @@ function CoursePageContent() {
     
     if (isLoading) {
          return (
-            <div className="flex h-[calc(100vh-theme(height.16))] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <span className="ml-2">Ders yükleniyor...</span>
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
+                <span className="ml-4 text-slate-400 animate-pulse">Ders Yükleniyor...</span>
             </div>
         )
     }
 
     if (!course) {
-        return (
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-                Ders bulunamadı veya yüklenemedi.
-            </div>
-        )
+        return <div className="flex h-screen items-center justify-center text-slate-400">Ders bulunamadı.</div>
     }
     
     return (
-        <>
-        <div className={cn("md:flex", isFullscreen ? "h-screen" : "h-[calc(100vh-theme(height.16))]")}>
-            <div className={cn(
-                "h-full w-full md:w-80", 
-                view === 'content' ? 'hidden md:block' : 'block',
-                isFullscreen && 'hidden'
-            )}>
-                <CourseSidebar
-                    course={course}
-                    activeTopic={activeTopic}
-                    onSelectTopic={handleSelectTopic}
-                    isTopicUnlocked={(topicIndex, unitIndex) => {
-                        if (!course) return false;
-                        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-                        const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
-                        if (globalIndex <= 0) return true;
-                        const prevTopic = allTopics[globalIndex - 1];
-                        if (!prevTopic) return true;
-                        return (completedTopics[prevTopic.id]?.completionCount || 0) > 0;
-                    }}
-                    isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
-                    topicProgress={localProgressMap}
-                    testCounts={{}} // Not needed here
-                />
+        <div className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative selection:bg-cyan-500/30">
+             
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-violet-900/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px]" />
             </div>
-            
-            <main ref={mainContentRef} className={cn("flex-1 overflow-y-auto bg-muted/30", view === 'map' ? 'hidden md:block' : 'block')}>
-                 <div className="h-full w-full">
-                     {!isFullscreen && view === 'content' && (
-                        <div className="md:hidden flex items-center justify-between p-4 bg-background border-b">
-                            <Button variant="outline" onClick={() => setView('map')}>
+
+            {/* Split Layout */}
+            <div className={cn("flex flex-col md:flex-row flex-grow overflow-hidden relative z-10", isFullscreen ? "h-screen" : "")}>
+                
+                {/* SOL PANEL: Konu Haritası (Sidebar) */}
+                <div className={cn(
+                    "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 flex flex-col",
+                    view === 'content' ? 'hidden md:flex' : 'flex h-full',
+                    isFullscreen && 'hidden'
+                )}>
+                    {/* Sidebar Header */}
+                    <div className="p-4 border-b border-white/5 flex items-center gap-3">
+                        <div className="p-2 bg-slate-800 rounded-lg">
+                            <Map className="h-5 w-5 text-cyan-400" />
+                        </div>
+                        <div>
+                            <h2 className="font-bold text-white leading-tight">Konu Haritası</h2>
+                            <p className="text-xs text-slate-500">{course.title}</p>
+                        </div>
+                    </div>
+
+                    {/* Sidebar Content */}
+                    <div className="flex-grow overflow-y-auto">
+                        <CourseSidebar
+                            course={course}
+                            activeTopic={activeTopic}
+                            onSelectTopic={handleSelectTopic}
+                            isTopicUnlocked={(topicIndex, unitIndex) => {
+                                // Bu fonksiyon CourseSidebar içinde topic id'sine erişimi kolaylaştırmak için var
+                                // Asıl kontrolü isTopicUnlocked ile yapıyoruz, sidebar'a o fonksiyonu prop olarak geçebiliriz
+                                // Veya burada index bazlı tekrar hesaplayabiliriz.
+                                // Basitleştirme: Sidebar topic objesini dönüyorsa direkt ID kullanalım.
+                                // CourseSidebar yapısına bağlı olarak burası değişebilir, 
+                                // ama eldeki kodda index bazlı bir prop var. Onu kullanalım:
+                                if (!course) return false;
+                                const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
+                                const allTopics = course.units?.flatMap(u => u.topics || []) || [];
+                                if (globalIndex <= 0) return true;
+                                const prevTopic = allTopics[globalIndex - 1];
+                                return (completedTopics[prevTopic.id]?.completionCount || 0) > 0;
+                            }}
+                            isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
+                            topicProgress={localProgressMap}
+                            testCounts={{}} // Ders anlatımında test sayısı göstermeye gerek yok
+                        />
+                    </div>
+                </div>
+                
+                {/* SAĞ PANEL: İçerik Görüntüleyici */}
+                <main ref={mainContentRef as any} className={cn(
+                    "flex-1 overflow-hidden relative flex flex-col bg-slate-950/50",
+                    view === 'map' ? 'hidden md:flex' : 'flex'
+                )}>
+                    
+                    {/* Mobil Navigasyon Barı (Sadece İçerik Modunda ve Fullscreen Değilse) */}
+                    {!isFullscreen && view === 'content' && (
+                        <div className="md:hidden flex items-center justify-between p-3 bg-slate-900/90 backdrop-blur-md border-b border-white/5 z-20 shrink-0">
+                            <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setView('map')}
+                                className="text-slate-400 hover:text-white"
+                            >
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Ders Haritası
+                                Harita
                             </Button>
-                            <div className="flex items-center">
-                                {activeTopicData && (
-                                    <p className="font-semibold text-base truncate mr-2 text-right">{activeTopicData.topic.title}</p>
-                                )}
-                                 <FullscreenToggle elementRef={mainContentRef} />
-                            </div>
+                            
+                            <p className="font-semibold text-sm text-white truncate max-w-[150px]">
+                                {activeTopicData?.topic.title}
+                            </p>
+                            
+                            <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 h-8 w-8" />
                         </div>
                     )}
                     
-                    <LessonContentViewer
-                        topic={activeTopicData?.topic || null}
-                        courseId={course.id}
-                        unitId={activeTopicData?.unitId || ''}
-                        courseTitle={course.title}
-                        unitTitle={activeTopicData?.unitTitle || ''}
-                        onTopicComplete={handleTopicComplete}
-                        progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
-                        onProgressUpdate={onProgressUpdate}
-                        isFullscreen={isFullscreen}
-                    />
-                </div>
-            </main>
+                    {/* İçerik */}
+                    <div className="flex-grow overflow-y-auto relative h-full">
+                        {activeTopicData ? (
+                            <LessonContentViewer
+                                topic={activeTopicData.topic}
+                                courseId={course.id}
+                                unitId={activeTopicData.unitId}
+                                courseTitle={course.title}
+                                unitTitle={activeTopicData.unitTitle}
+                                onTopicComplete={handleTopicComplete}
+                                progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
+                                onProgressUpdate={onProgressUpdate}
+                                isFullscreen={isFullscreen}
+                            />
+                        ) : (
+                            <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">
+                                <div className="p-4 bg-slate-900/50 rounded-full border border-white/5">
+                                    <BookOpen className="h-12 w-12 opacity-50" />
+                                </div>
+                                <p>Başlamak için soldaki menüden bir konu seçin.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Hata Bildir Butonu (Floating) */}
+                    {activeTopic && (
+                        <div className="absolute bottom-6 right-6 z-30">
+                            <Button
+                                size="icon"
+                                variant="secondary"
+                                className="h-10 w-10 rounded-full bg-slate-800/80 border border-white/10 text-slate-400 hover:text-red-400 hover:bg-slate-800 shadow-lg backdrop-blur-sm transition-all hover:scale-110"
+                                onClick={() => setIsReportDialogOpen(true)}
+                                title="Hata Bildir"
+                            >
+                                <Bug className="h-5 w-5" />
+                            </Button>
+                        </div>
+                    )}
+
+                </main>
+            </div>
+
+            <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} itemToReport={activeTopic} />
         </div>
-        <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} itemToReport={activeTopic} />
-        </>
     )
 }
 
-
 export default function CoursePage() {
     return (
-        <Suspense fallback={
-            <div className="flex h-[calc(100vh-theme(height.16))] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-        }>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
             <CoursePageContent />
         </Suspense>
     )
 }
-
-    

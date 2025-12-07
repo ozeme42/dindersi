@@ -1,9 +1,7 @@
-
-
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -46,7 +44,6 @@ function QuestionTest({
     const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
     const { user } = useAuth();
-    const router = useRouter();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | null)[]>([]);
@@ -124,7 +121,7 @@ function QuestionTest({
         const successPercentage = questions.length > 0 ? (correctCount / questions.length) * 100 : 0;
 
         return (
-            <div className="w-full min-h-full flex items-center justify-center p-4">
+            <div className="w-full min-h-full flex items-center justify-center p-4 pb-32">
                 <Card className="w-full max-w-lg text-center bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-500">
                     <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
                     <CardHeader className="items-center pb-2">
@@ -179,28 +176,15 @@ function QuestionTest({
     const currentQuestion = questions[currentQuestionIndex];
     if (!currentQuestion) return <div className="text-center text-slate-500 mt-10">Soru yüklenemedi.</div>;
 
-    const buttonColorClasses = [
-        "bg-chart-1 hover:bg-chart-1/90",
-        "bg-chart-2 hover:bg-chart-2/90",
-        "bg-chart-3 hover:bg-chart-3/90",
-        "bg-chart-4 hover:bg-chart-4/90",
-    ];
     const currentAnswer = answers[currentQuestionIndex];
-    
-    let isCurrentAnswerCorrect: boolean | null = null;
-    if (currentAnswer !== null && currentAnswer !== undefined) {
-      if (currentQuestion.type === 'Doğru/Yanlış') {
-          isCurrentAnswerCorrect = (currentAnswer === 'Doğru') === (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru'));
-      } else {
-          isCurrentAnswerCorrect = currentAnswer === currentQuestion.correctAnswer;
-      }
-    }
-
+    const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
 
     return (
-        <div className="w-full min-h-full flex items-center justify-center p-4 pb-24 md:pb-4">
-            <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative">
-                <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }} />
+        // DÜZELTME: justify-start ve pb-32 ile mobil hizalama sorunu çözüldü
+        <div className="w-full min-h-full flex flex-col items-center justify-start md:justify-center p-4 pb-32 md:pb-8">
+            
+            <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative flex flex-col">
+                <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
                 
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                      <div className="flex flex-col">
@@ -217,7 +201,7 @@ function QuestionTest({
                      </div>
                 </CardHeader>
                 
-                <CardContent className="py-6 space-y-8">
+                <CardContent className="py-6 space-y-8 flex-grow">
                     {/* Soru Metni */}
                     <div className="text-center">
                         <h3 className="text-xl md:text-2xl font-bold text-white leading-relaxed">
@@ -228,18 +212,28 @@ function QuestionTest({
                     {/* Seçenekler */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {(currentQuestion.type === 'Çoktan Seçmeli' || currentQuestion.type === 'Boşluk Doldurma') && currentQuestion.options?.map((option, index) => {
-                            const isCorrect = option === currentQuestion.correctAnswer;
                             const isSelected = currentAnswer === option;
+                            const isCorrect = option === currentQuestion.correctAnswer;
+                            
+                            let btnStyle = "h-auto py-5 px-6 text-base font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group text-left justify-start ";
+                            
+                            if (currentAnswer) {
+                                if (isCorrect) {
+                                    btnStyle += "bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-10";
+                                } else if (isSelected) {
+                                    btnStyle += "bg-red-500/20 border-red-500 text-red-100 opacity-80";
+                                } else {
+                                    btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
+                                }
+                            } else {
+                                btnStyle += "bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white hover:shadow-lg active:scale-95";
+                            }
+
                             return (
                                 <Button 
                                     key={option} 
                                     variant="ghost"
-                                    className={cn(
-                                        "h-auto py-5 px-6 text-base font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group text-left justify-start",
-                                        !currentAnswer ? 'bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white hover:shadow-lg active:scale-95' :
-                                        (isCorrect ? 'bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-10' :
-                                        isSelected ? 'bg-red-500/20 border-red-500 text-red-100 opacity-80' : 'bg-slate-800/30 border-transparent text-slate-500 opacity-40')
-                                    )}
+                                    className={btnStyle}
                                     onClick={() => handleAnswer(option)} 
                                     disabled={!!currentAnswer}
                                 >
@@ -270,7 +264,7 @@ function QuestionTest({
                                      else btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
                                 } 
                             } else {
-                                btnStyle += `bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white`;
+                                btnStyle += "bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white";
                             }
 
                             return (
@@ -288,13 +282,14 @@ function QuestionTest({
                     </div>
                 </CardContent>
                 
-                <CardFooter className="flex justify-end pt-2 pb-6 px-6">
+                {/* DÜZELTME: Sticky Footer ile buton her zaman görünür */}
+                <CardFooter className="flex justify-end pt-4 pb-6 px-6 border-t border-white/5 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
-                        disabled={!answers[currentQuestionIndex]}
+                        disabled={!currentAnswer}
                         className={cn(
-                            "h-12 px-8 rounded-xl font-bold transition-all duration-300",
-                            answers[currentQuestionIndex] 
+                            "h-12 px-8 rounded-xl font-bold transition-all duration-300 w-full md:w-auto",
+                            currentAnswer 
                                 ? "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/20 hover:scale-105" 
                                 : "bg-slate-800 text-slate-500 cursor-not-allowed"
                         )}
@@ -329,7 +324,7 @@ function QuestionBankCoursePageComponent() {
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
     
     // ... (Mantık Kodu Aynen Korundu) ...
-     const isTopicCompleted = useCallback((topicId: string) => {
+    const isTopicCompleted = useCallback((topicId: string) => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
         if (!counts || (counts.easy === 0 && counts.medium === 0 && counts.hard === 0)) return true; 
@@ -454,11 +449,11 @@ function QuestionBankCoursePageComponent() {
             totalTests += easyTests + mediumTests + hardTests;
 
             if (progress) {
-                const allTestResults: TestResult[] = [
+                const allTestResults = [
                     ...Object.values(progress.easy || {}),
                     ...Object.values(progress.medium || {}),
                     ...Object.values(progress.hard || {})
-                ];
+                ] as TestResult[];
                 
                 completedTests += allTestResults.length;
                 passedTests += allTestResults.filter(res => res.status === 'passed').length;
@@ -478,8 +473,14 @@ function QuestionBankCoursePageComponent() {
     const mainContent = () => {
         if (activeTest) {
             return (
-                <div className="flex-grow min-h-0 bg-slate-950 relative pb-24 md:pb-0">
-                     <div className="relative z-10 h-full overflow-y-auto">
+                // MOBİL DÜZELTME: h-[100dvh] ile mobil tarayıcıda tam ekran ve flex-col
+                <div className="flex flex-col h-[100dvh] md:h-full bg-slate-950 relative">
+                     {/* Test Arka Planı */}
+                     <div className="fixed inset-0 pointer-events-none z-0">
+                         <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-blue-900/10 rounded-full blur-[120px]" />
+                         <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-indigo-900/10 rounded-full blur-[120px]" />
+                     </div>
+                     <div className="relative z-10 flex-grow overflow-y-auto">
                         <QuestionTest
                             topic={activeTest.topic}
                             difficulty={activeTest.difficulty}
@@ -491,6 +492,7 @@ function QuestionBankCoursePageComponent() {
                 </div>
             );
         }
+
         if (activeTopic) {
             const difficultyLevels: ('Kolay' | 'Orta' | 'Zor')[] = ['Kolay', 'Orta', 'Zor'];
             const difficultyIcons = { 'Kolay': ShieldCheck, 'Orta': Shield, 'Zor': ShieldAlert };
@@ -627,10 +629,8 @@ function QuestionBankCoursePageComponent() {
     if (error) return <div className="p-8 text-center text-red-400">{error}</div>;
     if (!course) return <div className="p-8 text-center text-slate-400">Ders bulunamadı.</div>;
 
-    const showContent = !!(activeTest || activeTopic);
-
     return (
-        <div ref={mainContentRef} className="flex flex-col h-[calc(100dvh)] bg-slate-950 overflow-hidden relative">
+        <div ref={mainContentRef} className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative">
             
             {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -669,16 +669,16 @@ function QuestionBankCoursePageComponent() {
                                             <div><p className="text-lg font-bold text-white">{courseStats.totalScore}</p><p className="text-[10px] text-slate-400 uppercase">Puan</p></div>
                                         </div>
                                          <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
+                                            <div className="p-2 bg-green-500/10 rounded-lg"><CheckCheck className="h-5 w-5 text-green-500" /></div>
+                                            <div><p className="text-lg font-bold text-white">{courseStats.passedTests}/{courseStats.totalTests}</p><p className="text-[10px] text-slate-400 uppercase">Başarılan</p></div>
+                                        </div>
+                                         <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
                                             <div className="p-2 bg-violet-500/10 rounded-lg"><Star className="h-5 w-5 text-violet-500" /></div>
                                             <div><p className="text-lg font-bold text-white">#{courseStats.classRank}</p><p className="text-[10px] text-slate-400 uppercase">Sıralama</p></div>
                                         </div>
                                          <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
                                             <div className="p-2 bg-cyan-500/10 rounded-lg"><Activity className="h-5 w-5 text-cyan-500" /></div>
                                             <div><p className="text-lg font-bold text-white">%{courseStats.completionPercentage}</p><p className="text-[10px] text-slate-400 uppercase">Tamamlama</p></div>
-                                        </div>
-                                         <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
-                                            <div className="p-2 bg-green-500/10 rounded-lg"><CheckCheck className="h-5 w-5 text-green-500" /></div>
-                                            <div><p className="text-lg font-bold text-white">{courseStats.passedTests}/{courseStats.totalTests}</p><p className="text-[10px] text-slate-400 uppercase">Başarılan</p></div>
                                         </div>
                                     </div>
                                 )}
