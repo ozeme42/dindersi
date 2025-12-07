@@ -167,8 +167,8 @@ function KutuAcGame() {
         }
     }, [isProcessing, acilanKutular, kutuIcerikleri, ozelKutuEtkisiUygula]);
     
-     const oyunuBaslat = useCallback((soruBankasi: Question[]) => {
-        if (soruBankasi.length === 0) {
+     const oyunuBaslat = useCallback((questions: Question[]) => {
+        if (questions.length === 0) {
             setError(`Oyun için soru bulunamadı.`);
             setGameState('error');
             return;
@@ -177,11 +177,10 @@ function KutuAcGame() {
         const initialPuanlar: Record<string, number> = {};
         GRUPLAR.forEach(grup => { initialPuanlar[grup] = 0; });
         setPuanlar(initialPuanlar);
-
-        const shuffledQuestions = [...soruBankasi].sort(() => 0.5 - Math.random());
-        const questionCount = isMultiplayer ? Math.min(SORU_SAYISI, shuffledQuestions.length) : shuffledQuestions.length;
         
-        const sorular: KutuIcerik[] = shuffledQuestions.slice(0, questionCount).map(q => ({ type: 'soru', data: q }));
+        const questionCount = isMultiplayer ? Math.min(SORU_SAYISI, questions.length) : questions.length;
+        
+        const sorular: KutuIcerik[] = questions.slice(0, questionCount).map(q => ({ type: 'soru', data: q }));
         
         let icerikHavuzu: KutuIcerik[] = [...sorular];
         if (isMultiplayer) {
@@ -197,24 +196,25 @@ function KutuAcGame() {
         setIsFinished(false);
         setWinner(null);
         setGameState('playing');
-    }, [soruBankasi, GRUPLAR, isMultiplayer, ozelKutular]);
+    }, [GRUPLAR, isMultiplayer, ozelKutular]);
 
 
     const fetchQuestions = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         const tc = parseInt(searchParams.get('teamCount') || '1', 10);
-        setTakimSayisi(tc > 1 ? tc : 1);
+        setTakimSayisi(tc);
 
         const params = {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
-            questionCount: tc > 1 ? KUTU_SAYISI : undefined,
+            questionCount: KUTU_SAYISI,
         };
         const result = await getKutuAcQuestionsAction(params);
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Bu konu için soru bulunamadı.");
+            setGameState('error');
         } else {
             setSoruBankasi(result.questions as Question[]);
             oyunuBaslat(result.questions as Question[]);
@@ -226,7 +226,15 @@ function KutuAcGame() {
         fetchQuestions();
     }, [fetchQuestions]);
     
-    const handleEndGame = useCallback(() => {
+    useEffect(() => {
+        if (acilanKutular.size >= KUTU_SAYISI && isMultiplayer) {
+            handleEndGame();
+        } else if (!isMultiplayer && acilanKutular.size >= soruBankasi.length && soruBankasi.length > 0) {
+            handleEndGame();
+        }
+    }, [acilanKutular, isMultiplayer, soruBankasi]);
+    
+    const handleEndGame = () => {
         const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
        if (isMultiplayer) {
            if (sortedScores.length > 0 && (sortedScores.length === 1 || sortedScores[0][1] > sortedScores[1][1])) {
@@ -236,13 +244,7 @@ function KutuAcGame() {
            }
        }
        setIsFinished(true);
-   }, [isMultiplayer, puanlar]);
-
-    useEffect(() => {
-        if (kutuIcerikleri.length > 0 && acilanKutular.size >= kutuIcerikleri.length && !isFinished) {
-            handleEndGame();
-        }
-    }, [acilanKutular, kutuIcerikleri.length, isFinished, handleEndGame]);
+   };
 
     const handleRestart = () => {
         oyunuBaslat(soruBankasi);
