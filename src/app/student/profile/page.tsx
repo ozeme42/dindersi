@@ -28,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow'; 
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -314,9 +314,29 @@ function ProfilePage() {
                         <p className="text-slate-500 text-sm dark:text-slate-400">Hesap bilgilerinizi ve başarılarınızı yönetin.</p>
                     </div>
                  </div>
-                 <Button asChild variant="outline" className="hidden md:flex">
-                     <Link href="/student">Panele Dön</Link>
-                 </Button>
+                 <div className="flex items-center gap-4">
+                     <Button asChild variant="outline" className="hidden md:flex">
+                         <Link href="/student">Panele Dön</Link>
+                     </Button>
+                     <AlertDialog>
+                         <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm" className="hidden md:flex" disabled={isLoggingOut}>
+                                {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <LogOut className="mr-2 h-4 w-4"/>}
+                                Oturumu Kapat
+                            </Button>
+                         </AlertDialogTrigger>
+                         <AlertDialogContent>
+                             <AlertDialogHeader>
+                                 <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
+                                 <AlertDialogDescription>Oturumunuzu kapatmak istediğinize emin misiniz?</AlertDialogDescription>
+                             </AlertDialogHeader>
+                             <AlertDialogFooter>
+                                 <AlertDialogCancel>İptal</AlertDialogCancel>
+                                 <AlertDialogAction onClick={handleLogout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Çıkış Yap</AlertDialogAction>
+                             </AlertDialogFooter>
+                         </AlertDialogContent>
+                     </AlertDialog>
+                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -357,7 +377,6 @@ function ProfilePage() {
                                                 <GraduationCap className="h-3.5 w-3.5"/> {user.class || 'Sınıf Belirtilmemiş'}
                                              </Badge>
                                              <Badge variant="outline" className="flex items-center gap-1 border-primary/20 text-primary bg-primary/5 dark:bg-indigo-900/30 dark:border-indigo-500/50 dark:text-indigo-400">
-                                                {/* <Star className="h-3.5 w-3.5 fill-primary text-primary dark:fill-indigo-400 dark:text-indigo-400"/> */}
                                                 {(user.score || 0).toLocaleString()} Puan
                                              </Badge>
                                         </div>
@@ -370,22 +389,14 @@ function ProfilePage() {
                      {/* Hızlı Erişim ve İşlemler */}
                      <Card className="shadow-lg dark:bg-slate-800 dark:border-slate-700">
                         <CardHeader className="pb-3">
-                            <CardTitle className="text-lg">Hızlı Erişim</CardTitle>
+                            <CardTitle className="text-lg">Hesap İşlemleri</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                            <Button asChild variant="outline" className="w-full justify-start">
-                                <Link href="/student/tekrar-et">
-                                    <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
-                                </Link>
-                            </Button>
                             <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
-                        </CardContent>
-                        <CardFooter className="pt-4 border-t dark:border-slate-700">
-                            <AlertDialog>
+                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="destructive" size="sm" className="w-full" disabled={isLoggingOut}>
-                                        {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <LogOut className="mr-2 h-4 w-4"/>}
-                                        Oturumu Kapat
+                                    <Button variant="destructive-outline" className="w-full justify-start" disabled={isLoggingOut}>
+                                        <LogOut className="mr-2 h-4 w-4"/> Oturumu Kapat
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
@@ -399,7 +410,7 @@ function ProfilePage() {
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
-                        </CardFooter>
+                        </CardContent>
                      </Card>
                 </div>
 
@@ -418,14 +429,14 @@ function ProfilePage() {
                         <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
                              <CardContent className="p-4 flex flex-col items-center text-center">
                                 <Award className="h-7 w-7 text-orange-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{(user as any).classRank || '-'}</div> 
+                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{user.classRank || '-'}</div> 
                                 <div className="text-sm text-muted-foreground font-medium">Sınıf Sıralaması</div>
                             </CardContent>
                         </Card>
                         <Card className="bg-white shadow-lg dark:bg-slate-800 dark:border-slate-700 min-w-[140px] flex-1">
                              <CardContent className="p-4 flex flex-col items-center text-center">
                                 <Crown className="h-7 w-7 text-yellow-500 mb-2 opacity-80" />
-                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{(user as any).generalRank || '-'}</div> 
+                                <div className="text-2xl font-bold text-slate-900 dark:text-white">#{user.generalRank || '-'}</div> 
                                 <div className="text-sm text-muted-foreground font-medium">Genel Sıralama</div>
                             </CardContent>
                         </Card>
@@ -474,6 +485,13 @@ function ProfilePage() {
                                 </div>
                             )}
                         </CardContent>
+                         <CardFooter className="flex justify-center gap-4 bg-muted/50 p-4 border-t">
+                            <Button asChild variant="outline">
+                                <Link href="/student/tekrar-et">
+                                     <BookOpen className="mr-2 h-4 w-4"/> Yanlışlarımı Tekrar Et
+                                </Link>
+                            </Button>
+                        </CardFooter>
                     </Card>
 
                 </div>
