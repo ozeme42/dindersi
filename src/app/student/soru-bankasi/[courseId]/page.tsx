@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -453,11 +454,11 @@ function QuestionBankCoursePageComponent() {
             totalTests += easyTests + mediumTests + hardTests;
 
             if (progress) {
-                const allTestResults = [
+                const allTestResults: TestResult[] = [
                     ...Object.values(progress.easy || {}),
                     ...Object.values(progress.medium || {}),
                     ...Object.values(progress.hard || {})
-                ] as TestResult[];
+                ];
                 
                 completedTests += allTestResults.length;
                 passedTests += allTestResults.filter(res => res.status === 'passed').length;
