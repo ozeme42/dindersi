@@ -52,12 +52,12 @@ function KutuAcGame() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     
-    const isMultiplayer = useMemo(() => teamCount > 1, [teamCount]);
+    const isMultiplayer = useMemo(() => takimSayisi > 1, [takimSayisi]);
 
     const GRUPLAR = useMemo(() => {
         if (!isMultiplayer) return ['Tek Kişi'];
-        return ['A', 'B', 'C', 'D'].slice(0, teamCount);
-    }, [isMultiplayer, teamCount]);
+        return ['A', 'B', 'C', 'D'].slice(0, takimSayisi);
+    }, [isMultiplayer, takimSayisi]);
     
     const backUrl = '/teacher/smartboard/kutu-ac';
 
@@ -146,26 +146,26 @@ function KutuAcGame() {
                 siraDegistir(false);
             }, 50);
         } else {
-             if(isCorrect) setScore(s => s + scoreChange);
+             if(isCorrect) setPuanlar(prev => ({ ...prev, 'Tek Kişi': (prev['Tek Kişi'] || 0) + scoreChange }));
              setIsProcessing(false);
         }
     }, [siraIndeksi, GRUPLAR, siraDegistir, isMultiplayer]);
 
     const kutucukSecildi = useCallback((kutucukNo: number) => {
-        if (isProcessing || openedBoxes.has(kutucukNo + 1)) return;
+        if (isProcessing || acilanKutular.has(kutucukNo + 1)) return;
         
         const icerik = kutuIcerikleri[kutucukNo];
         if (!icerik) return;
 
         setIsProcessing(true);
-        setOpenedBoxes(prev => new Set(prev).add(kutucukNo + 1));
+        setAcilanKutular(prev => new Set(prev).add(kutucukNo + 1));
 
         if (icerik.type === 'soru') {
             setOpenedQuestion({ number: kutucukNo + 1, question: icerik.data });
         } else {
             ozelKutuEtkisiUygula(icerik);
         }
-    }, [isProcessing, openedBoxes, kutuIcerikleri, ozelKutuEtkisiUygula]);
+    }, [isProcessing, acilanKutular, kutuIcerikleri, ozelKutuEtkisiUygula]);
     
      const oyunuBaslat = useCallback((soruBankasi: Question[]) => {
         if (soruBankasi.length === 0) {
@@ -192,19 +192,19 @@ function KutuAcGame() {
         
         setKutuIcerikleri(icerikHavuzu.sort(() => Math.random() - 0.5));
         setSiraIndeksi(0);
-        setOpenedBoxes(new Set());
+        setAcilanKutular(new Set());
         setCezaliGruplar(new Set());
         setIsFinished(false);
         setWinner(null);
         setGameState('playing');
-    }, [GRUPLAR, isMultiplayer, ozelKutular]);
+    }, [soruBankasi, GRUPLAR, isMultiplayer, ozelKutular]);
 
 
     const fetchQuestions = useCallback(async () => {
         setIsLoading(true);
         setError(null);
         const tc = parseInt(searchParams.get('teamCount') || '1', 10);
-        setTeamCount(tc > 1 ? tc : 1);
+        setTakimSayisi(tc > 1 ? tc : 1);
 
         const params = {
             courseId: searchParams.get('courseId') || undefined,
@@ -226,7 +226,7 @@ function KutuAcGame() {
         fetchQuestions();
     }, [fetchQuestions]);
     
-     const handleEndGame = useCallback(() => {
+    const handleEndGame = useCallback(() => {
         const sortedScores = Object.entries(puanlar).sort(([, a], [, b]) => b - a);
        if (isMultiplayer) {
            if (sortedScores.length > 0 && (sortedScores.length === 1 || sortedScores[0][1] > sortedScores[1][1])) {
@@ -239,13 +239,13 @@ function KutuAcGame() {
    }, [isMultiplayer, puanlar]);
 
     useEffect(() => {
-        if (openedBoxes.size >= kutuIcerikleri.length && kutuIcerikleri.length > 0 && !isFinished) {
+        if (kutuIcerikleri.length > 0 && acilanKutular.size >= kutuIcerikleri.length && !isFinished) {
             handleEndGame();
         }
-    }, [openedBoxes, kutuIcerikleri.length, isFinished, handleEndGame]);
+    }, [acilanKutular, kutuIcerikleri.length, isFinished, handleEndGame]);
 
     const handleRestart = () => {
-        oyunuBaslat(questions);
+        oyunuBaslat(soruBankasi);
     };
 
     if (isLoading) {
@@ -279,7 +279,7 @@ function KutuAcGame() {
                                 <p className="text-2xl">Kazanan: <span className="font-bold text-primary">{winner} Grubu</span></p>
                             ) : <p className="text-2xl">Berabere!</p>
                         ) : (
-                             <p className="text-xl">Toplam Puanın: <span className="font-bold text-primary">{score}</span></p>
+                             <p className="text-xl">Toplam Puanın: <span className="font-bold text-primary">{puanlar['Tek Kişi'] || 0}</span></p>
                         )}
                         {isMultiplayer && (
                              <div className="mt-4 space-y-2">
@@ -291,6 +291,7 @@ function KutuAcGame() {
                                 ))}
                             </div>
                         )}
+                         {isSubmitting && <div className="mt-4 flex items-center justify-center text-muted-foreground"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Puan kaydediliyor...</div>}
                     </CardContent>
                     <CardFooter className="flex-col sm:flex-row justify-center gap-4">
                         <Button size="lg" onClick={handleRestart}><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
@@ -322,7 +323,7 @@ function KutuAcGame() {
             </div>
 
             {isMultiplayer && (
-                 <div id="puan-durumu-alani" className={cn("grid gap-2 mb-2 shrink-0", `grid-cols-2 md:grid-cols-${teamCount}`)}>
+                 <div id="puan-durumu-alani" className={cn("grid gap-2 mb-2 shrink-0", `grid-cols-2 md:grid-cols-${takimSayisi}`)}>
                     {GRUPLAR.map((grup, index) => {
                         const renkler = ['#3182ce', '#e53e3e', '#38a169', '#d69e2e'];
                         const isActive = GRUPLAR[siraIndeksi] === grup && !cezaliGruplar.has(grup);
@@ -345,7 +346,7 @@ function KutuAcGame() {
                 <div className={cn("grid gap-1 p-2", isMultiplayer ? "grid-cols-6 grid-rows-5" : "grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8")}>
                     {kutuIcerikleri.map((_, i) => {
                         const kutucukNo = i + 1;
-                        const isOpened = openedBoxes.has(kutucukNo);
+                        const isOpened = acilanKutular.has(kutucukNo);
                         return (
                             <div key={kutucukNo}
                                 id={`kutucuk-${kutucukNo}`}
