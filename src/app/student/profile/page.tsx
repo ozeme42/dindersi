@@ -28,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow'; 
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -534,3 +534,5 @@ export default function ProfilePageSuspense() {
         </Suspense>
     )
 }
+
+    
