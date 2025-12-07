@@ -3,10 +3,10 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/auth-context';
-import { SHOP_ITEMS } from '@/lib/shop-config.tsx';
+import { SHOP_ITEMS } from '@/lib/shop-config';
 import type { ShopItem, UserProfile } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Loader2, ShoppingCart, Gem, CheckCircle2, Package, Sparkles, Frame, Award, ArrowLeft, Shirt, Crown, Palette } from 'lucide-react';
+import { Loader2, ShoppingCart, Gem, CheckCircle2, Package, Frame, Award, ArrowLeft, XCircle } from 'lucide-react';
 import { purchaseItem, equipItem } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { UserAvatar } from '@/components/user-avatar';
@@ -19,7 +19,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
     item: ShopItem, 
     user: UserProfile, 
     onPurchase: (itemId: string, price: number) => Promise<void>,
-    onEquip: (itemType: 'avatarFrame' | 'avatarBadge', assetValue: string | null) => Promise<void> 
+    onEquip: (item: ShopItem, assetValue: string | null) => Promise<void> 
 }) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isEquipping, setIsEquipping] = useState(false);
@@ -39,36 +39,35 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
   
   const handleEquip = async () => {
       setIsEquipping(true);
-      const valueToEquip = item.type === 'avatarFrame' ? item.assetUrl || null : item.id;
-      await onEquip(item.type, valueToEquip);
+      const valueToUse = item.type === 'avatarFrame' ? item.assetUrl : item.id;
+      await onEquip(item, valueToUse || item.id);
       setIsEquipping(false);
   }
 
   const BadgeIcon = item.component;
 
   return (
-    <div className="group relative bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-900/20">
+    <div className="group relative bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-900/20 flex flex-col h-full">
       
       {/* Parlama Efekti */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
       
       {/* İkon / Görsel Alanı */}
-      <div className="relative h-32 bg-slate-950/50 flex items-center justify-center border-b border-white/5">
-         {/* Arka Işık */}
+      <div className="relative h-32 bg-slate-950/50 flex items-center justify-center border-b border-white/5 shrink-0">
          <div className="absolute w-20 h-20 bg-cyan-500/20 rounded-full blur-2xl group-hover:bg-cyan-400/30 transition-colors" />
          
          <div className="relative z-10">
             {item.type === 'avatarFrame' ? (
                 <div className="w-20 h-20 rounded-full bg-slate-800 border-4 border-slate-700 relative overflow-hidden shadow-lg">
                      <div className="absolute inset-0" style={{ background: item.assetUrl }} />
-                     <UserAvatar user={{...user, equippedFrameUrl: undefined}} className="w-full h-full opacity-50 grayscale" />
+                     {/* Frame önizlemesi */}
+                     <div className="w-full h-full bg-slate-800/50" /> 
                 </div>
             ) : (
-                BadgeIcon && <BadgeIcon className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+                BadgeIcon ? <BadgeIcon className="w-16 h-16 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" /> : <Award className="w-16 h-16 text-white" />
             )}
          </div>
 
-         {/* Fiyat Etiketi (Sağ Üst) */}
          {!alreadyOwned && (
              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur border border-yellow-500/30 px-2 py-1 rounded-lg flex items-center gap-1.5 shadow-lg">
                  <Gem className="w-3.5 h-3.5 text-yellow-400" />
@@ -78,10 +77,10 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
       </div>
 
       {/* İçerik */}
-      <div className="p-5 flex flex-col h-[calc(100%-8rem)]">
+      <div className="p-5 flex flex-col flex-grow">
         <div className="flex-grow">
-            <h3 className="font-bold text-white text-lg mb-1 group-hover:text-cyan-300 transition-colors">{item.name}</h3>
-            <p className="text-sm text-slate-400 leading-snug line-clamp-2">{item.description}</p>
+            <h3 className="font-bold text-white text-lg mb-1 group-hover:text-cyan-300 transition-colors line-clamp-1" title={item.name}>{item.name}</h3>
+            <p className="text-sm text-slate-400 leading-snug line-clamp-2 min-h-[2.5rem]">{item.description}</p>
         </div>
 
         <div className="mt-4 pt-4 border-t border-white/5">
@@ -92,7 +91,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
                     className={cn(
                         "w-full h-10 font-bold rounded-xl transition-all",
                         isEquipped 
-                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500/30 cursor-default"
+                            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 hover:bg-emerald-500/30 cursor-default opacity-100"
                             : "bg-slate-800 text-white hover:bg-cyan-600 hover:text-white"
                     )}
                 >
@@ -121,43 +120,49 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
 }
 
 // --- VARSAYILAN (ÇIKAR) KARTI ---
-const UnequipCard = ({ type, onEquip, user }: { type: 'avatarFrame' | 'avatarBadge', onEquip: (itemType: 'avatarFrame' | 'avatarBadge', assetUrl: string | null) => Promise<void>, user: UserProfile }) => {
+const UnequipCard = ({ type, onUnequip, user }: { 
+    type: 'avatarFrame' | 'avatarBadge', 
+    onUnequip: (type: 'avatarFrame' | 'avatarBadge') => Promise<void>, 
+    user: UserProfile 
+}) => {
     const isFrame = type === 'avatarFrame';
     const isNothingEquipped = isFrame ? !user.equippedFrameUrl : !user.equippedBadgeId;
     const [isEquipping, setIsEquipping] = useState(false);
 
     const handleUnequip = async () => {
         setIsEquipping(true);
-        await onEquip(type, null);
+        await onUnequip(type);
         setIsEquipping(false);
     }
 
     return (
         <div className={cn(
-            "group relative bg-slate-900/40 border border-dashed border-slate-700 rounded-3xl overflow-hidden hover:border-slate-500 transition-all duration-300 flex flex-col",
+            "group relative bg-slate-900/40 border border-dashed border-slate-700 rounded-3xl overflow-hidden hover:border-slate-500 transition-all duration-300 flex flex-col h-full",
             isNothingEquipped && "border-emerald-500/50 bg-emerald-500/5"
         )}>
-            <div className="relative h-32 flex items-center justify-center border-b border-white/5 bg-slate-950/30">
+            <div className="relative h-32 flex items-center justify-center border-b border-white/5 bg-slate-950/30 shrink-0">
                 <div className="w-20 h-20 rounded-full border-2 border-dashed border-slate-600 flex items-center justify-center">
                     {isFrame ? <Frame className="w-8 h-8 text-slate-600" /> : <Award className="w-8 h-8 text-slate-600" />}
                 </div>
             </div>
             
-            <div className="p-5 flex flex-col h-[calc(100%-8rem)] text-center">
-                <h3 className="font-bold text-slate-300 text-lg mb-1">Varsayılan</h3>
-                <p className="text-sm text-slate-500 mb-auto">{isFrame ? 'Çerçeveyi Kaldır' : 'Rozeti Kaldır'}</p>
+            <div className="p-5 flex flex-col flex-grow text-center">
+                <div className="flex-grow">
+                    <h3 className="font-bold text-slate-300 text-lg mb-1">Varsayılan</h3>
+                    <p className="text-sm text-slate-500">{isFrame ? 'Çerçeveyi Kaldır' : 'Rozeti Kaldır'}</p>
+                </div>
                 
-                <div className="mt-4">
+                <div className="mt-4 pt-4 border-t border-white/5">
                      <Button 
                         onClick={handleUnequip} 
                         disabled={isEquipping || isNothingEquipped}
                         variant="secondary"
                         className={cn(
                             "w-full h-10 font-bold rounded-xl",
-                            isNothingEquipped ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                            isNothingEquipped ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 cursor-default opacity-100" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
                         )}
                     >
-                        {isEquipping ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : isNothingEquipped ? <CheckCircle2 className="mr-2 h-4 w-4"/> : "Çıkar"}
+                        {isEquipping ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : isNothingEquipped ? <CheckCircle2 className="mr-2 h-4 w-4"/> : <XCircle className="mr-2 h-4 w-4" />}
                         {isNothingEquipped ? 'Varsayılan' : 'Çıkar'}
                     </Button>
                 </div>
@@ -168,9 +173,10 @@ const UnequipCard = ({ type, onEquip, user }: { type: 'avatarFrame' | 'avatarBad
 
 
 export default function ShopPage() {
-    const { user, loading } = useAuth();
+    const { user, loading, force_refresh_user } = useAuth() as any;
     const { toast } = useToast();
 
+    // Satın Alma
     const handlePurchase = async (itemId: string, price: number) => {
         if (!user) {
             toast({ title: "Hata", description: "Satın alım için giriş yapmalısınız.", variant: "destructive" });
@@ -179,16 +185,31 @@ export default function ShopPage() {
         const result = await purchaseItem(user.uid, itemId, price);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Ürün başarıyla satın alındı." });
+            force_refresh_user();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     };
     
-    const handleEquip = async (itemType: 'avatarFrame' | 'avatarBadge', assetValue: string | null) => {
+    // Kuşanma
+    const handleEquip = async (item: ShopItem, assetValue: string | null) => {
         if (!user) return;
-        const result = await equipItem(user.uid, itemType, assetValue);
+        const result = await equipItem(user.uid, item.type, assetValue);
         if (result.success) {
-            toast({ title: "Başarılı!", description: "Yeni seçimin kuşanıldı." });
+            toast({ title: "Başarılı!", description: "Seçiminiz güncellendi." });
+            force_refresh_user();
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+    }
+    
+    // Çıkarma
+    const handleUnequip = async (type: 'avatarFrame' | 'avatarBadge') => {
+        if (!user) return;
+        const result = await equipItem(user.uid, type, null);
+         if (result.success) {
+            toast({ title: "Başarılı!", description: "Eşya çıkarıldı." });
+            force_refresh_user();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -209,10 +230,8 @@ export default function ShopPage() {
 
             <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
                 
-                {/* Üst Kısım (Header & Profil Özeti) */}
+                {/* Üst Kısım */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-                    
-                    {/* Başlık ve Geri Dön */}
                     <div className="space-y-2">
                         <Button asChild variant="ghost" size="sm" className="pl-0 text-slate-400 hover:text-white hover:bg-transparent group">
                             <Link href="/student" className="flex items-center gap-2">
@@ -229,7 +248,6 @@ export default function ShopPage() {
                         </p>
                     </div>
 
-                    {/* Profil Kartı (Kasa) */}
                     <div className="bg-slate-900/80 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center gap-4 shadow-xl">
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-violet-500 rounded-full blur opacity-50" />
@@ -267,18 +285,38 @@ export default function ShopPage() {
 
                     <TabsContent value="frames" className="animate-in fade-in slide-in-from-bottom-4 duration-500 outline-none">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            <UnequipCard type="avatarFrame" onEquip={handleEquip} user={user} />
+                            <UnequipCard 
+                                type="avatarFrame" 
+                                onUnequip={handleUnequip}
+                                user={user} 
+                            />
                             {SHOP_ITEMS.filter(item => item.type === 'avatarFrame').map(item => (
-                                <ItemCard key={item.id} item={item} user={user} onPurchase={handlePurchase} onEquip={handleEquip} />
+                                <ItemCard 
+                                    key={item.id} 
+                                    item={item} 
+                                    user={user} 
+                                    onPurchase={handlePurchase} 
+                                    onEquip={handleEquip}
+                                />
                             ))}
                         </div>
                     </TabsContent>
                     
                     <TabsContent value="badges" className="animate-in fade-in slide-in-from-bottom-4 duration-500 outline-none">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                             <UnequipCard type="avatarBadge" onEquip={handleEquip} user={user} />
+                             <UnequipCard 
+                                type="avatarBadge" 
+                                onUnequip={handleUnequip}
+                                user={user} 
+                            />
                             {SHOP_ITEMS.filter(item => item.type === 'avatarBadge').map(item => (
-                                <ItemCard key={item.id} item={item} user={user} onPurchase={handlePurchase} onEquip={handleEquip} />
+                                <ItemCard 
+                                    key={item.id} 
+                                    item={item} 
+                                    user={user} 
+                                    onPurchase={handlePurchase} 
+                                    onEquip={handleEquip}
+                                />
                             ))}
                         </div>
                      </TabsContent>

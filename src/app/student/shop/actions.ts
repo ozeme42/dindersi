@@ -67,9 +67,8 @@ export async function equipItem(userId: string, itemType: ShopItem['type'], asse
     }
     
     await updateDoc(userRef, {
-      [fieldToUpdate]: assetValue, // assetValue null ise kuşanılmış olanı çıkarır
+      [fieldToUpdate]: assetValue,
     });
-
     return { success: true };
   } catch (error: any) {
     console.error("Error equipping item:", error);
