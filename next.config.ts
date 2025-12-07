@@ -4,9 +4,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {
@@ -23,7 +20,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // The experimental block is removed from here
 };
 
 export default nextConfig;

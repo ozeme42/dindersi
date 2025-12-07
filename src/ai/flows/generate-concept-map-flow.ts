@@ -8,7 +8,7 @@
  */
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { googleAI } from '@genkit-ai/google-genai';
+import { googleAI } from '@genkit-ai/googleai';
 
 const ConceptMapNodeSchema = z.object({
   id: z.string().describe('A unique identifier for the node (e.g., "concept_1").'),

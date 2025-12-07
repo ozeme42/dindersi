@@ -1,23 +1,20 @@
-
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { getKutuAcQuestionsAction } from '@/app/student/kutu-ac/actions';
-import type { Question } from "@/lib/types";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, Package, PartyPopper, Repeat, Home, CheckCheck } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
-import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { useAuth } from "@/context/auth-context";
-import { QuestionDialog } from "@/components/question-dialog";
-
-const KUTU_SAYISI = 30;
-const SORU_SAYISI = 15;
+import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { getKutuAcQuestionsAction } from '@/app/oyunlar/kutu-ac/actions';
+import type { Question } from '@/lib/types';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Loader2, ArrowLeft, Package, PartyPopper, Repeat, Home } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { useAuth } from '@/context/auth-context';
+import { QuestionDialog } from '@/components/question-dialog';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
     const newArray = [...array];
@@ -39,28 +36,15 @@ function KutuAcGame() {
     
     const [openedBoxes, setOpenedBoxes] = useState<Set<number>>(new Set());
     const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question } | null>(null);
+    const [score, setScore] = useState(0);
+
     const [isFinished, setIsFinished] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const [takimSayisi, setTakimSayisi] = useState(1);
-    const [puanlar, setPuanlar] = useState<Record<string, number>>({});
-    const [siraIndeksi, setSiraIndeksi] = useState(0);
-
-    const isMultiplayer = useMemo(() => takimSayisi > 1, [takimSayisi]);
-    const GRUPLAR = useMemo(() => {
-        if (!isMultiplayer) return ['Tek Kişi'];
-        return ['A', 'B', 'C', 'D'].slice(0, takimSayisi);
-    }, [isMultiplayer, takimSayisi]);
-
-    const activityCenterLink = useMemo(() => {
-        return '/teacher/smartboard';
-    }, []);
-
-    useEffect(() => {
-        const teamCountParam = searchParams.get('teamCount');
-        const teamCount = parseInt(teamCountParam || '1', 10);
-        setTakimSayisi(teamCount > 0 ? teamCount : 1);
-    }, [searchParams]);
+    const backUrl = '/oyunlar/kutu-ac';
+    const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -87,38 +71,30 @@ function KutuAcGame() {
 
     useEffect(() => {
         fetchQuestions();
-        const initialPuanlar: Record<string, number> = {};
-        GRUPLAR.forEach(grup => { initialPuanlar[grup] = 0; });
-        setPuanlar(initialPuanlar);
-    }, [fetchQuestions, GRUPLAR]);
+    }, [fetchQuestions]);
 
     const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
         setOpenedBoxes(prev => new Set(prev).add(questionNumber));
-        
-        const aktifGrup = GRUPLAR[siraIndeksi];
-        if (isCorrect) {
-            setPuanlar(prev => ({...prev, [aktifGrup]: Math.max(0, (prev[aktifGrup] || 0) + scoreChange)}));
+        if(isCorrect) {
+            setScore(s => s + scoreChange);
         }
-
-        if (openedBoxes.size + 1 >= Math.min(KUTU_SAYISI, questions.length)) {
+        if (openedBoxes.size + 1 >= questions.length) {
             setIsFinished(true);
         }
-
-        // Move to the next team
-        if(isMultiplayer) {
-            setSiraIndeksi((siraIndeksi + 1) % GRUPLAR.length);
-        }
     };
-    
+
+    const handleSaveAndExit = async () => {
+        // Teachers do not save scores
+        router.push('/teacher/smartboard');
+    };
+
     const handleRestart = () => {
         setIsFinished(false);
+        setScore(0);
         setOpenedBoxes(new Set());
         setOpenedQuestion(null);
-        const initialPuanlar: Record<string, number> = {};
-        GRUPLAR.forEach(grup => { initialPuanlar[grup] = 0; });
-        setPuanlar(initialPuanlar);
-        setSiraIndeksi(0);
+        setIsScoreSaved(false);
         fetchQuestions();
     };
 
@@ -129,74 +105,40 @@ function KutuAcGame() {
     if (error) {
         return (
             <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4")}>
-                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Link></Button></div></Alert>
+                <Alert variant="destructive" className="max-w-lg"><AlertTitle>Hata!</AlertTitle><AlertDescription>{error}</AlertDescription><div className="mt-4"><Button asChild variant="outline"><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div></Alert>
             </div>
         );
     }
     
     if (isFinished) {
         return (
-             <div className={cn("w-full h-full min-h-screen flex items-center justify-center p-4")}>
-                <Card className={cn("w-full text-center", isFullscreen ? "h-screen rounded-none border-none flex flex-col justify-center" : "max-w-md")}>
-                    <CardHeader>
-                        <div className="mx-auto bg-amber-100 rounded-full p-3 w-fit"><PartyPopper className={cn("h-10 w-10 text-amber-500", isFullscreen && "h-16 w-16")}/></div>
-                        <CardTitle className={cn("font-headline text-2xl md:text-3xl mt-4", isFullscreen && "text-5xl")}>Tebrikler!</CardTitle>
-                        <CardDescription>Tüm kutuları açtın.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                         {isMultiplayer ? (
-                            <div className="space-y-2">
-                                <h3 className="font-semibold">Skor Tablosu</h3>
-                                {Object.entries(puanlar).sort(([,a], [,b]) => b - a).map(([team, score]) => (
-                                    <div key={team} className="flex justify-between p-2 bg-muted rounded-md">
-                                        <span>{team} Takımı</span>
-                                        <span className="font-bold">{score} Puan</span>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className={cn("text-lg md:text-xl", isFullscreen && "text-2xl")}>Toplam Puanın: <span className="font-bold text-primary">{puanlar['Tek Kişi'] || 0}</span></p>
-                        )}
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2 pt-6">
-                        <Button onClick={handleRestart} variant="secondary" className="w-full">
-                           <Repeat className="mr-2 h-4 w-4" /> Tekrar Oyna
-                        </Button>
-                         <Button asChild className="w-full" variant="outline">
-                           <Link href={activityCenterLink}><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
+            <GameEndScreen
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSubmitting}
+                scoreSaved={true} // For teacher mode, assume it's "saved" to just exit
+                onRestart={handleRestart}
+                backUrl={'/teacher/smartboard'}
+            />
         )
     }
 
     const timerDuration = openedQuestion?.question.type === 'Doğru/Yanlış' ? 10 : 20;
 
     return (
-        <div className={cn("w-full h-full min-h-screen flex flex-col items-center justify-center p-2", isFullscreen ? "" : "md:p-8")}>
+        <div className={cn("w-full h-full min-h-screen flex flex-col items-center justify-center pb-24 md:pb-8", isFullscreen ? "" : "md:p-8")}>
             <div className="w-full max-w-5xl mx-auto">
-                <div className="flex justify-between items-center mb-2">
-                    <h1 className="text-xl md:text-3xl font-bold font-headline flex items-center gap-2"><Package/> Kutu Aç</h1>
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-3xl font-bold font-headline flex items-center gap-2"><Package/> Kutu Aç</h1>
                     <div className="flex items-center gap-2">
-                        <Button asChild variant="outline" size="sm"><Link href={activityCenterLink}><ArrowLeft className="mr-2 h-4 w-4"/>Çık</Link></Button>
+                         <span className="font-bold text-xl text-primary">Puan: {score}</span>
+                        <Button variant="destructive" size="sm" onClick={() => setIsFinished(true)}>Bitir</Button>
                         <FullscreenToggle />
                     </div>
                 </div>
-                 <div className={cn("grid gap-2 mb-2", `grid-cols-2 md:grid-cols-${takimSayisi}`)}>
-                    {GRUPLAR.map((grup, index) => {
-                        const renkler = ['#3182ce', '#e53e3e', '#38a169', '#d69e2e'];
-                        const isActive = GRUPLAR[siraIndeksi] === grup;
-                        return (
-                            <div key={grup} className={cn("text-center p-1 rounded-lg border-b-4", isActive && 'ring-2 ring-primary')}>
-                                <span className="text-sm sm:text-base font-bold text-primary">{grup}{isMultiplayer ? ' TAKIMI' : ''}</span>
-                                <span className="text-2xl sm:text-3xl font-extrabold block text-foreground">{puanlar[grup] || 0}</span>
-                            </div>
-                        );
-                    })}
-                </div>
-                 <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 md:gap-4">
-                    {Array.from({ length: Math.min(KUTU_SAYISI, questions.length) }).map((_, i) => {
+                <div className="text-sm text-muted-foreground mb-2">{openedBoxes.size} / {questions.length} kutu açıldı.</div>
+                 <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-4">
+                    {questions.map((q, i) => {
                         const questionNumber = i + 1;
                         const isOpened = openedBoxes.has(questionNumber);
                         return (
@@ -207,17 +149,12 @@ function KutuAcGame() {
                                     "bg-gradient-to-br from-indigo-500 to-purple-600",
                                     isOpened ? "opacity-20 cursor-not-allowed" : "hover:scale-105 hover:shadow-2xl"
                                 )}
-                                onClick={() => !isOpened && questions[i] && setOpenedQuestion({ number: questionNumber, question: questions[i] })}
+                                onClick={() => !isOpened && setOpenedQuestion({ number: questionNumber, question: q })}
                             >
-                                {isOpened ? <CheckCheck className="h-8 w-8 text-green-400" /> : questionNumber}
+                                {questionNumber}
                             </div>
                         )
                     })}
-                </div>
-                <div className="mt-6 text-center">
-                    <Button onClick={() => setIsFinished(true)} variant="secondary">
-                        <PartyPopper className="mr-2 h-4 w-4" /> Oyunu Bitir
-                    </Button>
                 </div>
             </div>
              {openedQuestion && (
@@ -228,14 +165,15 @@ function KutuAcGame() {
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={timerDuration}
-                    pointsConfig={{ 'Kolay': 10, 'Orta': 20, 'Zor': 30 }}
+                    pointsConfig={{ default: { points: 10 }}}
+                    showCorrectAnswerOnWrong={true}
                 />
             )}
         </div>
     );
 }
 
-export default function SmartboardKutuAcOyunPage() {
+export default function KutuAcOyunPage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
             <KutuAcGame />

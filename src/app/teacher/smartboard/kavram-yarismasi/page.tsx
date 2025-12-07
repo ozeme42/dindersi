@@ -1,23 +1,26 @@
+'use server';
 
 import { Suspense } from 'react';
 import KavramYarismaOyunPageWrapper from './oyun/page';
-import { getConceptQuizAction, type ConceptQuizQuestion } from './actions';
+import { getConceptQuizAction, type ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions';
 
 export const dynamic = 'force-dynamic';
 
-// This is now a Server Component that fetches data and passes it to the client component wrapper.
-export default async function KavramYarismaOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
+export default async function SmartboardKavramYarismasiPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
   const params = {
-      courseId: typeof searchParams.courseId === 'string' ? searchParams.courseId : undefined,
-      unitId: typeof searchParams.unitId === 'string' ? searchParams.unitId : undefined,
-      topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
+    courseId: searchParams.courseId as string | undefined,
+    unitId: searchParams.unitId as string | undefined,
+    topicId: searchParams.topicId as string | undefined,
   };
 
-  const questionData = await getConceptQuizAction(params);
+  const { questions, error } = await getConceptQuizAction(params);
+  
+  const context = {
+    courseName: searchParams.courseName as string,
+    topicName: searchParams.topicName as string,
+  }
 
   return (
-    <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
-      <KavramYarismaOyunPageWrapper initialQuestions={questionData.concepts} initialError={questionData.error} />
-    </Suspense>
+    <KavramYarismaOyunPageWrapper questions={questions} error={error} context={context} />
   );
 }

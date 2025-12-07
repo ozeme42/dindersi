@@ -5,7 +5,7 @@
  */
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { googleAI } from '@genkit-ai/google-genai';
+import { googleAI } from '@genkit-ai/googleai';
 
 const AiActivityDataInputSchema = z.object({
   topicTitle: z.string().describe('The title of the topic to generate data for.'),
