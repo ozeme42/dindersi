@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils';
 import { SelectionGrid } from '@/components/selection-grid';
 import { useSearchParams } from 'next/navigation';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { ErrorReportDialog } from '@/components/error-report-dialog';
 
 
 const activityTypes = [
@@ -24,14 +23,11 @@ const activityTypes = [
   { href: '/oyunlar/kavram-avi', label: 'Kavram Avı', icon: Crosshair },
   { href: '/oyunlar/eslestirme', label: 'Eşleştirme', icon: Puzzle },
   { href: '/oyunlar/cumle-olusturma', label: 'Cümle Ustası', icon: Shuffle },
-  { href: '/oyunlar/olay-siralama', label: 'Olay Sıralama', icon: ArrowDownUp },
   { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca', icon: Skull },
   { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
-  { href: '/oyunlar/kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
   { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
   { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
   { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri', icon: Link2 },
-  { href: '/oyunlar/ben-kimim', label: 'Ben Kimim?', icon: BrainCircuit },
   { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu', icon: Pencil },
   { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi', icon: BookOpen },
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Puzzle },
@@ -44,7 +40,6 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
   const [selectedClassId, setSelectedClassId] = useState<string | null>(searchParams.get("classId") || null);
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(searchParams.get("courseId") || null);
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
-  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [infoDialogContent, setInfoDialogContent] = useState({ title: '', description: '' });
 
   const selectedClassData = useMemo(() => data.find(c => c.id === selectedClassId), [data, selectedClassId]);
@@ -85,14 +80,6 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
           title: '1. Sınıf Seçimi',
           description: "Etkinlik içeriğini filtrelemek için bir sınıf seçin."
       };
-  }
-  
-  const handleInfoClick = (activityLabel: string) => {
-    setInfoDialogContent({
-        title: `${activityLabel} İçin Konu Seçimi Gerekli`,
-        description: `Bu etkinlik, sorularını doğrudan belirli bir konudan aldığı için, oynamak üzere bir konu seçmeniz gerekmektedir. Lütfen bir üniteyi genişletip, ardından listeden belirli bir konuya tıklayarak etkinliği başlatın.`
-    });
-    setInfoDialogOpen(true);
   }
 
   const { title, description } = getHeader();
@@ -219,9 +206,6 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                  <CardDescription>{description}</CardDescription>
               </div>
               <div className='flex items-center gap-2'>
-                  <Button variant="outline" size="sm" onClick={() => setIsReportDialogOpen(true)}>
-                    Hata Bildir
-                  </Button>
                   {selectedClassId && (
                       <Button variant="outline" size="sm" onClick={handleBack}>
                           <ArrowLeft className="h-4 w-4 mr-2"/> Geri
@@ -248,7 +232,6 @@ export function ActivitiesClientPage({ data }: { data: EnrichedClass[] }) {
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-        <ErrorReportDialog isOpen={isReportDialogOpen} onOpenChange={setIsReportDialogOpen} />
     </div>
   );
 }

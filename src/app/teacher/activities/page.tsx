@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { ActivitiesClientPage } from './client-page';
 import { Loader2 } from 'lucide-react';
 import { getActivitiesPageData } from './actions';
