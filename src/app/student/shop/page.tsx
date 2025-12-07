@@ -20,7 +20,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
     item: ShopItem, 
     user: UserProfile, 
     onPurchase: (itemId: string, price: number) => Promise<void>,
-    onEquip: (item: ShopItem, assetValue: string | null) => Promise<void> 
+    onEquip: (item: ShopItem) => Promise<void> 
 }) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isEquipping, setIsEquipping] = useState(false);
@@ -40,8 +40,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
   
   const handleEquip = async () => {
       setIsEquipping(true);
-      const valueToUse = item.type === 'avatarFrame' ? item.assetUrl : item.id;
-      await onEquip(item, valueToUse || item.id);
+      await onEquip(item);
       setIsEquipping(false);
   }
 
@@ -111,7 +110,7 @@ function ItemCard({ item, user, onPurchase, onEquip }: {
                     )}
                 >
                     {isPurchasing ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <ShoppingCart className="mr-2 h-4 w-4" />}
-                    Satın Al
+                    {hasEnoughPoints ? 'Satın Al' : 'Yetersiz Puan'}
                 </Button>
             )}
         </div>
@@ -187,19 +186,20 @@ export default function ShopPage() {
         const result = await purchaseItem(user.uid, itemId, price);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Ürün başarıyla satın alındı." });
-            router.refresh();
+            // The onSnapshot listener in useAuth will handle the UI update.
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
     };
     
     // Kuşanma
-    const handleEquip = async (item: ShopItem, assetValue: string | null) => {
+    const handleEquip = async (item: ShopItem) => {
         if (!user) return;
-        const result = await equipItem(user.uid, item.type, assetValue);
+        
+        const assetValue = item.type === 'avatarFrame' ? item.assetUrl : item.id;
+        const result = await equipItem(user.uid, item.type, assetValue || null);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Seçiminiz güncellendi." });
-            router.refresh();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -211,7 +211,6 @@ export default function ShopPage() {
         const result = await equipItem(user.uid, type, null);
          if (result.success) {
             toast({ title: "Başarılı!", description: "Eşya çıkarıldı." });
-            router.refresh();
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
