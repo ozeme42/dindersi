@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -23,7 +24,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
-    AlertTriangle, Users, FolderOpen, ArrowRight, UserCheck, Filter // <-- FILTER EKLENDİ
+    AlertTriangle, Users, FolderOpen, ArrowRight, UserCheck, Filter, Trophy, BarChart3, TrendingUp 
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -31,11 +32,13 @@ import { useToast } from '@/hooks/use-toast';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
-import { createScale, getTeacherScales, deleteScale } from './actions';
+import { createScale, getTeacherScales, deleteScale, getBranchScaleScores, type BranchScore } from './actions';
+
 
 // Types and Utils
 import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { Progress } from '@/components/ui/progress';
 
 
 export const dynamic = 'force-dynamic';
@@ -130,6 +133,62 @@ function ErrorWithLink({ message }: { message: string }) {
     );
 }
 
+// --- ŞUBE BAŞARI SIRALAMASI KARTI ---
+function BranchLeaderboardCard({ branchScores, isLoading }: { branchScores: BranchScore[], isLoading: boolean }) {
+    
+    const getSuccessColor = (score: number) => {
+        if (score >= 85) return 'bg-emerald-500';
+        if (score >= 70) return 'bg-yellow-500';
+        if (score >= 50) return 'bg-orange-500';
+        return 'bg-red-500';
+    }
+
+    const rankIcon = (rank: number) => {
+        if (rank === 0) return <Trophy className="h-5 w-5 text-yellow-400" />;
+        if (rank === 1) return <Trophy className="h-5 w-5 text-slate-300" />;
+        if (rank === 2) return <Trophy className="h-5 w-5 text-amber-600" />;
+        return <span className="font-bold text-slate-400 w-6 text-center">{rank + 1}</span>
+    }
+
+    return (
+        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+            <CardHeader>
+                <CardTitle className="text-white flex items-center gap-3 text-xl">
+                    <div className="p-2 bg-purple-500/20 rounded-lg border border-purple-500/30">
+                        <BarChart3 className="h-5 w-5 text-purple-400" />
+                    </div>
+                    Şube Başarı Sıralaması
+                </CardTitle>
+                <CardDescription className="text-slate-400">Ünite bazlı kontrol listesi ortalamaları.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-40"><Loader2 className="h-8 w-8 animate-spin text-purple-400"/></div>
+                ) : branchScores.length > 0 ? (
+                    <div className="space-y-3">
+                        {branchScores.map((branch, index) => (
+                            <div key={branch.branchName} className="p-3 bg-slate-800/50 rounded-lg border border-white/5 flex items-center gap-4">
+                                <div className="w-8 h-8 flex items-center justify-center shrink-0">{rankIcon(index)}</div>
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <p className="font-bold text-base text-white truncate">{branch.branchName}</p>
+                                        <p className="text-xs text-slate-400 font-mono">{branch.studentCount} Öğrenci</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Progress value={branch.averageSuccess} className="h-2 [&>div]:transition-all" indicatorClassName={getSuccessColor(branch.averageSuccess)} />
+                                        <span className={cn("text-xs font-bold", getSuccessColor(branch.averageSuccess).replace('bg-','text-'))}>{branch.averageSuccess}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center text-sm text-slate-500 py-10">Sıralama için henüz yeterli veri bulunmuyor.</p>
+                )}
+            </CardContent>
+        </Card>
+    )
+}
 
 export default function ScalesPage() {
     const { user } = useAuth();
@@ -148,6 +207,9 @@ export default function ScalesPage() {
     const [selectedBranch, setSelectedBranch] = useState<string>('');
     const [selectedCourseId, setSelectedCourseId] = useState<string>('');
     
+    const [branchScores, setBranchScores] = useState<BranchScore[]>([]);
+    const [isLoadingScores, setIsLoadingScores] = useState(true);
+
     const selectedClass = useMemo(() => allClasses.find(c => c.id === selectedClassId), [allClasses, selectedClassId]);
 
     const fetchData = useCallback(async () => {
@@ -193,6 +255,17 @@ export default function ScalesPage() {
         }
         setIsLoading(false);
     }, [user]);
+
+    // Branch scores'u ayrıca ve asenkron olarak çekiyoruz
+    useEffect(() => {
+        const fetchBranchScores = async () => {
+            setIsLoadingScores(true);
+            const scores = await getBranchScaleScores();
+            setBranchScores(scores);
+            setIsLoadingScores(false);
+        };
+        fetchBranchScores();
+    }, []);
 
     useEffect(() => {
         if(user) {
@@ -305,161 +378,172 @@ export default function ScalesPage() {
                      </Button>
                 </div>
                 
-                <div className="space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Filtre ve Yeni Ölçek Oluşturma */}
-                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
-                        <CardHeader className="pb-4">
-                            <CardTitle className="text-white flex items-center gap-2 text-xl">
-                                <Filter className="h-5 w-5 text-slate-400"/> Filtreler
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <Label className="text-slate-300">Sınıf Seçimi</Label>
-                                    <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); setSelectedCourseId('') }}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-1">
-                                    <Label className="text-slate-300">Şube Seçimi</Label>
-                                    <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                            {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Manuel Ölçek Oluşturma Formu (Accordion) */}
-                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
-                        <Accordion type="single" value={isCreateAccordionOpen ? "create-scale" : ""} onValueChange={(value) => setIsCreateAccordionOpen(value === "create-scale")}>
-                            <AccordionItem value="create-scale" className="border-b-0">
-                                <AccordionTrigger className="p-4 text-left hover:no-underline bg-white/5 data-[state=open]:bg-white/10">
-                                    <div className="flex items-center gap-3">
-                                        <PlusCircle className="h-5 w-5 text-indigo-400"/>
-                                        <span className="font-bold text-white text-lg">Yeni Manuel Ölçek Oluştur</span>
+                    <div className="lg:col-span-1 space-y-6">
+                        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+                            <CardHeader className="pb-4">
+                                <CardTitle className="text-white flex items-center gap-2 text-xl">
+                                    <Filter className="h-5 w-5 text-slate-400"/> Filtreler
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300">Sınıf Seçimi</Label>
+                                        <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); setSelectedCourseId('') }}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="px-6 pb-6 pt-4 space-y-4">
-                                    {selectedBranch && selectedBranch !== 'all' ? (
-                                        <>
-                                            <div className="space-y-1">
-                                                <Label className="text-slate-300 text-xs">Ders Seçimi (Ölçeğin İlişkilendirileceği)</Label>
-                                                <Select onValueChange={setSelectedCourseId} value={selectedCourseId}>
-                                                    <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Ders Seçin..."/></SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                        {coursesForManualCreation.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                            {selectedCourseId && <CreateScaleForm 
-                                                onSave={handleCreateScale}
-                                                isSaving={isSaving}
-                                                selectedClass={selectedClass}
-                                                selectedBranch={selectedBranch}
-                                                selectedCourseId={selectedCourseId}
-                                            />}
-                                        </>
-                                    ) : (
-                                        <p className="text-muted-foreground text-sm text-center p-4">Lütfen önce bir **Sınıf** ve **Şube** seçin.</p>
-                                    )}
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
-                    </Card>
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300">Şube Seçimi</Label>
+                                        <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        
+                        {/* Manuel Ölçek Oluşturma Formu (Accordion) */}
+                        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+                            <Accordion type="single" value={isCreateAccordionOpen ? "create-scale" : ""} onValueChange={(value) => setIsCreateAccordionOpen(value === "create-scale")}>
+                                <AccordionItem value="create-scale" className="border-b-0">
+                                    <AccordionTrigger className="p-4 text-left hover:no-underline bg-white/5 data-[state=open]:bg-white/10">
+                                        <div className="flex items-center gap-3">
+                                            <PlusCircle className="h-5 w-5 text-indigo-400"/>
+                                            <span className="font-bold text-white text-lg">Yeni Manuel Ölçek Oluştur</span>
+                                        </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="px-6 pb-6 pt-4 space-y-4">
+                                        {selectedBranch && selectedBranch !== 'all' ? (
+                                            <>
+                                                <div className="space-y-1">
+                                                    <Label className="text-slate-300 text-xs">Ders Seçimi (Ölçeğin İlişkilendirileceği)</Label>
+                                                    <Select onValueChange={setSelectedCourseId} value={selectedCourseId}>
+                                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Ders Seçin..."/></SelectTrigger>
+                                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                            {coursesForManualCreation.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                {selectedCourseId && <CreateScaleForm 
+                                                    onSave={handleCreateScale}
+                                                    isSaving={isSaving}
+                                                    selectedClass={selectedClass}
+                                                    selectedBranch={selectedBranch}
+                                                    selectedCourseId={selectedCourseId}
+                                                />}
+                                            </>
+                                        ) : (
+                                            <p className="text-muted-foreground text-sm text-center p-4">Lütfen önce bir **Sınıf** ve **Şube** seçin.</p>
+                                        )}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        </Card>
+                         <BranchLeaderboardCard branchScores={branchScores} isLoading={isLoadingScores} />
+                    </div>
 
                     {/* Sonuç Alanları */}
-                    {fetchError && <div className="lg:col-span-2">{fetchError && <ErrorWithLink message={fetchError} />}</div>}
+                    <div className="lg:col-span-2 space-y-8">
+                        {fetchError && <ErrorWithLink message={fetchError} />}
 
-                    {selectedBranch && selectedBranch !== 'all' && (
-                        <>
-                            {/* Ünite Bazlı Kontrol Listeleri */}
-                            <div className="lg:col-span-2 space-y-4">
-                                <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
-                                    <ListChecks className="h-6 w-6 text-cyan-400"/> Ünite Bazlı Listeler
-                                </h3>
-                                
-                                {filteredUnitData.length > 0 && filteredUnitData[0].courses.length > 0 ? (
-                                    <Accordion type="multiple" className="w-full space-y-4">
-                                        {filteredUnitData[0].courses.map(course => (
-                                            <AccordionItem key={course.id} value={course.id} className="border border-white/10 rounded-xl bg-slate-900/50 overflow-hidden">
-                                                <AccordionTrigger className="p-4 text-lg font-bold hover:no-underline hover:bg-white/5 transition-colors">
-                                                    <div className="flex items-center gap-3">
-                                                        <BookOpen className="h-5 w-5 text-cyan-400"/> {course.title}
-                                                    </div>
-                                                </AccordionTrigger>
-                                                <AccordionContent className="p-4 bg-black/20">
-                                                    {course.units.length > 0 ? (
-                                                        <div className="grid grid-cols-2 gap-3">
-                                                            {course.units.map(unit => (
-                                                                <Button key={unit.id} asChild variant="outline" className="h-20 text-base flex-col gap-1 border-white/10 text-white hover:bg-white/5 bg-slate-900/50 transition-all hover:-translate-y-1">
-                                                                    <Link href={`/teacher/scales/${unit.id}?type=unit&courseId=${course.id}&branch=${selectedBranch}`}>
-                                                                        <ListChecks className="h-5 w-5 text-white/70"/>
-                                                                        <span className="font-bold text-sm">{unit.title}</span>
-                                                                    </Link>
-                                                                </Button>
-                                                            ))}
+                        {selectedBranch && selectedBranch !== 'all' ? (
+                            <>
+                                {/* Ünite Bazlı Kontrol Listeleri */}
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                                        <ListChecks className="h-6 w-6 text-cyan-400"/> Ünite Bazlı Listeler
+                                    </h3>
+                                    
+                                    {filteredUnitData.length > 0 && filteredUnitData[0].courses.length > 0 ? (
+                                        <Accordion type="multiple" className="w-full space-y-4">
+                                            {filteredUnitData[0].courses.map(course => (
+                                                <AccordionItem key={course.id} value={course.id} className="border border-white/10 rounded-xl bg-slate-900/50 overflow-hidden shadow-lg">
+                                                    <AccordionTrigger className="p-4 text-lg font-bold hover:no-underline hover:bg-white/5 transition-colors">
+                                                        <div className="flex items-center gap-3">
+                                                            <BookOpen className="h-5 w-5 text-cyan-400"/> {course.title}
                                                         </div>
-                                                    ) : <p className="text-center text-sm text-slate-500 p-4">Bu derse ünite eklenmemiş.</p>}
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        ))}
-                                    </Accordion>
-                                ) : <p className="text-muted-foreground text-center p-8">Bu şube için ders içeriği bulunamadı.</p>}
-                            </div>
+                                                    </AccordionTrigger>
+                                                    <AccordionContent className="p-4 bg-black/20">
+                                                        {course.units.length > 0 ? (
+                                                            <div className="grid grid-cols-2 gap-3">
+                                                                {course.units.map(unit => (
+                                                                    <Button key={unit.id} asChild variant="outline" className="h-20 text-base flex-col gap-1 border-white/10 text-white hover:bg-white/5 bg-slate-900/50 transition-all hover:-translate-y-1">
+                                                                        <Link href={`/teacher/scales/${unit.id}?type=unit&courseId=${course.id}&branch=${selectedBranch}`}>
+                                                                            <ListChecks className="h-5 w-5 text-white/70"/>
+                                                                            <span className="font-bold text-sm">{unit.title}</span>
+                                                                        </Link>
+                                                                    </Button>
+                                                                ))}
+                                                            </div>
+                                                        ) : <p className="text-center text-sm text-slate-500 p-4">Bu derse ünite eklenmemiş.</p>}
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            ))}
+                                        </Accordion>
+                                    ) : <p className="text-muted-foreground text-center p-8">Bu şube için ders içeriği bulunamadı.</p>}
+                                </div>
 
-                            {/* Manuel Ölçekler Listesi */}
-                            <div className="lg:col-span-3 space-y-4">
-                                <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
-                                    <UserCheck className="h-6 w-6 text-purple-400"/> Özel Çeteleler ({filteredManualScales.length})
-                                </h3>
-                                
-                                {filteredManualScales.length > 0 ? (
-                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {filteredManualScales.map(scale => {
-                                            const courseName = allCourses.find(c => c.id === scale.courseId)?.title || 'Bilinmeyen Ders';
-                                            return (
-                                                <Card key={scale.id} className="bg-slate-900 border-white/10 hover:border-purple-500/50 hover:bg-slate-800/80 transition-all">
-                                                    <CardHeader className="pb-2">
-                                                        <CardTitle className="text-sm font-bold text-white">{scale.name.split(' (')[0]}</CardTitle>
-                                                        <CardDescription className="text-xs text-slate-500">{courseName}</CardDescription>
-                                                    </CardHeader>
-                                                    <CardFooter className="flex justify-between items-center pt-2 gap-2">
-                                                        <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
-                                                            <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendir</Link>
-                                                        </Button>
-                                                        <AlertDialog>
-                                                            <AlertDialogTrigger asChild>
-                                                                <Button variant="ghost" size="icon" className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="h-4 w-4"/></Button>
-                                                            </AlertDialogTrigger>
-                                                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                                                <AlertDialogHeader>
-                                                                    <RadixAlertDialogTitle className="text-red-400">Ölçeği Sil</RadixAlertDialogTitle>
-                                                                    <AlertDialogDescription className="text-slate-400">"{scale.name}" ölçeği ve tüm girişleri kalıcı olarak silinecektir.</AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                                                    <AlertDialogAction onClick={() => handleDeleteScale(scale.id)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Sil</AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                                                        </AlertDialog>
-                                                    </CardFooter>
-                                                </Card>
-                                            )
-                                        })}
-                                    </div>
-                                ) : <p className="text-muted-foreground text-center p-8 border-2 border-dashed border-slate-800 rounded-xl">Bu şube için özel ölçek oluşturulmamış.</p>}
+                                {/* Manuel Ölçekler Listesi */}
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                                        <UserCheck className="h-6 w-6 text-purple-400"/> Özel Çeteleler ({filteredManualScales.length})
+                                    </h3>
+                                    
+                                    {filteredManualScales.length > 0 ? (
+                                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {filteredManualScales.map(scale => {
+                                                const courseName = allCourses.find(c => c.id === scale.courseId)?.title || 'Bilinmeyen Ders';
+                                                return (
+                                                    <Card key={scale.id} className="bg-slate-900 border-white/10 hover:border-purple-500/50 hover:bg-slate-800/80 transition-all">
+                                                        <CardHeader className="pb-2">
+                                                            <CardTitle className="text-sm font-bold text-white">{scale.name.split(' (')[0]}</CardTitle>
+                                                            <CardDescription className="text-xs text-slate-500">{courseName}</CardDescription>
+                                                        </CardHeader>
+                                                        <CardFooter className="flex justify-between items-center pt-2 gap-2">
+                                                            <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
+                                                                <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendir</Link>
+                                                            </Button>
+                                                            <AlertDialog>
+                                                                <AlertDialogTrigger asChild>
+                                                                    <Button variant="ghost" size="icon" className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="h-4 w-4"/></Button>
+                                                                </AlertDialogTrigger>
+                                                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                                    <AlertDialogHeader>
+                                                                        <RadixAlertDialogTitle className="text-red-400">Ölçeği Sil</RadixAlertDialogTitle>
+                                                                        <AlertDialogDescription className="text-slate-400">"{scale.name}" ölçeği ve tüm girişleri kalıcı olarak silinecektir.</AlertDialogDescription>
+                                                                    </AlertDialogHeader>
+                                                                    <AlertDialogFooter>
+                                                                        <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                                        <AlertDialogAction onClick={() => handleDeleteScale(scale.id)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Sil</AlertDialogAction>
+                                                                    </AlertDialogFooter>
+                                                                </AlertDialogContent>
+                                                            </AlertDialog>
+                                                        </CardFooter>
+                                                    </Card>
+                                                )
+                                            })}
+                                        </div>
+                                    ) : <p className="text-muted-foreground text-center p-8 border-2 border-dashed border-slate-800 rounded-xl">Bu şube için özel ölçek oluşturulmamış.</p>}
+                                </div>
+                            </>
+                        ) : (
+                             <div className="flex flex-col items-center justify-center h-full text-center text-slate-500 bg-slate-900/30 rounded-2xl p-10 border border-dashed border-white/10">
+                                <FolderOpen className="h-16 w-16 text-slate-600 mb-4" />
+                                <h3 className="text-xl font-bold text-slate-400">Başlamak için Bir Sınıf ve Şube Seçin</h3>
+                                <p className="mt-2 text-sm max-w-sm">Değerlendirme yapmak veya yeni ölçek oluşturmak için lütfen sol taraftaki menüden bir sınıf ve ardından şube seçimi yapın.</p>
                             </div>
-                        </>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, doc, getDoc, addDoc, serverTimestamp, writeBatch, updateDoc, deleteDoc, orderBy, Timestamp } from 'firebase/firestore';
-import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from '@/lib/types';
+import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 export async function getTeacherScales(teacherId: string): Promise<{ success: boolean; data?: EvaluationScale[]; error?: string }> {
@@ -79,5 +79,82 @@ export async function deleteScale(scaleId: string): Promise<{ success: boolean; 
     } catch (error: any) {
         console.error("Error deleting scale and its entries:", error);
         return { success: false, error: "Ölçek silinirken bir hata oluştu." };
+    }
+}
+
+
+// --- YENİ FONKSİYON: ŞUBE BAŞARI SIRALAMASI ---
+
+export type BranchScore = {
+    branchName: string;
+    studentCount: number;
+    averageSuccess: number;
+}
+
+export async function getBranchScaleScores(): Promise<BranchScore[]> {
+    noStore();
+    try {
+        const [scalesSnap, usersSnap] = await Promise.all([
+            getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist'))),
+            getDocs(query(collection(db, 'users'), where('role', 'in', ['student', 'guest'])))
+        ]);
+
+        const allStudents = usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        const allStudentEntries: { [studentId: string]: { [scaleId: string]: ScaleEntry } } = {};
+
+        // Tüm ölçek girişlerini öğrenci bazında topla
+        for (const scaleDoc of scalesSnap.docs) {
+            const entriesSnap = await getDocs(collection(db, `evaluationScales/${scaleDoc.id}/entries`));
+            entriesSnap.forEach(entryDoc => {
+                if (!allStudentEntries[entryDoc.id]) {
+                    allStudentEntries[entryDoc.id] = {};
+                }
+                allStudentEntries[entryDoc.id][scaleDoc.id] = entryDoc.data() as ScaleEntry;
+            });
+        }
+
+        // Öğrenci puanlarını hesapla
+        const studentScores: { [studentId: string]: { totalSuccess: number; scaleCount: number } } = {};
+        for (const studentId in allStudentEntries) {
+            studentScores[studentId] = { totalSuccess: 0, scaleCount: 0 };
+            for (const scaleId in allStudentEntries[studentId]) {
+                const entry = allStudentEntries[studentId][scaleId];
+                if (entry.statuses) {
+                    const statuses = Object.values(entry.statuses);
+                    const pluses = statuses.filter(s => s === '+').length;
+                    const totalGraded = pluses + statuses.filter(s => s === '-').length;
+                    if (totalGraded > 0) {
+                        studentScores[studentId].totalSuccess += (pluses / totalGraded) * 100;
+                        studentScores[studentId].scaleCount += 1;
+                    }
+                }
+            }
+        }
+
+        // Şubelere göre grupla ve ortalama al
+        const branchScores: { [branchName: string]: { totalSuccess: number; studentCount: number } } = {};
+        allStudents.forEach(student => {
+            const studentScoreData = studentScores[student.uid];
+            if (student.class && studentScoreData && studentScoreData.scaleCount > 0) {
+                if (!branchScores[student.class]) {
+                    branchScores[student.class] = { totalSuccess: 0, studentCount: 0 };
+                }
+                const avgStudentSuccess = studentScoreData.totalSuccess / studentScoreData.scaleCount;
+                branchScores[student.class].totalSuccess += avgStudentSuccess;
+                branchScores[student.class].studentCount += 1;
+            }
+        });
+
+        const finalLeaderboard: BranchScore[] = Object.entries(branchScores).map(([branchName, data]) => ({
+            branchName,
+            studentCount: data.studentCount,
+            averageSuccess: Math.round(data.totalSuccess / data.studentCount),
+        }));
+
+        return finalLeaderboard.sort((a, b) => b.averageSuccess - a.averageSuccess);
+
+    } catch (e) {
+        console.error("Error calculating branch scale scores:", e);
+        return [];
     }
 }
