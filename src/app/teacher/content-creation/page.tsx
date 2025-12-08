@@ -64,11 +64,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, query, where, orderBy } from 'firebase/firestore';
-import type { SchoolClass, Course, Unit, Topic } from '@/lib/types';
+import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 
-type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
+type EnrichedTopic = Topic & { questionCount?: number };
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number };
+type EnrichedCourse = Course & { units: EnrichedUnit[] };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
 const steps = [
@@ -142,12 +145,15 @@ export default function ContentCreationPage() {
                 collection(db, 'classes'),
                 orderBy('createdAt', 'asc')
             );
-            const [classesSnapshot, coursesSnapshot] = await Promise.all([
+            const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
                 getDocs(classesQuery),
                 getDocs(collection(db, 'courses')),
+                getDocs(collection(db, 'questions')), // Fetch all questions once
             ]);
+            
+            const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
 
-            const allCourses = coursesSnapshot.docs.map(
+            const allCourses = allCoursesSnapshot.docs.map(
                 (doc) => ({ id: doc.id, ...doc.data() } as Course)
             );
             const enrichedClasses: EnrichedClass[] = [];
@@ -180,7 +186,7 @@ export default function ContentCreationPage() {
                     );
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit = { ...unitData, topics: [] };
+                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
 
                         const topicsSnapshot = await getDocs(
                             query(
@@ -194,6 +200,11 @@ export default function ContentCreationPage() {
                         enrichedUnit.topics = topicsSnapshot.docs.map(
                             (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
                         );
+                        
+                        // Calculate question count for the unit
+                        const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
+                        enrichedUnit.questionCount = unitQuestionCount;
+
                         enrichedCourse.units.push(enrichedUnit);
                     }
                     enrichedClass.courses.push(enrichedCourse);
@@ -465,6 +476,8 @@ export default function ContentCreationPage() {
                      else if (currentStep === 4) path = `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}`;
                     
                     const isPublished = item.isPublished ?? true;
+                    const questionCount = item.questionCount;
+
 
                     return (
                         <div key={item.id} className={cn("relative group h-48 transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
@@ -485,6 +498,7 @@ export default function ContentCreationPage() {
                                 <span className="text-xl font-bold leading-tight line-clamp-2">
                                     {item[itemTitleKey] || item.name}
                                 </span>
+                                {questionCount !== undefined && <Badge variant="secondary" className="mt-2 text-xs">({questionCount} Soru)</Badge>}
                             </Button>
                             
                             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
@@ -595,7 +609,7 @@ export default function ContentCreationPage() {
                                             ? "bg-slate-900 border-purple-500 text-purple-400 scale-110 shadow-purple-500/50" 
                                             : isCompleted 
                                                 ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
-                                                : "bg-slate-900 border-slate-800 text-slate-600 hover:border-slate-700"
+                                                : "bg-slate-900 border-slate-800 text-slate-600"
                                     )}>
                                         {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : IconComponent}
                                     </div>
@@ -648,7 +662,7 @@ export default function ContentCreationPage() {
                             variant="outline" 
                             onClick={handleBack}
                             disabled={currentStep === 1}
-                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent"
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent disabled:opacity-30"
                         >
                             <ArrowLeft className="mr-2 h-5 w-5" /> Geri
                         </Button>
