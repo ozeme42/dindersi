@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
@@ -199,10 +198,10 @@ export function QuestionDialog({
     };
 
     const buttonColorClasses = [
-        "bg-blue-600 hover:bg-blue-700 text-white",
-        "bg-green-600 hover:bg-green-700 text-white",
-        "bg-amber-500 hover:bg-amber-600 text-white",
-        "bg-red-600 hover:bg-red-700 text-white",
+        "bg-slate-700 hover:bg-slate-800 text-white",
+        "bg-sky-700 hover:bg-sky-800 text-white",
+        "bg-fuchsia-700 hover:bg-fuchsia-800 text-white",
+        "bg-rose-700 hover:bg-rose-800 text-white",
     ];
 
     return (
