@@ -27,7 +27,7 @@ export async function saveCurriculumItem(
     try {
         if (mode === 'add') {
             let collectionPath: string;
-            let dataToAdd: any = { createdAt: serverTimestamp() };
+            let dataToAdd: any = { createdAt: serverTimestamp(), isPublished: true }; // Default to published on creation
 
             if (type === 'Sınıf') {
                 collectionPath = 'classes';
@@ -87,6 +87,20 @@ export async function saveCurriculumItem(
     }
 }
 
+export async function togglePublishState(path: string, currentPublishedState: boolean): Promise<{ success: boolean; error?: string }> {
+    if (!path) {
+        return { success: false, error: "Geçersiz yol." };
+    }
+    try {
+        const docRef = doc(db, path);
+        await updateDoc(docRef, { isPublished: !currentPublishedState });
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error toggling publish state:", error);
+        return { success: false, error: "Yayın durumu güncellenirken bir hata oluştu." };
+    }
+}
+
 
 // Delete function
 export async function deleteCurriculumItem(path: string) {
@@ -133,7 +147,7 @@ export async function bulkAddCurriculumItems(
 
         names.forEach(name => {
             const docRef = doc(collection(db, collectionPath));
-            let data: any = { createdAt: serverTimestamp() };
+            let data: any = { createdAt: serverTimestamp(), isPublished: true }; // Default to published
             
             if (type === 'Sınıf') {
                 data.name = name;

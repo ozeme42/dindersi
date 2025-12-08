@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -17,12 +18,15 @@ import {
     ArrowLeft,
     Sparkles,
     FolderPlus,
-    LayoutGrid
+    LayoutGrid,
+    Eye,
+    EyeOff
 } from 'lucide-react';
 import {
     saveCurriculumItem,
     deleteCurriculumItem,
     bulkAddCurriculumItems,
+    togglePublishState,
 } from './actions';
 import { Button } from '@/components/ui/button';
 import {
@@ -77,7 +81,7 @@ type DialogState = {
     mode: 'add' | 'edit';
     type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu' | null;
     parentId?: string;
-    currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string };
+    currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string, isPublished?: boolean };
 };
 
 type BulkAddDialogState = {
@@ -146,7 +150,7 @@ export default function ContentCreationPage() {
             );
             const enrichedClasses: EnrichedClass[] = [];
 
-            for (const [index, classDoc] of classesSnapshot.docs.entries()) {
+            for (const classDoc of classesSnapshot.docs) {
                 const classData = {
                     id: classDoc.id,
                     ...classDoc.data(),
@@ -154,8 +158,14 @@ export default function ContentCreationPage() {
                 const enrichedClass: EnrichedClass = { ...classData, courses: [] };
 
                 const classCourses = allCourses.filter(
-                    (course) => course.classId === classDoc.id || (!course.classId && index === 0)
+                    (course) => course.classId === classDoc.id
                 );
+                 // Add "Genel" courses to the first class only
+                if (enrichedClasses.length === 0) {
+                    const generalCourses = allCourses.filter(course => !course.classId);
+                    classCourses.push(...generalCourses);
+                }
+
 
                 for (const courseData of classCourses) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
@@ -250,7 +260,7 @@ export default function ContentCreationPage() {
     const openDialog = (
         mode: 'add' | 'edit',
         type: DialogState['type'],
-        currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string },
+        currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string, isPublished?: boolean },
         parentId?: string
     ) => {
         setDialogState({ isOpen: true, mode, type, parentId, currentItem });
@@ -325,6 +335,18 @@ export default function ContentCreationPage() {
         setIsSaving(false);
     };
 
+    const handleTogglePublish = async (path: string, currentState: boolean) => {
+        setIsSaving(true);
+        const result = await togglePublishState(path, currentState);
+        if (result.success) {
+            toast({ title: 'Başarılı', description: `Durum güncellendi.` });
+            await fetchCurriculum(); // Refresh data to show new state
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    }
+
     const handleBulkSave = async () => {
         if (!bulkAddDialogState.type) return;
         setIsSaving(true);
@@ -359,30 +381,36 @@ export default function ContentCreationPage() {
         let itemTitleKey = 'name';
         let handleItemEdit = (item: any) => { };
         let handleItemDelete = (item: any) => { };
+        let handleItemPublishToggle = (item: any, path: string, currentState: boolean) => {};
+
 
         switch (currentStep) {
             case 1:
                 itemsToRender = curriculum;
                 handleItemEdit = (item) => openDialog('edit', 'Sınıf', item);
                 handleItemDelete = (item) => openDeleteDialog('Sınıf', { ...item, path: `classes/${item.id}` });
+                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
                 break;
             case 2:
                 itemsToRender = selectedClass?.courses || [];
                 itemTitleKey = 'title';
                 handleItemEdit = (item) => openDialog('edit', 'Ders', item, selections.classId);
                 handleItemDelete = (item) => openDeleteDialog('Ders', { ...item, path: `courses/${item.id}` });
+                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
                 break;
             case 3:
                 itemsToRender = selectedCourse?.units || [];
                 itemTitleKey = 'title';
                 handleItemEdit = (item) => openDialog('edit', 'Ünite', item, selections.courseId);
                 handleItemDelete = (item) => openDeleteDialog('Ünite', { ...item, path: `courses/${selections.courseId}/units/${item.id}` });
+                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
                 break;
             case 4:
                 itemsToRender = selectedUnit?.topics || [];
                 itemTitleKey = 'title';
                 handleItemEdit = (item) => openDialog('edit', 'Konu', item, selections.unitId);
                 handleItemDelete = (item) => openDeleteDialog('Konu', { ...item, path: `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}` });
+                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
                 break;
             default:
                 return null;
@@ -427,15 +455,24 @@ export default function ContentCreationPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {itemsToRender.map((item, index) => {
                     const colorClass = colorClasses[index % colorClasses.length];
+                     let path = '';
+                     if (currentStep === 1) path = `classes/${item.id}`;
+                     else if (currentStep === 2) path = `courses/${item.id}`;
+                     else if (currentStep === 3) path = `courses/${selections.courseId}/units/${item.id}`;
+                     else if (currentStep === 4) path = `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}`;
+                    
+                    const isPublished = item.isPublished ?? true;
+
                     return (
-                        <div key={item.id} className="relative group h-40">
+                        <div key={item.id} className={cn("relative group h-40 transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
                             <Button
                                 variant="ghost"
                                 className={cn(
                                     "w-full h-full p-4 flex flex-col items-center justify-center text-center transition-all duration-300",
                                     "rounded-2xl border-b-[6px] active:border-b-0 active:translate-y-[6px] hover:-translate-y-1",
                                     "text-white shadow-xl hover:shadow-2xl",
-                                    colorClass
+                                    colorClass,
+                                    !isPublished && "grayscale"
                                 )}
                                 onClick={() => handleButtonClick(item)}
                             >
@@ -447,9 +484,11 @@ export default function ContentCreationPage() {
                                 </span>
                             </Button>
                             
-                            {/* Hover Actions Overlay */}
                             <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg shadow-md bg-white text-slate-900 hover:bg-slate-100" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
+                                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg shadow-md bg-white/80 text-slate-900 hover:bg-white" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
+                                    {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                </Button>
+                                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg shadow-md bg-white/80 text-slate-900 hover:bg-white" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
                                     <FilePenLine className="h-4 w-4" />
                                 </Button>
                                 <Button size="icon" variant="destructive" className="h-8 w-8 rounded-lg shadow-md" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
@@ -507,7 +546,6 @@ export default function ContentCreationPage() {
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
              
-             {/* Arka Plan */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
@@ -515,9 +553,8 @@ export default function ContentCreationPage() {
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 
-                {/* Header */}
                 <div className="text-center space-y-4 py-6">
-                    <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl mb-2">
+                    <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-2">
                         <Sparkles className="h-10 w-10 text-purple-400" />
                     </div>
                     <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg">
@@ -554,7 +591,7 @@ export default function ContentCreationPage() {
                                                 ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
                                                 : "bg-slate-900 border-slate-800 text-slate-600 hover:border-slate-700"
                                     )}>
-                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : <step.icon className="w-6 h-6" />}
+                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
                                     </div>
                                     <span className={cn(
                                         "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
@@ -568,12 +605,11 @@ export default function ContentCreationPage() {
                     </div>
                 </div>
 
-                {/* Main Content Card */}
                 <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
                     <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                              <h2 className="text-2xl font-black text-white flex items-center gap-3">
-                                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 text-lg shadow-inner">
+                                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 text-lg">
                                     {currentStep}
                                 </span>
                                 <span>{steps.find(s => s.id === currentStep)?.name}</span>
@@ -616,7 +652,6 @@ export default function ContentCreationPage() {
 
             </div>
 
-            {/* Dialogs */}
             <Dialog open={dialogState.isOpen} onOpenChange={() => setDialogState({ isOpen: false, mode: 'add', type: null })}>
                 <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-lg">
                     <DialogHeader>
