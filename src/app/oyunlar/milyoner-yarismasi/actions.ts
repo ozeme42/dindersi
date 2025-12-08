@@ -24,7 +24,7 @@ export async function addScore(userId: string, score: number, context: string): 
       scoreEventsRef,
       where('userId', '==', userId),
       where('gameType', '==', 'Kim 1000 Puan İster?'),
-      where('context', '==', context)
+      where('context', '==', context) // Use the dynamic context here
     );
     const attemptsSnapshot = await getCountFromServer(attemptsQuery);
     if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
@@ -44,7 +44,7 @@ export async function addScore(userId: string, score: number, context: string): 
           userId: userId,
           points: score,
           gameType: 'Kim 1000 Puan İster?',
-          context: context,
+          context: context, // Use the provided context parameter
           timestamp: serverTimestamp()
       });
     });
