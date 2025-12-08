@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -187,8 +186,8 @@ export default function SmartboardPage() {
                         <div className="h-px w-16 bg-gradient-to-l from-transparent to-indigo-500"></div>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {yarışmalar.map((buttonProps) => (
-                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
+                        {yarışmalar.map(({ key, ...buttonProps }) => (
+                            <div key={key} className="aspect-[4/5] min-h-[380px]">
                                 <SmartboardCard {...buttonProps} />
                             </div>
                         ))}
@@ -205,8 +204,8 @@ export default function SmartboardPage() {
                         <div className="h-px w-16 bg-gradient-to-l from-transparent to-rose-500"></div>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {sunumlar.map((buttonProps) => (
-                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
+                        {sunumlar.map(({ key, ...buttonProps }) => (
+                            <div key={key} className="aspect-[4/5] min-h-[380px]">
                                 <SmartboardCard {...buttonProps} />
                             </div>
                         ))}
