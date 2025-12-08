@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -191,12 +192,12 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                                             <span className="font-medium text-slate-300 text-sm group-hover/topic:text-white">{topic.title}</span>
                                                                                         </div>
                                                                                         <div className="flex gap-2 self-end sm:self-center">
-                                                                                            {topic.hasYazilacaklarContent && (
+                                                                                            {(topic as any).hasYazilacaklarContent && (
                                                                                                 <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <Columns className="h-3 w-3"/> Yazılacaklar
                                                                                                 </Link>
                                                                                             )}
-                                                                                            {topic.hasOzetContent && (
+                                                                                            {(topic as any).hasOzetContent && (
                                                                                                 <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <BookOpen className="h-3 w-3"/> Özet
                                                                                                 </Link>
@@ -385,9 +386,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white uppercase flex flex-col md:block">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">YÖNETİM</span> PANELİ
                 </h1>
-                <p className="text-slate-400 text-lg font-medium max-w-2xl">
-                    {user.role === 'superadmin' ? 'Tüm sistemi buradan yönetebilirsin.' : 'Sınıfını yönet, içerik ekle ve öğrencilerinin gelişimini takip et.'}
-                </p>
+                
             </div>
             
             <div className="flex items-center gap-3 bg-slate-900/50 p-2 pr-6 rounded-2xl border border-white/5">
@@ -439,7 +438,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                             </div>
                         </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
                         <AlertDialogHeader>
                             <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
                             <AlertDialogDescription className="text-slate-400">
@@ -447,7 +446,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg">İptal</AlertDialogCancel>
                             <AlertDialogAction onClick={handleLogout} disabled={isLoggingOut} className="bg-red-600 hover:bg-red-500 text-white border-none">
                                 {isLoggingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Evet, Çıkış Yap

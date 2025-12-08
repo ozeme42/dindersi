@@ -40,14 +40,14 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                     const data = topicDoc.data() as Topic;
                     const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
                     const hasOzet = !!data.htmlContent;
-                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet } as Topic & { hasYazilacaklarContent: boolean, hasOzetContent: boolean };
-                }).filter(topic => topic.hasYazilacaklarContent || topic.hasOzetContent); // Only include topics with content
+                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
+                }).filter(topic => (topic as any).hasYazilacaklarContent || (topic as any).hasOzetContent || (topic.steps && topic.steps.length > 0)); // Include topics if they have any content for students
 
                 if (topics.length > 0) {
                      unitsWithContent.push({
                         id: unitDoc.id,
                         title: unitDoc.data().title,
-                        topics
+                        topics: topics as any
                     });
                 }
             }
@@ -57,6 +57,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                     id: course.id,
                     title: course.title,
                     classId: course.classId,
+                    isPublished: course.isPublished,
                     units: unitsWithContent
                 };
                 coursesWithContent.push(enrichedCourse);
