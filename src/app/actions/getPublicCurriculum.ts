@@ -20,44 +20,62 @@ export type PublicClass = Omit<SchoolClass, 'courses'> & {
 export async function getPublicCurriculum(): Promise<{ classGroups: { name: string; courses: PublicCourse[] }[] }> {
     noStore();
     try {
-        // HATA DÜZELTME: Sadece yayınlanmış olanları değil, TÜM sınıfları ve dersleri çek.
-        // Filtrelemeyi daha sonra, içeriklerin yayın durumuna göre yapacağız.
-        const [allCoursesSnap, allClassesSnap] = await Promise.all([
-            getDocs(collection(db, 'courses')),
-            getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc')))
+        const [allClassesSnap, allCoursesSnap] = await Promise.all([
+            getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
+            getDocs(collection(db, 'courses'))
         ]);
 
-        const allCoursesData = allCoursesSnap.docs
-            .map(doc => ({ id: doc.id, ...doc.data() } as Course))
-            .filter(course => course.isPublished ?? true); // Yalnızca yayınlanmış dersleri al
-
         const allClasses = allClassesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const allCoursesData = allCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
         const coursesWithContent: PublicCourse[] = [];
 
         for (const course of allCoursesData) {
-            const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), where('isPublished', '==', true), orderBy("title")));
+            // Sadece yayınlanmış dersleri işleme al
+            if (!(course.isPublished ?? true)) {
+                continue;
+            }
+
+            const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
             const unitsWithContent: PublicCourse['units'] = [];
 
             for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), where('isPublished', '==', true), orderBy("title")));
-                const topics = topicsSnap.docs.map(topicDoc => {
-                    const data = topicDoc.data() as Topic;
-                    const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
-                    const hasOzet = !!data.htmlContent;
-                    return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
-                }).filter(topic => (topic as any).hasYazilacaklarContent || (topic as any).hasOzetContent || (topic.steps && topic.steps.length > 0)); // Include topics if they have any content for students
+                const unitData = unitDoc.data();
+                // Sadece yayınlanmış üniteleri işleme al
+                if (!(unitData.isPublished ?? true)) {
+                    continue;
+                }
 
+                const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
+                const topics = topicsSnap.docs
+                    .map(topicDoc => {
+                        const data = topicDoc.data() as Topic;
+                        // Sadece yayınlanmış konuları işleme al
+                        if (!(data.isPublished ?? true)) {
+                            return null;
+                        }
+                        const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        const hasOzet = !!data.htmlContent;
+                        // Öğrenci için gösterilecek bir içeriği var mı?
+                        if (hasYazilacaklar || hasOzet || (data.steps && data.steps.length > 0)) {
+                             return { id: topicDoc.id, ...data, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: hasOzet };
+                        }
+                        return null;
+                    })
+                    .filter((topic): topic is Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean } => topic !== null);
+                
+                // Eğer ünitenin içinde gösterilecek en az bir konu varsa üniteyi ekle
                 if (topics.length > 0) {
                      unitsWithContent.push({
                         id: unitDoc.id,
-                        title: unitDoc.data().title,
+                        title: unitData.title,
                         topics: topics as any,
-                        isPublished: unitDoc.data().isPublished
+                        isPublished: unitData.isPublished
                     });
                 }
             }
-
+            
+            // Eğer dersin içinde gösterilecek en az bir ünite varsa dersi ekle
             if (unitsWithContent.length > 0) {
                  const enrichedCourse: PublicCourse = {
                     id: course.id,
@@ -85,14 +103,16 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
         });
         
         const classGroups = allClasses
-            // HATA DÜZELTME: Sadece yayınlanmış sınıfları değil, tümünü al ve sonra filtrele
-            .filter(cls => cls.isPublished ?? true) // Gizlenmiş sınıfları burada filtrele
+            // Sadece yayınlanmış sınıfları al
+            .filter(cls => cls.isPublished ?? true)
             .map(cls => ({
                 name: cls.name,
                 courses: groupedByClass[cls.id] || []
             }))
-            .filter(group => group.courses.length > 0); // Sadece içinde ders olan sınıfları göster
+            // Sadece içinde en az bir ders olan grupları göster
+            .filter(group => group.courses.length > 0);
         
+        // Genel kursları her zaman ekle (eğer varsa)
         if (generalCourses.length > 0) {
             classGroups.push({ name: "Genel", courses: generalCourses });
         }
