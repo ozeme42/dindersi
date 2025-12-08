@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Gamepad2, ArrowLeft, Search, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, 
   Layers, FolderKanban, MousePointerClick, Trophy, ArrowDownUp, Link2, 
-  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints
+  Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -53,6 +53,7 @@ const activityTypes = [
   { href: '/oyunlar/labirent', label: 'Labirent', icon: Milestone, color: 'zinc' },
   { href: '/oyunlar/tornado', label: 'Tornado', icon: Wind, color: 'cyan' },
   { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu', icon: Footprints, color: 'blue' },
+  { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı', icon: Target, color: 'sky' },
 ];
 
 // Arkaplan Efekti
