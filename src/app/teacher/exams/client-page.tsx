@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -26,10 +27,12 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/context/auth-context';
 
 
 export function ExamsClientPage() {
     const { toast } = useToast();
+    const { user } = useAuth();
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [fetchError, setFetchError] = useState<string | null>(null);
@@ -40,22 +43,23 @@ export function ExamsClientPage() {
     const buttonLabel = 'Yeni Deneme Oluştur';
 
     const fetchExams = useCallback(async () => {
-        // Assume user is always authenticated here due to layout guard
+        if (!user) return;
         setIsLoading(true);
         setFetchError(null);
-        // This action needs to be adjusted to not require teacherId if it can be derived server-side
-        const result = await getTeacherExams("placeholder-teacher-id"); // Placeholder, will be fixed
+        const result = await getTeacherExams(user.uid);
         if (result.success && result.data) {
             setAssignments(result.data);
         } else if (result.error) {
             setFetchError(result.error);
         }
         setIsLoading(false);
-    }, []);
+    }, [user]);
 
     useEffect(() => {
-        fetchExams();
-    }, [fetchExams]);
+        if (user) {
+            fetchExams();
+        }
+    }, [user, fetchExams]);
     
     const handleDelete = async (assignmentId: string) => {
         setIsDeleting(true);
@@ -89,7 +93,6 @@ export function ExamsClientPage() {
                             </div>
                             {title}
                         </h1>
-                        <p className="text-slate-400 mt-2 font-medium">{description}</p>
                      </div>
                      <Button asChild className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20 h-12 px-6 rounded-xl">
                         <Link href="/teacher/exams/new">
@@ -183,3 +186,5 @@ export function ExamsClientPage() {
         </div>
     );
 }
+
+    
