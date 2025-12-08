@@ -340,7 +340,7 @@ function MilyonerGame() {
         </div>
       </div>
 
-      <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-last md:order-last">
+      <div className="w-full md:w-64 bg-blue-900/30 border-l-0 md:border-l border-blue-800 p-4 flex flex-col justify-center order-last md:order-last pb-24 md:pb-4">
         <div className="grid grid-cols-5 md:flex md:flex-col-reverse gap-2">
             {MONEY_LEVELS.slice(0, questions.length).map((money, idx) => (
                 <div key={idx} className={cn(
