@@ -2,8 +2,8 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, orderBy, Timestamp, doc, getDoc, writeBatch, serverTimestamp, increment } from 'firebase/firestore';
-import type { Assignment, ScoreEvent, Question, UserProfile } from '@/lib/types';
+import { collection, query, where, getDocs, orderBy, Timestamp, doc, getDoc, writeBatch, serverTimestamp, increment } from "firebase/firestore";
+import type { Assignment, ScoreEvent, Question, UserProfile } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 type EnrichedAssignment = Assignment & {
@@ -148,8 +148,10 @@ export async function submitDenemeScoreAction(userId: string | null, score: numb
         const batch = writeBatch(db);
 
         // 1. Update user's main score
-        const userRef = doc(db, 'users', userId);
-        batch.update(userRef, { score: increment(score) });
+        if (score > 0) {
+            const userRef = doc(db, 'users', userId);
+            batch.update(userRef, { score: increment(score) });
+        }
 
         // 2. Log the score event with answers
         const eventRef = doc(collection(db, 'scoreEvents'));
