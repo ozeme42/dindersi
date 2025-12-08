@@ -2,14 +2,13 @@
 
 'use server';
 
-import { db, firebaseConfig } from "@/lib/firebase";
-import { doc, setDoc, serverTimestamp, writeBatch, increment, getDocs, collection, query, where } from "firebase/firestore";
+import { adminApp } from "@/lib/firebase-admin";
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore, doc, setDoc, serverTimestamp, writeBatch, increment, collection } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
-import { initializeApp, deleteApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, updateProfile } from "firebase/auth"
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
-import { deleteUserFromFirestore } from "@/app/teacher/superadmin/actions";
 
+const db = getFirestore(adminApp);
 
 export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdAt' | 'score'> & { password?: string }): Promise<{ success: boolean; error?: string; user?: UserProfile }> {
     const finalDisplayName = data.displayName.trim();
@@ -19,36 +18,37 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
     if (!data.password || data.password.length < 6) {
         return { success: false, error: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır." };
     }
-    if (!firebaseConfig.apiKey) {
-        console.error("Firebase config is missing.");
-        return { success: false, error: "Sunucu yapılandırma hatası." };
-    }
-
-    const appName = 'student-creation-' + Date.now() + Math.random();
-    let secondaryApp;
 
     try {
-        secondaryApp = initializeApp(firebaseConfig, appName);
-        const secondaryAuth = getAuth(secondaryApp);
+        const auth = getAuth(adminApp);
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
         let attempts = 0;
         
         while (true) {
-            const methods = await fetchSignInMethodsForEmail(secondaryAuth, finalEmail);
-            if (methods.length === 0) break;
-            attempts++;
-            finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-            if (attempts > 100) {
-                 throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
+            try {
+                await auth.getUserByEmail(finalEmail);
+                attempts++;
+                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
+                 if (attempts > 100) {
+                    throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
+                }
+            } catch (error: any) {
+                if (error.code === 'auth/user-not-found') {
+                    break; // Email is available
+                }
+                throw error; // Other errors
             }
         }
         
-        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, finalEmail, data.password);
-        const user = userCredential.user;
-
-        await updateProfile(user, { displayName: finalDisplayName });
+        const userRecord = await auth.createUser({
+            email: finalEmail,
+            password: data.password,
+            displayName: finalDisplayName,
+        });
+        
+        const user = userRecord;
 
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
@@ -72,10 +72,6 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
     } catch (error: any) {
         console.error("Error creating new student:", error);
         return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
-    } finally {
-        if (secondaryApp) {
-            await deleteApp(secondaryApp);
-        }
     }
 }
 
@@ -86,37 +82,36 @@ export async function addStudentToClass(displayName: string, className: string):
         return { success: false, error: "Öğrenci adı boş olamaz." };
     }
 
-    if (!firebaseConfig.apiKey) {
-        console.error("Firebase config is missing.");
-        return { success: false, error: "Sunucu yapılandırma hatası." };
-    }
-
     const password = "123456"; // Default password
-    const appName = 'student-creation-' + Date.now() + Math.random();
-    let secondaryApp;
 
     try {
-        secondaryApp = initializeApp(firebaseConfig, appName);
-        const secondaryAuth = getAuth(secondaryApp);
+        const auth = getAuth(adminApp);
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
         let attempts = 0;
         
         while (true) {
-            const methods = await fetchSignInMethodsForEmail(secondaryAuth, finalEmail);
-            if (methods.length === 0) break;
-            attempts++;
-            finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-            if (attempts > 100) {
-                 throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
+            try {
+                await auth.getUserByEmail(finalEmail);
+                attempts++;
+                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
+                 if (attempts > 100) {
+                    throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
+                }
+            } catch (error: any) {
+                if (error.code === 'auth/user-not-found') {
+                    break; // Email is available
+                }
+                throw error; // Other errors
             }
         }
         
-        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, finalEmail, password);
-        const user = userCredential.user;
-
-        await updateProfile(user, { displayName: finalDisplayName });
+        const userRecord = await auth.createUser({
+            email: finalEmail,
+            password: password,
+            displayName: finalDisplayName,
+        });
 
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
@@ -127,12 +122,11 @@ export async function addStudentToClass(displayName: string, className: string):
             createdAt: serverTimestamp(),
         };
 
-        // Use the primary admin-authenticated db instance to write to Firestore
-        await setDoc(doc(db, "users", user.uid), newUserProfile);
+        await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
-            uid: user.uid,
+            uid: userRecord.uid,
             createdAt: new Date().toISOString(),
         };
         
@@ -141,10 +135,6 @@ export async function addStudentToClass(displayName: string, className: string):
     } catch (error: any) {
         console.error("Error creating new student:", error);
         return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
-    } finally {
-        if (secondaryApp) {
-            await deleteApp(secondaryApp);
-        }
     }
 }
 
@@ -153,69 +143,29 @@ export async function bulkAddStudentsToClass(names: string[], className: string)
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
     }
-    if (!firebaseConfig.apiKey) {
-        console.error("Firebase config is missing.");
-        return { success: false, error: "Sunucu yapılandırma hatası." };
-    }
-
+    
     const password = "123456";
     let successCount = 0;
-    let errorCount = 0;
     const errorDetails: {name: string, error: string}[] = [];
 
-    await Promise.all(names.map(async (name) => {
+     for (const name of names) {
         const finalDisplayName = name.trim();
-        if (!finalDisplayName) {
-            errorCount++;
-            errorDetails.push({ name, error: "Boş isim." });
-            return;
-        }
+        if (!finalDisplayName) continue;
 
-        const appName = 'student-creation-' + Date.now() + Math.random();
-        let secondaryApp;
         try {
-            secondaryApp = initializeApp(firebaseConfig, appName);
-            const secondaryAuth = getAuth(secondaryApp);
-
-            const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
-            let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
-            let attempts = 0;
-
-            while (true) {
-                const methods = await fetchSignInMethodsForEmail(secondaryAuth, finalEmail);
-                if (methods.length === 0) break;
-                attempts++;
-                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-                if (attempts > 100) throw new Error("Benzersiz e-posta bulunamadı.");
+            const result = await addStudentToClass(finalDisplayName, className);
+            if (result.success) {
+                successCount++;
+            } else {
+                errorDetails.push({ name: finalDisplayName, error: result.error || 'Bilinmeyen hata' });
             }
-            
-            const userCredential = await createUserWithEmailAndPassword(secondaryAuth, finalEmail, password);
-            const user = userCredential.user;
-            await updateProfile(user, { displayName: finalDisplayName });
-
-            const newUserProfile: Omit<UserProfile, 'uid'> = {
-                displayName: finalDisplayName,
-                email: finalEmail,
-                role: 'student',
-                class: className,
-                score: 0,
-                createdAt: serverTimestamp(),
-            };
-            await setDoc(doc(db, "users", user.uid), newUserProfile);
-            successCount++;
         } catch (error: any) {
-            errorCount++;
             errorDetails.push({ name: finalDisplayName, error: error.message });
-            console.error(`Error creating student ${finalDisplayName}:`, error);
-        } finally {
-            if (secondaryApp) {
-                await deleteApp(secondaryApp);
-            }
         }
-    }));
+    }
 
-    if (errorCount > 0) {
-        return { success: false, error: `${errorCount} öğrenci eklenirken hata oluştu.`, successCount, errorCount, errorDetails };
+    if (errorDetails.length > 0) {
+        return { success: false, error: `${errorDetails.length} öğrenci eklenirken hata oluştu.`, successCount, errorDetails };
     }
 
     return { success: true, successCount };
@@ -258,9 +208,9 @@ export async function deleteStudent(userId: string): Promise<{ success: boolean;
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
     }
     try {
-        // This only deletes from Firestore. Auth deletion requires admin privileges.
-        // For a full delete, you'd call a Cloud Function or a dedicated admin action.
-        await deleteUserFromFirestore(userId);
+        const auth = getAuth(adminApp);
+        await auth.deleteUser(userId);
+        await deleteDoc(doc(db, 'users', userId));
         return { success: true };
     } catch (error: any) {
         console.error(`Error deleting user ${userId}:`, error);

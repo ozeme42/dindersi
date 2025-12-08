@@ -5,9 +5,10 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { getAuth } from 'firebase-admin/auth';
-import { doc, deleteDoc } from 'firebase/firestore';
+import { doc, deleteDoc, getFirestore } from 'firebase/firestore';
 import { adminApp } from '@/lib/firebase-admin';
-import { db } from '@/lib/firebase';
+
+const db = getFirestore(adminApp);
 
 export const deleteUserFlow = ai.defineFlow(
   {
