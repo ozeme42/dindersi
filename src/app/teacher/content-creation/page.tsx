@@ -2,6 +2,7 @@
 
 'use client';
 
+import * as React from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -71,10 +72,10 @@ type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
 const steps = [
-    { id: 1, name: 'Sınıf Seçimi', icon: Users },
-    { id: 2, name: 'Ders Seçimi', icon: Book },
-    { id: 3, name: 'Ünite Seçimi', icon: Library },
-    { id: 4, name: 'Konu Yönetimi', icon: ListTodo },
+    { id: 1, name: 'Sınıf Seçimi', icon: <Users className="w-6 h-6" /> },
+    { id: 2, name: 'Ders Seçimi', icon: <Book className="w-6 h-6" /> },
+    { id: 3, name: 'Ünite Seçimi', icon: <Library className="w-6 h-6" /> },
+    { id: 4, name: 'Konu Yönetimi', icon: <ListTodo className="w-6 h-6" /> },
 ];
 
 type DialogState = {
@@ -435,6 +436,7 @@ export default function ContentCreationPage() {
                 router.push(`/teacher/content-creation/edit?courseId=${selections.courseId}&unitId=${selections.unitId}&topicId=${item.id}`);
             } else {
                 let type: 'class' | 'course' | 'unit' = 'class';
+                if (currentStep === 1) type = 'class';
                 if (currentStep === 2) type = 'course';
                 if (currentStep === 3) type = 'unit';
                 handleSelect(type, item.id, displayName);
@@ -578,7 +580,7 @@ export default function ContentCreationPage() {
                         {steps.map((step, index) => {
                             const isCompleted = currentStep > step.id;
                             const isActive = currentStep === step.id;
-                            const IconComponent = React.cloneElement(step.icon, {
+                             const IconComponent = React.cloneElement(step.icon, {
                                 className: "w-6 h-6",
                             });
                             
@@ -642,15 +644,14 @@ export default function ContentCreationPage() {
                     </div>
 
                     <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
-                        {currentStep > 1 ? (
-                            <Button 
-                                variant="outline" 
-                                onClick={handleBack}
-                                className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent"
-                            >
-                                <ArrowLeft className="mr-2 h-5 w-5" /> Geri
-                            </Button>
-                        ) : <div></div>}
+                        <Button 
+                            variant="outline" 
+                            onClick={handleBack}
+                            disabled={currentStep === 1}
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl text-lg bg-transparent"
+                        >
+                            <ArrowLeft className="mr-2 h-5 w-5" /> Geri
+                        </Button>
                     </div>
                 </div>
 
