@@ -1,51 +1,50 @@
 
+'use client';
 
-"use client"
-
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Link from "next/link"
+import Link from "next/link";
 
 // UI Imports
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table"
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { UserAvatar } from "@/components/user-avatar"
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog } from "lucide-react"
+    Card, CardContent, CardDescription, CardHeader, CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/components/user-avatar";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, UserCheck, Search, Filter } from "lucide-react";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 
 // Firebase and Actions
-import { useToast } from "@/hooks/use-toast"
-import { db } from "@/lib/firebase"
-import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore"
-import { updateUser, getAllUsers } from '@/app/teacher/superadmin/actions';
-import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent, deleteStudent } from "./actions";
+import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
+import { updateUser, getAllUsers, deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent } from "./actions";
 
 
 // Types
-import type { UserProfile, SchoolClass } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import type { UserProfile, SchoolClass } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { UserEditorDialog } from "@/components/user-editor-dialog"
+import { UserEditorDialog } from "@/components/user-editor-dialog";
 
 function StudentQuickScore({ studentId, onScoreAdd }: { studentId: string, onScoreAdd: (studentId: string, points: number, reason: string) => Promise<void> }) {
     const [points, setPoints] = useState(10);
@@ -62,21 +61,21 @@ function StudentQuickScore({ studentId, onScoreAdd }: { studentId: string, onSco
     };
 
     return (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2 bg-slate-900/50 p-1.5 rounded-lg border border-white/5 shadow-inner">
             <Input
                 type="number"
                 value={points}
                 onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
-                className="w-16 h-8 text-center"
+                className="w-16 h-8 text-center bg-slate-950 border-white/10 text-white focus:border-indigo-500/50"
             />
             <Input
                 type="text"
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Açıklama"
-                className="w-32 h-8"
+                className="w-32 h-8 bg-slate-950 border-white/10 text-white focus:border-indigo-500/50 text-xs"
             />
-            <Button size="icon" className="h-8 w-8" onClick={handleQuickAdd} disabled={isSaving || !reason.trim() || points === 0}>
+            <Button size="icon" className="h-8 w-8 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20" onClick={handleQuickAdd} disabled={isSaving || !reason.trim() || points === 0}>
                 {isSaving ? <Loader2 className="h-4 w-4 animate-spin"/> : <Send className="h-4 w-4"/>}
             </Button>
         </div>
@@ -91,71 +90,83 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
     onAddScore: (studentId: string, points: number, reason: string) => Promise<void>
 }) {
     if (isLoading) {
-        return <div className="flex justify-center items-center h-48"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+        return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
     
     return (
-        <div className="border rounded-md">
+        <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Ad Soyad</TableHead>
-                        <TableHead>Sınıf/Şube</TableHead>
-                        <TableHead className="text-right">Puan</TableHead>
-                        <TableHead className="w-[300px]">Hızlı Puan Girişi</TableHead>
-                        <TableHead className="text-right">Eylemler</TableHead>
+                <TableHeader className="bg-slate-900/80">
+                    <TableRow className="border-white/5 hover:bg-transparent">
+                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sınıf</TableHead>
+                        <TableHead className="text-right text-slate-300 font-bold">Puan</TableHead>
+                        <TableHead className="w-[320px] text-slate-300 font-bold">Hızlı Puan</TableHead>
+                        <TableHead className="text-right text-slate-300 font-bold">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {students.length > 0 ? students.map((student) => {
-                        const date = student.createdAt ? new Date(student.createdAt) : null;
-                        const isValidDate = date instanceof Date && !isNaN(date.getTime());
-                        
                         return (
-                        <TableRow key={student.uid}>
+                        <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <UserAvatar user={student} />
-                                    <span className="font-medium">{student.displayName}</span>
+                                    <div className="relative">
+                                        <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700 group-hover:border-indigo-500 transition-colors"/>
+                                        <div className="absolute -bottom-1 -right-1 bg-slate-900 rounded-full p-0.5">
+                                            {student.role === 'guest' ? <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full" title="Misafir"/> : <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" title="Kayıtlı"/>}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
+                                        <span className="text-xs text-slate-500 truncate max-w-[150px]">{student.email}</span>
+                                    </div>
                                 </div>
                             </TableCell>
-                            <TableCell>{student.class}</TableCell>
-                            <TableCell className="text-right font-bold text-primary">{student.score?.toLocaleString()}</TableCell>
+                            <TableCell>
+                                <Badge variant="secondary" className="bg-slate-800 text-slate-300 border-white/10 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 group-hover:border-indigo-500/30 transition-all">
+                                    {student.class || '-'}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <span className="font-black text-lg text-emerald-400 drop-shadow-sm">{student.score?.toLocaleString() || 0}</span>
+                            </TableCell>
                             <TableCell>
                                 <StudentQuickScore studentId={student.uid} onScoreAdd={onAddScore} />
                             </TableCell>
                             <TableCell className="text-right">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button aria-haspopup="true" size="icon" variant="ghost">
-                                            <MoreHorizontal className="h-4 w-4" />
-                                            <span className="sr-only">Menüyü aç</span>
+                                        <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                                            <MoreHorizontal className="h-5 w-5" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>Eylemler</DropdownMenuLabel>
-                                        <DropdownMenuItem asChild>
+                                    <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
+                                        <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                        <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer">
                                            <Link href={`/teacher/students/${student.uid}`}>
-                                                <Users className="mr-2 h-4 w-4" /> Profili Görüntüle
-                                            </Link>
+                                                <Users className="mr-2 h-4 w-4 text-indigo-400" /> Profil
+                                           </Link>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onEdit(student)}><FilePenLine className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                            <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
+                                        </DropdownMenuItem>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <button className="w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-destructive hover:bg-destructive/10">
+                                                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
                                                     <Trash2 className="mr-2 h-4 w-4" /> Sil
-                                                </button>
+                                                </div>
                                             </AlertDialogTrigger>
-                                            <AlertDialogContent>
+                                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Bu işlem geri alınamaz. "{student.displayName}" adlı öğrencinin tüm verileri (giriş bilgileri, puanları, ilerlemesi) sistemden kalıcı olarak silinecektir.
+                                                    <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-slate-400">
+                                                        "{student.displayName}" silinecek. Bu işlem geri alınamaz.
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-destructive hover:bg-destructive/90">
+                                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white border-none">
                                                         Evet, Sil
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
@@ -168,7 +179,9 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={5} className="h-32 text-center text-slate-500 italic">
+                                Bu filtrede öğrenci bulunamadı.
+                            </TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -223,7 +236,7 @@ export default function StudentManagementPage() {
     try {
       const usersData = await getAllUsers();
       if (usersData) {
-        const studentsData = usersData.filter(u => u.role === 'student' || u.role === 'guest');
+        const studentsData = usersData.filter(u => u.role === 'student');
         setAllStudents(studentsData);
       } else {
          toast({ title: "Hata", description: "Kullanıcılar getirilemedi.", variant: "destructive" });
@@ -278,7 +291,7 @@ export default function StudentManagementPage() {
   };
   
   const handleDeleteUser = async (userId: string) => {
-    const result = await deleteStudent(userId);
+    const result = await deleteUserFromFirestore(userId);
     if (result.success) {
         toast({ title: "Başarılı", description: "Öğrenci sistemden tamamen silindi." });
         await fetchAllData();
@@ -372,95 +385,158 @@ export default function StudentManagementPage() {
   }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, sortBy]);
   
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold font-headline">Öğrenci Yönetimi</h1>
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+      
+       {/* Arka Plan */}
+       <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-emerald-900/10 rounded-full blur-[150px]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-8">
+             <div>
+                <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
+                    <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
+                        <UserCheck className="h-8 w-8 text-indigo-400" />
+                    </div>
+                    Öğrenci Yönetimi
+                </h1>
+                <p className="text-slate-400 mt-2 font-medium">Sınıf, öğrenci ve puan işlemlerini buradan yönetin.</p>
+             </div>
         </div>
 
-        <Tabs defaultValue="list">
-          <TabsList>
-            <TabsTrigger value="list">Öğrenci Listesi</TabsTrigger>
-            <TabsTrigger value="add">Yeni Öğrenci Ekle</TabsTrigger>
-          </TabsList>
-          <TabsContent value="list">
-             <Card>
-                <CardHeader>
-                    <CardTitle>Tüm Öğrenciler</CardTitle>
-                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 pt-4">
-                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                            <SelectTrigger><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Öğrenciler</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                        </Select>
-                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                            <SelectTrigger><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                         <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+        <Tabs defaultValue="list" className="space-y-6">
+            <div className="bg-slate-900/40 p-1.5 rounded-xl border border-white/10 inline-flex">
+                <TabsList className="bg-transparent border-0 p-0 h-auto gap-2">
+                    <TabsTrigger value="list" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
+                        <Users className="mr-2 h-4 w-4"/> Öğrenci Listesi
+                    </TabsTrigger>
+                    <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
+                        <UserPlus className="mr-2 h-4 w-4"/> Yeni Ekle
+                    </TabsTrigger>
+                </TabsList>
+            </div>
+
+          <TabsContent value="list" className="space-y-6 outline-none">
+             {/* Filtreleme Barı */}
+             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-white/5 shadow-lg">
+                <div className="md:col-span-3">
+                     <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
+                        <SelectTrigger className="bg-slate-950 border-white/10 h-11 text-white font-medium focus:ring-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                    </Select>
+                </div>
+                <div className="md:col-span-2">
+                    <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                        <SelectTrigger className="bg-slate-950 border-white/10 h-11 text-white font-medium focus:ring-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                            <SelectItem value="all">Tüm Şubeler</SelectItem>
+                            {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="md:col-span-4">
+                     <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                        <Input placeholder="İsim veya e-posta ile ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 h-11 pl-10 text-white focus:border-indigo-500/50 placeholder:text-slate-600" />
+                     </div>
+                </div>
+                 <div className="md:col-span-3 flex justify-end gap-2">
+                    <Button variant={sortBy === 'name' ? 'secondary' : 'ghost'} onClick={() => setSortBy('name')} size="sm" className={cn("h-11 px-4 font-bold border border-white/5", sortBy === 'name' ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>
+                        <ArrowDownAZ className="mr-2 h-4 w-4"/> A-Z
+                    </Button>
+                     <Button variant={sortBy === 'date' ? 'secondary' : 'ghost'} onClick={() => setSortBy('date')} size="sm" className={cn("h-11 px-4 font-bold border border-white/5", sortBy === 'date' ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" : "text-slate-400 hover:text-white hover:bg-white/5")}>
+                        <CalendarClock className="mr-2 h-4 w-4"/> Tarih
+                    </Button>
+                </div>
+             </div>
+
+             <StudentTable
+                students={filteredAndSortedStudents}
+                isLoading={isLoading}
+                onEdit={handleOpenDialog}
+                onDelete={handleDeleteUser}
+                onAddScore={handleAddManualScore}
+            />
+          </TabsContent>
+
+          <TabsContent value="add" className="outline-none">
+              <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                <CardHeader className="bg-white/5 border-b border-white/5 pb-8">
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
+                            <UserPlus className="h-6 w-6 text-emerald-400" />
+                        </div>
+                        <CardTitle className="text-2xl text-white">Yeni Öğrenci Ekle</CardTitle>
                     </div>
+                    <CardDescription className="text-slate-400 text-base">
+                        Öğrencileri tek tek veya toplu liste halinde ekleyebilirsiniz. Eklenen öğrenciler seçilen sınıfa atanır.
+                    </CardDescription>
                 </CardHeader>
-                <CardContent>
-                     <div className="flex items-center justify-between mb-4">
-                        <div/>
-                        <div className="flex items-center gap-2">
-                            <Button variant={sortBy === 'name' ? 'secondary' : 'ghost'} onClick={() => setSortBy('name')} size="sm">
-                                <ArrowDownAZ className="mr-2 h-4 w-4"/> İsme Göre Sırala
-                            </Button>
-                             <Button variant={sortBy === 'date' ? 'secondary' : 'ghost'} onClick={() => setSortBy('date')} size="sm">
-                                <CalendarClock className="mr-2 h-4 w-4"/> Kayıt Tarihine Göre Sırala
-                            </Button>
+                <CardContent className="p-8 space-y-8">
+                    {/* Sınıf Seçimi */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label className="text-slate-300">Sınıf</Label>
+                            <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 h-12 text-lg text-white"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="text-slate-300">Şube</Label>
+                            <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 h-12 text-lg text-white"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    <SelectItem value="all" disabled>Lütfen bir şube seçin</SelectItem>
+                                    {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
-                     <StudentTable
-                        students={filteredAndSortedStudents}
-                        isLoading={isLoading}
-                        onEdit={handleOpenDialog}
-                        onDelete={handleDeleteUser}
-                        onAddScore={handleAddManualScore}
-                    />
-                </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="add">
-              <Card>
-                <CardHeader>
-                    <CardTitle>Yeni Öğrenci Ekle</CardTitle>
-                    <CardDescription>Oluşturulan öğrenciler seçtiğiniz sınıf ve şubeye atanacaktır. Öğrenciler ilk girişlerinde şifrelerini oluşturacaklardır.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                            <SelectTrigger><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                        </Select>
-                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                            <SelectTrigger><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all" disabled>Lütfen bir şube seçin</SelectItem>
-                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <Tabs defaultValue="single">
-                      <TabsList>
-                        <TabsTrigger value="single">Tek Tek Ekle</TabsTrigger>
-                        <TabsTrigger value="bulk">Toplu Ekle</TabsTrigger>
+
+                    <Tabs defaultValue="single" className="w-full">
+                      <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex">
+                        <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
+                        <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
                       </TabsList>
-                      <TabsContent value="single" className="pt-4">
-                        <form onSubmit={handleAddSingleStudent} className="flex gap-2">
-                          <Input placeholder="Öğrenci Adı Soyadı" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} />
-                          <Button type="submit" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}><UserPlus className="mr-2 h-4 w-4"/> Ekle</Button>
-                        </form>
-                      </TabsContent>
-                      <TabsContent value="bulk" className="pt-4">
-                        <form onSubmit={handleBulkAdd} className="space-y-4">
-                            <Textarea placeholder="Her satıra bir öğrenci adı yazın..." className="min-h-48" value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} />
-                            <Button type="submit" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}><Users className="mr-2 h-4 w-4"/> Toplu Ekle</Button>
-                        </form>
-                      </TabsContent>
+                      
+                      <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
+                          <TabsContent value="single" className="mt-0">
+                            <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
+                              <div className="flex-1 space-y-2">
+                                  <Label className="text-slate-300">Ad Soyad</Label>
+                                  <Input 
+                                    placeholder="Örn: Ali Yılmaz" 
+                                    value={newStudentName} 
+                                    onChange={e => setNewStudentName(e.target.value)} 
+                                    className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"
+                                  />
+                              </div>
+                              <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}>
+                                  {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
+                              </Button>
+                            </form>
+                          </TabsContent>
+
+                          <TabsContent value="bulk" className="mt-0 space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-slate-300">Öğrenci Listesi</Label>
+                                <Textarea 
+                                    placeholder="Her satıra bir öğrenci adı gelecek şekilde yapıştırın..." 
+                                    className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" 
+                                    value={bulkStudentNames} 
+                                    onChange={e => setBulkStudentNames(e.target.value)} 
+                                />
+                            </div>
+                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}>
+                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Upload className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
+                            </Button>
+                          </TabsContent>
+                      </div>
                     </Tabs>
                 </CardContent>
               </Card>
