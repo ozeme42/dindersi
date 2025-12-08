@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -131,22 +132,25 @@ export async function getBranchScaleScores(): Promise<BranchScore[]> {
             }
         }
 
-        // Şubelere göre grupla ve ortalama al
-        const branchScores: { [branchName: string]: { totalSuccess: number; studentCount: number } } = {};
+        // Sınıf seviyelerine göre grupla ve ortalama al
+        const gradeScores: { [gradeName: string]: { totalSuccess: number; studentCount: number } } = {};
         allStudents.forEach(student => {
             const studentScoreData = studentScores[student.uid];
-            if (student.class && studentScoreData && studentScoreData.scaleCount > 0) {
-                if (!branchScores[student.class]) {
-                    branchScores[student.class] = { totalSuccess: 0, studentCount: 0 };
+            // Sınıf adından sadece seviyeyi al (örn: "5 - A" -> "5")
+            const gradeName = student.class?.split(' - ')[0];
+
+            if (gradeName && studentScoreData && studentScoreData.scaleCount > 0) {
+                if (!gradeScores[gradeName]) {
+                    gradeScores[gradeName] = { totalSuccess: 0, studentCount: 0 };
                 }
                 const avgStudentSuccess = studentScoreData.totalSuccess / studentScoreData.scaleCount;
-                branchScores[student.class].totalSuccess += avgStudentSuccess;
-                branchScores[student.class].studentCount += 1;
+                gradeScores[gradeName].totalSuccess += avgStudentSuccess;
+                gradeScores[gradeName].studentCount += 1;
             }
         });
 
-        const finalLeaderboard: BranchScore[] = Object.entries(branchScores).map(([branchName, data]) => ({
-            branchName,
+        const finalLeaderboard: BranchScore[] = Object.entries(gradeScores).map(([gradeName, data]) => ({
+            branchName: `${gradeName}. Sınıflar`,
             studentCount: data.studentCount,
             averageSuccess: Math.round(data.totalSuccess / data.studentCount),
         }));
