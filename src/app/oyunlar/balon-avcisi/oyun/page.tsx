@@ -211,7 +211,7 @@ function Game() {
         if (!rect) return;
         const targetX = clientX - rect.left;
         const centerX = dimensions.width / 2;
-        const centerY = dimensions.height - 20;
+        const centerY = dimensions.height - 80;
         const dx = targetX - centerX;
         const dy = clientY - centerY;
         const deg = Math.atan2(dx, -dy) * (180 / Math.PI);
@@ -226,7 +226,7 @@ function Game() {
         setProjectiles(prev => [...prev, {
             id: Date.now(),
             x: dimensions.width / 2 + Math.sin(radian) * 60,
-            y: dimensions.height - 20 - Math.cos(radian) * 60,
+            y: dimensions.height - 80 - Math.cos(radian) * 60,
             angle: fireAngle
         }]);
     };
@@ -374,13 +374,13 @@ function Game() {
                 {projectiles.map(p => <div key={p.id} className="projectile" style={{ left: p.x, top: p.y, transform: 'translate(-50%, -50%)' }}></div>)}
                 {effects.map(e => <div key={e.id} className="pop-effect" style={{ left: e.x, top: e.y, color: e.color, transform: 'translate(-50%, -50%)' }}>{e.text}</div>)}
 
-                <div className="shooter-base" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)'}} />
-                <div className="shooter" style={{ transform: `translateX(-50%) rotate(${angle}deg)`, bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }} >
+                <div className="shooter-base" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'}} />
+                <div className="shooter" style={{ transform: `translateX(-50%) rotate(${angle}deg)`, bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }} >
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>
                 </div>
 
                 {gameState === 'playing' && currentLevel && (
-                    <div className="question-panel" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 90px)'}}>
+                    <div className="question-panel" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 140px)'}}>
                         <div className="question-box animate-[bounce_2s_infinite]">
                             <span className="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>
                             {currentLevel.q}
