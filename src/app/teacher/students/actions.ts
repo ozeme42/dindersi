@@ -11,6 +11,75 @@ import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { deleteUserFromFirestore } from "@/app/teacher/superadmin/actions";
 
 
+export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdAt' | 'score'> & { password?: string }): Promise<{ success: boolean; error?: string; user?: UserProfile }> {
+    const finalDisplayName = data.displayName.trim();
+    if (!finalDisplayName) {
+        return { success: false, error: "Öğrenci adı boş olamaz." };
+    }
+    if (!data.password || data.password.length < 6) {
+        return { success: false, error: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır." };
+    }
+    if (!firebaseConfig.apiKey) {
+        console.error("Firebase config is missing.");
+        return { success: false, error: "Sunucu yapılandırma hatası." };
+    }
+
+    const appName = 'student-creation-' + Date.now() + Math.random();
+    let secondaryApp;
+
+    try {
+        secondaryApp = initializeApp(firebaseConfig, appName);
+        const secondaryAuth = getAuth(secondaryApp);
+
+        const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
+        let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
+        let attempts = 0;
+        
+        while (true) {
+            const methods = await fetchSignInMethodsForEmail(secondaryAuth, finalEmail);
+            if (methods.length === 0) break;
+            attempts++;
+            finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
+            if (attempts > 100) {
+                 throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
+            }
+        }
+        
+        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, finalEmail, data.password);
+        const user = userCredential.user;
+
+        await updateProfile(user, { displayName: finalDisplayName });
+
+        const newUserProfile: Omit<UserProfile, 'uid'> = {
+            displayName: finalDisplayName,
+            email: finalEmail,
+            role: data.role || 'student',
+            class: data.class,
+            score: 0,
+            createdAt: serverTimestamp(),
+        };
+
+        await setDoc(doc(db, "users", user.uid), newUserProfile);
+        
+        const serializableNewUser: UserProfile = {
+            ...newUserProfile,
+            uid: user.uid,
+            createdAt: new Date().toISOString(),
+        };
+        
+        return { success: true, user: serializableNewUser };
+
+    } catch (error: any) {
+        console.error("Error creating new student:", error);
+        return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
+    } finally {
+        if (secondaryApp) {
+            await deleteApp(secondaryApp);
+        }
+    }
+}
+
+
 export async function addStudentToClass(displayName: string, className: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
     if (!finalDisplayName) {
@@ -64,7 +133,7 @@ export async function addStudentToClass(displayName: string, className: string):
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
             uid: user.uid,
-            createdAt: new Date().toISOString(), // for immediate client-side update
+            createdAt: new Date().toISOString(),
         };
         
         return { success: true, newUser: serializableNewUser };
@@ -80,7 +149,7 @@ export async function addStudentToClass(displayName: string, className: string):
 }
 
 
-export async function bulkAddStudentsToClass(names: string[], className: string): Promise<{ success: boolean; error?: string; successCount?: number; errorCount?: number; errorDetails?: {name: string, error: string}[] }> {
+export async function bulkAddStudentsToClass(names: string[], className: string): Promise<{ success: boolean; error?: string; successCount?: number; errorDetails?: {name: string, error: string}[] }> {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
     }

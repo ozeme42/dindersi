@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -46,7 +47,7 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
                  return rest;
             });
         case 'yazilacaklar':
-             const topicsSnapshot = await getDocs(query(collection(db, "topics"), where("writingContent", "!=", null)));
+             const topicsSnapshot = await getDocs(query(collection(db, 'topics'), where("writingContent", "!=", null)));
              const yazilacaklarData = [];
              for (const topicDoc of topicsSnapshot.docs) {
                 const topicData = topicDoc.data() as Topic;
