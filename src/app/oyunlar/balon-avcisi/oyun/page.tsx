@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
-    Play, Zap, ArrowLeft, Loader2, Target, AlertTriangle
+    Play, Zap, Loader2, Target, AlertTriangle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ const BALLOON_COLORS = [
     '#ec4899'  // Pink
 ];
 
-const Game = () => {
+function Game() {
     const router = useRouter();
     const { user } = useAuth();
     const { toast } = useToast();
@@ -50,7 +50,7 @@ const Game = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
 
-    const gameContext = `Balon Avcısı - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+    const gameContext = `Balon Avcısı - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
     const backUrl = '/oyunlar/balon-avcisi';
 
     // Fetch data on load
@@ -102,9 +102,12 @@ const Game = () => {
     };
 
     const updateGame = useCallback((time: number) => {
-        if (gameState !== 'playing' || !dimensions.width) return;
+        if (gameState !== 'playing' || !dimensions.width || dimensions.height === 0) {
+            if (requestRef.current) cancelAnimationFrame(requestRef.current);
+            return;
+        }
 
-        const currentLevel = levels[levelIndex % levels.length];
+        const currentLevel = levels[levelIndex];
         if (!currentLevel) {
             setGameState('gameover');
             return;
@@ -116,7 +119,7 @@ const Game = () => {
             const text = isCorrect ? currentLevel.a : currentLevel.wrongs[Math.floor(Math.random() * currentLevel.wrongs.length)];
             
             const newBalloon = {
-                id: Date.now(),
+                id: Date.now() + Math.random(),
                 x: Math.random() * (dimensions.width - 80) + 40,
                 y: dimensions.height + 50,
                 text: text,
@@ -140,9 +143,10 @@ const Game = () => {
         setProjectiles(currentProjectiles => {
             const nextProjectiles = [...currentProjectiles];
             setBalloons(currentBalloons => {
-                let nextBalloons = [...currentBalloons];
+                const nextBalloons = [...currentBalloons];
                 for (let pIdx = nextProjectiles.length - 1; pIdx >= 0; pIdx--) {
                     const p = nextProjectiles[pIdx];
+                    let hit = false;
                     for (let bIdx = nextBalloons.length - 1; bIdx >= 0; bIdx--) {
                         const b = nextBalloons[bIdx];
                         const dx = p.x - b.x; const dy = p.y - b.y;
@@ -150,9 +154,11 @@ const Game = () => {
                             nextProjectiles.splice(pIdx, 1);
                             nextBalloons.splice(bIdx, 1);
                             if (b.isCorrect) handleCorrectHit(b.x, b.y); else handleWrongHit(b.x, b.y);
+                            hit = true;
                             break;
                         }
                     }
+                     if (hit) break;
                 }
                 return nextBalloons;
             });
@@ -200,13 +206,14 @@ const Game = () => {
     const handleInput = (e: React.MouseEvent | React.TouchEvent) => {
         if (gameState !== 'playing' || !dimensions.width) return;
         const clientX = 'clientX' in e ? e.clientX : e.touches[0].clientX;
+        const clientY = 'clientY' in e ? e.clientY : e.touches[0].clientY;
         const rect = gameAreaRef.current?.getBoundingClientRect();
         if (!rect) return;
         const targetX = clientX - rect.left;
         const centerX = dimensions.width / 2;
         const centerY = dimensions.height - 20;
         const dx = targetX - centerX;
-        const dy = (e.clientY || e.touches[0].clientY) - rect.top - centerY;
+        const dy = clientY - centerY;
         const deg = Math.atan2(dx, -dy) * (180 / Math.PI);
         const clampedAngle = Math.max(-70, Math.min(70, deg));
         setAngle(clampedAngle);
@@ -250,6 +257,110 @@ const Game = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-sky-500 overflow-hidden font-sans select-none relative touch-none">
+            <style jsx global>{`
+                .balloon {
+                    position: absolute;
+                    width: 70px;
+                    height: 85px;
+                    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 0.85rem;
+                    line-height: 1;
+                    box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+                    transition: transform 0.1s;
+                    z-index: 10;
+                    color: white;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                }
+                .balloon::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 2px;
+                    height: 20px;
+                    background: rgba(0,0,0,0.3);
+                }
+                .balloon::before {
+                    content: '';
+                    position: absolute;
+                    bottom: -4px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 6px;
+                    height: 4px;
+                    background: inherit;
+                    border-radius: 2px;
+                }
+                .projectile {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background: #ef4444;
+                    border-radius: 50%;
+                    z-index: 15;
+                    box-shadow: 0 0 5px #ef4444;
+                }
+                .pop-effect {
+                    position: absolute;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    animation: popAnim 0.4s ease-out forwards;
+                    z-index: 30;
+                    pointer-events: none;
+                }
+                @keyframes popAnim {
+                    0% { transform: scale(0.5); opacity: 1; }
+                    100% { transform: scale(2); opacity: 0; }
+                }
+                .shooter-base {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 60px;
+                    height: 30px;
+                    background: #1e293b;
+                    border-radius: 30px 30px 0 0;
+                    z-index: 19;
+                }
+                .shooter {
+                    position: absolute;
+                    left: 50%;
+                    transform-origin: center bottom;
+                    width: 6px;
+                    height: 60px;
+                    background: #475569;
+                    z-index: 20;
+                    border-radius: 3px;
+                }
+                 .question-panel {
+                    position: absolute;
+                    left: 20px;
+                    right: 20px;
+                    pointer-events: none; 
+                    display: flex;
+                    justify-content: center;
+                    z-index: 50;
+                }
+                .question-box {
+                    background: white;
+                    color: #0f172a;
+                    padding: 15px 30px;
+                    border-radius: 20px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    text-align: center;
+                    border-bottom: 6px solid #cbd5e1;
+                    pointer-events: auto;
+                    max-width: 90%;
+                }
+            `}</style>
             <div 
                 ref={gameAreaRef}
                 className="w-full h-full absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500 cursor-crosshair"
@@ -301,4 +412,3 @@ export default function BalonAvcisiGamePage() {
         </Suspense>
     );
 }
-
