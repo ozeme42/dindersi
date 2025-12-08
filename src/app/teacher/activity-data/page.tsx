@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -559,7 +560,7 @@ export default function ActivityDataManagementPage() {
             context={aiGenerationContext}
         />
         {editingItem && (
-            <ActivityItemEditorDialog 
+            <ActivityItemEditorDialog
                 isOpen={!!editingItem}
                 onOpenChange={(isOpen) => !isOpen && setEditingItem(null)}
                 item={editingItem}
