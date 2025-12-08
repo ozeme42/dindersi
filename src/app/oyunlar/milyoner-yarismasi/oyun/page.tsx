@@ -118,7 +118,7 @@ function MilyonerGame() {
           setShowConfetti(true);
           if (user) {
             const finalPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
-            await addScore(user.uid, finalPrize, gameContext); // CONTEXT WAS CORRECTED HERE
+            await addScore(user.uid, finalPrize, gameContext);
             await checkAndAwardMillionaireBadge(user.uid);
           }
         }
