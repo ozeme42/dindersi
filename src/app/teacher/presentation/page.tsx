@@ -1,15 +1,16 @@
-
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft, Presentation } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Topic } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 function PresentationPageContent() {
     const searchParams = useSearchParams();
@@ -57,17 +58,21 @@ function PresentationPageContent() {
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <span className="ml-2">Sunum yükleniyor...</span>
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
             </div>
         );
     }
     
     if (!topic) {
         return (
-            <div className="flex h-screen items-center justify-center text-muted-foreground">
-                Sunum içeriği bulunamadı.
+            <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
+                <div className="text-center">
+                    <p className="text-xl font-bold mb-4">Sunum içeriği bulunamadı.</p>
+                    <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5">
+                        <Link href="/teacher/ders-akisi">Geri Dön</Link>
+                    </Button>
+                </div>
             </div>
         );
     }
@@ -76,26 +81,69 @@ function PresentationPageContent() {
     const noOp = () => {};
 
     return (
-        <main ref={mainContentRef} className="h-screen w-screen p-4 sm:p-6 md:p-8">
-            <div className="flex justify-between items-start mb-4">
-                 <div>
-                    <h1 className="text-3xl font-bold font-headline">{topic.title}</h1>
-                 </div>
-                 <FullscreenToggle elementRef={mainContentRef} />
+        <main 
+            ref={mainContentRef} 
+            className={cn(
+                "h-screen w-screen bg-slate-950 text-white overflow-hidden flex flex-col font-sans relative",
+                !isFullscreen && "p-4 md:p-6"
+            )}
+        >
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
             </div>
-             <LessonContentViewer
-                topic={topic}
-                courseId={courseId!}
-                unitId={unitId!}
-                courseTitle={courseName!}
-                unitTitle={unitName!}
-                onTopicComplete={noOp}
-                progress={undefined}
-                onProgressUpdate={noOp}
-                onMultiAnswer={noOp}
-                onAllTfAnswered={noOp}
-                isFullscreen={isFullscreen}
-            />
+
+            {/* Üst Bar */}
+            <div className={cn(
+                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
+                isFullscreen 
+                    ? "absolute top-0 left-0 right-0 p-2 bg-slate-900/80 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 focus-within:opacity-100" 
+                    : "mb-4 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg"
+            )}>
+                <div className="flex items-center gap-4 overflow-hidden">
+                    <div className={cn("p-2.5 rounded-xl shadow-lg flex-shrink-0", isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-purple-500 to-indigo-600")}>
+                        <Presentation className={cn("text-white", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
+                    </div>
+                    <div className="flex flex-col overflow-hidden">
+                        <h1 className={cn("font-black tracking-tight text-white uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
+                            {topic.title}
+                        </h1>
+                        {!isFullscreen && <p className="text-xs text-slate-400 font-medium mt-1 truncate">{courseName} • {unitName}</p>}
+                    </div>
+                </div>
+                 
+                 <div className="flex items-center gap-2 flex-shrink-0">
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 hover:text-white border-0 h-9 w-9 rounded-lg" />
+                    {!isFullscreen && (
+                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-9 w-9">
+                            <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
+                        </Button>
+                    )}
+                 </div>
+            </div>
+            
+            {/* İçerik Alanı (Monitör) */}
+            <div className="flex-grow flex flex-col min-h-0 relative z-10">
+                 <div className={cn(
+                    "w-full h-full overflow-hidden transition-all duration-300 bg-white dark:bg-slate-900",
+                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl ring-1 ring-white/10"
+                )}>
+                    <LessonContentViewer
+                        topic={topic}
+                        courseId={courseId!}
+                        unitId={unitId!}
+                        courseTitle={courseName!}
+                        unitTitle={unitName!}
+                        onTopicComplete={noOp}
+                        progress={undefined}
+                        onProgressUpdate={noOp}
+                        onMultiAnswer={noOp}
+                        onAllTfAnswered={noOp}
+                        isFullscreen={isFullscreen}
+                    />
+                </div>
+            </div>
         </main>
     );
 }
@@ -103,10 +151,8 @@ function PresentationPageContent() {
 
 export default function PresentationPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-primary" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
             <PresentationPageContent />
         </Suspense>
     )
 }
-
-    

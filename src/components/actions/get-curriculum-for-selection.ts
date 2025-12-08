@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -26,7 +27,7 @@ export async function getCurriculumForSelection(userId: string, dataType: 'games
         const coursesSnapshot = await getDocs(coursesQuery);
         let relevantCourses = coursesSnapshot.docs
             .map(d => ({ id: d.id, ...d.data() } as Course))
-            .filter(c => !c.isTeacherOnly);
+            .filter(c => !c.isTeacherOnly && (c.isPublished ?? true));
 
         if (studentClassName) {
             relevantCourses = relevantCourses.filter(course =>
@@ -42,27 +43,32 @@ export async function getCurriculumForSelection(userId: string, dataType: 'games
             const enrichedUnits: EnrichedCourse['units'] = [];
 
             for (const unitDoc of unitsSnapshot.docs) {
+                const unitData = unitDoc.data() as Unit;
+                if (!(unitData.isPublished ?? true)) continue; // Skip unpublished units
+
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
                 
                 const topicsWithContent = topicsSnapshot.docs
-                    .map(topicDoc => topicDoc.data() as Topic)
+                    .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic))
                     .filter(topicData => {
+                        if (!(topicData.isPublished ?? true)) return false; // Skip unpublished topics
+
                         if (dataType === 'yazilacaklar') {
                             return (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
                         }
                         if (dataType === 'ozetler') {
                             return !!topicData.htmlContent;
                         }
-                        return true; // For games, include all topics
-                    })
-                    .map(topicData => ({ id: topicsSnapshot.docs.find(d => d.data().title === topicData.title)!.id, ...topicData }));
+                        return true; // For games, include all published topics
+                    });
 
 
                 if (topicsWithContent.length > 0) {
                     enrichedUnits.push({
                         id: unitDoc.id,
                         title: unitDoc.data().title,
-                        topics: topicsWithContent
+                        topics: topicsWithContent,
+                        isPublished: unitData.isPublished
                     });
                 }
             }

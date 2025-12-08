@@ -21,8 +21,8 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
     noStore();
     try {
         const [coursesSnap, classesSnap] = await Promise.all([
-            getDocs(query(collection(db, 'courses'))),
-            getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc')))
+            getDocs(query(collection(db, 'courses'), where('isPublished', '==', true))),
+            getDocs(query(collection(db, 'classes'), where('isPublished', '==', true), orderBy('createdAt', 'asc')))
         ]);
 
         const allCoursesData = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
@@ -31,11 +31,11 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
         const coursesWithContent: PublicCourse[] = [];
 
         for (const course of allCoursesData) {
-            const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
+            const unitsSnap = await getDocs(query(collection(db, `courses/${course.id}/units`), where('isPublished', '==', true), orderBy("title")));
             const unitsWithContent: PublicCourse['units'] = [];
 
             for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
+                const topicsSnap = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), where('isPublished', '==', true), orderBy("title")));
                 const topics = topicsSnap.docs.map(topicDoc => {
                     const data = topicDoc.data() as Topic;
                     const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;

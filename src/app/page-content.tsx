@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -6,7 +5,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -39,15 +38,15 @@ import { useToast } from '@/hooks/use-toast';
 // --- GAME THEME COMPONENTS ---
 const GameButton = ({ children, className, variant = 'primary', href, target, ...props }: any) => {
     const variants: {[key: string]: string} = {
-        primary: "bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/20",
-        secondary: "bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/20",
-        success: "bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/20",
-        warning: "bg-amber-500 hover:bg-amber-400 border-amber-700 text-white shadow-amber-900/20",
-        info: "bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/20",
-        dark: "bg-slate-700 hover:bg-slate-600 border-slate-900 text-white shadow-slate-900/20",
+        primary: "bg-indigo-600 hover:bg-indigo-500 border-indigo-800 text-white shadow-lg shadow-indigo-900/20",
+        secondary: "bg-rose-600 hover:bg-rose-500 border-rose-800 text-white shadow-lg shadow-rose-900/20",
+        success: "bg-emerald-600 hover:bg-emerald-500 border-emerald-800 text-white shadow-lg shadow-emerald-900/20",
+        warning: "bg-amber-600 hover:bg-amber-500 border-amber-800 text-white shadow-lg shadow-amber-900/20",
+        info: "bg-cyan-600 hover:bg-cyan-500 border-cyan-800 text-white shadow-lg shadow-cyan-900/20",
+        dark: "bg-slate-800 hover:bg-slate-700 border-slate-900 text-white shadow-lg shadow-slate-900/20",
     };
 
-    const baseClass = "relative inline-flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-3 px-6 shadow-xl group cursor-pointer";
+    const baseClass = "relative inline-flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[4px] active:border-b-0 active:translate-y-[4px] rounded-xl py-3 px-6 group cursor-pointer";
     
     const content = (
         <span className={cn(baseClass, variants[variant], className)} {...props}>
@@ -63,9 +62,11 @@ const GameButton = ({ children, className, variant = 'primary', href, target, ..
 
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
-        "backdrop-blur-md bg-white/10 dark:bg-black/20 border-2 border-white/20 dark:border-white/5 rounded-3xl shadow-2xl overflow-hidden",
+        "backdrop-blur-xl bg-slate-900/60 border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative",
         className
     )}>
+        {/* Shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
         {children}
     </div>
 );
@@ -79,16 +80,16 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         'from-pink-500 to-rose-600', 
         'from-emerald-400 to-teal-600',
         'from-amber-400 to-orange-600', 
-        'from-sky-400 to-blue-600'
+        'from-cyan-400 to-blue-600'
     ];
     
     const classColorMap: { [key: string]: string } = {
-        '5': 'text-sky-500',
-        '6': 'text-emerald-500',
-        '7': 'text-amber-500',
-        '8': 'text-rose-500',
-        'Lise': 'text-indigo-500',
-        'Genel': 'text-slate-500',
+        '5': 'text-cyan-400',
+        '6': 'text-emerald-400',
+        '7': 'text-amber-400',
+        '8': 'text-rose-400',
+        'Lise': 'text-indigo-400',
+        'Genel': 'text-slate-400',
     };
     
     const formatGroupName = (name: string) => {
@@ -99,98 +100,114 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black pb-20 md:pb-8 font-sans selection:bg-purple-500/30 text-white">
+        <div className="flex flex-col min-h-screen bg-slate-950 pb-20 md:pb-8 font-sans selection:bg-purple-500/30 text-white relative overflow-hidden">
              
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/20 rounded-full blur-[150px]" />
+            </div>
+
              {/* Hero Section */}
-             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-8 relative z-10">
-                <div className="flex flex-col items-center justify-center py-10 space-y-6">
-                    <div className="relative">
-                        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 opacity-75 blur-xl animate-pulse"></div>
-                        <h1 className="relative text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-white drop-shadow-sm text-center tracking-tight">
+             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
+                <div className="flex flex-col items-center justify-center py-16 space-y-8 text-center">
+                    <div className="relative group">
+                        <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div className="relative inline-flex items-center justify-center p-6 bg-slate-900/50 backdrop-blur-sm rounded-[2rem] border border-white/10 mb-6 shadow-2xl">
+                             <Gamepad2 className="h-16 w-16 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+                        </div>
+                        <h1 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 drop-shadow-2xl tracking-tighter">
                             DEĞERLER OYUNU
                         </h1>
+                        <p className="mt-4 text-xl text-slate-400 max-w-2xl mx-auto font-medium">
+                            Eğitimi oyunlaştırarak öğrenmeyi eğlenceli hale getirin.
+                        </p>
                     </div>
                     
                     <div className="flex gap-4 flex-wrap justify-center mt-8">
-                        <GameButton href="/login" variant="success" className="text-lg min-w-[160px]">
-                            <LogIn className="mr-2 h-6 w-6" /> Giriş Yap
+                        <GameButton href="/login" variant="success" className="text-lg min-w-[180px] h-14">
+                            <LogIn className="mr-2 h-5 w-5" /> Giriş Yap
                         </GameButton>
-                        <GameButton href="/leaderboard" variant="warning" className="text-lg min-w-[160px]">
-                            <Trophy className="mr-2 h-6 w-6" /> Liderlik
+                        <GameButton href="/leaderboard" variant="warning" className="text-lg min-w-[180px] h-14">
+                            <Trophy className="mr-2 h-5 w-5" /> Liderlik
                         </GameButton>
                     </div>
                 </div>
                  
                 {/* Content Groups */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                     {classGroups.map((group, groupIndex) => (
-                        <div key={group.name} className="space-y-4">
-                            <GlassCard>
+                        <div key={group.name} className="group">
+                            <GlassCard className="transition-transform duration-300 hover:-translate-y-1">
                                 <Accordion type="multiple" defaultValue={[group.name]} className="w-full border-none">
                                     <AccordionItem value={group.name} className="border-none">
                                         <AccordionTrigger className={cn(
-                                            "px-6 py-5 text-xl sm:text-2xl font-black text-white hover:no-underline rounded-t-3xl data-[state=closed]:rounded-b-3xl transition-all",
+                                            "px-6 py-5 text-xl sm:text-2xl font-black text-white hover:no-underline transition-all relative overflow-hidden",
                                             `bg-gradient-to-r ${groupColors[groupIndex % groupColors.length]}`
                                         )}>
-                                            <div className="flex items-center gap-3">
-                                                <Star className="h-6 w-6 text-yellow-300 fill-yellow-300" />
+                                            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <div className="flex items-center gap-3 relative z-10">
+                                                <Star className="h-6 w-6 text-yellow-300 fill-yellow-300 drop-shadow-md" />
                                                 {formatGroupName(group.name)}
                                             </div>
                                         </AccordionTrigger>
-                                        <AccordionContent className="p-0 bg-white/5">
+                                        <AccordionContent className="p-0 bg-slate-900/50">
                                             <div className="p-4 space-y-3">
                                                 <Accordion type="multiple" className="w-full space-y-3">
                                                     {group.courses.map((course) => (
                                                         <AccordionItem 
                                                             value={course.id} 
                                                             key={course.id} 
-                                                            className="border-none bg-white/5 rounded-2xl overflow-hidden border border-white/10"
+                                                            className="border-none bg-slate-800/40 rounded-xl overflow-hidden border border-white/5 hover:bg-slate-800/60 transition-colors"
                                                         >
-                                                            <AccordionTrigger className="px-4 py-3 hover:bg-white/5 hover:no-underline transition-colors">
+                                                            <AccordionTrigger className="px-4 py-3 hover:no-underline group/course">
                                                                 <div className="flex items-center gap-3">
-                                                                    <div className={cn("h-10 w-10 rounded-xl flex items-center justify-center font-bold text-lg bg-white shadow-sm", classColorMap[group.name] || 'text-slate-500')}>
+                                                                    <div className={cn(
+                                                                        "h-10 w-10 rounded-lg flex items-center justify-center font-black text-lg bg-slate-900 border border-white/10 shadow-lg group-hover/course:scale-110 transition-transform", 
+                                                                        classColorMap[group.name] || 'text-slate-500'
+                                                                    )}>
                                                                         {group.name.charAt(0)}
                                                                     </div>
-                                                                    <span className="text-lg font-bold text-white/90">
+                                                                    <span className="text-lg font-bold text-slate-200 group-hover/course:text-white transition-colors">
                                                                         {course.title}
                                                                     </span>
                                                                 </div>
                                                             </AccordionTrigger>
                                                             <AccordionContent className="px-4 pb-4 pt-0">
-                                                                <Accordion type="multiple" className="mt-2 space-y-2 pl-3 border-l-2 border-dashed border-white/20 ml-5">
+                                                                <Accordion type="multiple" className="mt-2 space-y-2 pl-3 border-l-2 border-white/10 ml-5">
                                                                     {course.units.length > 0 ? (
-                                                                            course.units.map(unit => (
-                                                                            <AccordionItem value={unit.id} key={unit.id} className="border-none">
-                                                                                <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-indigo-300 hover:no-underline py-2">
-                                                                                    {unit.title}
-                                                                                </AccordionTrigger>
-                                                                                <AccordionContent className="space-y-2 pt-2">
-                                                                                    {unit.topics.map(topic => (
-                                                                                        <div key={topic.id} className="group/topic flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-black/20 hover:bg-black/40 p-3 rounded-xl transition-all border border-transparent hover:border-white/10">
-                                                                                            <div className="flex items-center gap-3">
-                                                                                                <div className="h-8 w-8 rounded-lg bg-white/10 flex items-center justify-center group-hover/topic:scale-110 transition-transform">
-                                                                                                    <Sparkles className="h-4 w-4 text-yellow-200" />
-                                                                                                </div>
-                                                                                                <span className="font-medium text-white/90">{topic.title}</span>
+                                                                        course.units.map(unit => (
+                                                                        <AccordionItem value={unit.id} key={unit.id} className="border-none">
+                                                                            <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-slate-400 hover:text-white hover:no-underline py-2 transition-colors">
+                                                                                {unit.title}
+                                                                            </AccordionTrigger>
+                                                                            <AccordionContent className="space-y-2 pt-2">
+                                                                                {unit.topics.map(topic => (
+                                                                                    <div key={topic.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/40 hover:bg-slate-800/60 p-3 rounded-lg transition-all border border-white/5 hover:border-white/10 group/topic">
+                                                                                        <div className="flex items-center gap-3">
+                                                                                            <div className="h-6 w-6 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+                                                                                                <Sparkles className="h-3 w-3 text-indigo-400" />
                                                                                             </div>
-                                                                                            <div className="flex gap-2 self-end sm:self-center">
-                                                                                                {topic.hasYazilacaklarContent && (
-                                                                                                    <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-600/80 hover:bg-sky-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-sky-800 active:border-b-0 active:translate-y-[2px]">
-                                                                                                        <Columns className="h-3.5 w-3.5"/> Yazılacaklar
-                                                                                                    </Link>
-                                                                                                )}
-                                                                                                {topic.hasOzetContent && (
-                                                                                                    <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-600/80 hover:bg-amber-500 text-white text-xs font-bold py-1.5 px-3 rounded-lg transition-colors border-b-2 border-amber-800 active:border-b-0 active:translate-y-[2px]">
-                                                                                                        <BookOpen className="h-3.5 w-3.5"/> Özet
-                                                                                                    </Link>
-                                                                                                )}
-                                                                                            </div>
+                                                                                            <span className="font-medium text-slate-300 text-sm group-hover/topic:text-white">{topic.title}</span>
                                                                                         </div>
-                                                                                    ))}
-                                                                                </AccordionContent>
-                                                                            </AccordionItem>
-                                                                            ))
-                                                                    ) : <p className="text-sm text-white/40 italic p-2">Henüz görev eklenmemiş.</p>}
+                                                                                        <div className="flex gap-2 self-end sm:self-center">
+                                                                                            {topic.hasYazilacaklarContent && (
+                                                                                                <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
+                                                                                                    <Columns className="h-3 w-3"/> Yazılacaklar
+                                                                                                </Link>
+                                                                                            )}
+                                                                                            {topic.hasOzetContent && (
+                                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
+                                                                                                    <BookOpen className="h-3 w-3"/> Özet
+                                                                                                </Link>
+                                                                                            )}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </AccordionContent>
+                                                                        </AccordionItem>
+                                                                        ))
+                                                                    ) : <p className="text-xs text-slate-600 italic p-2">Henüz içerik eklenmemiş.</p>}
                                                                 </Accordion>
                                                             </AccordionContent>
                                                         </AccordionItem>
@@ -206,8 +223,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 </div>
              </main>
 
-            <footer className="container mx-auto p-8 text-center relative z-10">
-                <p className="text-white/30 text-xs mt-8 font-medium tracking-widest uppercase">Eğlenerek Öğrenmenin Adresi</p>
+            <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12">
+                <p className="text-slate-500 text-xs font-bold tracking-[0.2em] uppercase">Eğlenerek Öğrenmenin Adresi</p>
             </footer>
         </div>
     );
@@ -215,23 +232,53 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
 // --- LOGGED IN DASHBOARD ---
 
-const ManagementButton = ({ href, title, icon, colorClass }: { href?: string, title: string, icon: React.ReactNode, colorClass: string, onClick?: () => void }) => {
+const ManagementButton = ({ href, title, icon, colorClass, onClick }: { href?: string, title: string, icon: React.ReactNode, colorClass: string, onClick?: () => void }) => {
+    
+    // Cyber tema için renkleri düzenle
+    const cyberColors: {[key: string]: string} = {
+        "bg-red-500": "from-red-600 to-rose-600 border-red-500 text-red-100",
+        "bg-orange-500": "from-orange-500 to-amber-600 border-orange-500 text-orange-100",
+        "bg-blue-500": "from-blue-600 to-indigo-600 border-blue-500 text-blue-100",
+        "bg-indigo-500": "from-indigo-600 to-violet-600 border-indigo-500 text-indigo-100",
+        "bg-violet-500": "from-violet-600 to-purple-600 border-violet-500 text-violet-100",
+        "bg-teal-500": "from-teal-600 to-emerald-600 border-teal-500 text-teal-100",
+        "bg-green-500": "from-green-600 to-emerald-600 border-green-500 text-green-100",
+        "bg-cyan-500": "from-cyan-600 to-sky-600 border-cyan-500 text-cyan-100",
+        "bg-yellow-500": "from-yellow-500 to-amber-500 border-yellow-500 text-yellow-100",
+        "bg-rose-500": "from-rose-600 to-pink-600 border-rose-500 text-rose-100",
+        "bg-slate-500": "from-slate-600 to-gray-700 border-slate-500 text-slate-100",
+        "bg-red-400": "from-red-500 to-pink-600 border-red-400 text-red-100",
+        "bg-emerald-500": "from-emerald-600 to-green-600 border-emerald-500 text-emerald-100",
+        "bg-pink-500": "from-pink-600 to-rose-600 border-pink-500 text-pink-100",
+    };
+
+    // Mevcut colorClass içinden bg- rengini bulup eşle
+    const bgClass = colorClass.split(' ').find(c => c.startsWith('bg-')) || 'bg-slate-500';
+    const gradient = cyberColors[bgClass] || "from-slate-600 to-slate-700 border-slate-500 text-white";
+
     const content = (
         <div className={cn(
-            "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
-            "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
+            "h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group border",
+            "bg-slate-900 border-white/5 hover:border-white/20 hover:bg-slate-800 hover:-translate-y-1 shadow-lg"
         )}>
-            <div className={cn("p-4 rounded-2xl mb-3 transition-colors", colorClass)}>
-                {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-white" })}
+             {/* Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+            
+            <div className={cn(
+                "p-3 rounded-xl mb-3 transition-all duration-300 shadow-lg border bg-gradient-to-br",
+                gradient,
+                "group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+            )}>
+                {React.cloneElement(icon as React.ReactElement, { className: "h-7 w-7" })}
             </div>
-            <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">{title}</h3>
+            <h3 className="font-bold text-sm text-slate-300 group-hover:text-white transition-colors">{title}</h3>
         </div>
     );
 
     if (href) {
         return <Link href={href} className="block group h-full">{content}</Link>;
     }
-    return <button className="block group h-full w-full">{content}</button>;
+    return <button className="block group h-full w-full" onClick={onClick}>{content}</button>;
 };
 
 const LoggedInDashboard = ({ user }: { user: any }) => {
@@ -261,14 +308,19 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     
     if (user.role === 'student') {
         return (
-            <div className="flex h-[80vh] items-center justify-center bg-slate-50 dark:bg-slate-950">
-                <div className="flex flex-col items-center gap-4 text-center p-6">
+            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+                <div className="flex flex-col items-center gap-6 text-center">
                     <div className="relative">
-                        <div className="absolute inset-0 bg-indigo-500 blur-xl opacity-20 animate-pulse rounded-full"></div>
-                        <Gamepad2 className="h-20 w-20 text-indigo-600 relative z-10 animate-bounce" />
+                        <div className="absolute inset-0 bg-cyan-500 blur-3xl opacity-20 animate-pulse rounded-full"></div>
+                        <Gamepad2 className="h-24 w-24 text-cyan-400 relative z-10 animate-bounce drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
                     </div>
-                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Hoşgeldin {user.displayName}!</h2>
-                    <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Oyun Alanına Yönlendiriliyorsunuz...</p>
+                    <div className="space-y-2">
+                        <h2 className="text-3xl font-black text-white uppercase tracking-tight">Hoşgeldin {user.displayName}!</h2>
+                        <div className="flex items-center justify-center gap-2 text-slate-400">
+                             <Loader2 className="h-4 w-4 animate-spin" />
+                             <span className="text-sm font-bold uppercase tracking-widest">Yönlendiriliyorsunuz...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -315,64 +367,88 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   }
   
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
+    <div className="flex flex-col min-h-screen bg-slate-950 font-sans text-slate-100 selection:bg-indigo-500/30">
+      
+      {/* Arka Plan Efekti */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[1200px] h-[1200px] bg-indigo-900/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
+      </div>
+
       <AppHeader />
-      <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-10">
+      
+      <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
         
         {/* Header Section */}
-        <div className="text-center space-y-4 py-6">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-slate-800 dark:text-white">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600">
-                Öğretmen
-            </span>{" "}
-            Paneli
-          </h1>
-          
+        <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
+            <div className="space-y-2">
+                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white uppercase flex flex-col md:block">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">YÖNETİM</span> PANELİ
+                </h1>
+                <p className="text-slate-400 text-lg font-medium max-w-2xl">
+                    {user.role === 'superadmin' ? 'Tüm sistemi buradan yönetebilirsin.' : 'Sınıfını yönet, içerik ekle ve öğrencilerinin gelişimini takip et.'}
+                </p>
+            </div>
+            
+            <div className="flex items-center gap-3 bg-slate-900/50 p-2 pr-6 rounded-2xl border border-white/5">
+                <div className="h-12 w-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+                    <User className="h-6 w-6 text-indigo-400" />
+                </div>
+                <div>
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Giriş Yapıldı</p>
+                    <p className="text-sm font-bold text-white truncate max-w-[150px]">{user.displayName}</p>
+                </div>
+            </div>
         </div>
         
-        {/* Quick Actions Component */}
-         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-             <h2 className="text-lg font-bold mb-4 text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                 <PlayCircle className="text-indigo-500"/> Hızlı İşlemler
-             </h2>
-             <TeacherMainButtons />
+        {/* Quick Actions */}
+         <div className="bg-slate-900/40 backdrop-blur-md rounded-[2rem] p-8 border border-white/5 shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"/>
+             
+             <div className="flex items-center gap-3 mb-6 relative z-10">
+                 <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg">
+                    <MonitorPlay className="h-5 w-5 text-white"/>
+                 </div>
+                 <h2 className="text-xl font-black text-white uppercase tracking-tight">Akıllı Tahta & Oyunlar</h2>
+             </div>
+             
+             <div className="relative z-10">
+                <TeacherMainButtons />
+             </div>
          </div>
 
         {/* Management Grid */}
-        <div className="space-y-4">
-             <div className="flex items-center gap-2 px-2">
-                 <LayoutTemplate className="text-slate-400" />
-                 <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">Yönetim Araçları</h2>
+        <div className="space-y-6">
+             <div className="flex items-center gap-3 px-2">
+                 <LayoutTemplate className="text-cyan-500 h-6 w-6" />
+                 <h2 className="text-2xl font-black text-white uppercase tracking-tight">Araçlar</h2>
              </div>
              
-             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                 {getManagementButtons().map(({ key, href, title, icon, color }) =>
                     <ManagementButton key={key} href={href} title={title} icon={icon} colorClass={color} />
                 )}
                  <AlertDialog>
                     <AlertDialogTrigger asChild>
                          <button className="block group h-full w-full">
-                            <div className={cn(
-                                "h-full w-full rounded-3xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border-b-[6px] active:border-b-0 active:translate-y-[6px]",
-                                "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-900 shadow-lg hover:shadow-xl group-hover:-translate-y-1 group-active:shadow-none"
-                            )}>
-                                <div className={cn("p-4 rounded-2xl mb-3 transition-colors", "bg-red-500 shadow-red-200 dark:bg-red-600 dark:shadow-red-900")}>
-                                    <LogOut className="h-8 w-8 text-white" />
+                            <div className="h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border border-red-900/20 bg-slate-900 hover:bg-red-950/20 hover:border-red-500/30 group-hover:-translate-y-1">
+                                <div className="p-3 rounded-xl mb-3 transition-colors bg-gradient-to-br from-red-600 to-rose-700 shadow-lg group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(220,38,38,0.4)]">
+                                    <LogOut className="h-7 w-7 text-white" />
                                 </div>
-                                <h3 className="font-bold text-sm md:text-base text-slate-700 dark:text-slate-200 leading-tight">Çıkış Yap</h3>
+                                <h3 className="font-bold text-sm text-red-300 group-hover:text-red-200 transition-colors">Çıkış Yap</h3>
                             </div>
                         </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
                         <AlertDialogHeader>
                             <AlertDialogTitle>Oturumu Kapat</AlertDialogTitle>
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="text-slate-400">
                                 Oturumunuzu güvenli bir şekilde sonlandırmak istediğinizden emin misiniz?
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>İptal</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleLogout} disabled={isLoggingOut} className="bg-destructive hover:bg-destructive/90">
+                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleLogout} disabled={isLoggingOut} className="bg-red-600 hover:bg-red-500 text-white border-none">
                                 {isLoggingOut && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Evet, Çıkış Yap
                             </AlertDialogAction>
@@ -393,8 +469,8 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-[#2b1055]">
-                <Loader2 className="h-12 w-12 animate-spin text-white" />
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
             </div>
         );
     }

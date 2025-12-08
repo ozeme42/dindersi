@@ -1,6 +1,5 @@
 
 
-
 export type UserProfile = {
     uid: string;
     username?: string; // Unique username for login
@@ -173,6 +172,7 @@ export type Topic = {
     htmlContent?: string;
     writingContent?: YazilacaklarContent; // For the new "Yazılacaklar" module
     createdAt?: any;
+    isPublished?: boolean;
 };
 
 export type Unit = {
@@ -181,6 +181,7 @@ export type Unit = {
     topics?: Topic[];
     createdAt?: any;
     writingContent?: YazilacaklarContent;
+    isPublished?: boolean;
 };
 
 export type Course = {
@@ -197,6 +198,7 @@ export type Course = {
     createdAt?: any;
     isTeacherOnly?: boolean;
     isSummerSchool?: boolean;
+    isPublished?: boolean;
 };
 
 export type Question = {
@@ -224,6 +226,7 @@ export type SchoolClass = {
     branchCounts?: { [branchName: string]: number };
     students?: UserProfile[]; // Now holds student data directly
     createdAt?: any;
+    isPublished?: boolean;
 }
 
 export type DailyQuest = {
