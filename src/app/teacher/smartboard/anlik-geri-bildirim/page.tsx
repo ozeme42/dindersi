@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
     ThumbsUp, ThumbsDown, StopCircle, HelpCircle, Check, X, 
     BarChart3, RefreshCw, Trophy, Volume2, Timer, User, ArrowLeft, 
-    Meh, Frown, Smile, Trash2
+    Meh, Frown, Smile, Trash2, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -336,3 +336,5 @@ function ModeButton({ active, onClick, title, subtitle, icon, color }: { active:
         </button>
     )
 }
+
+    
