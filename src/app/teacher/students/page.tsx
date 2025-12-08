@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -152,22 +153,20 @@ export default function StudentsPage() {
 
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
-        const [usersResult, classesSnapshot] = await Promise.all([
+        const [allUsers, classesSnapshot] = await Promise.all([
             getAllUsers(),
             getDocs(collection(db, "classes"))
         ]);
-
-        if (usersResult.success && usersResult.users) {
-            setStudents(usersResult.users);
-        } else {
-            toast({ title: "Hata", description: "Öğrenciler yüklenemedi.", variant: "destructive" });
-        }
+        
+        const studentAndGuestUsers = allUsers.filter(u => u.role === 'student' || u.role === 'guest');
+        setStudents(studentAndGuestUsers);
         
         const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
         setClasses(classesData);
 
         setIsLoading(false);
-    }, [toast]);
+    }, []);
+
 
     useEffect(() => {
         fetchAllData();
