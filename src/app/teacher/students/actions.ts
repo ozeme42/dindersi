@@ -251,3 +251,19 @@ export async function addManualScore(studentId: string, points: number, reason: 
         return { success: false, error: "Puan eklenirken bir veritabanı hatası oluştu." };
     }
 }
+
+// Duplicating this here to avoid circular dependencies
+export async function deleteStudent(userId: string): Promise<{ success: boolean; error?: string }> {
+    if (!userId) {
+        return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
+    }
+    try {
+        // This only deletes from Firestore. Auth deletion requires admin privileges.
+        // For a full delete, you'd call a Cloud Function or a dedicated admin action.
+        await deleteUserFromFirestore(userId);
+        return { success: true };
+    } catch (error: any) {
+        console.error(`Error deleting user ${userId}:`, error);
+        return { success: false, error: 'Kullanıcı silinirken bir hata oluştu: ' + error.message };
+    }
+}

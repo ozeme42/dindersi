@@ -36,8 +36,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore"
-import { updateUser, deleteUserFromFirestore, getAllUsers } from '@/app/teacher/superadmin/actions';
-import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent } from "./actions";
+import { updateUser, getAllUsers } from '@/app/teacher/superadmin/actions';
+import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent, deleteStudent } from "./actions";
 
 
 // Types
@@ -99,7 +99,7 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Öğrenci</TableHead>
+                        <TableHead>Ad Soyad</TableHead>
                         <TableHead>Sınıf/Şube</TableHead>
                         <TableHead className="text-right">Puan</TableHead>
                         <TableHead className="w-[300px]">Hızlı Puan Girişi</TableHead>

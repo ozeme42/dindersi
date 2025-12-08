@@ -2,8 +2,9 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, where, doc, getDoc } from "firebase/firestore";
+import { db, adminApp } from "@/lib/firebase-admin"; // adminApp import edildi
+import { getAuth } from 'firebase-admin/auth';
+import { collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc } from "firebase/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -12,6 +13,29 @@ export async function getAllUsers(): Promise<UserProfile[]> {
     const usersSnapshot = await getDocs(collection(db, 'users'));
     return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
 }
+
+export async function deleteUserFromFirestore(userId: string): Promise<{ success: boolean; error?: string }> {
+    if (!userId) {
+        return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
+    }
+    try {
+        // Delete from Authentication
+        const auth = getAuth(adminApp);
+        await auth.deleteUser(userId);
+
+        // Delete from Firestore
+        await deleteDoc(doc(db, 'users', userId));
+
+        // Note: Subcollections are not deleted automatically. This requires a Cloud Function for a full cleanup.
+        // For this app's purpose, this is sufficient.
+
+        return { success: true };
+    } catch (error: any) {
+        console.error(`Error deleting user ${userId}:`, error);
+        return { success: false, error: 'Kullanıcı silinirken bir hata oluştu: ' + error.message };
+    }
+}
+
 
 export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar') {
     switch (dataType) {
