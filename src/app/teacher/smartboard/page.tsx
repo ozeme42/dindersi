@@ -1,8 +1,11 @@
+
 'use client';
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap } from 'lucide-react';
+import { 
+  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap 
+} from 'lucide-react';
 import React, { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +16,7 @@ const SmartboardCard = ({ href, title, description, icon, colorClass, isExternal
             "h-full w-full rounded-[2.5rem] p-8 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform border-b-8 group-hover:border-b-0 group-hover:translate-y-2 relative overflow-hidden group",
             colorClass
         )}>
-            {/* Arkaplan Işık Efekti */}
+            {/* Arka Plan Işık Efekti */}
             <div className={cn("absolute inset-0 opacity-20 blur-3xl group-hover:opacity-40 transition-opacity", colorClass.includes('bg-') ? colorClass.replace('bg-', 'bg-') : 'bg-primary')}></div>
             
             {/* İkon */}
