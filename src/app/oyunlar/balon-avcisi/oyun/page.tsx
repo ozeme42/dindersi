@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
-    Play, Zap, Loader2, Target, AlertTriangle
+    Play, Zap, Loader2, Target, AlertTriangle, Heart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -36,6 +36,7 @@ function Game() {
     const [error, setError] = useState<string | null>(null);
 
     const [score, setScore] = useState(0);
+    const [lives, setLives] = useState(3);
     const [levelIndex, setLevelIndex] = useState(0);
     const [balloons, setBalloons] = useState<any[]>([]); 
     const [projectiles, setProjectiles] = useState<any[]>([]);
@@ -72,6 +73,12 @@ function Game() {
         };
         fetchGameData();
     }, [searchParams]);
+    
+    useEffect(() => {
+        if(lives <= 0) {
+            setGameState('gameover');
+        }
+    }, [lives]);
 
     // Handle game area resizing
     useEffect(() => {
@@ -90,6 +97,7 @@ function Game() {
 
     const startGame = () => {
         setScore(0);
+        setLives(3);
         setLevelIndex(0);
         setBalloons([]);
         setProjectiles([]);
@@ -193,8 +201,8 @@ function Game() {
 
     const handleWrongHit = (x: number, y: number) => {
         playSound('incorrect');
-        setScore(s => Math.max(0, s - 5));
-        addEffect(x, y, "-5", "#ef4444");
+        setLives(l => l - 1);
+        addEffect(x, y, "-1 ❤️", "#ef4444");
     };
 
     const addEffect = (x: number, y: number, text: string, color: string) => {
@@ -366,6 +374,11 @@ function Game() {
                 className="w-full h-full absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500 cursor-crosshair"
                 onMouseMove={handleInput} onMouseDown={handleInput} onTouchMove={handleInput} onTouchStart={handleInput}
             >
+                <div className="absolute top-4 left-4 flex gap-1 z-50">
+                    {[...Array(3)].map((_, i) => (
+                        <Heart key={i} size={28} className={`transition-all duration-300 ${i < lives ? 'text-red-500 fill-current' : 'text-gray-600/50'} drop-shadow-md`} />
+                    ))}
+                </div>
                 <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200 flex items-center gap-2">
                     <Zap size={18} className="fill-yellow-400 text-yellow-500" /> {score}
                 </div>
@@ -374,13 +387,13 @@ function Game() {
                 {projectiles.map(p => <div key={p.id} className="projectile" style={{ left: p.x, top: p.y, transform: 'translate(-50%, -50%)' }}></div>)}
                 {effects.map(e => <div key={e.id} className="pop-effect" style={{ left: e.x, top: e.y, color: e.color, transform: 'translate(-50%, -50%)' }}>{e.text}</div>)}
 
-                <div className="shooter-base" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)'}} />
-                <div className="shooter" style={{ transform: `translateX(-50%) rotate(${angle}deg)`, bottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }} >
+                <div className="shooter-base" style={{bottom: `calc(env(safe-area-inset-bottom, 0px) + 80px)`}} />
+                <div className="shooter" style={{ transform: `translateX(-50%) rotate(${angle}deg)`, bottom: `calc(env(safe-area-inset-bottom, 0px) + 80px)` }} >
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-slate-300 rounded-full"></div>
                 </div>
 
                 {gameState === 'playing' && currentLevel && (
-                    <div className="question-panel" style={{bottom: 'calc(env(safe-area-inset-bottom, 0px) + 140px)'}}>
+                    <div className="question-panel" style={{bottom: `calc(env(safe-area-inset-bottom, 0px) + 140px)`}}>
                         <div className="question-box animate-[bounce_2s_infinite]">
                             <span className="text-sky-600 text-sm block opacity-70 uppercase tracking-widest">HEDEF</span>
                             {currentLevel.q}
