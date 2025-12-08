@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
@@ -15,7 +14,7 @@ function Game() {
   const [lives, setLives] = useState(3);
   const [playerLane, setPlayerLane] = useState(0); // 0: Sol, 1: Sağ
   const [obstacles, setObstacles] = useState<any[]>([]); 
-  const [speed, setSpeed] = useState(0.8); // Başlangıç hızı
+  const [speed, setSpeed] = useState(0.5); // Başlangıç hızı
   const [lastFeedback, setLastFeedback] = useState<{ text: string, type: 'good' | 'bad' } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +57,7 @@ function Game() {
     scoreRef.current = 0;
     setLives(3);
     setObstacles([]);
-    setSpeed(0.8);
+    setSpeed(0.5);
     setLastFeedback(null);
     setPlayerLane(0);
     lastSpawnTime.current = 0;
@@ -104,9 +103,9 @@ function Game() {
     if (gameState !== 'playing') return;
 
     // Zorluk Artışı
-    if (scoreRef.current > 500) setSpeed(1.0);
-    if (scoreRef.current > 1000) setSpeed(1.2);
-    if (scoreRef.current > 2000) setSpeed(1.5);
+    if (scoreRef.current > 500) setSpeed(0.7);
+    if (scoreRef.current > 1000) setSpeed(0.9);
+    if (scoreRef.current > 2000) setSpeed(1.1);
 
     // Engel Üretme (Hıza bağlı sıklık)
     const spawnRate = 2500 / speed; // Hız arttıkça süre azalır
@@ -303,4 +302,3 @@ export default function DogruYolKosucusuPage() {
         </Suspense>
     );
 }
-
