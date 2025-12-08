@@ -19,7 +19,7 @@ export async function getErrorReports(): Promise<{ success: boolean; data?: Erro
             if (Array.isArray(data.conversation) && data.conversation.length > 0) {
                 conversation = data.conversation.map((msg: any) => ({
                     ...msg,
-                    createdAt: msg.createdAt, // Already a string from previous fixes
+                    createdAt: (msg.createdAt instanceof Timestamp ? msg.createdAt.toDate().toISOString() : msg.createdAt),
                 }));
             } else {
                  // If not, create a conversation from the legacy `message` field
@@ -46,7 +46,7 @@ export async function getErrorReports(): Promise<{ success: boolean; data?: Erro
                 conversation: conversation,
             } as ErrorReport;
         });
-        return { success: true, data: reports };
+        return { success: true, data: JSON.parse(JSON.stringify(reports)) };
     } catch (error: any) {
         console.error("Error fetching error reports:", error);
         return { success: false, error: 'Hata raporları alınırken bir veritabanı hatası oluştu.' };

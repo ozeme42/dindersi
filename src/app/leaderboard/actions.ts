@@ -422,7 +422,7 @@ export async function getAnnouncements(category: 'general' | 'exam' = 'general')
             ...doc.data(),
             createdAt: (doc.data().createdAt as Timestamp).toDate().toISOString(),
         } as Announcement));
-        return { success: true, data: data };
+        return { success: true, data: JSON.parse(JSON.stringify(data)) };
     } catch (e: any) {
         console.error("Error getting announcements:", e);
         if (e.code === 'failed-precondition') {

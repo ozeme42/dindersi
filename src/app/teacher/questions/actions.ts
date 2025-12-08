@@ -1,9 +1,8 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, writeBatch, collection, addDoc, updateDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { doc, writeBatch, collection, addDoc, updateDoc, deleteDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 import type { Question } from "@/lib/types";
 import { z } from "zod";
 import { generateQuestions } from "@/ai/flows/generate-questions-flow";
@@ -18,10 +17,10 @@ export async function saveQuestion(questionToSave: Question): Promise<{ success:
                 ...questionData,
                 createdAt: serverTimestamp(),
             });
-            return { success: true, question: { ...questionData, id: newDocRef.id } };
+            return { success: true, question: { ...questionData, id: newDocRef.id, createdAt: new Date().toISOString() } };
         } else if (id) {
             await updateDoc(doc(db, "questions", id), questionData);
-            return { success: true, question: questionToSave };
+            return { success: true, question: { ...questionToSave, createdAt: new Date().toISOString() } };
         } else {
             return { success: false, error: "Geçersiz Soru ID'si" };
         }
@@ -103,6 +102,7 @@ export async function saveBulkQuestions(input: unknown, context: { classId?: str
                 ...question,
                 ...context,
                 topic: context.topicName,
+                createdAt: serverTimestamp(),
             };
             batch.set(docRef, questionData);
         });
@@ -153,6 +153,7 @@ export async function saveGeneratedQuestions(input: unknown, context: { classId?
                 ...question,
                 ...context,
                 topic: context.topicName,
+                createdAt: serverTimestamp(),
             };
             batch.set(docRef, questionData);
         });

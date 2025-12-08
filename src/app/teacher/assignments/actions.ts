@@ -1,9 +1,8 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 import type { Assignment, UserProfile, ScoreEvent } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -28,8 +27,14 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
         if (!assignmentSnap.exists()) {
             return { success: false, error: 'Ödev bulunamadı.' };
         }
-
-        const assignment = { id: assignmentSnap.id, ...assignmentSnap.data() } as Assignment;
+        const assignmentData = assignmentSnap.data();
+        const assignment: Assignment = {
+            id: assignmentSnap.id,
+            ...assignmentData,
+            createdAt: (assignmentData.createdAt as Timestamp)?.toDate().toISOString(),
+            startDate: (assignmentData.startDate as Timestamp)?.toDate().toISOString(),
+            dueDate: (assignmentData.dueDate as Timestamp)?.toDate().toISOString(),
+        } as Assignment;
 
         if (!assignment.assignedTo || assignment.assignedTo.length === 0) {
             return { success: true, data: { assignment, studentProgress: [] } };

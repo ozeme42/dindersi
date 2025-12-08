@@ -2,14 +2,14 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where, doc, getDoc } from "firebase/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
 
 export async function getAllUsers(): Promise<UserProfile[]> {
     const usersSnapshot = await getDocs(collection(db, 'users'));
-    return usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+    return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
 }
 
 export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar') {
@@ -36,7 +36,7 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
         case 'questions':
             const questionsSnapshot = await getDocs(query(collection(db, "questions"), orderBy("topicId")));
             return questionsSnapshot.docs.map(doc => {
-                const { id, classId, className, courseId, unitId, ...rest } = doc.data();
+                const { id, classId, className, courseId, unitId, createdAt, ...rest } = doc.data();
                 return rest;
             });
         case 'activity-items':
@@ -135,7 +135,7 @@ export async function exportDataForStaticSite() {
         const [questionsSnapshot, activityItemsSnapshot, topicsSnapshot] = await Promise.all([
             getDocs(collection(db, "questions")),
             getDocs(collection(db, "activityItems")),
-            getDocs(collection(db, "topics"))
+            getDocs(query(collection(db, 'topics'), where("writingContent", "!=", null)))
         ]);
 
         const questionsByTopic: { [key: string]: any[] } = {};
@@ -178,5 +178,3 @@ export async function exportDataForStaticSite() {
         return { success: false, error: "Static site data could not be generated: " + error.message };
     }
 }
-
-    

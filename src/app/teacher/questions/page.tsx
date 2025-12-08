@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
@@ -141,7 +140,7 @@ function QuestionCard({ question, index, onEdit, onDifficultyChange, onSelect, i
     );
 }
 
-export default function QuestionManagementPage() {
+export default function ExamQuestionBankPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -176,7 +175,7 @@ export default function QuestionManagementPage() {
     setIsLoading(true);
     try {
       const [questionsQuerySnapshot, classesSnapshot, coursesSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "questions"))),
+        getDocs(query(collection(db, "examQuestions"))),
         getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
         getDocs(collection(db, "courses"))
       ]);
@@ -312,7 +311,7 @@ export default function QuestionManagementPage() {
         tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
     } else if (selection.classId) {
          const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
-         tempQuestions = tempQuestions.filter(q => courseIdsInClass.has(q.courseId));
+         tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
     }
 
     if (searchTerm) {
@@ -332,7 +331,7 @@ export default function QuestionManagementPage() {
         );
     }
     
-    // Return a new sorted array to ensure re-render
+     // Return a new sorted array to ensure re-render
     return [...tempQuestions].sort((a, b) => {
         if (sortBy === 'text') {
             return (a.text || '').localeCompare(b.text || '', 'tr');

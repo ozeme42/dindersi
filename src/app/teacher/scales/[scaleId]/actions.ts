@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, query, where, getDocs, updateDoc, writeBatch, serverTimestamp, orderBy } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs, updateDoc, writeBatch, serverTimestamp, orderBy, Timestamp } from "firebase/firestore";
 import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -94,7 +94,12 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
             return { success: false, error: 'Ölçek bulunamadı.' };
         }
 
-        const scale = { id: scaleSnap.id, ...scaleSnap.data() } as EvaluationScale;
+        const scaleData = scaleSnap.data();
+        const scale: EvaluationScale = {
+            id: scaleSnap.id,
+            ...scaleData,
+            createdAt: (scaleData.createdAt as Timestamp)?.toDate().toISOString()
+        } as EvaluationScale;
         
         if (!scale.courseId) return { success: false, error: 'Ölçeğe bağlı ders bilgisi eksik.' };
         const courseRef = doc(db, 'courses', scale.courseId);
