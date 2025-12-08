@@ -19,6 +19,7 @@ function Game() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [questions, setQuestions] = useState<DogruYolQuestion[]>([]);
+  const [correctStreak, setCorrectStreak] = useState(0);
 
   const requestRef = useRef<number>();
   const lastSpawnTime = useRef(0);
@@ -61,6 +62,7 @@ function Game() {
     setLastFeedback(null);
     setPlayerLane(0);
     lastSpawnTime.current = 0;
+    setCorrectStreak(0);
   };
 
   const switchLane = () => {
@@ -123,13 +125,17 @@ function Game() {
         // Çarpışma Kontrolü (Oyuncu Y: 80-90 arası varsayalım)
         if (newY > 75 && newY < 90 && !obs.passed) {
           if (playerLane === obs.correctLane) {
+            const newStreak = correctStreak + 1;
+            const pointsToAdd = 20 + newStreak * 10;
+            setCorrectStreak(newStreak);
             setScore(s => {
-                scoreRef.current = s + 100;
-                return s + 100;
+                scoreRef.current = s + pointsToAdd;
+                return s + pointsToAdd;
             });
-            setLastFeedback({ text: "DOĞRU! +100", type: "good" });
+            setLastFeedback({ text: `DOĞRU! +${pointsToAdd}`, type: "good" });
             obs.passed = true;
           } else {
+            setCorrectStreak(0);
             setLives(l => {
                 const newLives = l - 1;
                 if (newLives <= 0) setGameState('gameover');
@@ -150,7 +156,7 @@ function Game() {
     });
 
     requestRef.current = requestAnimationFrame(updateGame);
-  }, [gameState, playerLane, speed, spawnObstacle]);
+  }, [gameState, playerLane, speed, spawnObstacle, correctStreak]);
 
   useEffect(() => {
     if (gameState === 'playing') {
