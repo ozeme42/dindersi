@@ -41,8 +41,9 @@ export async function getScoreEvents(cursor?: SerializableTimestamp | null): Pro
         // Iterate backwards to calculate attempt numbers correctly
         for (let i = allEventsData.length - 1; i >= 0; i--) {
             const event = allEventsData[i];
-            if (event.gameType === 'Soru Bankası') {
-                const key = `${event.userId}-${event.context}`;
+            // Check if context is a string, as it could be an object for 'deneme'
+            if (typeof event.context === 'string') {
+                const key = `${event.userId}-${event.gameType}-${event.context}`;
                 attemptCounts[key] = (attemptCounts[key] || 0) + 1;
                 eventsWithAttempts.unshift({
                     ...event,
@@ -50,6 +51,7 @@ export async function getScoreEvents(cursor?: SerializableTimestamp | null): Pro
                     attemptNumber: attemptCounts[key]
                 });
             } else {
+                 // For non-string contexts or other types, just add them without attempt number
                 eventsWithAttempts.unshift({
                     ...event,
                     userName: usersMap.get(event.userId) || 'Bilinmeyen Kullanıcı'
