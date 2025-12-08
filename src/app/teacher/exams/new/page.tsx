@@ -278,7 +278,7 @@ export function CreateExamClientPage() {
                      <div className="lg:col-span-4 xl:col-span-3 space-y-6 lg:sticky lg:top-8">
                          {/* Temel Bilgiler */}
                          <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl">
-                            <CardHeader><CardTitle>Temel Bilgiler</CardTitle></CardHeader>
+                            <CardHeader><CardTitle className="text-white">Temel Bilgiler</CardTitle></CardHeader>
                             <CardContent className="space-y-4">
                                 <div><Label>Sınav Başlığı</Label><Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Örn: 1. Dönem Tarama" className="bg-slate-950 border-white/10 text-white"/></div>
                                 <div className="grid grid-cols-2 gap-3">
@@ -294,7 +294,7 @@ export function CreateExamClientPage() {
                          
                          {/* Katılımcılar */}
                          <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl">
-                            <CardHeader><CardTitle>Katılımcılar ({selectedStudentUids.size})</CardTitle></CardHeader>
+                            <CardHeader><CardTitle className="text-white">Katılımcılar ({selectedStudentUids.size})</CardTitle></CardHeader>
                             <CardContent className="space-y-3">
                                 <div className="grid grid-cols-2 gap-2">
                                      <Select value={selectedClassId} onValueChange={v => { setSelectedClassId(v); setSelectedBranch('all'); setSelectedStudentUids(new Set()); }}>
@@ -318,7 +318,7 @@ export function CreateExamClientPage() {
                      <div className="lg:col-span-8 xl:col-span-9">
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl">
                             <CardHeader className="border-b border-white/5">
-                                <CardTitle>Soru Seçimi ({selectedQuestionIds.size})</CardTitle>
+                                <CardTitle className="text-white">Soru Seçimi ({selectedQuestionIds.size})</CardTitle>
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 pt-2">
                                     <Select value={selectedCourseId} onValueChange={v => {setSelectedCourseId(v); setSelectedUnitId('all'); setSelectedTopicId('all');}}><SelectTrigger className="bg-slate-950 border-white/10 text-xs"><SelectValue placeholder="Ders" /></SelectTrigger><SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tümü</SelectItem>{filteredCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent></Select>
                                     <Select value={selectedUnitId} onValueChange={v => {setSelectedUnitId(v); setSelectedTopicId('all');}} disabled={!selectedCourseId || selectedCourseId === 'all'}><SelectTrigger className="bg-slate-950 border-white/10 text-xs"><SelectValue placeholder="Ünite" /></SelectTrigger><SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tümü</SelectItem>{filteredUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent></Select>
