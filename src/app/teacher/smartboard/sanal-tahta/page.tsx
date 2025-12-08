@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { 
     Pencil, Eraser, Highlighter, MousePointer2, Square, Circle, Minus, 
     Undo2, Trash2, Download, Grid3X3, AlignJustify, Maximize2, Settings2, 
-    Palette, Type, X, Check, Image as ImageIcon
+    Palette, Type, X, Check, Image as ImageIcon, ArrowLeft
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -220,7 +220,7 @@ export default function VirtualBoardPage() {
         if (!context || !canvasRef.current) return;
         drawBackground(context, background, canvasRef.current.width, canvasRef.current.height);
         const newData = context.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-        setHistory(prev => [...prev.slice(0, historyStep + 1), newData]);
+        setHistory([...history.slice(0, historyStep + 1), newData]);
         setHistoryStep(prev => prev + 1);
         toast({ title: "Tahta Temizlendi", duration: 1500 });
     };
