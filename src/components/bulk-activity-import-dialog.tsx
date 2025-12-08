@@ -160,7 +160,7 @@ export function BulkActivityImportDialog({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2"><Upload /> Toplu Etkinlik Verisi Ekleme</DialogTitle>
-          <DialogDescription>Seçili konuya hızlıca kavram, tanım ve cümle ekleyin.</DialogDescription>
+          
         </DialogHeader>
         {renderContent()}
       </DialogContent>
