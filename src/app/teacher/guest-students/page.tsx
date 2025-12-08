@@ -1,49 +1,49 @@
+'use client';
 
-"use client"
-
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Link from "next/link"
+import Link from "next/link";
 
 // UI Imports
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table"
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog } from "lucide-react"
+    Card, CardContent, CardDescription, CardHeader, CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+// ADDED Search ICON
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search } from "lucide-react";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 
 // Firebase and Actions
-import { useToast } from "@/hooks/use-toast"
-import { db } from "@/lib/firebase"
-import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore"
+import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteUserFromFirestore, resetAllGeneralScores, getAllUsers } from '@/app/teacher/superadmin/actions';
 import { addGuestStudent, bulkAddGuestStudents, updateStudentClass, createNewStudent } from "./actions";
 
 
 // Types
-import type { UserProfile, SchoolClass } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import type { UserProfile, SchoolClass } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
-import { UserEditorDialog } from "@/components/user-editor-dialog"
+import { UserEditorDialog } from "@/components/user-editor-dialog";
 
 function StudentTable({ 
     students, 
@@ -61,17 +61,17 @@ function StudentTable({
     allClasses: SchoolClass[],
 }) {
     if (isLoading) {
-        return <div className="flex justify-center items-center h-48"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+        return <div className="flex justify-center items-center h-48"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
     
     return (
-        <div className="border rounded-md">
+        <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Sanal Öğrenci</TableHead>
-                        <TableHead>Sınıf/Şube</TableHead>
-                        <TableHead className="text-right">Eylemler</TableHead>
+                <TableHeader className="bg-slate-900/80">
+                    <TableRow className="border-white/5 hover:bg-transparent">
+                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
+                        <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -80,76 +80,81 @@ function StudentTable({
                         const studentClass = allClasses.find(c => c.name === currentClassName);
 
                         return (
-                        <TableRow key={student.uid}>
+                        <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <UserCog className="h-6 w-6 text-muted-foreground" />
-                                    <span className="font-medium">{student.displayName}</span>
+                                    <div className="p-2 bg-slate-800 rounded-full border border-white/10 group-hover:border-purple-400 transition-colors">
+                                        <UserCog className="h-6 w-6 text-purple-400" />
+                                    </div>
+                                    <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
                             <TableCell>
                                 {studentClass && studentClass.branches ? (
-                                    <Select 
-                                        value={currentBranch || ''}
-                                        onValueChange={(newBranch) => {
-                                            if (newBranch) {
-                                                onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
-                                            }
-                                        }}
-                                    >
-                                        <SelectTrigger className="w-40">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {studentClass.branches.map(b => (
-                                                <SelectItem key={b} value={b}>{b}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                     <Select 
+                                         value={currentBranch || ''}
+                                         onValueChange={(newBranch) => {
+                                             if (newBranch) {
+                                                 onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
+                                             }
+                                         }}
+                                     >
+                                         <SelectTrigger className="w-40 bg-slate-950 border-white/10 text-white h-9 text-xs focus:border-indigo-500/50">
+                                             <SelectValue />
+                                         </SelectTrigger>
+                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                             {studentClass.branches.map(b => (
+                                                 <SelectItem key={b} value={b}>{b}</SelectItem>
+                                             ))}
+                                         </SelectContent>
+                                     </Select>
                                 ) : (
-                                    student.class
+                                     <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
+                                        {student.class || 'Sınıfsız'}
+                                     </Badge>
                                 )}
                             </TableCell>
                             <TableCell className="text-right">
                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button aria-haspopup="true" size="icon" variant="ghost">
-                                            <MoreHorizontal className="h-4 w-4" />
-                                            <span className="sr-only">Menüyü aç</span>
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>Eylemler</DropdownMenuLabel>
-                                        <DropdownMenuItem onClick={() => onEdit(student)}><FilePenLine className="mr-2 h-4 w-4" /> Düzenle</DropdownMenuItem>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <button className="w-full text-left relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-destructive hover:bg-destructive/10">
-                                                    <Trash2 className="mr-2 h-4 w-4" /> Sil
-                                                </button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Bu işlem geri alınamaz. "{student.displayName}" adlı sanal öğrenci kalıcı olarak silinecektir.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-destructive hover:bg-destructive/90">
-                                                        Evet, Sil
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                     <DropdownMenuTrigger asChild>
+                                         <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                                             <MoreHorizontal className="h-5 w-5" />
+                                         </Button>
+                                     </DropdownMenuTrigger>
+                                     <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
+                                         <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                         <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                             <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
+                                         </DropdownMenuItem>
+                                         <AlertDialog>
+                                             <AlertDialogTrigger asChild>
+                                                 <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
+                                                     <Trash2 className="mr-2 h-4 w-4" /> Sil
+                                                 </div>
+                                             </AlertDialogTrigger>
+                                             <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                 <AlertDialogHeader>
+                                                     <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
+                                                     <AlertDialogDescription className="text-slate-400">
+                                                         "{student.displayName}" adlı sanal öğrenci kalıcı olarak silinecektir.
+                                                     </AlertDialogDescription>
+                                                 </AlertDialogHeader>
+                                                 <AlertDialogFooter>
+                                                     <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                     <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white">
+                                                         Evet, Sil
+                                                     </AlertDialogAction>
+                                                 </AlertDialogFooter>
+                                             </AlertDialogContent>
+                                         </AlertDialog>
+                                     </DropdownMenuContent>
+                                 </DropdownMenu>
                             </TableCell>
                         </TableRow>
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={3} className="h-24 text-center">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={3} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -161,7 +166,7 @@ function StudentTable({
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi."),
+  email: z.string().email("Geçersiz e-posta adresi.").optional(),
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -192,8 +197,8 @@ export default function GuestStudentManagementPage() {
     setIsLoading(true);
     try {
       const [usersData, classesData] = await Promise.all([
-          getAllUsers(),
-          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+           getAllUsers(),
+           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
       ]);
       
       const studentsData = usersData.filter(u => u.role === 'guest');
@@ -339,79 +344,134 @@ export default function GuestStudentManagementPage() {
   }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
   
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold font-headline">Sanal Öğrenci Yönetimi</h1>
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+        
+       {/* Arka Plan */}
+       <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
+          <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+        <div className="flex items-center justify-between border-b border-white/10 pb-8">
+             <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
+                <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                    <UserCog className="h-8 w-8 text-purple-400" />
+                </div>
+                Sanal Öğrenci Yönetimi
+            </h1>
         </div>
 
         <Tabs defaultValue="list">
-          <TabsList>
-            <TabsTrigger value="list">Öğrenci Listesi</TabsTrigger>
-            <TabsTrigger value="add">Yeni Öğrenci Ekle</TabsTrigger>
-          </TabsList>
-          <TabsContent value="list">
-             <Card>
-                <CardHeader>
-                    <CardTitle>Sanal Öğrenciler</CardTitle>
-                    <CardDescription>Akıllı tahta yarışmalarında kullanılacak sanal öğrencileri görüntüleyin ve yönetin.</CardDescription>
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-4">
+            <div className="bg-slate-900/40 p-1.5 rounded-xl border border-white/10 inline-flex">
+                <TabsList className="bg-transparent border-0 p-0 h-auto gap-2">
+                    <TabsTrigger value="list" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
+                        Sanal Öğrenci Listesi
+                    </TabsTrigger>
+                    <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
+                        Yeni Öğrenci Ekle
+                    </TabsTrigger>
+                </TabsList>
+            </div>
+
+          <TabsContent value="list" className="space-y-6 outline-none">
+             <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+                <CardHeader className="border-b border-white/5 pb-4">
+                    <CardTitle className="text-xl text-white">Sanal Öğrenci Filtresi</CardTitle>
+                    <CardDescription className="text-slate-400">Akıllı tahta yarışmalarında kullanılacak sanal öğrencileri görüntüleyin ve yönetin.</CardDescription>
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                         <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                            <SelectTrigger><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                            <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                         </Select>
                         <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                            <SelectTrigger><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                            <SelectContent>
+                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                            <SelectContent className="bg-slate-900 border-white/10 text-white">
                                 <SelectItem value="all">Tüm Şubeler</SelectItem>
                                 {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                             </SelectContent>
                         </Select>
-                         <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                         <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
+                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={handleClassChange} allClasses={classes} />
                 </CardContent>
-            </Card>
+             </Card>
           </TabsContent>
-          <TabsContent value="add">
-              <Card>
-                <CardHeader>
-                    <CardTitle>Yeni Sanal Öğrenci Ekle</CardTitle>
-                    <CardDescription>Oluşturulan öğrenciler seçtiğiniz sınıf ve şubeye atanacaktır.</CardDescription>
+          
+          <TabsContent value="add" className="outline-none space-y-6">
+              <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
+                    <CardTitle className="text-2xl text-white flex items-center gap-2">
+                        <UserPlus className="h-6 w-6 text-emerald-400" /> Yeni Sanal Öğrenci Ekle
+                    </CardTitle>
+                    <CardDescription className="text-slate-400 text-base">Oluşturulan öğrenciler seçtiğiniz sınıf ve şubeye atanacaktır. Şifre, sistem tarafından rastgele atanır.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                            <SelectTrigger><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                            <SelectContent><SelectItem value="all" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                        </Select>
-                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                            <SelectTrigger><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all" disabled>Lütfen bir şube seçin</SelectItem>
-                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
+                <CardContent className="p-8">
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div className="space-y-1">
+                            <Label className="text-slate-300 text-xs">Sınıf</Label>
+                            <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-slate-300 text-xs">Şube</Label>
+                            <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    <SelectItem value="all" disabled>Lütfen bir şube seçin</SelectItem>
+                                    {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
-                    <Tabs defaultValue="single">
-                      <TabsList>
-                        <TabsTrigger value="single">Tek Tek Ekle</TabsTrigger>
-                        <TabsTrigger value="bulk">Toplu Ekle</TabsTrigger>
+
+                    <Tabs defaultValue="single" className="w-full">
+                      <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex">
+                        <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
+                        <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Ekle</TabsTrigger>
                       </TabsList>
-                      <TabsContent value="single" className="pt-4">
-                        <form onSubmit={handleAddSingleStudent} className="flex gap-2">
-                          <Input placeholder="Öğrenci Adı Soyadı" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} />
-                          <Button type="submit" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}><UserPlus className="mr-2 h-4 w-4"/> Ekle</Button>
-                        </form>
-                      </TabsContent>
-                      <TabsContent value="bulk" className="pt-4">
-                        <form onSubmit={handleBulkAdd} className="space-y-4">
-                            <Textarea placeholder="Her satıra bir öğrenci adı gelecek şekilde yapıştırın..." className="min-h-48" value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} />
-                            <Button type="submit" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}><Users className="mr-2 h-4 w-4"/> Toplu Ekle</Button>
-                        </form>
-                      </TabsContent>
+                      
+                      <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
+                          <TabsContent value="single" className="mt-0">
+                            <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
+                              <div className="flex-1 space-y-2">
+                                  <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
+                                  <Input 
+                                    placeholder="Örn: Savaşçı 1" 
+                                    value={newStudentName} 
+                                    onChange={e => setNewStudentName(e.target.value)} 
+                                    className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"
+                                  />
+                              </div>
+                              <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedClass || activeBranch === 'all'}>
+                                  {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
+                              </Button>
+                            </form>
+                          </TabsContent>
+
+                          <TabsContent value="bulk" className="mt-0 space-y-4">
+                            <div className="space-y-2">
+                                <Label className="text-slate-300">Öğrenci Listesi</Label>
+                                <Textarea 
+                                    placeholder="Her satıra bir öğrenci adı gelecek şekilde yapıştırın..." 
+                                    className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" 
+                                    value={bulkStudentNames} 
+                                    onChange={e => setBulkStudentNames(e.target.value)} 
+                                />
+                            </div>
+                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedClass || activeBranch === 'all'}>
+                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Toplu Ekle
+                            </Button>
+                          </TabsContent>
+                      </div>
                     </Tabs>
                 </CardContent>
               </Card>
@@ -420,14 +480,14 @@ export default function GuestStudentManagementPage() {
       </div>
 
       {dialogState.isOpen && (
-           <UserEditorDialog 
-                isOpen={dialogState.isOpen}
-                onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
-                user={dialogState.user}
-                onSave={handleSaveUser}
-                isSaving={isSaving}
-                classes={classes}
-           />
+         <UserEditorDialog 
+             isOpen={dialogState.isOpen}
+             onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
+             user={dialogState.user}
+             onSave={handleSaveUser}
+             isSaving={isSaving}
+             classes={classes}
+         />
       )}
     </div>
   );
