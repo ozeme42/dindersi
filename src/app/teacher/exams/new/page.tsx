@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -8,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Save, X, Search, ArrowLeft, FileQuestion, Users, BookOpen, Clock, Calendar as CalendarIcon, FilePenLine
 } from 'lucide-react'; 
-import { createExam, getExamCreationData, updateExam, getTeacherExams } from '../actions';
+import { createExam, getExamCreationData, updateExam } from '../actions';
 import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -74,7 +73,7 @@ export function CreateExamClientPage() {
     const { toast } = useToast();
     const router = useRouter();
     const params = useParams();
-    const assignmentId = Array.isArray(params.slug) ? params.slug[0] : params.assignmentId;
+    const assignmentId = params.assignmentId as string;
     const isEditMode = !!assignmentId;
 
     const [creationData, setCreationData] = useState<ExamCreationData | null>(null);
@@ -105,8 +104,8 @@ export function CreateExamClientPage() {
             toast({ title: 'Hata', description: "Sayfa verileri yüklenemedi.", variant: 'destructive'});
         } else {
             setCreationData(data);
-            if (isEditMode) {
-                const examsResult = await getTeacherExams(user!.uid);
+            if (isEditMode && user) {
+                const examsResult = await getTeacherExams(user.uid);
                 const assignmentToEdit = examsResult.data?.find(a => a.id === assignmentId);
                 if (assignmentToEdit) {
                     setTitle(assignmentToEdit.title);
@@ -261,7 +260,7 @@ export function CreateExamClientPage() {
                         </Button>
                         <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
                             <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
-                                <FileQuestion className="h-8 w-8 text-indigo-400" />
+                                <FilePenLine className="h-8 w-8 text-indigo-400" />
                             </div>
                             {isEditMode ? 'Denemeyi Düzenle' : 'Yeni Deneme Sınavı'}
                         </h1>
@@ -352,3 +351,5 @@ export function CreateExamClientPage() {
         </div>
     )
 }
+
+export default CreateExamClientPage;
