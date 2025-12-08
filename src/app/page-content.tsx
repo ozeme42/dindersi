@@ -327,9 +327,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
             </span>{" "}
             Paneli
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-             {user.role === 'superadmin' ? 'Sistem üzerindeki tüm kontroller elinizin altında.' : 'Sınıfını yönet, içerik ekle ve öğrencilerinin gelişimini takip et.'}
-          </p>
+          
         </div>
         
         {/* Quick Actions Component */}

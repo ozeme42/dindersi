@@ -1,10 +1,8 @@
-
-
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Monitor, Maximize2, Minimize2, Edit, Wand2, BookOpen } from 'lucide-react';
 import type { Topic } from '@/lib/types';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -12,7 +10,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
-import { Wand2 } from 'lucide-react';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 function OzetlerDisplayPage() {
     const searchParams = useSearchParams();
@@ -69,18 +67,23 @@ function OzetlerDisplayPage() {
     }, [fetchContent]);
 
     if (isLoading) {
-        return <div className="flex h-screen items-center justify-center"><Loader2 className="h-10 w-10 animate-spin text-primary"/></div>;
+        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>;
     }
     
     const backUrl = `/teacher/smartboard/ozetler`;
     
     if (error || !topic || !topic.htmlContent) {
         return (
-             <div className="flex h-screen items-center justify-center text-center p-8">
-                <div>
-                    <p className="text-destructive mb-4">{error || "Bu konu için içerik bulunmuyor."}</p>
-                     <Button asChild variant="outline"><Link href={backUrl}>Geri Dön</Link></Button>
-                </div>
+             <div className="flex h-screen items-center justify-center text-center p-8 bg-slate-950">
+                <Alert variant="destructive" className="max-w-md bg-red-950/50 border-red-900 text-red-200">
+                    <AlertTitle>İçerik Yüklenemedi</AlertTitle>
+                    <AlertDescription>{error || "Bu konu için içerik bulunmuyor."}</AlertDescription>
+                    <div className="mt-4">
+                        <Button asChild variant="outline" className="border-red-800 text-red-300 hover:bg-red-900/50">
+                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+                        </Button>
+                    </div>
+                </Alert>
             </div>
         )
     }
@@ -89,42 +92,64 @@ function OzetlerDisplayPage() {
         <div 
             ref={mainContentRef} 
             className={cn(
-                "w-full h-full min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col", 
-                !isFullscreen && "p-4 sm:p-6 md:p-8"
+                "w-full h-screen bg-slate-950 text-white flex flex-col overflow-hidden relative font-sans", 
+                !isFullscreen && "p-4 md:p-6"
             )}
         >
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-rose-900/10 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
+            </div>
+
+            {/* Üst Bar (HUD) */}
             <div className={cn(
-                "flex-shrink-0",
-                !isFullscreen && "container mx-auto max-w-7xl"
+                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
+                isFullscreen 
+                    ? "absolute top-0 left-0 right-0 p-2 bg-slate-900/80 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 focus-within:opacity-100" 
+                    : "mb-6 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg"
             )}>
-                 <div className={cn(
-                    "flex justify-between items-center", 
-                    isFullscreen ? "mb-1 px-2 py-1" : "mb-6 md:mb-12 text-center flex-col"
-                )}>
-                    <div className={cn("flex-1 overflow-hidden w-full", isFullscreen && "text-left")}>
-                        <h1 className={cn("font-bold font-headline truncate", isFullscreen ? "text-xl" : "text-4xl")}>{topic?.title || 'Özet'}</h1>
+                <div className="flex items-center gap-4">
+                    <div className={cn("p-2.5 rounded-xl shadow-lg", isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-rose-500 to-indigo-600")}>
+                        <BookOpen className={cn("text-white", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
                     </div>
-                    <div className={cn("flex gap-2 justify-center", isFullscreen ? "ml-4" : "mt-4")}>
-                        <Button variant="outline" asChild size={isFullscreen ? 'sm' : 'default'}>
+                    <div className="overflow-hidden">
+                        <h1 className={cn("font-black tracking-tight text-white uppercase truncate", isFullscreen ? "text-lg" : "text-2xl")}>
+                            {topic?.title || 'Özet Görüntüleyici'}
+                        </h1>
+                        {!isFullscreen && <p className="text-xs text-slate-400 font-medium mt-0.5">İnteraktif Konu Anlatımı</p>}
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" asChild size="sm" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-9">
+                        <Link href={`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topicId}`}>
+                            <Wand2 className="mr-2 h-4 w-4" /> Düzenle
+                        </Link>
+                    </Button>
+                    <div className="h-6 w-px bg-white/10 mx-2 hidden md:block"></div>
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 hover:text-white border-0 h-9 w-9 rounded-lg" />
+                    
+                    {!isFullscreen && (
+                        <Button variant="ghost" asChild size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-9 w-9">
                             <Link href={backUrl}>
-                                <ArrowLeft className="mr-2 h-4 w-4"/> Konu Seçimine Dön
+                                <ArrowLeft className="h-5 w-5"/>
                             </Link>
                         </Button>
-                        <Button variant="outline" asChild size={isFullscreen ? 'sm' : 'default'}>
-                            <Link href={`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topicId}`}>
-                                <Wand2 className="mr-2 h-4 w-4" /> İçeriği Düzenle
-                            </Link>
-                        </Button>
-                        <FullscreenToggle elementRef={mainContentRef} />
-                    </div>
+                    )}
                 </div>
             </div>
             
-            <div className={cn("flex-grow flex flex-col min-h-0", !isFullscreen && "container mx-auto max-w-7xl")}>
-                <div className={cn("w-full", isFullscreen ? "h-full" : "h-[80vh]")}>
+            {/* İçerik Alanı (Monitör) */}
+            <div className="flex-grow flex flex-col min-h-0 relative z-10">
+                <div className={cn(
+                    "w-full h-full overflow-hidden transition-all duration-300",
+                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
+                )}>
+                    {/* iframe: Beyaz zeminli içerik için */}
                     <iframe
                         srcDoc={topic.htmlContent}
-                        className="w-full h-full border-0 rounded-lg"
+                        className="w-full h-full border-0 block bg-white"
                         title={topic.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
@@ -137,7 +162,7 @@ function OzetlerDisplayPage() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-12 w-12 animate-spin text-primary"/></div>}>
+        <Suspense fallback={<div className="flex justify-center items-center h-screen bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>}>
             <OzetlerDisplayPage />
         </Suspense>
     )

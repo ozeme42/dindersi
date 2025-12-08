@@ -1,24 +1,23 @@
-
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Users, LayoutTemplate } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { SelectionGrid } from "@/components/selection-grid";
 import { Loader2 } from "lucide-react";
 
 const steps = [
-  { id: 1, name: "Sınıf Seçimi", icon: <Users className="h-5 w-5" /> },
-  { id: 2, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
-  { id: 3, name: "Ünite Seçimi", icon: <Library className="h-5 w-5" /> },
-  { id: 4, name: "Konu Seçimi", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
 ];
 
 export default function OzetlerSetupPage() {
@@ -109,7 +108,7 @@ export default function OzetlerSetupPage() {
   
   const renderContent = () => {
     if (isLoading && currentStep > 1) {
-        return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>
+        return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     }
     
     switch(currentStep) {
@@ -127,47 +126,103 @@ export default function OzetlerSetupPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-headline">Özetler</h1>
-          <p className="text-muted-foreground">İçeriği tahtada göstermek için bir konu seçin.</p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
+      
+       {/* Arka Plan Efektleri */}
+       <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-rose-900/20 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-6xl space-y-8 flex flex-col h-full flex-grow">
+        
+        {/* Başlık Alanı */}
+        <div className="text-center space-y-4 py-4">
+            <div className="inline-flex items-center justify-center p-4 bg-rose-500/10 rounded-full mb-2 border border-rose-500/20 shadow-lg shadow-rose-500/10">
+                <LayoutTemplate className="h-10 w-10 text-rose-400"/>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black text-white drop-shadow-xl tracking-tight">
+                ÖZETLER
+            </h1>
+            <p className="text-slate-400 text-lg font-medium">Konu anlatımını yansıtmak için seçim yapın.</p>
         </div>
 
-        <div className="flex justify-center items-center mb-8 px-4">
-          <ol className="flex items-center w-full max-w-lg">
-            {steps.map((step, index) => (
-              <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-border after:border-2 after:inline-block": step.id !== steps.length })}>
-                <span className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
-                  currentStep > step.id ? "bg-primary text-primary-foreground" :
-                  currentStep === step.id ? "bg-accent text-accent-foreground scale-110" :
-                  "bg-muted text-muted-foreground"
-                )}>
-                  {step.icon}
-                </span>
-              </li>
-            ))}
-          </ol>
+        {/* Stepper */}
+        <div className="flex justify-center items-center px-4 w-full">
+            <div className="relative flex items-center justify-between w-full max-w-4xl">
+                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                <div 
+                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-rose-500 to-indigo-500 -z-10 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                ></div>
+
+                {steps.map((step, index) => {
+                    const isCompleted = currentStep > step.id;
+                    const isActive = currentStep === step.id;
+                    
+                    return (
+                        <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
+                            <div className={cn(
+                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
+                                isActive 
+                                    ? "bg-slate-900 border-rose-500 text-rose-400 scale-110 shadow-rose-500/50" 
+                                    : isCompleted 
+                                        ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
+                                        : "bg-slate-900 border-slate-800 text-slate-600"
+                            )}>
+                                {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                            </div>
+                            <span className={cn(
+                                "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
+                                isActive ? "text-rose-400" : isCompleted ? "text-indigo-500" : "text-slate-600"
+                            )}>
+                                {step.name}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
 
-        <Card className="min-h-[400px]">
-          <CardHeader>
-            <CardTitle>{steps.find(s => s.id === currentStep)?.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="min-h-[250px] flex justify-center items-center">
-             {renderContent()}
-          </CardContent>
-          <CardFooter className="flex justify-between pt-6">
-            {currentStep === 1 ? (
-                <Button asChild variant="outline">
-                    <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                </Button>
-            ) : (
-                <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
-            )}
-          </CardFooter>
-        </Card>
+        {/* Ana İçerik Kartı */}
+        <div className="mt-8 flex-grow flex flex-col">
+             <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col flex-grow min-h-[500px]">
+                <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
+                     <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                        <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 text-lg">
+                            {currentStep}
+                        </span>
+                        {steps.find(s => s.id === currentStep)?.name} Seçimi
+                     </h2>
+                     {isLoading && <Loader2 className="h-6 w-6 animate-spin text-rose-500" />}
+                </div>
+
+                <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30 overflow-y-auto">
+                     {renderContent()}
+                </div>
+
+                <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
+                    {currentStep === 1 ? (
+                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-14 px-8 rounded-xl text-lg">
+                            <Link href="/teacher/smartboard">
+                                <ArrowLeft className="mr-2 h-5 w-5" /> Menüye Dön
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button 
+                            variant="outline" 
+                            onClick={handleBack}
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-14 px-8 rounded-xl text-lg bg-transparent"
+                        >
+                            <ArrowLeft className="mr-2 h-5 w-5" /> Geri
+                        </Button>
+                    )}
+                    
+                    {/* İleri butonu yok çünkü son adımda otomatik yönlendiriliyor */}
+                </div>
+            </div>
+        </div>
+
       </div>
     </div>
   );
