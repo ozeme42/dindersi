@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -464,7 +465,7 @@ export default function ContentCreationPage() {
                     const isPublished = item.isPublished ?? true;
 
                     return (
-                        <div key={item.id} className={cn("relative group h-40 transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
+                        <div key={item.id} className={cn("relative group h-48 transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
                             <Button
                                 variant="ghost"
                                 className={cn(
@@ -477,9 +478,9 @@ export default function ContentCreationPage() {
                                 onClick={() => handleButtonClick(item)}
                             >
                                 <div className="p-3 bg-white/20 rounded-full mb-3 shadow-inner">
-                                    {isTopicStep ? <FilePenLine className="h-6 w-6" /> : <LayoutGrid className="h-6 w-6" />}
+                                    {isTopicStep ? <FilePenLine className="h-8 w-8" /> : <LayoutGrid className="h-8 w-8" />}
                                 </div>
-                                <span className="text-lg font-bold leading-tight line-clamp-2">
+                                <span className="text-xl font-bold leading-tight line-clamp-2">
                                     {item[itemTitleKey] || item.name}
                                 </span>
                             </Button>
@@ -577,7 +578,9 @@ export default function ContentCreationPage() {
                         {steps.map((step, index) => {
                             const isCompleted = currentStep > step.id;
                             const isActive = currentStep === step.id;
-                            const IconComponent = step.icon;
+                            const IconComponent = React.cloneElement(step.icon, {
+                                className: "w-6 h-6",
+                            });
                             
                             return (
                                 <div key={step.id} 
@@ -592,7 +595,7 @@ export default function ContentCreationPage() {
                                                 ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
                                                 : "bg-slate-900 border-slate-800 text-slate-600 hover:border-slate-700"
                                     )}>
-                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : <IconComponent />}
+                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : IconComponent}
                                     </div>
                                     <span className={cn(
                                         "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
