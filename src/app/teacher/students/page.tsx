@@ -149,6 +149,8 @@ export default function StudentsPage() {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [classFilter, setClassFilter] = useState("all");
+    const [branchFilter, setBranchFilter] = useState("all");
+
     const { toast } = useToast();
 
     const fetchAllData = useCallback(async () => {
@@ -172,13 +174,32 @@ export default function StudentsPage() {
         fetchAllData();
     }, [fetchAllData]);
 
+    const selectedClassData = useMemo(() => {
+        if (classFilter === 'all') return null;
+        return classes.find(c => c.id === classFilter);
+    }, [classFilter, classes]);
+
+
     const filteredStudents = useMemo(() => {
         return students.filter(student => {
             const nameMatch = student.displayName.toLowerCase().includes(searchTerm.toLowerCase());
-            const classMatch = classFilter === 'all' || student.class === classFilter;
+            
+            let classMatch = classFilter === 'all';
+            if (selectedClassData) {
+                const studentClassName = student.class?.split(' - ')[0];
+                if (studentClassName === selectedClassData.name) {
+                    if (branchFilter === 'all') {
+                        classMatch = true;
+                    } else {
+                        const studentBranch = student.class?.split(' - ')[1];
+                        classMatch = studentBranch === branchFilter;
+                    }
+                }
+            }
+            
             return nameMatch && classMatch;
         });
-    }, [students, searchTerm, classFilter]);
+    }, [students, searchTerm, classFilter, branchFilter, selectedClassData]);
     
     const handleSaveUser = async (data: any) => {
         setIsSaving(true);
@@ -234,13 +255,22 @@ export default function StudentsPage() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                         <Select value={classFilter} onValueChange={setClassFilter}>
+                         <Select value={classFilter} onValueChange={(value) => { setClassFilter(value); setBranchFilter('all'); }}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Sınıf Filtrele"/>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">Tüm Sınıflar</SelectItem>
-                                {classes.map(c => <SelectItem key={c.id} value={c.name}>{c.name}</SelectItem>)}
+                                {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                            </SelectContent>
+                         </Select>
+                         <Select value={branchFilter} onValueChange={setBranchFilter} disabled={!selectedClassData}>
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Şube Filtrele"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                             </SelectContent>
                          </Select>
                      </div>
