@@ -20,13 +20,18 @@ export type PublicClass = Omit<SchoolClass, 'courses'> & {
 export async function getPublicCurriculum(): Promise<{ classGroups: { name: string; courses: PublicCourse[] }[] }> {
     noStore();
     try {
-        const [coursesSnap, classesSnap] = await Promise.all([
-            getDocs(query(collection(db, 'courses'), where('isPublished', '==', true))),
-            getDocs(query(collection(db, 'classes'), where('isPublished', '==', true), orderBy('createdAt', 'asc')))
+        // HATA DÜZELTME: Sadece yayınlanmış olanları değil, TÜM sınıfları ve dersleri çek.
+        // Filtrelemeyi daha sonra, içeriklerin yayın durumuna göre yapacağız.
+        const [allCoursesSnap, allClassesSnap] = await Promise.all([
+            getDocs(collection(db, 'courses')),
+            getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc')))
         ]);
 
-        const allCoursesData = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const allCoursesData = allCoursesSnap.docs
+            .map(doc => ({ id: doc.id, ...doc.data() } as Course))
+            .filter(course => course.isPublished ?? true); // Yalnızca yayınlanmış dersleri al
+
+        const allClasses = allClassesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
         
         const coursesWithContent: PublicCourse[] = [];
 
@@ -47,7 +52,8 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                      unitsWithContent.push({
                         id: unitDoc.id,
                         title: unitDoc.data().title,
-                        topics: topics as any
+                        topics: topics as any,
+                        isPublished: unitDoc.data().isPublished
                     });
                 }
             }
@@ -79,11 +85,13 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
         });
         
         const classGroups = allClasses
+            // HATA DÜZELTME: Sadece yayınlanmış sınıfları değil, tümünü al ve sonra filtrele
+            .filter(cls => cls.isPublished ?? true) // Gizlenmiş sınıfları burada filtrele
             .map(cls => ({
                 name: cls.name,
                 courses: groupedByClass[cls.id] || []
             }))
-            .filter(group => group.courses.length > 0);
+            .filter(group => group.courses.length > 0); // Sadece içinde ders olan sınıfları göster
         
         if (generalCourses.length > 0) {
             classGroups.push({ name: "Genel", courses: generalCourses });
