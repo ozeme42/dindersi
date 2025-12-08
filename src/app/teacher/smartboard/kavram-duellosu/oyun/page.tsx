@@ -23,7 +23,7 @@ function KavramDuellosuGame() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [gameState, setGameState] = useState<'setup' | 'playing' | 'end'>('setup');
+    const [gameState, setGameState] = useState<'setup' | 'playing' | 'end' | 'error'>('setup');
     const [currentQIndex, setCurrentQIndex] = useState(0);
     const [pullPosition, setPullPosition] = useState(INITIAL_PULL);
     
@@ -50,7 +50,9 @@ function KavramDuellosuGame() {
             setGameState('error');
         } else {
             setQuestions(fetchedQuestions);
-            setGameState('setup');
+            const p1Name = searchParams.get('p1Name') || '1. Oyuncu';
+            const p2Name = searchParams.get('p2Name') || '2. Oyuncu';
+            startGame(p1Name, p2Name);
         }
         setIsLoading(false);
     }, [searchParams]);
@@ -60,6 +62,11 @@ function KavramDuellosuGame() {
     }, [fetchGameData]);
 
     const startGame = (p1Name?: string, p2Name?: string) => {
+        if (!questions || questions.length === 0) {
+            setError("Oyun için soru yüklenemedi veya bulunamadı.");
+            setGameState('error');
+            return;
+        }
         setPlayer1({ name: p1Name || "1. Oyuncu", score: 0, answered: false, avatar: p1Name?.charAt(0) || 'A' });
         setPlayer2({ name: p2Name || "2. Oyuncu", score: 0, answered: false, avatar: p2Name?.charAt(0) || 'B' });
         setCurrentQIndex(0);
@@ -136,18 +143,26 @@ function KavramDuellosuGame() {
         }
     }, [player1.answered, player2.answered, isRoundOver, handleRoundEnd]);
     
+    // FIX: router.push should be inside a useEffect
+    useEffect(() => {
+        if (gameState === 'setup') {
+            router.push(backUrl);
+        }
+    }, [gameState, router, backUrl]);
+
+
     const renderWinner = () => {
         if (pullPosition <= 0) return player1.name;
         if (pullPosition >= 100) return player2.name;
         return player1.score > player2.score ? player1.name : (player2.score > player1.score ? player2.name : "Berabere");
     }
 
-    if (isLoading) {
+    if (isLoading || gameState === 'setup') {
         return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
     }
 
     if (error) {
-        return (
+         return (
             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
                 <div className="bg-slate-900 border border-red-500/30 p-8 rounded-xl max-w-md text-center">
                     <AlertTriangle className="h-10 w-10 text-red-500 mx-auto mb-4" />
@@ -156,16 +171,9 @@ function KavramDuellosuGame() {
                     <Button asChild><Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button>
                 </div>
             </div>
-        );
+         );
     }
     
-    if (gameState === 'setup') {
-         // This state is just for loading, actual setup is in the parent.
-         // Redirecting back to parent page to show the setup screen.
-         router.push(backUrl);
-         return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
-    }
-
     if (gameState === 'end') {
         const winnerName = renderWinner();
         return (

@@ -1,31 +1,31 @@
-
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, PartyPopper, Loader2, Users, MonitorPlay } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import type { Course, Unit, Topic, SchoolClass, UserProfile } from "@/lib/types";
+import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { SelectionGrid } from "@/components/selection-grid";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { QUESTION_TYPES, DIFFICULTY_LEVELS } from "@/lib/game-config";
+import { useAuth } from "@/context/auth-context";
 
 const steps = [
-  { id: 1, name: "Sınıf Seçimi", icon: <Users className="h-5 w-5" /> },
-  { id: 2, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
-  { id: 3, name: "Ünite Seçimi", icon: <Library className="h-5 w-5" /> },
-  { id: 4, name: "Konu Seçimi", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
   { id: 5, name: "Ayarlar", icon: <Settings className="h-5 w-5" /> },
-  { id: 6, name: "Onay", icon: <Check className="h-5 w-5" /> },
+  { id: 6, name: "Başlat", icon: <Check className="h-5 w-5" /> },
 ];
 
 export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }) {
@@ -161,7 +161,7 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
   }
   
   const renderContent = () => {
-     if(isLoading) return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin"/></div>
+     if(isLoading) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>
      
      switch(currentStep) {
         case 1:
@@ -194,55 +194,76 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
             };
 
             return (
-                <div className="w-full max-w-lg mx-auto space-y-8">
-                    <div>
-                        <Label htmlFor="question-slider" className="flex justify-between"><span>Soru Sayısı:</span> <span>{settings.questionCount}</span></Label>
-                        <Slider id="question-slider" value={[settings.questionCount]} max={gameConfig.questionCount.max} min={gameConfig.questionCount.min} step={gameConfig.questionCount.step} onValueChange={(val) => setSettings({ ...settings, questionCount: val[0] })} />
-                    </div>
-                     <div className="space-y-3 rounded-lg border p-3 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="finish-score-switch" className="flex flex-col space-y-1"><span>Bitiş Skoru</span></Label>
-                            <Switch id="finish-score-switch" checked={settings.finishScore > 0} onCheckedChange={(checked) => setSettings(prev => ({...prev, finishScore: checked ? gameConfig.finishScore.default : 0}))}/>
+                <div className="w-full max-w-2xl mx-auto space-y-6">
+                    {/* Soru Sayısı */}
+                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5 space-y-4">
+                        <div className="flex justify-between items-center mb-2">
+                            <Label htmlFor="question-slider" className="text-white text-lg font-bold">Soru Sayısı</Label>
+                            <span className="text-2xl font-black text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/20">{settings.questionCount}</span>
                         </div>
-                        {settings.finishScore > 0 && (
-                            <div className="pt-2 space-y-2">
-                                <Label htmlFor="finish-score-input">Puan Değeri</Label>
-                                <Input id="finish-score-input" type="number" value={settings.finishScore} onChange={(e) => setSettings(prev => ({ ...prev, finishScore: parseInt(e.target.value) || 0 }))} step={gameConfig.finishScore.step} className="w-full"/>
-                            </div>
-                        )}
+                        <Slider id="question-slider" value={[settings.questionCount]} max={gameConfig.questionCount.max} min={gameConfig.questionCount.min} step={gameConfig.questionCount.step} onValueChange={(val) => setSettings({ ...settings, questionCount: val[0] })} className="py-4" />
                     </div>
-                    <div className="space-y-3 rounded-lg border p-3 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="timer-switch" className="flex flex-col space-y-1"><span>Soru Zamanlayıcısı</span></Label>
-                            <Switch id="timer-switch" checked={settings.questionTimer > 0} onCheckedChange={(checked) => setSettings(prev => ({...prev, questionTimer: checked ? gameConfig.questionTimer.default : 0}))}/>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Bitiş Skoru */}
+                         <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="finish-score-switch" className="text-white font-bold">Bitiş Skoru</Label>
+                                <Switch id="finish-score-switch" checked={settings.finishScore > 0} onCheckedChange={(checked) => setSettings(prev => ({...prev, finishScore: checked ? gameConfig.finishScore.default : 0}))} className="data-[state=checked]:bg-emerald-500"/>
+                            </div>
+                            {settings.finishScore > 0 && (
+                                <div className="pt-2 space-y-2 animate-in fade-in slide-in-from-top-2">
+                                    <Input id="finish-score-input" type="number" value={settings.finishScore} onChange={(e) => setSettings(prev => ({ ...prev, finishScore: parseInt(e.target.value) || 0 }))} step={gameConfig.finishScore.step} className="bg-slate-950 border-white/10 text-white h-12 text-lg font-mono text-center focus:ring-emerald-500/50"/>
+                                </div>
+                            )}
                         </div>
-                        {settings.questionTimer > 0 && (
-                            <div className="pt-2 space-y-2">
-                                <Label htmlFor="question-timer-slider" className="flex justify-between"><span>Süre:</span> <span>{settings.questionTimer} saniye</span></Label>
-                                <Slider id="question-timer-slider" value={[settings.questionTimer]} max={gameConfig.questionTimer.max} min={gameConfig.questionTimer.min} step={gameConfig.questionTimer.step} onValueChange={(val) => setSettings(prev => ({...prev, questionTimer: val[0]}))}/>
+
+                        {/* Zamanlayıcı */}
+                        <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label htmlFor="timer-switch" className="text-white font-bold">Zamanlayıcı</Label>
+                                <Switch id="timer-switch" checked={settings.questionTimer > 0} onCheckedChange={(checked) => setSettings(prev => ({...prev, questionTimer: checked ? gameConfig.questionTimer.default : 0}))} className="data-[state=checked]:bg-amber-500"/>
                             </div>
-                        )}
+                            {settings.questionTimer > 0 && (
+                                <div className="pt-2 space-y-4 animate-in fade-in slide-in-from-top-2">
+                                     <div className="flex justify-between items-center text-sm text-slate-400">
+                                        <span>Süre</span>
+                                        <span className="text-amber-400 font-bold">{settings.questionTimer} sn</span>
+                                     </div>
+                                    <Slider id="question-timer-slider" value={[settings.questionTimer]} max={gameConfig.questionTimer.max} min={gameConfig.questionTimer.min} step={gameConfig.questionTimer.step} onValueChange={(val) => setSettings(prev => ({...prev, questionTimer: val[0]}))}/>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    
+                    {/* Filtreler */}
+                    <div className="grid grid-cols-2 gap-6">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline">Zorluk ({settings.difficulty.length}) <ChevronDown className="ml-2 h-4 w-4"/></Button>
+                                <Button variant="outline" className="h-14 w-full justify-between px-6 text-lg bg-slate-900/50 border-white/10 hover:bg-slate-800 text-white group">
+                                    <span>Zorluk ({settings.difficulty.length})</span> 
+                                    <ChevronDown className="h-5 w-5 text-slate-400 group-hover:text-white transition-colors"/>
+                                </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className="bg-slate-900 border-white/10 text-white min-w-[200px]">
                                 {DIFFICULTY_LEVELS.map(level => (
-                                    <DropdownMenuCheckboxItem key={level} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)}>
+                                    <DropdownMenuCheckboxItem key={level} checked={settings.difficulty.includes(level)} onCheckedChange={() => handleDifficultyChange(level)} className="focus:bg-indigo-600 focus:text-white">
                                         {level}
                                     </DropdownMenuCheckboxItem>
                                 ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
+
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline">Soru Tipi ({settings.questionTypes.length}) <ChevronDown className="ml-2 h-4 w-4"/></Button>
+                                <Button variant="outline" className="h-14 w-full justify-between px-6 text-lg bg-slate-900/50 border-white/10 hover:bg-slate-800 text-white group">
+                                    <span>Soru Tipi ({settings.questionTypes.length})</span> 
+                                    <ChevronDown className="h-5 w-5 text-slate-400 group-hover:text-white transition-colors"/>
+                                </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent className="bg-slate-900 border-white/10 text-white min-w-[200px]">
                                 {QUESTION_TYPES.map(type => (
-                                    <DropdownMenuCheckboxItem key={type.id} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)}>
+                                    <DropdownMenuCheckboxItem key={type.id} checked={settings.questionTypes.includes(type.id)} onCheckedChange={() => handleQuestionTypeChange(type.id)} className="focus:bg-purple-600 focus:text-white">
                                         {type.name}
                                     </DropdownMenuCheckboxItem>
                                 ))}
@@ -253,76 +274,178 @@ export function SmartboardBireyselClientPage({ gameConfig }: { gameConfig: any }
             );
         case 6:
             return (
-              <div className="space-y-4 text-center sm:text-left w-full max-w-lg">
-                 <h3 className="text-xl font-semibold font-headline text-center mb-4">Yarışma Özeti</h3>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
-                    <p><strong>Sınıf:</strong></p><p>{selection.className}</p>
-                    <p><strong>Ders:</strong></p><p>{selection.courseName}</p>
-                    <p><strong>Konu:</strong></p><p>{selection.topicName}</p>
+              <div className="w-full max-w-4xl mx-auto space-y-8">
+                 
+                 {/* Özet Kartı */}
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center">
+                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Sınıf</span>
+                         <span className="text-lg font-bold text-white">{selection.className}</span>
+                     </div>
+                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center">
+                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Ders</span>
+                         <span className="text-lg font-bold text-white truncate px-2">{selection.courseName}</span>
+                     </div>
+                     <div className="bg-slate-800/50 p-4 rounded-xl border border-white/5 text-center lg:col-span-2">
+                         <span className="text-xs text-slate-400 uppercase font-bold mb-1 block">Konu</span>
+                         <span className="text-lg font-bold text-white truncate px-2">{selection.topicName}</span>
+                     </div>
                  </div>
-                 <hr className="my-4"/>
-                 <h3 className="text-lg font-semibold text-center sm:text-left">Ayarlar</h3>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
-                    <p><strong>Soru Sayısı:</strong></p><p>{settings.questionCount}</p>
-                    <p><strong>Soru Süresi:</strong></p><p>{settings.questionTimer > 0 ? `${settings.questionTimer} saniye` : 'Kapalı'}</p>
-                    <p><strong>Bitiş Skoru:</strong></p><p>{settings.finishScore > 0 ? `${settings.finishScore} puan` : 'Devre Dışı'}</p>
-                    <p><strong>Zorluk:</strong></p><p>{settings.difficulty.join(', ')}</p>
-                    <p><strong>Soru Tipleri:</strong></p><p>{settings.questionTypes.map(t => QUESTION_TYPES.find(qt => qt.id === t)?.name).join(', ')}</p>
+                 
+                 <div className="bg-slate-900/40 p-6 rounded-2xl border border-white/5">
+                     <h3 className="text-white font-bold mb-4 flex items-center gap-2 text-lg border-b border-white/5 pb-2">
+                        <Settings className="w-5 h-5 text-indigo-400" /> Oyun Ayarları
+                     </h3>
+                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+                        <div>
+                            <span className="text-slate-400 block mb-1">Soru Sayısı</span>
+                            <span className="text-white font-bold text-lg">{settings.questionCount}</span>
+                        </div>
+                        <div>
+                            <span className="text-slate-400 block mb-1">Süre</span>
+                            <span className="text-white font-bold text-lg">{settings.questionTimer > 0 ? `${settings.questionTimer} sn` : 'Kapalı'}</span>
+                        </div>
+                         <div>
+                            <span className="text-slate-400 block mb-1">Hedef Puan</span>
+                            <span className="text-white font-bold text-lg">{settings.finishScore > 0 ? settings.finishScore : 'Yok'}</span>
+                        </div>
+                        <div className="col-span-2 md:col-span-3">
+                             <span className="text-slate-400 block mb-1">Zorluk & Tipler</span>
+                             <div className="flex flex-wrap gap-2 mt-1">
+                                 {settings.difficulty.map(d => <span key={d} className="px-2 py-1 bg-red-500/20 text-red-300 rounded text-xs border border-red-500/30">{d}</span>)}
+                                 {settings.questionTypes.map(t => <span key={t} className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs border border-blue-500/30">{QUESTION_TYPES.find(qt => qt.id === t)?.name}</span>)}
+                             </div>
+                        </div>
+                     </div>
                  </div>
+
+                 <div className="pt-4 flex justify-center">
+                      <Button asChild size="lg" className="w-full md:w-2/3 h-20 text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-[0_0_40px_rgba(16,185,129,0.3)] rounded-2xl transition-all hover:scale-105 active:scale-95 group">
+                        <Link href={getGameUrl()}>
+                            <PartyPopper className="mr-4 h-8 w-8 group-hover:rotate-12 transition-transform" /> YARIŞMAYI BAŞLAT
+                        </Link>
+                      </Button>
+                 </div>
+
               </div>
             );
         default:
             return null;
      }
-  }
-
+ }
+  
   return (
-    <div className="container mx-auto p-4 sm:p-6 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold font-headline">Bireysel Yarışma Kurulumu (Akıllı Tahta)</h1>
-          <p className="text-muted-foreground">Yarışmayı başlatmak için adımları takip edin.</p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
+      
+       {/* Arka Plan Efektleri */}
+       <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/20 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-6xl space-y-8 flex flex-col h-full flex-grow">
+        
+        {/* Başlık Alanı */}
+        <div className="text-center space-y-4 py-4">
+            <div className="inline-flex items-center justify-center p-4 bg-indigo-500/10 rounded-full mb-2 border border-indigo-500/20 shadow-lg shadow-indigo-500/10">
+                <MonitorPlay className="h-10 w-10 text-indigo-400"/>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-black text-white drop-shadow-xl tracking-tight">
+                BİREYSEL YARIŞMA
+            </h1>
+            <p className="text-slate-400 text-lg font-medium">Hızlı, eğlenceli ve rekabetçi bir yarışma başlatın.</p>
         </div>
 
-        <div className="flex justify-center items-center mb-8 px-4">
-          <ol className="flex items-center w-full max-w-2xl">
-            {steps.map((step, index) => (
-              <li key={step.id} className={cn("flex w-full items-center", { "after:content-[''] after:w-full after:h-1 after:border-b after:border-border after:border-2 after:inline-block": index !== steps.length - 1 })}>
-                <span className={cn(
-                  "flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 transition-colors duration-300",
-                  currentStep > step.id ? "bg-primary text-primary-foreground" :
-                  currentStep === step.id ? "bg-accent text-accent-foreground scale-110" :
-                  "bg-muted text-muted-foreground")}>{step.icon}</span>
-              </li>
-            ))}
-          </ol>
+        {/* Stepper (Adım Göstergesi) */}
+        <div className="flex justify-center items-center px-4 w-full">
+            <div className="relative flex items-center justify-between w-full max-w-4xl">
+                {/* Bağlantı Çizgisi */}
+                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                <div 
+                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 -z-10 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                ></div>
+
+                {steps.map((step, index) => {
+                    const isCompleted = currentStep > step.id;
+                    const isActive = currentStep === step.id;
+                    
+                    return (
+                        <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
+                            <div className={cn(
+                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
+                                isActive 
+                                    ? "bg-slate-900 border-indigo-500 text-indigo-400 scale-110 shadow-indigo-500/50" 
+                                    : isCompleted 
+                                        ? "bg-purple-600 border-purple-600 text-white scale-100" 
+                                        : "bg-slate-900 border-slate-800 text-slate-600"
+                            )}>
+                                {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                            </div>
+                            <span className={cn(
+                                "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
+                                isActive ? "text-indigo-400" : isCompleted ? "text-purple-500" : "text-slate-600"
+                            )}>
+                                {step.name}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
 
-        <Card className="min-h-[400px]">
-          <CardHeader>
-            <CardTitle>{steps.find(s => s.id === currentStep)?.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="min-h-[250px] flex justify-center items-center">
-             {renderContent()}
-          </CardContent>
-          <CardFooter className="flex justify-between pt-6">
-            {currentStep === 1 ? <Button asChild variant="outline"><Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link></Button> : <Button variant="outline" onClick={handleBack}><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>}
-            {currentStep < steps.length ? (
-              <Button onClick={handleNext} disabled={
-                  (currentStep === 1 && !selection.classId) || 
-                  (currentStep === 2 && !selection.courseId) ||
-                  (currentStep === 3 && !selection.unitId) ||
-                  (currentStep === 4 && !selection.topicId)
-              }>İleri <ArrowRight className="mr-2 h-4 w-4" /></Button>
-            ) : (
-              <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
-                <Link href={getGameUrl()}>
-                    <PartyPopper className="mr-2 h-4 w-4" /> Yarışmayı Başlat
-                </Link>
-              </Button>
-            )}
-          </CardFooter>
-        </Card>
+        {/* Ana İçerik Kartı */}
+        <div className="mt-8 flex-grow flex flex-col">
+             <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col flex-grow min-h-[500px]">
+                <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
+                     <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                        <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-lg">
+                            {currentStep}
+                        </span>
+                        {steps.find(s => s.id === currentStep)?.name}
+                     </h2>
+                     {isLoading && <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />}
+                </div>
+
+                <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30 overflow-y-auto">
+                     {renderContent()}
+                </div>
+
+                <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
+                    {currentStep === 1 ? (
+                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-14 px-8 rounded-xl text-lg">
+                            <Link href="/teacher/smartboard">
+                                <ArrowLeft className="mr-2 h-5 w-5" /> Menüye Dön
+                            </Link>
+                        </Button>
+                    ) : (
+                        <Button 
+                            variant="outline" 
+                            onClick={handleBack}
+                            className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-14 px-8 rounded-xl text-lg bg-transparent"
+                        >
+                            <ArrowLeft className="mr-2 h-5 w-5" /> Geri
+                        </Button>
+                    )}
+                    
+                    {currentStep < steps.length && (
+                         <Button 
+                            onClick={handleNext} 
+                            disabled={
+                                (currentStep === 1 && !selection.classId) || 
+                                (currentStep === 2 && !selection.courseId) ||
+                                (currentStep === 3 && !selection.unitId) ||
+                                (currentStep === 4 && !selection.topicId)
+                            }
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white h-14 px-8 rounded-xl text-lg shadow-lg shadow-indigo-900/20 transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                        >
+                            İleri <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                    )}
+                </div>
+            </div>
+        </div>
+
       </div>
     </div>
   );
