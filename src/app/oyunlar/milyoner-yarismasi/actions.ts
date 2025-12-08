@@ -1,13 +1,14 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer, getDoc } from 'firebase/firestore';
+import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import type { Question } from '@/lib/types';
 
-const MAX_ATTEMPTS_PER_CONTEXT = 10; 
+const MAX_ATTEMPTS_PER_CONTEXT = 5; 
 
 export async function addScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
   noStore();
@@ -52,6 +53,9 @@ export async function addScore(userId: string, score: number, context: string): 
     return { success: true };
   } catch (error: any) {
     console.error("Error adding score:", error);
+    if (error.code === 'failed-precondition') {
+        return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}`};
+    }
     return { success: false, error: "Puan eklenirken bir hata oluştu." };
   }
 }
