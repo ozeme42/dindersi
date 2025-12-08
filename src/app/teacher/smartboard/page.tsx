@@ -124,6 +124,7 @@ export default function SmartboardPage() {
     // Sunum & Araç Modları
     const sunumlar = [
         {
+            key: 'ozetler',
             href: "/teacher/smartboard/ozetler",
             title: "Özetler ve İçerikler",
             description: "Konu özetlerini ve interaktif HTML içerikleri tam ekran sun.",
@@ -131,6 +132,7 @@ export default function SmartboardPage() {
             colorClass: "bg-rose-600 border-rose-800 hover:bg-rose-500",
         },
         {
+            key: 'yazilacaklar',
             href: "/teacher/smartboard/yazilacaklar",
             title: "Kavram & Not Panosu",
             description: "Kavramlar ve önemli notları sütunlara ayırarak net göster.",
@@ -138,6 +140,7 @@ export default function SmartboardPage() {
             colorClass: "bg-amber-600 border-amber-800 hover:bg-amber-500",
         },
         {
+             key: 'sanal-tahta',
              href: "/teacher/smartboard/sanal-tahta",
              title: "Sanal Tahta",
              description: "Ders anlatımı için temel dijital beyaz tahta modülü.",
@@ -145,6 +148,7 @@ export default function SmartboardPage() {
              colorClass: "bg-blue-600 border-blue-800 hover:bg-blue-500",
         },
         {
+             key: 'anlik-geri-bildirim',
              href: "/teacher/smartboard/anlik-geri-bildirim",
              title: "Anlık Geri Bildirim",
              description: "Sınıfın nabzını anında ölçmek için hızlı soru/anket.",
@@ -209,8 +213,8 @@ export default function SmartboardPage() {
                         <div className="h-px w-16 bg-gradient-to-l from-transparent to-rose-500"></div>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {sunumlar.map((buttonProps, index) => (
-                            <div key={index} className="aspect-[4/5] min-h-[380px]">
+                        {sunumlar.map(({ key, ...buttonProps }) => (
+                            <div key={key} className="aspect-[4/5] min-h-[380px]">
                                 <SmartboardCard {...buttonProps} />
                             </div>
                         ))}
