@@ -1,77 +1,23 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
     ThumbsUp, ThumbsDown, StopCircle, HelpCircle, Check, X, 
-    BarChart3, RefreshCw, Trophy, Volume2, Timer, User, ArrowLeft, 
-    Meh, Frown, Smile, Trash2, Zap, Loader2
+    BarChart3, RefreshCw, Trophy, Timer, ArrowLeft, 
+    Meh, Frown, Smile, Trash2, Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import type { SchoolClass, UserProfile } from '@/lib/types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { UserAvatar } from '@/components/user-avatar';
 
 // --- TİPLER ---
-type FeedbackMode = 'idle' | 'yes_no' | 'traffic_light' | 'quiz' | 'emoji' | 'random_student';
+type FeedbackMode = 'idle' | 'yes_no' | 'traffic_light' | 'quiz';
 
 export default function InstantFeedbackPage() {
     const [mode, setMode] = useState<FeedbackMode>('idle');
     const [votes, setVotes] = useState<Record<string, number>>({});
     const [timer, setTimer] = useState<number>(0);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
-    
-    // Data states for student selection
-    const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-    const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
-    const [classFilter, setClassFilter] = useState('all');
-    const [branchFilter, setBranchFilter] = useState('all');
-    const [isLoadingData, setIsLoadingData] = useState(true);
-
-    // Rastgele Öğrenci State
-    const [selectedStudent, setSelectedStudent] = useState<UserProfile | null>(null);
-    const [isRolling, setIsRolling] = useState(false);
-
-    useEffect(() => {
-        const fetchInitialData = async () => {
-            setIsLoadingData(true);
-            try {
-                const [classesSnap, studentsSnap] = await Promise.all([
-                    getDocs(query(collection(db, "classes"), orderBy("name"))),
-                    getDocs(query(collection(db, "users"), where("role", "==", "guest")))
-                ]);
-                setAllClasses(classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
-                setAllStudents(studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
-            } catch (error) {
-                console.error("Error fetching data for feedback tool:", error);
-            } finally {
-                setIsLoadingData(false);
-            }
-        };
-        fetchInitialData();
-    }, []);
-
-    const selectedClassData = useMemo(() => allClasses.find(c => c.id === classFilter), [classFilter, allClasses]);
-
-    const filteredStudents = useMemo(() => {
-        if (classFilter === 'all') {
-            return allStudents;
-        }
-        if (!selectedClassData) return [];
-        
-        if (branchFilter === 'all') {
-            return allStudents.filter(s => s.class?.startsWith(selectedClassData.name));
-        }
-
-        const fullClassName = `${selectedClassData.name} - ${branchFilter}`;
-        return allStudents.filter(s => s.class === fullClassName);
-    }, [allStudents, classFilter, branchFilter, selectedClassData]);
-
 
     // Zamanlayıcı
     useEffect(() => {
@@ -100,27 +46,7 @@ export default function InstantFeedbackPage() {
 
     const resetVotes = () => setVotes({});
 
-    const pickRandomStudent = () => {
-        if (filteredStudents.length === 0) {
-            alert("Seçilen kriterlere uygun öğrenci bulunamadı.");
-            return;
-        }
-        setIsRolling(true);
-        setSelectedStudent(null);
-        let count = 0;
-        const interval = setInterval(() => {
-            setSelectedStudent(filteredStudents[Math.floor(Math.random() * filteredStudents.length)]);
-            count++;
-            if (count > 20) {
-                clearInterval(interval);
-                setIsRolling(false);
-            }
-        }, 100);
-    };
-
     // --- MOD BİLEŞENLERİ ---
-
-    // 1. Evet / Hayır Modu
     const YesNoView = () => (
         <div className="grid grid-cols-2 gap-8 w-full h-full">
             <button 
@@ -146,7 +72,6 @@ export default function InstantFeedbackPage() {
         </div>
     );
 
-    // 2. Trafik Işığı Modu (Anlama Kontrolü)
     const TrafficLightView = () => (
         <div className="grid grid-cols-3 gap-6 w-full h-full">
             {[
@@ -174,7 +99,6 @@ export default function InstantFeedbackPage() {
         </div>
     );
 
-    // 3. Quiz (A/B/C/D) Modu
     const QuizView = () => (
         <div className="grid grid-cols-2 gap-6 w-full h-full">
             {['A', 'B', 'C', 'D'].map((opt, i) => {
@@ -210,118 +134,6 @@ export default function InstantFeedbackPage() {
         </div>
     );
 
-    // 4. Rastgele Öğrenci Modu (Yeni Animasyonlu Hali)
-    const RandomStudentView = () => {
-        const listRef = useRef<HTMLDivElement>(null);
-        const [isChoosing, setIsChoosing] = useState(false);
-        const [winner, setWinner] = useState<UserProfile | null>(null);
-        
-        const studentsForList = useMemo(() => {
-            if (filteredStudents.length === 0) return [];
-            // Create a long list for a good looping effect
-            const list = [];
-            for (let i = 0; i < 50; i++) {
-                list.push(filteredStudents[i % filteredStudents.length]);
-            }
-            return list;
-        }, [filteredStudents]);
-
-        const pickRandomStudent = () => {
-            if (filteredStudents.length === 0) {
-                alert("Seçilecek öğrenci bulunamadı. Lütfen filtreleri kontrol edin.");
-                return;
-            }
-            setIsChoosing(true);
-            setWinner(null);
-            
-            const listEl = listRef.current;
-            if (listEl) {
-                listEl.style.transition = 'none';
-                listEl.style.transform = 'translateY(0)';
-            }
-            
-            setTimeout(() => {
-                const winnerIndex = Math.floor(Math.random() * filteredStudents.length);
-                const winnerStudent = filteredStudents[winnerIndex];
-                
-                // Animasyon hedefi: Listenin sonlarına doğru kazanan öğrenciyi denk getir
-                const targetIndexInList = studentsForList.length - filteredStudents.length + winnerIndex;
-                const elementHeight = 100; // Her bir öğrenci kartının yüksekliği (px)
-                const targetPosition = -targetIndexInList * elementHeight + listEl!.clientHeight / 2 - elementHeight / 2;
-
-                if (listEl) {
-                    listEl.style.transition = 'transform 6s cubic-bezier(0.2, 0.8, 0.2, 1)';
-                    listEl.style.transform = `translateY(${targetPosition}px)`;
-                }
-
-                setTimeout(() => {
-                    setIsChoosing(false);
-                    setWinner(winnerStudent);
-                }, 6100);
-            }, 100);
-        };
-        
-        return (
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-center">
-                 <div className="md:col-span-1 h-full flex flex-col gap-4">
-                     <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5 space-y-2">
-                        <Label className="text-slate-400">Sınıf</Label>
-                        <Select value={classFilter} onValueChange={setClassFilter}>
-                            <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Tüm Sınıflar</SelectItem>
-                                {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                     </div>
-                     <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5 space-y-2">
-                        <Label className="text-slate-400">Şube</Label>
-                        <Select value={branchFilter} onValueChange={setBranchFilter} disabled={!selectedClassData}>
-                            <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                     </div>
-                      <Button size="lg" onClick={pickRandomStudent} disabled={isChoosing || isLoadingData || filteredStudents.length === 0} className="w-full h-20 text-xl font-bold bg-cyan-600 hover:bg-cyan-500 shadow-lg mt-auto">
-                        {isChoosing ? <Loader2 className="animate-spin h-8 w-8"/> : "ÖĞRENCİ SEÇ"}
-                    </Button>
-                 </div>
-                 
-                 <div className="md:col-span-2 h-[400px] md:h-full bg-slate-900/50 border-4 border-slate-700 rounded-3xl relative flex items-center justify-center overflow-hidden">
-                     {/* Orta İşaretçi */}
-                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent z-20 border-y-2 border-cyan-400" />
-                     <div className="absolute left-4 top-1/2 -translate-y-1/2 z-30">
-                        <div className="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
-                     </div>
-                     <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30">
-                        <div className="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
-                     </div>
-
-                     <div ref={listRef} className="absolute w-full top-0 left-0">
-                         {studentsForList.map((student, index) => (
-                             <div key={`${student.uid}-${index}`} className="flex items-center gap-4 h-[100px] p-4 justify-center text-3xl font-bold">
-                                 <UserAvatar user={student} className="w-12 h-12 text-2xl"/>
-                                 <span>{student.displayName}</span>
-                             </div>
-                         ))}
-                     </div>
-                     {winner && (
-                         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center z-40 animate-in fade-in">
-                              <div className="relative text-center">
-                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-yellow-500/30 blur-2xl rounded-full w-48 h-48" />
-                                <UserAvatar user={winner} className="w-40 h-40 text-7xl mb-4 border-4 border-yellow-400" />
-                                <h3 className="text-5xl font-black text-white">{winner.displayName}</h3>
-                                <p className="text-xl text-yellow-400 font-bold uppercase tracking-widest mt-2">KAZANAN</p>
-                            </div>
-                         </div>
-                     )}
-                 </div>
-             </div>
-        );
-    };
-
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-cyan-500/30 font-sans">
             
@@ -342,7 +154,6 @@ export default function InstantFeedbackPage() {
                         Anlık Geri Bildirim
                     </h1>
                 </div>
-
                 <div className="flex items-center gap-4">
                     <div className={cn(
                         "flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all",
@@ -360,53 +171,19 @@ export default function InstantFeedbackPage() {
             </header>
 
             <main className="flex-1 flex overflow-hidden z-10 p-6 gap-6">
-                
                 <div className="w-80 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
-                    <ModeButton 
-                        active={mode === 'yes_no'} 
-                        onClick={() => { setMode('yes_no'); resetVotes(); }}
-                        title="Evet / Hayır"
-                        icon={<ThumbsUp className="w-6 h-6" />}
-                        color="bg-emerald-600"
-                    />
-                    <ModeButton 
-                        active={mode === 'traffic_light'} 
-                        onClick={() => { setMode('traffic_light'); resetVotes(); }}
-                        title="Trafik Işığı"
-                        subtitle="Anlama Kontrolü"
-                        icon={<StopCircle className="w-6 h-6" />}
-                        color="bg-yellow-600"
-                    />
-                    <ModeButton 
-                        active={mode === 'quiz'} 
-                        onClick={() => { setMode('quiz'); resetVotes(); }}
-                        title="Çoktan Seçmeli"
-                        subtitle="A / B / C / D"
-                        icon={<HelpCircle className="w-6 h-6" />}
-                        color="bg-indigo-600"
-                    />
-                     <ModeButton 
-                        active={mode === 'random_student'} 
-                        onClick={() => { setMode('random_student'); setSelectedStudent(null); }}
-                        title="Şanslı Öğrenci"
-                        icon={<Trophy className="w-6 h-6" />}
-                        color="bg-cyan-600"
-                    />
+                    <ModeButton active={mode === 'yes_no'} onClick={() => { setMode('yes_no'); resetVotes(); }} title="Evet / Hayır" icon={<ThumbsUp className="w-6 h-6" />} color="bg-emerald-600" />
+                    <ModeButton active={mode === 'traffic_light'} onClick={() => { setMode('traffic_light'); resetVotes(); }} title="Trafik Işığı" subtitle="Anlama Kontrolü" icon={<StopCircle className="w-6 h-6" />} color="bg-yellow-600" />
+                    <ModeButton active={mode === 'quiz'} onClick={() => { setMode('quiz'); resetVotes(); }} title="Çoktan Seçmeli" subtitle="A / B / C / D" icon={<HelpCircle className="w-6 h-6" />} color="bg-indigo-600" />
 
                     <div className="mt-auto pt-4 border-t border-white/5">
-                         <Button 
-                            onClick={resetVotes} 
-                            variant="ghost" 
-                            className="w-full h-14 justify-start gap-4 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-2xl"
-                        >
-                            <Trash2 className="w-6 h-6" /> 
-                            <span className="text-lg font-bold">Sonuçları Temizle</span>
+                         <Button onClick={resetVotes} variant="ghost" className="w-full h-14 justify-start gap-4 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-2xl">
+                            <Trash2 className="w-6 h-6" /> <span className="text-lg font-bold">Sonuçları Temizle</span>
                         </Button>
                     </div>
                 </div>
 
                 <div className="flex-1 bg-slate-900/50 backdrop-blur-xl border-2 border-white/10 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden flex flex-col">
-                    
                     <div className="flex-grow flex items-center justify-center">
                         {mode === 'idle' && (
                             <div className="text-center text-slate-500">
@@ -418,9 +195,7 @@ export default function InstantFeedbackPage() {
                         {mode === 'yes_no' && <YesNoView />}
                         {mode === 'traffic_light' && <TrafficLightView />}
                         {mode === 'quiz' && <QuizView />}
-                        {mode === 'random_student' && <RandomStudentView />}
                     </div>
-
                 </div>
             </main>
         </div>

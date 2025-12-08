@@ -139,7 +139,7 @@ export default function SmartboardPage() {
         },
         {
              href: "/teacher/smartboard/sanal-tahta",
-             title: "Sanal Tahta (Beyaz Tahta)",
+             title: "Sanal Tahta",
              description: "Ders anlatımı için temel dijital beyaz tahta modülü.",
              icon: <Lightbulb />,
              colorClass: "bg-blue-600 border-blue-800 hover:bg-blue-500",
@@ -150,6 +150,14 @@ export default function SmartboardPage() {
              description: "Sınıfın nabzını anında ölçmek için hızlı soru/anket.",
              icon: <Zap />,
              colorClass: "bg-slate-700 border-slate-900 hover:bg-slate-600",
+        },
+        {
+            key: 'carkifelek',
+            href: "/teacher/smartboard/carkifelek",
+            title: "Çarkıfelek",
+            description: "Sınıftan rastgele bir öğrenci seçmek için çarkı çevirin.",
+            icon: <Trophy />,
+            colorClass: "bg-yellow-600 border-yellow-800 hover:bg-yellow-500",
         },
     ];
 

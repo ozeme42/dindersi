@@ -6,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -289,6 +289,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
     errorReports: { key: 'errorReports', href: '/teacher/error-reports', title: 'Hata Raporları', icon: <Bug />, color: "bg-red-400 shadow-red-100" },
     scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "bg-emerald-500 shadow-emerald-200" },
+    wheelOfFortune: { key: 'wheelOfFortune', href: '/teacher/smartboard/carkifelek', title: 'Çarkıfelek', icon: <Swords />, color: "bg-pink-500 shadow-pink-200" },
   };
 
   const getManagementButtons = () => {
@@ -301,6 +302,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.exams,
           managementButtons.evaluationScales,
           managementButtons.leaderboard,
+          managementButtons.wheelOfFortune,
           managementButtons.videoLibrary,
           managementButtons.gameSettingsTeacher,
           managementButtons.errorReports,
