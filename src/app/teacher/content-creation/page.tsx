@@ -577,6 +577,7 @@ export default function ContentCreationPage() {
                         {steps.map((step, index) => {
                             const isCompleted = currentStep > step.id;
                             const isActive = currentStep === step.id;
+                            const IconComponent = step.icon;
                             
                             return (
                                 <div key={step.id} 
@@ -591,7 +592,7 @@ export default function ContentCreationPage() {
                                                 ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
                                                 : "bg-slate-900 border-slate-800 text-slate-600 hover:border-slate-700"
                                     )}>
-                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : <IconComponent />}
                                     </div>
                                     <span className={cn(
                                         "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
@@ -633,7 +634,7 @@ export default function ContentCreationPage() {
                         </div>
                     </div>
 
-                    <div className="flex-grow p-6 md:p-10 bg-black/20">
+                    <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-black/20">
                          {renderCurrentStep()}
                     </div>
 
@@ -646,7 +647,7 @@ export default function ContentCreationPage() {
                             >
                                 <ArrowLeft className="mr-2 h-5 w-5" /> Geri
                             </Button>
-                        ) : <div />}
+                        ) : <div></div>}
                     </div>
                 </div>
 
