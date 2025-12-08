@@ -1,13 +1,20 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
-import { Play, RefreshCw, Heart, Zap, Loader2 } from 'lucide-react';
-import { getDogruYolKosucusuAction, type DogruYolQuestion } from '../actions';
-import { useSearchParams } from 'next/navigation';
+import { Play, RefreshCw, Heart, Zap, Loader2, Home } from 'lucide-react';
+import { getDogruYolKosucusuAction, submitDogruYolKosucusuScoreAction, type DogruYolQuestion } from '../actions';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
+import { useToast } from '@/hooks/use-toast';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 const LANE_WIDTH = 50; // % olarak şerit genişliği
 
 function Game() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const searchParams = useSearchParams();
   const [gameState, setGameState] = useState('start'); // start, playing, gameover
   const [score, setScore] = useState(0);
@@ -20,10 +27,16 @@ function Game() {
   const [error, setError] = useState<string | null>(null);
   const [questions, setQuestions] = useState<DogruYolQuestion[]>([]);
   const [correctStreak, setCorrectStreak] = useState(0);
+  
+  const [isSaving, setIsSaving] = useState(false);
+  const [isScoreSaved, setIsScoreSaved] = useState(false);
 
   const requestRef = useRef<number>();
   const lastSpawnTime = useRef(0);
   const scoreRef = useRef(0);
+
+  const gameContext = `Doğru Yol Koşucusu - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
+  const backUrl = '/oyunlar/dogru-yol-kosucusu';
   
   useEffect(() => {
       const fetchQuestions = async () => {
@@ -63,6 +76,8 @@ function Game() {
     setPlayerLane(0);
     lastSpawnTime.current = 0;
     setCorrectStreak(0);
+    setIsSaving(false);
+    setIsScoreSaved(false);
   };
 
   const switchLane = () => {
@@ -168,6 +183,22 @@ function Game() {
       }
     };
   }, [gameState, updateGame]);
+  
+  const handleSaveAndExit = async () => {
+    if (!user || isSaving || isScoreSaved || score <= 0) {
+      router.push(backUrl);
+      return;
+    }
+    setIsSaving(true);
+    const result = await submitDogruYolKosucusuScoreAction(user.uid, score, gameContext);
+    if (result.success) {
+      setIsScoreSaved(true);
+      toast({ title: "Başarılı!", description: "Puanınız kaydedildi." });
+    } else {
+      toast({ title: "Hata", description: result.error, variant: "destructive" });
+    }
+    setIsSaving(false);
+  };
 
 
   // --- RENDER ---
@@ -186,6 +217,19 @@ function Game() {
         </div>
     );
   }
+
+   if (gameState === 'gameover') {
+        return (
+            <GameEndScreen
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={startGame}
+                backUrl={backUrl}
+            />
+        );
+    }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 overflow-hidden font-sans select-none relative touch-none">
@@ -277,26 +321,6 @@ function Game() {
           </div>
         </div>
       )}
-
-      {gameState === 'gameover' && (
-        <div className="absolute inset-0 bg-red-900/90 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-          <div className="bg-white text-slate-900 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl animate-bounce">
-            <div className="text-6xl mb-4">🏁</div>
-            <h2 className="text-3xl font-bold text-slate-800 mb-2">Parkur Bitti!</h2>
-            <p className="text-gray-500 mb-6">Gayet iyi koştun.</p>
-            
-            <div className="bg-slate-100 p-6 rounded-xl mb-8 border-2 border-slate-200">
-              <div className="text-xs text-slate-500 font-bold tracking-widest mb-1">TOPLAM SKOR</div>
-              <div className="text-5xl font-black text-blue-600">{score}</div>
-            </div>
-
-            <button onClick={startGame} className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
-              <RefreshCw /> TEKRAR DENE
-            </button>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };
