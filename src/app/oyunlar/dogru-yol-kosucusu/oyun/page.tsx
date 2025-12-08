@@ -287,7 +287,7 @@ function Game() {
         ))}
 
         <div 
-            className="absolute bottom-8 w-16 h-16 bg-yellow-400 rounded-full border-4 border-orange-500 flex items-center justify-center text-3xl shadow-xl transition-all duration-200 z-20"
+            className="absolute bottom-24 w-16 h-16 bg-yellow-400 rounded-full border-4 border-orange-500 flex items-center justify-center text-3xl shadow-xl transition-all duration-200 z-20"
             style={{ 
                 left: playerLane === 0 ? '25%' : '75%', 
                 transform: 'translateX(-50%)' 
