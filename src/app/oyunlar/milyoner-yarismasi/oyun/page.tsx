@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
@@ -117,7 +118,7 @@ function MilyonerGame() {
           setShowConfetti(true);
           if (user) {
             const finalPrize = parseInt(MONEY_LEVELS[qIndex].replace(/\./g, ''));
-            await addScore(user.uid, finalPrize, `Kim 1000 Puan İster? yarışmasını kazandı.`);
+            await addScore(user.uid, finalPrize, gameContext); // CONTEXT WAS CORRECTED HERE
             await checkAndAwardMillionaireBadge(user.uid);
           }
         }
@@ -129,7 +130,7 @@ function MilyonerGame() {
         handleEndGame('lost', prize);
       }, 2000);
     }
-  }, [qIndex, questions, resetQuestion, user, handleEndGame]);
+  }, [qIndex, questions, resetQuestion, user, handleEndGame, gameContext]);
 
   const handleOptionSelect = useCallback((option: string) => {
     if (revealState !== 'none' || eliminatedOptions.includes(option)) return;
@@ -395,3 +396,4 @@ function MilyonerOyunPage() {
 // We are now exporting the wrapped component as the default.
 export default MilyonerOyunPage;
 
+    
