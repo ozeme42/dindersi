@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -72,14 +73,19 @@ export default function GuestStudentsPage() {
 
     const fetchStudents = useCallback(async () => {
         setIsLoading(true);
-        const result = await getAllUsers();
-        if (result.success && result.users) {
-             const guestStudents = result.users.filter(u => u.role === 'guest');
-             setStudents(guestStudents);
-        } else {
-             toast({ title: "Hata", description: "Öğrenciler yüklenemedi.", variant: "destructive" });
+        try {
+            const allUsers = await getAllUsers();
+            if (allUsers) {
+                const guestStudents = allUsers.filter(u => u.role === 'guest');
+                setStudents(guestStudents);
+            } else {
+                toast({ title: "Hata", description: "Öğrenciler yüklenemedi.", variant: "destructive" });
+            }
+        } catch (error) {
+            toast({ title: "Hata", description: "Öğrenciler yüklenirken bir sorun oluştu.", variant: "destructive" });
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, [toast]);
 
     useEffect(() => {
@@ -92,9 +98,9 @@ export default function GuestStudentsPage() {
         );
     }, [students, searchTerm]);
 
-    const handleCreateGuest = async (data: any) => {
+    const handleCreateGuest = async (data: { displayName: string, class: string }) => {
         setIsSaving(true);
-        const result = await addGuestStudent(data);
+        const result = await addGuestStudent(data.displayName, data.class);
         if (result.success) {
             toast({ title: "Başarılı", description: "Misafir öğrenci başarıyla oluşturuldu." });
             fetchStudents();
