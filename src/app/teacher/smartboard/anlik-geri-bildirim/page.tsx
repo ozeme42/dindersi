@@ -1,24 +1,23 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
     ThumbsUp, ThumbsDown, StopCircle, HelpCircle, Check, X, 
     BarChart3, RefreshCw, Trophy, Volume2, Timer, User, ArrowLeft, 
-    Meh, Frown, Smile, Trash2, Zap
+    Meh, Frown, Smile, Trash2, Zap, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import type { SchoolClass, UserProfile } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 // --- TİPLER ---
 type FeedbackMode = 'idle' | 'yes_no' | 'traffic_light' | 'quiz' | 'emoji' | 'random_student';
-
-// --- MOCK ÖĞRENCİ LİSTESİ (Gerçek uygulamada DB'den gelir) ---
-const MOCK_STUDENTS = [
-    "Ahmet Y.", "Ayşe K.", "Mehmet T.", "Zeynep B.", "Caner E.", 
-    "Elif S.", "Burak D.", "Ceren A.", "Deniz M.", "Fatih O."
-];
 
 export default function InstantFeedbackPage() {
     const [mode, setMode] = useState<FeedbackMode>('idle');
@@ -26,9 +25,52 @@ export default function InstantFeedbackPage() {
     const [timer, setTimer] = useState<number>(0);
     const [isTimerRunning, setIsTimerRunning] = useState(false);
     
+    // Data states for student selection
+    const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+    const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
+    const [classFilter, setClassFilter] = useState('all');
+    const [branchFilter, setBranchFilter] = useState('all');
+    const [isLoadingData, setIsLoadingData] = useState(true);
+
     // Rastgele Öğrenci State
     const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
     const [isRolling, setIsRolling] = useState(false);
+
+    useEffect(() => {
+        const fetchInitialData = async () => {
+            setIsLoadingData(true);
+            try {
+                const [classesSnap, studentsSnap] = await Promise.all([
+                    getDocs(query(collection(db, "classes"), orderBy("name"))),
+                    getDocs(query(collection(db, "users"), where("role", "==", "guest")))
+                ]);
+                setAllClasses(classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+                setAllStudents(studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+            } catch (error) {
+                console.error("Error fetching data for feedback tool:", error);
+            } finally {
+                setIsLoadingData(false);
+            }
+        };
+        fetchInitialData();
+    }, []);
+
+    const selectedClassData = useMemo(() => allClasses.find(c => c.id === classFilter), [classFilter, allClasses]);
+
+    const filteredStudents = useMemo(() => {
+        if (classFilter === 'all') {
+            return allStudents;
+        }
+        if (!selectedClassData) return [];
+        
+        if (branchFilter === 'all') {
+            return allStudents.filter(s => s.class?.startsWith(selectedClassData.name));
+        }
+
+        const fullClassName = `${selectedClassData.name} - ${branchFilter}`;
+        return allStudents.filter(s => s.class === fullClassName);
+    }, [allStudents, classFilter, branchFilter, selectedClassData]);
+
 
     // Zamanlayıcı
     useEffect(() => {
@@ -58,11 +100,15 @@ export default function InstantFeedbackPage() {
     const resetVotes = () => setVotes({});
 
     const pickRandomStudent = () => {
+        if (filteredStudents.length === 0) {
+            alert("Seçilen kriterlere uygun öğrenci bulunamadı.");
+            return;
+        }
         setIsRolling(true);
         setSelectedStudent(null);
         let count = 0;
         const interval = setInterval(() => {
-            setSelectedStudent(MOCK_STUDENTS[Math.floor(Math.random() * MOCK_STUDENTS.length)]);
+            setSelectedStudent(filteredStudents[Math.floor(Math.random() * filteredStudents.length)].displayName);
             count++;
             if (count > 20) {
                 clearInterval(interval);
@@ -165,7 +211,29 @@ export default function InstantFeedbackPage() {
 
     // 4. Rastgele Öğrenci Modu
     const RandomStudentView = () => (
-        <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="flex flex-col items-center justify-center w-full h-full gap-8">
+             <div className="w-full max-w-lg mx-auto grid grid-cols-2 gap-4">
+                <div>
+                    <Label className="text-slate-400">Sınıf</Label>
+                    <Select value={classFilter} onValueChange={setClassFilter}>
+                        <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Tüm Sınıflar</SelectItem>
+                            {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div>
+                    <Label className="text-slate-400">Şube</Label>
+                    <Select value={branchFilter} onValueChange={setBranchFilter} disabled={!selectedClassData}>
+                        <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Tüm Şubeler</SelectItem>
+                            {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
             <div className="relative w-full max-w-2xl aspect-video flex items-center justify-center">
                 {/* Daire Efektleri */}
                 <div className={cn("absolute inset-0 rounded-full border-4 border-dashed border-slate-700 animate-[spin_10s_linear_infinite]", isRolling && "border-cyan-500 duration-1000")} />
@@ -184,10 +252,10 @@ export default function InstantFeedbackPage() {
             <Button 
                 size="lg" 
                 onClick={pickRandomStudent} 
-                disabled={isRolling}
+                disabled={isRolling || isLoadingData || filteredStudents.length === 0}
                 className="mt-12 h-20 px-12 text-3xl rounded-3xl bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_30px_rgba(8,145,178,0.4)] transition-all hover:scale-105"
             >
-                {isRolling ? "Seçiliyor..." : "Öğrenci Seç"}
+                {isLoadingData ? <Loader2 className="animate-spin h-8 w-8"/> : isRolling ? "Seçiliyor..." : "Öğrenci Seç"}
             </Button>
         </div>
     );
@@ -336,5 +404,3 @@ function ModeButton({ active, onClick, title, subtitle, icon, color }: { active:
         </button>
     )
 }
-
-    
