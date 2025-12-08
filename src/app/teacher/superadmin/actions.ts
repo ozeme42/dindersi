@@ -4,8 +4,7 @@
 
 import { adminApp } from "@/lib/firebase-admin";
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
-import { collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc, Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -13,7 +12,7 @@ import path from 'path';
 const db = getFirestore(adminApp);
 
 export async function getAllUsers(): Promise<UserProfile[]> {
-    const usersSnapshot = await getDocs(collection(db, 'users'));
+    const usersSnapshot = await db.collection('users').get();
     return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
 }
 
@@ -27,7 +26,7 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
         await auth.deleteUser(userId);
 
         // Delete from Firestore
-        await deleteDoc(doc(db, 'users', userId));
+        await db.collection('users').doc(userId).delete();
 
         // Note: Subcollections are not deleted automatically. This requires a Cloud Function for a full cleanup.
         // For this app's purpose, this is sufficient.
@@ -62,8 +61,8 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
         await auth.updateUser(uid, authUpdatePayload);
 
         // Update Firestore
-        const userRef = doc(db, 'users', uid);
-        await updateDoc(userRef, firestoreData);
+        const userRef = db.collection('users').doc(uid);
+        await userRef.update(firestoreData);
         
         return { success: true };
 
@@ -79,15 +78,15 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
         case 'users':
             return await getAllUsers();
         case 'curriculum':
-            const coursesSnapshot = await getDocs(query(collection(db, "courses"), orderBy("title")));
+            const coursesSnapshot = await db.collection("courses").orderBy("title").get();
             const courses = [];
             for (const courseDoc of coursesSnapshot.docs) {
                 const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-                const unitsSnapshot = await getDocs(query(collection(db, `courses/${courseDoc.id}/units`), orderBy("title")));
+                const unitsSnapshot = await db.collection(`courses/${courseDoc.id}/units`).orderBy("title").get();
                 const units = [];
                 for (const unitDoc of unitsSnapshot.docs) {
                     const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                    const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`), orderBy("title")));
+                    const topicsSnapshot = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
                     unitData.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, title: topicDoc.data().title }));
                     units.push(unitData);
                 }
@@ -96,19 +95,19 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
             }
             return courses;
         case 'questions':
-            const questionsSnapshot = await getDocs(query(collection(db, "questions"), orderBy("topicId")));
+            const questionsSnapshot = await db.collection("questions").orderBy("topicId").get();
             return questionsSnapshot.docs.map(doc => {
                 const { id, classId, className, courseId, unitId, createdAt, ...rest } = doc.data();
                 return rest;
             });
         case 'activity-items':
-            const activityItemsSnapshot = await getDocs(query(collection(db, "activityItems"), orderBy("topicId")));
+            const activityItemsSnapshot = await db.collection("activityItems").orderBy("topicId").get();
             return activityItemsSnapshot.docs.map(doc => {
                  const { id, courseId, unitId, createdAt, ...rest } = doc.data();
                  return rest;
             });
         case 'yazilacaklar':
-             const topicsSnapshot = await getDocs(query(collection(db, 'topics'), where("writingContent", "!=", null)));
+             const topicsSnapshot = await db.collectionGroup('topics').where("writingContent", "!=", null).get();
              const yazilacaklarData = [];
              for (const topicDoc of topicsSnapshot.docs) {
                 const topicData = topicDoc.data() as Topic;
@@ -116,9 +115,9 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
                 if (pathSegments.length >= 4) {
                     const courseId = pathSegments[1];
                     const unitId = pathSegments[3];
-                    const courseRef = doc(db, 'courses', courseId);
-                    const unitRef = doc(db, `courses/${courseId}/units`, unitId);
-                    const [courseSnap, unitSnap] = await Promise.all([getDoc(courseRef), getDoc(unitRef)]);
+                    const courseRef = db.doc(`courses/${courseId}`);
+                    const unitRef = db.doc(`courses/${courseId}/units/${unitId}`);
+                    const [courseSnap, unitSnap] = await Promise.all([courseRef.get(), unitRef.get()]);
                     
                     yazilacaklarData.push({
                         courseTitle: courseSnap.data()?.title || 'Bilinmeyen Ders',
@@ -153,8 +152,8 @@ export async function exportDataForStaticSite() {
         await ensureDir(path.join(curriculumDir, 'yazilacaklar'));
 
         // 1. Export Curriculum Structure
-        const coursesQuery = query(collection(db, "courses"));
-        const coursesSnapshot = await getDocs(coursesQuery);
+        const coursesQuery = db.collection("courses");
+        const coursesSnapshot = await coursesQuery.get();
         const manifest = { courseGroups: [] as any[] };
         
         const courseGroups: { [key: string]: any[] } = {};
@@ -162,11 +161,11 @@ export async function exportDataForStaticSite() {
         for (const courseDoc of coursesSnapshot.docs) {
             const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
             
-            const unitsSnapshot = await getDocs(query(collection(db, `courses/${courseDoc.id}/units`), orderBy("title")));
+            const unitsSnapshot = await db.collection(`courses/${courseDoc.id}/units`).orderBy("title").get();
             const units = [];
             for (const unitDoc of unitsSnapshot.docs) {
                 const unitData = { id: unitDoc.id, title: unitDoc.data().title } as Partial<Unit>;
-                const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseDoc.id}/units/${unitDoc.id}/topics`), orderBy("title")));
+                const topicsSnapshot = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
                 unitData.topics = topicsSnapshot.docs.map(topicDoc => {
                     const topicData = topicDoc.data();
                     return { id: topicDoc.id, title: topicData.title, htmlContent: !!topicData.htmlContent };
@@ -195,9 +194,9 @@ export async function exportDataForStaticSite() {
 
         // 2. Export Questions, ActivityItems, Yazilacaklar grouped by topicId
         const [questionsSnapshot, activityItemsSnapshot, topicsSnapshot] = await Promise.all([
-            getDocs(collection(db, "questions")),
-            getDocs(collection(db, "activityItems")),
-            getDocs(query(collection(db, 'topics'), where("writingContent", "!=", null)))
+            db.collection("questions").get(),
+            db.collection("activityItems").get(),
+            db.collectionGroup('topics').where("writingContent", "!=", null).get()
         ]);
 
         const questionsByTopic: { [key: string]: any[] } = {};

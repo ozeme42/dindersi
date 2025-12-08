@@ -59,7 +59,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             createdAt: serverTimestamp(),
         };
 
-        await setDoc(doc(db, "users", user.uid), newUserProfile);
+        await db.collection("users").doc(user.uid).set(newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
@@ -122,7 +122,7 @@ export async function addStudentToClass(displayName: string, className: string):
             createdAt: serverTimestamp(),
         };
 
-        await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
+        await db.collection("users").doc(userRecord.uid).set(newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
@@ -177,14 +177,11 @@ export async function addManualScore(studentId: string, points: number, reason: 
     }
 
     try {
-        const batch = writeBatch(db);
-
-        // 1. Update user's score
-        const userRef = doc(db, 'users', studentId);
+        const batch = db.batch();
+        const userRef = db.doc(`users/${studentId}`);
         batch.update(userRef, { score: increment(points) });
 
-        // 2. Log the score event
-        const eventRef = doc(collection(db, 'scoreEvents'));
+        const eventRef = db.collection('scoreEvents').doc();
         batch.set(eventRef, {
             userId: studentId,
             points: points,
@@ -202,7 +199,6 @@ export async function addManualScore(studentId: string, points: number, reason: 
     }
 }
 
-// Duplicating this here to avoid circular dependencies
 export async function deleteStudent(userId: string): Promise<{ success: boolean; error?: string }> {
     if (!userId) {
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
@@ -210,7 +206,7 @@ export async function deleteStudent(userId: string): Promise<{ success: boolean;
     try {
         const auth = getAuth(adminApp);
         await auth.deleteUser(userId);
-        await deleteDoc(doc(db, 'users', userId));
+        await db.collection('users').doc(userId).delete();
         return { success: true };
     } catch (error: any) {
         console.error(`Error deleting user ${userId}:`, error);
