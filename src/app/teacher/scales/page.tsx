@@ -1,37 +1,41 @@
+'use client';
 
-
-"use client";
-
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
+
+// UI Imports
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
-import { Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, AlertTriangle } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import {
+    AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
+    AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
+    AlertDialogTitle as RadixAlertDialogTitle, AlertDialogTrigger
+} from '@/components/ui/alert-dialog';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+
+// Lucide Icons
+import { 
+    Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
+    AlertTriangle, Users, FolderOpen, ArrowRight, UserCheck, Filter // <-- FILTER EKLENDİ
+} from 'lucide-react';
+
+// Firebase and Actions
+import { useToast } from '@/hooks/use-toast';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
 import { createScale, getTeacherScales, deleteScale } from './actions';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle as RadixAlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+
+// Types and Utils
+import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 
 export const dynamic = 'force-dynamic';
@@ -40,8 +44,8 @@ type EnrichedCourse = Course & { units: Unit[] };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
 const createScaleSchema = z.object({
-  name: z.string().min(3, { message: "Ölçek adı en az 3 karakter olmalıdır." }),
-  type: z.enum(['tally', 'checklist']),
+    name: z.string().min(3, { message: "Ölçek adı en az 3 karakter olmalıdır." }),
+    type: z.enum(['tally', 'checklist']),
 });
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
@@ -62,32 +66,33 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
     });
 
     const onSubmit = (data: CreateScaleFormValues) => {
-        const generatedName = `${data.name} (${selectedClass?.name} - ${selectedBranch})`;
+        if (!selectedClass || !selectedCourseId) return;
+        const generatedName = `${data.name} (${selectedClass.name} - ${selectedBranch})`;
         onSave({ ...data, generatedName, courseId: selectedCourseId });
         reset();
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4 border rounded-lg bg-muted/50">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-6 rounded-xl bg-slate-950/30 border border-white/5 shadow-inner">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                    <Label htmlFor="scale-name">Ölçek Adı</Label>
+                    <Label htmlFor="scale-name" className="text-slate-300">Ölçek Adı</Label>
                     <Controller
                         name="name"
                         control={control}
-                        render={({ field }) => <Input id="scale-name" {...field} placeholder="Örn: Namaz Çetelesi" />}
+                        render={({ field }) => <Input id="scale-name" {...field} placeholder="Örn: Namaz Çetelesi" className="bg-slate-900 border-white/10 text-white h-10" />}
                     />
-                    {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+                    {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
                 </div>
                  <div className="space-y-1">
-                    <Label>Ölçek Tipi</Label>
-                     <Controller
+                    <Label className="text-slate-300">Ölçek Tipi</Label>
+                    <Controller
                         name="type"
                         control={control}
                         render={({ field }) => (
-                           <Select onValueChange={field.onChange} value={field.value}>
-                                <SelectTrigger><SelectValue/></SelectTrigger>
-                                <SelectContent>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue/></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     <SelectItem value="tally">Çetele (+/-)</SelectItem>
                                     <SelectItem value="checklist">Kontrol Listesi</SelectItem>
                                 </SelectContent>
@@ -97,9 +102,9 @@ function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, sele
                 </div>
             </div>
             <div className="flex justify-end">
-                <Button type="submit" disabled={isSaving}>
+                <Button type="submit" disabled={isSaving || !selectedCourseId || !watch('name')} className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
                     {isSaving && <Loader2 className="h-4 w-4 animate-spin mr-2"/>}
-                    Oluştur
+                    <PlusCircle className="h-4 w-4 mr-2"/> Oluştur
                 </Button>
             </div>
         </form>
@@ -111,13 +116,13 @@ function ErrorWithLink({ message }: { message: string }) {
     const parts = message.split(urlRegex);
 
     return (
-        <Alert variant="destructive" className="whitespace-pre-wrap">
+        <Alert variant="destructive" className="whitespace-pre-wrap bg-red-900/40 border-red-500/50 text-red-100">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Hata!</AlertTitle>
-            <AlertDescription>
+            <AlertTitle className="text-white">Hata!</AlertTitle>
+            <AlertDescription className="text-red-200">
                 {parts.map((part, index) => 
                     urlRegex.test(part) ? 
-                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
+                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all text-red-100">{part}</a> : 
                     <span key={index}>{part}</span>
                 )}
             </AlertDescription>
@@ -172,9 +177,9 @@ export default function ScalesPage() {
                  const coursesForClass = courses.filter(course => course.classId === cls.id || !course.classId);
 
                  const enrichedCourses = await Promise.all(coursesForClass.map(async course => {
-                    const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
-                    const units = unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit));
-                    return { ...course, units };
+                     const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
+                     const units = unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit));
+                     return { ...course, units };
                  }));
 
                 return { ...cls, courses: enrichedCourses };
@@ -272,111 +277,85 @@ export default function ScalesPage() {
     
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-full py-20">
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <div className="flex justify-center items-center h-full py-20 bg-slate-950">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-500" />
             </div>
         );
     }
     
     return (
-        <div className="container mx-auto p-4 sm:p-6 md:p-8">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold font-headline flex items-center gap-2"><ScaleIcon/> Değerlendirme Ölçekleri</h1>
+        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+             {/* Arka Plan */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
+                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
-            
-            <div className="space-y-8">
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Filtreler</CardTitle>
-                        <CardDescription>Aşağıdaki ölçekleri görüntülemek için bir sınıf ve şube seçin.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <div className="space-y-1">
-                                <Label>Sınıf</Label>
-                                 <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); setSelectedCourseId('') }}>
-                                    <SelectTrigger><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
-                                    <SelectContent>
-                                        {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-1">
-                                <Label>Şube</Label>
-                                <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass}>
-                                    <SelectTrigger><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                        {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {selectedClassId && (
-                <>
-                    {selectedBranch && selectedBranch !== 'all' && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Ünite Bazlı Kontrol Listeleri</CardTitle>
-                                <CardDescription>İçerik yönetimi panelinden eklediğiniz ünitelere dayalı otomatik olarak oluşturulan kontrol listeleri.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                {filteredUnitData.length > 0 ? (
-                                    <Accordion type="multiple" className="w-full space-y-4">
-                                        {filteredUnitData[0].courses.map(course => (
-                                            <AccordionItem key={course.id} value={course.id} className="border rounded-lg">
-                                                <AccordionTrigger className="p-3 text-lg font-semibold hover:no-underline">
-                                                    <div className="flex items-center gap-2">
-                                                        <BookOpen className="h-5 w-5"/> {course.title}
-                                                    </div>
-                                                </AccordionTrigger>
-                                                <AccordionContent className="p-3">
-                                                    {course.units.length > 0 ? (
-                                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                                                            {course.units.map(unit => (
-                                                                <Button key={unit.id} asChild variant="secondary" className="h-20 text-base flex-col gap-1">
-                                                                    <Link href={`/teacher/scales/${unit.id}?type=unit&courseId=${course.id}&branch=${selectedBranch}`}>
-                                                                        <ListChecks className="h-5 w-5"/>
-                                                                        <span>{unit.title}</span>
-                                                                    </Link>
-                                                                </Button>
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <p className="text-center text-sm text-muted-foreground p-4">Bu ders için ünite bulunmuyor.</p>
-                                                    )}
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        ))}
-                                    </Accordion>
-                                ) : (
-                                    <div className="text-center py-16 text-muted-foreground border-2 border-dashed rounded-lg">
-                                        <p>Bu sınıf için ders bulunmuyor.</p>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    )}
-                    <Card>
-                        <Accordion type="single" collapsible className="w-full" value={isCreateAccordionOpen ? "manual-scales" : ""} onValueChange={(value) => setIsCreateAccordionOpen(value === "manual-scales")}>
-                            <AccordionItem value="manual-scales" className="border-b-0">
-                                <AccordionTrigger className="p-6 text-left hover:no-underline">
-                                    <div className="flex-1">
-                                        <CardTitle>Manuel Ölçekler</CardTitle>
-                                        <CardDescription className="mt-1.5">Belirli bir ders veya konu için manuel olarak oluşturduğunuz özel kontrol listeleri veya çeteleler.</CardDescription>
+            <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+                
+                {/* Ana Başlık */}
+                <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                     <h1 className="text-4xl font-black text-white flex items-center gap-3"><ScaleIcon className="text-purple-400 h-8 w-8"/> Değerlendirme Ölçekleri</h1>
+                     <Button 
+                         onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
+                         className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 h-10 px-6 rounded-xl"
+                     >
+                         <PlusCircle className="mr-2 h-4 w-4"/> Yeni Ölçek Oluştur
+                     </Button>
+                </div>
+                
+                <div className="space-y-8">
+                    {/* Filtre ve Yeni Ölçek Oluşturma */}
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="text-white flex items-center gap-2 text-xl">
+                                <Filter className="h-5 w-5 text-slate-400"/> Filtreler
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                    <Label className="text-slate-300">Sınıf Seçimi</Label>
+                                    <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); setSelectedCourseId('') }}>
+                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                            {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-1">
+                                    <Label className="text-slate-300">Şube Seçimi</Label>
+                                    <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass}>
+                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                            <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                            {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Manuel Ölçek Oluşturma Formu (Accordion) */}
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
+                        <Accordion type="single" value={isCreateAccordionOpen ? "create-scale" : ""} onValueChange={(value) => setIsCreateAccordionOpen(value === "create-scale")}>
+                            <AccordionItem value="create-scale" className="border-b-0">
+                                <AccordionTrigger className="p-4 text-left hover:no-underline bg-white/5 data-[state=open]:bg-white/10">
+                                    <div className="flex items-center gap-3">
+                                        <PlusCircle className="h-5 w-5 text-indigo-400"/>
+                                        <span className="font-bold text-white text-lg">Yeni Manuel Ölçek Oluştur</span>
                                     </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="px-6 pb-6 pt-0 space-y-4">
-                                     {selectedBranch && selectedBranch !== 'all' ? (
-                                         <>
+                                <AccordionContent className="px-6 pb-6 pt-4 space-y-4">
+                                    {selectedBranch && selectedBranch !== 'all' ? (
+                                        <>
                                             <div className="space-y-1">
-                                                <Label>Ders Seçimi</Label>
+                                                <Label className="text-slate-300 text-xs">Ders Seçimi (Ölçeğin İlişkilendirileceği)</Label>
                                                 <Select onValueChange={setSelectedCourseId} value={selectedCourseId}>
-                                                    <SelectTrigger><SelectValue placeholder="Manuel ölçek için ders seçin..."/></SelectTrigger>
-                                                    <SelectContent>
+                                                    <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Ders Seçin..."/></SelectTrigger>
+                                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                         {coursesForManualCreation.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
                                                     </SelectContent>
                                                 </Select>
@@ -388,59 +367,100 @@ export default function ScalesPage() {
                                                 selectedBranch={selectedBranch}
                                                 selectedCourseId={selectedCourseId}
                                             />}
-                                         </>
-                                     ) : <p className="text-muted-foreground text-sm text-center">Yeni manuel ölçek oluşturmak için bir şube seçmelisiniz.</p> }
-                                    
-                                    <div className="border-t pt-4">
-                                        {fetchError && <ErrorWithLink message={fetchError} />}
-                                        {filteredManualScales.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {filteredManualScales.map(scale => {
-                                                    const courseName = allCourses.find(c => c.id === scale.courseId)?.title || 'Bilinmeyen Ders';
-                                                    return (
-                                                        <Card key={scale.id}>
-                                                            <CardHeader>
-                                                                <CardTitle>{scale.name}</CardTitle>
-                                                                <CardDescription>{courseName}</CardDescription>
-                                                            </CardHeader>
-                                                            <CardFooter className="flex justify-end gap-2">
-                                                                <AlertDialog>
-                                                                    <AlertDialogTrigger asChild>
-                                                                        <Button variant="destructive-outline" size="sm"><Trash2 className="h-4 w-4"/></Button>
-                                                                    </AlertDialogTrigger>
-                                                                    <AlertDialogContent>
-                                                                        <AlertDialogHeader>
-                                                                            <RadixAlertDialogTitle>Emin misiniz?</RadixAlertDialogTitle>
-                                                                            <AlertDialogDescription>"{scale.name}" ölçeği ve tüm verileri kalıcı olarak silinecektir.</AlertDialogDescription>
-                                                                        </AlertDialogHeader>
-                                                                        <AlertDialogFooter>
-                                                                            <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                                            <AlertDialogAction onClick={() => handleDeleteScale(scale.id)} className="bg-destructive hover:bg-destructive/90">
-                                                                                Evet, Sil
-                                                                            </AlertDialogAction>
-                                                                        </AlertDialogFooter>
-                                                                    </AlertDialogContent>
-                                                                </AlertDialog>
-                                                                <Button asChild>
-                                                                    <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendir</Link>
-                                                                </Button>
-                                                            </CardFooter>
-                                                        </Card>
-                                                    )
-                                                })}
-                                        </div>
-                                        ) : !fetchError && (
-                                            <div className="text-center py-10 text-muted-foreground border-2 border-dashed rounded-lg">
-                                                <p>Bu şube için manuel ölçek oluşturulmamış.</p>
-                                            </div>
-                                        )}
-                                    </div>
+                                        </>
+                                    ) : (
+                                        <p className="text-muted-foreground text-sm text-center p-4">Lütfen önce bir **Sınıf** ve **Şube** seçin.</p>
+                                    )}
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>
                     </Card>
-                </>
-                )}
+
+                    {/* Sonuç Alanları */}
+                    {fetchError && <div className="lg:col-span-2">{fetchError && <ErrorWithLink message={fetchError} />}</div>}
+
+                    {selectedBranch && selectedBranch !== 'all' && (
+                        <>
+                            {/* Ünite Bazlı Kontrol Listeleri */}
+                            <div className="lg:col-span-2 space-y-4">
+                                <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <ListChecks className="h-6 w-6 text-cyan-400"/> Ünite Bazlı Listeler
+                                </h3>
+                                
+                                {filteredUnitData.length > 0 && filteredUnitData[0].courses.length > 0 ? (
+                                    <Accordion type="multiple" className="w-full space-y-4">
+                                        {filteredUnitData[0].courses.map(course => (
+                                            <AccordionItem key={course.id} value={course.id} className="border border-white/10 rounded-xl bg-slate-900/50 overflow-hidden">
+                                                <AccordionTrigger className="p-4 text-lg font-bold hover:no-underline hover:bg-white/5 transition-colors">
+                                                    <div className="flex items-center gap-3">
+                                                        <BookOpen className="h-5 w-5 text-cyan-400"/> {course.title}
+                                                    </div>
+                                                </AccordionTrigger>
+                                                <AccordionContent className="p-4 bg-black/20">
+                                                    {course.units.length > 0 ? (
+                                                        <div className="grid grid-cols-2 gap-3">
+                                                            {course.units.map(unit => (
+                                                                <Button key={unit.id} asChild variant="outline" className="h-20 text-base flex-col gap-1 border-white/10 text-white hover:bg-white/5 bg-slate-900/50 transition-all hover:-translate-y-1">
+                                                                    <Link href={`/teacher/scales/${unit.id}?type=unit&courseId=${course.id}&branch=${selectedBranch}`}>
+                                                                        <ListChecks className="h-5 w-5 text-white/70"/>
+                                                                        <span className="font-bold text-sm">{unit.title}</span>
+                                                                    </Link>
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                    ) : <p className="text-center text-sm text-slate-500 p-4">Bu derse ünite eklenmemiş.</p>}
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        ))}
+                                    </Accordion>
+                                ) : <p className="text-muted-foreground text-center p-8">Bu şube için ders içeriği bulunamadı.</p>}
+                            </div>
+
+                            {/* Manuel Ölçekler Listesi */}
+                            <div className="lg:col-span-3 space-y-4">
+                                <h3 className="text-xl font-black text-white flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <UserCheck className="h-6 w-6 text-purple-400"/> Özel Çeteleler ({filteredManualScales.length})
+                                </h3>
+                                
+                                {filteredManualScales.length > 0 ? (
+                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {filteredManualScales.map(scale => {
+                                            const courseName = allCourses.find(c => c.id === scale.courseId)?.title || 'Bilinmeyen Ders';
+                                            return (
+                                                <Card key={scale.id} className="bg-slate-900 border-white/10 hover:border-purple-500/50 hover:bg-slate-800/80 transition-all">
+                                                    <CardHeader className="pb-2">
+                                                        <CardTitle className="text-sm font-bold text-white">{scale.name.split(' (')[0]}</CardTitle>
+                                                        <CardDescription className="text-xs text-slate-500">{courseName}</CardDescription>
+                                                    </CardHeader>
+                                                    <CardFooter className="flex justify-between items-center pt-2 gap-2">
+                                                        <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-500 text-white flex-1 text-xs">
+                                                            <Link href={`/teacher/scales/${scale.id}?type=manual`}>Değerlendir</Link>
+                                                        </Button>
+                                                        <AlertDialog>
+                                                            <AlertDialogTrigger asChild>
+                                                                <Button variant="ghost" size="icon" className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"><Trash2 className="h-4 w-4"/></Button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                                <AlertDialogHeader>
+                                                                    <RadixAlertDialogTitle className="text-red-400">Ölçeği Sil</RadixAlertDialogTitle>
+                                                                    <AlertDialogDescription className="text-slate-400">"{scale.name}" ölçeği ve tüm girişleri kalıcı olarak silinecektir.</AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                                    <AlertDialogAction onClick={() => handleDeleteScale(scale.id)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Sil</AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </CardFooter>
+                                                </Card>
+                                            )
+                                        })}
+                                    </div>
+                                ) : <p className="text-muted-foreground text-center p-8 border-2 border-dashed border-slate-800 rounded-xl">Bu şube için özel ölçek oluşturulmamış.</p>}
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

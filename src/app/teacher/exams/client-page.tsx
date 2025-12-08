@@ -4,7 +4,12 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, PlusCircle, Trash2, ArrowRight, FileQuestion, FilePenLine, Calendar as CalendarIcon, Clock, Users, BookOpen, CheckCircle2, AlertTriangle, Save, X } from 'lucide-react';
+import { 
+    Loader2, PlusCircle, Trash2, ArrowRight, FileQuestion, FilePenLine, 
+    Calendar as CalendarIcon, Clock, Users, BookOpen, CheckCircle2, 
+    AlertTriangle, Save, X, Search, ArrowLeft // <-- ARROWLEFT EKLENDİ
+} from 'lucide-react'; 
+// Diğer tüm importlar aynı kalacak.
 import { createExam, getTeacherExams, deleteExam, getExamCreationData, updateExam } from './actions';
 import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -56,7 +61,7 @@ function QuestionSelectionCard({ question, isSelected, onToggle }: { question: Q
             onClick={onToggle}
         >
             <div className="flex justify-between items-start gap-3 mb-2">
-                <Badge variant="outline" className={cn("font-bold border", difficultyColors[question.difficulty])}>
+                <Badge variant="outline" className={cn("font-bold border transition-colors", difficultyColors[question.difficulty])}>
                     {question.difficulty}
                 </Badge>
                 <Checkbox 
@@ -107,6 +112,10 @@ function CreateExamDialog({
     const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
     const [questionSearchTerm, setQuestionSearchTerm] = useState("");
 
+    // Pagination States
+    const [questionsCurrentPage, setQuestionsCurrentPage] = useState(1);
+    const [questionsItemsPerPage, setQuestionsItemsPerPage] = useState(20);
+
     useEffect(() => {
         if (editingAssignment) {
             setTitle(editingAssignment.title);
@@ -131,6 +140,8 @@ function CreateExamDialog({
             setStartDate(undefined);
             setDueDate(undefined);
         }
+         // Reset page on open/edit
+        setQuestionsCurrentPage(1); 
     }, [editingAssignment, isOpen]);
     
     useEffect(() => {
@@ -179,6 +190,7 @@ function CreateExamDialog({
 
     }, [selectedClassId, selectedBranch, selectedClassData, creationData]);
     
+    // Soru Filtreleme ve Sıralama
     const filteredExamQuestions = useMemo(() => {
         if (!creationData?.examQuestions) return [];
     
@@ -202,6 +214,16 @@ function CreateExamDialog({
         return questions;
     }, [creationData, selectedClassId, selectedCourseId, selectedUnitId, selectedTopicId, questionSearchTerm, filteredCourses]);
 
+    // Pagination Logic
+    const totalQuestionPages = useMemo(() => {
+        return Math.ceil(filteredExamQuestions.length / questionsItemsPerPage);
+    }, [filteredExamQuestions, questionsItemsPerPage]);
+
+    const paginatedQuestions = useMemo(() => {
+        const startIndex = (questionsCurrentPage - 1) * questionsItemsPerPage;
+        return filteredExamQuestions.slice(startIndex, startIndex + questionsItemsPerPage);
+    }, [filteredExamQuestions, questionsCurrentPage, questionsItemsPerPage]);
+
 
     const toggleQuestion = (questionId: string) => {
         setSelectedQuestionIds(prev => {
@@ -213,12 +235,22 @@ function CreateExamDialog({
     };
     
     const toggleAllQuestions = () => {
-        const allIds = new Set(filteredExamQuestions.map(q => q.id));
-        if (selectedQuestionIds.size === allIds.size) {
-            setSelectedQuestionIds(new Set());
-        } else {
-            setSelectedQuestionIds(allIds);
-        }
+        const allIdsOnPage = new Set(paginatedQuestions.map(q => q.id));
+        const currentSelectedOnPage = paginatedQuestions.filter(q => selectedQuestionIds.has(q.id));
+        const allAreSelected = currentSelectedOnPage.length === paginatedQuestions.length && paginatedQuestions.length > 0;
+
+        setSelectedQuestionIds(prev => {
+            const newSet = new Set(prev);
+            
+            // Eğer sayfadaki tüm sorular seçiliyse, hepsinin seçimini kaldır.
+            if (allAreSelected) {
+                allIdsOnPage.forEach(id => newSet.delete(id));
+            } else {
+                // Değilse, hepsini seç.
+                allIdsOnPage.forEach(id => newSet.add(id));
+            }
+            return newSet;
+        });
     };
     
     const toggleStudent = (studentUid: string) => {
@@ -243,7 +275,6 @@ function CreateExamDialog({
         const assignmentData = {
             title,
             teacherId: user.uid,
-            assignmentType: 'deneme' as const,
             classId: selectedClassId,
             className: classData?.name || 'Tümü',
             courseId: selectedCourseId,
@@ -257,7 +288,7 @@ function CreateExamDialog({
 
         const result = editingAssignment 
             ? await updateExam(editingAssignment.id, assignmentData)
-            : await createExam({ ...assignmentData, topicIds: [], topicNames: []});
+            : await createExam({ ...assignmentData, assignmentType: 'deneme', topicIds: [], topicNames: []});
 
         if (result.success) {
             toast({ title: "Başarılı", description: `Deneme sınavı ${editingAssignment ? 'güncellendi' : 'oluşturuldu'}.` });
@@ -269,6 +300,8 @@ function CreateExamDialog({
         setIsSaving(false);
     };
 
+    const isAllQuestionsOnPageSelected = paginatedQuestions.length > 0 && paginatedQuestions.every(q => selectedQuestionIds.has(q.id));
+
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-7xl h-[95vh] flex flex-col p-0 bg-slate-950 border-white/10 text-slate-100 shadow-2xl">
@@ -279,10 +312,11 @@ function CreateExamDialog({
                         </div>
                         {editingAssignment ? 'Denemeyi Düzenle' : 'Yeni Deneme Sınavı'}
                     </DialogTitle>
+                    <DialogDescription className="text-slate-400">Sınav detaylarını, katılımcıları ve soruları belirleyin.</DialogDescription>
                 </DialogHeader>
 
                  <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
-                    {/* SOL PANEL: Ayarlar ve Öğrenciler (3 Sütun) */}
+                    {/* SOL PANEL: Ayarlar ve Öğrenciler */}
                     <div className="lg:col-span-4 border-r border-white/5 bg-slate-900/20 overflow-y-auto custom-scrollbar">
                         <div className="p-6 space-y-8">
                             {/* Temel Bilgiler */}
@@ -394,9 +428,9 @@ function CreateExamDialog({
                         </div>
                     </div>
 
-                    {/* SAĞ PANEL: Soru Seçimi (9 Sütun) */}
+                    {/* SAĞ PANEL: Soru Seçimi */}
                     <div className="lg:col-span-8 bg-black/20 flex flex-col h-full overflow-hidden">
-                        <div className="p-4 border-b border-white/5 bg-slate-900/30 space-y-4">
+                        <div className="p-4 border-b border-white/5 bg-slate-900/30 space-y-4 flex-shrink-0">
                             <div className="flex flex-wrap items-center gap-2">
                                 <Select value={selectedCourseId} onValueChange={v => {setSelectedCourseId(v); setSelectedUnitId('all'); setSelectedTopicId('all');}}>
                                     <SelectTrigger className="bg-slate-950 border-white/10 text-white h-9 text-xs min-w-[120px]"><SelectValue placeholder="Ders" /></SelectTrigger>
@@ -417,7 +451,7 @@ function CreateExamDialog({
                                         onChange={e => setQuestionSearchTerm(e.target.value)} 
                                         className="bg-slate-950 border-white/10 text-white h-9 text-xs pl-8 focus:border-indigo-500/50"
                                     />
-                                    <CheckCircle2 className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500"/>
+                                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500"/>
                                 </div>
                             </div>
                             
@@ -426,10 +460,10 @@ function CreateExamDialog({
                                     <Checkbox 
                                         id="select-all-questions" 
                                         onCheckedChange={() => toggleAllQuestions()} 
-                                        checked={filteredExamQuestions.length > 0 && selectedQuestionIds.size === filteredExamQuestions.length} 
+                                        checked={isAllQuestionsOnPageSelected} 
                                         className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"
                                     />
-                                    <Label htmlFor="select-all-questions" className="text-xs font-bold text-slate-300 cursor-pointer">Filtrelenenleri Seç ({filteredExamQuestions.length})</Label>
+                                    <Label htmlFor="select-all-questions" className="text-xs font-bold text-slate-300 cursor-pointer">Bu sayfadakileri Seç ({paginatedQuestions.length})</Label>
                                 </div>
                                 <div className="text-xs text-slate-500">
                                     Toplam <span className="text-white font-bold">{selectedQuestionIds.size}</span> soru seçildi.
@@ -438,21 +472,41 @@ function CreateExamDialog({
                         </div>
 
                         <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                            {filteredExamQuestions.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {filteredExamQuestions.map(q => (
-                                        <QuestionSelectionCard 
-                                            key={q.id}
-                                            question={q}
-                                            isSelected={selectedQuestionIds.has(q.id)}
-                                            onToggle={() => toggleQuestion(q.id)}
-                                        />
-                                    ))}
+                            {filteredExamQuestions.length === 0 ? (
+                                <div className="h-full flex flex-col items-center justify-center text-slate-500">
+                                    <FileQuestion className="h-12 w-12 mb-4 opacity-20" />
+                                    <p>Bu filtrelerle eşleşen soru bulunamadı.</p>
                                 </div>
                             ) : (
-                                <div className="h-full flex flex-col items-center justify-center text-slate-500">
-                                    <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
-                                    <p>Bu filtrelerle eşleşen soru bulunamadı.</p>
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {paginatedQuestions.map(q => (
+                                            <QuestionSelectionCard 
+                                                key={q.id}
+                                                question={q}
+                                                isSelected={selectedQuestionIds.has(q.id)}
+                                                onToggle={() => toggleQuestion(q.id)}
+                                            />
+                                        ))}
+                                    </div>
+                                    
+                                    {/* Pagination Controls (Bottom) */}
+                                    {totalQuestionPages > 1 && (
+                                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
+                                            <span className="text-xs text-slate-500 font-medium">Toplam {filteredExamQuestions.length} soru</span>
+                                            <div className="flex items-center gap-2">
+                                                <Button variant="outline" size="sm" onClick={() => setQuestionsCurrentPage(p => p - 1)} disabled={questionsCurrentPage === 1} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">
+                                                    <ArrowLeft className="h-4 w-4"/>
+                                                </Button>
+                                                <span className="text-xs font-bold text-white px-3 py-1 bg-slate-900 rounded border border-white/10">
+                                                    {questionsCurrentPage} / {totalQuestionPages}
+                                                </span>
+                                                <Button variant="outline" size="sm" onClick={() => setQuestionsCurrentPage(p => p + 1)} disabled={questionsCurrentPage >= totalQuestionPages} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">
+                                                    <ArrowRight className="h-4 w-4"/>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

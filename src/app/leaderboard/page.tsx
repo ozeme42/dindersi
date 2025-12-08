@@ -145,7 +145,7 @@ const LeaderboardRow = ({ user, index }: { user: UserProfile, index: number }) =
 
 // 1. CURRENT LEADERBOARD
 function CurrentLeaderboardTab() {
-    const [filter, setFilter] = useState<'daily' | 'weekly' | 'all-time'>('daily');
+    const [filter, setFilter] = useState<'daily' | 'weekly' | 'all-time'>('all-time');
     const [search, setSearch] = useState("");
     const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
