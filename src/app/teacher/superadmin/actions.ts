@@ -2,10 +2,10 @@
 
 'use server';
 
-import { adminApp } from "@/lib/firebase-admin"; // adminApp import edildi
+import { adminApp } from "@/lib/firebase-admin";
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
-import { collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -36,6 +36,40 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
     } catch (error: any) {
         console.error(`Error deleting user ${userId}:`, error);
         return { success: false, error: 'Kullanıcı silinirken bir hata oluştu: ' + error.message };
+    }
+}
+
+export async function updateUser(user: UserProfile): Promise<{ success: boolean; error?: string }> {
+    if (!user || !user.uid) {
+        return { success: false, error: "Geçersiz kullanıcı verisi." };
+    }
+
+    try {
+        const auth = getAuth(adminApp);
+        const { uid, email, displayName, password } = user;
+        const firestoreData: any = {
+            displayName: user.displayName,
+            role: user.role,
+            class: user.class,
+            score: user.score,
+        };
+
+        // Update Authentication
+        const authUpdatePayload: any = { email, displayName };
+        if (password) {
+            authUpdatePayload.password = password;
+        }
+        await auth.updateUser(uid, authUpdatePayload);
+
+        // Update Firestore
+        const userRef = doc(db, 'users', uid);
+        await updateDoc(userRef, firestoreData);
+        
+        return { success: true };
+
+    } catch (error: any) {
+        console.error("Error updating user:", error);
+        return { success: false, error: "Kullanıcı güncellenirken bir hata oluştu: " + error.message };
     }
 }
 

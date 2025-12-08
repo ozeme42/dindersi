@@ -36,7 +36,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore"
-import { updateUser, getAllUsers } from '@/app/teacher/superadmin/actions';
+import { updateUser, getAllUsers, deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent, deleteStudent } from "./actions";
 
 
@@ -278,7 +278,7 @@ export default function StudentManagementPage() {
   };
   
   const handleDeleteUser = async (userId: string) => {
-    const result = await deleteUserFromFirestore(userId);
+    const result = await deleteStudent(userId);
     if (result.success) {
         toast({ title: "Başarılı", description: "Öğrenci sistemden tamamen silindi." });
         await fetchAllData();
@@ -339,10 +339,10 @@ export default function StudentManagementPage() {
   
   const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
 
-  const registeredStudents = useMemo(() => {
+  const filteredAndSortedStudents = useMemo(() => {
     let list = allStudents;
     
-    if (selectedClass) {
+    if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
              list = list.filter(s => s.class?.startsWith(selectedClass.name));
         } else {
@@ -415,7 +415,7 @@ export default function StudentManagementPage() {
                         </div>
                     </div>
                      <StudentTable
-                        students={registeredStudents}
+                        students={filteredAndSortedStudents}
                         isLoading={isLoading}
                         onEdit={handleOpenDialog}
                         onDelete={handleDeleteUser}
