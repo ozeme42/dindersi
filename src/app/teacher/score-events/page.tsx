@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     Table,
     TableBody,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge'; // <-- Hata burada düzeltildi
+import { Badge } from '@/components/ui/badge';
 import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { getScoreEvents, deleteScoreEvents } from './actions';
 import type { ScoreEvent } from '@/lib/types';
@@ -53,58 +53,41 @@ type SerializableTimestamp = {
 } | null;
 
 export default function ScoreEventsPage() {
-    const [pages, setPages] = useState<EnrichedScoreEvent[][]>([[]]);
-    const [lastVisibleCursors, setLastVisibleCursors] = useState<(SerializableTimestamp)[]>([null]);
-    const [currentPageIndex, setCurrentPageIndex] = useState(0);
-
+    const [events, setEvents] = useState<EnrichedScoreEvent[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
     const [selectedEventIds, setSelectedEventIds] = useState<Set<string>>(new Set());
     const [searchTerm, setSearchTerm] = useState('');
     const [showOnlyExcessiveAttempts, setShowOnlyExcessiveAttempts] = useState(false);
     const { toast } = useToast();
+    
+    // NOTE: Pagination state is currently disabled because server-side filtering is complex.
+    // We are fetching all data and filtering on the client for now.
+    // This is not ideal for very large datasets.
 
-    const fetchData = async (pageIndex: number, cursor: SerializableTimestamp | null) => {
+    const fetchData = useCallback(async () => {
         setIsLoading(true);
-        const result = await getScoreEvents(cursor);
+        // We pass search and filter terms to the backend now.
+        const result = await getScoreEvents({ 
+            searchTerm, 
+            showOnlyExcessiveAttempts 
+        });
         if (result.success && result.data) {
-            setPages(prev => {
-                const newPages = [...prev];
-                newPages[pageIndex] = result.data || [];
-                return newPages;
-            });
-            setLastVisibleCursors(prev => {
-                const newCursors = [...prev];
-                newCursors[pageIndex] = result.lastVisible || null;
-                return newCursors;
-            });
+            setEvents(result.data);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    };
+    }, [searchTerm, showOnlyExcessiveAttempts, toast]);
     
     useEffect(() => {
-        fetchData(0, null);
-    }, []);
-    
-    const handleNextPage = () => {
-        const lastCursor = lastVisibleCursors[currentPageIndex];
-        if (lastCursor === null && (pages[currentPageIndex]?.length || 0) < 25) return;
+        // Debounce search input
+        const handler = setTimeout(() => {
+            fetchData();
+        }, 500); // 500ms delay after user stops typing
+        return () => clearTimeout(handler);
+    }, [fetchData]);
 
-        const nextPageIndex = currentPageIndex + 1;
-        setCurrentPageIndex(nextPageIndex);
-        
-        if (!pages[nextPageIndex] || pages[nextPageIndex].length === 0) {
-            fetchData(nextPageIndex, lastCursor);
-        }
-    };
-
-    const handlePrevPage = () => {
-         if (currentPageIndex > 0) {
-             setCurrentPageIndex(prev => prev - 1);
-         }
-    };
 
     const handleSelect = (id: string) => {
         setSelectedEventIds(prev => {
@@ -117,7 +100,7 @@ export default function ScoreEventsPage() {
 
     const handleSelectAllOnPage = (isChecked: boolean) => {
         if (isChecked) {
-            setSelectedEventIds(new Set(filteredEvents.map(e => e.id)));
+            setSelectedEventIds(new Set(events.map(e => e.id)));
         } else {
             setSelectedEventIds(new Set());
         }
@@ -129,30 +112,14 @@ export default function ScoreEventsPage() {
         if (result.success) {
             toast({ title: 'Başarılı!', description: 'Seçilen puan hareketleri silindi ve öğrenci skorları güncellendi.' });
             setSelectedEventIds(new Set());
-            setPages([[]]);
-            setLastVisibleCursors([null]);
-            setCurrentPageIndex(0);
-            await fetchData(0, null);
+            await fetchData(); // Refetch data
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
         setIsDeleting(false);
     };
     
-    const filteredEvents = (pages[currentPageIndex] || []).filter(event => {
-        const matchesSearch = 
-            event.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            event.gameType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (typeof event.context === 'string' && event.context.toLowerCase().includes(searchTerm.toLowerCase()));
-
-        if (showOnlyExcessiveAttempts) {
-            return (event.attemptNumber || 0) > 10 && matchesSearch;
-        }
-
-        return matchesSearch;
-    });
-
-    const isNextButtonDisabled = !lastVisibleCursors[currentPageIndex];
+    const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length;
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -223,7 +190,7 @@ export default function ScoreEventsPage() {
                                     <TableRow className="border-white/5 hover:bg-transparent">
                                         <TableHead className="w-[50px] border-r border-white/5">
                                             <Checkbox
-                                                checked={filteredEvents.length > 0 && selectedEventIds.size === filteredEvents.length}
+                                                checked={isAllOnPageSelected}
                                                 onCheckedChange={(checked) => handleSelectAllOnPage(checked as boolean)}
                                                 aria-label="Tümünü seç"
                                                 className="border-white/20 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
@@ -232,20 +199,20 @@ export default function ScoreEventsPage() {
                                         <TableHead className="text-slate-300">Öğrenci</TableHead>
                                         <TableHead className="text-slate-300">Puan</TableHead>
                                         <TableHead className="text-slate-300">Etkinlik</TableHead>
-                                        <TableHead className="text-slate-300">Açıklama</TableHead>
+                                        <TableHead className="text-slate-300 min-w-[300px]">Açıklama</TableHead>
                                         <TableHead className="text-right text-slate-300">Tarih</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {isLoading && currentPageIndex === 0 ? (
+                                    {isLoading ? (
                                         <TableRow>
                                             <TableCell colSpan={6} className="h-48 text-center text-indigo-400">
                                                 <Loader2 className="h-8 w-8 animate-spin mx-auto" />
                                                 <span className='mt-2 block'>Kayıtlar yükleniyor...</span>
                                             </TableCell>
                                         </TableRow>
-                                    ) : filteredEvents.length > 0 ? (
-                                        filteredEvents.map((event) => (
+                                    ) : events.length > 0 ? (
+                                        events.map((event) => (
                                             <TableRow key={event.id} data-state={selectedEventIds.has(event.id) && "selected"} className="border-white/5 hover:bg-white/5 transition-colors group">
                                                 <TableCell className="border-r border-white/5">
                                                     <Checkbox
@@ -264,8 +231,8 @@ export default function ScoreEventsPage() {
                                                         {event.gameType}
                                                     </Badge>
                                                 </TableCell>
-                                                <TableCell className="text-slate-500 whitespace-pre-wrap">
-                                                    {event.context}
+                                                <TableCell className="text-slate-500">
+                                                    {typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}
                                                     {event.attemptNumber && (
                                                         <span className={cn("text-xs ml-2 font-semibold", (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse" : "text-slate-500")}>
                                                             ({event.attemptNumber}. deneme)
@@ -288,20 +255,6 @@ export default function ScoreEventsPage() {
                             </Table>
                         </div>
                     </CardContent>
-                    
-                    <CardFooter className="flex justify-between items-center bg-slate-900/50 border-t border-white/5 p-4">
-                        <span className="text-sm text-slate-500">Sayfa {currentPageIndex + 1}</span>
-                        <div className="flex gap-2">
-                            <Button variant="outline" onClick={handlePrevPage} disabled={currentPageIndex === 0} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">
-                                <ArrowLeft className="h-4 w-4 mr-2"/>
-                                Önceki Sayfa
-                            </Button>
-                            <Button variant="outline" onClick={handleNextPage} disabled={isNextButtonDisabled || isLoading} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-950">
-                                {isLoading && currentPageIndex >= pages.length - 1 ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : 'Sonraki Sayfa'}
-                                {!isLoading && <ArrowRight className="h-4 w-4 ml-2"/>}
-                            </Button>
-                        </div>
-                    </CardFooter>
                 </Card>
             </div>
         </div>
