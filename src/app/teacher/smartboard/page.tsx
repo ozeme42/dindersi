@@ -80,14 +80,6 @@ export default function SmartboardPage() {
             colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
         },
         {
-            key: 'kavram_duellosu',
-            href: "/teacher/smartboard/kavram-duellosu",
-            title: "Kavram Düellosu",
-            description: "Tanımını bularak rakibini elemece usulü alt et.",
-            icon: <BrainCircuit />,
-            colorClass: "bg-orange-600 border-orange-800 hover:bg-orange-500",
-        },
-        {
             key: 'fetih_oyunu',
             href: "/teacher/smartboard/fetih-oyunu",
             title: "Fetih Oyunu",
@@ -195,8 +187,8 @@ export default function SmartboardPage() {
                         <div className="h-px w-16 bg-gradient-to-l from-transparent to-indigo-500"></div>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {yarışmalar.map(({ key, ...buttonProps }) => (
-                            <div key={key} className="aspect-[4/5] min-h-[380px]">
+                        {yarışmalar.map((buttonProps) => (
+                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
                                 <SmartboardCard {...buttonProps} />
                             </div>
                         ))}
@@ -213,8 +205,8 @@ export default function SmartboardPage() {
                         <div className="h-px w-16 bg-gradient-to-l from-transparent to-rose-500"></div>
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {sunumlar.map(({ key, ...buttonProps }) => (
-                            <div key={key} className="aspect-[4/5] min-h-[380px]">
+                        {sunumlar.map((buttonProps) => (
+                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
                                 <SmartboardCard {...buttonProps} />
                             </div>
                         ))}
