@@ -15,6 +15,7 @@ import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import type { SchoolClass, UserProfile } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { UserAvatar } from '@/components/user-avatar';
 
 // --- TİPLER ---
 type FeedbackMode = 'idle' | 'yes_no' | 'traffic_light' | 'quiz' | 'emoji' | 'random_student';
@@ -33,7 +34,7 @@ export default function InstantFeedbackPage() {
     const [isLoadingData, setIsLoadingData] = useState(true);
 
     // Rastgele Öğrenci State
-    const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+    const [selectedStudent, setSelectedStudent] = useState<UserProfile | null>(null);
     const [isRolling, setIsRolling] = useState(false);
 
     useEffect(() => {
@@ -108,7 +109,7 @@ export default function InstantFeedbackPage() {
         setSelectedStudent(null);
         let count = 0;
         const interval = setInterval(() => {
-            setSelectedStudent(filteredStudents[Math.floor(Math.random() * filteredStudents.length)].displayName);
+            setSelectedStudent(filteredStudents[Math.floor(Math.random() * filteredStudents.length)]);
             count++;
             if (count > 20) {
                 clearInterval(interval);
@@ -209,67 +210,126 @@ export default function InstantFeedbackPage() {
         </div>
     );
 
-    // 4. Rastgele Öğrenci Modu
-    const RandomStudentView = () => (
-        <div className="flex flex-col items-center justify-center w-full h-full gap-8">
-             <div className="w-full max-w-lg mx-auto grid grid-cols-2 gap-4">
-                <div>
-                    <Label className="text-slate-400">Sınıf</Label>
-                    <Select value={classFilter} onValueChange={setClassFilter}>
-                        <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Tüm Sınıflar</SelectItem>
-                            {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                </div>
-                 <div>
-                    <Label className="text-slate-400">Şube</Label>
-                    <Select value={branchFilter} onValueChange={setBranchFilter} disabled={!selectedClassData}>
-                        <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Tüm Şubeler</SelectItem>
-                            {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
-            <div className="relative w-full max-w-2xl aspect-video flex items-center justify-center">
-                {/* Daire Efektleri */}
-                <div className={cn("absolute inset-0 rounded-full border-4 border-dashed border-slate-700 animate-[spin_10s_linear_infinite]", isRolling && "border-cyan-500 duration-1000")} />
-                <div className={cn("absolute inset-4 rounded-full border-4 border-slate-800 animate-[spin_15s_linear_infinite_reverse]", isRolling && "border-purple-500 duration-1000")} />
+    // 4. Rastgele Öğrenci Modu (Yeni Animasyonlu Hali)
+    const RandomStudentView = () => {
+        const listRef = useRef<HTMLDivElement>(null);
+        const [isChoosing, setIsChoosing] = useState(false);
+        const [winner, setWinner] = useState<UserProfile | null>(null);
+        
+        const studentsForList = useMemo(() => {
+            if (filteredStudents.length === 0) return [];
+            // Create a long list for a good looping effect
+            const list = [];
+            for (let i = 0; i < 50; i++) {
+                list.push(filteredStudents[i % filteredStudents.length]);
+            }
+            return list;
+        }, [filteredStudents]);
+
+        const pickRandomStudent = () => {
+            if (filteredStudents.length === 0) {
+                alert("Seçilecek öğrenci bulunamadı. Lütfen filtreleri kontrol edin.");
+                return;
+            }
+            setIsChoosing(true);
+            setWinner(null);
+            
+            const listEl = listRef.current;
+            if (listEl) {
+                listEl.style.transition = 'none';
+                listEl.style.transform = 'translateY(0)';
+            }
+            
+            setTimeout(() => {
+                const winnerIndex = Math.floor(Math.random() * filteredStudents.length);
+                const winnerStudent = filteredStudents[winnerIndex];
                 
-                <div className="relative z-10 text-center">
-                     <User className={cn("w-24 h-24 mx-auto mb-6 text-slate-600", isRolling && "text-cyan-400 animate-bounce")} />
-                     <h2 className={cn(
-                         "text-5xl md:text-7xl font-black transition-all",
-                         isRolling ? "text-slate-400 blur-sm" : "text-white scale-110 drop-shadow-[0_0_30px_rgba(34,211,238,0.5)]"
-                     )}>
-                         {selectedStudent || "???"}
-                     </h2>
-                </div>
-            </div>
-            <Button 
-                size="lg" 
-                onClick={pickRandomStudent} 
-                disabled={isRolling || isLoadingData || filteredStudents.length === 0}
-                className="mt-12 h-20 px-12 text-3xl rounded-3xl bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_30px_rgba(8,145,178,0.4)] transition-all hover:scale-105"
-            >
-                {isLoadingData ? <Loader2 className="animate-spin h-8 w-8"/> : isRolling ? "Seçiliyor..." : "Öğrenci Seç"}
-            </Button>
-        </div>
-    );
+                // Animasyon hedefi: Listenin sonlarına doğru kazanan öğrenciyi denk getir
+                const targetIndexInList = studentsForList.length - filteredStudents.length + winnerIndex;
+                const elementHeight = 100; // Her bir öğrenci kartının yüksekliği (px)
+                const targetPosition = -targetIndexInList * elementHeight + listEl!.clientHeight / 2 - elementHeight / 2;
+
+                if (listEl) {
+                    listEl.style.transition = 'transform 6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                    listEl.style.transform = `translateY(${targetPosition}px)`;
+                }
+
+                setTimeout(() => {
+                    setIsChoosing(false);
+                    setWinner(winnerStudent);
+                }, 6100);
+            }, 100);
+        };
+        
+        return (
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-center">
+                 <div className="md:col-span-1 h-full flex flex-col gap-4">
+                     <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5 space-y-2">
+                        <Label className="text-slate-400">Sınıf</Label>
+                        <Select value={classFilter} onValueChange={setClassFilter}>
+                            <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tüm Sınıflar</SelectItem>
+                                {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                     </div>
+                     <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5 space-y-2">
+                        <Label className="text-slate-400">Şube</Label>
+                        <Select value={branchFilter} onValueChange={setBranchFilter} disabled={!selectedClassData}>
+                            <SelectTrigger className="bg-slate-900 border-white/10"><SelectValue/></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
+                     </div>
+                      <Button size="lg" onClick={pickRandomStudent} disabled={isChoosing || isLoadingData || filteredStudents.length === 0} className="w-full h-20 text-xl font-bold bg-cyan-600 hover:bg-cyan-500 shadow-lg mt-auto">
+                        {isChoosing ? <Loader2 className="animate-spin h-8 w-8"/> : "ÖĞRENCİ SEÇ"}
+                    </Button>
+                 </div>
+                 
+                 <div className="md:col-span-2 h-[400px] md:h-full bg-slate-900/50 border-4 border-slate-700 rounded-3xl relative flex items-center justify-center overflow-hidden">
+                     {/* Orta İşaretçi */}
+                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-24 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent z-20 border-y-2 border-cyan-400" />
+                     <div className="absolute left-4 top-1/2 -translate-y-1/2 z-30">
+                        <div className="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+                     </div>
+                     <div className="absolute right-4 top-1/2 -translate-y-1/2 z-30">
+                        <div className="w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_15px_#22d3ee]" />
+                     </div>
+
+                     <div ref={listRef} className="absolute w-full top-0 left-0">
+                         {studentsForList.map((student, index) => (
+                             <div key={`${student.uid}-${index}`} className="flex items-center gap-4 h-[100px] p-4 justify-center text-3xl font-bold">
+                                 <UserAvatar user={student} className="w-12 h-12 text-2xl"/>
+                                 <span>{student.displayName}</span>
+                             </div>
+                         ))}
+                     </div>
+                     {winner && (
+                         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center z-40 animate-in fade-in">
+                              <div className="relative text-center">
+                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-yellow-500/30 blur-2xl rounded-full w-48 h-48" />
+                                <UserAvatar user={winner} className="w-40 h-40 text-7xl mb-4 border-4 border-yellow-400" />
+                                <h3 className="text-5xl font-black text-white">{winner.displayName}</h3>
+                                <p className="text-xl text-yellow-400 font-bold uppercase tracking-widest mt-2">KAZANAN</p>
+                            </div>
+                         </div>
+                     )}
+                 </div>
+             </div>
+        );
+    };
 
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-cyan-500/30 font-sans">
             
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-900/20 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-fuchsia-900/20 rounded-full blur-[150px]" />
             </div>
 
-            {/* Üst Bar */}
             <header className="flex-shrink-0 p-6 flex items-center justify-between z-20 bg-slate-900/50 backdrop-blur-md border-b border-white/5">
                 <div className="flex items-center gap-6">
                     <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white h-14 w-14 rounded-2xl">
@@ -283,7 +343,6 @@ export default function InstantFeedbackPage() {
                     </h1>
                 </div>
 
-                {/* Sağ Taraf: Zamanlayıcı */}
                 <div className="flex items-center gap-4">
                     <div className={cn(
                         "flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all",
@@ -300,10 +359,8 @@ export default function InstantFeedbackPage() {
                 </div>
             </header>
 
-            {/* Ana İçerik */}
             <main className="flex-1 flex overflow-hidden z-10 p-6 gap-6">
                 
-                {/* SOL PANEL: Araç Seçimi */}
                 <div className="w-80 flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
                     <ModeButton 
                         active={mode === 'yes_no'} 
@@ -348,10 +405,8 @@ export default function InstantFeedbackPage() {
                     </div>
                 </div>
 
-                {/* SAĞ PANEL: Aktif Görüntü */}
                 <div className="flex-1 bg-slate-900/50 backdrop-blur-xl border-2 border-white/10 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden flex flex-col">
                     
-                    {/* İçerik */}
                     <div className="flex-grow flex items-center justify-center">
                         {mode === 'idle' && (
                             <div className="text-center text-slate-500">
@@ -372,7 +427,6 @@ export default function InstantFeedbackPage() {
     );
 }
 
-// Yardımcı Alt Bileşen: Mode Selection Button
 function ModeButton({ active, onClick, title, subtitle, icon, color }: { active: boolean, onClick: () => void, title: string, subtitle?: string, icon: React.ReactNode, color: string }) {
     return (
         <button
