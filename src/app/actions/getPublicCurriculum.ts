@@ -25,13 +25,17 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
             getDocs(collection(db, 'courses'))
         ]);
 
-        const allClasses = allClassesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const allClasses = allClassesSnap.docs
+            .map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
+            .filter(cls => cls.isPublished !== false); // Filter out unpublished classes
+
         const allCoursesData = allCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
         const coursesWithContent: PublicCourse[] = [];
 
         for (const course of allCoursesData) {
-            if (!(course.isPublished ?? true)) {
+            // Ensure unpublished courses are skipped
+            if (course.isPublished === false) {
                 continue;
             }
 
@@ -40,7 +44,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
 
             for (const unitDoc of unitsSnap.docs) {
                 const unitData = unitDoc.data();
-                if (!(unitData.isPublished ?? true)) {
+                if (unitData.isPublished === false) {
                     continue;
                 }
 
@@ -48,7 +52,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                 const topics = topicsSnap.docs
                     .map(topicDoc => {
                         const data = topicDoc.data() as Topic;
-                        if (!(data.isPublished ?? true)) {
+                        if (data.isPublished === false) {
                             return null;
                         }
                         const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
