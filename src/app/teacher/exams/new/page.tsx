@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Loader2, Save, X, Search, ArrowLeft, FileQuestion, Users, BookOpen, Clock, Calendar as CalendarIcon, FilePenLine
 } from 'lucide-react'; 
-import { createExam, getExamCreationData, updateExam } from '../actions';
+import { createExam, getExamCreationData, updateExam, getTeacherExams } from '../actions';
 import type { Assignment, UserProfile, Question, SchoolClass, Course, Unit, Topic } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -354,5 +354,3 @@ export function CreateExamClientPage() {
 }
 
 export default CreateExamClientPage;
-
-    
