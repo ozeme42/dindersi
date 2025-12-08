@@ -29,7 +29,7 @@ import {
     ArrowRight,
     Check,
     User,
-    Save // Save ikonu eklendi
+    Save
 } from "lucide-react";
 import {
     Select,
@@ -147,7 +147,7 @@ function ActivityItemCard({ item, topicName, onEdit, onDelete, onSelect, isSelec
                         </DropdownMenuItem>
                          <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
+                                <div className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
                                     <Trash2 className="mr-2 h-4 w-4" /> Sil
                                 </div>
                             </AlertDialogTrigger>
@@ -570,6 +570,7 @@ export default function ActivityDataManagementPage() {
             isSaving={isSaving}
         />
       )}
+    </div>
     </>
   );
 }
