@@ -568,6 +568,6 @@ export default function ActivityDataManagementPage() {
                 isSaving={isSaving}
             />
         )}
-    </div>
-  );
+      </div>
+    );
 }
