@@ -409,7 +409,8 @@ export default function ActivityDataManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+    <>
+      <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
        {/* Arka Plan */}
        <div className="fixed inset-0 pointer-events-none z-0">
@@ -546,28 +547,29 @@ export default function ActivityDataManagementPage() {
                 </div>
             )}
         </div>
-        
-        <AiActivityGenerationPanel
-            isOpen={isAIGenOpen}
-            onOpenChange={setIsAIGenOpen}
-            context={aiGenerationContext}
-            onDataGenerated={fetchData}
-        />
-        <BulkActivityImportDialog
-            isOpen={isBulkOpen}
-            onOpenChange={setIsBulkOpen}
-            onImported={fetchData}
-            context={aiGenerationContext}
-        />
-        {editingItem && (
-            <ActivityItemEditorDialog
-                isOpen={!!editingItem}
-                onOpenChange={(isOpen) => !isOpen && setEditingItem(null)}
-                item={editingItem}
-                onSave={handleSave}
-                isSaving={isSaving}
-            />
-        )}
       </div>
-    );
+
+      <AiActivityGenerationPanel
+        isOpen={isAIGenOpen}
+        onOpenChange={setIsAIGenOpen}
+        context={aiGenerationContext}
+        onDataGenerated={fetchData}
+      />
+      <BulkActivityImportDialog
+        isOpen={isBulkOpen}
+        onOpenChange={setIsBulkOpen}
+        onImported={fetchData}
+        context={aiGenerationContext}
+      />
+      {editingItem && (
+        <ActivityItemEditorDialog
+            isOpen={!!editingItem}
+            onOpenChange={(isOpen) => !isOpen && setEditingItem(null)}
+            item={editingItem}
+            onSave={handleSave}
+            isSaving={isSaving}
+        />
+      )}
+    </>
+  );
 }
