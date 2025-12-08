@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -18,6 +19,12 @@ import { playSound } from '@/lib/audio-service';
 
 // --- TİPLER ---
 // Konfeti tipi tanımı burada gerekli değil, kaldırıldı.
+
+const WHEEL_COLORS = [
+    '#4f46e5', '#db2777', '#2563eb', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444',
+    '#14b8a6', '#64748b', '#ec4899', '#0ea5e9', '#f97316'
+];
+
 
 // --- KONFETİ EFEKTİ ---
 const Confetti = () => {
@@ -261,7 +268,7 @@ export default function WheelOfFortunePage() {
                             <div className="space-y-2">
                                 <Label className="text-slate-300 ml-1">Şube</Label>
                                 <Select value={branchFilter} onValueChange={(val) => { setBranchFilter(val); }} disabled={!selectedClassData || isRolling}>
-                                    <SelectTrigger className="bg-slate-950/50 border-white/10 h-12 text-lg text-white rounded-xl focus:ring-purple-500/50"><SelectValue/></SelectTrigger>
+                                    <SelectTrigger className="bg-slate-950/50 border-white/10 h-12 text-lg text-white rounded-xl focus:ring-purple-500/50"><SelectValue placeholder="Şube Seçin..."/></SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
                                         <SelectItem value="all">Tüm Şubeler</SelectItem>
                                         {selectedClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -312,9 +319,14 @@ export default function WheelOfFortunePage() {
                     )}>
                      
                      {isWheelFullscreen && (
-                         <Button onClick={() => setIsWheelFullscreen(false)} className="absolute top-8 right-8 z-50 bg-slate-800/80 hover:bg-slate-700 text-white rounded-full h-14 w-14 border border-white/10">
-                            <Minimize2 className="h-6 w-6"/>
-                         </Button>
+                         <div className="absolute top-8 right-8 z-50 flex gap-4">
+                            <Button onClick={spinWheel} disabled={isRolling || students.length < 2} className="h-16 px-8 text-xl font-bold bg-cyan-600 hover:bg-cyan-500 text-white rounded-2xl">
+                                {isRolling ? "Dönüyor..." : "Çevir"}
+                            </Button>
+                            <Button onClick={() => setIsWheelFullscreen(false)} className="bg-slate-800/80 hover:bg-slate-700 text-white rounded-full h-16 w-16 border border-white/10">
+                                <Minimize2 className="h-8 w-8"/>
+                            </Button>
+                         </div>
                      )}
 
                      <div className={cn("relative aspect-square flex items-center justify-center transition-all duration-500", isWheelFullscreen ? "w-[90vh]" : "w-full max-w-[70vh]")}>
@@ -423,4 +435,3 @@ export default function WheelOfFortunePage() {
         </div>
     );
 }
-```
