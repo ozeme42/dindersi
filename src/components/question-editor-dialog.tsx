@@ -99,7 +99,6 @@ export function QuestionEditorDialog({
       <DialogContent className="max-w-3xl h-[90vh] flex flex-col p-0">
         <DialogHeader className="p-6 pb-2 border-b">
           <DialogTitle>{editedQuestion.id.startsWith('new-') ? 'Yeni Soru Oluştur' : `Soru ${editingState.index + 1} Düzenle`}</DialogTitle>
-          <DialogDescription>Soru detaylarını düzenleyin ve kaydedin.</DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             <div className="space-y-2">
