@@ -2,7 +2,7 @@
 
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -36,7 +36,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast"
 import { db } from "@/lib/firebase"
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore"
-import { updateUser, getAllUsers, deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { updateUser, getAllUsers } from '@/app/teacher/superadmin/actions';
 import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent, deleteStudent } from "./actions";
 
 
