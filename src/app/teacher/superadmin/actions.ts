@@ -2,12 +2,15 @@
 
 'use server';
 
-import { db, adminApp } from "@/lib/firebase-admin"; // adminApp import edildi
+import { adminApp } from "@/lib/firebase-admin"; // adminApp import edildi
 import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 import { collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc } from "firebase/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
+
+const db = getFirestore(adminApp);
 
 export async function getAllUsers(): Promise<UserProfile[]> {
     const usersSnapshot = await getDocs(collection(db, 'users'));
