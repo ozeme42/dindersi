@@ -16,56 +16,65 @@ type SerializableTimestamp = {
     _nanoseconds: number;
 }
 
-export async function getScoreEvents(cursor: SerializableTimestamp | null = null): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null }> {
+export async function getScoreEvents(cursor?: SerializableTimestamp | null): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null }> {
     noStore();
     try {
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const usersMap = new Map(usersSnapshot.docs.map(doc => [doc.id, doc.data().displayName]));
-
-        let eventsQuery = query(
-            collection(db, 'scoreEvents'), 
-            orderBy('timestamp', 'desc'), 
-            limit(25)
-        );
         
-        if (cursor) {
-             const firestoreCursor = new Timestamp(cursor._seconds, cursor._nanoseconds);
-             eventsQuery = query(
-                collection(db, 'scoreEvents'), 
-                orderBy('timestamp', 'desc'), 
-                startAfter(firestoreCursor),
-                limit(25)
-            );
+        const allEventsQuery = query(
+            collection(db, 'scoreEvents'), 
+            orderBy('timestamp', 'desc'),
+        );
+
+        const allEventsSnapshot = await getDocs(allEventsQuery);
+        const allEventsData = allEventsSnapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+            timestamp: (doc.data().timestamp as any).toDate(),
+        } as ScoreEvent));
+
+        // Calculate attempt numbers
+        const attemptCounts: { [key: string]: number } = {};
+        const eventsWithAttempts: EnrichedScoreEvent[] = [];
+
+        // Iterate backwards to calculate attempt numbers correctly
+        for (let i = allEventsData.length - 1; i >= 0; i--) {
+            const event = allEventsData[i];
+            if (event.gameType === 'Soru Bankası') {
+                const key = `${event.userId}-${event.context}`;
+                attemptCounts[key] = (attemptCounts[key] || 0) + 1;
+                eventsWithAttempts.unshift({
+                    ...event,
+                    userName: usersMap.get(event.userId) || 'Bilinmeyen Kullanıcı',
+                    attemptNumber: attemptCounts[key]
+                });
+            } else {
+                eventsWithAttempts.unshift({
+                    ...event,
+                    userName: usersMap.get(event.userId) || 'Bilinmeyen Kullanıcı'
+                });
+            }
         }
+        
+        const itemsPerPage = 25;
+        const pageIndex = cursor ? Math.floor(allEventsData.findIndex(e => (e.timestamp as Date).getTime() === new Timestamp(cursor._seconds, cursor._nanoseconds).toDate().getTime()) / itemsPerPage) + 1 : 0;
+        
+        const startIndex = pageIndex * itemsPerPage;
+        const paginatedEvents = eventsWithAttempts.slice(startIndex, startIndex + itemsPerPage);
+        const lastVisibleEvent = paginatedEvents.length === itemsPerPage ? allEventsData[startIndex + itemsPerPage] : null;
 
-        const eventsSnapshot = await getDocs(eventsQuery);
-        const lastVisibleDoc = eventsSnapshot.docs[eventsSnapshot.docs.length - 1];
 
-        const allEvents = eventsSnapshot.docs.map(doc => {
-            const data = doc.data() as ScoreEvent;
-            return {
-                ...data,
-                id: doc.id,
-                timestamp: (data.timestamp as any).toDate(),
-                userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
-            } as EnrichedScoreEvent;
-        });
-
-        // The logic for attemptNumber calculation requires all events, which is inefficient for pagination.
-        // For now, we will omit the attemptNumber logic to make pagination possible.
-        // A more complex solution would involve a separate system or denormalization if this feature is critical.
-
-        const serializableEvents = allEvents.map(event => ({
+        const serializableEvents = paginatedEvents.map(event => ({
             ...event,
             timestamp: new Date(event.timestamp).toISOString(),
         }));
         
-        // Serialize the lastVisible document for the client
-        const serializableLastVisible = lastVisibleDoc ? {
-            _seconds: lastVisibleDoc.data().timestamp.seconds,
-            _nanoseconds: lastVisibleDoc.data().timestamp.nanoseconds
+        const serializableLastVisible = lastVisibleEvent ? {
+            _seconds: (lastVisibleEvent.timestamp as Date).getTime() / 1000,
+            _nanoseconds: 0 // Simplification, as JS Date doesn't have nanos
         } : null;
-        
+
         return { 
             success: true, 
             data: JSON.parse(JSON.stringify(serializableEvents)),
