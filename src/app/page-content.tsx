@@ -233,55 +233,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
 // --- LOGGED IN DASHBOARD ---
 
-const ManagementButton = ({ href, title, icon, colorClass, onClick }: { href?: string, title: string, icon: React.ReactNode, colorClass: string, onClick?: () => void }) => {
-    
-    // Cyber tema için renkleri düzenle
-    const cyberColors: {[key: string]: string} = {
-        "bg-red-500": "from-red-600 to-rose-600 border-red-500 text-red-100",
-        "bg-orange-500": "from-orange-500 to-amber-600 border-orange-500 text-orange-100",
-        "bg-blue-500": "from-blue-600 to-indigo-600 border-blue-500 text-blue-100",
-        "bg-indigo-500": "from-indigo-600 to-violet-600 border-indigo-500 text-indigo-100",
-        "bg-violet-500": "from-violet-600 to-purple-600 border-violet-500 text-violet-100",
-        "bg-teal-500": "from-teal-600 to-emerald-600 border-teal-500 text-teal-100",
-        "bg-green-500": "from-green-600 to-emerald-600 border-green-500 text-green-100",
-        "bg-cyan-500": "from-cyan-600 to-sky-600 border-cyan-500 text-cyan-100",
-        "bg-yellow-500": "from-yellow-500 to-amber-500 border-yellow-500 text-yellow-100",
-        "bg-rose-500": "from-rose-600 to-pink-600 border-rose-500 text-rose-100",
-        "bg-slate-500": "from-slate-600 to-gray-700 border-slate-500 text-slate-100",
-        "bg-red-400": "from-red-500 to-pink-600 border-red-400 text-red-100",
-        "bg-emerald-500": "from-emerald-600 to-green-600 border-emerald-500 text-emerald-100",
-        "bg-pink-500": "from-pink-600 to-rose-600 border-pink-500 text-pink-100",
-    };
-
-    // Mevcut colorClass içinden bg- rengini bulup eşle
-    const bgClass = colorClass.split(' ').find(c => c.startsWith('bg-')) || 'bg-slate-500';
-    const gradient = cyberColors[bgClass] || "from-slate-600 to-slate-700 border-slate-500 text-white";
-
-    const content = (
-        <div className={cn(
-            "h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group border",
-            "bg-slate-900 border-white/5 hover:border-white/20 hover:bg-slate-800 hover:-translate-y-1 shadow-lg"
-        )}>
-             {/* Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
-            
-            <div className={cn(
-                "p-3 rounded-xl mb-3 transition-all duration-300 shadow-lg border bg-gradient-to-br",
-                gradient,
-                "group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-            )}>
-                {React.cloneElement(icon as React.ReactElement, { className: "h-7 w-7" })}
-            </div>
-            <h3 className="font-bold text-sm text-slate-300 group-hover:text-white transition-colors">{title}</h3>
-        </div>
-    );
-
-    if (href) {
-        return <Link href={href} className="block group h-full">{content}</Link>;
-    }
-    return <button className="block group h-full w-full" onClick={onClick}>{content}</button>;
-};
-
 const LoggedInDashboard = ({ user }: { user: any }) => {
     const router = useRouter();
     const { toast } = useToast();
@@ -380,26 +331,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
       
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
         
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-white/5 pb-8">
-            <div className="space-y-2">
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white uppercase flex flex-col md:block">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">YÖNETİM</span> PANELİ
-                </h1>
-                
-            </div>
-            
-            <div className="flex items-center gap-3 bg-slate-900/50 p-2 pr-6 rounded-2xl border border-white/5">
-                <div className="h-12 w-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-                    <User className="h-6 w-6 text-indigo-400" />
-                </div>
-                <div>
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Giriş Yapıldı</p>
-                    <p className="text-sm font-bold text-white truncate max-w-[150px]">{user.displayName}</p>
-                </div>
-            </div>
-        </div>
-        
         {/* Quick Actions */}
          <div className="bg-slate-900/40 backdrop-blur-md rounded-[2rem] p-8 border border-white/5 shadow-2xl relative overflow-hidden">
              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"/>
@@ -462,6 +393,54 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   );
 };
 
+const ManagementButton = ({ href, title, icon, colorClass, onClick }: { href?: string, title: string, icon: React.ReactNode, colorClass: string, onClick?: () => void }) => {
+    
+    // Cyber tema için renkleri düzenle
+    const cyberColors: {[key: string]: string} = {
+        "bg-red-500": "from-red-600 to-rose-600 border-red-500 text-red-100",
+        "bg-orange-500": "from-orange-500 to-amber-600 border-orange-500 text-orange-100",
+        "bg-blue-500": "from-blue-600 to-indigo-600 border-blue-500 text-blue-100",
+        "bg-indigo-500": "from-indigo-600 to-violet-600 border-indigo-500 text-indigo-100",
+        "bg-violet-500": "from-violet-600 to-purple-600 border-violet-500 text-violet-100",
+        "bg-teal-500": "from-teal-600 to-emerald-600 border-teal-500 text-teal-100",
+        "bg-green-500": "from-green-600 to-emerald-600 border-green-500 text-green-100",
+        "bg-cyan-500": "from-cyan-600 to-sky-600 border-cyan-500 text-cyan-100",
+        "bg-yellow-500": "from-yellow-500 to-amber-500 border-yellow-500 text-yellow-100",
+        "bg-rose-500": "from-rose-600 to-pink-600 border-rose-500 text-rose-100",
+        "bg-slate-500": "from-slate-600 to-gray-700 border-slate-500 text-slate-100",
+        "bg-red-400": "from-red-500 to-pink-600 border-red-400 text-red-100",
+        "bg-emerald-500": "from-emerald-600 to-green-600 border-emerald-500 text-emerald-100",
+        "bg-pink-500": "from-pink-600 to-rose-600 border-pink-500 text-pink-100",
+    };
+
+    // Mevcut colorClass içinden bg- rengini bulup eşle
+    const bgClass = colorClass.split(' ').find(c => c.startsWith('bg-')) || 'bg-slate-500';
+    const gradient = cyberColors[bgClass] || "from-slate-600 to-slate-700 border-slate-500 text-white";
+
+    const content = (
+        <div className={cn(
+            "h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 relative overflow-hidden group border",
+            "bg-slate-900 border-white/5 hover:border-white/20 hover:bg-slate-800 hover:-translate-y-1 shadow-lg"
+        )}>
+             {/* Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+            
+            <div className={cn(
+                "p-3 rounded-xl mb-3 transition-all duration-300 shadow-lg border bg-gradient-to-br",
+                gradient,
+                "group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+            )}>
+                {React.cloneElement(icon as React.ReactElement, { className: "h-7 w-7" })}
+            </div>
+            <h3 className="font-bold text-sm text-slate-300 group-hover:text-white transition-colors">{title}</h3>
+        </div>
+    );
+
+    if (href) {
+        return <Link href={href} className="block group h-full">{content}</Link>;
+    }
+    return <button className="block group h-full w-full" onClick={onClick}>{content}</button>;
+};
 
 export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     const { user, loading } = useAuth();
