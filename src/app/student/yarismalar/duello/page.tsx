@@ -1,9 +1,9 @@
 import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { BireyselYarismaClientPage } from "./client-page";
+import { DuelloSetupClientPage } from "./client-page";
 
 export const dynamic = 'force-dynamic';
 
-export default async function BireyselYarismaSetupPage() {
+export default async function DuelloSetupPage() {
     const settings = await getGameSettings();
-    return <BireyselYarismaClientPage gameConfig={settings.studentBireysel} />;
+    return <DuelloSetupClientPage gameConfig={settings.studentDuello} />;
 }

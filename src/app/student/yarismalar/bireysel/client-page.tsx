@@ -32,6 +32,7 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
@@ -98,7 +99,7 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
             const studentClassId = studentClass?.id;
             
             if (studentClassId) { 
-                finalCourses = allCourses.filter(course => 
+                 finalCourses = allCourses.filter(course => 
                     course.classId === studentClassId || !course.classId
                 );
             } else { 
@@ -133,13 +134,13 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection({ ...selection, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' });
-    setIsLoading(true);
+    setIsDataLoading(true);
     const unitsRef = collection(db, `courses/${courseId}/units`);
     const q = query(unitsRef, orderBy("title"));
     const unitsSnapshot = await getDocs(q);
     setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
     setTopics([]);
-    setIsLoading(false);
+    setIsDataLoading(false);
     setCurrentStep(2);
   };
 
@@ -149,12 +150,12 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
       setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
       setTopics([]);
     } else {
-      setIsLoading(true);
+      setIsDataLoading(true);
       const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
       const q = query(topicsRef, orderBy("title"));
       const topicsSnapshot = await getDocs(q);
       setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
-      setIsLoading(false);
+      setIsDataLoading(false);
     }
     setCurrentStep(3);
   };
@@ -194,16 +195,18 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
         case 1:
             return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} subtitleKey={user?.role === 'teacher' || user?.role === 'superadmin' ? 'className' : undefined}/>;
         case 2:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading} />;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={isDataLoading} />;
         case 3:
-            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isDataLoading}/>;
         case 4:
             return (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                     <Card className="bg-slate-900 border-white/10 shadow-lg">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-white"><Users className="text-cyan-400 h-5 w-5"/> Oyuncular</CardTitle>
-                            <CardDescription className="text-slate-400">Kendin ve misafir oyuncular arasından seçim yap.</CardDescription>
+                            <CardDescription className="text-slate-400 text-sm">
+                               Kendin ve misafir oyuncular arasından seçim yap. Yeni misafirleri <Link href="/student/yarismalar/ayarlar" className="underline hover:text-cyan-400">yönetim sayfasından</Link> ekleyebilirsin.
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <ScrollArea className="h-48 border border-white/10 rounded-xl p-3 bg-slate-950/50 mb-4">
@@ -232,15 +235,6 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
                                     )}
                                 </div>
                             </ScrollArea>
-                             <form onSubmit={handleAddGuestPlayer} className="flex gap-2 pt-4 border-t border-white/10">
-                                <Input
-                                    placeholder="Yeni misafir adı..."
-                                    value={newGuestName}
-                                    onChange={(e) => setNewGuestName(e.target.value)}
-                                    className="bg-slate-950 border-white/10 text-white focus:border-cyan-500/50"
-                                />
-                                <Button type="submit" size="icon" title="Yeni misafir ekle" className="bg-cyan-600 hover:bg-cyan-500 text-white"><UserPlus className="h-4 w-4" /></Button>
-                            </form>
                         </CardContent>
                     </Card>
                     <Card className="bg-slate-900 border-white/10 shadow-lg">
@@ -262,7 +256,7 @@ export function BireyselYarismaClientPage({ gameConfig }: { gameConfig: any }) {
             const allPlayers = [user?.displayName, ...inGameGuests].filter(Boolean);
             return (
               <div className="w-full max-w-lg mx-auto">
-                 <Card className="bg-slate-900 border-white/10 overflow-hidden">
+                 <Card className="bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
                     <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-1"></div>
                     <CardHeader className="text-center pb-2">
                         <Trophy className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>

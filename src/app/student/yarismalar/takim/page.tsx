@@ -1,9 +1,9 @@
 import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { BireyselYarismaClientPage } from "./client-page";
+import { TakimYarismaSetupClientPage } from "./client-page";
 
 export const dynamic = 'force-dynamic';
 
-export default async function BireyselYarismaSetupPage() {
+export default async function Page() {
     const settings = await getGameSettings();
-    return <BireyselYarismaClientPage gameConfig={settings.studentBireysel} />;
+    return <TakimYarismaSetupClientPage gameConfig={settings.teacherTakim} />;
 }

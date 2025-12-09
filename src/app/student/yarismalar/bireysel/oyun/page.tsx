@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Timer, Target } from "lucide-react";
+// Gamepad2 ikonu buraya eklendi
+import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Timer, Target, Gamepad2 } from "lucide-react";
 import Link from "next/link";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
 import type { GetQuizOutput, Question } from "@/lib/types";
