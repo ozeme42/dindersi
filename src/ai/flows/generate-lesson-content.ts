@@ -17,19 +17,17 @@ const GenerateLessonContentInputSchema = z.object({
   topicSummary: z
     .string()
     .describe('A summary of the topic for which to generate lesson content.'),
-  modules: z.object({
-    summary: z.boolean().optional().describe('Generate a summary of the topic?'),
-    learningObjectives: z.boolean().optional().describe('Generate learning objectives for the topic?'),
-    keyTakeaways: z.boolean().optional().describe('Generate key takeaways for the topic?'),
-    conceptExplanations: z.boolean().optional().describe('Generate concept explanations?'),
-    keyConcepts: z.boolean().optional().describe('Generate a list of key concepts?'),
-    flashcards: z.boolean().optional().describe('Generate flashcards?'),
-    multipleChoiceQuestions: z.boolean().optional().describe('Generate multiple choice questions?'),
-    trueFalseQuestions: z.boolean().optional().describe('Generate true/false questions?'),
-    fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
-    anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
-    sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
-  }).describe('Which content modules to generate.'),
+  summary: z.boolean().optional().describe('Generate a summary of the topic?'),
+  learningObjectives: z.boolean().optional().describe('Generate learning objectives for the topic?'),
+  keyTakeaways: z.boolean().optional().describe('Generate key takeaways for the topic?'),
+  conceptExplanations: z.boolean().optional().describe('Generate concept explanations?'),
+  keyConcepts: z.boolean().optional().describe('Generate a list of key concepts?'),
+  flashcards: z.boolean().optional().describe('Generate flashcards?'),
+  multipleChoiceQuestions: z.boolean().optional().describe('Generate multiple choice questions?'),
+  trueFalseQuestions: z.boolean().optional().describe('Generate true/false questions?'),
+  fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
+  anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
+  sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
 });
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
 
@@ -114,6 +112,9 @@ TOPIC SUMMARY:
 REQUESTED MODULES AND THEIR FORMATS:
 {{{requestedInstructions}}}
 `,
+  config: {
+    responseModalities: ['TEXT'],
+  }
 });
 
 
@@ -126,9 +127,8 @@ const generateLessonContentFlow = ai.defineFlow(
   async (input) => {
     let output: GenerateLessonContentOutput = {};
 
-    const requestedInstructions = Object.entries(input.modules)
-      .filter(([, value]) => value)
-      .filter(([key]) => key in moduleInstructions)
+    const requestedInstructions = Object.entries(input)
+      .filter(([key, value]) => value === true && key in moduleInstructions)
       .map(([key]) => moduleInstructions[key as keyof typeof moduleInstructions])
       .join('\n');
 
@@ -146,17 +146,16 @@ const generateLessonContentFlow = ai.defineFlow(
     if (Object.keys(output).length > 0) {
       const generatedModules: string[] = [];
 
-      for (const key in input.modules) {
-        if (Object.prototype.hasOwnProperty.call(input.modules, key)) {
-          const moduleKey = key as keyof typeof input.modules;
-          const outputKey = key as keyof GenerateLessonContentOutput;
-          if (input.modules[moduleKey] && output[outputKey]) {
-            const outputValue = output[outputKey];
-            if (Array.isArray(outputValue) ? outputValue.length > 0 : true) {
-              generatedModules.push(key);
+      for (const key in output) {
+          if (Object.prototype.hasOwnProperty.call(output, key)) {
+            const moduleKey = key as keyof GenerateLessonContentOutput;
+            if (moduleKey !== 'progress' && output[moduleKey]) {
+                const outputValue = output[moduleKey];
+                 if (Array.isArray(outputValue) ? outputValue.length > 0 : true) {
+                    generatedModules.push(key);
+                }
             }
           }
-        }
       }
 
       if (generatedModules.length > 0) {
@@ -171,3 +170,5 @@ const generateLessonContentFlow = ai.defineFlow(
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
   return generateLessonContentFlow(input);
 }
+
+    
