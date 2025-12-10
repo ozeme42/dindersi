@@ -53,7 +53,7 @@ Topic Summary:
 `;
       
     const {output} = await ai.generate({
-      model: googleAI.model('gemini-pro'),
+      model: googleAI.model('gemini-2.5-flash'),
       prompt: prompt,
       output: {
         schema: GenerateHtmlSlideOutputSchema,
