@@ -69,13 +69,13 @@ const generateActivityDataFlow = ai.defineFlow(
       instructions.push(`- **Summary Sentences**: Generate 5-10 sentences that summarize key aspects of the topic (konuyu özetleyen cümleler). It is MANDATORY that each sentence has a maximum of 6 words. Do not generate sentences longer than 6 words.`);
     }
 
-    const prompt = ai.prompt(promptTemplate
+    const prompt = promptTemplate
       .replace('{{{topicTitle}}}', input.topicTitle)
       .replace('{{{contextText}}}', input.contextText || '')
-      .replace('{{{instructions}}}', instructions.join('\n\n')));
+      .replace('{{{instructions}}}', instructions.join('\n\n'));
     
     const {output} = await ai.generate({
-        prompt: await prompt.render(),
+        prompt: prompt,
         model: googleAI.model('gemini-1.5-flash'),
         output: {
             schema: AiActivityDataOutputSchema
