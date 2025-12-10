@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash } from "lucide-react";
+import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import type { Course, SchoolClass, Unit, Topic } from "@/lib/types";
@@ -13,18 +13,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 // --- NEON RENK PALETİ ---
-// Yapıyı bozmadan sadece görsel sınıfları değiştirdik.
 const colorClasses = [
-    'bg-blue-950/40 border-2 border-blue-500/30 hover:border-blue-400 hover:bg-blue-900/60 text-blue-100 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]',
-    'bg-emerald-950/40 border-2 border-emerald-500/30 hover:border-emerald-400 hover:bg-emerald-900/60 text-emerald-100 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]',
-    'bg-purple-950/40 border-2 border-purple-500/30 hover:border-purple-400 hover:bg-purple-900/60 text-purple-100 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]',
-    'bg-rose-950/40 border-2 border-rose-500/30 hover:border-rose-400 hover:bg-rose-900/60 text-rose-100 hover:shadow-[0_0_20px_rgba(244,63,94,0.3)]',
-    'bg-amber-950/40 border-2 border-amber-500/30 hover:border-amber-400 hover:bg-amber-900/60 text-amber-100 hover:shadow-[0_0_20px_rgba(245,158,11,0.3)]',
-    'bg-indigo-950/40 border-2 border-indigo-500/30 hover:border-indigo-400 hover:bg-indigo-900/60 text-indigo-100 hover:shadow-[0_0_20px_rgba(99,102,241,0.3)]',
-    'bg-teal-950/40 border-2 border-teal-500/30 hover:border-teal-400 hover:bg-teal-900/60 text-teal-100 hover:shadow-[0_0_20px_rgba(20,184,166,0.3)]',
-    'bg-cyan-950/40 border-2 border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-100 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)]',
-    'bg-pink-950/40 border-2 border-pink-500/30 hover:border-pink-400 hover:bg-pink-900/60 text-pink-100 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)]',
-    'bg-orange-950/40 border-2 border-orange-500/30 hover:border-orange-400 hover:bg-orange-900/60 text-orange-100 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]',
+    'bg-blue-950/60 border-2 border-blue-500/50 hover:border-blue-400 hover:bg-blue-900/80 text-blue-100 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]',
+    'bg-emerald-950/60 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-900/80 text-emerald-100 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]',
+    'bg-purple-950/60 border-2 border-purple-500/50 hover:border-purple-400 hover:bg-purple-900/80 text-purple-100 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]',
+    'bg-rose-950/60 border-2 border-rose-500/50 hover:border-rose-400 hover:bg-rose-900/80 text-rose-100 hover:shadow-[0_0_30px_rgba(244,63,94,0.4)]',
+    'bg-amber-950/60 border-2 border-amber-500/50 hover:border-amber-400 hover:bg-amber-900/80 text-amber-100 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]',
+    'bg-indigo-950/60 border-2 border-indigo-500/50 hover:border-indigo-400 hover:bg-indigo-900/80 text-indigo-100 hover:shadow-[0_0_30px_rgba(99,102,241,0.4)]',
+    'bg-teal-950/60 border-2 border-teal-500/50 hover:border-teal-400 hover:bg-teal-900/80 text-teal-100 hover:shadow-[0_0_30px_rgba(20,184,166,0.4)]',
+    'bg-cyan-950/60 border-2 border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/80 text-cyan-100 hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]',
 ];
 
 // Types
@@ -104,163 +101,182 @@ export default function DersAkisiPage() {
         fetchData();
     }, []);
     
-    const handleEditClick = (topic: Topic, courseId: string, unitId: string) => {
+    const handleEditClick = (e: React.MouseEvent, topic: Topic, courseId: string, unitId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
         router.push(`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`);
     };
 
-    const handleSummaryClick = (courseId: string, unitId: string, topicId: string) => {
+    const handleSummaryClick = (e: React.MouseEvent, courseId: string, unitId: string, topicId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
         router.push(`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`);
     }
 
     const renderCourseContent = (courseGroups: CourseGroup[]) => {
         if (isLoading) {
             return (
-                <div className="flex justify-center items-center h-64">
-                    <Loader2 className="h-16 w-16 animate-spin text-cyan-500" />
+                <div className="flex justify-center items-center h-[50vh]">
+                    <Loader2 className="h-24 w-24 animate-spin text-cyan-500" />
                 </div>
             );
         }
 
         if (courseGroups.length === 0) {
             return (
-                <div className="text-center py-20 border-2 border-dashed border-slate-800 rounded-3xl bg-slate-900/50">
-                    <Layers className="h-16 w-16 mx-auto mb-4 text-slate-600 opacity-50" />
-                    <p className="text-xl font-bold text-slate-500">Bu bölümde gösterilecek ders materyali bulunmuyor.</p>
+                <div className="text-center py-32 border-4 border-dashed border-slate-800 rounded-[3rem] bg-slate-900/50">
+                    <Layers className="h-32 w-32 mx-auto mb-8 text-slate-600 opacity-50" />
+                    <p className="text-4xl font-bold text-slate-500">Bu bölümde gösterilecek ders materyali bulunmuyor.</p>
                 </div>
             );
         }
 
         return (
-            <Accordion type="multiple" className="w-full space-y-6">
+            <Accordion type="multiple" className="w-full space-y-8">
                 {courseGroups.map((group, groupIndex) => (
                     <AccordionItem value={group.title} key={group.title} className="border-none">
-                        <Card className="bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-3xl">
+                        <Card className="bg-slate-900/80 backdrop-blur-xl border-2 border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem]">
                             {/* Grup Başlığı */}
                             <CardHeader className="p-0 border-b border-white/5">
                                 <AccordionTrigger className={cn(
-                                    "text-2xl md:text-3xl font-black hover:no-underline px-6 py-5 transition-all",
+                                    "text-3xl md:text-5xl font-black hover:no-underline px-8 py-8 transition-all",
                                     "text-white bg-white/5 hover:bg-white/10 data-[state=open]:bg-indigo-500/20 data-[state=open]:text-indigo-300"
                                 )}>
-                                    <div className="flex items-center gap-3">
-                                        <Hash className="w-6 h-6 text-indigo-500" />
+                                    <div className="flex items-center gap-6">
+                                        <div className="p-3 rounded-2xl bg-indigo-500/20">
+                                            <Hash className="w-10 h-10 md:w-12 md:h-12 text-indigo-400" />
+                                        </div>
                                         {group.title}
                                     </div>
                                 </AccordionTrigger>
                             </CardHeader>
                             
-                            <AccordionContent className="p-4 sm:p-6 bg-slate-950/50">
-                                <div className="space-y-4">
+                            <AccordionContent className="p-6 md:p-8 bg-slate-950/30">
+                                <div className="space-y-6">
                                 {group.courses.map((course, courseIndex) => (
-                                    <div key={course.id} className="pl-4 border-l-2 border-indigo-500/30">
-                                        <div className="flex items-center">
-                                            {/* Bağlantı Çizgisi */}
-                                            <div className="w-4 h-0.5 bg-indigo-500/30 -ml-4 mr-3"></div>
-                                            
-                                            <Accordion type="single" collapsible className="w-full">
-                                                <AccordionItem value={course.id} className="border border-white/10 rounded-xl bg-slate-900 overflow-hidden shadow-lg">
-                                                    <AccordionTrigger className={cn(
-                                                        "px-5 py-4 text-xl font-bold hover:no-underline transition-all",
-                                                        "text-slate-200 hover:text-white hover:bg-white/5 data-[state=open]:bg-white/5 data-[state=open]:text-indigo-400"
-                                                    )}>
-                                                        <div className="flex items-center gap-4 w-full">
-                                                            <div className="h-8 w-8 rounded bg-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold border border-indigo-500/30">
-                                                                {course.className?.charAt(0) || 'G'}
+                                    <div key={course.id} className="pl-6 md:pl-10 border-l-4 border-indigo-500/30">
+                                            <div className="flex items-start">
+                                                {/* Bağlantı Çizgisi */}
+                                                <div className="w-8 h-1 bg-indigo-500/30 -ml-10 mt-10 mr-4"></div>
+                                                
+                                                <Accordion type="single" collapsible className="w-full">
+                                                    <AccordionItem value={course.id} className="border-2 border-white/10 rounded-3xl bg-slate-900 overflow-hidden shadow-xl">
+                                                        <AccordionTrigger className={cn(
+                                                            "px-8 py-6 text-2xl md:text-3xl font-bold hover:no-underline transition-all",
+                                                            "text-slate-200 hover:text-white hover:bg-white/5 data-[state=open]:bg-white/5 data-[state=open]:text-cyan-400"
+                                                        )}>
+                                                            <div className="flex items-center gap-6 w-full">
+                                                                <div className="h-16 w-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-black text-2xl border-2 border-cyan-500/30">
+                                                                    {course.className?.charAt(0) || 'G'}
+                                                                </div>
+                                                                {/* GÜNCELLEME: Sınıf isminin sonuna '.Sınıf' ekleme mantığı */}
+                                                                <span className="flex-1 text-left">
+                                                                    {course.className && /^\d+$/.test(course.className) 
+                                                                        ? `${course.className}.Sınıf` 
+                                                                        : course.className
+                                                                    }
+                                                                </span>
                                                             </div>
-                                                            <span className="flex-1 text-left">{course.className}</span>
-                                                        </div>
-                                                    </AccordionTrigger>
-                                                    <AccordionContent className="p-4 bg-black/20">
-                                                        <div className="space-y-3">
-                                                            {course.units.map((unit, unitIndex) => (
-                                                                <Accordion key={unit.id} type="multiple" className="w-full">
-                                                                    <AccordionItem value={unit.id} className="border border-white/5 rounded-lg bg-slate-900/50 overflow-hidden">
-                                                                        <AccordionTrigger className={cn(
-                                                                            "px-4 py-3 text-lg font-medium hover:no-underline transition-colors",
-                                                                            "text-slate-400 hover:text-white hover:bg-white/5"
-                                                                        )}>
-                                                                            <span className="flex items-center gap-2">
-                                                                                <ChevronRight className="w-4 h-4 text-slate-500" />
-                                                                                {unit.title}
-                                                                            </span>
-                                                                        </AccordionTrigger>
-                                                                        <AccordionContent className="p-4 bg-black/20">
-                                                                            {unit.topics.length > 0 ? (
-                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                                                                                    {unit.topics.map((topic, topicIndex) => {
-                                                                                        const isLink = topic.externalLink;
-                                                                                        const hasStudentContent = (topic.steps?.length || 0) > 0;
-                                                                                        const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
-                                                                                        
-                                                                                        const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
+                                                        </AccordionTrigger>
+                                                        <AccordionContent className="p-6 md:p-8 bg-black/20">
+                                                            <div className="space-y-6">
+                                                                {course.units.map((unit, unitIndex) => (
+                                                                    <Accordion key={unit.id} type="multiple" className="w-full">
+                                                                        <AccordionItem value={unit.id} className="border-2 border-white/5 rounded-2xl bg-slate-900/50 overflow-hidden">
+                                                                                <AccordionTrigger className={cn(
+                                                                                    "px-6 py-5 text-xl md:text-2xl font-bold hover:no-underline transition-colors",
+                                                                                    "text-slate-400 hover:text-white hover:bg-white/5"
+                                                                                )}>
+                                                                                    <span className="flex items-center gap-4">
+                                                                                        <div className="p-2 bg-white/5 rounded-lg">
+                                                                                            <Book className="w-6 h-6 text-slate-500" />
+                                                                                        </div>
+                                                                                        {unit.title}
+                                                                                    </span>
+                                                                                </AccordionTrigger>
+                                                                                <AccordionContent className="p-6 bg-black/20">
+                                                                                        {unit.topics.length > 0 ? (
+                                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                                                                {unit.topics.map((topic, topicIndex) => {
+                                                                                                    const isLink = topic.externalLink;
+                                                                                                    const hasStudentContent = (topic.steps?.length || 0) > 0;
+                                                                                                    const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
+                                                                                                    
+                                                                                                    const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
 
-                                                                                        return (
-                                                                                            <div key={topic.id} className="relative group h-32">
-                                                                                                <Button
-                                                                                                    asChild
-                                                                                                    className={cn(
-                                                                                                        "w-full h-full p-4 flex flex-col justify-center items-center text-center font-bold",
-                                                                                                        "transition-all duration-300 hover:-translate-y-1 active:translate-y-0",
-                                                                                                        "rounded-xl shadow-lg",
-                                                                                                        "break-words whitespace-normal text-sm leading-snug",
-                                                                                                        neonClass
-                                                                                                    )}
-                                                                                                >
-                                                                                                    {isLink ? (
-                                                                                                        <Link href={topic.externalLink!} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center gap-2 h-full w-full">
-                                                                                                            <LinkIcon className="h-5 w-5 mb-1 opacity-70" />
-                                                                                                            {topic.title}
+                                                                                                    return (
+                                                                                                        <Link 
+                                                                                                            key={topic.id}
+                                                                                                            href={isLink ? topic.externalLink! : presentationUrl}
+                                                                                                            target={isLink ? "_blank" : undefined}
+                                                                                                            className={cn(
+                                                                                                                "group relative w-full flex flex-col justify-center items-center text-center font-bold",
+                                                                                                                "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                                "rounded-[2rem] shadow-2xl min-h-[14rem]",
+                                                                                                                "break-words whitespace-normal leading-tight p-8",
+                                                                                                                neonClass
+                                                                                                            )}
+                                                                                                        >
+                                                                                                            {/* İkon */}
+                                                                                                            {isLink ? (
+                                                                                                                <LinkIcon className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                            ) : (
+                                                                                                                <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                            )}
+
+                                                                                                            {/* Başlık */}
+                                                                                                            <span className="text-2xl md:text-3xl line-clamp-3">
+                                                                                                                {topic.title}
+                                                                                                            </span>
+
+                                                                                                            {/* Action Buttons Overlay - Sabit Sağ Üst */}
+                                                                                                            <div className="absolute top-4 right-4 flex gap-2 z-20">
+                                                                                                                {hasStudentContent && !isLink && (
+                                                                                                                    <div 
+                                                                                                                        onClick={(e) => {
+                                                                                                                            e.preventDefault();
+                                                                                                                            e.stopPropagation();
+                                                                                                                            window.open(`/student/ders/${course.id}?topicId=${topic.id}`, '_blank');
+                                                                                                                        }}
+                                                                                                                        className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-emerald-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                        title="Öğrenci Görünümü"
+                                                                                                                    >
+                                                                                                                        <BookOpen className="h-6 w-6" />
+                                                                                                                    </div>
+                                                                                                                )}
+                                                                                                                <div 
+                                                                                                                    onClick={(e) => handleEditClick(e, topic, course.id, unit.id)}
+                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-amber-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                    title="Düzenle"
+                                                                                                                >
+                                                                                                                    <FilePenLine className="h-6 w-6" />
+                                                                                                                </div>
+                                                                                                                <div 
+                                                                                                                    onClick={(e) => handleSummaryClick(e, course.id, unit.id, topic.id)}
+                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-purple-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                    title="Özet"
+                                                                                                                >
+                                                                                                                    <Columns className="h-6 w-6" />
+                                                                                                                </div>
+                                                                                                            </div>
                                                                                                         </Link>
-                                                                                                    ) : (
-                                                                                                        <Link href={presentationUrl} className="flex flex-col items-center justify-center h-full w-full">
-                                                                                                            <span className="line-clamp-3">{topic.title}</span>
-                                                                                                        </Link>
-                                                                                                    )}
-                                                                                                </Button>
-                                                                                                
-                                                                                                {/* Action Buttons Overlay */}
-                                                                                                <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                                                                                                    {hasStudentContent && !isLink && (
-                                                                                                        <Button asChild size="icon" className="h-8 w-8 rounded-lg bg-black/60 hover:bg-black/90 text-white border border-white/20 backdrop-blur-sm shadow-xl" title="Öğrenci Görünümü">
-                                                                                                            <Link href={`/student/ders/${course.id}?topicId=${topic.id}`}>
-                                                                                                                <BookOpen className="h-4 w-4" />
-                                                                                                            </Link>
-                                                                                                        </Button>
-                                                                                                    )}
-                                                                                                    <Button 
-                                                                                                        size="icon" 
-                                                                                                        className="h-8 w-8 rounded-lg bg-black/60 hover:bg-black/90 text-white border border-white/20 backdrop-blur-sm shadow-xl"
-                                                                                                        onClick={() => handleEditClick(topic, course.id, unit.id)}
-                                                                                                        title="Düzenle"
-                                                                                                    >
-                                                                                                        <FilePenLine className="h-4 w-4" />
-                                                                                                    </Button>
-                                                                                                    <Button 
-                                                                                                        size="icon" 
-                                                                                                        className="h-8 w-8 rounded-lg bg-black/60 hover:bg-black/90 text-white border border-white/20 backdrop-blur-sm shadow-xl"
-                                                                                                        onClick={() => handleSummaryClick(course.id, unit.id, topic.id)}
-                                                                                                        title="Özet"
-                                                                                                    >
-                                                                                                        <Columns className="h-4 w-4" />
-                                                                                                    </Button>
-                                                                                                </div>
+                                                                                                    );
+                                                                                                })}
                                                                                             </div>
-                                                                                        );
-                                                                                    })}
-                                                                                </div>
-                                                                            ) : (
-                                                                                <div className="text-sm text-slate-600 italic p-4 text-center border-2 border-dashed border-slate-800 rounded-xl">
-                                                                                    Bu üniteye henüz konu eklenmemiş.
-                                                                                </div>
-                                                                            )}
-                                                                        </AccordionContent>
-                                                                    </AccordionItem>
-                                                                </Accordion>
-                                                            ))}
-                                                        </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </Accordion>
-                                        </div>
+                                                                                        ) : (
+                                                                                            <div className="text-xl text-slate-500 italic p-8 text-center border-4 border-dashed border-slate-800 rounded-3xl">
+                                                                                                Bu üniteye henüz konu eklenmemiş.
+                                                                                            </div>
+                                                                                        )}
+                                                                                </AccordionContent>
+                                                                        </AccordionItem>
+                                                                    </Accordion>
+                                                                ))}
+                                                            </div>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                </Accordion>
+                                            </div>
                                     </div>
                                 ))}
                                 </div>
@@ -273,27 +289,27 @@ export default function DersAkisiPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-6 md:p-10 relative overflow-hidden">
             
             {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-900/10 rounded-full blur-[150px]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[200px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[200px]" />
                 <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+            <div className="max-w-[95%] mx-auto relative z-10 space-y-12">
                 
                 {/* Header */}
-                <div className="text-center space-y-4 py-8">
-                    <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-2">
-                        <Workflow className="h-10 w-10 text-cyan-400" />
+                <div className="text-center space-y-6 py-10">
+                    <div className="inline-flex items-center justify-center p-6 bg-slate-900 border-2 border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-4">
+                        <Workflow className="h-16 w-16 text-cyan-400" />
                     </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase drop-shadow-lg">
+                    <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight uppercase drop-shadow-2xl">
                         Ders Akışı
                     </h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
-                        Müfredat, üniteler ve konuları buradan yönetin.
+                    <p className="text-slate-400 text-2xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed">
+                        Akıllı tahta modu devrede. Müfredat ve konuları buradan yönetin.
                     </p>
                 </div>
 

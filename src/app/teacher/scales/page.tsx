@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -20,11 +19,12 @@ import {
     AlertDialogTitle as RadixAlertDialogTitle, AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
 
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
-    AlertTriangle, Users, FolderOpen, ArrowRight, UserCheck, Filter, Trophy, BarChart3, TrendingUp 
+    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -34,12 +34,9 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/auth-context';
 import { createScale, getTeacherScales, deleteScale, getBranchScaleScores, type BranchScore } from './actions';
 
-
 // Types and Utils
 import type { EvaluationScale, SchoolClass, Course, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
-
 
 export const dynamic = 'force-dynamic';
 
@@ -52,6 +49,8 @@ const createScaleSchema = z.object({
 });
 
 type CreateScaleFormValues = z.infer<typeof createScaleSchema>;
+
+// --- BİLEŞENLER ---
 
 function CreateScaleForm({ onSave, isSaving, selectedClass, selectedBranch, selectedCourseId }: {
     onSave: (data: Omit<CreateScaleFormValues, 'branch'> & { generatedName: string, courseId: string }) => void;
@@ -135,7 +134,6 @@ function ErrorWithLink({ message }: { message: string }) {
 
 // --- ŞUBE BAŞARI SIRALAMASI KARTI ---
 function BranchLeaderboardCard({ branchScores, isLoading }: { branchScores: BranchScore[], isLoading: boolean }) {
-    
     const getSuccessColor = (score: number) => {
         if (score >= 85) return 'bg-emerald-500';
         if (score >= 70) return 'bg-yellow-500';
@@ -190,28 +188,35 @@ function BranchLeaderboardCard({ branchScores, isLoading }: { branchScores: Bran
     )
 }
 
+// --- ANA SAYFA COMPONENTİ ---
 export default function ScalesPage() {
     const { user } = useAuth();
     const { toast } = useToast();
+    
+    // Veri State'leri
     const [unitBasedData, setUnitBasedData] = useState<EnrichedClass[]>([]);
     const [manualScales, setManualScales] = useState<EvaluationScale[]>([]);
     const [allCourses, setAllCourses] = useState<Course[]>([]);
     const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+    
+    // UI State'leri
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [fetchError, setFetchError] = useState<string | null>(null);
-    
     const [isCreateAccordionOpen, setIsCreateAccordionOpen] = useState(false);
     
+    // Seçim State'leri
     const [selectedClassId, setSelectedClassId] = useState<string>('');
     const [selectedBranch, setSelectedBranch] = useState<string>('');
     const [selectedCourseId, setSelectedCourseId] = useState<string>('');
     
+    // İstatistik State'i
     const [branchScores, setBranchScores] = useState<BranchScore[]>([]);
     const [isLoadingScores, setIsLoadingScores] = useState(true);
 
     const selectedClass = useMemo(() => allClasses.find(c => c.id === selectedClassId), [allClasses, selectedClassId]);
 
+    // Verileri Çek
     const fetchData = useCallback(async () => {
         if (!user) return;
         setIsLoading(true);
@@ -256,7 +261,7 @@ export default function ScalesPage() {
         setIsLoading(false);
     }, [user]);
 
-    // Branch scores'u ayrıca ve asenkron olarak çekiyoruz
+    // Şube Skorlarını Çek
     useEffect(() => {
         const fetchBranchScores = async () => {
             setIsLoadingScores(true);
@@ -336,7 +341,7 @@ export default function ScalesPage() {
                 return false;
             }
             if (selectedBranch === 'all' || !selectedBranch) {
-                return true; // Show all branches for the selected class
+                return true; 
             }
             return scaleBranch === selectedBranch;
         });
@@ -367,20 +372,34 @@ export default function ScalesPage() {
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 
-                {/* Ana Başlık */}
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                     <h1 className="text-4xl font-black text-white flex items-center gap-3"><ScaleIcon className="text-purple-400 h-8 w-8"/> Değerlendirme Ölçekleri</h1>
-                     <Button 
-                         onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
-                         className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20 h-10 px-6 rounded-xl"
-                     >
-                         <PlusCircle className="mr-2 h-4 w-4"/> Yeni Ölçek Oluştur
-                     </Button>
+                {/* Ana Başlık ve Aksiyonlar */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-white/10 pb-4 gap-4">
+                     <div>
+                        <h1 className="text-4xl font-black text-white flex items-center gap-3"><ScaleIcon className="text-purple-400 h-8 w-8"/> Değerlendirme Ölçekleri</h1>
+                        <p className="text-slate-400 text-sm mt-1">Sınıf içi performans takibi ve analiz.</p>
+                     </div>
+                     
+                     <div className="flex gap-3">
+                         {/* YENİ BUTON: Öğrenci Analiz Sayfasına Git */}
+                         <Button asChild variant="secondary" className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/50 shadow-lg shadow-emerald-900/20">
+                             <Link href="/teacher/scales/students">
+                                <Trophy className="mr-2 h-4 w-4"/> Öğrenci Başarı Analizi
+                             </Link>
+                         </Button>
+
+                         <Button 
+                             onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
+                             className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20"
+                         >
+                             <PlusCircle className="mr-2 h-4 w-4"/> Yeni Ölçek Oluştur
+                         </Button>
+                     </div>
                 </div>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Filtre ve Yeni Ölçek Oluşturma */}
+                    {/* SOL SÜTUN: Filtreler ve Analizler */}
                     <div className="lg:col-span-1 space-y-6">
+                        {/* Filtre Kartı */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                             <CardHeader className="pb-4">
                                 <CardTitle className="text-white flex items-center gap-2 text-xl">
@@ -392,7 +411,7 @@ export default function ScalesPage() {
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Sınıf Seçimi</Label>
                                         <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); setSelectedCourseId('') }}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue placeholder="Sınıf Seçin..."/></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                 {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                                             </SelectContent>
@@ -401,7 +420,7 @@ export default function ScalesPage() {
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Şube Seçimi</Label>
                                         <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass}>
-                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue placeholder="Şube Seçin..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
                                                 <SelectItem value="all">Tüm Şubeler</SelectItem>
                                                 {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -412,7 +431,7 @@ export default function ScalesPage() {
                             </CardContent>
                         </Card>
                         
-                        {/* Manuel Ölçek Oluşturma Formu (Accordion) */}
+                        {/* Manuel Ölçek Oluşturma (Accordion) */}
                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                             <Accordion type="single" value={isCreateAccordionOpen ? "create-scale" : ""} onValueChange={(value) => setIsCreateAccordionOpen(value === "create-scale")}>
                                 <AccordionItem value="create-scale" className="border-b-0">
@@ -423,36 +442,40 @@ export default function ScalesPage() {
                                         </div>
                                     </AccordionTrigger>
                                     <AccordionContent className="px-6 pb-6 pt-4 space-y-4">
-                                        {selectedBranch && selectedBranch !== 'all' ? (
-                                            <>
-                                                <div className="space-y-1">
-                                                    <Label className="text-slate-300 text-xs">Ders Seçimi (Ölçeğin İlişkilendirileceği)</Label>
-                                                    <Select onValueChange={setSelectedCourseId} value={selectedCourseId}>
-                                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-10"><SelectValue placeholder="Ders Seçin..."/></SelectTrigger>
-                                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                            {coursesForManualCreation.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                                {selectedCourseId && <CreateScaleForm 
-                                                    onSave={handleCreateScale}
-                                                    isSaving={isSaving}
-                                                    selectedClass={selectedClass}
-                                                    selectedBranch={selectedBranch}
-                                                    selectedCourseId={selectedCourseId}
-                                                />}
-                                            </>
-                                        ) : (
-                                            <p className="text-muted-foreground text-sm text-center p-4">Lütfen önce bir **Sınıf** ve **Şube** seçin.</p>
-                                        )}
+                                            {selectedBranch && selectedBranch !== 'all' ? (
+                                                <>
+                                                    <div className="space-y-1">
+                                                        <Label className="text-slate-300 text-xs">Ders Seçimi (Ölçeğin İlişkilendirileceği)</Label>
+                                                        <Select onValueChange={setSelectedCourseId} value={selectedCourseId}>
+                                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-10"><SelectValue placeholder="Ders Seçin..."/></SelectTrigger>
+                                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                                {coursesForManualCreation.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    {selectedCourseId && <CreateScaleForm 
+                                                        onSave={handleCreateScale}
+                                                        isSaving={isSaving}
+                                                        selectedClass={selectedClass}
+                                                        selectedBranch={selectedBranch}
+                                                        selectedCourseId={selectedCourseId}
+                                                    />}
+                                                </>
+                                            ) : (
+                                                <p className="text-muted-foreground text-sm text-center p-4">Lütfen önce bir **Sınıf** ve **Şube** seçin.</p>
+                                            )}
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>
                         </Card>
-                         <BranchLeaderboardCard branchScores={branchScores} isLoading={isLoadingScores} />
+
+                        {/* Analiz Kartı (Sadece Şube Sıralaması) */}
+                        <div className="space-y-6">
+                            <BranchLeaderboardCard branchScores={branchScores} isLoading={isLoadingScores} />
+                        </div>
                     </div>
 
-                    {/* Sonuç Alanları */}
+                    {/* SAĞ SÜTUN: Sonuçlar (Üniteler ve Manuel Ölçekler) */}
                     <div className="lg:col-span-2 space-y-8">
                         {fetchError && <ErrorWithLink message={fetchError} />}
 
