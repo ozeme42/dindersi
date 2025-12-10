@@ -1,6 +1,6 @@
 
 
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -18,22 +18,27 @@ import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import type { LessonStep } from '@/lib/types';
 import { Checkbox } from './ui/checkbox';
 
-const activityOptions = [
-    { id: 'summary', label: 'Özet (Akordiyon)' },
-    { id: 'learningObjectives', label: 'Öğrenme Hedefleri' },
-    { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar' },
-    { id: 'conceptExplanations', label: 'Kavram Açıklamaları' },
-    { id: 'keyConcepts', label: 'Anahtar Kavramlar (Liste)' },
-    { id: 'flashcards', label: 'Bilgi Kartları' },
-    { id: 'multipleChoiceQuestions', label: 'Çoktan Seçmeli Sorular' },
-    { id: 'trueFalseQuestions', label: 'Doğru/Yanlış Soruları' },
-    { id: 'fillInTheBlankQuestions', label: 'Boşluk Doldurma Soruları' },
-    { id: 'anagramQuestions', label: 'Anagram Soruları' },
-    { id: 'sentenceScrambleQuestions', label: 'Cümle Düzeltme Soruları' },
-    { id: 'visuals', label: 'Görsel/Diyagram (AI ile)' },
-    { id: 'conceptMap', label: 'Kavram Haritası (AI ile)' },
-    { id: 'htmlSlide', label: 'HTML Slayt (AI ile)' },
-] as const;
+const allActivityOptions = {
+    anlatim: [
+        { id: 'summary', label: 'Özet (Akordiyon)' },
+        { id: 'learningObjectives', label: 'Öğrenme Hedefleri' },
+        { id: 'keyTakeaways', label: 'Anahtar Çıkarımlar' },
+        { id: 'conceptExplanations', label: 'Kavram Açıklamaları' },
+        { id: 'keyConcepts', label: 'Anahtar Kavramlar (Liste)' },
+        { id: 'flashcards', label: 'Bilgi Kartları' },
+        { id: 'visuals', label: 'Görsel/Diyagram (AI ile)' },
+        { id: 'conceptMap', label: 'Kavram Haritası (AI ile)' },
+        { id: 'htmlSlide', label: 'HTML Slayt (AI ile)' },
+    ],
+    degerlendirme: [
+        { id: 'multipleChoiceQuestions', label: 'Çoktan Seçmeli Sorular' },
+        { id: 'trueFalseQuestions', label: 'Doğru/Yanlış Soruları' },
+        { id: 'fillInTheBlankQuestions', label: 'Boşluk Doldurma Soruları' },
+        { id: 'anagramQuestions', label: 'Anagram Soruları' },
+        { id: 'sentenceScrambleQuestions', label: 'Cümle Düzeltme Soruları' },
+    ]
+} as const;
+
 
 const formSchema = z.object({
   sourceText: z.string().min(10, 'Kaynak metin en az 10 karakter olmalıdır.'),
@@ -51,6 +56,7 @@ type AiLessonStepGenerationDialogProps = {
     sourceText?: string;
   } | null;
   onStepsGenerated: (steps: LessonStep[]) => void;
+  generationType: 'anlatim' | 'degerlendirme' | null;
 };
 
 export function AiLessonStepGenerationDialog({
@@ -58,6 +64,7 @@ export function AiLessonStepGenerationDialog({
   onOpenChange,
   context,
   onStepsGenerated,
+  generationType,
 }: AiLessonStepGenerationDialogProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
@@ -66,15 +73,26 @@ export function AiLessonStepGenerationDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       sourceText: '',
-      modules: { summary: true, multipleChoiceQuestions: true },
+      modules: {},
     },
   });
   
+  const activityOptions = generationType ? allActivityOptions[generationType] : [];
+
   useEffect(() => {
     if (context && isOpen) {
       form.setValue('sourceText', context.sourceText || context.topicTitle || '');
+      // Set default checked items based on generation type
+      const defaultModules: { [key: string]: boolean } = {};
+      if (generationType === 'anlatim') {
+        defaultModules['summary'] = true;
+        defaultModules['conceptExplanations'] = true;
+      } else if (generationType === 'degerlendirme') {
+        defaultModules['multipleChoiceQuestions'] = true;
+      }
+      form.setValue('modules', defaultModules);
     }
-  }, [context, isOpen, form]);
+  }, [context, isOpen, form, generationType]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!context) {
@@ -89,7 +107,7 @@ export function AiLessonStepGenerationDialog({
     try {
         const inputModules = data.modules as GenerateLessonContentInput['modules'];
         
-        // Handle special AI flows first
+        // Handle special AI flows first if they are selected
         if (inputModules.conceptMap) {
             const mapData = await generateConceptMap({ topicSummary: data.sourceText });
             if (mapData && mapData.nodes && mapData.nodes.length > 0) {
@@ -103,7 +121,6 @@ export function AiLessonStepGenerationDialog({
             }
         }
         
-        // Handle standard content generation
         const standardModules: GenerateLessonContentInput['modules'] = {};
         let needsStandardCall = false;
         for (const key in inputModules) {
@@ -146,7 +163,7 @@ export function AiLessonStepGenerationDialog({
     setTimeout(() => {
         form.reset({
             sourceText: '',
-            modules: { summary: true, multipleChoiceQuestions: true },
+            modules: {},
         });
     }, 300);
   }
@@ -195,26 +212,36 @@ export function AiLessonStepGenerationDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 border-b">
-          <DialogTitle className="flex items-center gap-3 text-2xl">
-            <Sparkles className="text-purple-400"/> AI ile İçerik Üretimi
+      <DialogContent className="sm:max-w-2xl flex flex-col h-auto max-h-[90vh] bg-slate-950 border-white/10 text-slate-100 shadow-2xl p-0 overflow-hidden">
+        <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-slate-900/50">
+          <DialogTitle className="flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-white">
+            <div className="p-2 bg-purple-500/20 rounded-lg border border-purple-500/30">
+                <Sparkles className="h-6 w-6 text-purple-400" />
+            </div>
+            AI ile İçerik Üretimi
           </DialogTitle>
-          <DialogDescription>
-            Yapay zeka desteğiyle ders akışınız için hızlıca çeşitli içerik türleri oluşturun.
+          <DialogDescription className="text-slate-400">
+            {generationType === 'anlatim' ? 'Anlatım odaklı ' : 'Değerlendirme odaklı '}
+            ders adımları oluşturun.
           </DialogDescription>
         </DialogHeader>
         {isGenerating ? (
-            <div className="flex flex-col items-center justify-center flex-1 gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
-                <p className="text-lg text-muted-foreground">İçerikleriniz üretiliyor...</p>
+            <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 text-center p-8">
+                <div className="relative">
+                    <div className="absolute inset-0 bg-purple-500 blur-xl opacity-20 animate-pulse rounded-full"></div>
+                    <Loader2 className="h-16 w-16 animate-spin text-purple-400 relative z-10" />
+                </div>
+                <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Yapay Zeka Çalışıyor</h3>
+                    <p className="text-slate-400">İçerik analiz ediliyor ve adımlar oluşturuluyor...</p>
+                </div>
             </div>
         ) : (
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col flex-1 overflow-hidden">
                  <div className="px-6 py-4 flex-grow overflow-y-auto space-y-6">
-                    <div className="rounded-md border bg-muted/50 p-3">
+                    <div className="rounded-md border bg-slate-800/50 p-3">
                         <p className="text-sm font-semibold">Hedef Konu</p>
-                        <p className="text-sm text-muted-foreground">{context?.topicTitle}</p>
+                        <p className="text-sm text-slate-400">{context?.topicTitle}</p>
                     </div>
 
                     <Controller
@@ -222,8 +249,8 @@ export function AiLessonStepGenerationDialog({
                         control={form.control}
                         render={({ field, fieldState }) => (
                             <div>
-                                <Label htmlFor='sourceText'>Kaynak Metin</Label>
-                                <Textarea id="sourceText" {...field} className="mt-1 min-h-[120px] bg-background" placeholder="Yapay zekanın veri üretmesi için konuyla ilgili bir metin veya anahtar kelimeler girebilirsiniz."/>
+                                <Label htmlFor='contextText'>Kaynak Metin</Label>
+                                <Textarea id="contextText" {...field} className="mt-1 min-h-[120px] bg-slate-900 border-white/10 text-white focus-visible:ring-purple-500 placeholder:text-slate-600 text-sm leading-relaxed" placeholder="Yapay zekanın veri üretmesi için konuyla ilgili bir metin veya anahtar kelimeler girebilirsiniz. Boş bırakırsanız, sadece konu başlığını kullanacaktır."/>
                                 {fieldState.error && <p className="text-sm text-destructive mt-1">{fieldState.error.message}</p>}
                             </div>
                         )}
@@ -237,13 +264,14 @@ export function AiLessonStepGenerationDialog({
                                 <Label>Üretilecek İçerik Türleri</Label>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
                                 {activityOptions.map(item => (
-                                    <div key={item.id} className="flex items-center space-x-2 p-2 rounded-md bg-muted/30">
+                                    <div key={item.id} className="flex items-center space-x-2 p-2 rounded-md bg-muted/50">
                                         <Checkbox
                                             id={item.id}
                                             checked={field.value?.[item.id] || false}
                                             onCheckedChange={(checked) => {
                                                 field.onChange({ ...field.value, [item.id]: checked });
                                             }}
+                                            className="border-white/20 data-[state=checked]:bg-purple-500 data-[state=checked]:border-purple-500"
                                         />
                                         <Label htmlFor={item.id} className="text-xs font-medium leading-none cursor-pointer">
                                             {item.label}
@@ -256,9 +284,9 @@ export function AiLessonStepGenerationDialog({
                         )}
                     />
                  </div>
-                 <DialogFooter className="p-6 border-t bg-muted/20">
-                    <Button type="button" variant="ghost" onClick={handleClose}>İptal</Button>
-                    <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
+                 <DialogFooter className="p-6 border-t border-white/5 bg-slate-900/50">
+                    <Button type="button" variant="ghost" onClick={handleClose} className="text-slate-400 hover:text-white hover:bg-white/5">İptal</Button>
+                    <Button type="submit" className="bg-purple-600 hover:bg-purple-500 text-white font-bold shadow-lg shadow-purple-900/20">
                         <Wand2 className="mr-2 h-4 w-4" /> Üretimi Başlat
                     </Button>
                 </DialogFooter>
@@ -268,4 +296,3 @@ export function AiLessonStepGenerationDialog({
     </Dialog>
   );
 }
-

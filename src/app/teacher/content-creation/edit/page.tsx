@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep } from '@/lib/types';
+import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -27,7 +28,8 @@ import { StepEditorDialog } from '@/components/step-editor-dialog';
 import { LessonPreviewDialog } from '@/components/lesson-preview-dialog';
 import { BulkStepImportDialog } from '@/components/bulk-step-import-dialog';
 import { LibraryImportDialog } from '@/components/library-import-dialog';
-import { type GenerateLessonContentOutput, generateLessonContent } from '@/ai/flows/generate-lesson-content';
+import type { GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
+import { generateLessonContent } from '@/ai/flows/generate-lesson-content';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -159,6 +161,7 @@ function TopicEditor() {
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
+    const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
 
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
         return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
@@ -222,7 +225,7 @@ function TopicEditor() {
             case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
-            case 'conceptMap': newStep = { type, title: defaultTitle, mapData: { nodes: [], edges: [] } }; break;
+            case 'conceptMap': newStep = { type, title: 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
             case 'accordion': newStep = { type, title: 'Akordiyon Başlık', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
@@ -259,7 +262,7 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
@@ -280,12 +283,12 @@ function TopicEditor() {
             }));
              newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: cards });
         } else if (stepType === 'sentenceScramble') {
-            const sentenceItem = importedItems[0] as ActivityItem;
-            newSteps.push({
+             const newSentence = importedItems[0]?.content.text || '';
+             newSteps.push({
                 type: 'sentenceScramble',
                 title: 'Cümle Düzeltme',
-                correctSentence: sentenceItem.content.text || '',
-                scrambledSentence: (sentenceItem.content.text || '').split(' ').sort(() => 0.5 - Math.random()).join(' ')
+                correctSentence: newSentence,
+                scrambledSentence: newSentence.split(' ').sort(() => 0.5 - Math.random()).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
              const concepts = importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
@@ -333,6 +336,11 @@ function TopicEditor() {
         if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
         else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         setIsSaving(false);
+    };
+    
+    const openAIGenerationDialog = (type: 'anlatim' | 'degerlendirme') => {
+        setAiGenerationType(type);
+        setIsAiStepDialogOpen(true);
     };
 
     if (isLoading) {
@@ -410,10 +418,21 @@ function TopicEditor() {
                             <Upload className="mr-2 h-4 w-4"/>
                             Toplu Ekle
                         </Button>
-                         <Button onClick={() => setIsAiStepDialogOpen(true)} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20">
-                            <Sparkles className="mr-2 h-4 w-4"/>
-                            AI ile Üret
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20">
+                                    <Sparkles className="mr-2 h-4 w-4"/> AI ile Üret
+                                </Button>
+                            </DropdownMenuTrigger>
+                             <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
+                                <DropdownMenuItem onClick={() => openAIGenerationDialog('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                    <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => openAIGenerationDialog('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                    <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                         <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
                             Kaydet
@@ -565,11 +584,12 @@ function TopicEditor() {
                     onOpenChange={setIsPreviewOpen}
                     steps={steps}
                 />
-                <AiLessonStepGenerationDialog
+                 <AiLessonStepGenerationDialog
                     isOpen={isAiStepDialogOpen}
                     onOpenChange={setIsAiStepDialogOpen}
                     context={topic ? { topicId: topic.id, topicTitle: topic.title, sourceText: sourceText } : null}
                     onStepsGenerated={handleAddSteps}
+                    generationType={aiGenerationType}
                 />
             </div>
         </div>
