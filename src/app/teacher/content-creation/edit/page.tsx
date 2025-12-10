@@ -27,7 +27,7 @@ import { StepEditorDialog } from '@/components/step-editor-dialog';
 import { LessonPreviewDialog } from '@/components/lesson-preview-dialog';
 import { BulkStepImportDialog } from '@/components/bulk-step-import-dialog';
 import { LibraryImportDialog } from '@/components/library-import-dialog';
-import { type GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
+import { type GenerateLessonContentOutput, generateLessonContent } from '@/ai/flows/generate-lesson-content';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -36,6 +36,8 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from '@dnd-kit/utilities';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { playableActivities } from '@/lib/game-config';
+
 
 type DraggableLessonStep = LessonStep & { id: string };
 
@@ -202,16 +204,7 @@ function TopicEditor() {
 
     const handleAddStep = (type: LessonStep['type'], defaultTitle: string) => {
         let newStep: LessonStep;
-        // ... (Step creation logic remains same) ...
-        // Kısaltma: Buradaki switch-case mantığı önceki kod ile aynı kalacak.
-        // Yer kazanmak için tekrar yazmıyorum, yukarıdaki orijinal koddan alınıp buraya konulmalıdır.
-        // Sadece örnek:
-        newStep = { type: 'content', title: defaultTitle, content: 'İçeriği buraya girin...' }; 
-        if (type === 'mcq') newStep = { type, title: defaultTitle, question: 'Soru?', options: ['A', 'B', 'C', 'D'], correctAnswer: 'A' };
-        // ... Diğer case'ler ...
-        
-        // Gerçek implementasyon için switch case yapısını koruyun.
-        // Hızlı fix için şimdilik sadece dummy:
+
         switch(type) {
             case 'content': newStep = { type, title: defaultTitle, content: 'İçeriği buraya girin...' }; break;
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
@@ -226,7 +219,7 @@ function TopicEditor() {
             case 'anagramFlashcard': newStep = { type, title: defaultTitle, cards: [{ definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' }] }; break;
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
-            case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\n<html lang="tr">\n<head>\n  <title>Başlık</title>\n</head>\n<body>\n  <h1>Merhaba Dünya</h1>\n</body>\n</html>' }; break;
+            case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
             case 'conceptMap': newStep = { type, title: defaultTitle, mapData: { nodes: [], edges: [] } }; break;
@@ -266,29 +259,70 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
     const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
-         // (Orijinal koddaki aynı mantık)
-         let newSteps: LessonStep[] = [];
-         // ... (Logic)
-         if (newSteps.length > 0) {
-            const newStepsWithIds = addIdToSteps(newSteps);
-            setSteps(currentSteps => [...currentSteps, ...newStepsWithIds]);
-         }
+        if (importedItems.length === 0) return;
+        
+        let newSteps: LessonStep[] = [];
+        
+        if (stepType === 'flashcard') {
+            const cards = importedItems.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
+            newSteps.push({ type: 'flashcard', title: 'Veri Bankası Bilgi Kartları', cards: cards });
+        } else if (stepType === 'anagramFlashcard') {
+            const cards = importedItems.map(item => ({
+                definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`,
+                scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
+                correctAnswer: (item as ActivityItem).content.text || ''
+            }));
+             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: cards });
+        } else if (stepType === 'sentenceScramble') {
+            const sentenceItem = importedItems[0] as ActivityItem;
+            newSteps.push({
+                type: 'sentenceScramble',
+                title: 'Cümle Düzeltme',
+                correctSentence: sentenceItem.content.text || '',
+                scrambledSentence: (sentenceItem.content.text || '').split(' ').sort(() => 0.5 - Math.random()).join(' ')
+            });
+        } else if (stepType === 'keyConcepts') {
+             const concepts = importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: `<ul>${concepts}</ul>` });
+        } else if (stepType === 'questions') {
+            importedItems.forEach(item => {
+                const q = item as Question;
+                if (q.type === 'Çoktan Seçmeli') newSteps.push({ type: 'mcq', title: q.text, ...q });
+                else if (q.type === 'Doğru/Yanlış') newSteps.push({ type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' });
+                else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
+            });
+        }
+
+        if (newSteps.length > 0) {
+            handleAddSteps(newSteps);
+        }
     };
     
     const handleSplitStep = (indexToSplit: number) => {
-        // (Orijinal koddaki aynı mantık)
-         const stepToSplit = steps[indexToSplit];
+        const stepToSplit = steps[indexToSplit];
         if (stepToSplit.type !== 'accordion') return;
-        const accordionStep = stepToSplit as any;
-        const newContentSteps: LessonStep[] = accordionStep.items.map((item:any) => ({ type: 'content', title: item.title, content: item.content }));
-        const newStepsWithIds = addIdToSteps(newContentSteps);
-        setSteps(currentSteps => { const newSteps = [...currentSteps]; newSteps.splice(indexToSplit, 1, ...newStepsWithIds); return newSteps; });
+        
+        const accordionStep = stepToSplit as AccordionStep;
+        
+        if (accordionStep.items && accordionStep.items.length > 0) {
+            const newContentSteps: LessonStep[] = accordionStep.items.map(item => ({
+                type: 'content',
+                title: item.title,
+                content: item.content
+            }));
+            const newStepsWithIds = addIdToSteps(newContentSteps);
+            setSteps(currentSteps => {
+                const newSteps = [...currentSteps];
+                newSteps.splice(indexToSplit, 1, ...newStepsWithIds);
+                return newSteps;
+            });
+        }
     };
     
     const handleSave = async () => {
@@ -300,48 +334,6 @@ function TopicEditor() {
         else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         setIsSaving(false);
     };
-    
-    const mapAIOutputToSteps = (output: GenerateLessonContentOutput): LessonStep[] => {
-        const newSteps: LessonStep[] = [];
-        if (output.summary && output.summary.length > 0) {
-            newSteps.push({ type: 'accordion', title: 'Konu Özeti', items: output.summary.map(s => ({ title: s.title, content: `<ul>${s.content}</ul>` })) });
-        }
-        if (output.learningObjectives && output.learningObjectives.length > 0) {
-            newSteps.push({ type: 'objectiveList', title: 'Öğrenme Hedefleri', items: output.learningObjectives });
-        }
-        if (output.keyTakeaways && output.keyTakeaways.length > 0) {
-            newSteps.push({ type: 'content', title: 'Anahtar Çıkarımlar', content: `<ul>${output.keyTakeaways.map(item => `<li>${item}</li>`).join('')}</ul>` });
-        }
-        if (output.conceptExplanations && output.conceptExplanations.length > 0) {
-            newSteps.push({ type: 'conceptExplanation', title: 'Kavram Açıklamaları', items: output.conceptExplanations });
-        }
-        if (output.keyConcepts && output.keyConcepts.length > 0) {
-             newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: `<ul>${output.keyConcepts.map(item => `<li>${item}</li>`).join('')}</ul>` });
-        }
-        if (output.flashcards && output.flashcards.length > 0) {
-            newSteps.push({ type: 'flashcard', title: 'Bilgi Kartları', cards: output.flashcards });
-        }
-        if (output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
-            output.multipleChoiceQuestions.forEach(q => newSteps.push({ type: 'mcq', title: `Kontrol Sorusu`, ...q }));
-        }
-        if (output.trueFalseQuestions && output.trueFalseQuestions.length > 0) {
-            output.trueFalseQuestions.forEach(q => newSteps.push({ type: 'tf', title: 'Doğru/Yanlış', ...q }));
-        }
-        if (output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
-            output.fillInTheBlankQuestions.forEach(q => newSteps.push({ type: 'fitb', title: 'Boşluk Doldurma', ...q }));
-        }
-        if (output.anagramQuestions && output.anagramQuestions.length > 0) {
-            output.anagramQuestions.forEach(q => newSteps.push({ type: 'anagram', title: 'Anagram', ...q }));
-        }
-        if (output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
-            output.sentenceScrambleQuestions.forEach(q => newSteps.push({ type: 'sentenceScramble', title: 'Cümle Düzeltme', ...q }));
-        }
-         if (output.generatedImageDataUri) {
-            newSteps.push({ type: 'visual', title: 'Konu Görseli', imageUrl: output.generatedImageDataUri, prompt: `educational illustration for ${topic?.title}` });
-        }
-        return newSteps;
-    };
-
 
     if (isLoading) {
         return (
