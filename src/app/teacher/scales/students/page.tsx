@@ -16,23 +16,13 @@ import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 // Firebase
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
+import { getStudentAnalysis } from './actions';
 
 // Types
-import type { SchoolClass } from '@/lib/types';
-
-// Öğrenci Veri Tipi
-type StudentData = {
-    id: string;
-    studentNumber: string;
-    name: string;
-    branch: string;
-    classId: string;
-    average: number;
-    completedScales: number;
-};
+import type { SchoolClass, StudentAnalysisData } from './actions';
 
 export default function StudentAnalysisPage() {
     // State
@@ -41,16 +31,10 @@ export default function StudentAnalysisPage() {
     const [selectedBranch, setSelectedBranch] = useState<string>('');
     const [searchTerm, setSearchTerm] = useState('');
     
-    const [students, setStudents] = useState<StudentData[]>([]);
+    const [students, setStudents] = useState<StudentAnalysisData[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isPageLoading, setIsPageLoading] = useState(true);
-    const [debugLog, setDebugLog] = useState<string[]>([]); // Hata ayıklama için
-
-    // Loglama yardımcısı
-    const addLog = (msg: string) => {
-        console.log(`[Analiz]: ${msg}`);
-        // İsterseniz ekranda göstermek için: setDebugLog(prev => [...prev, msg]); 
-    };
+    const [error, setError] = useState<string | null>(null);
 
     // 1. Sayfa Yüklendiğinde Sınıfları Çek
     useEffect(() => {
@@ -77,100 +61,24 @@ export default function StudentAnalysisPage() {
             }
 
             setIsLoading(true);
-            addLog(`Veri çekiliyor... SınıfID: ${selectedClassId}, Şube: ${selectedBranch}`);
-
-            try {
-                // A) ÖĞRENCİLERİ ÇEK
-                // NOT: İndeks hatası almamak için 'branch' filtresini client tarafında yapıyoruz.
-                const studentsRef = collection(db, 'users');
-                const q = query(
-                    studentsRef, 
-                    where('role', '==', 'student'),
-                    where('classId', '==', selectedClassId)
-                );
-
-                const studentsSnap = await getDocs(q);
-                addLog(`Firestore'dan gelen ham öğrenci sayısı: ${studentsSnap.size}`);
-
-                if (studentsSnap.empty) {
-                    addLog("UYARI: Bu sınıf ID'sine sahip 'student' rolünde kullanıcı bulunamadı.");
-                }
-
-                // B) NOTLARI ÇEK
-                // NOT: Koleksiyon isminiz 'scale_entries' değilse burayı değiştirin!
-                // Örneğin: 'evaluations', 'student_scores' vb.
-                const SCORES_COLLECTION_NAME = 'scale_entries'; 
-                
-                const scoresRef = collection(db, SCORES_COLLECTION_NAME);
-                // Sadece bu sınıfa ait notları çekmeye çalışıyoruz
-                // Eğer scale_entries içinde 'classId' alanı yoksa bu sorgu boş döner.
-                // Güvenli olsun diye sadece scale_entries'i çekip client'ta filtreleyelim (veri az ise)
-                // Veya classId olduğunu varsayalım:
-                const scoresQuery = query(scoresRef, where('classId', '==', selectedClassId));
-                const scoresSnap = await getDocs(scoresQuery);
-                
-                addLog(`Firestore'dan gelen ham not sayısı (${SCORES_COLLECTION_NAME}): ${scoresSnap.size}`);
-                const allScores = scoresSnap.docs.map(doc => doc.data());
-
-                // C) VERİLERİ İŞLE VE BİRLEŞTİR
-                let studentList: StudentData[] = [];
-
-                studentsSnap.forEach(doc => {
-                    const data = doc.data();
-                    
-                    // Şube Filtrelemesi (Client Side)
-                    // Eğer 'all' değilse ve öğrencinin şubesi eşleşmiyorsa atla
-                    if (selectedBranch !== 'all' && data.branch !== selectedBranch) {
-                        return;
-                    }
-
-                    // Bu öğrenciye ait notları bul (studentId ile eşleştir)
-                    // Not: scale_entries içinde öğrenci ID'si 'studentId' olarak mı saklanıyor 'userId' olarak mı?
-                    const studentScores = allScores.filter((s: any) => s.studentId === doc.id || s.userId === doc.id);
-                    
-                    // Ortalamayı hesapla
-                    let average = 0;
-                    if (studentScores.length > 0) {
-                        // score alanı string ise sayıya çevir
-                        const totalScore = studentScores.reduce((sum: number, curr: any) => {
-                            // Eğer checklist ise puan 0-100 arasıdır, tally ise farklı olabilir.
-                            // Varsayım: score alanı 0-100 arası bir sayı.
-                            const val = Number(curr.score);
-                            return sum + (isNaN(val) ? 0 : val);
-                        }, 0);
-                        average = Math.round(totalScore / studentScores.length);
-                    }
-
-                    studentList.push({
-                        id: doc.id,
-                        studentNumber: data.studentNumber || 'No Yok',
-                        name: data.name || 'İsimsiz',
-                        branch: data.branch || '?',
-                        classId: data.classId,
-                        average: average,
-                        completedScales: studentScores.length
-                    });
-                });
-
-                addLog(`İşlenmiş ve filtrelenmiş öğrenci sayısı: ${studentList.length}`);
-                
+            setError(null);
+            
+            const result = await getStudentAnalysis(selectedClassId, selectedBranch);
+            
+            if (result.success && result.data) {
                 // Puana göre sırala
-                setStudents(studentList.sort((a, b) => b.average - a.average));
-
-            } catch (error: any) {
-                console.error("Veri hatası:", error);
-                addLog(`HATA OLUŞTU: ${error.message}`);
-                
-                // Eğer hata "Missing or insufficient permissions" veya "Index" ise
-                if (error.message.includes("index")) {
-                    addLog("LÜTFEN KONSOLDAKİ LİNKE TIKLAYARAK INDEKS OLUŞTURUN.");
-                }
-            } finally {
-                setIsLoading(false);
+                const sortedStudents = result.data.sort((a, b) => b.average - a.average);
+                setStudents(sortedStudents);
+            } else {
+                setError(result.error || "Öğrenci verileri alınamadı.");
+                setStudents([]);
             }
+            setIsLoading(false);
         };
 
-        fetchStudentsAndScores();
+        if (selectedClassId && selectedBranch) {
+            fetchStudentsAndScores();
+        }
     }, [selectedClassId, selectedBranch]);
 
     const selectedClass = useMemo(() => allClasses.find(c => c.id === selectedClassId), [allClasses, selectedClassId]);
@@ -179,7 +87,7 @@ export default function StudentAnalysisPage() {
     const filteredStudents = useMemo(() => {
         return students.filter(s => 
             s.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            s.studentNumber.includes(searchTerm)
+            (s.studentNumber && s.studentNumber.includes(searchTerm))
         );
     }, [students, searchTerm]);
 
@@ -257,20 +165,13 @@ export default function StudentAnalysisPage() {
                         </div>
                     </CardContent>
                 </Card>
-
-                {/* Bilgilendirme / Hata Mesajı Alanı */}
-                {selectedClassId && selectedBranch && students.length === 0 && !isLoading && (
+                
+                {/* Hata Mesajı */}
+                {error && (
                     <Alert className="bg-orange-500/10 border-orange-500/20 text-orange-200">
                         <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Öğrenci Bulunamadı</AlertTitle>
-                        <AlertDescription>
-                            Seçilen kriterlere uygun öğrenci bulunamadı. Lütfen şunları kontrol edin:
-                            <ul className="list-disc list-inside mt-2 text-xs opacity-80">
-                                <li>'users' koleksiyonunda bu sınıf ID'sine ({selectedClassId}) sahip kullanıcı var mı?</li>
-                                <li>Kullanıcıların 'role' alanı 'student' olarak ayarlı mı?</li>
-                                <li>Kullanıcıların 'branch' alanı '{selectedBranch}' ile eşleşiyor mu?</li>
-                            </ul>
-                        </AlertDescription>
+                        <AlertTitle>Veri Yüklenemedi</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
                     </Alert>
                 )}
 
@@ -288,7 +189,7 @@ export default function StudentAnalysisPage() {
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center h-64 text-slate-500">
                                 <Loader2 className="h-10 w-10 animate-spin text-emerald-500 mb-3" />
-                                <p>Veriler veritabanından çekiliyor...</p>
+                                <p>Veriler işleniyor...</p>
                             </div>
                         ) : selectedClassId && selectedBranch ? (
                             filteredStudents.length > 0 ? (
@@ -350,7 +251,13 @@ export default function StudentAnalysisPage() {
                                         </TableBody>
                                     </Table>
                                 </div>
-                            ) : null // Öğrenci yoksa yukarıdaki Alert gösterilir
+                            ) : (
+                                 <div className="flex flex-col items-center justify-center h-64 text-slate-500">
+                                     <User className="h-12 w-12 mb-4 opacity-50 text-slate-600" />
+                                     <h3 className="text-lg font-bold text-slate-400">Öğrenci Bulunamadı</h3>
+                                     <p className="text-sm">Seçilen kriterlere uygun öğrenci yok.</p>
+                                 </div>
+                            )
                         ) : (
                             <div className="flex flex-col items-center justify-center h-64 text-slate-500">
                                 <Search className="h-12 w-12 mb-4 opacity-50 text-slate-600" />
