@@ -12,7 +12,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateLessonContentInputSchema = z.object({
   topicSummary: z
@@ -184,4 +184,10 @@ ${requestedInstructions}
       }
       
       if(generatedModules.length > 0) {
-        output.progress = `Generated content for: ${generatedModules.map(m => m.replace(/([A-Z])/g, ' $1').trim()).join(', ')}.
+        output.progress = `Generated content for: ${generatedModules.map(m => m.replace(/([A-Z])/g, ' $1').trim()).join(', ')}.`;
+      }
+    }
+    
+    return output;
+  }
+);
