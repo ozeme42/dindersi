@@ -7,6 +7,29 @@ export const QUESTION_TYPES = [
 
 export const DIFFICULTY_LEVELS = ['Kolay', 'Orta', 'Zor'] as const;
 
+export const playableActivities = [
+  { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?' },
+  { href: '/oyunlar/yazi-tura', label: 'Yazı Tura' },
+  { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması' },
+  { href: '/oyunlar/kelime-avi', label: 'Kelime Avı' },
+  { href: '/oyunlar/kutu-ac', label: 'Kutu Aç' },
+  { href: '/oyunlar/kavram-avi', label: 'Kavram Avı' },
+  { href: '/oyunlar/eslestirme', label: 'Eşleştirme' },
+  { href: '/oyunlar/cumle-olusturma', label: 'Cümle Ustası' },
+  { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca' },
+  { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları' },
+  { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur' },
+  { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım' },
+  { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri' },
+  { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu' },
+  { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi' },
+  { href: '/oyunlar/labirent', label: 'Labirent' },
+  { href: '/oyunlar/soru-coz', label: 'Soru Çöz' },
+  { href: '/oyunlar/tornado', label: 'Tornado' },
+  { href: '/oyunlar/dogru-yol-kosucusu', label: 'Doğru Yol Koşucusu' },
+  { href: '/oyunlar/balon-avcisi', label: 'Balon Avcısı' },
+];
+
 const DEFAULT_POINTS = {
     mcq: { Kolay: 10, Orta: 15, Zor: 20 },
     tf: { Kolay: 5, Orta: 10, Zor: 15 },
