@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -225,7 +224,7 @@ function TopicEditor() {
             case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
-            case 'conceptMap': newStep = { type, title: 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
+            case 'conceptMap': newStep = { type, 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
             case 'accordion': newStep = { type, title: 'Akordiyon Başlık', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
@@ -262,7 +261,7 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
@@ -603,3 +602,5 @@ export default function TopicEditorPage() {
         </Suspense>
     )
 }
+
+    
