@@ -76,7 +76,7 @@ const generateActivityDataFlow = ai.defineFlow(
     
     const {output} = await ai.generate({
         prompt: prompt,
-        model: googleAI.model('gemini-2.5-flash'),
+        model: googleAI.model('gemini-pro'),
         config: {
             responseModalities: ['TEXT'],
         },

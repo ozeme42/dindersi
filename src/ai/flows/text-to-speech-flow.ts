@@ -49,14 +49,11 @@ export const textToSpeechFlow = ai.defineFlow(
   async ({ text }) => {
     try {
       const { output: media } = await ai.generate({
-        model: googleAI.model('gemini-2.5-flash'),
+        model: googleAI.model('gemini-pro-tts'),
         prompt: text,
         config: {
           responseModalities: ['AUDIO'],
         },
-        output: {
-            media: true
-        }
       });
 
       if (!media) {
