@@ -87,19 +87,7 @@ const moduleInstructions = {
     sentenceScrambleQuestions: `- sentenceScrambleQuestions: Generate scrambled sentences. For each, provide the 'scrambledSentence' and the 'correctSentence'. This should be an array of objects.`,
 };
 
-const generateLessonContentPrompt = ai.definePrompt({
-  name: 'generateLessonContentPrompt',
-  model: googleAI.model('gemini-2.5-flash'),
-  input: {
-    schema: z.object({
-      topicSummary: z.string(),
-      requestedInstructions: z.string(),
-    }),
-  },
-  output: {
-    schema: GenerateLessonContentOutputSchema,
-  },
-  prompt: `You are an expert Turkish educational content creator.
+const promptTemplate = `You are an expert Turkish educational content creator.
 Your task is to generate a valid JSON object based on the provided topic summary and the requested modules.
 All generated content MUST be in Turkish.
 The JSON object you generate MUST ONLY contain keys for the modules listed in the "REQUESTED MODULES" section.
@@ -111,12 +99,7 @@ TOPIC SUMMARY:
 
 REQUESTED MODULES AND THEIR FORMATS:
 {{{requestedInstructions}}}
-`,
-  config: {
-    responseModalities: ['TEXT'],
-  }
-});
-
+`;
 
 const generateLessonContentFlow = ai.defineFlow(
   {
@@ -133,9 +116,19 @@ const generateLessonContentFlow = ai.defineFlow(
       .join('\n');
 
     if (requestedInstructions) {
-      const { output: textOutput } = await generateLessonContentPrompt({
-        topicSummary: input.topicSummary,
-        requestedInstructions: requestedInstructions,
+      const prompt = promptTemplate
+        .replace('{{{topicSummary}}}', input.topicSummary)
+        .replace('{{{requestedInstructions}}}', requestedInstructions);
+
+      const { output: textOutput } = await ai.generate({
+        model: googleAI.model('gemini-2.5-flash'),
+        prompt: prompt,
+        output: {
+          schema: GenerateLessonContentOutputSchema,
+        },
+        config: {
+          responseModalities: ['TEXT'],
+        }
       });
 
       if (textOutput) {
@@ -170,5 +163,3 @@ const generateLessonContentFlow = ai.defineFlow(
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
   return generateLessonContentFlow(input);
 }
-
-    
