@@ -48,15 +48,15 @@ export const textToSpeechFlow = ai.defineFlow(
   },
   async ({ text }) => {
     try {
-      const { output: media } = await ai.generate({
-        model: googleAI.model('gemini-pro-tts'),
+      const { media } = await ai.generate({
+        model: googleAI.model('gemini-2.5-flash-tts'),
         prompt: text,
         config: {
           responseModalities: ['AUDIO'],
         },
       });
 
-      if (!media) {
+      if (!media?.url) {
         throw new Error('Yapay zeka ses verisi döndürmedi.');
       }
       

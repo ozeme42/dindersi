@@ -1,32 +1,24 @@
 
 'use server';
 
-/**
- * @fileOverview AI-assisted lesson content generation tool.
- */
-
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 
 const GenerateLessonContentInputSchema = z.object({
-  topicSummary: z
-    .string()
-    .describe('A summary of the topic for which to generate lesson content.'),
-  modules: z.object({
-    summary: z.boolean().optional().describe('Generate a summary of the topic?'),
-    learningObjectives: z.boolean().optional().describe('Generate learning objectives for the topic?'),
-    keyTakeaways: z.boolean().optional().describe('Generate key takeaways for the topic?'),
-    conceptExplanations: z.boolean().optional().describe('Generate concept explanations?'),
-    keyConcepts: z.boolean().optional().describe('Generate a list of key concepts?'),
-    flashcards: z.boolean().optional().describe('Generate flashcards?'),
-    multipleChoiceQuestions: z.boolean().optional().describe('Generate multiple choice questions?'),
-    trueFalseQuestions: z.boolean().optional().describe('Generate true/false questions?'),
-    fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
-    anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
-    sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
-    visuals: z.boolean().optional().describe('Generate a main visual for the lesson?'),
-  }).describe('Which content modules to generate.'),
+  topicSummary: z.string().describe('A summary of the topic for which to generate lesson content.'),
+  summary: z.boolean().optional().describe('Generate a summary of the topic?'),
+  learningObjectives: z.boolean().optional().describe('Generate learning objectives for the topic?'),
+  keyTakeaways: z.boolean().optional().describe('Generate key takeaways for the topic?'),
+  conceptExplanations: z.boolean().optional().describe('Generate concept explanations?'),
+  keyConcepts: z.boolean().optional().describe('Generate a list of key concepts?'),
+  flashcards: z.boolean().optional().describe('Generate flashcards?'),
+  multipleChoiceQuestions: z.boolean().optional().describe('Generate multiple choice questions?'),
+  trueFalseQuestions: z.boolean().optional().describe('Generate true/false questions?'),
+  fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
+  anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
+  sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
+  visuals: z.boolean().optional().describe('Generate a main visual for the lesson?'),
 });
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
 
@@ -73,9 +65,6 @@ const GenerateLessonContentOutputSchema = z.object({
 });
 export type GenerateLessonContentOutput = z.infer<typeof GenerateLessonContentOutputSchema>;
 
-export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
-  return generateLessonContentFlow(input);
-}
 
 const moduleInstructions = {
     summary: `- summary: Generate a summary of the topic as an array of objects. Each object must have a "title" (a short, concise heading for a summary point) and a "content" (a detailed explanation for that point. The content should be broken down into several short, easy-to-understand sentences, formatted as a list of <li> items). Generate 3-5 summary points.`,
@@ -91,6 +80,9 @@ const moduleInstructions = {
     sentenceScrambleQuestions: `- sentenceScrambleQuestions: Generate scrambled sentences. For each, provide the 'scrambledSentence' and the 'correctSentence'. This should be an array of objects.`,
 };
 
+export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
+  return generateLessonContentFlow(input);
+}
 
 const generateLessonContentFlow = ai.defineFlow(
   {
@@ -101,11 +93,14 @@ const generateLessonContentFlow = ai.defineFlow(
   async (input) => {
     
     let output: GenerateLessonContentOutput = {};
-    
-    const requestedInstructions = Object.entries(input.modules)
-      .filter(([, value]) => value)
-      .filter(([key]) => key in moduleInstructions && key !== 'visuals') // Exclude visuals from text prompt
-      .map(([key]) => moduleInstructions[key as keyof typeof moduleInstructions])
+
+    const requestedModuleKeys = Object.entries(input)
+        .filter(([, value]) => value === true)
+        .map(([key]) => key);
+
+    const requestedInstructions = requestedModuleKeys
+      .filter(key => key in moduleInstructions && key !== 'visuals')
+      .map(key => moduleInstructions[key as keyof typeof moduleInstructions])
       .join('\n');
 
     if (requestedInstructions) {
@@ -124,7 +119,7 @@ ${requestedInstructions}
 `;
         
         const { output: textOutput } = await ai.generate({
-            model: googleAI.model('gemini-pro'),
+            model: googleAI.model('gemini-2.5-flash'),
             prompt: prompt,
             config: { responseModalities: ['TEXT'] },
             output: {
@@ -137,7 +132,7 @@ ${requestedInstructions}
         }
     }
     
-    if (input.modules.visuals) {
+    if (input.visuals) {
       try {
         const { media } = await ai.generate({
             model: googleAI.model('imagen-4.0-fast-generate-001'),
@@ -148,21 +143,20 @@ ${requestedInstructions}
         }
       } catch (err) {
           console.error("Image generation failed but the flow will continue:", err);
-          // Don't throw an error, just log it. The flow can continue with text content.
       }
     }
         
     if (Object.keys(output).length > 0) {
-      const generatedModules: string[] = [];
-      
-      for (const key in input.modules) {
-        if (Object.prototype.hasOwnProperty.call(input.modules, key)) {
-          const moduleKey = key as keyof typeof input.modules;
-          if (input.modules[moduleKey] && output[moduleKey as keyof typeof output] && (Array.isArray(output[moduleKey as keyof typeof output]) ? (output[moduleKey as keyof typeof output] as any[]).length > 0 : true)) {
-            generatedModules.push(key);
+      const generatedModules = requestedModuleKeys.filter(key => {
+        const outputKey = key as keyof typeof output;
+        if (output[outputKey]) {
+          if (Array.isArray(output[outputKey])) {
+            return (output[outputKey] as any[]).length > 0;
           }
+          return true;
         }
-      }
+        return false;
+      });
 
       if (output.generatedImageDataUri && !generatedModules.includes('visuals')) {
           generatedModules.push('visuals');
