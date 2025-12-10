@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -156,7 +157,6 @@ function TopicEditor() {
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
-    const [aiModuleToGenerate, setAiModuleToGenerate] = useState<keyof GenerateLessonContentInput['modules'] | 'conceptMap' | 'htmlSlide' | null>(null);
 
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
         return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
@@ -266,10 +266,7 @@ function TopicEditor() {
         });
     };
     
-    // ... (handleOpenLibrary, handleItemsImportedFromLibrary, handleSplitStep, handleSave, mapAIOutputToSteps mantıkları aynı) ...
-    // Hepsini buraya kopyalamak çok uzun sürecek, sadece görsel olarak düzeltilmesi gereken UI kısmına odaklanıyorum.
-    // Fonksiyonlar değişmedi.
-     const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
@@ -305,27 +302,46 @@ function TopicEditor() {
     };
     
     const mapAIOutputToSteps = (output: GenerateLessonContentOutput): LessonStep[] => {
-         // (Orijinal koddaki aynı mantık)
-         return [];
+        const newSteps: LessonStep[] = [];
+        if (output.summary && output.summary.length > 0) {
+            newSteps.push({ type: 'accordion', title: 'Konu Özeti', items: output.summary.map(s => ({ title: s.title, content: `<ul>${s.content}</ul>` })) });
+        }
+        if (output.learningObjectives && output.learningObjectives.length > 0) {
+            newSteps.push({ type: 'objectiveList', title: 'Öğrenme Hedefleri', items: output.learningObjectives });
+        }
+        if (output.keyTakeaways && output.keyTakeaways.length > 0) {
+            newSteps.push({ type: 'content', title: 'Anahtar Çıkarımlar', content: `<ul>${output.keyTakeaways.map(item => `<li>${item}</li>`).join('')}</ul>` });
+        }
+        if (output.conceptExplanations && output.conceptExplanations.length > 0) {
+            newSteps.push({ type: 'conceptExplanation', title: 'Kavram Açıklamaları', items: output.conceptExplanations });
+        }
+        if (output.keyConcepts && output.keyConcepts.length > 0) {
+             newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: `<ul>${output.keyConcepts.map(item => `<li>${item}</li>`).join('')}</ul>` });
+        }
+        if (output.flashcards && output.flashcards.length > 0) {
+            newSteps.push({ type: 'flashcard', title: 'Bilgi Kartları', cards: output.flashcards });
+        }
+        if (output.multipleChoiceQuestions && output.multipleChoiceQuestions.length > 0) {
+            output.multipleChoiceQuestions.forEach(q => newSteps.push({ type: 'mcq', title: `Kontrol Sorusu`, ...q }));
+        }
+        if (output.trueFalseQuestions && output.trueFalseQuestions.length > 0) {
+            output.trueFalseQuestions.forEach(q => newSteps.push({ type: 'tf', title: 'Doğru/Yanlış', ...q }));
+        }
+        if (output.fillInTheBlankQuestions && output.fillInTheBlankQuestions.length > 0) {
+            output.fillInTheBlankQuestions.forEach(q => newSteps.push({ type: 'fitb', title: 'Boşluk Doldurma', ...q }));
+        }
+        if (output.anagramQuestions && output.anagramQuestions.length > 0) {
+            output.anagramQuestions.forEach(q => newSteps.push({ type: 'anagram', title: 'Anagram', ...q }));
+        }
+        if (output.sentenceScrambleQuestions && output.sentenceScrambleQuestions.length > 0) {
+            output.sentenceScrambleQuestions.forEach(q => newSteps.push({ type: 'sentenceScramble', title: 'Cümle Düzeltme', ...q }));
+        }
+         if (output.generatedImageDataUri) {
+            newSteps.push({ type: 'visual', title: 'Konu Görseli', imageUrl: output.generatedImageDataUri, prompt: `educational illustration for ${topic?.title}` });
+        }
+        return newSteps;
     };
 
-    const handleGenerateStep = (moduleId: keyof GenerateLessonContentInput['modules']) => {
-        if (!topic) return;
-        setAiModuleToGenerate(moduleId);
-        setIsAiStepDialogOpen(true);
-    };
-    
-    const handleGenerateConceptMap = () => {
-        if (!topic) return;
-        setAiModuleToGenerate('conceptMap');
-        setIsAiStepDialogOpen(true);
-    };
-    
-    const handleGenerateHtmlSlide = () => {
-        if (!topic) return;
-        setAiModuleToGenerate('htmlSlide');
-        setIsAiStepDialogOpen(true);
-    };
 
     if (isLoading) {
         return (
@@ -364,38 +380,6 @@ function TopicEditor() {
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
-    
-    const aiGenerationOptions = [
-        { label: 'Özet (Akordiyon)', moduleId: 'summary' },
-        { label: 'Öğrenme Hedefleri', moduleId: 'learningObjectives' },
-        { label: 'Öğrendiklerimiz (Liste)', moduleId: 'keyTakeaways' },
-        { label: 'Kavram Açıklamaları', moduleId: 'conceptExplanations' },
-        { label: 'Anahtar Kavramlar', moduleId: 'keyConcepts' },
-        { label: 'Bilgi Kartları', moduleId: 'flashcards' },
-        { label: 'AI ile Görsel Oluştur', moduleId: 'visuals' },
-      ] as const;
-
-    const aiAssessmentOptions = [
-        { label: 'Çoktan Seçmeli Sorular', moduleId: 'multipleChoiceQuestions' },
-        { label: 'Doğru/Yanlış Soruları', moduleId: 'trueFalseQuestions' },
-        { label: 'Boşluk Doldurma Soruları', moduleId: 'fillInTheBlankQuestions' },
-        { label: 'Anagram Soruları (Kart Formatında)', moduleId: 'anagramQuestions' },
-        { label: 'Cümle Düzeltme Soruları', moduleId: 'sentenceScrambleQuestions' },
-    ] as const;
-
-    const playableActivities = [
-      { href: 'bil-bakalim', label: 'Bil Bakalım', icon: Lightbulb },
-      { href: 'eslestirme', label: 'Eşleştirme', icon: Puzzle },
-      { href: 'hafiza-kartlari', label: 'Hafıza Kartları', icon: Layers },
-      { href: 'adam-asmaca', label: 'Adam Asmaca', icon: Skull },
-      { href: 'kavram-avi', label: 'Kavram Avı', icon: Crosshair },
-      { href: 'kelime-avi', label: 'Kelime Avı', icon: Search },
-      { href: 'hedefi-vur', label: 'Hedefi Vur', icon: MousePointerClick },
-      { href: 'cumle-olusturma', label: 'Cümle Oluşturma', icon: Shuffle },
-      { href: 'kategorilere-ayir', label: 'Kategorize Et', icon: FolderKanban },
-      { href: 'milyoner-yarismasi', label: 'Milyoner', icon: Trophy },
-      { href: 'soru-coz', label: 'Soru Çöz', icon: BrainCircuit },
-    ] as const;
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -410,7 +394,7 @@ function TopicEditor() {
             <div className="max-w-7xl mx-auto relative z-10 space-y-6">
                 
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 border-b border-white/5 pb-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-white/5 pb-6">
                     <div>
                         <Button asChild variant="ghost" size="sm" className="mb-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
                             <Link href="/teacher/content-creation">
@@ -434,44 +418,10 @@ function TopicEditor() {
                             <Upload className="mr-2 h-4 w-4"/>
                             Toplu Ekle
                         </Button>
-                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20">
-                                    <Sparkles className="mr-2 h-4 w-4"/>
-                                    AI ile Üret
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
-                                <DropdownMenuSub>
-                                    <DropdownMenuSubTrigger className="focus:bg-white/10 focus:text-white cursor-pointer">Anlatım</DropdownMenuSubTrigger>
-                                    <DropdownMenuSubContent className="bg-slate-900 border-white/10 text-white">
-                                        {aiGenerationOptions.map(opt => (
-                                            <DropdownMenuItem key={opt.moduleId} onClick={() => handleGenerateStep(opt.moduleId as any)} className="focus:bg-white/10 focus:text-white cursor-pointer">{opt.label}</DropdownMenuItem>
-                                        ))}
-                                        <DropdownMenuItem onClick={handleGenerateHtmlSlide} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                            <LayoutTemplate className="mr-2 h-4 w-4"/> AI ile Slayt Sayfası
-                                        </DropdownMenuItem>
-                                    </DropdownMenuSubContent>
-                                </DropdownMenuSub>
-                                <DropdownMenuSub>
-                                    <DropdownMenuSubTrigger className="focus:bg-white/10 focus:text-white cursor-pointer">Değerlendirme</DropdownMenuSubTrigger>
-                                    <DropdownMenuSubContent className="bg-slate-900 border-white/10 text-white">
-                                         {aiAssessmentOptions.map(opt => {
-                                            const moduleId = opt.moduleId === 'anagramFlashcard' ? 'anagramQuestions' : opt.moduleId;
-                                            return (
-                                                <DropdownMenuItem key={opt.moduleId} onClick={() => handleGenerateStep(moduleId as any)} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                                    {opt.label}
-                                                </DropdownMenuItem>
-                                            );
-                                        })}
-                                    </DropdownMenuSubContent>
-                                </DropdownMenuSub>
-                                <DropdownMenuSeparator className="bg-white/10" />
-                                <DropdownMenuItem onClick={() => handleGenerateConceptMap()} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                    <BrainCircuit className="mr-2 h-4 w-4"/> Kavram Haritası
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                         <Button onClick={() => setIsAiStepDialogOpen(true)} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20">
+                            <Sparkles className="mr-2 h-4 w-4"/>
+                            AI ile Üret
+                        </Button>
                         <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
                             Kaydet
@@ -627,9 +577,7 @@ function TopicEditor() {
                     isOpen={isAiStepDialogOpen}
                     onOpenChange={setIsAiStepDialogOpen}
                     context={topic ? { topicId: topic.id, topicTitle: topic.title, sourceText: sourceText } : null}
-                    moduleToGenerate={aiModuleToGenerate}
                     onStepsGenerated={handleAddSteps}
-                    mapAIOutputToSteps={mapAIOutputToSteps}
                 />
             </div>
         </div>
