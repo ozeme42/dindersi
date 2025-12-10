@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -22,7 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generateActivityData } from '@/ai/flows/generate-activity-data-flow';
 import type { AiActivityDataOutput } from '@/ai/flows/generate-activity-data-flow';
 import { saveGeneratedActivityItems } from '@/app/teacher/activity-data/actions';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardHeader } from './ui/card';
 import { Textarea } from './ui/textarea';
 import { Input } from './ui/input';
 import { cn } from '@/lib/utils';
