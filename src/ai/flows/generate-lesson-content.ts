@@ -154,8 +154,11 @@ ${requestedInstructions}
     if (input.modules.visuals) {
       try {
         const { media } = await ai.generate({
-            model: googleAI.model('imagen-4.0-fast-generate-001'),
+            model: googleAI.model('gemini-2.5-flash'),
             prompt: `Generate an educational and visually appealing image or diagram that illustrates the concept of '${input.topicSummary}'. The style should be simple, clean, and suitable for a classroom setting. Avoid text unless it is essential for the diagram.`,
+            config: {
+                responseModalities: ['TEXT', 'IMAGE'],
+            },
         });
         if (media?.url) {
             output.generatedImageDataUri = media.url;
