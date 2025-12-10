@@ -139,7 +139,7 @@ ${requestedInstructions}
 `;
         
         const { output: textOutput } = await ai.generate({
-            model: googleAI.model('gemini-1.5-flash-preview'),
+            model: googleAI.model('gemini-2.5-flash'),
             prompt: prompt,
             output: {
                 schema: GenerateLessonContentOutputSchema,
@@ -184,10 +184,4 @@ ${requestedInstructions}
       }
       
       if(generatedModules.length > 0) {
-        output.progress = `Generated content for: ${generatedModules.map(m => m.replace(/([A-Z])/g, ' $1').trim()).join(', ')}.`;
-      }
-    }
-
-    return output;
-  }
-);
+        output.progress = `Generated content for: ${generatedModules.map(m => m.replace(/([A-Z])/g, ' $1').trim()).join(', ')}.
