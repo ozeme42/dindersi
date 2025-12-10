@@ -1,29 +1,26 @@
-
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import { 
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, Home, User
+    Loader2, Home, User, ArrowRight
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, onSnapshot, query, where, orderBy, getDoc } from "firebase/firestore";
-import type { Course, UserProfile, SchoolClass, Topic, Unit, QuestionBankStats, Assignment } from "@/lib/types";
+import { collection, getDocs, doc, query, where, orderBy, getDoc } from "firebase/firestore";
+import type { Course, UserProfile, SchoolClass, QuestionBankStats } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
@@ -46,51 +43,107 @@ function HardestWorkersToday() {
     };
 
     return (
-        <Card className="bg-gradient-to-b from-slate-800/50 to-slate-900/50 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-            <div className="p-4 border-b border-white/10 flex items-center gap-2">
-                <Trophy className="h-6 w-6 text-amber-400" />
-                <h3 className="font-bold text-white text-lg">Günün Efsaneleri</h3>
+        <Card className="bg-gradient-to-b from-slate-900/80 to-slate-950/80 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+            <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-white/5">
+                <div className="p-2 bg-amber-500/20 rounded-lg border border-amber-500/30">
+                     <Trophy className="h-5 w-5 text-amber-400" />
+                </div>
+                <h3 className="font-bold text-white text-lg tracking-wide uppercase">Günün Efsaneleri</h3>
             </div>
-            <div className="p-2">
+            <div className="p-4">
                 {isLoading ? (
-                    <div className="space-y-2 p-2">
-                        <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
-                        <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
-                        <Skeleton className="h-12 w-full rounded-xl bg-white/10" />
+                    <div className="space-y-3">
+                        {[1, 2, 3].map((i) => (
+                            <Skeleton key={i} className="h-14 w-full rounded-xl bg-white/5" />
+                        ))}
                     </div>
                 ) : dailyTop.length > 0 ? (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         {dailyTop.map((student, index) => (
-                            <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
-                                <div className="flex items-center gap-3">
-                                    <div className="h-8 w-8 flex items-center justify-center bg-black/20 rounded-lg">
+                            <div key={student.uid} className="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors border border-white/5 group">
+                                <div className="flex items-center gap-4">
+                                    <div className="h-10 w-10 flex items-center justify-center bg-black/40 rounded-lg border border-white/10 group-hover:border-amber-500/30 transition-colors">
                                         {rankIcons[index]}
                                     </div>
-                                    <UserAvatar user={student} className="w-10 h-10 border-2 border-white/20 text-slate-700"/>
-                                    <div>
-                                        <p className="font-bold text-white text-sm">{student.displayName}</p>
-                                        <p className="text-white/50 text-xs">Seviye {Math.floor((student.score || 0) / 1000) + 1}</p>
+                                    <div className="flex items-center gap-3">
+                                         <UserAvatar user={student} className="w-10 h-10 border-2 border-white/10 group-hover:border-amber-400 transition-colors"/>
+                                         <div>
+                                            <p className="font-bold text-white text-sm group-hover:text-amber-200 transition-colors">{student.displayName}</p>
+                                            <p className="text-white/40 text-xs font-mono">Lvl {Math.floor((student.score || 0) / 1000) + 1}</p>
+                                         </div>
                                     </div>
                                 </div>
-                                <div className="bg-amber-500/20 px-3 py-1 rounded-full border border-amber-500/30">
-                                    <p className="font-bold text-amber-300 text-sm">{(student.score || 0).toLocaleString()} Puan</p>
+                                <div className="bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 group-hover:bg-amber-500/20 transition-colors">
+                                    <p className="font-bold text-amber-400 text-sm">{(student.score || 0).toLocaleString()} <span className="text-[10px] opacity-70">XP</span></p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-center text-white/50 py-6 italic">Bugün henüz kimse XP kazanmadı.</p>
+                    <div className="text-center py-8">
+                         <div className="inline-block p-4 rounded-full bg-white/5 mb-3">
+                            <Trophy className="h-8 w-8 text-white/20" />
+                         </div>
+                         <p className="text-white/40 text-sm">Bugün henüz kimse XP kazanmadı.</p>
+                         <p className="text-indigo-400 text-xs mt-1 font-bold cursor-pointer hover:underline">İlk sen ol!</p>
+                    </div>
                 )}
             </div>
         </Card>
     )
 }
 
+// --- ANA SAYFA KARTI BİLEŞENİ ---
+const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number }) => {
+     // Renk sınıflarını parçala (basit bir haritalama)
+     const colors: {[key: string]: string} = {
+        "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40",
+        "rose": "from-rose-500 to-pink-600 border-rose-600 shadow-rose-900/40",
+        "orange": "from-orange-500 to-amber-600 border-orange-600 shadow-orange-900/40",
+        "indigo": "from-indigo-500 to-violet-600 border-indigo-600 shadow-indigo-900/40",
+        "emerald": "from-emerald-500 to-green-600 border-emerald-600 shadow-emerald-900/40",
+        "violet": "from-violet-500 to-purple-600 border-violet-600 shadow-violet-900/40",
+     }
+
+     const gradient = colors[colorClass] || "from-slate-700 to-slate-800 border-slate-600";
+
+     return (
+        <Button asChild className={cn(
+            "relative w-full h-auto flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 p-4 rounded-2xl transition-all duration-300 group overflow-hidden",
+            "border-b-[6px] active:border-b-0 active:translate-y-[6px]", // 3D effect
+            "bg-gradient-to-br text-white shadow-xl",
+            gradient
+        )}>
+            <Link href={href} className="w-full">
+                {/* Işıltı Efekti */}
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                
+                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner shrink-0">
+                    {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-white" })}
+                </div>
+                
+                <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 min-w-0">
+                    <span className="font-black text-lg uppercase tracking-wide leading-tight">{title}</span>
+                    {subtitle && <span className="text-[11px] font-medium opacity-80 leading-tight">{subtitle}</span>}
+                </div>
+
+                {badge && badge > 0 && (
+                    <div className="absolute top-2 right-2 flex h-6 min-w-[24px] px-1.5 items-center justify-center rounded-full bg-white text-red-600 text-xs font-black shadow-lg animate-bounce z-10">
+                        {badge}
+                    </div>
+                )}
+            </Link>
+        </Button>
+     )
+}
+
+
 export default function StudentDashboard() {
   const { user } = useAuth();
-  const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // State for stats
   const [stats, setStats] = useState({
       score: 0,
       completedTopics: 0,
@@ -115,15 +168,7 @@ export default function StudentDashboard() {
       setIsLoading(true);
       
       try {
-        let completedTopicsTotal = 0;
-        let grandTotalTopics = 0;
-        let studentClassName: string | undefined;
-        let userScore = user.score || 0;
-        
-        studentClassName = user.class?.split(' - ')[0];
-
-        let coursesData: Course[] = [];
-
+        // Paralel Veri Çekme (Performans için kritik)
         const [classesSnapshot, allCoursesSnapshot, allUsersSnapshot, examsSnapshot] = await Promise.all([
           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
           getDocs(collection(db, "courses")),
@@ -131,14 +176,18 @@ export default function StudentDashboard() {
           getStudentExams(user.uid),
         ]);
         
+        // --- Sınav İstatistikleri ---
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
             setExamStats({ pending, solved });
         }
 
+        // --- Sıralama Hesaplamaları (Basitleştirilmiş) ---
         const allStudents = allUsersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile & {uid: string}));
-
+        const userScore = user.score || 0;
+        
+        // Genel Sıralama
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
@@ -149,23 +198,25 @@ export default function StudentDashboard() {
             const gradeName = user.class.split(' - ')[0];
             const branchName = user.class;
 
+            // Sınıf (Örn: 5. Sınıflar) Sıralaması
             const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            const sortedGradeStudents = [...studentsInGrade].sort((a,b) => (b.score || 0) - (a.score || 0));
-            classRank = sortedGradeStudents.findIndex(s => s.uid === user.uid) + 1;
+            classRank = studentsInGrade.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
 
+            // Şube (Örn: 5-A) Sıralaması
             const studentsInBranch = allStudents.filter(s => s.class === branchName);
-            const sortedBranchStudents = [...studentsInBranch].sort((a,b) => (b.score || 0) - (a.score || 0));
-            branchRank = sortedBranchStudents.findIndex(s => s.uid === user.uid) + 1;
+            branchRank = studentsInBranch.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
         }
 
+        // --- Kurs İlerlemeleri ---
+        
         const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
         const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
         
+        const studentClassName = user.class?.split(' - ')[0];
         const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
         const studentClassId = studentClass?.id;
 
         const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        
         const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
         
         let filteredCourses: Course[] = [];
@@ -177,63 +228,18 @@ export default function StudentDashboard() {
         } else {
             filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
         }
-        
-        let totalQuestionBankPassedTests = 0;
-        let totalQuestionBankTests = 0;
-
-        coursesData = await Promise.all(filteredCourses.map(async (course) => {
-          const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-          const qbStats = getCourseQuestionBankStats(course.id, user.uid);
-          
-          const [progressSnap, questionBankStats] = await Promise.all([
-            getDoc(progressRef),
-            qbStats
-          ]);
-
-          const completedTopics = progressSnap.exists() ? (progressSnap.data() as any).completedTopics || [] : [];
-          completedTopicsTotal += completedTopics.length;
-          
-          const unitsRef = collection(db, 'courses', course.id, 'units');
-          const unitsSnap = await getDocs(unitsRef);
-          let totalTopics = 0;
-          
-          for (const unitDoc of unitsSnap.docs) {
-            const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
-            totalTopics += topicsSnap.size;
-          }
-          
-          grandTotalTopics += totalTopics;
-          course.progress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
-          course.topicsCount = totalTopics;
-          course.unitsCount = unitsSnap.size;
-          course.completedTopicsCount = completedTopics.length;
-
-          totalQuestionBankPassedTests += questionBankStats.passedTests;
-          totalQuestionBankTests += questionBankStats.totalTests;
-
-          return course;
-        }));
-        
-        const coursesStartedCount = coursesData.filter(c => (c.progress || 0) > 0).length;
-        const coursesCompletedCount = coursesData.filter(c => c.progress === 100).length;
-        
-        setCourses(coursesData);
-        
-        const qbProgressPercentage = totalQuestionBankTests > 0 
-            ? Math.round((totalQuestionBankPassedTests / totalQuestionBankTests) * 100)
-            : 0;
 
         setStats({
             score: userScore,
-            completedTopics: completedTopicsTotal,
-            totalTopics: grandTotalTopics,
-            coursesStarted: coursesStartedCount,
-            coursesCompleted: coursesCompletedCount,
-            totalCourses: coursesData.length,
+            completedTopics: 0, 
+            totalTopics: 0,     
+            coursesStarted: 0,
+            coursesCompleted: 0,
+            totalCourses: filteredCourses.length,
             generalRank,
             classRank,
             branchRank,
-            questionBankProgress: qbProgressPercentage,
+            questionBankProgress: 0, 
         });
 
       } catch (error) {
@@ -247,164 +253,208 @@ export default function StudentDashboard() {
   
   if (isLoading) {
     return (
-        <div className="flex h-[calc(100vh-theme(height.16))] w-full items-center justify-center bg-background">
-            <Loader2 className="h-16 w-16 animate-spin text-primary" />
+        <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+            <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
+                <p className="text-slate-400 font-bold animate-pulse">Profilin Yükleniyor...</p>
+            </div>
         </div>
     );
   }
 
-  const lessonProgress = stats.totalTopics > 0 ? Math.round((stats.completedTopics / stats.totalTopics) * 100) : 0;
+  // Seviye Hesaplama
+  const level = Math.floor(stats.score / 1000) + 1;
+  const nextLevelScore = level * 1000;
+  const progressToNextLevel = ((stats.score % 1000) / 1000) * 100;
   
   return (
-    <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-purple-500/30">
-      <div className="max-w-5xl mx-auto space-y-6">
-          
-           <Card className="p-1 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
-              <div className="flex flex-col sm:flex-row items-center gap-4 p-4 md:p-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="p-1 rounded-full bg-gradient-to-br from-amber-300 to-yellow-600 shadow-lg shadow-amber-500/20">
-                         <div className="relative shrink-0 w-20 h-20">
-                            <UserAvatar user={user} className="w-20 h-20"/>
-                         </div>
-                    </div>
-                    <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-400 shadow-sm">
-                        LVL {Math.floor(stats.score / 1000) + 1}
-                    </div>
-                  </div>
-                  
-                  <div className="flex-grow text-center sm:text-left z-10 space-y-1">
-                      <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white drop-shadow-md">{user?.displayName}</h1>
-                      <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-lg backdrop-blur-sm border border-white/10">
-                        <Backpack className="h-4 w-4 text-indigo-300"/>
-                        <span className="text-sm font-medium text-indigo-200">{user?.class || 'Sınıfsız Gezgin'}</span>
-                      </div>
-                  </div>
-                  
-                  <div className="text-center z-10 bg-black/30 p-3 rounded-2xl border border-white/10 min-w-[140px]">
-                      <div className="flex items-center justify-center gap-2 text-3xl font-black text-amber-400 drop-shadow-sm">
-                          <Star className="h-6 w-6 fill-amber-400 animate-pulse"/>
-                          <span>{stats.score.toLocaleString()}</span>
-                      </div>
-                      <p className="text-xs uppercase tracking-widest text-amber-200/60 font-bold mt-1">Toplam Puan</p>
-                  </div>
-              </div>
-          </Card>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Link href="/student/soru-bankasi" className="group h-full">
-                 <Card className="h-full bg-gradient-to-br from-sky-900/40 to-blue-900/40 hover:border-sky-400/50 transition-colors group-hover:bg-sky-900/30 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-                      <div className="p-5 flex flex-col h-full relative">
-                          <div className="absolute top-4 right-4 bg-sky-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                              <Map className="h-8 w-8 text-sky-400" />
-                          </div>
-                          
-                          <div className="mb-6">
-                              <h2 className="text-2xl font-bold text-white mb-1">Macera Haritası</h2>
-                              <p className="text-sky-200 text-sm">Dersler ve Soru Bankası</p>
-                          </div>
+    <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
+      
+      {/* Arka Plan Efektleri */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+         <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[150px]" />
+         <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
+      </div>
 
-                          <div className="mt-auto space-y-4">
-                              <div>
-                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                      <span className="flex items-center gap-1"><BookOpen className="h-3 w-3"/> Görev İlerlemesi</span>
-                                      <span>{lessonProgress}%</span>
-                                  </div>
-                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                      <div className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-1000" style={{width: `${lessonProgress}%`}}></div>
-                                  </div>
-                              </div>
-                              <div>
-                                  <div className="flex justify-between text-xs font-bold text-sky-100 mb-1 uppercase tracking-wide">
-                                      <span className="flex items-center gap-1"><Target className="h-3 w-3"/> Başarı Oranı</span>
-                                      <span>{stats.questionBankProgress}%</span>
-                                  </div>
-                                  <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
-                                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 transition-all duration-1000" style={{width: `${stats.questionBankProgress}%`}}></div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                 </Card>
+      <div className="max-w-6xl mx-auto space-y-8 relative z-10">
+          
+           {/* Profil Kartı */}
+           <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
+                {/* Kart Arka Planı */}
+                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-50 z-0"></div>
+                
+                {/* İçerik */}
+                <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+                    
+                    {/* Avatar ve Seviye */}
+                    <div className="relative shrink-0">
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
+                             <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800">
+                                <UserAvatar user={user} className="w-full h-full" />
+                             </div>
+                        </div>
+                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-black py-1.5 px-4 rounded-full border border-indigo-500 shadow-lg whitespace-nowrap flex items-center gap-2">
+                             <Sparkles className="h-3 w-3 text-yellow-400 fill-yellow-400"/>
+                             SEVİYE {level}
+                        </div>
+                    </div>
+
+                    {/* İsim ve İstatistikler */}
+                    <div className="flex-1 text-center md:text-left w-full">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+                            <div>
+                                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md">{user?.displayName}</h1>
+                                <div className="flex items-center justify-center md:justify-start gap-2 mt-2 text-slate-300 font-medium">
+                                    <Backpack className="h-4 w-4 text-indigo-400" />
+                                    <span>{user?.class || 'Sınıfsız Gezgin'}</span>
+                                    <span className="mx-2">•</span>
+                                    <span className="text-indigo-300">{stats.totalCourses} Ders</span>
+                                </div>
+                            </div>
+                            
+                            {/* Puan Kutusu */}
+                            <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[200px]">
+                                <div className="p-3 bg-amber-500/20 rounded-xl border border-amber-500/30">
+                                    <Star className="h-6 w-6 text-amber-400 fill-amber-400 animate-pulse" />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs text-amber-200/70 font-bold uppercase tracking-wider">Toplam XP</p>
+                                    <p className="text-2xl font-black text-white tabular-nums">{stats.score.toLocaleString()}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Seviye İlerleme Çubuğu */}
+                        <div className="mt-6">
+                            <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">
+                                <span>İlerleme</span>
+                                <span>{Math.floor(progressToNextLevel)}% <span className="text-slate-600">/ 100%</span></span>
+                            </div>
+                            <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative">
+                                <div 
+                                    className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out relative overflow-hidden"
+                                    style={{ width: `${progressToNextLevel}%` }}
+                                >
+                                    <div className="absolute inset-0 bg-[url('/stripe-pattern.png')] opacity-20 animate-slide"></div>
+                                </div>
+                            </div>
+                            <p className="text-right text-xs text-slate-500 mt-1">Sonraki seviye için {1000 - (stats.score % 1000)} XP gerekli</p>
+                        </div>
+                    </div>
+                </div>
+           </div>
+          
+          {/* Ana Kartlar Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               {/* Soru Bankası (Macera Haritası) */}
+              <Link href="/student/soru-bankasi" className="group block h-full">
+                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-sky-500/20">
+                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
+                     <div className="absolute top-0 right-0 p-32 bg-sky-500/20 rounded-full blur-[80px] pointer-events-none"></div>
+
+                     <div className="relative z-10 p-8 flex flex-col h-full">
+                         <div className="flex justify-between items-start mb-6">
+                             <div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30 backdrop-blur-md">
+                                 <Map className="h-8 w-8 text-sky-300" />
+                             </div>
+                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-sky-200">
+                                 DERSLER VE SORU BANKASI
+                             </div>
+                         </div>
+                         
+                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Macera <br/><span className="text-sky-400">Haritası</span></h2>
+                         <p className="text-sky-100/70 font-medium mb-8">Derslerini seç, soruları çöz ve haritada ilerle.</p>
+                         
+                         <div className="mt-auto flex items-center gap-2 text-white font-bold text-lg group-hover:gap-4 transition-all">
+                             Hemen Başla <ArrowRight className="h-5 w-5" />
+                         </div>
+                     </div>
+                 </div>
               </Link>
             
-            <Link href="/leaderboard" className="group h-full">
-                <Card className="h-full bg-gradient-to-br from-amber-900/40 to-orange-900/40 hover:border-amber-400/50 transition-colors group-hover:bg-amber-900/30 backdrop-blur-md bg-white/10 border-2 border-white/20 rounded-3xl shadow-2xl overflow-hidden relative">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-50"></div>
-                    <div className="p-5 flex flex-col h-full relative">
-                        <div className="absolute top-4 right-4 bg-amber-500/20 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                             <Trophy className="h-8 w-8 text-amber-400" />
-                        </div>
+              {/* Liderlik Tablosu (Şöhret Salonu) */}
+              <Link href="/leaderboard" className="group block h-full">
+                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-amber-500/20">
+                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
+                     <div className="absolute bottom-0 left-0 p-32 bg-amber-500/20 rounded-full blur-[80px] pointer-events-none"></div>
 
-                        <div className="mb-6">
-                             <h2 className="text-2xl font-bold text-white mb-1">Şöhret Salonu</h2>
-                             <p className="text-amber-200 text-sm">Liderlik Tablosu Sıralaman</p>
-                        </div>
-                        
-                        <div className="mt-auto grid grid-cols-3 gap-2">
-                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.generalRank > 0 ? `#${stats.generalRank}` : '-'}</span>
-                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Genel</span>
+                     <div className="relative z-10 p-8 flex flex-col h-full">
+                         <div className="flex justify-between items-start mb-6">
+                             <div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30 backdrop-blur-md">
+                                 <Trophy className="h-8 w-8 text-amber-300" />
                              </div>
-                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.classRank > 0 ? `#${stats.classRank}` : '-'}</span>
-                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Sınıf</span>
+                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-amber-200">
+                                 LİDERLİK
                              </div>
-                             <div className="bg-black/30 rounded-xl p-3 flex flex-col items-center justify-center border border-white/5">
-                                 <span className="text-2xl font-black text-white">{stats.branchRank > 0 ? `#${stats.branchRank}` : '-'}</span>
-                                 <span className="text-[10px] uppercase text-amber-200/70 font-bold mt-1">Şube</span>
-                             </div>
-                        </div>
-                    </div>
-                </Card>
-            </Link>
+                         </div>
+                         
+                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Şöhret <br/><span className="text-amber-400">Salonu</span></h2>
+                         
+                         <div className="mt-auto grid grid-cols-3 gap-3">
+                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                                  <span className="text-2xl font-black text-white">#{stats.generalRank || '-'}</span>
+                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Genel</span>
+                              </div>
+                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                                  <span className="text-2xl font-black text-white">#{stats.classRank || '-'}</span>
+                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Sınıf</span>
+                              </div>
+                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
+                                  <span className="text-2xl font-black text-white">#{stats.branchRank || '-'}</span>
+                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Şube</span>
+                              </div>
+                         </div>
+                     </div>
+                 </div>
+              </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:gap-6">
-                <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-sky-500 hover:bg-sky-400 border-sky-700 text-white shadow-sky-900/40 h-auto flex-col gap-2">
-                    <Link href="/oyunlar">
-                        <Gamepad2 className="h-8 w-8 mb-1"/> 
-                        <span>Etkinlikler</span>
-                        <span className="text-[10px] opacity-70 font-normal normal-case">Arcade Modu</span>
-                    </Link>
-                </Button>
-                 <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-rose-500 hover:bg-rose-400 border-rose-700 text-white shadow-rose-900/40 h-auto flex-col gap-2">
-                    <Link href="/student/yarismalar">
-                        <Swords className="h-8 w-8 mb-1"/> 
-                        <span>Çok Oyunculu</span>
-                        <span className="text-[10px] opacity-70 font-normal normal-case">PvP Arena</span>
-                    </Link>
-                </Button>
-          </div>
-          
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-orange-500 hover:bg-orange-400 border-orange-700 text-white shadow-orange-900/40 text-sm flex-col md:flex-row gap-2 items-center">
-                  <Link href="/student/yazilacaklar">
-                    <Columns className="h-5 w-5"/> <span>Yazılacaklar</span>
-                  </Link>
-              </Button>
-               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-indigo-500 hover:bg-indigo-400 border-indigo-700 text-white shadow-indigo-900/40 text-sm flex-col md:flex-row gap-2 items-center">
-                   <Link href="/student/ozetler">
-                    <LayoutTemplate className="h-5 w-5"/> <span>Özetler</span>
-                  </Link>
-              </Button>
-               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-emerald-500 hover:bg-emerald-400 border-emerald-700 text-white shadow-emerald-900/40 text-sm flex-col md:flex-row gap-2 items-center">
-                   <Link href="/student/shop">
-                    <ShoppingCart className="h-5 w-5"/> <span>Puan Dükkanı</span>
-                  </Link>
-              </Button>
-               <Button asChild className="relative w-full flex items-center justify-center font-bold uppercase tracking-wide transition-all duration-200 border-b-[6px] active:border-b-0 active:translate-y-[6px] rounded-2xl py-4 px-4 shadow-xl group cursor-pointer bg-violet-600 hover:bg-violet-500 border-violet-800 text-white shadow-violet-900/40 text-sm flex-col md:flex-row gap-2 items-center">
-                <Link href="/student/deneme">
-                  <FileCog className="h-5 w-5"/> <span>Deneme Sınavı</span>
-                  {examStats.pending > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full border-2 border-white animate-bounce shadow-sm">
-                          {examStats.pending} YENİ
-                      </span>
-                  )}
-                </Link>
-              </Button>
+          {/* Aksiyon Butonları (Grid) */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+               <DashboardCardButton 
+                   href="/oyunlar" 
+                   icon={<Gamepad2 />} 
+                   title="Etkinlikler" 
+                   subtitle="Arcade Modu"
+                   colorClass="sky"
+               />
+               <DashboardCardButton 
+                   href="/student/yarismalar" 
+                   icon={<Swords />} 
+                   title="Arena" 
+                   subtitle="Çok Oyunculu"
+                   colorClass="rose"
+               />
+               <DashboardCardButton 
+                   href="/student/yazilacaklar" 
+                   icon={<Columns />} 
+                   title="Panolar" 
+                   subtitle="Notlar & Kavramlar"
+                   colorClass="orange"
+               />
+               <DashboardCardButton 
+                   href="/student/ozetler" 
+                   icon={<LayoutTemplate />} 
+                   title="Özetler" 
+                   subtitle="Ders Notları"
+                   colorClass="indigo"
+               />
+                <DashboardCardButton 
+                   href="/student/shop" 
+                   icon={<ShoppingCart />} 
+                   title="Mağaza" 
+                   subtitle="Puan Harca"
+                   colorClass="emerald"
+               />
+                <DashboardCardButton 
+                   href="/student/deneme" 
+                   icon={<FileCog />} 
+                   title="Denemeler" 
+                   subtitle="Sınav Merkezi"
+                   colorClass="violet"
+                   badge={examStats.pending}
+               />
           </div>
           
           <HardestWorkersToday />
