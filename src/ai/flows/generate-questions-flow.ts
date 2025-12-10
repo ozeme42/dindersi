@@ -94,7 +94,7 @@ Return all generated questions in a single, valid JSON object that adheres to th
 `;
 
     const { output } = await ai.generate({
-        model: googleAI.model('gemini-2.5-flash'),
+        model: googleAI.model('gemini-pro'),
         prompt: prompt,
         output: {
             schema: AIGeneratedQuestionsSchema,
