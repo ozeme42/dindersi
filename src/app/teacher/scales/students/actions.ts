@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import type { SchoolClass, UserProfile, ScaleEntry } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -54,37 +54,28 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
             return { success: true, data: [] }; // No students, no error
         }
         const studentIds = studentsSnap.docs.map(d => d.id);
+        const studentsData = studentsSnap.docs.map(d => ({uid: d.id, ...d.data()}) as UserProfile);
 
         // 2. Get all evaluation entries for these students
-        // Firestore 'in' query is limited to 30 items. We need to chunk.
-        const studentEntryMap = new Map<string, any[]>();
-        const chunks: string[][] = [];
-        for (let i = 0; i < studentIds.length; i += 30) {
-            chunks.push(studentIds.slice(i, i + 30));
-        }
+        const studentEntryMap = new Map<string, ScaleEntry[]>();
 
-        for (const chunk of chunks) {
-            const entriesQuery = query(collection(db, `evaluationScales`), where('__name__', '!=', '')); // A placeholder to get all scales
-            const allScalesSnap = await getDocs(entriesQuery);
-            for(const scaleDoc of allScalesSnap.docs) {
-                const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', chunk));
-                const entriesSnap = await getDocs(entriesSubCollQuery);
-                entriesSnap.forEach(entryDoc => {
-                    const studentId = entryDoc.id;
-                    const entryData = entryDoc.data() as ScaleEntry;
-                    if (!studentEntryMap.has(studentId)) {
-                        studentEntryMap.set(studentId, []);
-                    }
-                    studentEntryMap.get(studentId)!.push(entryData);
-                });
-            }
+        const allScalesSnap = await getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist')));
+        
+        for(const scaleDoc of allScalesSnap.docs) {
+            const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', studentIds));
+            const entriesSnap = await getDocs(entriesSubCollQuery);
+            entriesSnap.forEach(entryDoc => {
+                const studentId = entryDoc.id;
+                if (!studentEntryMap.has(studentId)) {
+                    studentEntryMap.set(studentId, []);
+                }
+                studentEntryMap.get(studentId)!.push(entryDoc.data() as ScaleEntry);
+            });
         }
         
         // 3. Process data
-        const studentList: StudentAnalysisData[] = studentsSnap.docs.map(doc => {
-            const data = doc.data();
-            const studentId = doc.id;
-            const studentEntries = studentEntryMap.get(studentId) || [];
+        const studentList: StudentAnalysisData[] = studentsData.map(student => {
+            const studentEntries = studentEntryMap.get(student.uid) || [];
 
             let totalSuccess = 0;
             let totalScalesCount = 0;
@@ -104,10 +95,10 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
             const average = totalScalesCount > 0 ? Math.round(totalSuccess / totalScalesCount) : 0;
 
             return {
-                id: studentId,
-                studentNumber: data.studentNumber || 'No Yok',
-                name: data.displayName || 'İsimsiz',
-                branch: data.class?.split(' - ')[1] || '?',
+                id: student.uid,
+                studentNumber: student.studentNumber || 'No Yok',
+                name: student.displayName || 'İsimsiz',
+                branch: student.class?.split(' - ')[1] || '?',
                 classId: classId,
                 average: average,
                 completedScales: totalScalesCount,
