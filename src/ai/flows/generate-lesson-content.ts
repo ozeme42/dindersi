@@ -75,10 +75,6 @@ const GenerateLessonContentOutputSchema = z.object({
 });
 export type GenerateLessonContentOutput = z.infer<typeof GenerateLessonContentOutputSchema>;
 
-export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
-  return generateLessonContentFlow(input);
-}
-
 const moduleInstructions = {
     summary: `- summary: Generate a summary of the topic as an array of objects. Each object must have a "title" (a short, concise heading for a summary point) and a "content" (a detailed explanation for that point. The content should be broken down into several short, easy-to-understand sentences, formatted as a list of <li> items). Generate 3-5 summary points.`,
     learningObjectives: `- learningObjectives: Generate a list of what the student will learn, phrased from their perspective. For example: "Atomun yapısını açıklayabileceksiniz.". This should be an array of strings.`,
@@ -93,6 +89,32 @@ const moduleInstructions = {
     sentenceScrambleQuestions: `- sentenceScrambleQuestions: Generate scrambled sentences. For each, provide the 'scrambledSentence' and the 'correctSentence'. This should be an array of objects.`,
 };
 
+const generateLessonContentPrompt = ai.definePrompt({
+  name: 'generateLessonContentPrompt',
+  input: {
+    schema: z.object({
+      topicSummary: z.string(),
+      requestedInstructions: z.string(),
+    }),
+  },
+  output: {
+    schema: GenerateLessonContentOutputSchema,
+  },
+  prompt: `You are an expert Turkish educational content creator.
+Your task is to generate a valid JSON object based on the provided topic summary and the requested modules.
+All generated content MUST be in Turkish.
+The JSON object you generate MUST ONLY contain keys for the modules listed in the "REQUESTED MODULES" section.
+
+TOPIC SUMMARY:
+{{{topicSummary}}}
+
+---
+
+REQUESTED MODULES AND THEIR FORMATS:
+{{{requestedInstructions}}}
+`,
+});
+
 
 const generateLessonContentFlow = ai.defineFlow(
   {
@@ -101,9 +123,8 @@ const generateLessonContentFlow = ai.defineFlow(
     outputSchema: GenerateLessonContentOutputSchema,
   },
   async (input) => {
-    
     let output: GenerateLessonContentOutput = {};
-    
+
     const requestedInstructions = Object.entries(input.modules)
       .filter(([, value]) => value)
       .filter(([key]) => key in moduleInstructions)
@@ -111,49 +132,33 @@ const generateLessonContentFlow = ai.defineFlow(
       .join('\n');
 
     if (requestedInstructions) {
-        const prompt = `You are an expert Turkish educational content creator.
-Your task is to generate a valid JSON object based on the provided topic summary and the requested modules.
-All generated content MUST be in Turkish.
-The JSON object you generate MUST ONLY contain keys for the modules listed in the "REQUESTED MODULES" section.
+      const { output: textOutput } = await generateLessonContentPrompt({
+        topicSummary: input.topicSummary,
+        requestedInstructions: requestedInstructions,
+      });
 
-TOPIC SUMMARY:
-${input.topicSummary}
-
----
-
-REQUESTED MODULES AND THEIR FORMATS:
-${requestedInstructions}
-`;
-        
-        const { output: textOutput } = await ai.generate({
-            model: googleAI.model('gemini-2.5-flash'),
-            prompt: prompt,
-            config: {
-                responseModalities: ['TEXT'],
-            },
-            output: {
-                schema: GenerateLessonContentOutputSchema,
-            }
-        });
-        
-        if (textOutput) {
-            output = textOutput;
-        }
+      if (textOutput) {
+        output = textOutput;
+      }
     }
-        
+
     if (Object.keys(output).length > 0) {
       const generatedModules: string[] = [];
-      
+
       for (const key in input.modules) {
         if (Object.prototype.hasOwnProperty.call(input.modules, key)) {
           const moduleKey = key as keyof typeof input.modules;
-          if (input.modules[moduleKey] && output[moduleKey] && (Array.isArray(output[moduleKey]) ? (output[moduleKey] as any[]).length > 0 : true)) {
-            generatedModules.push(key);
+          const outputKey = key as keyof GenerateLessonContentOutput;
+          if (input.modules[moduleKey] && output[outputKey]) {
+            const outputValue = output[outputKey];
+            if (Array.isArray(outputValue) ? outputValue.length > 0 : true) {
+              generatedModules.push(key);
+            }
           }
         }
       }
-      
-      if(generatedModules.length > 0) {
+
+      if (generatedModules.length > 0) {
         output.progress = `Generated content for: ${generatedModules.map(m => m.replace(/([A-Z])/g, ' $1').trim()).join(', ')}.`;
       }
     }
@@ -161,3 +166,9 @@ ${requestedInstructions}
     return output;
   }
 );
+
+export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
+  return generateLessonContentFlow(input);
+}
+
+    
