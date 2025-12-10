@@ -30,7 +30,6 @@ const GenerateLessonContentInputSchema = z.object({
     fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
     anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
     sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
-    visuals: z.boolean().optional().describe('Generate a main visual for the lesson?'),
     infographicIdeas: z.boolean().optional().describe('Generate ideas for an infographic?'),
     videos: z.boolean().optional().describe('Generate video ideas?'),
     documents: z.boolean().optional().describe('Generate document links?'),
@@ -76,11 +75,9 @@ const GenerateLessonContentOutputSchema = z.object({
     scrambledSentence: z.string().describe('A sentence with its words scrambled.'),
     correctSentence: z.string().describe('The correctly ordered sentence.'),
   })).optional().describe('A list of scrambled sentences.'),
-  visuals: z.array(z.string()).optional().describe('URLs or descriptions of relevant visuals.'),
   infographicIdeas: z.array(z.string()).optional().describe('A list of ideas for an infographic?'),
   videos: z.array(z.string()).optional().describe('URLs of relevant videos.'),
   documents: z.array(z.string()).optional().describe('Links to supporting documents.'),
-  generatedImageDataUri: z.string().optional().describe('A generated image for the lesson, as a data URI.'),
   progress: z.string().optional().describe('Short summary of what has been generated.'),
 });
 export type GenerateLessonContentOutput = z.infer<typeof GenerateLessonContentOutputSchema>;
@@ -119,7 +116,7 @@ const generateLessonContentFlow = ai.defineFlow(
     
     const requestedInstructions = Object.entries(input.modules)
       .filter(([, value]) => value)
-      .filter(([key]) => key in moduleInstructions && key !== 'visuals') // Exclude visuals from text prompt
+      .filter(([key]) => key in moduleInstructions)
       .map(([key]) => moduleInstructions[key as keyof typeof moduleInstructions])
       .join('\n');
 
@@ -153,24 +150,6 @@ ${requestedInstructions}
             output = textOutput;
         }
     }
-    
-    if (input.modules.visuals) {
-      try {
-        const { media } = await ai.generate({
-            model: googleAI.model('gemini-2.5-flash'),
-            prompt: `Generate an educational and visually appealing image or diagram that illustrates the concept of '${input.topicSummary}'. The style should be simple, clean, and suitable for a classroom setting. Avoid text unless it is essential for the diagram.`,
-            config: {
-                responseModalities: ['TEXT', 'IMAGE'],
-            },
-        });
-        if (media?.url) {
-            output.generatedImageDataUri = media.url;
-        }
-      } catch (err) {
-          console.error("Image generation failed but the flow will continue:", err);
-          // Don't throw an error, just log it. The flow can continue with text content.
-      }
-    }
         
     if (Object.keys(output).length > 0) {
       const generatedModules: string[] = [];
@@ -182,11 +161,6 @@ ${requestedInstructions}
             generatedModules.push(key);
           }
         }
-      }
-
-      // Special check for generatedImageDataUri because it's not directly in input.modules
-      if (output.generatedImageDataUri && !generatedModules.includes('visuals')) {
-          generatedModules.push('visuals');
       }
       
       if(generatedModules.length > 0) {
