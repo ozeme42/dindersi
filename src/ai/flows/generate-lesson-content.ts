@@ -98,9 +98,6 @@ const moduleInstructions = {
     fillInTheBlankQuestions: `- fillInTheBlankQuestions: Generate a set of sentences with a blank part ('___'), each with 4 options and one correct answer. This should be an array of objects.`,
     anagramQuestions: `- anagramQuestions: Generate anagrams. For each, provide a 'definition' for the word, the 'scrambledWord', and the 'correctAnswer' (the unscrambled word). Example: { "definition": "Türkiye'nin başkenti", "scrambledWord": "karnaa", "correctAnswer": "Ankara" }`,
     sentenceScrambleQuestions: `- sentenceScrambleQuestions: Generate scrambled sentences. For each, provide the 'scrambledSentence' and the 'correctSentence'. This should be an array of objects.`,
-    infographicIdeas: `- infographicIdeas: Generate ideas for an infographic that summarizes the topic. This should be an array of strings.`,
-    videos: `- videos: Generate ideas for relevant video topics or search terms. This should be an array of strings.`,
-    documents: `- documents: Generate links to supporting documents or articles. This should be an array of strings.`,
 };
 
 
