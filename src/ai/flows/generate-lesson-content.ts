@@ -1,5 +1,4 @@
 
-
 'use server';
 
 /**
@@ -30,9 +29,6 @@ const GenerateLessonContentInputSchema = z.object({
     fillInTheBlankQuestions: z.boolean().optional().describe('Generate fill-in-the-blank questions?'),
     anagramQuestions: z.boolean().optional().describe('Generate anagram questions?'),
     sentenceScrambleQuestions: z.boolean().optional().describe('Generate sentence scramble questions?'),
-    infographicIdeas: z.boolean().optional().describe('Generate ideas for an infographic?'),
-    videos: z.boolean().optional().describe('Generate video ideas?'),
-    documents: z.boolean().optional().describe('Generate document links?'),
   }).describe('Which content modules to generate.'),
 });
 export type GenerateLessonContentInput = z.infer<typeof GenerateLessonContentInputSchema>;
@@ -75,9 +71,6 @@ const GenerateLessonContentOutputSchema = z.object({
     scrambledSentence: z.string().describe('A sentence with its words scrambled.'),
     correctSentence: z.string().describe('The correctly ordered sentence.'),
   })).optional().describe('A list of scrambled sentences.'),
-  infographicIdeas: z.array(z.string()).optional().describe('A list of ideas for an infographic?'),
-  videos: z.array(z.string()).optional().describe('URLs of relevant videos.'),
-  documents: z.array(z.string()).optional().describe('Links to supporting documents.'),
   progress: z.string().optional().describe('Short summary of what has been generated.'),
 });
 export type GenerateLessonContentOutput = z.infer<typeof GenerateLessonContentOutputSchema>;
