@@ -91,6 +91,7 @@ const moduleInstructions = {
 
 const generateLessonContentPrompt = ai.definePrompt({
   name: 'generateLessonContentPrompt',
+  model: googleAI.model('gemini-2.5-flash'),
   input: {
     schema: z.object({
       topicSummary: z.string(),
@@ -170,5 +171,3 @@ const generateLessonContentFlow = ai.defineFlow(
 export async function generateLessonContent(input: GenerateLessonContentInput): Promise<GenerateLessonContentOutput> {
   return generateLessonContentFlow(input);
 }
-
-    
