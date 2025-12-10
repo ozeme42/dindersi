@@ -139,7 +139,7 @@ ${requestedInstructions}
 `;
         
         const { output: textOutput } = await ai.generate({
-            model: googleAI.model('gemini-2.5-flash'),
+            model: googleAI.model('gemini-1.5-flash-preview'),
             prompt: prompt,
             output: {
                 schema: GenerateLessonContentOutputSchema,
@@ -153,12 +153,9 @@ ${requestedInstructions}
     
     if (input.modules.visuals) {
       try {
-        const { output: media } = await ai.generate({
-            model: googleAI.model('gemini-2.5-flash'),
+        const { media } = await ai.generate({
+            model: googleAI.model('imagen-4.0-fast-generate-001'),
             prompt: `Generate an educational and visually appealing image or diagram that illustrates the concept of '${input.topicSummary}'. The style should be simple, clean, and suitable for a classroom setting. Avoid text unless it is essential for the diagram.`,
-            output: {
-                media: true
-            },
         });
         if (media?.url) {
             output.generatedImageDataUri = media.url;
