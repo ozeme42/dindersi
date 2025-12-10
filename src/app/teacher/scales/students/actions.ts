@@ -31,21 +31,22 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
         }
         const className = classDoc.data().name;
 
-        // 1. Get all students matching the criteria
+        // 1. Get all students matching the criteria (Only guests)
         let studentsQuery;
         if (branch === 'all') {
             studentsQuery = query(
                 collection(db, 'users'),
-                where('role', '==', 'student'),
+                where('role', '==', 'guest'), // *** DÜZELTME: 'student' yerine 'guest'
                 where('class', '>=', className),
                 where('class', '<', className + '\uf8ff')
             );
         } else {
             const fullClassName = `${className} - ${branch}`;
+            const poolClassName = `${fullClassName} (Havuz)`;
             studentsQuery = query(
                 collection(db, 'users'),
-                where('role', '==', 'student'),
-                where('class', '==', fullClassName)
+                where('role', '==', 'guest'), // *** DÜZELTME: 'student' yerine 'guest'
+                where('class', 'in', [fullClassName, poolClassName])
             );
         }
 
@@ -62,15 +63,18 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
         const allScalesSnap = await getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist')));
         
         for(const scaleDoc of allScalesSnap.docs) {
-            const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', studentIds));
-            const entriesSnap = await getDocs(entriesSubCollQuery);
-            entriesSnap.forEach(entryDoc => {
-                const studentId = entryDoc.id;
-                if (!studentEntryMap.has(studentId)) {
-                    studentEntryMap.set(studentId, []);
-                }
-                studentEntryMap.get(studentId)!.push(entryDoc.data() as ScaleEntry);
-            });
+            // Firestore 'in' query supports up to 30 values. If more students, this needs chunking.
+            if (studentIds.length > 0) {
+                const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', studentIds.slice(0, 30)));
+                const entriesSnap = await getDocs(entriesSubCollQuery);
+                entriesSnap.forEach(entryDoc => {
+                    const studentId = entryDoc.id;
+                    if (!studentEntryMap.has(studentId)) {
+                        studentEntryMap.set(studentId, []);
+                    }
+                    studentEntryMap.get(studentId)!.push(entryDoc.data() as ScaleEntry);
+                });
+            }
         }
         
         // 3. Process data
