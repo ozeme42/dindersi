@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, Sparkles, Wand2, Trash2, CheckCircle2, FileText, Database } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Trash2, CheckCircle2, FileText, Database, Save } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { generateActivityData } from '@/ai/flows/generate-activity-data-flow';
@@ -386,7 +386,7 @@ export function AiActivityGenerationPanel({
                         Yapay zeka desteğiyle etkinlikleriniz için hızlıca içerik oluşturun.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="p-6 overflow-y-auto custom-scrollbar">
+                <div className="overflow-y-auto custom-scrollbar">
                     {renderContent()}
                 </div>
             </DialogContent>
