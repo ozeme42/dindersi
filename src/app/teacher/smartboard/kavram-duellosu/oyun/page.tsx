@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useCallback } from "react";
@@ -7,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
 import Link from "next/link";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import type { GetQuizOutput, Question } from "@/lib/types";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +16,7 @@ import { QuestionDialog } from "@/components/question-dialog";
 import { Loader2 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
 import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/context/auth-context";
@@ -31,16 +32,16 @@ function CompetitionLoadingSkeleton() {
     );
 }
 
-function DuelGameComponent({ initialQuestions, initialError }: { initialQuestions: GameQuestion[], initialError?: string }) {
+function DuelGameComponent() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const { user } = useAuth();
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(initialError || null);
+    const [error, setError] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const [questions, setQuestions] = useState<GameQuestion[]>(initialQuestions);
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
     
     const [duelists, setDuelists] = useState<{ p1: Player, p2: Player } | null>(null);
     const [activePlayer, setActivePlayer] = useState<Player | null>(null);
@@ -73,12 +74,13 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const fetchPlayers = useCallback(async () => {
+    const fetchGameData = useCallback(async () => {
         const p1Id = searchParams.get('p1');
         const p2Id = searchParams.get('p2');
         
         if (!p1Id || !p2Id) {
             setError("Savaşçı bilgileri eksik. Lütfen kurulum ekranına geri dönün.");
+            setIsLoading(false);
             return;
         }
 
@@ -95,7 +97,23 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
 
             setDuelists({ p1, p2 });
             setActivePlayer(p1);
+
+            const params: GetQuizInput = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+                questionCount: parseInt(searchParams.get('questionCount') || '20'),
+                difficulty: ['Kolay', 'Orta', 'Zor'],
+                questionTypes: ['mcq', 'tf', 'fitb'],
+            };
+            const questionResult = await getQuestionsFromBank(params);
+            
+            if ('error' in questionResult) throw new Error(questionResult.error);
+            if (!questionResult.questions || questionResult.questions.length === 0) throw new Error("Soru bulunamadı.");
+            
+            setQuestions(questionResult.questions as GameQuestion[]);
             setGameState('playing');
+
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -104,18 +122,14 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
     }, [searchParams]);
 
     useEffect(() => {
-        if (!initialError && initialQuestions.length > 0) {
-            fetchPlayers();
-        } else {
-            setIsLoading(false);
-        }
-    }, [initialQuestions, initialError, fetchPlayers]);
-    
+        fetchGameData();
+    }, [fetchGameData]);
+
     const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         if (gameState !== 'playing' || !activePlayer || !duelists) return;
         
         const direction = activePlayer.id === duelists.p1.id ? 1 : -1;
-        const impact = scoreChange; // QuestionDialog already calculates penalty
+        const impact = scoreChange; 
         
         let newTugProgress = tugProgress + (direction * impact);
         newTugProgress = Math.max(-100, Math.min(100, newTugProgress));
@@ -124,9 +138,13 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
         setAnsweredQuestions(prev => [...prev, questionNumber]);
         setOpenedQuestion(null);
 
-        if (newTugProgress >= 100) { setWinner(duelists.p1); setGameState('finished'); }
-        else if (newTugProgress <= -100) { setWinner(duelists.p2); setGameState('finished'); }
-        else if (answeredQuestions.length + 1 === questions.length) {
+        if (newTugProgress >= 100) { 
+            setWinner(duelists.p1); 
+            setGameState('finished'); 
+        } else if (newTugProgress <= -100) { 
+            setWinner(duelists.p2); 
+            setGameState('finished'); 
+        } else if (answeredQuestions.length + 1 === questions.length) {
             if (newTugProgress > 0) setWinner(duelists.p1);
             else if (newTugProgress < 0) setWinner(duelists.p2);
             else setWinner('draw');
@@ -270,18 +288,42 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
                 {/* 2. ALT: SORU PANELİ */}
                 <div className="flex-1 min-h-0 pb-2">
                      <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-6 shadow-inner overflow-hidden flex flex-col">
+                        
+                        {/* Soru Grid */}
                         <div className="flex-1 overflow-hidden relative">
                              <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-2">
-                                <div className={cn("grid gap-3", isFullscreen ? "grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10")}>
+                                <div className={cn(
+                                    "grid gap-3",
+                                    isFullscreen ? "grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
+                                )}>
                                     {questions.map((q, i) => {
                                         const questionNumber = i + 1;
                                         const isAnswered = answeredQuestions.includes(questionNumber);
+                                        const index = i % 8; 
+                                        const colorClass = [
+                                            "bg-blue-600 hover:bg-blue-500 border-blue-800", 
+                                            "bg-red-600 hover:bg-red-500 border-red-800", 
+                                            "bg-amber-600 hover:bg-amber-500 border-amber-800", 
+                                            "bg-indigo-600 hover:bg-indigo-500 border-indigo-800", 
+                                            "bg-pink-600 hover:bg-pink-500 border-pink-800", 
+                                            "bg-cyan-600 hover:bg-cyan-500 border-cyan-800", 
+                                            "bg-emerald-600 hover:bg-emerald-500 border-emerald-800", 
+                                            "bg-violet-600 hover:bg-violet-500 border-violet-800"
+                                        ][index];
+
                                         return (
                                             <button
                                                 key={i}
                                                 disabled={isAnswered || !activePlayer}
                                                 onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
-                                                className={cn("aspect-square rounded-xl flex items-center justify-center font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]", isFullscreen ? "text-3xl" : "text-xl", isAnswered ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" : "bg-slate-800 border-slate-950 text-white shadow-lg hover:bg-slate-700")}>
+                                                className={cn(
+                                                    "aspect-square rounded-xl flex items-center justify-center font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
+                                                    isFullscreen ? "text-3xl" : "text-xl",
+                                                    isAnswered 
+                                                        ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" 
+                                                        : cn("text-white shadow-lg", colorClass)
+                                                )}
+                                            >
                                                 {!isAnswered && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
                                                 {isAnswered ? <Check className="h-8 w-8 opacity-20" /> : <span className="drop-shadow-md z-10">{questionNumber}</span>}
                                             </button>
@@ -292,8 +334,10 @@ function DuelGameComponent({ initialQuestions, initialError }: { initialQuestion
                         </div>
                      </div>
                 </div>
+
             </main>
-            
+
+            {/* Modal */}
             {openedQuestion && (
                 <QuestionDialog
                     isFullscreen={isFullscreen}
@@ -317,769 +361,3 @@ export default function SmartboardDuelloOyunPage() {
         </Suspense>
     )
 }
-```
-- src/lib/placeholders.ts:
-```ts
-export const placeholderQuestions = [
-  {
-    id: '1',
-    text: 'Varsayılan Soru: Türkiye\'nin başkenti neresidir?',
-    type: 'Çoktan Seçmeli',
-    options: ['İstanbul', 'Ankara', 'İzmir', 'Bursa'],
-    correctAnswer: 'Ankara',
-    difficulty: 'Kolay',
-    courseId: 'genel-kultur',
-    topicId: 'baskentler',
-    topic: 'Başkentler',
-  },
-  {
-    id: '2',
-    text: 'Varsayılan Soru: Dünya Güneş etrafında döner.',
-    type: 'Doğru/Yanlış',
-    options: ['Doğru', 'Yanlış'],
-    correctAnswer: 'Doğru',
-    isTrue: true,
-    difficulty: 'Kolay',
-    courseId: 'genel-kultur',
-    topicId: 'astronomi',
-    topic: 'Astronomi',
-  },
-  {
-    id: '3',
-    text: 'Varsayılan Soru: "Sinekli Bakkal" romanının yazarı _____.',
-    type: 'Boşluk Doldurma',
-    options: ['Yaşar Kemal', 'Halide Edib Adıvar', 'Orhan Pamuk', 'Sabahattin Ali'],
-    correctAnswer: 'Halide Edib Adıvar',
-    difficulty: 'Orta',
-    courseId: 'edebiyat',
-    topicId: 'romanlar',
-    topic: 'Romanlar',
-  },
-]
-
-```
-- .next/types/app/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/teacher/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/teacher/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/register/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/register/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/layout.ts:
-```ts
-import 'next';
-
-
-```
-- .next/types/app/login/layout.ts:
-```ts
-import 'next';
-
-export const metadata = // <unknown> as any
-
-```
-- .next/types/app/login/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/login/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/student/layout.ts:
-```ts
-import 'next';
-
-
-```
-- .next/types/app/student/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/student/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/leaderboard/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/leaderboard/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/teacher/layout.ts:
-```ts
-import 'next';
-
-
-```
-- .next/types/app/oyunlar/kutu-ac/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/kutu-ac/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/labirent/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/labirent/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/eslestirme/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/eslestirme/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/yazi-tura/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/yazi-tura/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/adam-asmaca/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/adam-asmaca/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/bil-bakalim/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/bil-bakalim/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/kelime-avi/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/kelime-avi/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/hedefi-vur/page.tsx:
-```tsx
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/hedefi-vur/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/kavram-avi/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/kavram-avi/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/balon-avcisi/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/balon-avcisi/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/ilim-hazinesi/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/ilim-hazinesi/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/cumle-olusturma/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/cumle-olusturma/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/acik-uclu-cevapla/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/acik-uclu-cevapla/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/dogru-yol-kosucusu/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/dogru-yol-kosucusu/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/kavram-yarismasi/page.tsx:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/kavram-yarismasi/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/oyunlar/dogru-yanlis-zinciri/page.ts:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/oyunlar/dogru-yanlis-zinciri/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/teacher/smartboard/page.tsx:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/teacher/smartboard/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
-- .next/types/app/teacher/smartboard/kavram-duellosu/page.tsx:
-```ts
-import 'next';
-
-import type {DefaultPageModule} from "next/dist/server/future/route-modules/app-page/module"
-
-export const Components = {}
-export const CorrectlyTypedPage = // <unknown> as any
-export const __next_app__ = {
-  action: "default",
-  dir: "src/app/teacher/smartboard/kavram-duellosu/",
-  page: "page",
-}
-
-if (process.env.NODE_ENV !== 'production') {
-  // @ts-ignore
-  import(/* webpackMode: "eager" */ "next/dist/client/components/react-dev-overlay/internal/ReactDevOverlay").then((Overlay) => {
-    // @ts-ignore
-    Overlay.default.then((mod) => {
-      // @ts-ignore
-      mod.register()
-    })
-  })
-}
-const PageRouteModule = // <unknown> as any
-export default PageRouteModule
-
-```
