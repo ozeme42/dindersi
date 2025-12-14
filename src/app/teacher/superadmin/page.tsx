@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import { User, Download, HardDriveDownload, AlertTriangle, Loader2, Building, Book, FileQuestion, List, FileJson, Server } from "lucide-react";
@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { AppHeader } from "@/components/app-header";
 
 function downloadJson(data: any, filename: string) {
   const jsonStr = JSON.stringify(data, null, 2);
@@ -85,7 +84,6 @@ export default function SuperAdminPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-muted/40">
-        <AppHeader />
         <main className="flex-1 container mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
@@ -162,5 +160,3 @@ export default function SuperAdminPage() {
     </div>
   );
 }
-
-    
