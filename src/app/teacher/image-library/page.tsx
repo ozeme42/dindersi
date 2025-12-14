@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -72,15 +73,14 @@ function ImageEditorDialog({
     setFile(null); // Reset file on open
   }, [image, isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault() is no longer needed as it's not a form submission event
     onSave(formData, file || undefined);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
-      <form onSubmit={handleSubmit}>
+      <DialogContent className="bg-slate-900 border-white/10 text-white">
           <DialogHeader>
             <DialogTitle>
               {image?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
@@ -119,13 +119,12 @@ function ImageEditorDialog({
                 İptal
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isSaving || (!file && !image?.id)}>
+            <Button onClick={handleSubmit} disabled={isSaving || (!file && !image?.id)}>
               {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Kaydet
             </Button>
           </DialogFooter>
-      </form>
-        </DialogContent>
+      </DialogContent>
     </Dialog>
   );
 }
