@@ -4,7 +4,7 @@
 import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { User, Lock, CheckCircle2, XCircle, ArrowRight, ArrowLeft, Loader2, PartyPopper, Repeat, Home, Trophy, Award, Swords } from "lucide-react";
 import Link from "next/link";
 import { getKavramDuellosuQuestions, type KavramDuellosuQuestion } from '../actions';
@@ -299,3 +299,5 @@ export default function KavramDuellosuOyunPage() {
         </Suspense>
     );
 }
+
+    
