@@ -1,242 +1,248 @@
+
 'use client';
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { 
-  MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap 
-} from 'lucide-react';
-import React, { type ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Swords, Loader2, Trophy, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { SelectionGrid } from "@/components/selection-grid";
 
-// Yeni, daha büyük ve okunaklı kart bileşeni
-const SmartboardCard = ({ href, title, description, icon, colorClass, isExternal }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string, isExternal?: boolean }) => {
-    const linkContent = (
-        <div className={cn(
-            "h-full w-full rounded-[2.5rem] p-8 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform border-b-8 group-hover:border-b-0 group-hover:translate-y-2 relative overflow-hidden group",
-            colorClass
-        )}>
-            {/* Arka Plan Işık Efekti */}
-            <div className={cn("absolute inset-0 opacity-20 blur-3xl group-hover:opacity-40 transition-opacity", colorClass.includes('bg-') ? colorClass.replace('bg-', 'bg-') : 'bg-primary')}></div>
-            
-            {/* İkon */}
-            <div className="p-6 rounded-3xl bg-white/10 mb-6 border border-white/20 relative z-10 group-hover:scale-110 transition-transform shadow-lg backdrop-blur-sm">
-                {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 text-white" })}
-            </div>
-            
-            {/* Başlık */}
-            <h3 className="font-black text-3xl md:text-4xl mt-2 text-white drop-shadow-md relative z-10 uppercase tracking-tight leading-tight">{title}</h3>
-            
-            {/* Açıklama */}
-            <p className="mt-3 text-white/80 text-lg font-medium relative z-10 leading-snug">{description}</p>
-            
-            <div className="flex-grow" />
-            
-            {/* Detay Butonu/İkonu */}
-            <div className="mt-8 flex items-center text-xl font-bold text-white relative z-10 bg-black/20 px-6 py-2 rounded-full border border-white/10 group-hover:bg-white/20 transition-colors">
-                BAŞLAT <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
-            </div>
-        </div>
-    );
-    
-    if (isExternal) {
-        return <a href={href} target="_blank" rel="noopener noreferrer" className="block group h-full">{linkContent}</a>
-    }
+const steps = [
+  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 5, name: "Başlat", icon: <Check className="h-5 w-5" /> },
+];
 
-    return (
-        <Link href={href} className="block group h-full">
-            {linkContent}
-        </Link>
-    )
-};
-
-
-export default function SmartboardPage() {
+export function SmartboardKavramDuellosuClientPage() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   
-    // Yarışma Modları
-    const yarışmalar = [
-        {
-            key: 'smartboard_bireysel',
-            href: "/teacher/smartboard/bireysel",
-            title: "Bireysel Yarışma",
-            description: "Her öğrencinin kendi başına yarıştığı klasik, hızlı mod.",
-            icon: <User />,
-            colorClass: "bg-indigo-600 border-indigo-800 hover:bg-indigo-500",
-        },
-        {
-            key: 'smartboard_takim',
-            href: "/teacher/smartboard/takim",
-            title: "Takım Yarışması",
-            description: "Öğrencileri gruplandırıp takım ruhuyla rekabeti artırın.",
-            icon: <Users />,
-            colorClass: "bg-teal-600 border-teal-800 hover:bg-teal-500",
-        },
-        {
-            key: 'smartboard_duello',
-            href: "/teacher/smartboard/duello",
-            title: "Düello",
-            description: "İki öğrenciyi veya takımı doğrudan karşı karşıya getirin.",
-            icon: <Swords />,
-            colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
-        },
-        {
-            key: 'fetih_oyunu',
-            href: "/teacher/smartboard/fetih-oyunu",
-            title: "Fetih Oyunu",
-            description: "Sorularla haritada ilerle, kaleyi fethet ve bölgeleri ele geçir.",
-            icon: <GitBranch />,
-            colorClass: "bg-emerald-600 border-emerald-800 hover:bg-emerald-500",
-        },
-        {
-            key: 'tornado',
-            href: "/teacher/smartboard/tornado",
-            title: "Tornado",
-            description: "Rastgele puanlar ve sürpriz sorularla şans faktörünü kullan.",
-            icon: <Wind />,
-            colorClass: "bg-cyan-600 border-cyan-800 hover:bg-cyan-500",
-        },
-        {
-            key: 'kutu_ac',
-            href: "/teacher/smartboard/kutu-ac",
-            title: "Kutu Aç",
-            description: "Kutuları açarak puan tablosunu doldur ve lider ol.",
-            icon: <Package />,
-            colorClass: "bg-purple-600 border-purple-800 hover:bg-purple-500",
-        },
-        {
-            key: 'dort_secenek',
-            href: "/teacher/smartboard/dort-secenek",
-            title: "4 Seçenekli Test",
-            description: "Klasik çoktan seçmeli soruyu tahtada interaktif çözme.",
-            icon: <Gamepad2 />,
-            colorClass: "bg-pink-600 border-pink-800 hover:bg-pink-500",
-        },
-    ];
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [units, setUnits] = useState<Unit[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  
+  const [selection, setSelection] = useState({
+    classId: "",
+    className: "",
+    courseId: "",
+    courseName: "",
+    unitId: "",
+    unitName: "",
+    topicId: "",
+    topicName: "",
+  });
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      setIsLoading(true);
+      try {
+        const [coursesSnapshot, classesSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "courses"), orderBy("title"))),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        ]);
+        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
+        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+      } catch (error) {
+        console.error("Error fetching initial data: ", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchInitialData();
+  }, []);
+
+  const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
+  const handleBack = () => {
+    if (currentStep > 1) {
+        if (currentStep === 2) setSelection(s => ({...s, classId: '', className: ''}));
+        if (currentStep === 3) setSelection(s => ({...s, courseId: '', courseName: ''}));
+        if (currentStep === 4) setSelection(s => ({...s, unitId: '', unitName: ''}));
+        if (currentStep === 5) setSelection(s => ({...s, topicId: '', topicName: ''}));
+        setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleSelectClass = (classId: string, className: string) => {
+    setSelection(prev => ({ ...prev, classId, className, courseId: '', courseName: '', unitId: '', unitName: '', topicId: '' }));
     
-    // Sunum & Araç Modları
-    const sunumlar = [
-        {
-            key: 'ozetler',
-            href: "/teacher/smartboard/ozetler",
-            title: "Özetler ve İçerikler",
-            description: "Konu özetlerini ve interaktif HTML içerikleri tam ekran sun.",
-            icon: <LayoutTemplate />,
-            colorClass: "bg-rose-600 border-rose-800 hover:bg-rose-500",
-        },
-        {
-            key: 'yazilacaklar',
-            href: "/teacher/smartboard/yazilacaklar",
-            title: "Kavram & Not Panosu",
-            description: "Kavramlar ve önemli notları sütunlara ayırarak net göster.",
-            icon: <Columns />,
-            colorClass: "bg-amber-600 border-amber-800 hover:bg-amber-500",
-        },
-        {
-             key: 'sanal-tahta',
-             href: "/teacher/smartboard/sanal-tahta",
-             title: "Sanal Tahta",
-             description: "Ders anlatımı için temel dijital beyaz tahta modülü.",
-             icon: <Lightbulb />,
-             colorClass: "bg-blue-600 border-blue-800 hover:bg-blue-500",
-        },
-        {
-             key: 'anlik-geri-bildirim',
-             href: "/teacher/smartboard/anlik-geri-bildirim",
-             title: "Anlık Geri Bildirim",
-             description: "Sınıfın nabzını anında ölçmek için hızlı soru/anket.",
-             icon: <Zap />,
-             colorClass: "bg-slate-700 border-slate-900 hover:bg-slate-600",
-        },
-        {
-            key: 'carkifelek',
-            href: "/teacher/smartboard/carkifelek",
-            title: "Çarkıfelek",
-            description: "Sınıftan rastgele bir öğrenci seçmek için çarkı çevirin.",
-            icon: <Trophy />,
-            colorClass: "bg-yellow-600 border-yellow-800 hover:bg-yellow-500",
-        },
-    ];
+    const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+    const isFirstClass = classId === firstClassId;
+    const applicableCourses = allCourses.filter(course => course.isSummerSchool !== true && (course.classId === classId || (!course.classId && isFirstClass)));
+    setCourses(applicableCourses);
+    setUnits([]);
+    setTopics([]);
+    
+    handleNext();
+  };
+  
+  const handleSelectCourse = async (courseId: string, courseName: string) => {
+    setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
+    setIsDataLoading(true);
+    const unitsRef = collection(db, `courses/${courseId}/units`);
+    const q = query(unitsRef, orderBy("title"));
+    const unitsSnapshot = await getDocs(q);
+    setUnits(unitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit)));
+    setTopics([]);
+    setIsDataLoading(false);
+    handleNext();
+  };
 
-    return (
-        <div className="flex flex-col items-center p-6 sm:p-10 md:p-16 space-y-16 min-h-screen bg-slate-950 text-white font-sans relative overflow-hidden">
-            
-             {/* Arka Plan Efektleri */}
-             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px]" />
-            </div>
+  const handleSelectUnit = async (unitId: string, unitName: string) => {
+    setSelection(prev => ({ ...prev, unitId, unitName, topicId: '', topicName: '' }));
+    if (unitId === 'all') {
+      setSelection(prev => ({ ...prev, topicId: 'all', topicName: 'Tüm Konular' }));
+      setTopics([]);
+    } else {
+      setIsDataLoading(true);
+      const topicsRef = collection(db, `courses/${selection.courseId}/units/${unitId}/topics`);
+      const q = query(topicsRef, orderBy("title"));
+      const topicsSnapshot = await getDocs(q);
+      setTopics(topicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic)));
+      setIsDataLoading(false);
+    }
+    handleNext();
+  };
+  
+  const handleSelectTopic = (topicId: string, topicName: string) => {
+    setSelection(prev => ({...prev, topicId, topicName}));
+    handleNext();
+  };
 
-            {/* Ana Başlık */}
-            <div className="text-center relative z-10 space-y-6">
-                <div className="inline-flex items-center justify-center p-5 bg-white/5 rounded-full mb-2 border border-white/10 shadow-2xl backdrop-blur-md">
-                    <MonitorPlay className="h-12 w-12 text-cyan-400"/>
+  const getGameUrl = () => {
+    const params = new URLSearchParams({
+        courseId: selection.courseId,
+        unitId: selection.unitId,
+        topicId: selection.topicId,
+    });
+    return `/teacher/smartboard/kavram-duellosu/oyun?${params.toString()}`;
+  }
+
+  const renderContent = () => {
+    if (isLoading && currentStep > 0) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-fuchsia-500"/></div>
+    
+    const loadingProp = isDataLoading;
+
+    switch(currentStep) {
+        case 1: return <SelectionGrid items={allClasses} onSelect={handleSelectClass} selectedId={selection.classId} titleKey="name" isLoading={isLoading} />;
+        case 2: return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={loadingProp} />
+        case 3: return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />
+        case 4: return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />
+        case 5:
+            return (
+                <div className="w-full max-w-lg mx-auto">
+                    <Card className="bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
+                        <div className="bg-gradient-to-r from-red-600 to-blue-600 p-1"></div>
+                        <CardHeader className="text-center pb-2">
+                             <Trophy className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>
+                             <CardTitle className="text-2xl text-white">Düello Özeti</CardTitle>
+                             <CardDescription className="text-slate-400">Her şey hazır, mücadele başlasın!</CardDescription>
+                        </CardHeader>
+                         <CardContent className="space-y-6 pt-4">
+                             <div className="space-y-2 text-sm text-slate-300">
+                                 <div className="flex justify-between border-b border-white/5 pb-2"><span>Ders:</span> <span className="text-white font-medium">{selection.courseName}</span></div>
+                                 <div className="flex justify-between border-b border-white/5 pb-2"><span>Ünite:</span> <span className="text-white font-medium">{selection.unitName}</span></div>
+                                 <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
+                             </div>
+                        </CardContent>
+                         <CardFooter>
+                            <Button asChild className="w-full h-16 text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 shadow-[0_0_20px_rgba(220,38,38,0.4)]">
+                                <Link href={getGameUrl()}>
+                                    <Swords className="mr-3 h-6 w-6"/> Düelloyu Başlat
+                                </Link>
+                            </Button>
+                         </CardFooter>
+                    </Card>
                 </div>
-                <h1 className="font-black text-6xl md:text-8xl tracking-tight text-white drop-shadow-2xl">AKILLI <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">TAHTA</span></h1>
-                <p className="text-slate-400 text-2xl md:text-3xl font-medium max-w-3xl mx-auto">Sınıf içi etkileşimi en üst seviyeye çıkarmak için bir mod seçin.</p>
-            </div>
-            
-            <div className="w-full max-w-[1600px] space-y-16 relative z-10">
-                
-                {/* Yarışmalar Bölümü */}
-                <section>
-                    <h2 className="text-4xl font-black text-center mb-10 text-white flex items-center justify-center gap-4">
-                        <div className="h-px w-16 bg-gradient-to-r from-transparent to-indigo-500"></div>
-                        <span className="bg-indigo-500/10 px-6 py-2 rounded-xl border border-indigo-500/30 text-indigo-300 uppercase tracking-widest flex items-center gap-3">
-                           <Trophy className="h-8 w-8" /> Yarışma Modları
-                        </span>
-                        <div className="h-px w-16 bg-gradient-to-l from-transparent to-indigo-500"></div>
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {yarışmalar.map((buttonProps) => (
-                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
-                                <SmartboardCard {...buttonProps} />
-                            </div>
-                        ))}
-                    </div>
-                </section>
+            );
+        default: return null;
+    }
+  }
 
-                {/* Sunumlar ve Araçlar Bölümü */}
-                <section>
-                    <h2 className="text-4xl font-black text-center mb-10 text-white flex items-center justify-center gap-4">
-                        <div className="h-px w-16 bg-gradient-to-r from-transparent to-rose-500"></div>
-                        <span className="bg-rose-500/10 px-6 py-2 rounded-xl border border-rose-500/30 text-rose-300 uppercase tracking-widest flex items-center gap-3">
-                           <MonitorPlay className="h-8 w-8" /> Sunumlar ve Araçlar
-                        </span>
-                        <div className="h-px w-16 bg-gradient-to-l from-transparent to-rose-500"></div>
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {sunumlar.map((buttonProps) => (
-                            <div key={buttonProps.key} className="aspect-[4/5] min-h-[380px]">
-                                <SmartboardCard {...buttonProps} />
-                            </div>
-                        ))}
-                    </div>
-                </section>
-                
-            </div>
-
-            {/* Yönetim Butonları */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-4xl relative z-10 p-8 rounded-[2.5rem] bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl">
-                <Button asChild className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-xl font-bold shadow-lg shadow-amber-900/40 h-16 px-10 rounded-2xl transition-all border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 w-full md:w-auto">
-                    <Link href="/teacher/smartboard/leaderboard">
-                        <Trophy className="mr-3 h-7 w-7" />
-                        Turnuva Liderliği
-                    </Link>
-                </Button>
-                <div className="h-px w-full md:w-px md:h-12 bg-white/10"></div>
-                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 text-lg font-bold h-14 px-8 rounded-xl w-full md:w-auto justify-start md:justify-center">
-                    <Link href="/teacher/guest-students">
-                        <UserCog className="mr-3 h-6 w-6 text-cyan-400" />
-                        Sanal Öğrencileri Yönet
-                    </Link>
-                </Button>
-                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 text-lg font-bold h-14 px-8 rounded-xl w-full md:w-auto justify-start md:justify-center">
-                    <Link href="/teacher/game-settings">
-                        <Settings className="mr-3 h-6 w-6 text-purple-400" />
-                        Oyun Ayarlarını Yönet
-                    </Link>
-                </Button>
-            </div>
-            
+  return (
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
+        {/* Arka Plan */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+            <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[150px]" />
+            <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-900/10 rounded-full blur-[150px]" />
         </div>
-    );
+
+        <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
+            <div className="text-center mb-8">
+                <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">Kavram Düellosu Kurulumu</h1>
+                <p className="text-slate-400 mt-1">Konu seçimi yapın ve mücadeleyi başlatın.</p>
+            </div>
+        
+            {/* Stepper */}
+            <div className="flex justify-center items-center mb-8 px-4">
+                <div className="relative flex items-center justify-between w-full max-w-4xl">
+                    <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                    <div 
+                        className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-red-500 to-blue-500 -z-10 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                    ></div>
+
+                    {steps.map((step) => {
+                        const isActive = currentStep === step.id;
+                        const isCompleted = currentStep > step.id;
+                        return (
+                            <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
+                                <div className={cn(
+                                    "w-10 h-10 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
+                                    isActive 
+                                        ? "bg-slate-900 border-rose-500 text-rose-400 scale-110 shadow-rose-500/50" 
+                                        : isCompleted 
+                                            ? "bg-blue-600 border-blue-600 text-white scale-100" 
+                                            : "bg-slate-900 border-slate-800 text-slate-600"
+                                )}>
+                                    {isCompleted ? <Check className="w-5 h-5 stroke-[3]" /> : step.icon}
+                                </div>
+                                <span className={cn("text-[10px] font-bold uppercase tracking-wider hidden sm:block", isActive ? "text-rose-400" : "text-slate-600")}>{step.name}</span>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+
+            <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
+                <CardHeader className="border-b border-white/5 pb-4">
+                    <CardTitle className="text-xl text-white">{steps.find(s => s.id === currentStep)?.name} Seçimi</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow flex justify-center items-start p-6 overflow-y-auto min-h-[400px]">
+                    {renderContent()}
+                </CardContent>
+                <CardFooter className="flex justify-between p-6 border-t border-white/5 bg-slate-900/50">
+                    {currentStep === 1 ? (
+                        <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                            <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                        </Button>
+                    ) : (
+                        <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
+                    )}
+                    
+                    {currentStep < steps.length && (
+                        <Button onClick={handleNext} disabled={
+                            (currentStep === 1 && !selection.classId) || 
+                            (currentStep === 2 && !selection.courseId) ||
+                            (currentStep === 3 && !selection.unitId) ||
+                            (currentStep === 4 && !selection.topicId)
+                        } className="bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-900/20 px-8">
+                            İleri <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button> 
+                    )}
+                </CardFooter>
+            </Card>
+        </div>
+    </div>
+  );
 }

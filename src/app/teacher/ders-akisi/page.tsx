@@ -169,7 +169,6 @@ export default function DersAkisiPage() {
                                                                 <div className="h-16 w-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-black text-2xl border-2 border-cyan-500/30">
                                                                     {course.className?.charAt(0) || 'G'}
                                                                 </div>
-                                                                {/* GÜNCELLEME: Sınıf isminin sonuna '.Sınıf' ekleme mantığı */}
                                                                 <span className="flex-1 text-left">
                                                                     {course.className && /^\d+$/.test(course.className) 
                                                                         ? `${course.className}.Sınıf` 
@@ -195,79 +194,91 @@ export default function DersAkisiPage() {
                                                                                     </span>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="p-6 bg-black/20">
-                                                                                        {unit.topics.length > 0 ? (
-                                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                                                {unit.topics.map((topic, topicIndex) => {
-                                                                                                    const isLink = topic.externalLink;
-                                                                                                    const hasStudentContent = (topic.steps?.length || 0) > 0;
-                                                                                                    const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
-                                                                                                    
-                                                                                                    const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
+                                                                                    {unit.topics.length > 0 ? (
+                                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                                                            {unit.topics.map((topic, topicIndex) => {
+                                                                                                const isLink = topic.externalLink;
+                                                                                                const hasStudentContent = (topic.steps?.length || 0) > 0;
+                                                                                                const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
+                                                                                                
+                                                                                                const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
 
-                                                                                                    return (
-                                                                                                        <Link 
-                                                                                                            key={topic.id}
-                                                                                                            href={isLink ? topic.externalLink! : presentationUrl}
-                                                                                                            target={isLink ? "_blank" : undefined}
-                                                                                                            className={cn(
-                                                                                                                "group relative w-full flex flex-col justify-center items-center text-center font-bold",
-                                                                                                                "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
-                                                                                                                "rounded-[2rem] shadow-2xl min-h-[14rem]",
-                                                                                                                "break-words whitespace-normal leading-tight p-8",
-                                                                                                                neonClass
-                                                                                                            )}
-                                                                                                        >
-                                                                                                            {/* İkon */}
-                                                                                                            {isLink ? (
-                                                                                                                <LinkIcon className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                            ) : (
-                                                                                                                <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                            )}
+                                                                                                return (
+                                                                                                    <Link 
+                                                                                                        key={topic.id}
+                                                                                                        href={isLink ? topic.externalLink! : presentationUrl}
+                                                                                                        target={isLink ? "_blank" : undefined}
+                                                                                                        className={cn(
+                                                                                                            "group relative w-full flex flex-col justify-center items-center text-center font-bold",
+                                                                                                            "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                            "rounded-[2rem] shadow-2xl min-h-[14rem]",
+                                                                                                            "break-words whitespace-normal leading-tight p-8",
+                                                                                                            neonClass
+                                                                                                        )}
+                                                                                                    >
+                                                                                                        {/* İkon */}
+                                                                                                        {isLink ? (
+                                                                                                            <LinkIcon className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                        ) : (
+                                                                                                            <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                        )}
 
-                                                                                                            {/* Başlık */}
-                                                                                                            <span className="text-2xl md:text-3xl line-clamp-3">
-                                                                                                                {topic.title}
-                                                                                                            </span>
+                                                                                                        {/* Başlık */}
+                                                                                                        <span className="text-2xl md:text-3xl line-clamp-3">
+                                                                                                            {topic.title}
+                                                                                                        </span>
 
-                                                                                                            {/* Action Buttons Overlay - Sabit Sağ Üst */}
-                                                                                                            <div className="absolute top-4 right-4 flex gap-2 z-20">
-                                                                                                                {hasStudentContent && !isLink && (
-                                                                                                                    <div 
-                                                                                                                        onClick={(e) => {
-                                                                                                                            e.preventDefault();
-                                                                                                                            e.stopPropagation();
-                                                                                                                            window.open(`/student/ders/${course.id}?topicId=${topic.id}`, '_blank');
-                                                                                                                        }}
-                                                                                                                        className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-emerald-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                        title="Öğrenci Görünümü"
-                                                                                                                    >
-                                                                                                                        <BookOpen className="h-6 w-6" />
-                                                                                                                    </div>
-                                                                                                                )}
+                                                                                                        {/* Action Buttons Overlay - Sabit Sağ Üst */}
+                                                                                                        <div className={cn(
+                                                                                                            "absolute top-4 right-4 flex gap-2 z-20",
+                                                                                                            "transition-all duration-300 ease-in-out",
+                                                                                                            
+                                                                                                            // MOBİL (< 768px): Her zaman görünür ve yerinde
+                                                                                                            "opacity-100 visible translate-y-0", 
+                                                                                                            
+                                                                                                            // MASAÜSTÜ (>= 768px): Başlangıçta Görünmez ve Gizli
+                                                                                                            "md:opacity-0 md:invisible md:-translate-y-2",
+                                                                                                            
+                                                                                                            // MASAÜSTÜ HOVER: Görünür, Visible ve Yerine Gelir
+                                                                                                            "md:group-hover:opacity-100 md:group-hover:visible md:group-hover:translate-y-0"
+                                                                                                        )}>
+                                                                                                            {hasStudentContent && !isLink && (
                                                                                                                 <div 
-                                                                                                                    onClick={(e) => handleEditClick(e, topic, course.id, unit.id)}
-                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-amber-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                    title="Düzenle"
+                                                                                                                    onClick={(e) => {
+                                                                                                                        e.preventDefault();
+                                                                                                                        e.stopPropagation();
+                                                                                                                        window.open(`/student/ders/${course.id}?topicId=${topic.id}`, '_blank');
+                                                                                                                    }}
+                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-emerald-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                    title="Öğrenci Görünümü"
                                                                                                                 >
-                                                                                                                    <FilePenLine className="h-6 w-6" />
+                                                                                                                    <BookOpen className="h-6 w-6" />
                                                                                                                 </div>
-                                                                                                                <div 
-                                                                                                                    onClick={(e) => handleSummaryClick(e, course.id, unit.id, topic.id)}
-                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-purple-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                    title="Özet"
-                                                                                                                >
-                                                                                                                    <Columns className="h-6 w-6" />
-                                                                                                                </div>
+                                                                                                            )}
+                                                                                                            <div 
+                                                                                                                onClick={(e) => handleEditClick(e, topic, course.id, unit.id)}
+                                                                                                                className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-amber-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                title="Düzenle"
+                                                                                                            >
+                                                                                                                <FilePenLine className="h-6 w-6" />
                                                                                                             </div>
-                                                                                                        </Link>
-                                                                                                    );
-                                                                                                })}
-                                                                                            </div>
-                                                                                        ) : (
-                                                                                            <div className="text-xl text-slate-500 italic p-8 text-center border-4 border-dashed border-slate-800 rounded-3xl">
-                                                                                                Bu üniteye henüz konu eklenmemiş.
-                                                                                            </div>
-                                                                                        )}
+                                                                                                            <div 
+                                                                                                                onClick={(e) => handleSummaryClick(e, course.id, unit.id, topic.id)}
+                                                                                                                className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-purple-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
+                                                                                                                title="Özet"
+                                                                                                            >
+                                                                                                                <Columns className="h-6 w-6" />
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </Link>
+                                                                                                );
+                                                                                            })}
+                                                                                        </div>
+                                                                                    ) : (
+                                                                                        <div className="text-xl text-slate-500 italic p-8 text-center border-4 border-dashed border-slate-800 rounded-3xl">
+                                                                                            Bu üniteye henüz konu eklenmemiş.
+                                                                                        </div>
+                                                                                    )}
                                                                                 </AccordionContent>
                                                                         </AccordionItem>
                                                                     </Accordion>

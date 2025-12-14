@@ -1,10 +1,11 @@
 
 import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { SmartboardDuelloSetupClientPage } from "./client-page";
+import { SmartboardKavramDuellosuClientPage } from "./client-page";
 
 export const dynamic = 'force-dynamic';
 
-export default async function DuelloSetupPage() {
+export default async function KavramDuellosuSetupPage() {
     const settings = await getGameSettings();
-    return <SmartboardDuelloSetupClientPage gameConfig={settings.teacherDuello} />;
+    // Re-use bireysel settings for now as they are similar, can be customized later
+    return <SmartboardKavramDuellosuClientPage gameConfig={settings.teacherDuello} />;
 }

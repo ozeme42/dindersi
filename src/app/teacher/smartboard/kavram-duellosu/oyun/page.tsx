@@ -1,363 +1,301 @@
 
 'use client';
 
-import { useState, useEffect, Suspense, useMemo, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
+import { User, Lock, CheckCircle2, XCircle, ArrowRight, ArrowLeft, Loader2, PartyPopper, Repeat, Home, Trophy, Award, Swords } from "lucide-react";
 import Link from "next/link";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { getKavramDuellosuQuestions, type KavramDuellosuQuestion } from '../actions';
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { QuestionDialog } from "@/components/question-dialog";
-import { Loader2 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/context/auth-context";
+import { playSound, stopSound } from "@/lib/audio-service";
+import Confetti from 'react-dom-confetti';
 
-type GameQuestion = GetQuizOutput['questions'][0];
-type Player = { id: string; name: string; isGuest: boolean; avatar?: string; };
+type GameQuestion = KavramDuellosuQuestion;
 
-function CompetitionLoadingSkeleton() {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-950">
-        <Loader2 className="h-16 w-16 animate-spin text-red-500" />
-      </div>
-    );
-}
-
-function DuelGameComponent() {
+function KavramDuellosuGame() {
     const searchParams = useSearchParams();
-    const { toast } = useToast();
-    const { user } = useAuth();
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    const [state, setState] = useState({
+        p1Score: 0,
+        p2Score: 0,
+        currentQIndex: 0,
+        showNextButton: false,
+        correctAnswer: null as string | null,
+        winner: null as 'p1' | 'p2' | null,
+        gameState: 'playing' as 'playing' | 'finished',
+    });
+
+    const [p1Lock, setP1Lock] = useState(false);
+    const [p2Lock, setP2Lock] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
     
-    const [duelists, setDuelists] = useState<{ p1: Player, p2: Player } | null>(null);
-    const [activePlayer, setActivePlayer] = useState<Player | null>(null);
-    const [tugProgress, setTugProgress] = useState(0); // -100 (p2 wins) to 100 (p1 wins)
-
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: GameQuestion } | null>(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
-    const [winner, setWinner] = useState<Player | 'draw' | null>(null);
-
-    const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
-    
-    // Configs
-    const pullStrengthConfig = useMemo(() => {
-        const param = searchParams.get('pullStrength');
-        try { return param ? JSON.parse(param) : { Kolay: 10, Orta: 15, Zor: 20 }; } catch { return { Kolay: 10, Orta: 15, Zor: 20 }; }
-    }, [searchParams]);
-
-    const pointsConfig = useMemo(() => {
-        return { 
-            default: { points: 0 },
-            mcq: pullStrengthConfig,
-            tf: pullStrengthConfig,
-            fitb: pullStrengthConfig 
-        };
-    }, [pullStrengthConfig]);
-
-    useEffect(() => {
-        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
-
     const fetchGameData = useCallback(async () => {
-        const p1Id = searchParams.get('p1');
-        const p2Id = searchParams.get('p2');
-        
-        if (!p1Id || !p2Id) {
-            setError("Savaşçı bilgileri eksik. Lütfen kurulum ekranına geri dönün.");
-            setIsLoading(false);
-            return;
+        setIsLoading(true);
+        const params = {
+            courseId: searchParams.get('courseId') || undefined,
+            unitId: searchParams.get('unitId') || undefined,
+            topicId: searchParams.get('topicId') || undefined,
+        };
+        const result = await getKavramDuellosuQuestions(params);
+        if (result.error || result.questions.length === 0) {
+            setError(result.error || "Uygun soru bulunamadı.");
+        } else {
+            // Soruları 3 kez çoğalt ve karıştır
+            const tripleQuestions = [...result.questions, ...result.questions, ...result.questions];
+            setQuestions(tripleQuestions.sort(() => Math.random() - 0.5));
         }
-
-        try {
-            const [p1Doc, p2Doc] = await Promise.all([ getDoc(doc(db, "users", p1Id)), getDoc(doc(db, "users", p2Id)) ]);
-            
-            if (!p1Doc.exists() || !p2Doc.exists()) throw new Error("Savaşçılar bulunamadı.");
-
-            const player1Data = p1Doc.data();
-            const player2Data = p2Doc.data();
-            
-            const p1: Player = { id: p1Doc.id, name: player1Data.displayName, isGuest: player1Data.role === 'guest', avatar: player1Data.avatar };
-            const p2: Player = { id: p2Doc.id, name: player2Data.displayName, isGuest: player2Data.role === 'guest', avatar: player2Data.avatar };
-
-            setDuelists({ p1, p2 });
-            setActivePlayer(p1);
-
-            const params: GetQuizInput = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: parseInt(searchParams.get('questionCount') || '20'),
-                difficulty: ['Kolay', 'Orta', 'Zor'],
-                questionTypes: ['mcq', 'tf', 'fitb'],
-            };
-            const questionResult = await getQuestionsFromBank(params);
-            
-            if ('error' in questionResult) throw new Error(questionResult.error);
-            if (!questionResult.questions || questionResult.questions.length === 0) throw new Error("Soru bulunamadı.");
-            
-            setQuestions(questionResult.questions as GameQuestion[]);
-            setGameState('playing');
-
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
     }, [searchParams]);
 
     useEffect(() => {
         fetchGameData();
     }, [fetchGameData]);
+    
+    const currentQ = questions[state.currentQIndex];
 
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
-        if (gameState !== 'playing' || !activePlayer || !duelists) return;
-        
-        const direction = activePlayer.id === duelists.p1.id ? 1 : -1;
-        const impact = scoreChange; 
-        
-        let newTugProgress = tugProgress + (direction * impact);
-        newTugProgress = Math.max(-100, Math.min(100, newTugProgress));
-        
-        setTugProgress(newTugProgress);
-        setAnsweredQuestions(prev => [...prev, questionNumber]);
-        setOpenedQuestion(null);
-
-        if (newTugProgress >= 100) { 
-            setWinner(duelists.p1); 
-            setGameState('finished'); 
-        } else if (newTugProgress <= -100) { 
-            setWinner(duelists.p2); 
-            setGameState('finished'); 
-        } else if (answeredQuestions.length + 1 === questions.length) {
-            if (newTugProgress > 0) setWinner(duelists.p1);
-            else if (newTugProgress < 0) setWinner(duelists.p2);
-            else setWinner('draw');
-            setGameState('finished');
-        } else {
-            setActivePlayer(activePlayer.id === duelists.p1.id ? duelists.p2 : duelists.p1);
+    const loadQuestion = useCallback(() => {
+        if (!currentQ) {
+            // Eğer soru yoksa ve index geçerliyse, oyun bitmiş demektir.
+            if (state.currentQIndex >= questions.length && questions.length > 0) {
+                 setState(s => ({...s, gameState: 'finished'}));
+                 playSound('win');
+            }
+            return;
         }
-    };
+
+        const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
+        
+        setState(s => ({ 
+            ...s, 
+            showNextButton: false,
+            correctAnswer: null,
+            winner: null,
+        }));
+        setP1Lock(false);
+        setP2Lock(false);
+    }, [currentQ, state.currentQIndex, questions.length]);
     
     useEffect(() => {
-        if (gameState === 'finished' && winner && winner !== 'draw' && duelists) {
-            if (user?.role === 'student') return; // Do not save score if a student is playing from smartboard link
-            
-            const winnerId = winner.id;
-            const loserId = winnerId === duelists.p1.id ? duelists.p2.id : duelists.p1.id;
-            
-            const scoreUpdates = [];
-            if(!duelists.p1.isGuest) scoreUpdates.push({ userId: duelists.p1.id, points: winnerId === duelists.p1.id ? 50 : 10, gameType: 'smartboard_duello' as const, context: 'Düello' });
-            if(!duelists.p2.isGuest) scoreUpdates.push({ userId: duelists.p2.id, points: winnerId === duelists.p2.id ? 50 : 10, gameType: 'smartboard_duello' as const, context: 'Düello' });
-
-            if(scoreUpdates.length > 0) {
-                updateMultipleStudentScores(scoreUpdates);
-            }
+        if (!isLoading && questions.length > 0) {
+            loadQuestion();
         }
-    }, [gameState, winner, duelists, user]);
-    
-    if (isLoading) return <CompetitionLoadingSkeleton />;
-    if (error) return (
-        <div className="flex h-screen items-center justify-center bg-slate-950 p-4">
-            <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-900 text-red-200">
-                <AlertTitle>Hata!</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50">
-                    <Link href="/teacher/smartboard/duello"><ArrowLeft className="mr-2 h-4 w-4" /> Kuruluma Geri Dön</Link>
-                </Button>
-            </Alert>
-        </div>
-    );
+    }, [isLoading, questions, state.currentQIndex, loadQuestion]);
 
-     if (gameState === 'finished') {
-         return (
-              <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
-                <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-slate-950 to-slate-950" />
-                <Card className="w-full max-w-4xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500" />
-                    
-                    <CardHeader className="text-center pt-12 pb-6">
-                        <div className="mx-auto bg-slate-800 p-6 rounded-full mb-6 shadow-xl ring-8 ring-slate-800/50 inline-block animate-bounce">
-                             <Trophy className="h-20 w-20 text-yellow-400 fill-yellow-400/20" />
-                        </div>
-                        <CardTitle className="text-5xl font-black text-white uppercase tracking-tight drop-shadow-lg">Düello Bitti!</CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent className="flex flex-col items-center gap-8 pb-12">
-                        {winner === 'draw' ? (
-                            <div className="text-center">
-                                <Award className="h-32 w-32 text-slate-400 mx-auto mb-4"/>
-                                <p className="text-4xl font-black text-slate-200">BERABERE!</p>
-                            </div>
-                        ) : winner && duelists ? (
-                            <div className="flex flex-col items-center">
-                                <div className="relative mb-6">
-                                    <div className="absolute -top-10 -right-10 text-6xl animate-bounce delay-100">👑</div>
-                                    <div className={cn("border-4 px-12 py-8 rounded-[2rem] shadow-2xl relative overflow-hidden", winner.id === duelists.p1.id ? "bg-blue-900/40 border-blue-500" : "bg-red-900/40 border-red-500")}>
-                                        <div className={cn("absolute inset-0 opacity-20", winner.id === duelists.p1.id ? "bg-blue-500" : "bg-red-500")}/>
-                                        <h3 className="text-6xl font-black text-white uppercase relative z-10">{winner.name}</h3>
-                                        <p className={cn("text-2xl font-bold mt-2 tracking-widest text-center relative z-10", winner.id === duelists.p1.id ? "text-blue-300" : "text-red-300")}>KAZANAN</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p className="text-slate-400">Sonuçlar hesaplanıyor...</p> }
-                    </CardContent>
-                    <CardFooter className="bg-slate-900 border-t border-white/5 p-8 flex justify-center gap-6">
-                        <Button size="lg" onClick={() => window.location.reload()} className="h-16 px-8 text-xl rounded-2xl bg-white text-slate-900 hover:bg-slate-200 font-bold shadow-lg">
-                            <Repeat className="mr-3 h-6 w-6"/> Rövanş
-                        </Button>
-                        <Button asChild size="lg" variant="outline" className="h-16 px-8 text-xl rounded-2xl border-white/10 text-slate-300 hover:text-white hover:bg-white/5">
-                            <Link href="/teacher/smartboard"><Home className="mr-3 h-6 w-6"/> Çıkış</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        )
+    const handleAnswer = (player: 'p1' | 'p2', answer: string) => {
+        if (!currentQ || state.showNextButton) return;
+        
+        const isP1 = player === 'p1';
+        if ((isP1 && p1Lock) || (!isP1 && p2Lock)) return;
+
+        // Yanlış Cevap
+        if (answer !== currentQ.a) {
+            playSound('incorrect');
+            const zoneId = `${player}-zone`;
+            document.getElementById(zoneId)?.classList.add('shake');
+            
+            if (isP1) setP1Lock(true);
+            else setP2Lock(true);
+            
+            setTimeout(() => {
+                document.getElementById(zoneId)?.classList.remove('shake');
+            }, 500);
+
+            // Her ikisi de yanlış cevap verince sonraki tuşu çıksın
+            if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
+                 setTimeout(() => setState(s => ({...s, showNextButton: true, correctAnswer: currentQ?.a || null})), 500);
+            }
+            return;
+        }
+
+        // Doğru Cevap!
+        playSound('correct');
+        const winner = player;
+        setState(prevState => ({
+            ...prevState,
+            p1Score: isP1 ? prevState.p1Score + 1 : prevState.p1Score,
+            p2Score: !isP1 ? prevState.p2Score + 1 : prevState.p2Score,
+            showNextButton: true,
+            correctAnswer: currentQ.a,
+            winner,
+        }));
+        
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 2000);
+    };
+
+    const nextQuestion = () => {
+        setState(s => ({...s, currentQIndex: s.currentQIndex + 1}));
     }
 
+    const resetGame = () => {
+        setQuestions(prev => [...prev].sort(() => Math.random() - 0.5));
+        setState({
+            p1Score: 0,
+            p2Score: 0,
+            currentQIndex: 0,
+            showNextButton: false,
+            correctAnswer: null,
+            winner: null,
+            gameState: 'playing'
+        });
+        setP1Lock(false);
+        setP2Lock(false);
+    }
+    
+    if (isLoading) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
+    if (error) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900 text-red-400 text-2xl p-8 text-center">{error}</div>;
+
+    if (state.gameState === 'finished') {
+        const p1s = state.p1Score;
+        const p2s = state.p2Score;
+        let winnerText = "BERABERE!";
+        if (p1s > p2s) winnerText = "MAVİ TAKIM KAZANDI!";
+        if (p2s > p1s) winnerText = "KIRMIZI TAKIM KAZANDI!";
+        
+        return (
+             <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
+                 <Card className="w-full max-w-lg text-center bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
+                    <div className="bg-gradient-to-r from-red-600 to-blue-600 p-1"></div>
+                    <CardHeader className="pb-2">
+                        <Trophy className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>
+                        <CardTitle className="text-2xl text-white">Yarışma Bitti!</CardTitle>
+                        <CardDescription className="text-slate-400 text-lg">{winnerText}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-4">
+                         <div className="flex justify-around">
+                            <div className="text-center p-4 rounded-lg bg-blue-900/50 border border-blue-700 w-40">
+                                <p className="text-sm font-bold text-blue-300">MAVİ TAKIM</p>
+                                <p className="text-4xl font-black text-white">{p1s}</p>
+                            </div>
+                            <div className="text-center p-4 rounded-lg bg-red-900/50 border border-red-700 w-40">
+                                <p className="text-sm font-bold text-red-300">KIRMIZI TAKIM</p>
+                                <p className="text-4xl font-black text-white">{p2s}</p>
+                            </div>
+                         </div>
+                    </CardContent>
+                    <CardFooter className="flex-col sm:flex-row justify-center gap-4 p-6">
+                        <Button onClick={resetGame} size="lg" className="bg-indigo-600 hover:bg-indigo-500 font-bold"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
+                        <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
+                            <Link href="/teacher/smartboard/kavram-duellosu"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link>
+                        </Button>
+                    </CardFooter>
+                 </Card>
+            </div>
+        );
+    }
+    
+    if (!currentQ) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
+    
+    const OptionButton = ({ player, option, ...props }: { player: 'p1' | 'p2', option: string, [key: string]: any }) => {
+        const baseClass = player === 'p1'
+            ? 'bg-blue-100 text-blue-900 hover:bg-blue-50 border-b-4 border-blue-300 active:border-b-0 active:translate-y-1'
+            : 'bg-red-100 text-red-900 hover:bg-red-50 border-b-4 border-red-300 active:border-b-0 active:translate-y-1';
+        
+        const isCorrect = state.correctAnswer === option;
+        
+        let dynamicClass = baseClass;
+        if(state.showNextButton && isCorrect) {
+            dynamicClass = 'bg-green-500 text-white border-green-700 correct-blink';
+        }
+
+        return <button onClick={() => handleAnswer(player, option)} className={`w-full h-full text-2xl font-bold rounded-xl shadow-md transition-all ${dynamicClass}`} {...props}>{option}</button>;
+    }
+    
     return (
-        <div className={cn("flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-red-500/30 font-sans", isFullscreen ? "" : "p-4 md:p-6")}>
+        <div className="h-screen w-screen bg-slate-900 text-white flex">
+             <style jsx global>{`
+                body { touch-action: manipulation; user-select: none; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+                .player-zone { transition: background-color 0.3s; }
+                .shake { animation: shake 0.5s; }
+                @keyframes shake {
+                    0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); }
+                }
+                .correct-blink { animation: blinkGreen 0.5s 3; }
+                @keyframes blinkGreen { 50% { background-color: #4ade80; color: white; } }
+                .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+            `}</style>
             
-            {/* Arka Plan */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[150px]" />
+            <div id="p1-zone" className="player-zone flex-1 bg-blue-900/50 border-r-4 border-white/10 flex flex-col relative">
+                <div className="p-4 bg-blue-800 flex justify-between items-center shadow-lg z-10">
+                    <div className="flex items-center gap-2">
+                        <User className="w-6 h-6 text-blue-200" />
+                        <span className="text-2xl font-bold text-blue-200">MAVİ TAKIM</span>
+                    </div>
+                    <span id="p1-score" className="text-5xl font-black text-white drop-shadow-lg">{state.p1Score}</span>
+                </div>
+                
+                <div className="flex-1 flex flex-col justify-center p-8 gap-6 relative z-0" id="p1-controls">
+                    <div className="bg-white/10 p-6 rounded-2xl mb-4 min-h-[160px] flex items-center justify-center backdrop-blur-sm border border-white/5 shadow-xl">
+                        <p id="p1-question" className="text-3xl font-semibold text-center text-blue-50 leading-relaxed">{currentQ.q}</p>
+                    </div>
+                    <div id="p1-options" className="grid grid-cols-2 gap-4 h-64">
+                        {currentQ?.options.map(opt => <OptionButton key={`p1-${opt}`} player="p1" option={opt} />)}
+                    </div>
+                </div>
+                
+                {p1Lock && <div id="p1-lock" className="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center z-50 animate-fade-in"><Lock className="w-32 h-32 text-red-500 mb-4 animate-bounce" /><span className="text-2xl font-bold text-red-400">KİLİTLENDİ!</span></div>}
+                
+                {state.winner === 'p1' && state.showNextButton &&
+                    <div className="absolute inset-0 bg-green-900/40 backdrop-blur-sm flex flex-col items-center justify-center z-50 animate-fade-in">
+                        <CheckCircle2 className="w-32 h-32 text-green-400 mb-4" />
+                        <span className="text-4xl font-black text-white">DOĞRU!</span>
+                    </div>
+                }
             </div>
 
-            {/* Üst Bar */}
-            <header className={cn("flex-shrink-0 flex items-center justify-between z-20 mb-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-2 shadow-lg", isFullscreen && "rounded-none border-x-0 border-t-0 mb-0")}>
-                <div className="flex items-center gap-4">
-                    <div className="p-2.5 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl shadow-lg"><Swords className="h-5 w-5 text-white"/></div>
-                    <div>
-                        <h1 className="text-lg font-black tracking-tight text-white uppercase leading-none">Düello</h1>
-                        <p className="text-[10px] text-slate-400 font-medium mt-0.5">{searchParams.get('courseName')} • {searchParams.get('topicName')}</p>
-                    </div>
+            <div id="p2-zone" className="player-zone flex-1 bg-red-900/50 flex flex-col relative">
+                <div className="p-4 bg-red-800 flex justify-between items-center shadow-lg z-10">
+                    <div className="flex items-center gap-2"><User className="w-6 h-6 text-red-200" /><span className="text-2xl font-bold text-red-200">KIRMIZI TAKIM</span></div>
+                    <span id="p2-score" className="text-5xl font-black text-white drop-shadow-lg">{state.p2Score}</span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <FullscreenToggle className="bg-slate-800 text-slate-300 hover:text-white border-0 h-8 w-8 rounded-lg" />
-                    {!isFullscreen && <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-8 w-8"><Link href="/teacher/smartboard/duello"><ArrowLeft className="h-4 w-4" /></Link></Button>}
+                <div className="flex-1 flex flex-col justify-center p-8 gap-6 relative z-0" id="p2-controls">
+                    <div className="bg-white/10 p-6 rounded-2xl mb-4 min-h-[160px] flex items-center justify-center backdrop-blur-sm border border-white/5 shadow-xl"><p id="p2-question" className="text-3xl font-semibold text-center text-red-50 leading-relaxed">{currentQ.q}</p></div>
+                    <div id="p2-options" className="grid grid-cols-2 gap-4 h-64">{currentQ?.options.map(opt => <OptionButton key={`p2-${opt}`} player="p2" option={opt} />)}</div>
                 </div>
-            </header>
-
-            {/* Ana İçerik */}
-            <main className="flex-1 flex flex-col gap-6 overflow-hidden relative z-10 h-full p-2">
                 
-                {/* 1. ÜST: SAVAŞ ALANI */}
-                {duelists && (
-                    <div className="flex-shrink-0 flex flex-col gap-6 justify-center min-h-[250px] relative">
-                        <div className="flex justify-between items-center w-full px-4 md:px-12 relative z-10">
-                            <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activePlayer?.id === duelists.p1.id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95")}>
-                                <div className={cn("p-1 rounded-full", activePlayer?.id === duelists.p1.id ? "bg-blue-500 animate-pulse" : "bg-slate-700")}><Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900"><AvatarImage src={duelists.p1.avatar}/><AvatarFallback className="bg-blue-600 text-white font-black text-2xl">{duelists.p1.name.charAt(0)}</AvatarFallback></Avatar></div>
-                                <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activePlayer?.id === duelists.p1.id ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-400")}>{duelists.p1.name}</div>
-                            </div>
-                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"><div className="w-16 h-16 bg-slate-900 rounded-full border-4 border-white/10 flex items-center justify-center shadow-2xl"><span className="font-black text-2xl text-slate-500 italic">VS</span></div></div>
-                            <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activePlayer?.id === duelists.p2.id ? "scale-110 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]" : "opacity-70 scale-95")}>
-                                <div className={cn("p-1 rounded-full", activePlayer?.id === duelists.p2.id ? "bg-red-500 animate-pulse" : "bg-slate-700")}><Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900"><AvatarImage src={duelists.p2.avatar}/><AvatarFallback className="bg-red-600 text-white font-black text-2xl">{duelists.p2.name.charAt(0)}</AvatarFallback></Avatar></div>
-                                <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activePlayer?.id === duelists.p2.id ? "bg-red-600 text-white" : "bg-slate-800 text-slate-400")}>{duelists.p2.name}</div>
-                            </div>
-                        </div>
-                        
-                        <div className="w-full px-8 relative">
-                             <div className="h-8 w-full bg-slate-800 rounded-full overflow-hidden border-4 border-slate-700 shadow-inner relative">
-                                 <div className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-blue-800 to-blue-500 transition-all duration-700 ease-in-out shadow-[0_0_20px_rgba(59,130,246,0.5)]" style={{ width: `${50 + tugProgress / 2}%` }} />
-                                 <div className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-red-800 to-red-500 transition-all duration-700 ease-in-out shadow-[0_0_20px_rgba(239,68,68,0.5)]" style={{ width: `${50 - tugProgress / 2}%` }} />
-                                 <div className="absolute top-1/2 -translate-y-1/2 z-30 transition-all duration-700 ease-in-out" style={{ left: `${50 + tugProgress / 2}%`, transform: 'translate(-50%, -50%)' }}><div className="w-12 h-12 bg-white rounded-full border-4 border-slate-900 shadow-xl flex items-center justify-center"><Swords className={cn("h-6 w-6", tugProgress > 0 ? "text-blue-600" : tugProgress < 0 ? "text-red-600" : "text-slate-400")} /></div></div>
-                             </div>
-                             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-white/20 -translate-x-1/2 h-12 -mt-2 z-0" />
-                        </div>
-                        <div className="text-center"><p className="text-slate-400 text-sm font-bold uppercase tracking-widest animate-pulse">Sıra: <span className={cn("text-lg", activePlayer?.id === duelists.p1.id ? "text-blue-400" : "text-red-400")}>{activePlayer?.name}</span></p></div>
+                {p2Lock && <div id="p2-lock" className="absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center z-50 animate-fade-in"><Lock className="w-32 h-32 text-red-500 mb-4 animate-bounce" /><span className="text-2xl font-bold text-red-400">KİLİTLENDİ!</span></div>}
+                
+                {state.winner === 'p2' && state.showNextButton &&
+                    <div className="absolute inset-0 bg-green-900/40 backdrop-blur-sm flex flex-col items-center justify-center z-50 animate-fade-in">
+                        <CheckCircle2 className="w-32 h-32 text-green-400 mb-4" />
+                        <span className="text-4xl font-black text-white">DOĞRU!</span>
+                    </div>
+                }
+            </div>
+
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60]">
+                {state.showNextButton ? (
+                     <Button onClick={nextQuestion} className="h-24 px-12 text-2xl font-black bg-white text-slate-900 hover:bg-slate-200 pointer-events-auto animate-in zoom-in-50 duration-300">
+                        SONRAKİ <ArrowRight className="ml-3 h-8 w-8" />
+                    </Button>
+                ) : (
+                    <div className="bg-yellow-500 text-slate-900 font-black text-4xl w-20 h-20 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-2xl transform rotate-12 pointer-events-none">
+                        VS
                     </div>
                 )}
-
-                {/* 2. ALT: SORU PANELİ */}
-                <div className="flex-1 min-h-0 pb-2">
-                     <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-6 shadow-inner overflow-hidden flex flex-col">
-                        
-                        {/* Soru Grid */}
-                        <div className="flex-1 overflow-hidden relative">
-                             <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-2">
-                                <div className={cn(
-                                    "grid gap-3",
-                                    isFullscreen ? "grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
-                                )}>
-                                    {questions.map((q, i) => {
-                                        const questionNumber = i + 1;
-                                        const isAnswered = answeredQuestions.includes(questionNumber);
-                                        const index = i % 8; 
-                                        const colorClass = [
-                                            "bg-blue-600 hover:bg-blue-500 border-blue-800", 
-                                            "bg-red-600 hover:bg-red-500 border-red-800", 
-                                            "bg-amber-600 hover:bg-amber-500 border-amber-800", 
-                                            "bg-indigo-600 hover:bg-indigo-500 border-indigo-800", 
-                                            "bg-pink-600 hover:bg-pink-500 border-pink-800", 
-                                            "bg-cyan-600 hover:bg-cyan-500 border-cyan-800", 
-                                            "bg-emerald-600 hover:bg-emerald-500 border-emerald-800", 
-                                            "bg-violet-600 hover:bg-violet-500 border-violet-800"
-                                        ][index];
-
-                                        return (
-                                            <button
-                                                key={i}
-                                                disabled={isAnswered || !activePlayer}
-                                                onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
-                                                className={cn(
-                                                    "aspect-square rounded-xl flex items-center justify-center font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
-                                                    isFullscreen ? "text-3xl" : "text-xl",
-                                                    isAnswered 
-                                                        ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" 
-                                                        : cn("text-white shadow-lg", colorClass)
-                                                )}
-                                            >
-                                                {!isAnswered && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                                                {isAnswered ? <Check className="h-8 w-8 opacity-20" /> : <span className="drop-shadow-md z-10">{questionNumber}</span>}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                     </div>
-                </div>
-
-            </main>
-
-            {/* Modal */}
-            {openedQuestion && (
-                <QuestionDialog
-                    isFullscreen={isFullscreen}
-                    isOpen={!!openedQuestion}
-                    onClose={() => setOpenedQuestion(null)}
-                    questionData={openedQuestion}
-                    onAnswer={handleAnswerQuestion}
-                    timerDuration={questionTimer}
-                    pointsConfig={pointsConfig}
-                />
-            )}
+            </div>
+            
+            <Link href="/teacher/smartboard/kavram-duellosu" className="absolute top-6 left-6 z-50">
+                 <Button variant="ghost" size="icon" className="h-14 w-14 rounded-2xl bg-slate-900/50 hover:bg-slate-800 text-white border border-white/10">
+                    <ArrowLeft className="w-8 h-8" />
+                 </Button>
+            </Link>
+             {showConfetti && <Confetti active={showConfetti} config={{ particleCount: 200, spread: 90, origin: { x: state.winner === 'p1' ? 0.25 : 0.75, y: 0.6 } }} />}
         </div>
     );
 }
 
-// Wrapper component to handle Suspense
-export default function SmartboardDuelloOyunPage() {
+export default function KavramDuellosuOyunPage() {
     return (
-        <Suspense fallback={<CompetitionLoadingSkeleton />}>
-            <DuelGameComponent />
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
+            <KavramDuellosuGame />
         </Suspense>
-    )
+    );
 }

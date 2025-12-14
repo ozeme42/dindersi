@@ -1,11 +1,12 @@
+
 'use client';
 
 import Link from 'next/link';
+import React, { type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   MonitorPlay, Sun, User, Users, Swords, ArrowRight, BrainCircuit, Settings, Trophy, GitBranch, Columns, LayoutTemplate, Package, Wind, Gamepad2, UserCog, Lightbulb, Zap 
 } from 'lucide-react';
-import React, { type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 // Yeni, daha büyük ve okunaklı kart bileşeni
@@ -79,6 +80,14 @@ export default function SmartboardPage() {
             colorClass: "bg-red-600 border-red-800 hover:bg-red-500",
         },
         {
+            key: 'kavram_duellosu',
+            href: "/teacher/smartboard/kavram-duellosu",
+            title: "Kavram Düellosu",
+            description: "İki oyuncu için hızlı tempolu bilgi ve refleks yarışması.",
+            icon: <BrainCircuit />,
+            colorClass: "bg-fuchsia-600 border-fuchsia-800 hover:bg-fuchsia-500",
+        },
+        {
             key: 'fetih_oyunu',
             href: "/teacher/smartboard/fetih-oyunu",
             title: "Fetih Oyunu",
@@ -101,14 +110,6 @@ export default function SmartboardPage() {
             description: "Kutuları açarak puan tablosunu doldur ve lider ol.",
             icon: <Package />,
             colorClass: "bg-purple-600 border-purple-800 hover:bg-purple-500",
-        },
-        {
-            key: 'dort_secenek',
-            href: "/teacher/smartboard/dort-secenek",
-            title: "4 Seçenekli Test",
-            description: "Klasik çoktan seçmeli soruyu tahtada interaktif çözme.",
-            icon: <Gamepad2 />,
-            colorClass: "bg-pink-600 border-pink-800 hover:bg-pink-500",
         },
     ];
     
