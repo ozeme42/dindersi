@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Card,
   CardContent,
@@ -19,6 +19,7 @@ import {
   Image as ImageIcon,
   UploadCloud,
   Copy,
+  Expand,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -54,6 +55,84 @@ import { tr } from 'date-fns/locale';
 import Image from 'next/image';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { FullscreenToggle } from "@/components/fullscreen-toggle";
+
+function ImageEditorDialog({
+  isOpen,
+  onOpenChange,
+  image,
+  onSave,
+  isSaving,
+}: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  image: Partial<ImageAsset> | null;
+  onSave: (data: Partial<ImageAsset>, file: File | null) => void;
+  isSaving: boolean;
+}) {
+  const [formData, setFormData] = useState<Partial<ImageAsset>>({});
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setFormData(image || { title: "", url: "", storagePath: "" });
+    setFile(null);
+  }, [image, isOpen]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData, file);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <form onSubmit={handleSubmit}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogHeader>
+              <DialogTitle>
+                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="image-title">Başlık</Label>
+                <Input
+                  id="image-title"
+                  value={formData.title || ""}
+                  onChange={(e) =>
+                    setFormData(prev => ({ ...prev, title: e.target.value }))
+                  }
+                  required
+                  className="bg-slate-800 border-white/20"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                <Input
+                  id="image-file"
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif, image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  İptal
+                </Button>
+              </DialogClose>
+              <Button type="submit" disabled={isSaving || (!file && !editingImage?.id)}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Kaydet
+              </Button>
+            </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
+  );
+}
 
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
@@ -61,7 +140,9 @@ export default function ImageLibraryPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [fullscreenImage, setFullscreenImage] = useState<ImageAsset | null>(null);
+  const fullscreenRef = useRef<HTMLDivElement>(null);
+
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -84,32 +165,29 @@ export default function ImageLibraryPage() {
 
   const handleOpenDialog = (image: Partial<ImageAsset> | null = null) => {
     setEditingImage(image);
-    setFile(null); // Clear previous file selection
     setIsEditorOpen(true);
   };
 
-  const handleSaveImage = async () => {
+  const handleSaveImage = async (formData: Partial<ImageAsset>, file: File | null) => {
     if (!user) return;
-    if (!editingImage || (!file && !editingImage.id)) {
+    if (!formData || (!file && !formData.id)) {
         toast({ title: "Hata", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
         return;
     }
     setIsSaving(true);
     
-    let imageUrl = editingImage.url;
-    let imageStoragePath = editingImage.storagePath;
+    let imageUrl = formData.url;
+    let imageStoragePath = formData.storagePath;
 
     try {
-        // 1. If a new file is selected, upload it
         if (file) {
             const storage = getStorage();
             const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
             const storageRef = ref(storage, path);
             
-            // Delete old file if it exists and we're uploading a new one
-            if (editingImage.id && editingImage.storagePath) {
+            if (formData.id && formData.storagePath) {
                 try {
-                    const oldStorageRef = ref(storage, editingImage.storagePath);
+                    const oldStorageRef = ref(storage, formData.storagePath);
                     await deleteObject(oldStorageRef);
                 } catch (e) {
                     console.warn("Could not delete old file, but continuing with save:", e);
@@ -122,23 +200,17 @@ export default function ImageLibraryPage() {
         }
 
         const recordToSave = {
-            title: editingImage.title || 'İsimsiz Görsel',
+            title: formData.title || 'İsimsiz Görsel',
             url: imageUrl,
             storagePath: imageStoragePath,
             teacherId: user.uid,
         };
 
-        // 2. Save/Update Firestore document
-        if (editingImage.id) {
-            // Update
-            const docRef = doc(db, 'imageLibrary', editingImage.id);
+        if (formData.id) {
+            const docRef = doc(db, 'imageLibrary', formData.id);
             await updateDoc(docRef, recordToSave);
         } else {
-            // Create
-            await addDoc(collection(db, 'imageLibrary'), {
-                ...recordToSave,
-                createdAt: serverTimestamp()
-            });
+            await addDoc(collection(db, 'imageLibrary'), { ...recordToSave, createdAt: serverTimestamp() });
         }
         
         toast({ title: "Başarılı", description: "Görsel kaydedildi." });
@@ -147,11 +219,7 @@ export default function ImageLibraryPage() {
 
     } catch (error: any) {
         console.error("Görsel kaydetme/yükleme hatası:", error);
-        toast({
-            title: "Hata",
-            description: `İşlem sırasında bir hata oluştu: ${error.message}`,
-            variant: "destructive",
-        });
+        toast({ title: "Hata", description: `İşlem sırasında bir hata oluştu: ${error.message}`, variant: "destructive" });
     } finally {
         setIsSaving(false);
     }
@@ -221,8 +289,11 @@ export default function ImageLibraryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {images.map((image) => (
                 <Card key={image.id} className="flex flex-col overflow-hidden">
-                    <div className="relative aspect-video w-full bg-slate-800">
+                    <div className="relative aspect-video w-full bg-slate-800 cursor-pointer" onClick={() => setFullscreenImage(image)}>
                         <Image src={image.url} alt={image.title || 'Yüklenen görsel'} fill className="object-cover" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <Expand className="h-8 w-8 text-white"/>
+                        </div>
                     </div>
                   <CardHeader>
                     <CardTitle className="line-clamp-2 text-base">{image.title}</CardTitle>
@@ -274,51 +345,31 @@ export default function ImageLibraryPage() {
         </CardContent>
       </Card>
       
-      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
-            <DialogHeader>
-              <DialogTitle>
-                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="image-title">Başlık</Label>
-                <Input
-                  id="image-title"
-                  value={editingImage?.title || ""}
-                  onChange={(e) =>
-                    setEditingImage(prev => ({ ...prev, title: e.target.value }))
-                  }
-                  required
-                  className="bg-slate-800 border-white/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
-                <Input
-                  id="image-file"
-                  type="file"
-                  accept="image/png, image/jpeg, image/gif, image/webp"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  required={!editingImage?.id}
-                  className="bg-slate-800 border-white/20 file:text-white"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  İptal
-                </Button>
-              </DialogClose>
-              <Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Kaydet
-              </Button>
-            </DialogFooter>
+      <ImageEditorDialog
+        isOpen={isEditorOpen}
+        onOpenChange={setIsEditorOpen}
+        image={editingImage}
+        onSave={handleSaveImage}
+        isSaving={isSaving}
+      />
+
+       <Dialog open={!!fullscreenImage} onOpenChange={() => setFullscreenImage(null)}>
+        <DialogContent ref={fullscreenRef} className="max-w-7xl w-full h-[90vh] bg-black/80 backdrop-blur-md border-0 p-4">
+            {fullscreenImage && (
+                <div className="relative w-full h-full flex flex-col">
+                    <div className="flex justify-between items-center mb-2 text-white">
+                        <h3 className="font-bold">{fullscreenImage.title}</h3>
+                        <FullscreenToggle elementRef={fullscreenRef} />
+                    </div>
+                    <div className="relative flex-1">
+                        <Image src={fullscreenImage.url} alt={fullscreenImage.title} fill className="object-contain" />
+                    </div>
+                </div>
+            )}
         </DialogContent>
       </Dialog>
     </div>
   );
 }
+
+    
