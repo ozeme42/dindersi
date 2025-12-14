@@ -6,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
