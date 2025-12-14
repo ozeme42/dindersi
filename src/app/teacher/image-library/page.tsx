@@ -43,11 +43,9 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
-import { getImages, deleteImage } from "./actions";
-
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 import type { ImageAsset } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
@@ -150,14 +148,25 @@ export default function ImageLibraryPage() {
   const fetchImages = useCallback(async () => {
     if (!user) return;
     setIsLoading(true);
-    const result = await getImages(user.uid);
-    if (result.success) {
-      setImages(result.data || []);
-    } else {
-      toast({ title: "Hata", description: result.error, variant: "destructive" });
-    }
+    // Directly use firebase-js-sdk here.
+    const { getDocs, collection, query, where, orderBy } = await import('firebase/firestore');
+    const q = query(
+        collection(db, 'imageLibrary'),
+        where('teacherId', '==', user.uid),
+        orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    const fetchedImages = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            id: doc.id, 
+            ...data,
+            createdAt: (data.createdAt as any)?.toDate().toISOString() || new Date().toISOString()
+        } as ImageAsset
+    });
+    setImages(fetchedImages);
     setIsLoading(false);
-  }, [user, toast]);
+  }, [user]);
 
   useEffect(() => {
     fetchImages();
@@ -207,8 +216,7 @@ export default function ImageLibraryPage() {
         };
 
         if (formData.id) {
-            const docRef = doc(db, 'imageLibrary', formData.id);
-            await updateDoc(docRef, recordToSave);
+            await updateDoc(doc(db, 'imageLibrary', formData.id), recordToSave);
         } else {
             await addDoc(collection(db, 'imageLibrary'), { ...recordToSave, createdAt: serverTimestamp() });
         }
@@ -245,12 +253,12 @@ export default function ImageLibraryPage() {
         toast({ title: "Depolama Hatası", description: "Görsel depolamadan silinemedi ama veritabanı girişi silinecek.", variant: "destructive"});
     }
 
-    const result = await deleteImage(imageId);
-    if (result.success) {
-      toast({ title: "Başarılı", description: "Görsel silindi." });
-      fetchImages();
-    } else {
-      toast({ title: "Hata", description: result.error, variant: "destructive" });
+    try {
+        await deleteDoc(doc(db, 'imageLibrary', imageId));
+        toast({ title: "Başarılı", description: "Görsel silindi." });
+        fetchImages();
+    } catch (e) {
+        toast({ title: "Hata", description: 'Görsel veritabanından silinemedi.', variant: "destructive" });
     }
   };
 
@@ -361,10 +369,10 @@ export default function ImageLibraryPage() {
         <DialogContent ref={fullscreenRef} className="max-w-7xl w-full h-[90vh] bg-black/80 backdrop-blur-md border-0 p-4">
             {fullscreenImage && (
                 <div className="relative w-full h-full flex flex-col">
-                    <div className="flex justify-between items-center mb-2 text-white">
-                        <h3 className="font-bold">{fullscreenImage.title}</h3>
+                    <DialogHeader className="flex flex-row justify-between items-center mb-2 text-white">
+                        <DialogTitle className="font-bold">{fullscreenImage.title}</DialogTitle>
                         <FullscreenToggle elementRef={fullscreenRef} />
-                    </div>
+                    </DialogHeader>
                     <div className="relative flex-1">
                         <Image src={fullscreenImage.url} alt={fullscreenImage.title} fill className="object-contain" />
                     </div>
