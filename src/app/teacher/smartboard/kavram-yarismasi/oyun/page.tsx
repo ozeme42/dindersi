@@ -1,4 +1,3 @@
-
 import { Suspense } from 'react';
 import { KavramYarismaClientPage } from './client-page';
 import { getConceptQuizData } from '@/app/oyunlar/kavram-yarismasi/actions';
@@ -18,7 +17,7 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
       return <div>Konu ID'si gerekli.</div>;
   }
 
-  const { questions, error } = await getConceptQuizAction(params);
+  const { concepts: questions, error } = await getConceptQuizData(params.topicId);
   
   const context = {
     courseName: typeof searchParams.courseName === 'string' ? searchParams.courseName : 'Bilinmeyen Ders',
@@ -28,4 +27,6 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
   return (
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
       <KavramYarismaClientPage initialQuestions={questions} initialError={error} context={context} />
-    </Susp
+    </Suspense>
+  );
+}
