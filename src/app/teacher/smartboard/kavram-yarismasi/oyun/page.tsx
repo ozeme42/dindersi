@@ -2,7 +2,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { KavramYarismaClientPage } from './client-page';
+import KavramYarismaClientPage from './client-page';
 import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import type { ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions';
 
@@ -13,14 +13,14 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
   const params = {
       courseId: typeof searchParams.courseId === 'string' ? searchParams.courseId : undefined,
       unitId: typeof searchParams.unitId === 'string' ? searchParams.unitId : undefined,
-      topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined,
+      topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : '',
   };
 
   if (!params.topicId) {
       return <div>Konu ID'si gerekli.</div>;
   }
 
-  const { questions, error } = await getConceptQuizAction(params);
+  const { questions, error } = await getConceptQuizAction(params.topicId);
   
   const context = {
     courseName: typeof searchParams.courseName === 'string' ? searchParams.courseName : 'Bilinmeyen Ders',
