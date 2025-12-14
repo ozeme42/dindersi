@@ -1,9 +1,5 @@
-
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  // Add srcDir to specify that the app directory is inside 'src'
-  srcDir: 'src',
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -17,7 +13,9 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.firebasestorage.googleapis.com',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
