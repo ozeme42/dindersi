@@ -34,7 +34,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
-import { getImages, deleteImage } from "./actions";
+import { getImages, deleteImage, saveImageRecord } from "./actions";
 
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -77,77 +77,81 @@ export default function ImageLibraryPage() {
     setIsEditorOpen(true);
   };
 
-  const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
-      if (!user) {
-        toast({ title: "Hata", description: "Bu işlem için giriş yapmalısınız.", variant: "destructive" });
-        return;
-      }
-      setIsSaving(true);
-      
-      try {
-        let newUrl = data.url;
-        let newStoragePath = data.storagePath;
+    const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
+        if (!user) return;
+        setIsSaving(true);
+        try {
+            let newUrl = data.url;
+            let newStoragePath = data.storagePath;
 
-        // 1. If a new file is provided, upload it to Storage
-        if (file) {
-          const storage = getStorage();
-          // Delete old file if we are editing and uploading a new one
-          if (data.id && data.storagePath) {
-             try {
-                const oldStorageRef = ref(storage, data.storagePath);
-                await deleteObject(oldStorageRef);
-             } catch (e) {
-                 console.warn("Could not delete old file, continuing...", e);
-             }
-          }
-          
-          const fileName = `${Date.now()}-${file.name}`;
-          const path = `imageLibrary/${user.uid}/${fileName}`;
-          const storageRef = ref(storage, path);
-          
-          const snapshot = await uploadBytes(storageRef, file);
-          newUrl = await getDownloadURL(snapshot.ref);
-          newStoragePath = snapshot.ref.fullPath;
-        }
+            // 1. Yeni dosya varsa yükle
+            if (file) {
+                const storage = getStorage();
+                const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
+                const storageRef = ref(storage, path);
+                const snapshot = await uploadBytes(storageRef, file);
+                newUrl = await getDownloadURL(snapshot.ref);
+                newStoragePath = snapshot.ref.fullPath;
 
-        // 2. Save or Update the document in Firestore
-        if (data.id) { // Editing existing image
-             const docRef = doc(db, 'imageLibrary', data.id);
-             const updateData: any = { title: data.title };
-             if(newUrl) updateData.url = newUrl;
-             if(newStoragePath) updateData.storagePath = newStoragePath;
-             await updateDoc(docRef, updateData);
-        } else { // Creating new image
-            if (!newUrl || !newStoragePath) {
-                throw new Error("Yeni görsel oluşturmak için bir dosya gereklidir.");
+                // Eğer düzenleme modunda yeni dosya yüklendiyse, eski dosyayı sil
+                if (data.id && data.storagePath) {
+                    try {
+                        const oldStorageRef = ref(storage, data.storagePath);
+                        await deleteObject(oldStorageRef);
+                    } catch (e) {
+                        console.warn("Could not delete old file, but continuing with save:", e);
+                    }
+                }
             }
-            await addDoc(collection(db, 'imageLibrary'), {
-                title: data.title,
+            
+            // 2. Firestore kaydını hazırla
+            const recordToSave = {
+                ...data,
                 url: newUrl,
                 storagePath: newStoragePath,
-                teacherId: user.uid,
-                createdAt: serverTimestamp()
-            });
-        }
-        
-        toast({ title: "Başarılı", description: "Görsel kaydedildi." });
-        fetchImages(); // Refresh the list
-        setIsEditorOpen(false);
+            };
 
-      } catch (error: any) {
-          console.error("Görsel kaydetme/yükleme hatası:", error);
-          toast({
-              title: "Hata",
-              description: `İşlem sırasında bir hata oluştu: ${error.message}`,
-              variant: "destructive",
-          });
-      } finally {
-          setIsSaving(false);
-      }
-  };
+            // 3. Firestore'a kaydetmek için sunucu eylemini çağır
+            const saveResult = await saveImageRecord(recordToSave, user.uid);
+            
+            if (!saveResult.success) {
+                throw new Error(saveResult.error || "Veritabanı kaydı başarısız oldu.");
+            }
+
+            toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+            fetchImages();
+            setIsEditorOpen(false);
+
+        } catch (error: any) {
+            console.error("Görsel kaydetme/yükleme hatası:", error);
+            toast({
+                title: "Hata",
+                description: `İşlem sırasında bir hata oluştu: ${error.message}`,
+                variant: "destructive",
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
 
   const handleDeleteImage = async (imageId: string) => {
+    const imageToDelete = images.find(img => img.id === imageId);
+    if (!imageToDelete) return;
+
+    try {
+        // Önce Storage'dan silmeyi dene (client-side)
+        if (imageToDelete.storagePath) {
+            const storage = getStorage();
+            const storageRef = ref(storage, imageToDelete.storagePath);
+            await deleteObject(storageRef);
+        }
+    } catch (storageError) {
+        console.error("Storage deletion failed:", storageError);
+        toast({ title: "Depolama Hatası", description: "Görsel depolamadan silinemedi ama veritabanı girişi silinecek.", variant: "destructive"});
+    }
+
+    // Ardından Firestore'dan sil (server-side)
     const result = await deleteImage(imageId);
     if (result.success) {
       toast({ title: "Başarılı", description: "Görsel silindi." });

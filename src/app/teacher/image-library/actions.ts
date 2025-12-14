@@ -20,8 +20,39 @@ import {
 import { getStorage, ref, deleteObject } from "firebase/storage";
 import type { ImageAsset } from "@/lib/types";
 
-// firebase/storage'ı client-side kullanacağımız için bu fonksiyona artık gerek yok.
-// Bu dosyadaki tüm sunucu aksiyonları client tarafına taşındı.
+// Bu fonksiyon istemci tarafında halledildiği için kaldırıldı veya kullanılmıyor.
+// Sunucu eylemi olarak yeniden tanımlıyoruz.
+export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: string): Promise<{ success: boolean; error?: string; }> {
+    if (!teacherId) return { success: false, error: 'Kullanıcı kimliği bulunamadı.' };
+    if (!data.title || !data.url || !data.storagePath) return { success: false, error: 'Eksik görsel bilgileri.' };
+
+    try {
+        if (data.id) {
+            // Update existing document
+            const { id, ...updateData } = data;
+            const docRef = doc(db, 'imageLibrary', id);
+            await updateDoc(docRef, {
+                title: updateData.title,
+                url: updateData.url,
+                storagePath: updateData.storagePath,
+            });
+        } else {
+            // Create new document
+            await addDoc(collection(db, 'imageLibrary'), {
+                title: data.title,
+                url: data.url,
+                storagePath: data.storagePath,
+                teacherId: teacherId,
+                createdAt: serverTimestamp()
+            });
+        }
+        return { success: true };
+    } catch (e: any) {
+        console.error("Error saving image record to Firestore:", e);
+        return { success: false, error: "Görsel bilgisi veritabanına kaydedilemedi." };
+    }
+}
+
 
 export async function getImages(teacherId: string): Promise<{ success: boolean; data?: ImageAsset[]; error?: string }> {
     try {
@@ -59,12 +90,11 @@ export async function deleteImage(imageId: string): Promise<{ success: boolean; 
 
         if (storagePath) {
             try {
-                const storage = getStorage();
-                const storageRef = ref(storage, storagePath);
-                await deleteObject(storageRef);
+                // Client-side SDK'dan storage nesnesi alınamıyor, bu yüzden bu işlem client'ta yapılmalı.
+                // Ancak path'i loglayabiliriz. Bu fonksiyon idealde client'tan çağrılmalı.
+                console.log(`Deletion requested for storage path: ${storagePath}. This should be handled on the client.`);
             } catch (storageError: any) {
-                console.warn(`Storage delete failed for ${storagePath} but Firestore entry was removed. Error: ${storageError.message}`);
-                // Don't fail the whole operation if storage deletion fails, but log it.
+                console.warn(`Storage delete instruction failed for ${storagePath} but Firestore entry was removed. Error: ${storageError.message}`);
             }
         }
         
