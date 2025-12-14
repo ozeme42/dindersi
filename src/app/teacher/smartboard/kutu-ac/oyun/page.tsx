@@ -89,13 +89,28 @@ function KutuAcGame() {
         if (count === 1) {
             newPlayers.push({ id: 1, name: user?.displayName || 'Oyuncu', score: 0 });
         } else {
-            for (let i = 1; i <= count; i++) {
-                newPlayers.push({ id: i, name: `Oyuncu ${i}`, score: 0 });
+            const playerNamesParam = searchParams.get('players');
+            const playerNames = playerNamesParam ? playerNamesParam.split(',') : [];
+            if(playerNames.length > 0) {
+                playerNames.forEach((name, index) => {
+                    newPlayers.push({ id: index + 1, name: name, score: 0 });
+                });
+            } else {
+                for (let i = 1; i <= count; i++) {
+                    newPlayers.push({ id: i, name: `Oyuncu ${i}`, score: 0 });
+                }
             }
         }
         setPlayers(newPlayers);
         fetchQuestions();
     };
+    
+    useEffect(() => {
+        const teamCountParam = searchParams.get('teamCount');
+        if(teamCountParam) {
+            startGame(parseInt(teamCountParam, 10));
+        }
+    }, [searchParams]);
 
     const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
@@ -147,6 +162,10 @@ function KutuAcGame() {
         setIsScoreSaved(false);
         setActivePlayerIndex(0);
         setPlayerCount(null); // Go back to setup
+        const teamCountParam = searchParams.get('teamCount');
+        if (teamCountParam) {
+            startGame(parseInt(teamCountParam, 10));
+        }
     };
 
     // Setup Screen
@@ -369,7 +388,7 @@ function KutuAcGame() {
 
                 {/* Game Grid */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
-                     <CardHeader className="border-b border-white/5 pb-4">
+                    <CardHeader className="border-b border-white/5 pb-4">
                         <div className="flex items-center justify-between">
                             <CardTitle className="text-xl text-white font-bold flex items-center gap-2">
                                 <span className="bg-purple-500/20 text-purple-400 p-1.5 rounded-lg border border-purple-500/30"><Target className="h-5 w-5"/></span>
@@ -400,7 +419,7 @@ function KutuAcGame() {
                                         )}
                                     >
                                         {!isOpened && <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
-                                        {isOpened ? <CheckCheck className="h-6 w-6 text-emerald-500/50" /> : questionNumber}
+                                        {isOpened ? <CheckCheck className="h-6 w-6 text-emerald-500/50" /> : <span className="drop-shadow-md relative z-10">{questionNumber}</span>}
                                     </div>
                                 )
                             })}
@@ -414,17 +433,27 @@ function KutuAcGame() {
             
             {openedQuestion && (
                 <QuestionDialog
-                    isFullscreen={isFullscreen}
                     isOpen={!!openedQuestion}
-                    onClose={() => setOpenedQuestion(null)}
+                    onClose={() => {
+                        setOpenedQuestion(null);
+                        // Sadece multiplayer modunda sırayı değiştir
+                        if (playerCount && playerCount > 1) {
+                            setActivePlayerIndex(prev => (prev + 1) % playerCount);
+                        }
+                    }}
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={timerDuration}
                     pointsConfig={{ default: { points: 10 }}}
                     penaltyConfig={{ default: { penalty: 0 }}}
                     showCorrectAnswerOnWrong={true}
+                    isFullscreen={isFullscreen}
                 />
             )}
         </div>
     );
+}
+
+export default function SmartboardKutuAcOyunPage() {
+    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}><KutuAcGame/></Suspense>
 }
