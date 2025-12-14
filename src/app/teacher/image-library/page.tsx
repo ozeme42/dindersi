@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -31,10 +31,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
-import { getImages, deleteImage, saveImageRecord } from "./actions";
+import { getImages, deleteImage } from "./actions";
 
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -44,8 +52,8 @@ import type { ImageAsset } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from 'date-fns/locale';
 import Image from 'next/image';
-import { ImageEditorDialog } from "@/components/image-editor-dialog";
-
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
@@ -53,6 +61,8 @@ export default function ImageLibraryPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -74,65 +84,78 @@ export default function ImageLibraryPage() {
 
   const handleOpenDialog = (image: Partial<ImageAsset> | null = null) => {
     setEditingImage(image);
+    setFile(null); // Clear previous file selection
     setIsEditorOpen(true);
   };
 
-    const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
-        if (!user) return;
-        setIsSaving(true);
-        try {
-            let newUrl = data.url;
-            let newStoragePath = data.storagePath;
+  const handleSaveImage = async () => {
+    if (!user) return;
+    if (!editingImage || (!file && !editingImage.id)) {
+        toast({ title: "Hata", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
+        return;
+    }
+    setIsSaving(true);
+    
+    let imageUrl = editingImage.url;
+    let imageStoragePath = editingImage.storagePath;
 
-            // 1. Yeni dosya varsa yükle
-            if (file) {
-                const storage = getStorage();
-                const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
-                const storageRef = ref(storage, path);
-                const snapshot = await uploadBytes(storageRef, file);
-                newUrl = await getDownloadURL(snapshot.ref);
-                newStoragePath = snapshot.ref.fullPath;
-
-                // Eğer düzenleme modunda yeni dosya yüklendiyse, eski dosyayı sil
-                if (data.id && data.storagePath) {
-                    try {
-                        const oldStorageRef = ref(storage, data.storagePath);
-                        await deleteObject(oldStorageRef);
-                    } catch (e) {
-                        console.warn("Could not delete old file, but continuing with save:", e);
-                    }
+    try {
+        // 1. If a new file is selected, upload it
+        if (file) {
+            const storage = getStorage();
+            const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
+            const storageRef = ref(storage, path);
+            
+            // Delete old file if it exists and we're uploading a new one
+            if (editingImage.id && editingImage.storagePath) {
+                try {
+                    const oldStorageRef = ref(storage, editingImage.storagePath);
+                    await deleteObject(oldStorageRef);
+                } catch (e) {
+                    console.warn("Could not delete old file, but continuing with save:", e);
                 }
             }
-            
-            // 2. Firestore kaydını hazırla
-            const recordToSave = {
-                ...data,
-                url: newUrl,
-                storagePath: newStoragePath,
-            };
 
-            // 3. Firestore'a kaydetmek için sunucu eylemini çağır
-            const saveResult = await saveImageRecord(recordToSave, user.uid);
-            
-            if (!saveResult.success) {
-                throw new Error(saveResult.error || "Veritabanı kaydı başarısız oldu.");
-            }
-
-            toast({ title: "Başarılı", description: "Görsel kaydedildi." });
-            fetchImages();
-            setIsEditorOpen(false);
-
-        } catch (error: any) {
-            console.error("Görsel kaydetme/yükleme hatası:", error);
-            toast({
-                title: "Hata",
-                description: `İşlem sırasında bir hata oluştu: ${error.message}`,
-                variant: "destructive",
-            });
-        } finally {
-            setIsSaving(false);
+            const snapshot = await uploadBytes(storageRef, file);
+            imageUrl = await getDownloadURL(snapshot.ref);
+            imageStoragePath = snapshot.ref.fullPath;
         }
-    };
+
+        const recordToSave = {
+            title: editingImage.title || 'İsimsiz Görsel',
+            url: imageUrl,
+            storagePath: imageStoragePath,
+            teacherId: user.uid,
+        };
+
+        // 2. Save/Update Firestore document
+        if (editingImage.id) {
+            // Update
+            const docRef = doc(db, 'imageLibrary', editingImage.id);
+            await updateDoc(docRef, recordToSave);
+        } else {
+            // Create
+            await addDoc(collection(db, 'imageLibrary'), {
+                ...recordToSave,
+                createdAt: serverTimestamp()
+            });
+        }
+        
+        toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+        await fetchImages();
+        setIsEditorOpen(false);
+
+    } catch (error: any) {
+        console.error("Görsel kaydetme/yükleme hatası:", error);
+        toast({
+            title: "Hata",
+            description: `İşlem sırasında bir hata oluştu: ${error.message}`,
+            variant: "destructive",
+        });
+    } finally {
+        setIsSaving(false);
+    }
+  };
 
 
   const handleDeleteImage = async (imageId: string) => {
@@ -140,7 +163,6 @@ export default function ImageLibraryPage() {
     if (!imageToDelete) return;
 
     try {
-        // Önce Storage'dan silmeyi dene (client-side)
         if (imageToDelete.storagePath) {
             const storage = getStorage();
             const storageRef = ref(storage, imageToDelete.storagePath);
@@ -151,7 +173,6 @@ export default function ImageLibraryPage() {
         toast({ title: "Depolama Hatası", description: "Görsel depolamadan silinemedi ama veritabanı girişi silinecek.", variant: "destructive"});
     }
 
-    // Ardından Firestore'dan sil (server-side)
     const result = await deleteImage(imageId);
     if (result.success) {
       toast({ title: "Başarılı", description: "Görsel silindi." });
@@ -252,13 +273,52 @@ export default function ImageLibraryPage() {
           )}
         </CardContent>
       </Card>
-      <ImageEditorDialog
-        isOpen={isEditorOpen}
-        onOpenChange={setIsEditorOpen}
-        image={editingImage}
-        onSave={handleSaveImage}
-        isSaving={isSaving}
-      />
+      
+      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogHeader>
+              <DialogTitle>
+                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="image-title">Başlık</Label>
+                <Input
+                  id="image-title"
+                  value={editingImage?.title || ""}
+                  onChange={(e) =>
+                    setEditingImage(prev => ({ ...prev, title: e.target.value }))
+                  }
+                  required
+                  className="bg-slate-800 border-white/20"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                <Input
+                  id="image-file"
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif, image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  İptal
+                </Button>
+              </DialogClose>
+              <Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Kaydet
+              </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
