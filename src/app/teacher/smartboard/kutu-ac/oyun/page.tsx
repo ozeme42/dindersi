@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -259,7 +260,7 @@ function KutuAcGame() {
                             ) : (
                                 <>
                                     <p className="text-lg text-slate-300 font-medium uppercase tracking-widest">TOPLAM PUAN</p>
-                                    <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{puanlar[teams[0]]}</p>
+                                    <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{players[0].score}</p>
                                 </>
                             )}
                         </div>
@@ -427,5 +428,3 @@ function KutuAcGame() {
         </div>
     );
 }
-
-```

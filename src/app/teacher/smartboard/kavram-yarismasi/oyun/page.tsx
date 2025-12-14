@@ -1,6 +1,9 @@
+
+'use client';
+
 import { Suspense } from 'react';
 import { KavramYarismaClientPage } from './client-page';
-import { getConceptQuizData } from '@/app/oyunlar/kavram-yarismasi/actions';
+import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import type { ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +20,7 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
       return <div>Konu ID'si gerekli.</div>;
   }
 
-  const { concepts: questions, error } = await getConceptQuizData(params.topicId);
+  const { questions, error } = await getConceptQuizAction(params);
   
   const context = {
     courseName: typeof searchParams.courseName === 'string' ? searchParams.courseName : 'Bilinmeyen Ders',
