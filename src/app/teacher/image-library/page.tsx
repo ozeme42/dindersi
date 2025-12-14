@@ -20,6 +20,7 @@ import {
   UploadCloud,
   Copy,
   Expand,
+  Download, // <-- İndirme ikonu eklendi
 } from "lucide-react";
 import {
   AlertDialog,
@@ -189,6 +190,7 @@ export default function ImageLibraryPage() {
     let imageStoragePath = formData.storagePath;
 
     try {
+        // 1. If a new file is selected, upload it
         if (file) {
             const storage = getStorage();
             const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
@@ -215,10 +217,17 @@ export default function ImageLibraryPage() {
             teacherId: user.uid,
         };
 
+        // 2. Save/Update Firestore document
         if (formData.id) {
-            await updateDoc(doc(db, 'imageLibrary', formData.id), recordToSave);
+            // Update
+            const docRef = doc(db, 'imageLibrary', formData.id);
+            await updateDoc(docRef, recordToSave);
         } else {
-            await addDoc(collection(db, 'imageLibrary'), { ...recordToSave, createdAt: serverTimestamp() });
+            // Create
+            await addDoc(collection(db, 'imageLibrary'), {
+                ...recordToSave,
+                createdAt: serverTimestamp()
+            });
         }
         
         toast({ title: "Başarılı", description: "Görsel kaydedildi." });
@@ -267,6 +276,24 @@ export default function ImageLibraryPage() {
     toast({ title: "Kopyalandı", description: "Görsel URL'i panoya kopyalandı." });
   };
 
+    const handleDownload = async (imageUrl: string, imageName: string) => {
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = imageName || 'indirilen-gorsel.jpg';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Download failed:", error);
+            toast({ title: "İndirme Başarısız", description: "Görsel indirilemedi. Lütfen tekrar deneyin.", variant: "destructive" });
+        }
+    };
+
   return (
     <div className="container mx-auto p-4 sm:p-6 md:p-8">
       <Card>
@@ -314,6 +341,14 @@ export default function ImageLibraryPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardFooter className="flex justify-end gap-1 mt-auto bg-muted/50 p-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDownload(image.url, image.title)}
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      İndir
+                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -370,8 +405,11 @@ export default function ImageLibraryPage() {
             {fullscreenImage && (
                 <div className="relative w-full h-full flex flex-col">
                     <DialogHeader className="flex flex-row justify-between items-center mb-2 text-white">
-                        <DialogTitle className="font-bold">{fullscreenImage.title}</DialogTitle>
+                      <DialogTitle className="font-bold">{fullscreenImage.title}</DialogTitle>
+                      <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="icon" onClick={() => handleDownload(fullscreenImage!.url, fullscreenImage!.title)}><Download className="h-5 w-5"/></Button>
                         <FullscreenToggle elementRef={fullscreenRef} />
+                      </div>
                     </DialogHeader>
                     <div className="relative flex-1">
                         <Image src={fullscreenImage.url} alt={fullscreenImage.title} fill className="object-contain" />
