@@ -79,8 +79,8 @@ function ImageEditorDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <form onSubmit={handleSubmit}>
         <DialogContent className="bg-slate-900 border-white/10 text-white">
+      <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>
               {image?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
@@ -124,8 +124,8 @@ function ImageEditorDialog({
               Kaydet
             </Button>
           </DialogFooter>
-        </DialogContent>
       </form>
+        </DialogContent>
     </Dialog>
   );
 }
