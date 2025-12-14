@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, orderBy, Timestamp } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import type { ImageAsset } from "@/lib/types";
 
@@ -16,7 +16,14 @@ export async function getImages(teacherId: string): Promise<{ success: boolean; 
             orderBy('createdAt', 'desc')
         );
         const snapshot = await getDocs(q);
-        const images = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
+        const images = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return { 
+                id: doc.id, 
+                ...data,
+                createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString()
+            } as ImageAsset
+        });
         return { success: true, data: JSON.parse(JSON.stringify(images)) };
     } catch (e: any) {
         return { success: false, error: 'Görseller alınamadı.' };
