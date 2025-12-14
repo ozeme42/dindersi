@@ -159,7 +159,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                     const userAnswer = answers && answers[index];
                     const isAnswered = userAnswer !== undefined;
                     const isCorrect = isAnswered && userAnswer.isCorrect;
-                     
+                    
                     // Temayı seç
                     const theme = colorThemes[index % colorThemes.length];
 
@@ -292,7 +292,7 @@ function ContentListPlayer({
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
-                     
+                    
                     const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
 
                     return (
@@ -332,7 +332,7 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
             <div className={cn("p-4 rounded-3xl shadow-lg bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 mb-8 w-full text-center")}>
                 <h2 className={cn("font-black text-white", isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl"))}>{title}</h2>
             </div>
-             
+            
             <div className={cn(
                 "w-full flex-grow grid gap-6", 
                 isTeacher 
@@ -541,7 +541,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: Anagr
             <div className="bg-slate-800/50 p-6 md:p-10 rounded-3xl border-2 border-white/10 backdrop-blur-md w-full max-w-5xl">
                  <p className={cn("font-bold italic text-cyan-100", isTeacher ? "text-4xl leading-snug" : "text-lg md:text-3xl")}>"{step.definition}"</p>
             </div>
-             
+            
             <div className={cn("flex justify-center flex-wrap gap-4 p-8 rounded-3xl bg-slate-900/50 border-2 border-white/5 items-center w-full max-w-6xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]", isWrong && "animate-shake")}>
                 {Array.from({ length: step.correctAnswer.length }).map((_, index) => {
                     const letterObj = constructedLetters[index];
@@ -753,34 +753,29 @@ export function StepContent({
                  return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-2xl bg-white", "h-full")} allowFullScreen></iframe></div>
             case 'htmlSlide':
                  return <HtmlSlidePlayer step={step} isFullscreen={isFullscreen} onSlideScrolledToEnd={onSlideScrolledToEnd} />
-            
-            // --- GÜNCELLENEN KISIM: ActivityLink artık Iframe olarak açılıyor ---
             case 'activityLink':
-                const activityStep = step as ActivityLinkStep;
-                
-                // Etkinlik URL'ini oluşturuyoruz.
-                // Mevcut konu (topic.id), ünite ve kurs bilgilerini parametre olarak ekliyoruz.
-                // 'embedded=true' parametresi de ekledim, isterseniz etkinlik sayfalarınızda 
-                // bu parametreyi kontrol edip navigasyon barı gizleyebilirsiniz.
-                const activityUrl = `${activityStep.activityType}?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}&courseName=${encodeURIComponent(courseTitle)}&unitName=${encodeURIComponent(unitTitle)}&topicName=${encodeURIComponent(topic.title)}&embedded=true`;
-
-                return (
-                    <div className={cn("w-full h-full flex flex-col items-center justify-center p-1 md:p-4", isTeacher ? "max-w-full" : "max-w-full")}>
-                         <div className={cn("w-full h-full rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-slate-950 relative")}>
-                             {/* Yükleniyor animasyonu için bir placeholder eklenebilir ama iframe hızlıysa gerekmez */}
-                             <iframe
-                                 src={activityUrl}
-                                 title={activityStep.activityLabel}
-                                 className="w-full h-full border-0 bg-slate-900"
-                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                 allowFullScreen
-                                 loading="lazy"
-                             />
-                         </div>
-                    </div>
-                );
-            // -------------------------------------------------------------------
-
+                    const activityStep = step as ActivityLinkStep;
+                    const activityIcons: Record<string, React.ElementType> = {
+                        'bil-bakalim': Lightbulb, 'eslestirme': Puzzle, 'hafiza-kartlari': Layers, 'adam-asmaca': Skull,
+                        'kavram-avi': Crosshair, 'kelime-avi': Search, 'hedefi-vur': MousePointerClick,
+                        'cumle-olusturma': Shuffle, 'kategorilere-ayir': FolderKanban, 'milyoner-yarismasi': Trophy, 'soru-coz': BrainCircuit,
+                        'dogru-yanlis-zinciri': LinkIcon, 'ben-kimim': BrainCircuit, 'acik-uclu-cevapla': FilePenLine, 'yazi-tura': Coins, 'deneme': ClipboardCheck, 'olay-siralama': ArrowDownUp
+                    };
+                    const Icon = activityIcons[activityStep.activityType.split('/').pop() || ''] || Gamepad2;
+                    return (
+                         <div className="flex flex-col items-center justify-center h-full p-8 text-white">
+                             <div className={cn("bg-slate-800/50 rounded-full mb-8 border-4 border-slate-700 shadow-2xl animate-bounce-slow", isTeacher ? "p-12" : "p-10")}>
+                                 <Icon className={cn("text-cyan-400", isTeacher ? "h-32 w-32" : "h-32 w-32")} />
+                             </div>
+                             <h3 className={cn("font-black mb-4", isTeacher ? "text-6xl" : "text-4xl")}>{activityStep.activityLabel}</h3>
+                             <p className={cn("text-slate-400 mb-10 max-w-3xl text-center", isTeacher ? "text-2xl" : "text-lg")}>Bu etkinliği tamamlayarak bilgini test et!</p>
+                             <Button asChild size={isTeacher ? "lg" : "lg"} className={cn("font-bold bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-2xl shadow-xl hover:scale-105 transition-transform", isTeacher ? "h-24 px-16 text-3xl" : "h-16 px-10 text-xl")}>
+                                 <Link href={`${activityStep.activityType}?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}&courseName=${encodeURIComponent(courseTitle)}&unitName=${encodeURIComponent(unitTitle)}&topicName=${encodeURIComponent(topic.title)}`}>
+                                     <Gamepad2 className={cn("mr-4", isTeacher ? "h-8 w-8" : "h-5 w-5")}/> Etkinliğe Başla
+                                 </Link>
+                             </Button>
+                        </div>
+                    )
             case 'flashcard':
                 return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'anagramFlashcard':

@@ -89,7 +89,7 @@ function ImageEditorDialog({
         <DialogContent className="bg-slate-900 border-white/10 text-white">
             <DialogHeader>
               <DialogTitle>
-                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+                {image?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
               </DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -106,13 +106,13 @@ function ImageEditorDialog({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                <Label htmlFor="image-file">Görsel Dosyası {image?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
                 <Input
                   id="image-file"
                   type="file"
                   accept="image/png, image/jpeg, image/gif, image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  required={!editingImage?.id}
+                  required={!image?.id}
                   className="bg-slate-800 border-white/20 file:text-white"
                 />
               </div>
@@ -123,7 +123,7 @@ function ImageEditorDialog({
                   İptal
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={isSaving || (!file && !editingImage?.id)}>
+              <Button type="submit" disabled={isSaving || (!file && !image?.id)}>
                 {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Kaydet
               </Button>
@@ -219,7 +219,11 @@ export default function ImageLibraryPage() {
 
     } catch (error: any) {
         console.error("Görsel kaydetme/yükleme hatası:", error);
-        toast({ title: "Hata", description: `İşlem sırasında bir hata oluştu: ${error.message}`, variant: "destructive" });
+        toast({
+            title: "Hata",
+            description: `İşlem sırasında bir hata oluştu: ${error.message}`,
+            variant: "destructive",
+        });
     } finally {
         setIsSaving(false);
     }
@@ -371,5 +375,3 @@ export default function ImageLibraryPage() {
     </div>
   );
 }
-
-    
