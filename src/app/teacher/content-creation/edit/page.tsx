@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep } from '@/lib/types';
+import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -84,7 +85,7 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
             case 'flashcard': return <span className="text-xs text-emerald-400/80">{step.cards.length} kart</span>;
             case 'anagram': return <span className="text-xs text-orange-400/80 font-mono">{step.scrambledWord}</span>;
             case 'visual': return step.imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={step.imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
-            case 'video': return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{(step as VideoStep).url}</span>;
+            case 'video': return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{step.url}</span>;
             default: return null;
         }
     }
@@ -156,7 +157,7 @@ function TopicEditor() {
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     
     const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
@@ -261,17 +262,23 @@ function TopicEditor() {
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         if (importedItems.length === 0) return;
         
         let newSteps: LessonStep[] = [];
         
-        if (stepType === 'flashcard') {
+        if (stepType === 'visual' && 'url' in importedItems[0]) {
+             newSteps = importedItems.map(item => ({
+                type: 'visual',
+                title: (item as ImageAsset).title || 'Arşivden Görsel',
+                imageUrl: (item as ImageAsset).url
+            }));
+        } else if (stepType === 'flashcard') {
             const cards = importedItems.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
             newSteps.push({ type: 'flashcard', title: 'Veri Bankası Bilgi Kartları', cards: cards });
         } else if (stepType === 'anagramFlashcard') {
@@ -282,7 +289,7 @@ function TopicEditor() {
             }));
              newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: cards });
         } else if (stepType === 'sentenceScramble') {
-             const newSentence = importedItems[0]?.content.text || '';
+             const newSentence = (importedItems[0] as ActivityItem)?.content.text || '';
              newSteps.push({
                 type: 'sentenceScramble',
                 title: 'Cümle Düzeltme',
@@ -361,7 +368,7 @@ function TopicEditor() {
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel / Afiş', type: 'visual', defaultTitle: 'Görsel' },
+        { label: 'Görsel (Arşivden)', action: () => handleOpenLibrary(['images'], false, 'visual') },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
         { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },

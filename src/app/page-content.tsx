@@ -1,11 +1,12 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { 
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
-    Video, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
+    Image as ImageIcon, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
     Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
@@ -19,7 +20,6 @@ import type { PublicClass } from './actions/getPublicCurriculum';
 // --- UI COMPONENTS ---
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { AppHeader } from '@/components/app-header';
 import { TeacherMainButtons } from '@/components/teacher-main-buttons';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -288,7 +288,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     exams: { key: 'exams', href: '/teacher/exams', title: 'Deneme Oluştur', icon: <ClipboardCheck />, color: "bg-green-500 shadow-green-200" },
     evaluationScales: { key: 'evaluationScales', href: '/teacher/scales', title: 'Ölçekler', icon: <Scale />, color: "bg-cyan-500 shadow-cyan-200" },
     statsTeacher: { key: 'statsTeacher', href: '/teacher/stats', title: 'İstatistikler', icon: <BarChart3 />, color: "bg-yellow-500 shadow-yellow-200" },
-    videoLibrary: { key: 'videoLibrary', href: '/teacher/video-library', title: 'Video Arşivi', icon: <Video />, color: "bg-rose-500 shadow-rose-200" },
+    imageLibrary: { key: 'imageLibrary', href: '/teacher/image-library', title: 'Görsel Arşivi', icon: <ImageIcon />, color: "bg-rose-500 shadow-rose-200" },
     gameSettingsTeacher: { key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />, color: "bg-slate-500 shadow-slate-200" },
     leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
     errorReports: { key: 'errorReports', href: '/teacher/error-reports', title: 'Hata Raporları', icon: <Bug />, color: "bg-red-400 shadow-red-100" },
@@ -308,7 +308,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.leaderboard,
           managementButtons.statsTeacher,
           managementButtons.wheelOfFortune,
-          managementButtons.videoLibrary,
+          managementButtons.imageLibrary,
           managementButtons.gameSettingsTeacher,
           managementButtons.errorReports,
           managementButtons.scoreEvents,

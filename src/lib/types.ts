@@ -67,11 +67,11 @@ export type QuestionBankProgress = {
     };
 };
 
-export type VideoAsset = {
+export type ImageAsset = {
     id: string;
     title: string;
-    description: string;
     url: string;
+    storagePath: string; // To delete from storage
     teacherId: string;
     createdAt: any;
 };

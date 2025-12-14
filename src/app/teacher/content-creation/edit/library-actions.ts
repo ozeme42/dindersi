@@ -4,14 +4,14 @@
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy, Query, and } from "firebase/firestore";
-import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, VideoAsset } from "@/lib/types";
+import type { Question, ActivityItem, Course, Unit, Topic, SchoolClass, ImageAsset } from "@/lib/types";
 
 export type LibraryFilter = {
     classId?: string | null;
     courseId?: string | null;
     unitId?: string | null;
     topicId?: string | null;
-    type: 'questions' | 'activities' | 'videos';
+    type: 'questions' | 'activities' | 'images';
     questionTypes?: Question['type'][];
     activityTypes?: ActivityItem['type'][];
 };
@@ -60,12 +60,14 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
 }
 
 
-export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | VideoAsset)[], error?: string }> {
+export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | ImageAsset)[], error?: string }> {
     try {
-        if (filters.type === 'videos') {
-            const videosQuery = query(collection(db, 'videoLibrary'), orderBy('createdAt', 'desc'));
-            const snapshot = await getDocs(videosQuery);
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as VideoAsset));
+        if (filters.type === 'images') {
+            // NOTE: For simplicity, we are fetching all images. For a larger scale app,
+            // you might want to filter by teacherId if available.
+            const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
+            const snapshot = await getDocs(imagesQuery);
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
             return { items: JSON.parse(JSON.stringify(items)) };
         }
 
