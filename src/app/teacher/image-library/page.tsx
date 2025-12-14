@@ -34,9 +34,11 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
-import { getImages, saveImageRecord, deleteImage } from "./actions";
+import { getImages, deleteImage } from "./actions";
 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 import type { ImageAsset } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
@@ -76,59 +78,74 @@ export default function ImageLibraryPage() {
   };
 
   const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
-    if (!user) return;
-    setIsSaving(true);
+      if (!user) {
+        toast({ title: "Hata", description: "Bu işlem için giriş yapmalısınız.", variant: "destructive" });
+        return;
+      }
+      setIsSaving(true);
+      
+      try {
+        let newUrl = data.url;
+        let newStoragePath = data.storagePath;
 
-    try {
-        let submissionData: Partial<ImageAsset> & { teacherId: string } = {
-            id: data.id,
-            title: data.title,
-            teacherId: user.uid,
-        };
-
-        // Case 1: New file is being uploaded (for new or existing image)
+        // 1. If a new file is provided, upload it to Storage
         if (file) {
-            const storage = getStorage();
-            const fileName = `${Date.now()}-${file.name}`;
-            const path = `imageLibrary/${user.uid}/${fileName}`;
-            const storageRef = ref(storage, path);
-            
-            const snapshot = await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(snapshot.ref);
-            
-            submissionData.url = downloadURL;
-            submissionData.storagePath = snapshot.ref.fullPath;
-        } 
-        // Case 2: Editing an existing image without changing the file
-        else if (data.id) {
-            // No new file, so we don't need to add url/storagePath to submission
-            // The action will only update the title.
-        } 
-        // Case 3: Creating a new image without a file
-        else {
-            throw new Error("Yeni bir görsel oluşturmak için bir dosya seçmelisiniz.");
+          const storage = getStorage();
+          // Delete old file if we are editing and uploading a new one
+          if (data.id && data.storagePath) {
+             try {
+                const oldStorageRef = ref(storage, data.storagePath);
+                await deleteObject(oldStorageRef);
+             } catch (e) {
+                 console.warn("Could not delete old file, continuing...", e);
+             }
+          }
+          
+          const fileName = `${Date.now()}-${file.name}`;
+          const path = `imageLibrary/${user.uid}/${fileName}`;
+          const storageRef = ref(storage, path);
+          
+          const snapshot = await uploadBytes(storageRef, file);
+          newUrl = await getDownloadURL(snapshot.ref);
+          newStoragePath = snapshot.ref.fullPath;
+        }
+
+        // 2. Save or Update the document in Firestore
+        if (data.id) { // Editing existing image
+             const docRef = doc(db, 'imageLibrary', data.id);
+             const updateData: any = { title: data.title };
+             if(newUrl) updateData.url = newUrl;
+             if(newStoragePath) updateData.storagePath = newStoragePath;
+             await updateDoc(docRef, updateData);
+        } else { // Creating new image
+            if (!newUrl || !newStoragePath) {
+                throw new Error("Yeni görsel oluşturmak için bir dosya gereklidir.");
+            }
+            await addDoc(collection(db, 'imageLibrary'), {
+                title: data.title,
+                url: newUrl,
+                storagePath: newStoragePath,
+                teacherId: user.uid,
+                createdAt: serverTimestamp()
+            });
         }
         
-        const result = await saveImageRecord(submissionData);
+        toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+        fetchImages(); // Refresh the list
+        setIsEditorOpen(false);
 
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Görsel kaydedildi." });
-            fetchImages();
-            setIsEditorOpen(false);
-        } else {
-            throw new Error(result.error || "Bilinmeyen bir sunucu hatası oluştu.");
-        }
-    } catch (error: any) {
-        console.error("Görsel kaydetme hatası:", error);
-        toast({
-            title: "Hata",
-            description: `İşlem sırasında bir hata oluştu: ${error.message}`,
-            variant: "destructive",
-        });
-    } finally {
-        setIsSaving(false); // Ensure this is always called
-    }
-};
+      } catch (error: any) {
+          console.error("Görsel kaydetme/yükleme hatası:", error);
+          toast({
+              title: "Hata",
+              description: `İşlem sırasında bir hata oluştu: ${error.message}`,
+              variant: "destructive",
+          });
+      } finally {
+          setIsSaving(false);
+      }
+  };
+
 
   const handleDeleteImage = async (imageId: string) => {
     const result = await deleteImage(imageId);
