@@ -20,7 +20,8 @@ import {
   UploadCloud,
   Copy,
   Expand,
-  Download, // <-- İndirme ikonu eklendi
+  Download,
+  MoreHorizontal, // <-- EKLENDİ
 } from "lucide-react";
 import {
   AlertDialog,
@@ -33,6 +34,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // <-- EKLENDİ
 import {
   Dialog,
   DialogContent,
@@ -56,82 +63,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 
-function ImageEditorDialog({
-  isOpen,
-  onOpenChange,
-  image,
-  onSave,
-  isSaving,
-}: {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  image: Partial<ImageAsset> | null;
-  onSave: (data: Partial<ImageAsset>, file: File | null) => void;
-  isSaving: boolean;
-}) {
-  const [formData, setFormData] = useState<Partial<ImageAsset>>({});
-  const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    setFormData(image || { title: "", url: "", storagePath: "" });
-    setFile(null);
-  }, [image, isOpen]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData, file);
-  };
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <form onSubmit={handleSubmit}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
-            <DialogHeader>
-              <DialogTitle>
-                {image?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="image-title">Başlık</Label>
-                <Input
-                  id="image-title"
-                  value={formData.title || ""}
-                  onChange={(e) =>
-                    setFormData(prev => ({ ...prev, title: e.target.value }))
-                  }
-                  required
-                  className="bg-slate-800 border-white/20"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="image-file">Görsel Dosyası {image?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
-                <Input
-                  id="image-file"
-                  type="file"
-                  accept="image/png, image/jpeg, image/gif, image/webp"
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  required={!image?.id}
-                  className="bg-slate-800 border-white/20 file:text-white"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  İptal
-                </Button>
-              </DialogClose>
-              <Button type="submit" disabled={isSaving || (!file && !image?.id)}>
-                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Kaydet
-              </Button>
-            </DialogFooter>
-        </DialogContent>
-      </form>
-    </Dialog>
-  );
-}
+// Bu dosya `getImages` ve `deleteImage` gibi sunucu eylemlerini kullanmıyor,
+// tüm Firebase işlemleri doğrudan istemci tarafında yapılıyor.
+// Bu yüzden actions.ts importu kaldırıldı.
 
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
@@ -139,6 +73,7 @@ export default function ImageLibraryPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<ImageAsset | null>(null);
   const fullscreenRef = useRef<HTMLDivElement>(null);
 
@@ -150,7 +85,7 @@ export default function ImageLibraryPage() {
     if (!user) return;
     setIsLoading(true);
     // Directly use firebase-js-sdk here.
-    const { getDocs, collection, query, where, orderBy } = await import('firebase/firestore');
+    const { getDocs, collection, query, where, orderBy, Timestamp } = await import('firebase/firestore');
     const q = query(
         collection(db, 'imageLibrary'),
         where('teacherId', '==', user.uid),
@@ -162,7 +97,7 @@ export default function ImageLibraryPage() {
         return { 
             id: doc.id, 
             ...data,
-            createdAt: (data.createdAt as any)?.toDate().toISOString() || new Date().toISOString()
+            createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString()
         } as ImageAsset
     });
     setImages(fetchedImages);
@@ -175,30 +110,30 @@ export default function ImageLibraryPage() {
 
   const handleOpenDialog = (image: Partial<ImageAsset> | null = null) => {
     setEditingImage(image);
+    setFile(null); // Clear previous file selection
     setIsEditorOpen(true);
   };
 
-  const handleSaveImage = async (formData: Partial<ImageAsset>, file: File | null) => {
+  const handleSaveImage = async () => {
     if (!user) return;
-    if (!formData || (!file && !formData.id)) {
+    if (!editingImage || (!file && !editingImage.id)) {
         toast({ title: "Hata", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
         return;
     }
     setIsSaving(true);
     
-    let imageUrl = formData.url;
-    let imageStoragePath = formData.storagePath;
+    let imageUrl = editingImage.url;
+    let imageStoragePath = editingImage.storagePath;
 
     try {
-        // 1. If a new file is selected, upload it
         if (file) {
             const storage = getStorage();
             const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
             const storageRef = ref(storage, path);
             
-            if (formData.id && formData.storagePath) {
+            if (editingImage.id && editingImage.storagePath) {
                 try {
-                    const oldStorageRef = ref(storage, formData.storagePath);
+                    const oldStorageRef = ref(storage, editingImage.storagePath);
                     await deleteObject(oldStorageRef);
                 } catch (e) {
                     console.warn("Could not delete old file, but continuing with save:", e);
@@ -211,19 +146,16 @@ export default function ImageLibraryPage() {
         }
 
         const recordToSave = {
-            title: formData.title || 'İsimsiz Görsel',
+            title: editingImage.title || 'İsimsiz Görsel',
             url: imageUrl,
             storagePath: imageStoragePath,
             teacherId: user.uid,
         };
 
-        // 2. Save/Update Firestore document
-        if (formData.id) {
-            // Update
-            const docRef = doc(db, 'imageLibrary', formData.id);
+        if (editingImage.id) {
+            const docRef = doc(db, 'imageLibrary', editingImage.id);
             await updateDoc(docRef, recordToSave);
         } else {
-            // Create
             await addDoc(collection(db, 'imageLibrary'), {
                 ...recordToSave,
                 createdAt: serverTimestamp()
@@ -340,23 +272,7 @@ export default function ImageLibraryPage() {
                         {image.createdAt ? formatDistanceToNow(new Date(image.createdAt), { addSuffix: true, locale: tr }) : ''}
                     </CardDescription>
                   </CardHeader>
-                  <CardFooter className="flex justify-end gap-1 mt-auto bg-muted/50 p-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDownload(image.url, image.title)}
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      İndir
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => copyToClipboard(image.url)}
-                    >
-                      <Copy className="mr-2 h-4 w-4" />
-                      URL
-                    </Button>
+                  <CardFooter className="flex justify-end gap-2 mt-auto bg-muted/50 p-2">
                     <Button
                       variant="outline"
                       size="sm"
@@ -365,25 +281,42 @@ export default function ImageLibraryPage() {
                       <FilePenLine className="mr-2 h-4 w-4" />
                       Düzenle
                     </Button>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant="destructive-outline" size="sm" className="text-red-500 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 dark:hover:text-red-400">
-                                <Trash2 className="mr-2 h-4 w-4" /> Sil
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    "{image.title}" başlıklı görseli silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>İptal</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteImage(image.id)}>Evet, Sil</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-9 w-9 text-muted-foreground">
+                            <MoreHorizontal className="h-4 w-4"/>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => copyToClipboard(image.url)}>
+                            <Copy className="mr-2 h-4 w-4" />
+                            URL Kopyala
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDownload(image.url, image.title)}>
+                            <Download className="mr-2 h-4 w-4" />
+                            İndir
+                        </DropdownMenuItem>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-destructive/10 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-500 hover:bg-destructive/10 hover:text-red-400 w-full">
+                                    <Trash2 className="mr-2 h-4 w-4" /> Sil
+                                </div>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        "{image.title}" başlıklı görseli silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>İptal</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeleteImage(image.id)}>Evet, Sil</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </CardFooter>
                 </Card>
               ))}
@@ -392,15 +325,53 @@ export default function ImageLibraryPage() {
         </CardContent>
       </Card>
       
-      <ImageEditorDialog
-        isOpen={isEditorOpen}
-        onOpenChange={setIsEditorOpen}
-        image={editingImage}
-        onSave={handleSaveImage}
-        isSaving={isSaving}
-      />
-
-       <Dialog open={!!fullscreenImage} onOpenChange={() => setFullscreenImage(null)}>
+      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogHeader>
+              <DialogTitle>
+                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+              </DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="image-title">Başlık</Label>
+                <Input
+                  id="image-title"
+                  value={editingImage?.title || ""}
+                  onChange={(e) =>
+                    setEditingImage(prev => ({ ...prev, title: e.target.value }))
+                  }
+                  required
+                  className="bg-slate-800 border-white/20"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                <Input
+                  id="image-file"
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif, image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  İptal
+                </Button>
+              </DialogClose>
+              <Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Kaydet
+              </Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={!!fullscreenImage} onOpenChange={() => setFullscreenImage(null)}>
         <DialogContent ref={fullscreenRef} className="max-w-7xl w-full h-[90vh] bg-black/80 backdrop-blur-md border-0 p-4">
             {fullscreenImage && (
                 <div className="relative w-full h-full flex flex-col">

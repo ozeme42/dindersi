@@ -43,6 +43,29 @@ export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePath
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
+  // --- YENİ EKLENEN KISIM: OTOMATİK YÖNLENDİRME ---
+  // Eğer URL'de 'autoStart=true' varsa, bu component sadece bir "yönlendirici" görevi görür.
+  // Ders akışından gelen istekleri direkt oyunun içine atar.
+  useEffect(() => {
+      const autoStart = searchParams.get('autoStart');
+      const currentGamePath = gamePathProp || searchParams.get('gamePath') || "";
+
+      if (autoStart === 'true' && currentGamePath) {
+          // Mevcut parametreleri al (courseId, topicId vb.)
+          const params = new URLSearchParams(searchParams.toString());
+          
+          // Oyunun asıl oynandığı sayfaya yönlendir (Genelde /oyunlar/[oyun]/oyun şeklindedir)
+          // Not: Eğer oyun yolunuz farklıysa burayı düzenlemeniz gerekebilir.
+          const targetUrl = `/oyunlar/${currentGamePath}/oyun?${params.toString()}`;
+          
+          console.log("Ders akışı algılandı, oyuna yönlendiriliyor:", targetUrl);
+          router.replace(targetUrl);
+          // Yönlendirme başladı, loading durumunda bırak
+          return; 
+      }
+  }, [searchParams, gamePathProp, router]);
+  // ------------------------------------------------
+
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
@@ -63,6 +86,9 @@ export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePath
   });
 
   useEffect(() => {
+    // Eğer otomatik başlatma varsa verileri çekmeye gerek yok, yönlenmeyi bekle
+    if (searchParams.get('autoStart') === 'true') return;
+
     const fetchInitialData = async () => {
         setIsLoading(true);
         const courseData = await getCoursesForSetup();
@@ -85,7 +111,7 @@ export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePath
     if (user) {
         fetchInitialData();
     }
-  }, [user]);
+  }, [user, searchParams]);
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -146,7 +172,7 @@ export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePath
       unitName: selection.unitName,
       topicId: selection.topicId,
       topicName: selection.topicName,
-      autoStart: 'true' // <-- BU PARAMETRE OYUNUN DİREKT BAŞLAMASINI SAĞLAR
+      autoStart: 'true' 
     });
     if(isGame) {
       return `/oyunlar/${gamePath}/oyun?${params.toString()}`;
@@ -205,10 +231,13 @@ export default function OyunKurulum({ gameName: gameNameProp, gamePath: gamePath
   );
 
   const renderContent = () => {
-    if (isLoading) return (
+    // AutoStart varsa veya yükleniyorsa loading göster
+    if (isLoading || searchParams.get('autoStart') === 'true') return (
         <div className="flex flex-col items-center justify-center h-full min-h-[400px]">
             <Loader2 className="h-16 w-16 text-cyan-500 animate-spin mb-4"/>
-            <p className="text-slate-400 animate-pulse">Veriler yükleniyor...</p>
+            <p className="text-slate-400 animate-pulse">
+                {searchParams.get('autoStart') === 'true' ? "Oyun başlatılıyor..." : "Veriler yükleniyor..."}
+            </p>
         </div>
     );
 
