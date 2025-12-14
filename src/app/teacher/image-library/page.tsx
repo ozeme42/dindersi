@@ -77,51 +77,50 @@ export default function ImageLibraryPage() {
 
   const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
     if (!user) return;
+
     setIsSaving(true);
     try {
-      let downloadURL = data.url;
-      let storagePath = (data as any).storagePath;
+        let submissionData = { ...data, teacherId: user.uid };
 
-      if (file) {
-        const storage = getStorage();
-        const fileName = `${Date.now()}-${file.name}`;
-        const path = `imageLibrary/${user.uid}/${fileName}`;
-        const storageRef = ref(storage, path);
-        const snapshot = await uploadBytes(storageRef, file);
-        downloadURL = await getDownloadURL(snapshot.ref);
-        storagePath = snapshot.ref.fullPath;
-      }
+        // Eğer yeni bir dosya yükleniyorsa, önce onu Storage'a yükle.
+        if (file) {
+            const storage = getStorage();
+            const fileName = `${Date.now()}-${file.name}`;
+            const path = `imageLibrary/${user.uid}/${fileName}`;
+            const storageRef = ref(storage, path);
+            
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            
+            submissionData.url = downloadURL;
+            submissionData.storagePath = snapshot.ref.fullPath;
+        }
 
-      if (!data.id && !downloadURL) {
-         throw new Error("Yeni görsel için dosya seçilmelidir.");
-      }
+        // Yeni görsel ekleniyorsa ve dosya yoksa bu bir hatadır.
+        if (!submissionData.id && !submissionData.url) {
+            throw new Error("Yeni bir görsel oluşturmak için bir dosya seçmelisiniz.");
+        }
+        
+        const result = await saveImageRecord(submissionData);
 
-      const result = await saveImageRecord({
-        id: data.id,
-        title: data.title || "",
-        teacherId: user.uid,
-        url: downloadURL,
-        storagePath: storagePath
-      });
-
-      if (result.success) {
-        toast({ title: "Başarılı", description: "Görsel kaydedildi." });
-        fetchImages();
-        setIsEditorOpen(false);
-      } else {
-        throw new Error(result.error || "Bilinmeyen bir sunucu hatası oluştu.");
-      }
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Görsel kaydedildi." });
+            fetchImages();
+            setIsEditorOpen(false);
+        } else {
+            throw new Error(result.error || "Bilinmeyen bir sunucu hatası oluştu.");
+        }
     } catch (error: any) {
-      console.error("Görsel kaydetme hatası:", error);
-      toast({
-        title: "Hata",
-        description: `İşlem sırasında bir hata oluştu: ${error.message}`,
-        variant: "destructive"
-      });
+        console.error("Görsel kaydetme hatası:", error);
+        toast({
+            title: "Hata",
+            description: `İşlem sırasında bir hata oluştu: ${error.message}`,
+            variant: "destructive",
+        });
     } finally {
-      setIsSaving(false);
+        setIsSaving(false);
     }
-  };
+};
 
   const handleDeleteImage = async (imageId: string) => {
     const result = await deleteImage(imageId);
