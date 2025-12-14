@@ -208,21 +208,25 @@ export default function ImageLibraryPage() {
     toast({ title: "Kopyalandı", description: "Görsel URL'i panoya kopyalandı." });
   };
 
-    const handleDownload = async (imageUrl: string, imageName: string) => {
+    const handleDownload = (imageUrl: string, imageName: string) => {
         try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.href = url;
+            link.href = imageUrl;
+            // Tarayıcıya, bu linke tıklandığında dosyayı indirmesini söyler.
+            // Çapraz kaynak (cross-origin) resimlerde bu her zaman çalışmayabilir,
+            // ama fetch'ten daha güvenilirdir. Firebase Storage CORS ayarları gerektirir.
             link.download = imageName || 'indirilen-gorsel.jpg';
+            // Firefox'un linki görmesi için DOM'a eklemek gerekir.
             document.body.appendChild(link);
             link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
+            // Temizlik
+            document.body.removeChild(link);
         } catch (error) {
             console.error("Download failed:", error);
-            toast({ title: "İndirme Başarısız", description: "Görsel indirilemedi. Lütfen tekrar deneyin.", variant: "destructive" });
+            // Hata durumunda kullanıcıyı bilgilendir.
+            // Alternatif olarak, resmi yeni sekmede açabiliriz.
+            window.open(imageUrl, '_blank');
+            toast({ title: "İndirme Başlatılamadı", description: "Görsel yeni sekmede açılıyor. Oradan kaydedebilirsiniz.", variant: "default" });
         }
     };
 
