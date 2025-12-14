@@ -63,8 +63,6 @@ async function getAllTopicIdsUnderPath(filter: LibraryFilter): Promise<string[]>
 export async function getLibraryItems(filters: LibraryFilter): Promise<{ items: (Question | ActivityItem | ImageAsset)[], error?: string }> {
     try {
         if (filters.type === 'images') {
-            // NOTE: For simplicity, we are fetching all images. For a larger scale app,
-            // you might want to filter by teacherId if available.
             const imagesQuery = query(collection(db, 'imageLibrary'), orderBy('createdAt', 'desc'));
             const snapshot = await getDocs(imagesQuery);
             const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ImageAsset));
