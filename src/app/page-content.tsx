@@ -326,8 +326,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           <div className="absolute top-[-20%] left-[-10%] w-[1200px] h-[1200px] bg-indigo-900/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
       </div>
-
-      <AppHeader />
       
       <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
         
@@ -350,7 +348,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         {/* Management Grid */}
         <div className="space-y-6">
              <div className="flex items-center gap-3 px-2">
-                 <LayoutTemplate className="text-cyan-500 h-6 w-6" />
+                 <LayoutGrid className="text-cyan-500 h-6 w-6" />
                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Araçlar</h2>
              </div>
              
