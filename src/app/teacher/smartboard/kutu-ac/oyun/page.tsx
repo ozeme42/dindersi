@@ -7,7 +7,7 @@ import { getKutuAcQuestionsAction, submitKutuAcScoreAction } from '@/app/oyunlar
 import type { Question } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, Package, PartyPopper, Repeat, Home, User, Users, Trophy, Crown, Target } from 'lucide-react';
+import { Loader2, ArrowLeft, Package, PartyPopper, Repeat, Home, User, Users, Trophy, Crown, Target, CheckCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
@@ -300,7 +300,7 @@ function KutuAcGame() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex-col sm:flex-row justify-center gap-4 bg-black/20 p-6 border-t border-white/5">
-                         <Button onClick={handleRestart} size="lg" className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+                         <Button onClick={() => setGameState('setup')} size="lg" className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
                              <Repeat className="mr-2 h-5 w-5" /> Tekrar Oyna
                          </Button>
                          <Button asChild variant="outline" size="lg" className="w-full sm:w-auto border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
@@ -386,9 +386,8 @@ function KutuAcGame() {
                     )}
                 </div>
 
-                {/* Game Grid */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
-                    <CardHeader className="border-b border-white/5 pb-4">
+                     <CardHeader className="border-b border-white/5 pb-4">
                         <div className="flex items-center justify-between">
                             <CardTitle className="text-xl text-white font-bold flex items-center gap-2">
                                 <span className="bg-purple-500/20 text-purple-400 p-1.5 rounded-lg border border-purple-500/30"><Target className="h-5 w-5"/></span>
@@ -403,14 +402,14 @@ function KutuAcGame() {
                     </CardHeader>
                     <CardContent className="p-6 overflow-y-auto flex-grow min-h-[300px] pb-24">
                         <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 md:gap-4">
-                            {Array.from({ length: questions.length }).map((_, i) => {
+                            {questions.map((q, i) => {
                                 const questionNumber = i + 1;
                                 const isOpened = openedBoxes.has(questionNumber);
                                 return (
                                     <div 
                                         key={i}
                                         id={`kutucuk-${questionNumber}`}
-                                        onClick={() => !isOpened && setOpenedQuestion({ number: questionNumber, question: questions[i] })}
+                                        onClick={() => !isOpened && setOpenedQuestion({ number: questionNumber, question: q })}
                                         className={cn(
                                             "aspect-square rounded-xl flex items-center justify-center text-2xl md:text-3xl font-black text-white cursor-pointer shadow-lg transition-all duration-500 relative overflow-hidden group border-b-[4px] active:border-b-0 active:translate-y-[4px]",
                                             isOpened 
