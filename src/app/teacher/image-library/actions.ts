@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -43,7 +44,6 @@ export async function getImages(teacherId: string): Promise<{ success: boolean; 
     }
 }
 
-// BU FONKSİYON ARTIK DOSYA DEĞİL, URL KABUL EDİYOR
 export async function saveImageRecord(data: {
     id?: string;
     title: string;
@@ -54,20 +54,23 @@ export async function saveImageRecord(data: {
     try {
         // --- GÜNCELLEME ---
         if (data.id) {
-            const updateData: any = { title: data.title };
-            // Eğer yeni resim yüklendiyse URL ve Path'i de güncelle
-            if (data.url && data.storagePath) {
-                updateData.url = data.url;
-                updateData.storagePath = data.storagePath;
-            }
-            await updateDoc(doc(db, 'imageLibrary', data.id), updateData);
+            const docRef = doc(db, 'imageLibrary', data.id);
+            // Sadece güncellenebilir alanları içeren bir obje oluştur
+            const updateData: { title: string; url?: string; storagePath?: string } = {
+                 title: data.title 
+            };
+            // Sadece yeni bir URL ve path varsa bunları ekle
+            if (data.url) updateData.url = data.url;
+            if (data.storagePath) updateData.storagePath = data.storagePath;
+
+            await updateDoc(docRef, updateData);
             return { success: true, id: data.id };
         } 
         
         // --- YENİ KAYIT ---
         else {
-            if (!data.url || !data.storagePath) {
-                return { success: false, error: "Görsel URL'i eksik." };
+            if (!data.url || !data.storagePath || !data.teacherId) {
+                return { success: false, error: "Yeni görsel için URL, depolama yolu ve öğretmen ID'si zorunludur." };
             }
 
             const docRef = await addDoc(collection(db, 'imageLibrary'), {
@@ -80,7 +83,7 @@ export async function saveImageRecord(data: {
             return { success: true, id: docRef.id };
         }
     } catch (e: any) {
-        console.error("Database Error:", e);
+        console.error("Database Error in saveImageRecord:", e);
         return { success: false, error: 'Veritabanı hatası: ' + e.message };
     }
 }

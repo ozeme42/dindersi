@@ -77,12 +77,16 @@ export default function ImageLibraryPage() {
 
   const handleSaveImage = async (data: Partial<ImageAsset>, file?: File) => {
     if (!user) return;
-
     setIsSaving(true);
-    try {
-        let submissionData = { ...data, teacherId: user.uid };
 
-        // Eğer yeni bir dosya yükleniyorsa, önce onu Storage'a yükle.
+    try {
+        let submissionData: Partial<ImageAsset> & { teacherId: string } = {
+            id: data.id,
+            title: data.title,
+            teacherId: user.uid,
+        };
+
+        // Case 1: New file is being uploaded (for new or existing image)
         if (file) {
             const storage = getStorage();
             const fileName = `${Date.now()}-${file.name}`;
@@ -94,10 +98,14 @@ export default function ImageLibraryPage() {
             
             submissionData.url = downloadURL;
             submissionData.storagePath = snapshot.ref.fullPath;
-        }
-
-        // Yeni görsel ekleniyorsa ve dosya yoksa bu bir hatadır.
-        if (!submissionData.id && !submissionData.url) {
+        } 
+        // Case 2: Editing an existing image without changing the file
+        else if (data.id) {
+            // No new file, so we don't need to add url/storagePath to submission
+            // The action will only update the title.
+        } 
+        // Case 3: Creating a new image without a file
+        else {
             throw new Error("Yeni bir görsel oluşturmak için bir dosya seçmelisiniz.");
         }
         
@@ -118,7 +126,7 @@ export default function ImageLibraryPage() {
             variant: "destructive",
         });
     } finally {
-        setIsSaving(false);
+        setIsSaving(false); // Ensure this is always called
     }
 };
 
@@ -199,8 +207,8 @@ export default function ImageLibraryPage() {
                     </Button>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" size="icon" className="w-9 h-9">
-                                <Trash2 className="h-4 w-4" />
+                            <Button variant="destructive-outline" size="sm" className="text-red-500 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 dark:hover:text-red-400">
+                                <Trash2 className="mr-2 h-4 w-4" /> Sil
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
