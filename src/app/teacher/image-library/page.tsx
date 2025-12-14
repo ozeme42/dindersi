@@ -224,7 +224,7 @@ export default function ImageLibraryPage() {
               {images.map((image) => (
                 <Card key={image.id} className="flex flex-col overflow-hidden">
                     <div className="relative aspect-video w-full bg-slate-800">
-                        <Image src={image.url} alt={image.title} fill className="object-cover" />
+                        <Image src={image.url} alt={image.title || 'Yüklenen görsel'} fill className="object-cover" />
                     </div>
                   <CardHeader>
                     <CardTitle className="line-clamp-2 text-base">{image.title}</CardTitle>
