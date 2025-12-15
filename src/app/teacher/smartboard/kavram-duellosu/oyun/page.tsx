@@ -5,12 +5,15 @@ import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } fr
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { User, Lock, CheckCircle2, XCircle, ArrowRight, ArrowLeft, Loader2, PartyPopper, Repeat, Home, Trophy, Award, Swords } from "lucide-react";
+import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown, Timer, CheckCircle2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { getKavramDuellosuQuestions, type KavramDuellosuQuestion } from '../actions';
 import { cn } from "@/lib/utils";
 import { playSound, stopSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
+
 
 type GameQuestion = KavramDuellosuQuestion;
 
@@ -34,6 +37,11 @@ function KavramDuellosuGame() {
     const [p2Lock, setP2Lock] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     
+    // YENİ EKLENEN STATE'LER
+    const [timeLeft, setTimeLeft] = useState(15);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
         const params = {
@@ -45,7 +53,6 @@ function KavramDuellosuGame() {
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Uygun soru bulunamadı.");
         } else {
-            // Soruları 3 kez çoğalt ve karıştır
             const tripleQuestions = [...result.questions, ...result.questions, ...result.questions];
             setQuestions(tripleQuestions.sort(() => Math.random() - 0.5));
         }
@@ -60,7 +67,6 @@ function KavramDuellosuGame() {
 
     const loadQuestion = useCallback(() => {
         if (!currentQ) {
-            // Eğer soru yoksa ve index geçerliyse, oyun bitmiş demektir.
             if (state.currentQIndex >= questions.length && questions.length > 0) {
                  setState(s => ({...s, gameState: 'finished'}));
                  playSound('win');
@@ -68,8 +74,6 @@ function KavramDuellosuGame() {
             return;
         }
 
-        const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
-        
         setState(s => ({ 
             ...s, 
             showNextButton: false,
@@ -78,6 +82,8 @@ function KavramDuellosuGame() {
         }));
         setP1Lock(false);
         setP2Lock(false);
+        setTimeLeft(15); // Zamanlayıcıyı sıfırla
+
     }, [currentQ, state.currentQIndex, questions.length]);
     
     useEffect(() => {
@@ -86,11 +92,51 @@ function KavramDuellosuGame() {
         }
     }, [isLoading, questions, state.currentQIndex, loadQuestion]);
 
+     // Zamanlayıcı Mantığı
+    useEffect(() => {
+        if (state.gameState === 'playing' && !state.showNextButton) {
+            timerRef.current = setInterval(() => {
+                setTimeLeft(prev => {
+                    if (prev <= 1) {
+                        clearInterval(timerRef.current!);
+                        stopSound('timer');
+                        playSound('timeUp');
+                        // Süre dolduğunda her iki tarafı kilitle ve sonraki butonu göster
+                        setP1Lock(true);
+                        setP2Lock(true);
+                        setState(s => ({...s, showNextButton: true, correctAnswer: currentQ?.a || null}));
+                        return 0;
+                    }
+                    if (prev <= 6 && prev > 1) {
+                        playSound('timer');
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        } else {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                stopSound('timer');
+            }
+        }
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            stopSound('timer');
+        };
+    }, [state.gameState, state.showNextButton, currentQ]);
+
+
     const handleAnswer = (player: 'p1' | 'p2', answer: string) => {
         if (!currentQ || state.showNextButton) return;
         
         const isP1 = player === 'p1';
         if ((isP1 && p1Lock) || (!isP1 && p2Lock)) return;
+
+        // Zamanlayıcıyı durdur
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            stopSound('timer');
+        }
 
         // Yanlış Cevap
         if (answer !== currentQ.a) {
@@ -181,7 +227,7 @@ function KavramDuellosuGame() {
                     <CardFooter className="flex-col sm:flex-row justify-center gap-4 p-6">
                         <Button onClick={resetGame} size="lg" className="bg-indigo-600 hover:bg-indigo-500 font-bold"><Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna</Button>
                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-transparent">
-                            <Link href="/teacher/smartboard/kavram-duellosu"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link>
+                            <Link href="/teacher/smartboard"><Home className="mr-2 h-5 w-5"/> Ana Menü</Link>
                         </Button>
                     </CardFooter>
                  </Card>
@@ -276,8 +322,12 @@ function KavramDuellosuGame() {
                         SONRAKİ <ArrowRight className="ml-3 h-8 w-8" />
                     </Button>
                 ) : (
-                    <div className="bg-yellow-500 text-slate-900 font-black text-4xl w-20 h-20 rounded-full flex items-center justify-center border-4 border-slate-900 shadow-2xl transform rotate-12 pointer-events-none">
-                        VS
+                    <div className={cn(
+                        "bg-slate-900 text-slate-100 font-black text-4xl w-24 h-24 rounded-full flex items-center justify-center border-4 border-slate-700 shadow-2xl transform transition-all",
+                        timeLeft <= 5 ? 'border-red-500 text-red-500 animate-pulse' : ''
+                    )}>
+                        <Timer className="h-8 w-8 mr-1" />
+                        {timeLeft}
                     </div>
                 )}
             </div>
@@ -299,5 +349,4 @@ export default function KavramDuellosuOyunPage() {
         </Suspense>
     );
 }
-
-    
+```
