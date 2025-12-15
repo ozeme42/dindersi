@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book } from "lucide-react";
+import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import type { Course, SchoolClass, Unit, Topic } from "@/lib/types";
@@ -311,17 +312,21 @@ export default function DersAkisiPage() {
 
             <div className="max-w-[95%] mx-auto relative z-10 space-y-12">
                 
-                {/* Header */}
-                <div className="text-center space-y-6 py-10">
-                    <div className="inline-flex items-center justify-center p-6 bg-slate-900 border-2 border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-4">
-                        <Workflow className="h-16 w-16 text-cyan-400" />
+                 {/* Header */}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="text-center md:text-left">
+                        <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight uppercase drop-shadow-2xl">
+                            Ders Akışı
+                        </h1>
+                        <p className="text-slate-400 text-xl md:text-2xl font-medium max-w-3xl mt-4">
+                            Akıllı tahta modu devrede. Müfredat ve konuları buradan yönetin.
+                        </p>
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight uppercase drop-shadow-2xl">
-                        Ders Akışı
-                    </h1>
-                    <p className="text-slate-400 text-2xl md:text-3xl max-w-4xl mx-auto font-medium leading-relaxed">
-                        Akıllı tahta modu devrede. Müfredat ve konuları buradan yönetin.
-                    </p>
+                     <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white h-14 px-8 rounded-xl text-lg bg-slate-900/50 backdrop-blur-md">
+                        <Link href="/teacher">
+                            <Home className="mr-2 h-5 w-5" /> Ana Panele Dön
+                        </Link>
+                    </Button>
                 </div>
 
                 {/* İçerik */}
@@ -330,3 +335,4 @@ export default function DersAkisiPage() {
         </div>
     );
 }
+

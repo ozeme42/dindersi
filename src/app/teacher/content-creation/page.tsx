@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import * as React from 'react';
@@ -32,21 +30,12 @@ import {
 } from './actions';
 import { Button } from '@/components/ui/button';
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-    CardFooter,
-} from '@/components/ui/card';
-import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogDescription,
     DialogFooter,
-    DialogClose,
 } from '@/components/ui/dialog';
 import {
     AlertDialog,
@@ -66,7 +55,6 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, query, where, orderBy } from 'firebase/firestore';
 import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 
 type EnrichedTopic = Topic & { questionCount?: number };
@@ -148,7 +136,7 @@ export default function ContentCreationPage() {
             const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
                 getDocs(classesQuery),
                 getDocs(collection(db, 'courses')),
-                getDocs(collection(db, 'questions')), // Fetch all questions once
+                getDocs(collection(db, 'questions')), 
             ]);
             
             const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
@@ -168,12 +156,11 @@ export default function ContentCreationPage() {
                 const classCourses = allCourses.filter(
                     (course) => course.classId === classDoc.id
                 );
-                 // Add "Genel" courses to the first class only
+                
                 if (enrichedClasses.length === 0) {
                     const generalCourses = allCourses.filter(course => !course.classId);
                     classCourses.push(...generalCourses);
                 }
-
 
                 for (const courseData of classCourses) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
@@ -201,7 +188,6 @@ export default function ContentCreationPage() {
                             (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
                         );
                         
-                        // Calculate question count for the unit
                         const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
                         enrichedUnit.questionCount = unitQuestionCount;
 
@@ -353,7 +339,7 @@ export default function ContentCreationPage() {
         const result = await togglePublishState(path, currentState);
         if (result.success) {
             toast({ title: 'Başarılı', description: `Durum güncellendi.` });
-            await fetchCurriculum(); // Refresh data to show new state
+            await fetchCurriculum(); 
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -395,7 +381,6 @@ export default function ContentCreationPage() {
         let handleItemEdit = (item: any) => { };
         let handleItemDelete = (item: any) => { };
         let handleItemPublishToggle = (item: any, path: string, currentState: boolean) => {};
-
 
         switch (currentStep) {
             case 1:
@@ -466,7 +451,8 @@ export default function ContentCreationPage() {
         ];
 
         return (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            // DÜZELTME: Grid yapısı güncellendi
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {itemsToRender.map((item, index) => {
                     const colorClass = colorClasses[index % colorClasses.length];
                      let path = '';
@@ -480,36 +466,36 @@ export default function ContentCreationPage() {
 
 
                     return (
-                        <div key={item.id} className={cn("relative group h-48 transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
+                        <div key={item.id} className={cn("relative group min-h-[12rem] transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
                             <Button
                                 variant="ghost"
                                 className={cn(
-                                    "w-full h-full p-4 flex flex-col items-center justify-center text-center transition-all duration-300",
-                                    "rounded-2xl border-b-[6px] active:border-b-0 active:translate-y-[6px] hover:-translate-y-1",
-                                    "text-white shadow-xl hover:shadow-2xl",
+                                    "w-full h-full p-6 flex flex-col items-center justify-center text-center transition-all duration-300",
+                                    "rounded-3xl border-b-[8px] active:border-b-0 active:translate-y-[8px] hover:-translate-y-2",
+                                    "text-white shadow-2xl hover:shadow-3xl",
                                     colorClass,
                                     !isPublished && "grayscale"
                                 )}
                                 onClick={() => handleButtonClick(item)}
                             >
-                                <div className="p-3 bg-white/20 rounded-full mb-3 shadow-inner">
-                                    {isTopicStep ? <FilePenLine className="h-8 w-8" /> : <LayoutGrid className="h-8 w-8" />}
+                                <div className="p-4 bg-white/20 rounded-full mb-4 shadow-inner backdrop-blur-sm">
+                                    {isTopicStep ? <FilePenLine className="h-10 w-10" /> : <LayoutGrid className="h-10 w-10" />}
                                 </div>
-                                <span className="text-xl font-bold leading-tight line-clamp-2">
+                                <span className="text-2xl font-black leading-tight line-clamp-2">
                                     {item[itemTitleKey] || item.name}
                                 </span>
-                                {questionCount !== undefined && <Badge variant="secondary" className="mt-2 text-xs">({questionCount} Soru)</Badge>}
+                                {questionCount !== undefined && <Badge variant="secondary" className="mt-3 text-sm px-3 py-1 font-bold bg-white/20 text-white border-none backdrop-blur-md">({questionCount} Soru)</Badge>}
                             </Button>
                             
-                            <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg shadow-md bg-white/80 text-slate-900 hover:bg-white" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
-                                    {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                                <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-white/90 text-slate-900 hover:bg-white hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
+                                    {isPublished ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
                                 </Button>
-                                <Button size="icon" variant="secondary" className="h-8 w-8 rounded-lg shadow-md bg-white/80 text-slate-900 hover:bg-white" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
-                                    <FilePenLine className="h-4 w-4" />
+                                <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-white/90 text-slate-900 hover:bg-white hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
+                                    <FilePenLine className="h-5 w-5" />
                                 </Button>
-                                <Button size="icon" variant="destructive" className="h-8 w-8 rounded-lg shadow-md" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
-                                    <Trash2 className="h-4 w-4" />
+                                <Button size="icon" variant="destructive" className="h-10 w-10 rounded-xl shadow-lg hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
+                                    <Trash2 className="h-5 w-5" />
                                 </Button>
                             </div>
                         </div>
@@ -653,7 +639,7 @@ export default function ContentCreationPage() {
                         </div>
                     </div>
 
-                    <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-black/20">
+                    <div className="flex-grow p-6 md:p-10 bg-black/20">
                          {renderCurrentStep()}
                     </div>
 
