@@ -25,7 +25,8 @@ import {
   Folder,
   ArrowLeft,
   FolderPlus,
-  Move
+  Move,
+  AlertTriangle,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -38,13 +39,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator
-} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -69,7 +63,27 @@ import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage } from './actions';
 import { cn } from "@/lib/utils";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
+
+function ErrorWithLink({ message }: { message: string }) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.split(urlRegex);
+
+    return (
+        <Alert variant="destructive" className="whitespace-pre-wrap">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Hata!</AlertTitle>
+            <AlertDescription>
+                {parts.map((part, index) => 
+                    urlRegex.test(part) ? 
+                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
+                    <span key={index}>{part}</span>
+                )}
+            </AlertDescription>
+        </Alert>
+    );
+}
 
 export default function ImageLibraryPage() {
   const [images, setImages] = useState<ImageAsset[]>([]);
@@ -77,6 +91,7 @@ export default function ImageLibraryPage() {
   const [currentFolder, setCurrentFolder] = useState<{id: string, name: string} | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
@@ -95,15 +110,16 @@ export default function ImageLibraryPage() {
   const fetchLibrary = useCallback(async () => {
     if (!user) return;
     setIsLoading(true);
+    setFetchError(null);
     const result = await getImagesAndFolders(user.uid);
-    if (result.success && result.data) {
-        setImages(result.data.images || []);
-        setFolders(result.data.folders || []);
+    if (result.success) {
+        setImages(result.images || []);
+        setFolders(result.folders || []);
     } else {
-        toast({ title: "Hata", description: result.error, variant: "destructive" });
+        setFetchError(result.error || "Bilinmeyen bir hata oluştu.");
     }
     setIsLoading(false);
-  }, [user, toast]);
+  }, [user]);
 
   useEffect(() => {
     fetchLibrary();
@@ -293,6 +309,8 @@ export default function ImageLibraryPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>
+          ) : fetchError ? (
+             <ErrorWithLink message={fetchError} />
           ) : (
             <div className="space-y-8">
                  {/* Klasör Alanı */}
@@ -412,12 +430,45 @@ export default function ImageLibraryPage() {
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
         <DialogContent className="bg-slate-900 border-white/10 text-white">
-            <DialogHeader><DialogTitle>{editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}</DialogTitle></DialogHeader>
+            <DialogHeader>
+              <DialogTitle>
+                {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
+              </DialogTitle>
+            </DialogHeader>
             <div className="grid gap-4 py-4">
-              <div className="space-y-2"><Label htmlFor="image-title">Başlık</Label><Input id="image-title" value={editingImage?.title || ""} onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))} required className="bg-slate-800 border-white/20"/></div>
-              <div className="space-y-2"><Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label><Input id="image-file" type="file" accept="image/png, image/jpeg, image/gif, image/webp" onChange={(e) => setFile(e.target.files?.[0] || null)} required={!editingImage?.id} className="bg-slate-800 border-white/20 file:text-white"/></div>
+              <div className="space-y-2">
+                <Label htmlFor="image-title">Başlık</Label>
+                <Input
+                  id="image-title"
+                  value={editingImage?.title || ""}
+                  onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))}
+                  required
+                  className="bg-slate-800 border-white/20"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image-file">Görsel Dosyası {editingImage?.id ? '(Değiştirmek istemiyorsanız boş bırakın)' : ''}</Label>
+                <Input
+                  id="image-file"
+                  type="file"
+                  accept="image/png, image/jpeg, image/gif, image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
+                />
+              </div>
             </div>
-            <DialogFooter><DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose><Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>{isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Kaydet</Button></DialogFooter>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="ghost">
+                  İptal
+                </Button>
+              </DialogClose>
+              <Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>
+                {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Kaydet
+              </Button>
+            </DialogFooter>
         </DialogContent>
       </Dialog>
       
