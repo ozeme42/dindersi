@@ -1,7 +1,7 @@
-
 'use client';
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react"; // useEffect eklendi
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, PartyPopper, Repeat, Save, CheckCircle2, Home, Trophy, Star } from "lucide-react";
 import Link from 'next/link';
@@ -14,9 +14,33 @@ type GameEndScreenProps = {
     scoreSaved?: boolean;
     onRestart: () => void;
     backUrl: string;
+    passThreshold?: number; // Geçme notu (Opsiyonel, varsayılan 50 yapabiliriz)
 };
 
-export function GameEndScreen({ score, onSave, isSaving, onRestart, backUrl, scoreSaved }: GameEndScreenProps) {
+export function GameEndScreen({ 
+    score, 
+    onSave, 
+    isSaving, 
+    onRestart, 
+    backUrl, 
+    scoreSaved,
+    passThreshold = 50 // Varsayılan geçme notu
+}: GameEndScreenProps) {
+
+    // --- BU KISIM DERS AKIŞIYLA HABERLEŞMEYİ SAĞLAR ---
+    useEffect(() => {
+        // Bu ekran render olduğunda (yani oyun bittiğinde)
+        // Eğer bir iframe içindeysek ana pencereye mesaj gönderiyoruz.
+        if (window.parent) {
+            window.parent.postMessage({
+                type: 'ACTIVITY_COMPLETED',
+                score: score,
+                passed: score >= passThreshold
+            }, '*');
+        }
+    }, [score, passThreshold]);
+    // ---------------------------------------------------
+
     return (
         <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
             
@@ -56,6 +80,15 @@ export function GameEndScreen({ score, onSave, isSaving, onRestart, backUrl, sco
                                 <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-300 tracking-tighter">
                                     {score}
                                 </span>
+                            </div>
+                            
+                            {/* Geçme Durumu Göstergesi */}
+                            <div className={cn("mt-2 text-xs font-bold px-2 py-1 rounded-full border", 
+                                score >= passThreshold 
+                                    ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
+                                    : "bg-red-500/20 text-red-400 border-red-500/30"
+                            )}>
+                                {score >= passThreshold ? "BAŞARILI" : "TEKRAR DENE"}
                             </div>
                         </div>
                     </div>

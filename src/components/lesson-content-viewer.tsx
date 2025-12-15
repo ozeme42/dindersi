@@ -8,14 +8,16 @@ import {
     CheckCircle2, XCircle, Link as LinkIcon, Layers, Star, 
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
-    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, X
+    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X
 } from 'lucide-react';
 import type { 
+    LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
     Topic, ActivityLinkStep, VisualStep, McqStep, TfStep, FlashcardStep, TrueFalseListStep, 
-    HtmlSlideStep, ContentStep, AccordionStep, IframeStep, AnagramStep, SentenceScrambleStep, FitbStep, 
-    AnagramFlashcardStep, ObjectiveListStep, VideoStep 
+    HtmlSlideStep, ContentStep, ConceptMapStep, ConceptMapData, AnagramFlashcardStep, 
+    ConceptExplanationStep, ObjectiveListStep, VideoStep, Question 
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import Link from 'next/link';
 import { playSound } from "@/lib/audio-service";
@@ -119,7 +121,7 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
     return <div dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
 
-// --- ALT BİLEŞENLER (TAM VE KISALTILMAMIŞ) ---
+// --- ALT BİLEŞENLER ---
 
 function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
     const isTeacher = useTeacherMode();
@@ -551,10 +553,12 @@ export function StepContent({
         switch (step.type) {
             case 'content':
             case 'objectiveList':
-            case 'accordion':
                  return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} />
             case 'conceptExplanation': {
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
+            }
+             case 'accordion': {
+                return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} />
             }
             case 'visual':
                 return (
@@ -569,13 +573,11 @@ export function StepContent({
             case 'htmlSlide':
                  return <HtmlSlidePlayer step={step} isFullscreen={isFullscreen} onSlideScrolledToEnd={onSlideScrolledToEnd} />
             
-            // --- KRİTİK GÜNCELLEME: ActivityLink ---
+            // --- OYUN GÖSTERİMİ ---
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
                 
-                // URL Parametreleri:
-                // autoStart=true -> Oyun menüyü atlar
-                // embedded=true -> Oyun navigasyon barını gizler
+                // Oyun otomatik başlasın diye parametreleri ekliyoruz.
                 const params = new URLSearchParams({
                     courseId: courseId,
                     unitId: unitId,
@@ -590,12 +592,12 @@ export function StepContent({
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
 
                 return (
-                    // Iframe'i tam ekran yapmak için absolute inset-0 kullanıyoruz
-                    <div className="absolute inset-0 w-full h-full z-10 bg-slate-950">
+                    // absolute inset-0 ile parent container'ın padding'ini aşıp tam ekran yapıyoruz.
+                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-950">
                          <iframe
                              src={activityUrl}
                              title={activityStep.activityLabel}
-                             className="w-full h-full border-0"
+                             className="w-full h-full border-0 bg-slate-900"
                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                              allowFullScreen
                              loading="lazy"
@@ -814,13 +816,14 @@ export function LessonContentViewer({
 }: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: any }) {
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
+    const { toast } = useToast();
+    
+    // State tanımları
     const [isAnimating, setIsAnimating] = useState(false);
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
     const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
     const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
-    const [internalProgress, setInternalProgress] = useState<LocalProgress>(
-        () => ({ answers: {}, score: 0 })
-    );
+    const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
     const steps = useMemo(() => topic?.steps || [], [topic]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
@@ -837,20 +840,65 @@ export function LessonContentViewer({
         }
     }, [topic]);
 
+    // Iframe Message Listener (Oyun Bittiğinde)
     useEffect(() => {
-        if (topic) {
-            onProgressUpdate(topic.id, internalProgress);
-        }
-    }, [internalProgress, onProgressUpdate, topic]);
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === 'ACTIVITY_COMPLETED') {
+                const { score, passed } = event.data;
+                if (passed) {
+                    const currentAnswers = internalProgress.answers[currentStepIndex] || {};
+                    if (!currentAnswers.completed) {
+                        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
+                        setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 50), answers: newAnswers }));
+                        toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-600 border-none text-white" });
+                        playSound('win');
+                    }
+                } else {
+                    toast({ title: "Tekrar Dene", description: `Henüz yeterli puana ulaşamadın.`, variant: "destructive" });
+                }
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [currentStepIndex, internalProgress, toast]);
+
+    useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
     
+    // --- OYUN KONTROLÜ ---
+    const isActivityStep = currentStep?.type === 'activityLink';
+    const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
+
+    const isNextButtonEnabled = useMemo(() => {
+        if (!currentStep) return false;
+        if (isTeacher) return true;
+        
+        if (isActivityStep) return !!isStepCompleted;
+
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
+        if (isPassiveStep) return true;
+        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
+
+        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
+        if (isCardStep) {
+            const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards;
+            const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
+            return cardSet.size === cards.length;
+        }
+        
+        const answer = internalProgress.answers[currentStepIndex];
+        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
+        
+        return answer !== undefined && answer !== null;
+    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isStepCompleted]);
+
     const handleNext = useCallback(() => {
         if (!currentStep) return;
-        if (['visual', 'iframe', 'activityLink', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type)) {
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
-                setInternalProgress({ ...internalProgress, answers: newAnswers });
+                setInternalProgress(prev => ({...prev, answers: newAnswers }));
             }
         }
         if (currentStepIndex < steps.length - 1) {
@@ -905,11 +953,6 @@ export function LessonContentViewer({
             setInternalProgress(prev => ({ ...prev, answers: newAnswers }));
         }
     }, [currentStep, flippedCards, flippedAnagramCards, internalProgress, currentStepIndex]);
-    
-    const onCorrectAndNext = useCallback(() => {
-        const timeoutId = setTimeout(() => { handleNext(); }, 1200);
-        return () => clearTimeout(timeoutId);
-    }, [handleNext]);
 
     const handleSlideScrolledToEnd = useCallback(() => {
         if (internalProgress.answers && internalProgress.answers[currentStepIndex] === undefined) {
@@ -918,16 +961,8 @@ export function LessonContentViewer({
         }
     }, [currentStepIndex, internalProgress]);
 
-    const handlePrev = () => {
-        if (currentStepIndex > 0) {
-            setCurrentStepIndex(currentStepIndex - 1);
-            setRevealedSentencesCount(1);
-            setFlippedCards(new Set());
-            setFlippedAnagramCards(new Set());
-            setIsAnimating(false);
-        }
-    }
-    
+    const handlePrev = () => { if(currentStepIndex > 0) setCurrentStepIndex(prev => prev - 1); };
+
     const handleLocalMultiAnswer = (questionIndex: number, selectedAnswer: boolean) => {
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const existingAnswers = internalProgress.answers[currentStepIndex] || {};
@@ -948,31 +983,6 @@ export function LessonContentViewer({
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
     }
 
-     const isNextButtonEnabled = useMemo(() => {
-        if (!currentStep) return false;
-        
-        if (isTeacher) return true;
-
-        const isPassiveStep = ['visual', 'iframe', 'activityLink', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
-        if (isPassiveStep) return true;
-
-        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) {
-             return true;
-        }
-
-        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
-        if (isCardStep) {
-            const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards;
-            const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
-            return cardSet.size === cards.length;
-        }
-        
-        const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-        
-        return answer !== undefined && answer !== null;
-    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher]);
-
     const handleContinueOrNext = () => {
          if (!currentStep) return;
         const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
@@ -986,139 +996,59 @@ export function LessonContentViewer({
                  totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
              }
             const isListFullyRevealed = revealedSentencesCount >= totalItems;
-            
-            if (isListFullyRevealed) {
-                handleNext();
-            } else {
-                setRevealedSentencesCount(prev => prev + 1);
-            }
+            if (isListFullyRevealed) handleNext(); else setRevealedSentencesCount(prev => prev + 1);
         } else {
             handleNext();
         }
     };
 
-    // Activity Step Kontrolü
-    const isActivityStep = currentStep?.type === 'activityLink';
+    // --- RENDER ---
 
-    const renderNavigation = () => {
-        if (!currentStep) return null;
-        const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
-        let showContinueButton = false;
-        if (isContentList) {
-             let totalItems = 0;
-             if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
-             else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
-             else if (currentStep.type === 'content') {
-                 const stepContent = (currentStep as ContentStep).content || '';
-                 const listItems = stepContent.match(/<li>/g) || [];
-                 totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
-             }
-            showContinueButton = revealedSentencesCount < totalItems;
-        }
-
-        return (
-             <div className={cn("flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/80 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4")}>
-                 <div className="flex gap-2">
-                    {user?.role !== 'student' && !isActivityStep && <Button variant="secondary" size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'default')} onClick={handleNext} className={isTeacher ? "text-xl h-14" : ""}>Atla</Button>}
-                 </div>
-                <div className="flex gap-4 md:gap-6">
-                    <Button 
-                        variant="outline" 
-                        size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'sm')} 
-                        onClick={handlePrev} 
-                        disabled={currentStepIndex === 0} 
-                        className={cn("border-white/10 hover:bg-white/5 text-slate-300 hover:text-white", isTeacher ? "text-xl px-8 h-14" : "text-xs px-3 h-8")}
-                    >
-                        <ArrowLeft className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-3 w-3")} />
-                        Geri
-                    </Button>
-                    <Button 
-                        size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'sm')} 
-                        onClick={handleContinueOrNext} 
-                        // Activity step'de ileri butonu her zaman aktif olsun ki geçilebilsin
-                        disabled={!isNextButtonEnabled && !isActivityStep} 
-                        className={cn(
-                            "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
-                            showContinueButton ? "px-6 md:px-8" : "px-4 md:px-6",
-                            isTeacher ? "text-xl px-10 h-14" : "text-xs h-8"
-                        )}
-                    >
-                        {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
-                        <ArrowRight className={cn("ml-2", isTeacher ? "h-6 w-6" : "h-3 w-3")} />
-                    </Button>
-                </div>
-            </div>
-        )
-    };
-    
     if (isFinished) {
          return (
-            <div className="h-full flex items-center justify-center p-4 bg-slate-950">
-                 <Card className={cn("w-full max-w-lg bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl text-center overflow-hidden animate-in zoom-in-95 duration-500", isTeacher ? "max-w-3xl" : "max-w-lg")}>
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 to-purple-500" />
-                    <CardHeader className={isTeacher ? "pb-4 pt-10" : ""}>
-                        <div className={cn("mx-auto bg-slate-800 rounded-full mb-2 shadow-lg ring-4 ring-slate-800/50", isTeacher ? "p-6" : "p-4")}>
-                             <PartyPopper className={cn("text-yellow-400 animate-bounce", isTeacher ? "h-20 w-20" : "h-12 w-12")} />
-                        </div>
-                        <CardTitle className={cn("font-black text-white mt-4", isTeacher ? "text-5xl" : "text-3xl")}>Tebrikler!</CardTitle>
-                        <CardDescription className={cn("text-slate-400", isTeacher ? "text-2xl" : "text-lg")}>Konuyu başarıyla tamamladın.</CardDescription>
-                    </CardHeader>
-                    <CardContent className={isTeacher ? "py-8" : "py-6"}>
-                        <div className={cn("bg-slate-950/50 rounded-2xl border border-white/5", isTeacher ? "p-8" : "p-6")}>
-                            <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mb-2">Kazanılan Puan</p>
-                            <p className={cn("font-black text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]", isTeacher ? "text-8xl" : "text-6xl")}>{internalProgress.score}</p>
-                        </div>
-                    </CardContent>
-                    <CardFooter className={cn("flex-col gap-4 px-8", isTeacher ? "pb-10" : "pb-8")}>
-                        <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className={cn("w-full font-bold rounded-2xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-xl", isTeacher ? "h-20 text-3xl" : "h-14 text-lg")}>
-                            {completeButtonText || "Ders Haritasına Dön"}
-                        </Button>
-                        <Button variant="ghost" onClick={() => { setIsFinished(false); setCurrentStepIndex(0); setInternalProgress({ answers: {}, score: 0 }); }} className={cn("text-slate-400 hover:text-white", isTeacher ? "text-xl h-14" : "")}>
-                            <Repeat className="mr-2 h-4 w-4" /> Tekrar Et
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        );
+             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-6">
+                 <PartyPopper className="h-20 w-20 text-yellow-400 animate-bounce" />
+                 <h1 className="text-4xl font-bold">Ders Tamamlandı!</h1>
+                 <p className="text-2xl text-cyan-400 font-bold">Toplam Puan: {internalProgress.score}</p>
+                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">Bitir</Button>
+             </div>
+         )
     }
     
-    if (!currentStep) {
-        return (
-            <div className="flex justify-center items-center h-full text-slate-500">
-                <Loader2 className="h-8 w-8 animate-spin mr-3 text-cyan-500" />
-                <span className="text-lg font-medium">İçerik yükleniyor...</span>
-            </div>
-        );
+    if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
+
+    const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
+    let showContinueButton = false;
+    if (isContentList) {
+         let totalItems = 0;
+         if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
+         else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
+         else if (currentStep.type === 'content') {
+             const stepContent = (currentStep as ContentStep).content || '';
+             const listItems = stepContent.match(/<li>/g) || [];
+             totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+         }
+        showContinueButton = revealedSentencesCount < totalItems;
     }
 
     return (
       <div className="h-full w-full flex flex-col relative overflow-hidden bg-slate-950">
         
-        {/* HUD (Üst Bar) - Activity step değilse göster */}
+        {/* HUD (Üst Bar) - Oyun sırasında GİZLE */}
         {!isFullscreen && !isActivityStep && (
-            <div className={cn(
-                "flex-shrink-0 border-b border-white/5 bg-slate-900/80 backdrop-blur-md z-20 flex justify-between items-center",
-                isTeacher ? "px-6 py-2 h-16" : "px-3 py-2 h-12" 
-            )}>
-                 <div className="flex items-center gap-2 md:gap-4 flex-1">
-                     <div className={cn("w-full bg-slate-800 rounded-full overflow-hidden border border-white/5", isTeacher ? "h-4 max-w-md" : "h-1.5 md:h-2.5 max-w-[100px] md:max-w-xs")}>
-                        <div 
-                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(6,182,212,0.5)]"
-                            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-                        />
-                     </div>
-                     <span className={cn("font-bold text-slate-400 whitespace-nowrap", isTeacher ? "text-lg" : "text-[10px] md:text-xs")}>{currentStepIndex + 1} / {steps.length}</span>
+            <div className="flex-shrink-0 border-b border-white/5 bg-slate-900/80 backdrop-blur-md z-20 flex justify-between items-center px-4 h-12">
+                 <div className="flex items-center gap-4 flex-1">
+                     <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
+                     <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
                  </div>
-                 <div className={cn("flex items-center gap-1.5 md:gap-2 bg-slate-800 rounded-xl border border-white/5", isTeacher ? "px-4 py-2" : "px-2 md:px-3 py-1 md:py-1.5")}>
-                     <Star className={cn("text-yellow-400 fill-yellow-400", isTeacher ? "h-6 w-6" : "h-3 w-3 md:h-4 md:w-4")} />
-                     <span className={cn("font-mono font-bold text-white", isTeacher ? "text-xl" : "text-xs md:text-sm")}>{internalProgress.score}</span>
-                 </div>
+                 <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
             </div>
         )}
 
+        {/* Ana İçerik Alanı */}
         <div className={cn(
-          "flex-grow relative overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent bg-slate-950",
-          isActivityStep ? "p-0" : "pb-24" // Activity step ise padding'i kaldır
+          "flex-grow relative overflow-y-auto scrollbar-hide bg-slate-950",
+          isActivityStep ? "p-0" : "pb-24 p-4 md:py-8" // Oyun varsa padding'i sıfırla
         )}>
              {/* İçerik Alanı Arka Plan Efektleri - Activity değilse göster */}
              {!isActivityStep && (
@@ -1128,12 +1058,12 @@ export function LessonContentViewer({
                  </div>
              )}
 
-           <div className={cn("relative z-10 min-h-full flex flex-col justify-start", isActivityStep ? "h-full" : "py-4 md:py-8 px-4")}>
+           <div className={cn("relative z-10 min-h-full flex flex-col justify-start", isActivityStep ? "h-full" : "")}>
               <StepContent 
                 step={currentStep}
                 answer={internalProgress.answers[currentStepIndex]}
                 onAnswer={handleAnswer}
-                onCorrectAndNext={onCorrectAndNext}
+                onCorrectAndNext={() => setTimeout(handleNext, 1000)}
                 stepAnswers={internalProgress.answers[currentStepIndex]}
                 topic={topic}
                 courseId={courseId}
@@ -1154,7 +1084,49 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {renderNavigation()}
+        {/* --- ALT MENÜ VE KONTROLLER --- */}
+        
+        {/* 1. STANDART NAVİGASYON (Oyun dışındaki adımlarda görünür) */}
+        {!isActivityStep && (
+            <div className="flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4">
+                 <Button variant="outline" onClick={handlePrev} disabled={currentStepIndex===0} className="border-white/10 text-slate-300">Geri</Button>
+                 {user?.role !== 'student' && <Button variant="secondary" onClick={handleNext}>Atla</Button>}
+                 <Button onClick={handleContinueOrNext} disabled={!isNextButtonEnabled} className="bg-cyan-600 hover:bg-cyan-500 text-white px-8">
+                     {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
+                 </Button>
+            </div>
+        )}
+
+        {/* 2. OYUN İÇİN ÖZEL KONTROLLER (Sadece Oyun adımında görünür) */}
+        {isActivityStep && (
+            <>
+                {/* SOL ALT: Şeffaf Geri Butonu (Her zaman görünür, çıkış için) */}
+                <div className="absolute bottom-4 left-4 z-50">
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={handlePrev}
+                        disabled={currentStepIndex === 0}
+                        className="bg-black/30 hover:bg-black/50 text-white/70 hover:text-white rounded-full h-12 w-12 backdrop-blur-sm border border-white/10"
+                    >
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
+                </div>
+
+                {/* SAĞ ALT: Devam Et Butonu (Sadece oyun tamamlanınca görünür) */}
+                {isStepCompleted && (
+                    <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
+                        <Button 
+                            size="lg" 
+                            onClick={handleNext} 
+                            className="bg-green-600 hover:bg-green-500 text-white shadow-[0_0_30px_rgba(22,163,74,0.6)] border-4 border-green-800/50 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest animate-bounce"
+                        >
+                            Devam Et <ArrowRight className="ml-2 h-6 w-6" />
+                        </Button>
+                    </div>
+                )}
+            </>
+        )}
         
       </div>
     );
