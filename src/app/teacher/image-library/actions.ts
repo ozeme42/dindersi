@@ -16,7 +16,7 @@ import {
   orderBy, 
   Timestamp,
   getDoc,
-  WriteBatch
+  writeBatch
 } from "firebase/firestore";
 import type { ImageAsset, Folder } from "@/lib/types";
 
@@ -81,7 +81,7 @@ export async function getImagesAndFolders(teacherId: string): Promise<{ success:
 
         const folders = folderSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Folder));
 
-        return { success: true, data: { images: JSON.parse(JSON.stringify(images)), folders: JSON.parse(JSON.stringify(folders)) } } as any;
+        return { success: true, images: JSON.parse(JSON.stringify(images)), folders: JSON.parse(JSON.stringify(folders)) };
 
     } catch (e: any) {
         console.error("Error getting library content:", e);
