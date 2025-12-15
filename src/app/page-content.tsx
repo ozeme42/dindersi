@@ -1,4 +1,5 @@
 
+      
 
 'use client';
 
@@ -179,8 +180,15 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                     {course.units.length > 0 ? (
                                                                         course.units.map(unit => (
                                                                         <AccordionItem value={unit.id} key={unit.id} className="border-none">
-                                                                            <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-slate-400 hover:text-white hover:no-underline py-2 transition-colors">
-                                                                                {unit.title}
+                                                                            <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-slate-400 hover:text-white hover:no-underline py-2 transition-colors flex justify-between w-full">
+                                                                                <span>{unit.title}</span>
+                                                                                {unit.hasUnitOzet && (
+                                                                                     <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()} className="ml-auto mr-2">
+                                                                                        <Button variant="outline" size="sm" className="h-6 px-2 text-xs bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
+                                                                                            <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
+                                                                                        </Button>
+                                                                                    </Link>
+                                                                                )}
                                                                             </AccordionTrigger>
                                                                             <AccordionContent className="space-y-2 pt-2">
                                                                                 {unit.topics.map(topic => (
@@ -463,3 +471,5 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     
     return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
 }
+
+    

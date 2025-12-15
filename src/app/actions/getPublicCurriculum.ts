@@ -1,4 +1,5 @@
 
+      
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -9,6 +10,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 export type PublicCourse = Omit<Course, 'units'> & {
     units: (Omit<Unit, 'topics'> & {
         topics: (Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean })[]
+        hasUnitOzet: boolean; // Ünite özetinin olup olmadığını belirten alan
     })[]
 };
 
@@ -27,14 +29,13 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
 
         const allClasses = allClassesSnap.docs
             .map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
-            .filter(cls => cls.isPublished !== false); // Filter out unpublished classes
+            .filter(cls => cls.isPublished !== false); 
 
         const allCoursesData = allCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
         const coursesWithContent: PublicCourse[] = [];
 
         for (const course of allCoursesData) {
-            // Ensure unpublished courses are skipped
             if (course.isPublished === false) {
                 continue;
             }
@@ -43,7 +44,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
             const unitsWithContent: PublicCourse['units'] = [];
 
             for (const unitDoc of unitsSnap.docs) {
-                const unitData = unitDoc.data();
+                const unitData = unitDoc.data() as Unit;
                 if (unitData.isPublished === false) {
                     continue;
                 }
@@ -65,12 +66,15 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                     })
                     .filter((topic): topic is Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean } => topic !== null);
                 
-                if (topics.length > 0) {
+                const hasUnitOzet = !!unitData.htmlContent;
+
+                if (topics.length > 0 || hasUnitOzet) {
                      unitsWithContent.push({
                         id: unitDoc.id,
                         title: unitData.title,
                         topics: topics as any,
-                        isPublished: unitData.isPublished
+                        isPublished: unitData.isPublished,
+                        hasUnitOzet: hasUnitOzet // Bu bilgiyi ekliyoruz
                     });
                 }
             }
@@ -119,3 +123,5 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
         return { classGroups: [] };
     }
 }
+
+    

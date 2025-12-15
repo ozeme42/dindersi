@@ -1,4 +1,5 @@
 
+      
 'use client';
 
 import Link from 'next/link';
@@ -224,7 +225,7 @@ export default function SmartboardPage() {
                     </Link>
                 </Button>
                 <div className="h-px w-full md:w-px md:h-12 bg-white/10"></div>
-                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 text-lg font-bold h-14 px-8 rounded-xl w-full md:w-auto justify-start md:justify-center">
+                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/5 text-lg font-bold h-14 px-8 rounded-xl w-full md:w-auto justify-start md:justify-center">
                     <Link href="/teacher/guest-students">
                         <UserCog className="mr-3 h-6 w-6 text-cyan-400" />
                         Sanal Öğrencileri Yönet
@@ -241,3 +242,5 @@ export default function SmartboardPage() {
         </div>
     );
 }
+
+    
