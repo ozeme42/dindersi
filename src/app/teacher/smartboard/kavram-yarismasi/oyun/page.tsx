@@ -1,35 +1,41 @@
-
-'use client';
+'use server'; // Bu bileşenin sunucu tarafında çalışmasını sağlıyoruz
 
 import { Suspense } from 'react';
 import KavramYarismaClientPage from './client-page';
 import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
-import type { ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions';
+import { Loader2 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-// This is now a Server Component that fetches data and passes it to the client component wrapper.
+// Bu artık veriyi sunucuda çeken bir asenkron Server Component
 export default async function KavramYarismaOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
-  const params = {
-      courseId: typeof searchParams.courseId === 'string' ? searchParams.courseId : undefined,
-      unitId: typeof searchParams.unitId === 'string' ? searchParams.unitId : undefined,
-      topicId: typeof searchParams.topicId === 'string' ? searchParams.topicId : '',
-  };
+  
+  const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
 
-  if (!params.topicId) {
-      return <div>Konu ID'si gerekli.</div>;
+  if (!topicId) {
+      return (
+          <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
+              Hata: Konu ID'si gerekli.
+          </div>
+      );
   }
 
-  const { questions, error } = await getConceptQuizAction(params.topicId);
+  // Veriyi sunucuda çek
+  const { questions, error } = await getConceptQuizAction({ topicId });
   
+  // İstemci bileşenine context olarak gönderilecek veriyi oluştur
   const context = {
     courseName: typeof searchParams.courseName === 'string' ? searchParams.courseName : 'Bilinmeyen Ders',
     topicName: typeof searchParams.topicName === 'string' ? searchParams.topicName : 'Bilinmeyen Konu',
   }
 
   return (
-    <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">Yükleniyor...</div>}>
-      <KavramYarismaClientPage initialQuestions={questions} initialError={error} context={context} />
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
+      <KavramYarismaClientPage 
+        initialQuestions={questions} 
+        initialError={error} 
+        context={context} 
+      />
     </Suspense>
   );
 }
