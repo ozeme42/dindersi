@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Search, Trophy, Loader2, User, Medal, ArrowUpDown, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Search, Trophy, Loader2, User, Medal, ArrowUpDown, AlertTriangle } from 'lucide-react';
 
 // UI Components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,6 +24,25 @@ import { getStudentAnalysis } from './actions';
 
 // Types
 import type { SchoolClass, StudentAnalysisData } from './actions';
+
+function ErrorWithLink({ message }: { message: string }) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.split(urlRegex);
+
+    return (
+        <Alert variant="destructive" className="whitespace-pre-wrap">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Hata!</AlertTitle>
+            <AlertDescription className="text-red-200">
+                {parts.map((part, index) => 
+                    urlRegex.test(part) ? 
+                    <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
+                    <span key={index}>{part}</span>
+                )}
+            </AlertDescription>
+        </Alert>
+    );
+}
 
 export default function StudentAnalysisPage() {
     // State
@@ -167,13 +187,7 @@ export default function StudentAnalysisPage() {
                 </Card>
                 
                 {/* Hata Mesajı */}
-                {error && (
-                    <Alert className="bg-orange-500/10 border-orange-500/20 text-orange-200">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Veri Yüklenemedi</AlertTitle>
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                )}
+                {error && <ErrorWithLink message={error} />}
 
                 {/* Tablo Alanı */}
                 <Card className="bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden min-h-[400px]">

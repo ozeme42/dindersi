@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -95,7 +96,9 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
     } catch (error: any) {
         console.error("Error fetching assignment details:", error);
          if (error.code === 'failed-precondition') {
-             return { success: false, error: `Veritabanı indeksi eksik. Geliştirici konsolundaki linki kullanarak indeksi oluşturun. Hata: ${error.message}` };
+             const urlRegex = /(https?:\/\/[^\s]+)/g;
+             const url = error.message.match(urlRegex)?.[0] || '#';
+             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
         }
         return { success: false, error: 'Ödev detayları alınırken bir hata oluştu.' };
     }

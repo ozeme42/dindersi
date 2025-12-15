@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -114,7 +115,9 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
     } catch (e: any) {
         console.error("Error in getStudentAnalysis:", e);
          if (e.code === 'failed-precondition') {
-            return { success: false, error: `Veritabanı indeksi eksik. Sorgu oluşturulamadı. Lütfen Firebase konsolundan gerekli indeksi oluşturun. Hata detayı: ${e.message}` };
+             const urlRegex = /(https?:\/\/[^\s]+)/g;
+             const url = e.message.match(urlRegex)?.[0] || '#';
+             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
         }
         return { success: false, error: "Analiz verileri alınırken bir hata oluştu." };
     }
