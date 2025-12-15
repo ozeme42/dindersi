@@ -224,7 +224,16 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 </div>
              </main>
 
-            <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12">
+            <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12 space-y-6">
+                 <a 
+                    href="https://drive.google.com/file/d/1_yEKAVgDXvrjINJHvSZo2l1Hwx4dmOgH/view" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
+                >
+                    <Smartphone />
+                    Android Uygulamasını İndir
+                </a>
                 <p className="text-slate-500 text-xs font-bold tracking-[0.2em] uppercase">Eğlenerek Öğrenmenin Adresi</p>
             </footer>
         </div>
