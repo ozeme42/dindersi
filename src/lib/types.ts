@@ -71,7 +71,16 @@ export type ImageAsset = {
     id: string;
     title: string;
     url: string;
-    storagePath: string; // To delete from storage
+    storagePath: string;
+    teacherId: string;
+    createdAt: any;
+    folderId?: string | null; // ID of the folder it belongs to
+    folderName?: string | null; // Name of the folder for display
+};
+
+export type Folder = {
+    id: string;
+    name: string;
     teacherId: string;
     createdAt: any;
 };

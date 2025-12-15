@@ -16,33 +16,30 @@ import {
   Timestamp,
   getDoc 
 } from "firebase/firestore";
-// DİKKAT: Storage importlarını buradan kaldırdık (Delete hariç, o bazen çalışır ama client'tan tetiklemek daha iyidir. Şimdilik burada kalsın)
-import { getStorage, ref, deleteObject } from "firebase/storage";
-import type { ImageAsset } from "@/lib/types";
+import type { ImageAsset, Folder } from "@/lib/types";
 
-// Bu fonksiyon istemci tarafında halledildiği için kaldırıldı veya kullanılmıyor.
-// Sunucu eylemi olarak yeniden tanımlıyoruz.
 export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: string): Promise<{ success: boolean; error?: string; }> {
     if (!teacherId) return { success: false, error: 'Kullanıcı kimliği bulunamadı.' };
     if (!data.title || !data.url || !data.storagePath) return { success: false, error: 'Eksik görsel bilgileri.' };
 
     try {
+        const dataToSave = {
+            title: data.title,
+            url: data.url,
+            storagePath: data.storagePath,
+            teacherId: teacherId,
+            folderId: data.folderId || null,
+            folderName: data.folderName || null,
+        };
+
         if (data.id) {
             // Update existing document
-            const { id, ...updateData } = data;
-            const docRef = doc(db, 'imageLibrary', id);
-            await updateDoc(docRef, {
-                title: updateData.title,
-                url: updateData.url,
-                storagePath: updateData.storagePath,
-            });
+            const docRef = doc(db, 'imageLibrary', data.id);
+            await updateDoc(docRef, dataToSave);
         } else {
             // Create new document
             await addDoc(collection(db, 'imageLibrary'), {
-                title: data.title,
-                url: data.url,
-                storagePath: data.storagePath,
-                teacherId: teacherId,
+                ...dataToSave,
                 createdAt: serverTimestamp()
             });
         }
@@ -53,16 +50,25 @@ export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: stri
     }
 }
 
-
-export async function getImages(teacherId: string): Promise<{ success: boolean; data?: ImageAsset[]; error?: string }> {
+export async function getImagesAndFolders(teacherId: string): Promise<{ success: boolean; images?: ImageAsset[]; folders?: Folder[]; error?: string }> {
     try {
-        const q = query(
+        const imageQuery = query(
             collection(db, 'imageLibrary'),
             where('teacherId', '==', teacherId),
             orderBy('createdAt', 'desc')
         );
-        const snapshot = await getDocs(q);
-        const images = snapshot.docs.map(doc => {
+        const folderQuery = query(
+            collection(db, 'imageFolders'),
+            where('teacherId', '==', teacherId),
+            orderBy('name', 'asc')
+        );
+
+        const [imageSnapshot, folderSnapshot] = await Promise.all([
+            getDocs(imageQuery),
+            getDocs(folderQuery),
+        ]);
+
+        const images = imageSnapshot.docs.map(doc => {
             const data = doc.data();
             return { 
                 id: doc.id, 
@@ -70,11 +76,67 @@ export async function getImages(teacherId: string): Promise<{ success: boolean; 
                 createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || new Date().toISOString()
             } as ImageAsset
         });
-        return { success: true, data: JSON.parse(JSON.stringify(images)) };
+
+        const folders = folderSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Folder));
+
+        return { success: true, data: { images: JSON.parse(JSON.stringify(images)), folders: JSON.parse(JSON.stringify(folders)) } } as any;
+
     } catch (e: any) {
-        return { success: false, error: 'Görseller alınamadı.' };
+        console.error("Error getting library content:", e);
+        return { success: false, error: 'Arşiv içeriği alınamadı.' };
     }
 }
+
+export async function createFolder(name: string, teacherId: string): Promise<{ success: boolean, error?: string }> {
+    if (!name.trim()) return { success: false, error: "Klasör adı boş olamaz."};
+    try {
+        await addDoc(collection(db, 'imageFolders'), {
+            name,
+            teacherId,
+            createdAt: serverTimestamp()
+        });
+        return { success: true };
+    } catch (e: any) {
+         return { success: false, error: "Klasör oluşturulamadı." };
+    }
+}
+
+export async function moveImageToFolder(imageId: string, folderId: string | null, folderName: string | null): Promise<{ success: boolean; error?: string }> {
+    if (!imageId) return { success: false, error: 'Görsel ID\'si eksik.'};
+    try {
+        await updateDoc(doc(db, 'imageLibrary', imageId), {
+            folderId: folderId,
+            folderName: folderName
+        });
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: "Görsel taşınamadı." };
+    }
+}
+
+export async function deleteFolder(folderId: string): Promise<{ success: boolean; error?: string }> {
+    if (!folderId) return { success: false, error: "Klasör ID'si eksik."};
+    try {
+        // Find all images in this folder and move them to root
+        const imagesInFolderQuery = query(collection(db, 'imageLibrary'), where('folderId', '==', folderId));
+        const imagesSnapshot = await getDocs(imagesInFolderQuery);
+        
+        const batch = db.batch();
+        imagesSnapshot.forEach(imageDoc => {
+            batch.update(doc(db, 'imageLibrary', imageDoc.id), { folderId: null, folderName: null });
+        });
+        
+        // Delete the folder document
+        batch.delete(doc(db, 'imageFolders', folderId));
+
+        await batch.commit();
+
+        return { success: true };
+    } catch (e: any) {
+        return { success: false, error: "Klasör silinirken bir hata oluştu." };
+    }
+}
+
 
 export async function deleteImage(imageId: string): Promise<{ success: boolean; error?: string }> {
     try {
@@ -85,17 +147,10 @@ export async function deleteImage(imageId: string): Promise<{ success: boolean; 
 
         const storagePath = imageSnap.data()?.storagePath;
         
-        // Firestore'dan sil
         await deleteDoc(imageRef);
 
         if (storagePath) {
-            try {
-                // Client-side SDK'dan storage nesnesi alınamıyor, bu yüzden bu işlem client'ta yapılmalı.
-                // Ancak path'i loglayabiliriz. Bu fonksiyon idealde client'tan çağrılmalı.
-                console.log(`Deletion requested for storage path: ${storagePath}. This should be handled on the client.`);
-            } catch (storageError: any) {
-                console.warn(`Storage delete instruction failed for ${storagePath} but Firestore entry was removed. Error: ${storageError.message}`);
-            }
+            console.log(`Deletion requested for storage path: ${storagePath}. This should be handled on the client to use the client SDK for deletion.`);
         }
         
         return { success: true };
