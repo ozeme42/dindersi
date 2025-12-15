@@ -1,4 +1,5 @@
 
+
       
 
 'use client';
@@ -180,16 +181,18 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                     {course.units.length > 0 ? (
                                                                         course.units.map(unit => (
                                                                         <AccordionItem value={unit.id} key={unit.id} className="border-none">
-                                                                            <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-slate-400 hover:text-white hover:no-underline py-2 transition-colors flex justify-between w-full">
-                                                                                <span>{unit.title}</span>
+                                                                            <div className="flex justify-between items-center pr-2">
+                                                                                <AccordionTrigger className="font-bold uppercase text-xs tracking-wider text-slate-400 hover:text-white hover:no-underline py-2 transition-colors flex-1">
+                                                                                    <span>{unit.title}</span>
+                                                                                </AccordionTrigger>
                                                                                 {unit.hasUnitOzet && (
-                                                                                     <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()} className="ml-auto mr-2">
+                                                                                    <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()}>
                                                                                         <Button variant="outline" size="sm" className="h-6 px-2 text-xs bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
                                                                                             <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
                                                                                         </Button>
                                                                                     </Link>
                                                                                 )}
-                                                                            </AccordionTrigger>
+                                                                            </div>
                                                                             <AccordionContent className="space-y-2 pt-2">
                                                                                 {unit.topics.map(topic => (
                                                                                     <div key={topic.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/40 hover:bg-slate-800/60 p-3 rounded-lg transition-all border border-white/5 hover:border-white/10 group/topic">
