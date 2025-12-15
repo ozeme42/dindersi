@@ -15,10 +15,10 @@ import { SelectionGrid } from "@/components/selection-grid";
 import { Loader2 } from "lucide-react";
 
 const steps = [
-  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
-  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
-  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
-  { id: 4, name: "İçerik", icon: <LayoutTemplate className="h-5 w-5" /> },
+  { id: 1, name: "Sınıf Seçimi", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders Seçimi", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite Seçimi", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "İçerik Seçimi", icon: <LayoutTemplate className="h-5 w-5" /> },
 ];
 
 type EnrichedUnit = Unit & { topics: Topic[] };
@@ -161,7 +161,7 @@ export default function OzetlerSetupPage() {
                                 onClick={() => handleSelectContent('topic', topic.id)}
                                 className="h-40 text-lg flex flex-col gap-2 bg-slate-700 hover:bg-slate-600 border-b-8 border-slate-900 active:border-b-0 active:translate-y-2 transition-all shadow-lg"
                             >
-                                <BookOpen className="h-8 w-8"/>
+                                <Book className="h-8 w-8"/>
                                 <span className="line-clamp-3">{topic.title}</span>
                             </Button>
                         ))}
@@ -169,7 +169,7 @@ export default function OzetlerSetupPage() {
                 );
         default:
             return null;
-     }
+    }
   }
 
   return (
@@ -180,10 +180,10 @@ export default function OzetlerSetupPage() {
       </div>
       <div className="relative z-10 w-full max-w-5xl space-y-8">
         <div className="text-center space-y-2">
-            <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500 drop-shadow-sm">
-                Özet Sunum Modu
-            </h1>
-            <p className="text-slate-400 text-lg">İçeriği tahtada göstermek için seçim yapın.</p>
+          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500 drop-shadow-sm">
+            Özet Sunum Modu
+          </h1>
+          <p className="text-slate-400 text-lg">İçeriği tahtada göstermek için seçim yapın.</p>
         </div>
         <div className="flex justify-center items-center px-4 w-full">
             <div className="relative flex items-center justify-between w-full max-w-3xl">
@@ -192,17 +192,17 @@ export default function OzetlerSetupPage() {
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-rose-500 to-indigo-500 -z-10 rounded-full transition-all duration-500 ease-out"
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
-                {steps.map((step) => {
+                {steps.map((step, index) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-2 group cursor-default">
                             <div className={cn(
-                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
+                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-500 z-10 shadow-lg",
                                 isCurrent 
-                                    ? "bg-slate-900 border-rose-500 text-rose-400 scale-110 shadow-rose-500/50" 
+                                    ? "bg-slate-900 border-rose-500 text-rose-400 scale-125 shadow-rose-500/50" 
                                     : isActive 
-                                        ? "bg-indigo-600 border-indigo-600 text-white scale-100" 
+                                        ? "bg-indigo-600 border-indigo-600 text-white scale-110" 
                                         : "bg-slate-900 border-slate-700 text-slate-600"
                             )}>
                                 {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
@@ -223,8 +223,9 @@ export default function OzetlerSetupPage() {
                         <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
                             {currentStep}
                         </span>
-                        {steps.find(s => s.id === currentStep)?.name} Seçimi
+                        {steps.find(s => s.id === currentStep)?.name}
                      </h2>
+                     <div className="h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_#f43f5e]"></div>
                 </div>
                 <div className="flex-grow p-8 flex items-center justify-center">
                      {renderContent()}
