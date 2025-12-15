@@ -638,7 +638,7 @@ export default function ContentCreationPage() {
                         </div>
 
                         <div className="flex-grow p-6 md:p-10 bg-black/20">
-                            {renderContent()}
+                            {renderCurrentStep()}
                         </div>
 
                         <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
