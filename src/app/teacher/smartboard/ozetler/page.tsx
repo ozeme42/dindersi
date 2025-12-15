@@ -129,7 +129,10 @@ export default function OzetlerSetupPage() {
   }
 
   const renderContent = () => {
-    if ((isLoading || isDataLoading) && currentStep > 1) {
+    if (isLoading && currentStep > 1) {
+        return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
+    }
+    if (isDataLoading) {
         return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     }
     
@@ -139,7 +142,7 @@ export default function OzetlerSetupPage() {
         case 2:
             return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading}/>;
         case 3:
-            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} disabled={!selection.courseId} titleKey="title" isLoading={isDataLoading}/>;
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
         case 4:
             const selectedUnit = units.find(u => u.id === selection.unitId);
             const contentTopics = topics.filter(t => t.htmlContent);
@@ -166,18 +169,21 @@ export default function OzetlerSetupPage() {
                             </Button>
                         ))}
                     </div>
-                );
+                </div>
+            );
         default:
             return null;
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden">
+      
       <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-rose-900/20 rounded-full blur-[120px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-900/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px]" />
       </div>
+
       <div className="relative z-10 w-full max-w-5xl space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500 drop-shadow-sm">
@@ -198,17 +204,17 @@ export default function OzetlerSetupPage() {
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-2 group cursor-default">
                             <div className={cn(
-                                "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-500 z-10 shadow-lg",
+                                "w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-lg",
                                 isCurrent 
                                     ? "bg-slate-900 border-rose-500 text-rose-400 scale-125 shadow-rose-500/50" 
                                     : isActive 
                                         ? "bg-indigo-600 border-indigo-600 text-white scale-110" 
                                         : "bg-slate-900 border-slate-700 text-slate-600"
                             )}>
-                                {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                                {isActive && !isCurrent ? <Check className="w-6 h-6" /> : step.id}
                             </div>
                             <span className={cn(
-                                "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap",
+                                "text-[9px] md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap",
                                 isCurrent ? "text-rose-400" : isActive ? "text-indigo-500" : "text-slate-600"
                             )}>{step.name}</span>
                         </div>
@@ -217,8 +223,8 @@ export default function OzetlerSetupPage() {
             </div>
         </div>
         <div className="mt-12">
-            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
-                <div className="p-6 border-b border-white/5 bg-slate-900/80 flex items-center justify-between">
+            <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
+                <CardHeader className="p-6 border-b border-white/5 bg-slate-900/80 flex items-center justify-between">
                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
                             {currentStep}
@@ -226,11 +232,11 @@ export default function OzetlerSetupPage() {
                         {steps.find(s => s.id === currentStep)?.name}
                      </h2>
                      <div className="h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_#f43f5e]"></div>
-                </div>
-                <div className="flex-grow p-8 flex items-center justify-center">
-                     {renderContent()}
-                </div>
-                <div className="p-6 border-t border-white/5 bg-slate-900/80 flex justify-between items-center">
+                </CardHeader>
+                <CardContent className="flex-grow p-8 flex items-center justify-center">
+                    {renderContent()}
+                </CardContent>
+                <CardFooter className="p-6 border-t border-white/5 bg-slate-900/80 flex justify-between items-center">
                     {currentStep === 1 ? (
                         <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-12 px-6 rounded-xl">
                             <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Akıllı Tahtaya Dön</Link>
@@ -244,10 +250,11 @@ export default function OzetlerSetupPage() {
                             <ArrowLeft className="mr-2 h-4 w-4" /> Geri
                         </Button>
                     )}
-                </div>
-            </div>
+                </CardFooter>
+            </Card>
         </div>
       </div>
     </div>
   );
 }
+
