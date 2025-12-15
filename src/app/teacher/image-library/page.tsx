@@ -47,6 +47,13 @@ import {
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
@@ -74,7 +81,7 @@ function ErrorWithLink({ message }: { message: string }) {
         <Alert variant="destructive" className="whitespace-pre-wrap">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Hata!</AlertTitle>
-            <AlertDescription>
+            <AlertDescription className="text-red-200">
                 {parts.map((part, index) => 
                     urlRegex.test(part) ? 
                     <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
