@@ -189,7 +189,7 @@ export type Unit = {
     title: string;
     topics?: Topic[];
     createdAt?: any;
-    writingContent?: YazilacaklarContent;
+    htmlContent?: string; // YENİ EKLENDİ
     isPublished?: boolean;
 };
 
