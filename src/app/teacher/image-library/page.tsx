@@ -27,6 +27,7 @@ import {
   FolderPlus,
   Move,
   AlertTriangle,
+  Home,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -140,7 +141,7 @@ export default function ImageLibraryPage() {
 
   const handleSaveImage = async () => {
     if (!user) return;
-    if (!editingImage || (!file && !editingImage.id)) {
+    if (!editingImage?.title || (!file && !editingImage.id)) {
         toast({ title: "Hata", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
         return;
     }
@@ -304,6 +305,9 @@ export default function ImageLibraryPage() {
               </CardDescription>
             </div>
             <div className="flex gap-2">
+                 <Button variant="ghost" asChild>
+                    <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Ana Sayfa</Link>
+                 </Button>
                  <Button variant="outline" onClick={() => setIsFolderCreatorOpen(true)}>
                     <FolderPlus className="mr-2 h-4 w-4"/> Yeni Klasör
                 </Button>
@@ -436,7 +440,7 @@ export default function ImageLibraryPage() {
       
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent>
             <DialogHeader>
               <DialogTitle>
                 {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
@@ -450,7 +454,6 @@ export default function ImageLibraryPage() {
                   value={editingImage?.title || ""}
                   onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))}
                   required
-                  className="bg-slate-800 border-white/20"
                 />
               </div>
               <div className="space-y-2">
@@ -461,7 +464,6 @@ export default function ImageLibraryPage() {
                   accept="image/png, image/jpeg, image/gif, image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   required={!editingImage?.id}
-                  className="bg-slate-800 border-white/20 file:text-white"
                 />
               </div>
             </div>
@@ -471,7 +473,7 @@ export default function ImageLibraryPage() {
                   İptal
                 </Button>
               </DialogClose>
-              <Button onClick={handleSaveImage} disabled={isSaving || (!file && !editingImage?.id)}>
+              <Button onClick={handleSaveImage} disabled={isSaving || !editingImage?.title || (!file && !editingImage?.id)}>
                 {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Kaydet
               </Button>
@@ -480,7 +482,7 @@ export default function ImageLibraryPage() {
       </Dialog>
       
        <Dialog open={isFolderCreatorOpen} onOpenChange={setIsFolderCreatorOpen}>
-            <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogContent>
                 <DialogHeader><DialogTitle>Yeni Klasör Oluştur</DialogTitle></DialogHeader>
                 <div className="py-4"><Label htmlFor="folder-name">Klasör Adı</Label><Input id="folder-name" value={newFolderName} onChange={e => setNewFolderName(e.target.value)} /></div>
                 <DialogFooter><DialogClose asChild><Button variant="ghost">İptal</Button></DialogClose><Button onClick={handleCreateFolder} disabled={isSaving || !newFolderName.trim()}>Oluştur</Button></DialogFooter>
@@ -488,7 +490,7 @@ export default function ImageLibraryPage() {
         </Dialog>
         
         <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-            <DialogContent className="bg-slate-900 border-white/10 text-white">
+            <DialogContent>
                 <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle></DialogHeader>
                 <div className="py-4 space-y-2">
                     <p className="text-sm text-muted-foreground">Görseli taşımak istediğiniz klasörü seçin.</p>
