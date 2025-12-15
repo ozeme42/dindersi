@@ -19,10 +19,6 @@ const nextConfig = {
       },
     ],
   },
-  // ADDED: Prevent file watcher loop when exporting static data.
-  watchOptions: {
-    ignored: ['**/public/curriculum/**'],
-  },
 };
 
 export default nextConfig;

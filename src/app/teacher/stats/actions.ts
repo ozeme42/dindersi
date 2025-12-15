@@ -137,48 +137,38 @@ export async function getStudentProgressReports(): Promise<{data?: StudentProgre
                 let passedTests = 0;
                 let totalCorrectAnswers = 0;
                 let totalAnsweredQuestions = 0;
-                
-                const studentClassName = student.class?.split(' - ')[0];
-                const studentCourses = allCourses.filter(c => !c.isTeacherOnly && (!c.classId || (studentClassName && c.className === studentClassName)));
-                
-                totalTopicsAvailable = studentCourses.reduce((sum, course) => {
-                    const topicCount = totalTopicsPerCourse[course.id] || 0;
-                    return sum + topicCount;
-                }, 0);
 
+                const studentCourses = allCourses.filter(c => !c.isTeacherOnly && (!c.classId || (student.class && c.className === student.class.split(' - ')[0])));
+                totalTopicsAvailable = studentCourses.reduce((sum, course) => sum + (totalTopicsPerCourse[course.id] || 0), 0);
 
                 const progressCollectionRef = collection(db, `users/${student.uid}/progress`);
                 const progressSnapshot = await getDocs(progressCollectionRef);
                 progressSnapshot.forEach(doc => {
-                    if (studentCourses.some(c => c.id === doc.id)) {
-                        completedTopicsCount += (doc.data().completedTopics || []).length;
-                    }
+                    completedTopicsCount += (doc.data().completedTopics || []).length;
                 });
                 
                 const qbProgressRef = collection(db, `users/${student.uid}/questionBankProgress`);
                 const qbSnapshot = await getDocs(qbProgressRef);
                 
                 for(const doc of qbSnapshot.docs) {
-                     if (studentCourses.some(c => c.id === doc.id)) {
-                        const data = doc.data();
-                        for(const topicId in data) {
-                            const topicProgress = data[topicId];
-                            const allResults = [
-                                ...Object.values(topicProgress.easy || {}),
-                                ...Object.values(topicProgress.medium || {}),
-                                ...Object.values(topicProgress.hard || {})
-                            ] as TestResult[];
-                            
-                            totalQuestionBankTests += allResults.length;
-                            passedTests += allResults.filter((r) => r.status === 'passed').length;
-                            totalCorrectAnswers += allResults.reduce((sum, res) => sum + res.correct, 0);
-                            totalAnsweredQuestions += allResults.reduce((sum, res) => sum + res.total, 0);
-                        }
+                    const data = doc.data();
+                    for(const topicId in data) {
+                        const topicProgress = data[topicId];
+                        const allResults = [
+                            ...Object.values(topicProgress.easy || {}),
+                            ...Object.values(topicProgress.medium || {}),
+                            ...Object.values(topicProgress.hard || {})
+                        ] as TestResult[];
+                        
+                        totalQuestionBankTests += allResults.length;
+                        passedTests += allResults.filter((r) => r.status === 'passed').length;
+                        totalCorrectAnswers += allResults.reduce((sum, res) => sum + res.correct, 0);
+                        totalAnsweredQuestions += allResults.reduce((sum, res) => sum + res.total, 0);
                     }
                 }
                 
                 const activityCount = allScoreEvents.filter(e => e.userId === student.uid).length;
-                
+
                 return {
                     ...student,
                     totalTopics: totalTopicsAvailable,
