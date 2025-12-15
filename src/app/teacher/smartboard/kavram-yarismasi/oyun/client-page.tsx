@@ -9,7 +9,7 @@ import type { ConceptQuizQuestion } from '@/app/oyunlar/kavram-yarismasi/actions
 import { Loader2, ArrowLeft, Home, PartyPopper, Repeat } from "lucide-react";
 import { useSearchParams } from 'next/navigation';
 
-export default function KavramYarismaOyunClientPage({ questions, context }: { questions: ConceptQuizQuestion[], context: { courseName: string, topicName: string }}) {
+export default function KavramYarismaOyunClientPage({ initialQuestions, initialError, context }: { initialQuestions: ConceptQuizQuestion[] | null, initialError?: string, context: { courseName: string, topicName: string }}) {
     const { toast } = useToast();
     const { user } = useAuth();
 
@@ -27,6 +27,14 @@ export default function KavramYarismaOyunClientPage({ questions, context }: { qu
         }
     };
     
+    if (initialError) {
+        return <div>Hata: {initialError}</div>
+    }
+
+    if (!initialQuestions) {
+        return <div>Sorular yükleniyor...</div>
+    }
+
     // Placeholder rendering
-    return <div>Oyun mantığı burada olacak.</div>
+    return <div>Oyun mantığı burada olacak. ({initialQuestions.length} soru yüklendi)</div>
 }

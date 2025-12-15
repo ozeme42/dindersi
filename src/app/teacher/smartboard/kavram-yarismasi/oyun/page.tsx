@@ -5,7 +5,7 @@ import KavramYarismaClientPage from './client-page';
 import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import { Loader2 } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic'; // REMOVED: This was causing the build error in a "use server" file.
 
 // Bu artık veriyi sunucuda çeken bir asenkron Server Component
 export default async function KavramYarismaOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
