@@ -14,7 +14,8 @@ import {
   serverTimestamp, 
   orderBy, 
   Timestamp,
-  getDoc 
+  getDoc,
+  WriteBatch
 } from "firebase/firestore";
 import type { ImageAsset, Folder } from "@/lib/types";
 
@@ -83,6 +84,12 @@ export async function getImagesAndFolders(teacherId: string): Promise<{ success:
 
     } catch (e: any) {
         console.error("Error getting library content:", e);
+        if (e.code === 'failed-precondition') {
+             return { 
+                success: false, 
+                error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kopyalayıp tarayıcınızda açın veya aşağıdaki linke tıklayın.\n\n${e.message}`
+            };
+        }
         return { success: false, error: 'Arşiv içeriği alınamadı.' };
     }
 }
@@ -116,20 +123,20 @@ export async function moveImageToFolder(imageId: string, folderId: string | null
 
 export async function deleteFolder(folderId: string): Promise<{ success: boolean; error?: string }> {
     if (!folderId) return { success: false, error: "Klasör ID'si eksik."};
+    const dbBatch = writeBatch(db);
     try {
         // Find all images in this folder and move them to root
         const imagesInFolderQuery = query(collection(db, 'imageLibrary'), where('folderId', '==', folderId));
         const imagesSnapshot = await getDocs(imagesInFolderQuery);
         
-        const batch = db.batch();
         imagesSnapshot.forEach(imageDoc => {
-            batch.update(doc(db, 'imageLibrary', imageDoc.id), { folderId: null, folderName: null });
+            dbBatch.update(doc(db, 'imageLibrary', imageDoc.id), { folderId: null, folderName: null });
         });
         
         // Delete the folder document
-        batch.delete(doc(db, 'imageFolders', folderId));
+        dbBatch.delete(doc(db, 'imageFolders', folderId));
 
-        await batch.commit();
+        await dbBatch.commit();
 
         return { success: true };
     } catch (e: any) {
