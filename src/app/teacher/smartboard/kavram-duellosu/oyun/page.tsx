@@ -6,9 +6,10 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, CheckCircle2, XCircle, Lock } from "lucide-react";
+import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, CheckCircle2, XCircle, Lock, User, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
+import { getKavramDuellosuQuestions } from '../actions';
+import type { KavramDuellosuQuestion } from '../actions';
 import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -21,15 +22,26 @@ import { doc, getDoc } from 'firebase/firestore';
 import { playSound, stopSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
 
-type GameQuestion = GetQuizOutput['questions'][0];
+type GameQuestion = KavramDuellosuQuestion;
 type Player = { id: string; name: string; isGuest: boolean; };
 
-function KavramDuellosuOyunPage() {
+function CompetitionLoadingSkeleton() {
+    return (
+      <div className="flex h-screen items-center justify-center bg-slate-950">
+        <Loader2 className="h-16 w-16 animate-spin text-rose-500" />
+      </div>
+    );
+}
+
+function DuelGameComponent() {
     const searchParams = useSearchParams();
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    const { toast } = useToast();
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    
     const [state, setState] = useState({
         p1Score: 0,
         p2Score: 0,
@@ -53,15 +65,13 @@ function KavramDuellosuOyunPage() {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
-            questionCount: parseInt(searchParams.get('questionCount') || '30'),
-            difficulty: ['Kolay', 'Orta', 'Zor'],
-            questionTypes: ['mcq', 'tf', 'fitb'],
         };
-        const result = await getQuestionsFromBank(params as any);
-        if ('error' in result) {
-            setError(result.error);
-        } else if (result.questions) {
-            const tripleQuestions = [...result.questions, ...result.questions, ...result.questions];
+        const questionResult = await getKavramDuellosuQuestions(params);
+        
+        if (questionResult.error) {
+            setError(questionResult.error);
+        } else if (questionResult.questions && questionResult.questions.length > 0) {
+            const tripleQuestions = [...questionResult.questions, ...questionResult.questions, ...questionResult.questions];
             setQuestions(tripleQuestions.sort(() => Math.random() - 0.5));
         } else {
             setError("Uygun soru bulunamadı.");
@@ -352,6 +362,10 @@ function KavramDuellosuOyunPage() {
     );
 }
 
-export default KavramDuellosuOyunPage;
-
-    
+export default function KavramDuellosuOyunPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-rose-500" /></div>}>
+            <DuelGameComponent />
+        </Suspense>
+    )
+}
