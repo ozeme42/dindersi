@@ -66,6 +66,7 @@ import type { ImageAsset, Folder } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from 'date-fns/locale';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
