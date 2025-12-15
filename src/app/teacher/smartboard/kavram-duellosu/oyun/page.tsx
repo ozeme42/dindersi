@@ -1,22 +1,30 @@
 
 'use client';
 
-import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown, Timer, CheckCircle2, XCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, CheckCircle2, XCircle, Lock } from "lucide-react";
 import Link from "next/link";
-import { getKavramDuellosuQuestions, type KavramDuellosuQuestion } from '../actions';
+import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
+import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { QuestionDialog } from "@/components/question-dialog";
+import { Badge } from "@/components/ui/badge";
+import { updateMultipleStudentScores } from "../../../../teacher/smartboard/actions";
+import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from 'firebase/firestore';
 import { playSound, stopSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
 
-type GameQuestion = KavramDuellosuQuestion;
+type GameQuestion = GetQuizOutput['questions'][0];
+type Player = { id: string; name: string; isGuest: boolean; };
 
-function KavramDuellosuGame() {
+function KavramDuellosuOyunPage() {
     const searchParams = useSearchParams();
     const [questions, setQuestions] = useState<GameQuestion[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +44,6 @@ function KavramDuellosuGame() {
     const [p2Lock, setP2Lock] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     
-    // ZAMANLAYICI İÇİN EKLENEN STATE VE REF
     const [timeLeft, setTimeLeft] = useState(15);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -46,13 +53,18 @@ function KavramDuellosuGame() {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
+            questionCount: parseInt(searchParams.get('questionCount') || '30'),
+            difficulty: ['Kolay', 'Orta', 'Zor'],
+            questionTypes: ['mcq', 'tf', 'fitb'],
         };
-        const result = await getKavramDuellosuQuestions(params);
-        if (result.error || result.questions.length === 0) {
-            setError(result.error || "Uygun soru bulunamadı.");
-        } else {
+        const result = await getQuestionsFromBank(params as any);
+        if ('error' in result) {
+            setError(result.error);
+        } else if (result.questions) {
             const tripleQuestions = [...result.questions, ...result.questions, ...result.questions];
             setQuestions(tripleQuestions.sort(() => Math.random() - 0.5));
+        } else {
+            setError("Uygun soru bulunamadı.");
         }
         setIsLoading(false);
     }, [searchParams]);
@@ -80,7 +92,7 @@ function KavramDuellosuGame() {
         }));
         setP1Lock(false);
         setP2Lock(false);
-        setTimeLeft(15); // Zamanlayıcıyı sıfırla
+        setTimeLeft(15);
 
     }, [currentQ, state.currentQIndex, questions.length]);
     
@@ -101,7 +113,6 @@ function KavramDuellosuGame() {
         setState(s => ({ ...s, showNextButton: true, correctAnswer: currentQ?.a || null }));
     }, [currentQ, state.showNextButton]);
     
-     // Zamanlayıcı Mantığı
     useEffect(() => {
         if (state.gameState === 'playing' && !state.showNextButton) {
             timerRef.current = setInterval(() => {
@@ -341,11 +352,6 @@ function KavramDuellosuGame() {
     );
 }
 
-export default function KavramDuellosuOyunPage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
-            <KavramDuellosuGame />
-        </Suspense>
-    )
-}
+export default KavramDuellosuOyunPage;
 
+    
