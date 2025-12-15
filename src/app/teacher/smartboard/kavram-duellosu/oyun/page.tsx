@@ -341,3 +341,11 @@ function KavramDuellosuGame() {
     );
 }
 
+export default function KavramDuellosuOyunPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
+            <KavramDuellosuGame />
+        </Suspense>
+    )
+}
+
