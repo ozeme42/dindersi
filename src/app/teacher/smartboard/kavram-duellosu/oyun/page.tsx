@@ -14,7 +14,6 @@ import Confetti from 'react-dom-confetti';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 
-
 type GameQuestion = KavramDuellosuQuestion;
 
 function KavramDuellosuGame() {
@@ -37,10 +36,9 @@ function KavramDuellosuGame() {
     const [p2Lock, setP2Lock] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
     
-    // YENİ EKLENEN STATE'LER
+    // ZAMANLAYICI İÇİN EKLENEN STATE VE REF
     const [timeLeft, setTimeLeft] = useState(15);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-
 
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
@@ -92,19 +90,24 @@ function KavramDuellosuGame() {
         }
     }, [isLoading, questions, state.currentQIndex, loadQuestion]);
 
+    const handleTimeUp = useCallback(() => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        stopSound('timer');
+        if (state.showNextButton) return;
+        
+        playSound('timeUp');
+        setP1Lock(true);
+        setP2Lock(true);
+        setState(s => ({ ...s, showNextButton: true, correctAnswer: currentQ?.a || null }));
+    }, [currentQ, state.showNextButton]);
+    
      // Zamanlayıcı Mantığı
     useEffect(() => {
         if (state.gameState === 'playing' && !state.showNextButton) {
             timerRef.current = setInterval(() => {
                 setTimeLeft(prev => {
                     if (prev <= 1) {
-                        clearInterval(timerRef.current!);
-                        stopSound('timer');
-                        playSound('timeUp');
-                        // Süre dolduğunda her iki tarafı kilitle ve sonraki butonu göster
-                        setP1Lock(true);
-                        setP2Lock(true);
-                        setState(s => ({...s, showNextButton: true, correctAnswer: currentQ?.a || null}));
+                        handleTimeUp();
                         return 0;
                     }
                     if (prev <= 6 && prev > 1) {
@@ -123,8 +126,7 @@ function KavramDuellosuGame() {
             if (timerRef.current) clearInterval(timerRef.current);
             stopSound('timer');
         };
-    }, [state.gameState, state.showNextButton, currentQ]);
-
+    }, [state.gameState, state.showNextButton, handleTimeUp]);
 
     const handleAnswer = (player: 'p1' | 'p2', answer: string) => {
         if (!currentQ || state.showNextButton) return;
@@ -132,13 +134,11 @@ function KavramDuellosuGame() {
         const isP1 = player === 'p1';
         if ((isP1 && p1Lock) || (!isP1 && p2Lock)) return;
 
-        // Zamanlayıcıyı durdur
         if (timerRef.current) {
             clearInterval(timerRef.current);
             stopSound('timer');
         }
 
-        // Yanlış Cevap
         if (answer !== currentQ.a) {
             playSound('incorrect');
             const zoneId = `${player}-zone`;
@@ -151,14 +151,12 @@ function KavramDuellosuGame() {
                 document.getElementById(zoneId)?.classList.remove('shake');
             }, 500);
 
-            // Her ikisi de yanlış cevap verince sonraki tuşu çıksın
             if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
                  setTimeout(() => setState(s => ({...s, showNextButton: true, correctAnswer: currentQ?.a || null})), 500);
             }
             return;
         }
 
-        // Doğru Cevap!
         playSound('correct');
         const winner = player;
         setState(prevState => ({
@@ -238,7 +236,8 @@ function KavramDuellosuGame() {
     if (!currentQ) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
     
     const OptionButton = ({ player, option, ...props }: { player: 'p1' | 'p2', option: string, [key: string]: any }) => {
-        const baseClass = player === 'p1'
+        const isP1 = player === 'p1';
+        const baseClass = isP1
             ? 'bg-blue-100 text-blue-900 hover:bg-blue-50 border-b-4 border-blue-300 active:border-b-0 active:translate-y-1'
             : 'bg-red-100 text-red-900 hover:bg-red-50 border-b-4 border-red-300 active:border-b-0 active:translate-y-1';
         
@@ -342,11 +341,3 @@ function KavramDuellosuGame() {
     );
 }
 
-export default function KavramDuellosuOyunPage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
-            <KavramDuellosuGame />
-        </Suspense>
-    );
-}
-```
