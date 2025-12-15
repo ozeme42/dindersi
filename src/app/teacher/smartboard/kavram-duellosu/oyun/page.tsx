@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
@@ -111,7 +110,7 @@ function DuelGameComponent() {
             loadQuestion();
         }
     }, [isLoading, questions, state.currentQIndex, loadQuestion]);
-
+    
     const handleTimeUp = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current);
         stopSound('timer');
@@ -155,12 +154,7 @@ function DuelGameComponent() {
         const isP1 = player === 'p1';
         if ((isP1 && p1Lock) || (!isP1 && p2Lock)) return;
 
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            stopSound('timer');
-        }
-
-        if (answer !== currentQ.a) {
+        if (answer !== currentQ.a) { // Yanlış Cevap
             playSound('incorrect');
             const zoneId = `${player}-zone`;
             document.getElementById(zoneId)?.classList.add('shake');
@@ -172,10 +166,19 @@ function DuelGameComponent() {
                 document.getElementById(zoneId)?.classList.remove('shake');
             }, 500);
 
+            // Eğer her iki oyuncu da kilitlendiyse, süreyi durdur ve sonraki butonu göster
             if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
+                 if (timerRef.current) clearInterval(timerRef.current);
+                 stopSound('timer');
                  setTimeout(() => setState(s => ({...s, showNextButton: true, correctAnswer: currentQ?.a || null})), 500);
             }
             return;
+        }
+
+        // Doğru Cevap
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            stopSound('timer');
         }
 
         playSound('correct');
