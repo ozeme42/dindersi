@@ -169,9 +169,11 @@ export default function SmartboardPage() {
 
             {/* Ana Başlık */}
             <div className="text-center relative z-10 space-y-6">
-                <div className="inline-flex items-center justify-center p-5 bg-white/5 rounded-full mb-2 border border-white/10 shadow-2xl backdrop-blur-md">
-                    <MonitorPlay className="h-12 w-12 text-cyan-400"/>
-                </div>
+                <Link href="/teacher" className="inline-block">
+                    <div className="inline-flex items-center justify-center p-5 bg-white/5 rounded-full mb-2 border border-white/10 shadow-2xl backdrop-blur-md cursor-pointer hover:bg-white/10 transition-colors">
+                        <MonitorPlay className="h-12 w-12 text-cyan-400"/>
+                    </div>
+                </Link>
                 <h1 className="font-black text-6xl md:text-8xl tracking-tight text-white drop-shadow-2xl">AKILLI <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">TAHTA</span></h1>
                 <p className="text-slate-400 text-2xl md:text-3xl font-medium max-w-3xl mx-auto">Sınıf içi etkileşimi en üst seviyeye çıkarmak için bir mod seçin.</p>
             </div>
@@ -242,5 +244,3 @@ export default function SmartboardPage() {
         </div>
     );
 }
-
-    
