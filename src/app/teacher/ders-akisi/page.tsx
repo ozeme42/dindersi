@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home } from "lucide-react";
+import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import type { Course, SchoolClass, Unit, Topic } from "@/lib/types";
@@ -12,18 +12,6 @@ import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-// --- NEON RENK PALETİ ---
-const colorClasses = [
-    'bg-blue-950/60 border-2 border-blue-500/50 hover:border-blue-400 hover:bg-blue-900/80 text-blue-100 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]',
-    'bg-emerald-950/60 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-900/80 text-emerald-100 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]',
-    'bg-purple-950/60 border-2 border-purple-500/50 hover:border-purple-400 hover:bg-purple-900/80 text-purple-100 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]',
-    'bg-rose-950/60 border-2 border-rose-500/50 hover:border-rose-400 hover:bg-rose-900/80 text-rose-100 hover:shadow-[0_0_30px_rgba(244,63,94,0.4)]',
-    'bg-amber-950/60 border-2 border-amber-500/50 hover:border-amber-400 hover:bg-amber-900/80 text-amber-100 hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]',
-    'bg-indigo-950/60 border-2 border-indigo-500/50 hover:border-indigo-400 hover:bg-indigo-900/80 text-indigo-100 hover:shadow-[0_0_30px_rgba(99,102,241,0.4)]',
-    'bg-teal-950/60 border-2 border-teal-500/50 hover:border-teal-400 hover:bg-teal-900/80 text-teal-100 hover:shadow-[0_0_30px_rgba(20,184,166,0.4)]',
-    'bg-cyan-950/60 border-2 border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/80 text-cyan-100 hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]',
-];
 
 // Types
 type EnrichedUnit = Unit & { topics: Topic[] };
@@ -197,7 +185,7 @@ export default function DersAkisiPage() {
                                                                                 <AccordionContent className="p-6 bg-black/20">
                                                                                     {unit.topics.length > 0 ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                                            {unit.htmlContent && (
+                                                                                             {unit.htmlContent && (
                                                                                                  <Link 
                                                                                                     href={`/teacher/smartboard/ozetler/goruntule/${course.id}/${unit.id}`}
                                                                                                     className="group relative w-full flex flex-col justify-center items-center text-center font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-[2rem] shadow-2xl min-h-[14rem] break-words whitespace-normal leading-tight p-8 bg-gradient-to-br from-amber-500 to-orange-600 border-b-8 border-orange-800 text-white"
