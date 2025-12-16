@@ -21,7 +21,8 @@ import {
     LayoutGrid,
     Eye,
     EyeOff,
-    FileText
+    FileText,
+    Workflow // Eklendi
 } from 'lucide-react';
 import {
     saveCurriculumItem,
@@ -158,12 +159,6 @@ export default function ContentCreationPage() {
                     (course) => course.classId === classDoc.id
                 );
                 
-                // İlk sınıfa "Genel" dersleri ekle
-                if (enrichedClasses.length === 0) {
-                    const generalCourses = allCourses.filter(course => !course.classId);
-                    classCourses.push(...generalCourses);
-                }
-
                 for (const courseData of classCourses) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
 
@@ -190,7 +185,6 @@ export default function ContentCreationPage() {
                             (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
                         );
                         
-                        // Her ünite için toplam soru sayısını hesapla
                         const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
                         enrichedUnit.questionCount = unitQuestionCount;
 
@@ -200,6 +194,45 @@ export default function ContentCreationPage() {
                 }
                 enrichedClasses.push(enrichedClass);
             }
+            
+            // "Genel" dersleri için ayrı bir "Sınıf" grubu oluştur
+            const generalCoursesData = allCourses.filter(course => !course.classId);
+            if (generalCoursesData.length > 0) {
+                 const generalCourses: EnrichedCourse[] = [];
+                 for (const courseData of generalCoursesData) {
+                    const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
+                     const unitsSnapshot = await getDocs(
+                        query(
+                            collection(db, `courses/${courseData.id}/units`),
+                            orderBy('title')
+                        )
+                    );
+                    for (const unitDoc of unitsSnapshot.docs) {
+                        const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
+                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
+                         const topicsSnapshot = await getDocs(
+                            query(
+                                collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`),
+                                orderBy('title')
+                            )
+                        );
+                        enrichedUnit.topics = topicsSnapshot.docs.map((topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+                        const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
+                        enrichedUnit.questionCount = unitQuestionCount;
+                        enrichedCourse.units.push(enrichedUnit);
+                    }
+                    generalCourses.push(enrichedCourse);
+                 }
+                 
+                 enrichedClasses.unshift({
+                     id: 'general',
+                     name: 'Genel',
+                     courses: generalCourses,
+                     createdAt: new Date()
+                 } as EnrichedClass)
+            }
+
+
             setCurriculum(enrichedClasses);
         } catch (error) {
             console.error('Error fetching curriculum: ', error);
@@ -292,7 +325,7 @@ export default function ContentCreationPage() {
         parentId?: string,
         parentName?: string
     ) => {
-        setBulkAddDialogState({ isOpen: true, type, parentId, parentName });
+        setBulkAddDialogState({ isOpen: false, type, parentId, parentName });
     };
 
     const handleSave = async () => {
@@ -354,7 +387,7 @@ export default function ContentCreationPage() {
         setIsSaving(true);
         const names = bulkText.split('\n').map(n => n.trim()).filter(Boolean);
         const { type, parentId } = bulkAddDialogState;
-        // Konu ekliyorsak, path'i doğru oluşturmamız lazım. `parentId` burada unitId oluyor.
+        
         let finalParentId = parentId;
         if (type === 'Konu' && parentId) {
             finalParentId = `${selections.courseId}/${parentId}`;
@@ -460,9 +493,9 @@ export default function ContentCreationPage() {
                             </Button>
                             
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                {currentStep === 3 && ( // Sadece Ünite seviyesinde göster
-                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-green-500/90 text-white hover:bg-green-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Özeti Düzenle">
-                                        <FileText className="h-4 w-4" />
+                                {currentStep === 3 && (
+                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-green-500/90 text-white hover:bg-green-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Akışını Düzenle">
+                                        <Workflow className="h-4 w-4" />
                                     </Button>
                                 )}
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>

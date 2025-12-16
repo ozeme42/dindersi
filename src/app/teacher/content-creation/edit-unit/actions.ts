@@ -17,10 +17,12 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
         if (data.title) {
             dataToUpdate.title = data.title;
         }
+        // htmlContent'i korumak veya güncellemek için kontrol
         if (data.htmlContent !== undefined) {
             dataToUpdate.htmlContent = data.htmlContent;
         }
         if (data.steps !== undefined) {
+             // Firestore'un anlayacağı düz objelere dönüştür
              dataToUpdate.steps = JSON.parse(JSON.stringify(data.steps));
         }
 
