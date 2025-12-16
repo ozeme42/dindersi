@@ -242,7 +242,7 @@ export function TopicEditor({
             case 'anagramFlashcard': newStep = { type, title: defaultTitle, cards: [{ definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' }] }; break;
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
-            case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
+            case 'htmlSlide': newStep = { type: 'htmlSlide', title: 'İnteraktif Sunum', htmlContent: '<!DOCTYPE html>\n<html lang="tr">\n<head>\n  <title>Başlık</title>\n</head>\n<body>\n  <h1>Merhaba Dünya</h1>\n</body>\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
@@ -282,7 +282,7 @@ export function TopicEditor({
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[];, multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
