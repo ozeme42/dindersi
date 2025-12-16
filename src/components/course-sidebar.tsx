@@ -70,17 +70,15 @@ export function CourseSidebar({
                                              <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
                                                 <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
                                             </div>
-                                            <Link href={`/student/ders/${course.id}/${unit.id}`} legacyBehavior>
-                                                <a className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80">
-                                                    <div className="flex items-center gap-3 min-w-0">
-                                                         <div className="shrink-0 text-purple-400">
-                                                            <Workflow className="w-4 h-4" />
-                                                         </div>
-                                                         <span className="text-sm font-bold truncate text-white">
-                                                            Ünite Akışını Başlat
-                                                        </span>
-                                                    </div>
-                                                </a>
+                                            <Link href={`/student/ders/${course.id}/${unit.id}`} className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80">
+                                                <div className="flex items-center gap-3 min-w-0">
+                                                        <div className="shrink-0 text-purple-400">
+                                                        <Workflow className="w-4 h-4" />
+                                                        </div>
+                                                        <span className="text-sm font-bold truncate text-white">
+                                                        Ünite Akışını Başlat
+                                                    </span>
+                                                </div>
                                             </Link>
                                         </div>
                                     )}
