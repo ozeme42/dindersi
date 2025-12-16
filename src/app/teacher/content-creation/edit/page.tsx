@@ -39,6 +39,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { playableActivities } from '@/lib/game-config';
+import React from 'react';
 
 
 type DraggableLessonStep = LessonStep & { id: string };
@@ -140,19 +141,23 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
     )
 }
 
-function TopicEditor() {
-    const searchParams = useSearchParams();
-    const courseId = searchParams.get('courseId');
-    const unitId = searchParams.get('unitId');
-    const topicId = searchParams.get('topicId');
-    
-    const [topic, setTopic] = useState<Topic | null>(null);
+export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, isUnitFlow = false }: { 
+    initialTopic: Topic | null,
+    courseId: string,
+    unitId: string,
+    onSave: (steps: LessonStep[], title?: string) => Promise<void>,
+    isSaving: boolean,
+    isUnitFlow?: boolean
+}) {
+    const topicId = isUnitFlow ? null : initialTopic?.id;
+
+    const [topic, setTopic] = useState<Topic | null>(initialTopic);
     const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
     const [sourceText, setSourceText] = useState('');
     const [htmlContent, setHtmlContent] = useState('');
+    const [title, setTitle] = useState('');
 
     const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
@@ -168,24 +173,34 @@ function TopicEditor() {
     };
 
     useEffect(() => {
-        const fetchTopicData = async () => {
-            if (!courseId || !unitId || !topicId) return;
-            setIsLoading(true);
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
-            if (topicSnap.exists()) {
-                const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
-                setTopic(topicData);
-                setSteps(addIdToSteps(topicData.steps || []));
-                setSourceText(topicData.sourceText || '');
-                setHtmlContent(topicData.htmlContent || '');
-            } else {
-                toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
-            }
+        if(initialTopic) {
+            setTopic(initialTopic);
+            setTitle(initialTopic.title);
+            setSteps(addIdToSteps(initialTopic.steps || []));
+            setSourceText(initialTopic.sourceText || '');
+            setHtmlContent(initialTopic.htmlContent || '');
             setIsLoading(false);
+        } else {
+             const fetchTopicData = async () => {
+                if (!courseId || !unitId || !topicId) return;
+                setIsLoading(true);
+                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+                const topicSnap = await getDoc(topicRef);
+                if (topicSnap.exists()) {
+                    const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
+                    setTopic(topicData);
+                    setTitle(topicData.title);
+                    setSteps(addIdToSteps(topicData.steps || []));
+                    setSourceText(topicData.sourceText || '');
+                    setHtmlContent(topicData.htmlContent || '');
+                } else {
+                    toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
+                }
+                setIsLoading(false);
+            }
+            fetchTopicData();
         }
-        fetchTopicData();
-    }, [courseId, unitId, topicId, toast]);
+    }, [initialTopic, courseId, unitId, topicId, toast]);
     
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -334,14 +349,19 @@ function TopicEditor() {
         }
     };
     
-    const handleSave = async () => {
-         if (!courseId || !unitId || !topicId) return;
-        setIsSaving(true);
+    const handleSaveFlow = async () => {
+         if (!courseId || !unitId) return;
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
-        if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
-        else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
-        setIsSaving(false);
+        
+        if (isUnitFlow) {
+            // This is a unit flow, we use the onSave prop.
+            onSave(stepsToSave, title);
+        } else {
+            // This is a topic flow, use the internal save function
+            const result = await updateTopicContent({ courseId, unitId, topicId: topic!.id, steps: stepsToSave, sourceText, htmlContent });
+            if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
+            else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
+        }
     };
     
     const openAIGenerationDialog = (type: 'anlatim' | 'degerlendirme') => {
@@ -408,8 +428,8 @@ function TopicEditor() {
                                 İçerik Yönetimine Dön
                             </Link>
                         </Button>
-                        <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md">{topic.title}</h1>
-                        <p className="text-slate-400 font-medium">Konu içeriğini ve adımlarını buradan yönetin.</p>
+                        <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md">{title}</h1>
+                        <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
                     </div>
                     <div className="flex gap-2 flex-wrap">
                           <Button variant="secondary" onClick={() => setIsPreviewOpen(true)} className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-lg">
@@ -439,7 +459,7 @@ function TopicEditor() {
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Button onClick={handleSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
+                        <Button onClick={handleSaveFlow} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
                             Kaydet
                         </Button>
@@ -472,16 +492,18 @@ function TopicEditor() {
                                         className="min-h-[120px] text-base bg-slate-950 border-white/10 text-white focus:border-indigo-500/50"
                                     />
                                 </div>
-                                <div className="border-t border-white/5 pt-6">
-                                    <Label htmlFor="htmlContent" className="text-slate-300 font-semibold mb-2 block">İnteraktif HTML İçeriği (Öğrenci Paneli için)</Label>
-                                    <Textarea 
-                                        id="htmlContent"
-                                        value={htmlContent} 
-                                        onChange={(e) => setHtmlContent(e.target.value)}
-                                        placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                        className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
-                                    />
-                                </div>
+                                {!isUnitFlow && (
+                                    <div className="border-t border-white/5 pt-6">
+                                        <Label htmlFor="htmlContent" className="text-slate-300 font-semibold mb-2 block">İnteraktif HTML İçeriği (Öğrenci Paneli için)</Label>
+                                        <Textarea 
+                                            id="htmlContent"
+                                            value={htmlContent} 
+                                            onChange={(e) => setHtmlContent(e.target.value)}
+                                            placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                            className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                        />
+                                    </div>
+                                )}
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
@@ -602,12 +624,48 @@ function TopicEditor() {
     );
 }
 
-export default function TopicEditorPage() {
+// Wrapper component to handle Suspense
+function TopicEditorWrapper() {
+    const searchParams = useSearchParams();
+    const courseId = searchParams.get('courseId');
+    const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
+    const { toast } = useToast();
+
+    // This is a topic editor, so it needs a topicId.
+    useEffect(() => {
+        if (!topicId) {
+            toast({ title: "Hata", description: "Düzenlenecek bir konu seçilmedi.", variant: 'destructive' });
+        }
+    }, [topicId, toast]);
+
+    if (!courseId || !unitId || !topicId) {
+        // You can return a more user-friendly error message or a redirect component
+        return <div className="flex h-screen items-center justify-center bg-slate-950 text-red-500">
+            Geçersiz URL. Lütfen içerik yönetimi sayfasından bir konu seçin.
+        </div>;
+    }
+
+    return (
+        <TopicEditor 
+            initialTopic={null}
+            courseId={courseId}
+            unitId={unitId}
+            // A simplified onSave for this specific page, not for the reusable component.
+            onSave={async (steps, title) => {
+                const result = await updateTopicContent({ courseId, unitId, topicId, steps });
+                // Handle result...
+            }}
+            isSaving={false}
+        />
+    )
+}
+
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
-            <TopicEditor />
+            <TopicEditorWrapper />
         </Suspense>
     )
 }
 
-    
