@@ -1,12 +1,15 @@
+
 'use client';
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import type { Course, Topic, Unit, QuestionBankProgress } from '@/lib/types';
-import { Lock, Check, Play, MapPin, ChevronDown, BookOpen } from 'lucide-react';
+import { Lock, Check, Play, MapPin, ChevronDown, BookOpen, Workflow } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { Button } from './ui/button';
 
 interface CourseSidebarProps {
     course: Course;
@@ -61,6 +64,27 @@ export function CourseSidebar({
                                 </AccordionTrigger>
 
                                 <AccordionContent className="pt-0 pb-2 pl-2">
+                                     {/* Ünite Akışı Butonu */}
+                                    {unit.steps && unit.steps.length > 0 && (
+                                        <div className="relative pl-6 pb-2 mb-2">
+                                             <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
+                                                <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
+                                            </div>
+                                            <Link href={`/student/ders/${course.id}/${unit.id}`} legacyBehavior>
+                                                <a className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80">
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                         <div className="shrink-0 text-purple-400">
+                                                            <Workflow className="w-4 h-4" />
+                                                         </div>
+                                                         <span className="text-sm font-bold truncate text-white">
+                                                            Ünite Akışını Başlat
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </Link>
+                                        </div>
+                                    )}
+
                                     {/* Timeline (Yol Haritası) Yapısı */}
                                     <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
                                         {unit.topics?.map((topic, topicIndex) => {
@@ -127,11 +151,6 @@ export function CourseSidebar({
                                                                 )}
                                                             </div>
                                                         </div>
-
-                                                        {/* Sağ İkon (Kilit veya Ok) */}
-                                                        {/* {!isLocked && !isActive && (
-                                                            <ChevronDown className="w-4 h-4 text-slate-600 -rotate-90 opacity-0 group-hover/card:opacity-100 transition-opacity" />
-                                                        )} */}
                                                     </button>
                                                 </div>
                                             );

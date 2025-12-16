@@ -9,7 +9,7 @@ import {
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
-    Maximize2 
+    Maximize2, Maximize, Minimize 
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -124,25 +124,64 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ALT BİLEŞENLER ---
 
-// 1. VisualPlayer (Görsel Büyütme - GÜNCELLENDİ: TAM EKRAN MODU)
-function VisualPlayer({ step }: { step: VisualStep }) {
-    // Zoom mantığı kaldırıldı, görsel doğrudan container'ı dolduracak şekilde ayarlandı.
+// 1. VisualPlayer (Görsel Büyütme - GÜNCELLENDİ: PROP İLE KONTROL)
+// Artık state'i kendi içinde değil, parent'tan alıyor.
+function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualStep, isMaximized: boolean, onToggleMaximize: () => void }) {
+    
+    // ESC tuşu ile tam ekrandan çıkma
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isMaximized) {
+                onToggleMaximize();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isMaximized, onToggleMaximize]);
+
     return (
-        <div className="relative w-full h-full flex flex-col items-center justify-center bg-black/5 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+        <div 
+            className={cn(
+                "relative flex flex-col items-center justify-center bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-500 ease-in-out",
+                // Eğer maximize ise tüm ekranı kaplasın, değilse normal ebeveyn boyutunu alsın
+                isMaximized 
+                    ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0" // z-index'i düşürdüm (z-40) ki üstüne buton gelebilsin
+                    : "w-full h-full"
+            )}
+        >
+            {/* Kontrol Butonu (Sağ Üst) */}
+            <div className="absolute top-4 right-4 z-50">
+                <Button
+                    onClick={onToggleMaximize}
+                    variant="secondary"
+                    size="icon"
+                    className="bg-black/50 hover:bg-black/70 text-white backdrop-blur-md border border-white/20 rounded-full w-12 h-12 shadow-lg transition-transform hover:scale-110"
+                    title={isMaximized ? "Küçült" : "Tam Ekran Yap"}
+                >
+                    {isMaximized ? <Minimize className="h-6 w-6" /> : <Maximize className="h-6 w-6" />}
+                </Button>
+            </div>
+
             {/* Resim Container */}
             <div className="relative w-full h-full">
                 <Image 
                     src={step.imageUrl} 
                     alt={step.title} 
                     fill
-                    className="object-contain" // Resmi orantılı sığdırır. Tam doldurmak için 'object-cover' kullanabilirsiniz.
+                    className={cn(
+                        "transition-all duration-500",
+                        isMaximized ? "object-contain p-4" : "object-contain"
+                    )}
                     priority
                 />
             </div>
             
-            {/* Başlık (Opsiyonel: Alt kısımda yüzer bar olarak) */}
+            {/* Başlık (Alt kısım) */}
             {step.title && (
-                <div className="absolute bottom-6 px-4 w-full flex justify-center z-10 pointer-events-none">
+                <div className={cn(
+                    "absolute bottom-6 px-4 w-full flex justify-center z-10 pointer-events-none transition-all duration-500",
+                    isMaximized ? "bottom-10 scale-110" : "bottom-6"
+                )}>
                     <div className="bg-black/60 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-lg pointer-events-auto">
                         <p className="text-white text-lg md:text-xl font-bold text-center">
                             {step.title}
@@ -775,7 +814,10 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
 export function StepContent({ 
     step, answer, onAnswer, onCorrectAndNext, stepAnswers, topic, courseId, unitId, courseTitle, unitTitle, isFullscreen, 
     revealedSentencesCount, flippedCards, flippedAnagramCards, onCardFlip, onSlideScrolledToEnd, onMultiAnswer, onAllTfAnswered,
-    onAnimationStart, onAnimationEnd 
+    onAnimationStart, onAnimationEnd,
+    // GÜNCELLEME: Yeni prop'lar
+    isVisualMaximized,
+    onToggleVisualMaximize
 }: any) {
     const isTeacher = useTeacherMode();
 
@@ -789,10 +831,14 @@ export function StepContent({
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
             }
             case 'visual':
-                // GÜNCELLEME: Görsel için padding kaldırıldı ve tam boyut kullanıldı
+                // GÜNCELLEME: Görsel için padding kaldırıldı ve tam boyut kullanıldı. Prop'lar aktarıldı.
                 return (
                      <div className="w-full h-full p-0 md:p-2">
-                        <VisualPlayer step={step as VisualStep} />
+                        <VisualPlayer 
+                            step={step as VisualStep} 
+                            isMaximized={isVisualMaximized} 
+                            onToggleMaximize={onToggleVisualMaximize}
+                        />
                      </div>
                 );
             case 'iframe':
@@ -1005,6 +1051,9 @@ export function LessonContentViewer({
     const steps = useMemo(() => topic?.steps || [], [topic]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+    
+    // GÜNCELLEME: Görsel büyütme durumu state'i
+    const [isVisualMaximized, setIsVisualMaximized] = useState(false);
      
     // --- RESUME (KALINAN YERDEN DEVAM) ---
     const [showResumeDialog, setShowResumeDialog] = useState(false);
@@ -1034,6 +1083,7 @@ export function LessonContentViewer({
             setFlippedCards(new Set());
             setFlippedAnagramCards(new Set());
             setIsAnimating(false);
+            setIsVisualMaximized(false); // Reset
         }
     }, [topic, user?.uid, steps.length]);
 
@@ -1088,8 +1138,9 @@ export function LessonContentViewer({
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
-    // Full width adımlar (Alt menüsü gizlenecekler)
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep;
+    
+    // GÜNCELLEME: Görsel tam ekran yapıldığında da 'FullWidth' moduna geç
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
      
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
@@ -1143,7 +1194,8 @@ export function LessonContentViewer({
             setRevealedSentencesCount(1);
             setFlippedCards(new Set());
             setFlippedAnagramCards(new Set());
-            setIsAnimating(false); 
+            setIsAnimating(false);
+            setIsVisualMaximized(false); // Adım değişince büyütmeyi kapat 
         } else {
             setIsFinished(true);
             playSound('win');
@@ -1271,7 +1323,8 @@ export function LessonContentViewer({
     // --- BUTON GÖSTERME MANTIĞI ---
     const showFloatingButton = isFullWidthStep && (
         isHtmlSlideStep || // HTML ise hep göster
-        (isActivityStep && isStepCompleted) // Oyun ise sadece tamamlanınca göster
+        (isActivityStep && isStepCompleted) || // Oyun ise sadece tamamlanınca göster
+        (currentStep?.type === 'visual' && isVisualMaximized) // GÜNCELLEME: Görsel tam ekransa göster
     );
 
     return (
@@ -1339,6 +1392,9 @@ export function LessonContentViewer({
                 onAllTfAnswered={handleLocalAllTfAnswered}
                 onAnimationStart={() => setIsAnimating(true)}
                 onAnimationEnd={() => setIsAnimating(false)}
+                // GÜNCELLEME: Yeni prop'lar aktarılıyor
+                isVisualMaximized={isVisualMaximized}
+                onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
               />
            </div>
         </div>
