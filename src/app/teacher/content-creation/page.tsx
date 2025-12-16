@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -141,10 +141,10 @@ export default function ContentCreationPage() {
                         ...c,
                         units: c.units.map(u => {
                             if (u.id !== unitId) return u;
-                            if (updatedData.hasOwnProperty('steps')) { // Ünite akışı güncelleniyor
+                            if ('steps' in updatedData && 'title' in updatedData) { // Unit update
                                 return { ...u, ...updatedData };
                             }
-                            return { // Konu akışı güncelleniyor
+                            return { // Topic update
                                 ...u,
                                 topics: u.topics.map(t => t.id === (updatedData as Topic).id ? { ...t, ...updatedData } : t)
                             };
@@ -351,6 +351,7 @@ export default function ContentCreationPage() {
             return {
                 courseId: selections.courseId,
                 unitId: selections.unitId,
+                topicId: undefined, // Explicitly undefined for unit-level generation
                 topicTitle: selectedUnit.title,
                 sourceText: selectedUnit.sourceText || selectedUnit.title
             }
@@ -570,7 +571,7 @@ export default function ContentCreationPage() {
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
                                     <FilePenLine className="h-4 w-4" />
                                 </Button>
-                                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
+                                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDeleteDialog(steps.find(s => s.id === currentStep)?.name as any, { ...item, name: item.title || item.name, path }); }} title="Sil">
                                     <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -634,7 +635,7 @@ export default function ContentCreationPage() {
                 </div>
 
                 {/* Stepper */}
-                <div className="flex justify-center items-center px-4 w-full">
+                <div className="flex justify-center items-center px-4 w-full mb-8">
                     <div className="relative flex items-center justify-between w-full max-w-3xl">
                         <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                         <div 
@@ -831,107 +832,3 @@ export default function ContentCreationPage() {
         </div>
     );
 }
-
-```
-- src/lib/firebase-admin.ts:
-```ts
-
-
-import 'dotenv/config';
-import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
-
-let adminApp: App;
-
-try {
-  adminApp = getApp('admin');
-} catch (e) {
-  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-    : undefined;
-
-  if (!serviceAccount) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Cannot initialize Firebase Admin SDK.');
-  }
-
-  adminApp = initializeApp({
-    credential: cert(serviceAccount)
-  }, 'admin');
-}
-
-// Ensure services are initialized
-getFirestore(adminApp);
-getAuth(adminApp);
-
-export { adminApp };
-
-```
-- src/lib/utils.ts:
-```ts
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
-export function normalizeNameToEmailLocalPart(name: string): string {
-  if (!name) return '';
-  return name
-    .trim()
-    .toLocaleLowerCase('tr-TR')
-    .replace(/\s+/g, '.') // handle one or more spaces
-    .replace(/ğ/g, 'g')
-    .replace(/ü/g, 'u')
-    .replace(/ş/g, 's')
-    .replace(/ı/g, 'i')
-    .replace(/ö/g, 'o')
-    .replace(/ç/g, 'c')
-    .replace(/[^a-z0-9.-_]/g, ''); // Allow dots and hyphens
-}
-
-```
-- tsconfig.json:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
-```
