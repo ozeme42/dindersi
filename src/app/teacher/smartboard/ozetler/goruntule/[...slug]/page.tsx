@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect, useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { Loader2, ArrowLeft, LayoutTemplate } from 'lucide-react';
+import { Loader2, ArrowLeft, LayoutTemplate, BookOpen } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Unit, Topic } from '@/lib/types';
@@ -66,11 +66,11 @@ function OzetDisplayPage() {
 
         const fetchUnit = async () => {
             setIsLoading(true);
-            const fetchedContent = await getContent(courseId, unitId, topicId);
+            const fetchedContent = await getContent(courseId, unitId, topicId || undefined);
             if (fetchedContent) {
                 setContent(fetchedContent);
             } else {
-                setError("Bu içerik için interaktif özet bulunamadı.");
+                setError('Bu içerik için interaktif özet bulunamadı.');
             }
             setIsLoading(false);
         };
@@ -166,8 +166,8 @@ function OzetDisplayPage() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-slate-800 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>}>
+        <Suspense fallback={<div className="flex justify-center items-center h-screen bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>}>
             <OzetDisplayPage />
         </Suspense>
-    );
+    )
 }
