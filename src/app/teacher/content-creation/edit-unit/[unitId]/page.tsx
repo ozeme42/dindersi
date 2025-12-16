@@ -21,7 +21,6 @@ function UnitFlowEditor() {
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);
-    const [steps, setSteps] = useState<LessonStep[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     
@@ -46,7 +45,6 @@ function UnitFlowEditor() {
                 if (!unitData.steps) unitData.steps = [];
                 
                 setUnit(unitData);
-                setSteps(unitData.steps);
             } else {
                 toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
                 router.back();
@@ -63,15 +61,15 @@ function UnitFlowEditor() {
         fetchUnitData();
     }, [fetchUnitData]);
 
-    const handleSave = async (newSteps: LessonStep[], newTitle?: string, newSourceText?: string) => {
+    const handleSave = async (data: { steps: LessonStep[], title: string, sourceText: string }) => {
         if (!courseId || !unitId || !unit) return;
         
         setIsSaving(true);
         
         const dataToSave = {
-            title: newTitle || unit.title,
-            steps: newSteps,
-            sourceText: newSourceText || unit.sourceText || '',
+            title: data.title,
+            steps: data.steps,
+            sourceText: data.sourceText,
         };
 
         try {
@@ -80,7 +78,6 @@ function UnitFlowEditor() {
             if (result.success) {
                 toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
                 setUnit(prev => prev ? { ...prev, ...dataToSave } : null);
-                setSteps(newSteps);
             } else {
                 toast({ title: "Hata", description: result.error, variant: "destructive" });
             }
@@ -92,7 +89,11 @@ function UnitFlowEditor() {
     };
     
     const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
-        setSteps(prevSteps => [...prevSteps, ...newSteps]);
+        if (!unit) return;
+        
+        const updatedUnit = { ...unit, steps: [...(unit.steps || []), ...newSteps] };
+        setUnit(updatedUnit);
+
         toast({
             title: "Başarılı",
             description: `${newSteps.length} yeni adım taslağa eklendi. Değişiklikleri kaydetmeyi unutmayın.`
@@ -107,23 +108,14 @@ function UnitFlowEditor() {
         );
     }
     
-    // TopicEditor'a geçici bir Topic nesnesi oluşturuyoruz
-    const pseudoTopic = {
-        id: unit.id,
-        title: unit.title,
-        steps: steps, // Dışarıdaki state'i kullan
-        sourceText: unit.sourceText || ''
-    } as Topic;
-
     return (
         <>
             <TopicEditor
-                key={`editor-${unit.id}-${steps.length}`}
-                initialTopic={pseudoTopic}
+                key={`editor-${unit.id}-${unit.steps?.length}`}
+                initialTopic={unit as Topic} // Cast Unit to Topic for props compatibility
                 courseId={courseId!}
                 unitId={unitId}
-                // onSave, TopicEditor'ın kendi içindeki title ve sourceText'i de gönderir.
-                onSave={(updatedSteps, updatedTitle, updatedSourceText) => handleSave(updatedSteps, updatedTitle, updatedSourceText)}
+                onSave={handleSave}
                 isSaving={isSaving}
                 isUnitFlow={true}
                 onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
@@ -132,7 +124,7 @@ function UnitFlowEditor() {
                 isOpen={isAiOpen}
                 onOpenChange={setIsAiOpen}
                 context={{ 
-                    topicId: unit.id, // We use unit ID as context ID here
+                    topicId: unit.id,
                     topicTitle: unit.title, 
                     sourceText: unit.sourceText 
                 }}

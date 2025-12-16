@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
@@ -30,7 +29,8 @@ import { BulkStepImportDialog } from '@/components/bulk-step-import-dialog';
 import { LibraryImportDialog } from '@/components/library-import-dialog';
 import type { GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateLessonContent } from '@/ai/flows/generate-lesson-content';
-import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
+import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
+import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
@@ -156,7 +156,7 @@ export function TopicEditor({
     courseId: string,
     unitId: string,
     topicId?: string | null,
-    onSave: (steps: LessonStep[], title?: string, sourceText?: string) => Promise<void>,
+    onSave: (data: { steps: LessonStep[], title: string, sourceText: string }) => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
     onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
@@ -358,7 +358,7 @@ export function TopicEditor({
     const handleSaveFlow = async () => {
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
         if (isUnitFlow) {
-            onSave(stepsToSave, title, sourceText);
+            onSave({ steps: stepsToSave, title, sourceText });
         } else {
              if (!courseId || !unitId || !topicId) return;
             const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
@@ -414,7 +414,7 @@ export function TopicEditor({
             <div className="max-w-7xl mx-auto relative z-10 space-y-6">
                 
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-white/5 pb-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                      <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12 flex-shrink-0">
                             <Link href="/teacher/content-creation">
@@ -639,8 +639,8 @@ function TopicEditorWrapper() {
             courseId={courseId}
             unitId={unitId}
             topicId={topicId}
-            onSave={async (steps, title, sourceText) => {
-                const result = await updateTopicContent({ courseId, unitId, topicId, steps, sourceText: sourceText || '' });
+            onSave={async (data) => {
+                const result = await updateTopicContent({ courseId, unitId, topicId, steps: data.steps, sourceText: data.sourceText || '' });
                 if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
                 else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
             }}
