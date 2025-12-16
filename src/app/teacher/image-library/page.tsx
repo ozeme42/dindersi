@@ -42,6 +42,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -453,7 +460,7 @@ export default function ImageLibraryPage() {
       
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
             <DialogHeader>
               <DialogTitle>
                 {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
@@ -467,6 +474,7 @@ export default function ImageLibraryPage() {
                   value={editingImage?.title || ""}
                   onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))}
                   required
+                  className="bg-slate-800 border-white/20"
                 />
               </div>
               <div className="space-y-2">
@@ -477,6 +485,7 @@ export default function ImageLibraryPage() {
                   accept="image/png, image/jpeg, image/gif, image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
                 />
               </div>
             </div>
@@ -495,7 +504,7 @@ export default function ImageLibraryPage() {
       </Dialog>
       
        <Dialog open={isFolderCreatorOpen} onOpenChange={setIsFolderCreatorOpen}>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-white/10 text-white">
                 <DialogHeader><DialogTitle>Yeni Klasör Oluştur</DialogTitle></DialogHeader>
                 <div className="py-4"><Label htmlFor="folder-name">Klasör Adı</Label><Input id="folder-name" value={newFolderName} onChange={e => setNewFolderName(e.target.value)} /></div>
                 <DialogFooter><DialogClose asChild><Button variant="ghost">İptal</Button></DialogClose><Button onClick={handleCreateFolder} disabled={isSaving || !newFolderName.trim()}>Oluştur</Button></DialogFooter>
@@ -503,7 +512,7 @@ export default function ImageLibraryPage() {
         </Dialog>
         
         <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-white/10 text-white">
                 <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle></DialogHeader>
                 <div className="py-4 space-y-2">
                     <p className="text-sm text-muted-foreground">Görseli taşımak istediğiniz klasörü seçin.</p>
