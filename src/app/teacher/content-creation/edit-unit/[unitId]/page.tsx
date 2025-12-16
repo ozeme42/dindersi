@@ -11,7 +11,7 @@ import { Loader2, Save, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { TopicEditor } from '@/app/teacher/content-creation/edit/page';
-import { updateUnitContent } from './actions';
+import { updateUnitContent } from '../actions';
 
 
 function UnitFlowEditor() {
@@ -52,9 +52,10 @@ function UnitFlowEditor() {
         if (!courseId || !unitId || !unit) return;
         setIsSaving(true);
 
-        const dataToSave: { title: string, steps: LessonStep[] } = {
+        const dataToSave: { title: string, steps: LessonStep[], htmlContent?: string } = {
             title: newTitle || unit.title,
-            steps: newSteps
+            steps: newSteps,
+            htmlContent: unit.htmlContent || '' // Mevcut htmlContent'i koru
         };
         
         const result = await updateUnitContent(courseId, unitId, dataToSave);
