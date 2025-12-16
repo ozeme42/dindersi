@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
     try {
@@ -102,71 +103,57 @@ function OzetDisplayPage() {
         <div 
             ref={mainContentRef} 
             className={cn(
-                "w-full min-h-screen bg-slate-800 flex flex-col relative overflow-hidden transition-all", 
-                !isFullscreen ? "pb-24 md:pb-8" : "pb-0"
+                "w-full h-screen bg-slate-950 text-white flex flex-col overflow-hidden relative font-sans", 
+                !isFullscreen && "p-4 md:p-6"
             )}
         >
              {!isFullscreen && (
-                <div className="fixed inset-0 pointer-events-none z-0 opacity-50">
-                    <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-cyan-400/20 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px]" />
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-rose-900/10 rounded-full blur-[150px]" />
+                    <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 </div>
             )}
 
-            <div className={cn(
-                "sticky top-0 z-30 w-full border-b border-white/20 bg-slate-700/90 backdrop-blur-xl transition-all shadow-md",
-                !isFullscreen && "pt-4"
+            <header className={cn(
+                "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
+                isFullscreen 
+                    ? "absolute top-0 left-0 right-0 p-2 bg-slate-900/80 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 focus-within:opacity-100" 
+                    : "mb-6 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg"
             )}>
-                 <div className="container mx-auto px-4 pb-4">
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                            {!isFullscreen && (
-                                <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/50 transition-all">
-                                    <Link href={backUrl} className="flex items-center gap-2">
-                                        <ArrowLeft className="h-5 w-5 stroke-[3px]"/>
-                                        <span className="hidden sm:inline">Geri</span>
-                                    </Link>
-                                </Button>
-                            )}
-                            <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
-                                {content?.title || 'Özet'}
-                            </h1>
-                        </div>
-                        <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
-                             <FullscreenToggle elementRef={mainContentRef} />
-                        </div>
+                <div className="flex items-center gap-4 overflow-hidden">
+                    <div className={cn("p-2.5 rounded-xl shadow-lg", isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-rose-500 to-indigo-600")}>
+                        <BookOpen className={cn("text-white", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
                     </div>
-                 </div>
-            </div>
-            
-            <div className={cn(
-                "flex-grow flex flex-col min-h-0 relative z-10 transition-all duration-300",
-                !isFullscreen ? "container mx-auto px-4 pt-6" : "p-0"
-            )}>
-                <div className={cn(
-                    "w-full transition-all duration-300 flex flex-col bg-white",
-                    !isFullscreen ? "h-[80vh] rounded-2xl border-4 border-slate-600/50 shadow-2xl overflow-hidden" : "h-full rounded-none"
-                )}>
-                    
+                    <div className="overflow-hidden">
+                        <h1 className={cn("font-black tracking-tight text-white uppercase truncate", isFullscreen ? "text-lg" : "text-2xl")}>
+                            {content?.title || 'Özet'}
+                        </h1>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" asChild size="sm" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-9">
+                        <Link href={`/teacher/content-creation/edit-unit/${unitId}?courseId=${courseId}`}>
+                             Düzenle
+                        </Link>
+                    </Button>
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 hover:text-white border-0 h-9 w-9 rounded-lg" />
                     {!isFullscreen && (
-                        <div className="h-10 bg-slate-200 border-b border-slate-300 flex items-center px-4 gap-2 shrink-0">
-                            <div className="flex gap-2">
-                                <div className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-600/30 shadow-sm" />
-                                <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600/30 shadow-sm" />
-                                <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-600/30 shadow-sm" />
-                            </div>
-                            
-                            <div className="ml-4 flex-1 flex justify-center">
-                                <div className="bg-white border border-slate-300 rounded-lg px-6 py-1 text-xs text-slate-600 font-bold flex items-center gap-2 shadow-sm">
-                                    <LayoutTemplate className="w-3.5 h-3.5 text-cyan-600" />
-                                    <span>Özet Modülü</span>
-                                </div>
-                            </div>
-                        </div>
+                        <Button variant="ghost" asChild size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-9 w-9">
+                            <Link href={backUrl}><ArrowLeft className="h-5 w-5"/></Link>
+                        </Button>
                     )}
+                </div>
+            </header>
+            
+            <div className="flex-grow flex flex-col min-h-0 relative z-10">
+                <div className={cn(
+                    "w-full h-full overflow-hidden transition-all duration-300",
+                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
+                )}>
                     <iframe
                         srcDoc={content.htmlContent}
-                        className="w-full flex-grow border-0 bg-white"
+                        className="w-full h-full border-0 block bg-white"
                         title={content.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
@@ -180,7 +167,7 @@ function OzetDisplayPage() {
 export default function Page() {
     return (
         <Suspense fallback={<div className="min-h-screen bg-slate-800 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>}>
-            <UnitOzetDisplayPage />
+            <OzetDisplayPage />
         </Suspense>
     );
 }
