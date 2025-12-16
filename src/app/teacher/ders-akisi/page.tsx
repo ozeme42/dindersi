@@ -65,7 +65,7 @@ export default function DersAkisiPage() {
                     const classCourses = allCourses.filter(
                         (course) => course.classId === classDoc.id
                     );
-                    
+
                     for (const courseData of classCourses) {
                         const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
 
@@ -102,7 +102,6 @@ export default function DersAkisiPage() {
                     enrichedClasses.push(enrichedClass);
                 }
                 
-                // Handle general (no-class) courses separately and add them to a "Genel" class group
                 const generalCoursesData = allCourses.filter(course => !course.classId);
                 const generalCourses: EnrichedCourse[] = [];
                 for (const courseData of generalCoursesData) {
@@ -154,18 +153,6 @@ export default function DersAkisiPage() {
 
         fetchCurriculum();
     }, []);
-
-    const handleEditClick = (e: React.MouseEvent, topic: Topic, courseId: string, unitId: string) => {
-        e.preventDefault();
-        e.stopPropagation();
-        router.push(`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`);
-    };
-
-    const handleSummaryClick = (e: React.MouseEvent, courseId: string, unitId: string, topicId: string) => {
-        e.preventDefault();
-        e.stopPropagation();
-        router.push(`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`);
-    }
 
     const renderCourseContent = (courseGroups: CourseGroup[]) => {
         if (isLoading) {
@@ -249,43 +236,57 @@ export default function DersAkisiPage() {
                                                                                     {unit.topics && unit.topics.length > 0 ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                                                                             {unit.htmlContent && (
-                                                                                                 <Link 
-                                                                                                    href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
-                                                                                                    className={cn(
-                                                                                                        "group relative w-full flex flex-col justify-center items-center text-center font-bold",
-                                                                                                        "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
-                                                                                                        "rounded-[2rem] shadow-2xl min-h-[14rem]",
-                                                                                                        "break-words whitespace-normal leading-tight p-8",
-                                                                                                        "border-b-8 text-white",
-                                                                                                        "bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800"
-                                                                                                    )}
-                                                                                                 >
-                                                                                                    <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                    <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
-                                                                                                 </Link>
+                                                                                                 <div className="group relative aspect-[4/5] min-h-[14rem]">
+                                                                                                    <Link 
+                                                                                                        href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
+                                                                                                        className={cn(
+                                                                                                            "absolute inset-0 flex flex-col justify-center items-center text-center font-bold",
+                                                                                                            "transition-all duration-300 group-hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                            "rounded-[2rem] shadow-2xl",
+                                                                                                            "break-words whitespace-normal leading-tight p-8",
+                                                                                                            "border-b-8 text-white",
+                                                                                                            "bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800"
+                                                                                                        )}
+                                                                                                    >
+                                                                                                        <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                        <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
+                                                                                                    </Link>
+                                                                                                    <Button asChild size="icon" className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                                                        <Link href={`/teacher/content-creation/edit-unit/${unit.id}?courseId=${course.id}`}>
+                                                                                                            <FilePenLine className="w-4 h-4"/>
+                                                                                                        </Link>
+                                                                                                    </Button>
+                                                                                                </div>
                                                                                             )}
                                                                                             {unit.topics?.map((topic, topicIndex) => {
                                                                                                 const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
                                                                                                 const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
+                                                                                                const editUrl = `/teacher/content-creation/edit?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}`;
 
                                                                                                 return (
-                                                                                                    <Link 
-                                                                                                        key={topic.id}
-                                                                                                        href={presentationUrl}
-                                                                                                        className={cn(
-                                                                                                            "group relative w-full flex flex-col justify-center items-center text-center font-bold",
-                                                                                                            "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
-                                                                                                            "rounded-[2rem] shadow-2xl min-h-[14rem]",
-                                                                                                            "break-words whitespace-normal leading-tight p-8",
-                                                                                                            "border-b-8 text-white",
-                                                                                                            neonClass
-                                                                                                        )}
-                                                                                                    >
-                                                                                                        <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                        <span className="text-2xl md:text-3xl line-clamp-3">
-                                                                                                            {topic.title}
-                                                                                                        </span>
-                                                                                                    </Link>
+                                                                                                    <div key={topic.id} className="group relative aspect-[4/5] min-h-[14rem]">
+                                                                                                        <Link 
+                                                                                                            href={presentationUrl}
+                                                                                                            className={cn(
+                                                                                                                "absolute inset-0 flex flex-col justify-center items-center text-center font-bold",
+                                                                                                                "transition-all duration-300 group-hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                                "rounded-[2rem] shadow-2xl",
+                                                                                                                "break-words whitespace-normal leading-tight p-8",
+                                                                                                                "border-b-8 text-white",
+                                                                                                                neonClass
+                                                                                                            )}
+                                                                                                        >
+                                                                                                            <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                            <span className="text-2xl md:text-3xl line-clamp-3">
+                                                                                                                {topic.title}
+                                                                                                            </span>
+                                                                                                        </Link>
+                                                                                                        <Button asChild size="icon" className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                                                            <Link href={editUrl}>
+                                                                                                                <FilePenLine className="w-4 h-4"/>
+                                                                                                            </Link>
+                                                                                                        </Button>
+                                                                                                    </div>
                                                                                                 );
                                                                                             })}
                                                                                         </div>
@@ -315,6 +316,7 @@ export default function DersAkisiPage() {
     }
     
     const courseGroups: CourseGroup[] = useMemo(() => {
+        if (!curriculum) return [];
         const grouped: { [title: string]: EnrichedCourse[] } = {};
         
         curriculum.forEach(cls => {
