@@ -22,7 +22,7 @@ import {
     Eye,
     EyeOff,
     FileText,
-    Workflow // Eklendi
+    Workflow
 } from 'lucide-react';
 import {
     saveCurriculumItem,
@@ -67,7 +67,7 @@ type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 const steps = [
     { id: 1, name: 'Sınıf Seçimi', icon: <Users className="w-6 h-6" /> },
     { id: 2, name: 'Ders Seçimi', icon: <Book className="w-6 h-6" /> },
-    { id: 3, name: 'Ünite Yönetimi', icon: <Library className="w-6 h-6" /> }, // Değiştirildi
+    { id: 3, name: 'Ünite Yönetimi', icon: <Library className="w-6 h-6" /> },
     { id: 4, name: 'Konu Yönetimi', icon: <ListTodo className="w-6 h-6" /> },
 ];
 
@@ -195,7 +195,6 @@ export default function ContentCreationPage() {
                 enrichedClasses.push(enrichedClass);
             }
             
-            // "Genel" dersleri için ayrı bir "Sınıf" grubu oluştur
             const generalCoursesData = allCourses.filter(course => !course.classId);
             if (generalCoursesData.length > 0) {
                  const generalCourses: EnrichedCourse[] = [];
@@ -210,7 +209,7 @@ export default function ContentCreationPage() {
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
                         const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
-                         const topicsSnapshot = await getDocs(
+                        const topicsSnapshot = await getDocs(
                             query(
                                 collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`),
                                 orderBy('title')
@@ -224,12 +223,17 @@ export default function ContentCreationPage() {
                     generalCourses.push(enrichedCourse);
                  }
                  
-                 enrichedClasses.unshift({
-                     id: 'general',
-                     name: 'Genel',
-                     courses: generalCourses,
-                     createdAt: new Date()
-                 } as EnrichedClass)
+                 const generalClass = enrichedClasses.find(c => c.name === "Genel");
+                 if (generalClass) {
+                     generalClass.courses.push(...generalCourses);
+                 } else {
+                     enrichedClasses.unshift({
+                        id: 'general',
+                        name: 'Genel',
+                        courses: generalCourses,
+                        createdAt: new Date()
+                    } as EnrichedClass)
+                 }
             }
 
 
@@ -325,7 +329,7 @@ export default function ContentCreationPage() {
         parentId?: string,
         parentName?: string
     ) => {
-        setBulkAddDialogState({ isOpen: false, type, parentId, parentName });
+        setBulkAddDialogState({ isOpen: true, type, parentId, parentName });
     };
 
     const handleSave = async () => {
@@ -515,7 +519,6 @@ export default function ContentCreationPage() {
         );
     };
 
-
     const getAddButtonAction = () => {
         switch (currentStep) {
             case 1:
@@ -628,13 +631,13 @@ export default function ContentCreationPage() {
                                 </p>
                             </div>
                             
-                            <div className="flex gap-3 w-full md:w-auto">
+                            <div className="flex gap-3 self-end md:self-center">
                                 {getBulkAddButtonAction() && (
-                                    <Button size="sm" variant="outline" onClick={getBulkAddButtonAction()!} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 flex-1 md:flex-none">
+                                    <Button size="sm" variant="outline" onClick={getBulkAddButtonAction()!} className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5">
                                         <Layers className="h-4 w-4 mr-2" /> Toplu Ekle
                                     </Button>
                                 )}
-                                <Button size="sm" onClick={getAddButtonAction()} className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20 flex-1 md:flex-none">
+                                <Button size="sm" onClick={getAddButtonAction()} className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20">
                                     <PlusCircle className="h-4 w-4 mr-2" /> Yeni Ekle
                                 </Button>
                             </div>
