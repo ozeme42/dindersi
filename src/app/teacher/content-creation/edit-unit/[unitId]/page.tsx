@@ -5,19 +5,11 @@ import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { Unit, LessonStep } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Save, FileText, Sparkles, BookOpen, LayersIcon, HelpCircle, Gamepad2, Brain, FilePenLine } from 'lucide-react';
+import type { Unit, LessonStep, Topic } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { updateUnitContent } from '../actions';
-import { LessonContentViewer } from '@/components/lesson-content-viewer'; // Assuming this might be used for preview
-import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; // Re-use the editor component logic
-
+import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
 
 function UnitFlowEditor() {
     const params = useParams();
@@ -28,57 +20,77 @@ function UnitFlowEditor() {
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);
-    const [title, setTitle] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    
+    // We use this version state to force a re-render of the editor 
+    // when new data is fetched, ensuring it gets the latest props.
+    const [dataVersion, setDataVersion] = useState(0); 
+
     const { toast } = useToast();
 
     const fetchUnitData = useCallback(async () => {
         if (!courseId || !unitId) {
-            toast({ title: "Hata", description: "Geçersiz yol.", variant: "destructive" });
-            router.back();
+            toast({ title: "Hata", description: "Geçersiz ders veya ünite yolu.", variant: "destructive" });
             return;
         }
+
         setIsLoading(true);
-        const unitRef = doc(db, 'courses', courseId, 'units', unitId);
-        const unitSnap = await getDoc(unitRef);
-        if (unitSnap.exists()) {
-            const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
-            setUnit(unitData);
-            setTitle(unitData.title);
-        } else {
-            toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
+        try {
+            const unitRef = doc(db, 'courses', courseId, 'units', unitId);
+            const unitSnap = await getDoc(unitRef);
+
+            if (unitSnap.exists()) {
+                const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
+                if (!unitData.steps) unitData.steps = [];
+                
+                setUnit(unitData);
+                setDataVersion(prev => prev + 1); // Increment version on new data
+            } else {
+                toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
+                router.back();
+            }
+        } catch (error) {
+            console.error("Ünite getirme hatası:", error);
+            toast({ title: "Hata", description: "Veri yüklenirken bir sorun oluştu.", variant: "destructive" });
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, [courseId, unitId, toast, router]);
     
     useEffect(() => {
         fetchUnitData();
     }, [fetchUnitData]);
 
-
     const handleSave = async (newSteps: LessonStep[], newTitle?: string, newSourceText?: string) => {
         if (!courseId || !unitId || !unit) return;
+        
         setIsSaving(true);
         
         const dataToSave = {
             title: newTitle || unit.title,
             steps: newSteps,
             sourceText: newSourceText || unit.sourceText || '',
-            // htmlContent is intentionally omitted to prevent overwriting it with old logic
         };
-        
-        const result = await updateUnitContent(courseId, unitId, dataToSave);
 
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        try {
+            const result = await updateUnitContent(courseId, unitId, dataToSave);
+
+            if (result.success) {
+                toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
+                // Optimistically update the local state to reflect the save without a full refetch
+                setUnit(prev => prev ? { ...prev, ...dataToSave } : null);
+            } else {
+                toast({ title: "Hata", description: result.error, variant: "destructive" });
+            }
+        } catch (error) {
+            toast({ title: "Hata", description: "Kaydetme sırasında beklenmedik hata.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
         }
-        setIsSaving(false);
     };
 
-    if (isLoading) {
+    if (isLoading || !unit) {
         return (
             <div className="flex h-screen items-center justify-center bg-slate-950">
                 <Loader2 className="h-16 w-16 animate-spin text-purple-500" />
@@ -86,23 +98,18 @@ function UnitFlowEditor() {
         );
     }
     
-    if (!unit) {
-        return (
-            <div className="flex h-screen items-center justify-center bg-slate-950 text-red-500">
-                Ünite bilgileri yüklenemedi. Lütfen geri dönüp tekrar deneyin.
-            </div>
-        )
-    }
-
     return (
         <div>
+            {/* The key is crucial here. It forces React to create a new instance of TopicEditor 
+                when the unit data changes, ensuring the editor's internal state is always fresh. */}
             <TopicEditor
+                key={`editor-${unit.id}-${dataVersion}`}
                 initialTopic={{
                     id: unit.id,
-                    title: title,
+                    title: unit.title,
                     steps: unit.steps || [],
                     sourceText: unit.sourceText
-                }}
+                } as Topic}
                 courseId={courseId!}
                 unitId={unitId}
                 onSave={handleSave}

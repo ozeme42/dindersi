@@ -1,8 +1,7 @@
 
-
 'use client';
 
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -141,23 +140,24 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
     )
 }
 
-export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, isUnitFlow = false }: { 
+export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdProp, onSave, isSaving, isUnitFlow = false }: { 
     initialTopic: Topic | null,
     courseId: string,
     unitId: string,
-    onSave: (steps: LessonStep[], title?: string) => Promise<void>,
+    topicId?: string | null, // Can be null if it's a new unit flow
+    onSave: (steps: LessonStep[], title?: string, sourceText?: string) => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean
 }) {
-    const topicId = isUnitFlow ? null : initialTopic?.id;
-
-    const [topic, setTopic] = useState<Topic | null>(initialTopic);
+    const topicId = isUnitFlow ? null : (topicIdProp || initialTopic?.id);
+    
+    // Internal state management
+    const [title, setTitle] = useState(initialTopic?.title || '');
     const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
-    const [sourceText, setSourceText] = useState('');
-    const [htmlContent, setHtmlContent] = useState('');
-    const [title, setTitle] = useState('');
-
-    const [isLoading, setIsLoading] = useState(true);
+    const [sourceText, setSourceText] = useState(initialTopic?.sourceText || '');
+    const [htmlContent, setHtmlContent] = useState(initialTopic?.htmlContent || '');
+    
+    const [isLoading, setIsLoading] = useState(!initialTopic); // Only load if not passed as prop
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
@@ -173,8 +173,7 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
     };
 
     useEffect(() => {
-        if(initialTopic) {
-            setTopic(initialTopic);
+        if (initialTopic) {
             setTitle(initialTopic.title);
             setSteps(addIdToSteps(initialTopic.steps || []));
             setSourceText(initialTopic.sourceText || '');
@@ -188,7 +187,6 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists()) {
                     const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
-                    setTopic(topicData);
                     setTitle(topicData.title);
                     setSteps(addIdToSteps(topicData.steps || []));
                     setSourceText(topicData.sourceText || '');
@@ -350,15 +348,12 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
     };
     
     const handleSaveFlow = async () => {
-         if (!courseId || !unitId) return;
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        
         if (isUnitFlow) {
-            // This is a unit flow, we use the onSave prop.
-            onSave(stepsToSave, title);
+            onSave(stepsToSave, title, sourceText);
         } else {
-            // This is a topic flow, use the internal save function
-            const result = await updateTopicContent({ courseId, unitId, topicId: topic!.id, steps: stepsToSave, sourceText, htmlContent });
+             if (!courseId || !unitId || !topicId) return;
+            const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
             if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
             else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         }
@@ -377,7 +372,7 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
         );
     }
 
-    if (!topic) {
+    if (!initialTopic) {
         return <div className="text-center text-slate-400 p-8">Konu yüklenemedi.</div>
     }
 
@@ -428,7 +423,7 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
                                 İçerik Yönetimine Dön
                             </Link>
                         </Button>
-                        <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md">{title}</h1>
+                        <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                         <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
                     </div>
                     <div className="flex gap-2 flex-wrap">
@@ -615,7 +610,7 @@ export function TopicEditor({ initialTopic, courseId, unitId, onSave, isSaving, 
                  <AiLessonStepGenerationDialog
                     isOpen={isAiStepDialogOpen}
                     onOpenChange={setIsAiStepDialogOpen}
-                    context={topic ? { topicId: topic.id, topicTitle: topic.title, sourceText: sourceText } : null}
+                    context={initialTopic ? { topicId: initialTopic.id, topicTitle: title, sourceText: sourceText } : null}
                     onStepsGenerated={handleAddSteps}
                     generationType={aiGenerationType}
                 />
@@ -648,13 +643,15 @@ function TopicEditorWrapper() {
 
     return (
         <TopicEditor 
+            key={`${courseId}-${unitId}-${topicId}`} // Re-mount component if IDs change
             initialTopic={null}
             courseId={courseId}
             unitId={unitId}
-            // A simplified onSave for this specific page, not for the reusable component.
-            onSave={async (steps, title) => {
-                const result = await updateTopicContent({ courseId, unitId, topicId, steps });
-                // Handle result...
+            topicId={topicId}
+            onSave={async (steps, title, sourceText) => {
+                const result = await updateTopicContent({ courseId, unitId, topicId, steps, sourceText: sourceText || '' });
+                if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
+                else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
             }}
             isSaving={false}
         />
@@ -668,4 +665,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
