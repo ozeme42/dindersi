@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -341,7 +342,7 @@ function ContentListPlayer({
     }, [visibleSentences.length, isTeacher, onAnimationStart]);
 
     return (
-        <div className={cn("w-full h-full flex flex-col gap-6 items-center justify-start p-2", isTeacher ? "max-w-[95%] mx-auto" : "max-w-4xl mx-auto")}>
+        <div className={cn("w-full h-full flex flex-col gap-6 items-center justify-start p-2", isTeacher ? "max-w-[95%] mx-auto" : "max-w-4xl mx-auto justify-center")}>
             <div className={cn(
                 "p-4 rounded-3xl shadow-lg bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 w-full text-center", 
                 isTeacher ? "py-4 mb-4 mt-2" : "p-3 md:p-6"
@@ -846,7 +847,7 @@ export function StepContent({
             
             // --- TAM EKRAN ADIMLAR ---
             case 'htmlSlide':
-                 return <HtmlSlidePlayer step={step} isFullscreen={isFullscreen} onSlideScrolledToEnd={onSlideScrolledToEnd} />
+                 return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
             
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
@@ -902,7 +903,7 @@ export function StepContent({
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl justify-center")}>
                         <div className={cn("rounded-3xl shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 to-blue-500" />
-                          <h3 className={cn("font-bold text-white leading-relaxed", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
+                          <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
                         </div>
                         <div className={cn("grid gap-6", isTeacher ? "grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
@@ -1012,7 +1013,7 @@ export function StepContent({
                 );
             }
             case 'anagram': return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer}/>;
-            case 'sentenceScramble': return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
+            case 'sentenceScramble': return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={handleNext} answer={answer} isAnswerRevealed={!!answer} />;
             default: return <div className="text-center p-8 text-white">İçerik yüklenemedi.</div>;
         }
     }
@@ -1299,7 +1300,9 @@ export function LessonContentViewer({
                  <PartyPopper className="h-20 w-20 text-yellow-400 animate-bounce" />
                  <h1 className="text-4xl font-bold">Ders Tamamlandı!</h1>
                  <p className="text-2xl text-cyan-400 font-bold">Toplam Puan: {internalProgress.score}</p>
-                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">Bitir</Button>
+                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">
+                     {completeButtonText || 'Bitir'}
+                 </Button>
              </div>
          )
     }
@@ -1320,17 +1323,15 @@ export function LessonContentViewer({
         showContinueButton = revealedSentencesCount < totalItems;
     }
 
-    // --- BUTON GÖSTERME MANTIĞI ---
     const showFloatingButton = isFullWidthStep && (
-        isHtmlSlideStep || // HTML ise hep göster
-        (isActivityStep && isStepCompleted) || // Oyun ise sadece tamamlanınca göster
-        (currentStep?.type === 'visual' && isVisualMaximized) // GÜNCELLEME: Görsel tam ekransa göster
+        isHtmlSlideStep || 
+        (isActivityStep && isStepCompleted) || 
+        (currentStep?.type === 'visual' && isVisualMaximized)
     );
 
     return (
-      <div className="h-[100dvh] w-full flex flex-col bg-slate-950 overflow-hidden relative">
+      <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
         
-        {/* RESUME DIALOG */}
         {showResumeDialog && (
             <div className="absolute inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
                 <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-white animate-in zoom-in-95">
@@ -1346,23 +1347,7 @@ export function LessonContentViewer({
             </div>
         )}
 
-        {/* HUD (Üst Bar) - Tam Ekran Adımlarda Gizle */}
-        {!isFullscreen && !isFullWidthStep && (
-            <div className="flex-shrink-0 border-b border-white/5 bg-slate-900/80 backdrop-blur-md z-20 flex justify-between items-center px-4 h-12">
-                 <div className="flex items-center gap-4 flex-1">
-                     <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
-                     <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
-                 </div>
-                 <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
-            </div>
-        )}
-
-        {/* Ana İçerik Alanı */}
-        <div className={cn(
-          "flex-1 relative w-full",
-          isFullWidthStep ? "overflow-hidden" : "overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent pb-24" 
-        )}>
-             {/* Arka Plan Efektleri - Tam ekranda gizle */}
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : "overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent pb-24")}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" />
@@ -1392,83 +1377,80 @@ export function LessonContentViewer({
                 onAllTfAnswered={handleLocalAllTfAnswered}
                 onAnimationStart={() => setIsAnimating(true)}
                 onAnimationEnd={() => setIsAnimating(false)}
-                // GÜNCELLEME: Yeni prop'lar aktarılıyor
                 isVisualMaximized={isVisualMaximized}
                 onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
               />
            </div>
         </div>
         
-        {/* --- ALT MENÜ VE KONTROLLER --- */}
-        
-        {/* 1. STANDART NAVİGASYON (Tam Ekran Olmayan Adımlarda) */}
-        {!isFullWidthStep && (
-            <div className="flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4">
-                 <div className="flex gap-2">
-                    {user?.role !== 'student' && <Button variant="secondary" size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'default')} onClick={handleNext} className={isTeacher ? "text-xl h-14" : ""}>Atla</Button>}
-                 </div>
-                <div className="flex gap-4 md:gap-6">
-                    <Button 
-                        variant="outline" 
-                        size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'sm')} 
-                        onClick={handlePrev} 
-                        disabled={currentStepIndex === 0} 
-                        className={cn("border-white/10 hover:bg-white/5 text-slate-300 hover:text-white", isTeacher ? "text-xl px-8 h-14" : "text-xs px-3 h-8")}
-                    >
-                        <ArrowLeft className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-3 w-3")} />
-                        Geri
-                    </Button>
-                    <Button 
-                        size={isTeacher ? 'lg' : (isFullscreen ? 'lg' : 'sm')} 
-                        onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled} 
-                        className={cn(
-                            "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
-                            showContinueButton ? "px-6 md:px-8" : "px-4 md:px-6",
-                            isTeacher ? "text-xl px-10 h-14" : "text-xs h-8"
-                        )}
-                    >
-                        {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
-                        <ArrowRight className={cn("ml-2", isTeacher ? "h-6 w-6" : "h-3 w-3")} />
-                    </Button>
+        {/* ALT MENÜ VE KONTROLLER */}
+        <div className={cn("flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4", isFullscreen ? "opacity-0 pointer-events-none" : "")}>
+             <div className="flex items-center gap-4 flex-1">
+                 <Button 
+                    variant="outline" 
+                    size='sm'
+                    onClick={handlePrev} 
+                    disabled={currentStepIndex === 0} 
+                    className="border-white/10 hover:bg-white/5 text-slate-300 hover:text-white"
+                >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Geri
+                </Button>
+                <div className="hidden md:flex items-center gap-2">
+                    <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
+                    <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
                 </div>
+             </div>
+            <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
+            <div className="flex gap-4 md:gap-6 flex-1 justify-end">
+                <Button 
+                    size='sm'
+                    onClick={handleContinueOrNext} 
+                    disabled={!isNextButtonEnabled} 
+                    className={cn(
+                        "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
+                        showContinueButton ? "px-6" : "px-4"
+                    )}
+                >
+                    {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        </div>
+
+        {isFullWidthStep && (
+            <div className="absolute bottom-4 left-4 z-50">
+                <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={handlePrev}
+                    disabled={currentStepIndex === 0}
+                    className="bg-black/30 hover:bg-black/50 text-white/70 hover:text-white rounded-full h-12 w-12 backdrop-blur-sm border border-white/10"
+                >
+                    <ArrowLeft className="h-6 w-6" />
+                </Button>
             </div>
         )}
 
-        {isFullWidthStep && (
-            <>
-                <div className="absolute bottom-4 left-4 z-50">
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={handlePrev}
-                        disabled={currentStepIndex === 0}
-                        className="bg-black/30 hover:bg-black/50 text-white/70 hover:text-white rounded-full h-12 w-12 backdrop-blur-sm border border-white/10"
-                    >
-                        <ArrowLeft className="h-6 w-6" />
-                    </Button>
-                </div>
-
-                {showFloatingButton && (
-                    <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
-                        <Button 
-                            size="lg" 
-                            onClick={handleNext} 
-                            className={cn(
-                                "text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all",
-                                (isActivityStep && isStepCompleted) 
-                                    ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" 
-                                    : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30" 
-                            )}
-                        >
-                            {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
-                            <ArrowRight className="ml-2 h-6 w-6" />
-                        </Button>
-                    </div>
-                )}
-            </>
+        {showFloatingButton && (
+            <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
+                <Button 
+                    size="lg" 
+                    onClick={handleNext} 
+                    className={cn(
+                        "text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all",
+                        (isActivityStep && isStepCompleted) 
+                            ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" 
+                            : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30" 
+                    )}
+                >
+                    {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
+                    <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+            </div>
         )}
-        
       </div>
     );
 }
+
+```
