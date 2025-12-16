@@ -1,8 +1,8 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useCallback, useRef } from 'react';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { Suspense, useEffect, useState, useRef } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { Loader2, ArrowLeft, LayoutTemplate } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
     try {
@@ -37,7 +36,7 @@ async function getContent(courseId: string, unitId: string, topicId?: string): P
 }
 
 
-function UnitOzetDisplayPage() {
+function OzetDisplayPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
 
@@ -47,7 +46,7 @@ function UnitOzetDisplayPage() {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const backUrl = `/teacher/smartboard/ozetler`;
+    const backUrl = `/teacher/smartboard/ozetler?courseId=${courseId}`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -86,7 +85,7 @@ function UnitOzetDisplayPage() {
         );
     }
     
-    if (error || !content || !content.htmlContent) {
+    if (error || !content) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">

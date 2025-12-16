@@ -2,7 +2,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import type { Topic, Unit } from '@/lib/types';
@@ -27,11 +27,10 @@ async function updateUnitContent(courseId: string, unitId: string, data: { title
 }
 
 function UnitEditor() {
-    const params = useParams();
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const unitId = params.unitId as string;
+    const unitId = searchParams.get('unitId');
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);

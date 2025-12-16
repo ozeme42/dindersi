@@ -427,7 +427,7 @@ export default function ContentCreationPage() {
         }
 
         const isTopicStep = currentStep === 4;
-        const isUnitStep = currentStep === 3; // YENİ EKLENDİ
+        const isUnitStep = currentStep === 3; 
 
         const handleButtonClick = (item: any) => {
             const displayName = item[itemTitleKey] || item.name;
@@ -490,7 +490,7 @@ export default function ContentCreationPage() {
                             </Button>
                             
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                                {isUnitStep && ( // YENİ EKLENDİ
+                                {isUnitStep && ( 
                                     <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-green-500/90 text-white hover:bg-green-400 hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Özeti Düzenle">
                                         <FileText className="h-5 w-5" />
                                     </Button>
@@ -638,7 +638,7 @@ export default function ContentCreationPage() {
                         </div>
 
                         <div className="flex-grow p-6 md:p-10 bg-black/20">
-                            {renderCurrentStep()}
+                            {renderContent()}
                         </div>
 
                         <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">

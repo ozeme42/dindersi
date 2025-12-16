@@ -212,7 +212,7 @@ export default function OzetlerSetupPage() {
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-2 group cursor-default">
                             <div className={cn(
-                                "w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-lg",
+                                "w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-lg",
                                 isCurrent 
                                     ? "bg-slate-900 border-rose-500 text-rose-400 scale-125 shadow-rose-500/50" 
                                     : isActive 
@@ -262,6 +262,20 @@ export default function OzetlerSetupPage() {
                             className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" /> Geri
+                        </Button>
+                    )}
+                    
+                    {currentStep < steps.length && (
+                        <Button 
+                            onClick={handleNext} 
+                            disabled={
+                                (currentStep === 1 && !selection.classId) || 
+                                (currentStep === 2 && !selection.courseId) ||
+                                (currentStep === 3 && !selection.unitId)
+                            }
+                            className="bg-rose-600 hover:bg-rose-500 text-white h-12 px-8 rounded-xl shadow-lg shadow-rose-900/20"
+                        >
+                            İleri <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     )}
                 </div>

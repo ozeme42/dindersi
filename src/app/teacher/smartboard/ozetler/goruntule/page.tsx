@@ -1,5 +1,4 @@
 
-      
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
@@ -14,13 +13,38 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
+async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
+    try {
+        let docRef;
+        if (topicId) {
+            docRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+        } else {
+            docRef = doc(db, 'courses', courseId, 'units', unitId);
+        }
+        
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.htmlContent) {
+                return { title: data.title, htmlContent: data.htmlContent };
+            }
+        }
+        return null;
+    } catch (e) {
+        console.error("Error fetching content:", e);
+        return null;
+    }
+}
+
+
 function UnitOzetDisplayPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
 
-    const [unit, setUnit] = useState<Unit | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
@@ -40,22 +64,16 @@ function UnitOzetDisplayPage() {
         }
         const fetchUnit = async () => {
             setIsLoading(true);
-            try {
-                const unitRef = doc(db, 'courses', courseId, 'units', unitId);
-                const unitSnap = await getDoc(unitRef);
-                if (unitSnap.exists() && unitSnap.data().htmlContent) {
-                    setUnit({ id: unitSnap.id, ...unitSnap.data() } as Unit);
-                } else {
-                    setError('Bu ünite için interaktif özet içeriği bulunamadı.');
-                }
-            } catch (e) {
-                setError('İçerik alınırken bir hata oluştu.');
-            } finally {
-                setIsLoading(false);
+            const fetchedContent = await getContent(courseId, unitId, topicId || undefined);
+            if (fetchedContent) {
+                setContent(fetchedContent);
+            } else {
+                setError('Bu içerik için interaktif özet bulunamadı.');
             }
+            setIsLoading(false);
         };
         fetchUnit();
-    }, [courseId, unitId]);
+    }, [courseId, unitId, topicId]);
 
     const backUrl = `/teacher/smartboard/ozetler?courseId=${courseId}`;
 
@@ -63,7 +81,7 @@ function UnitOzetDisplayPage() {
         return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>;
     }
 
-    if (error || !unit) {
+    if (error || !content) {
         return (
             <div className="flex h-screen items-center justify-center text-center p-8 bg-slate-950 text-white">
                  <Alert variant="destructive" className="max-w-md bg-red-950/50 border-red-900 text-red-200">
@@ -104,7 +122,7 @@ function UnitOzetDisplayPage() {
                     </div>
                     <div className="overflow-hidden">
                         <h1 className={cn("font-black tracking-tight text-white uppercase truncate", isFullscreen ? "text-lg" : "text-2xl")}>
-                            {unit?.title || 'Ünite Özeti'}
+                            {content?.title || 'Özet'}
                         </h1>
                     </div>
                 </div>
@@ -130,9 +148,9 @@ function UnitOzetDisplayPage() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white ring-1 ring-white/10"
                 )}>
                     <iframe
-                        srcDoc={unit.htmlContent}
+                        srcDoc={content.htmlContent}
                         className="w-full h-full border-0 block bg-white"
-                        title={unit.title}
+                        title={content.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
                 </div>
@@ -148,5 +166,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
-    

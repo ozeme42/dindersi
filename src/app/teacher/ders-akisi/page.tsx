@@ -1,7 +1,9 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
@@ -10,8 +12,6 @@ import { cn } from "@/lib/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 // --- NEON RENK PALETİ ---
 const colorClasses = [
@@ -197,6 +197,15 @@ export default function DersAkisiPage() {
                                                                                 <AccordionContent className="p-6 bg-black/20">
                                                                                     {unit.topics.length > 0 ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                                                            {unit.htmlContent && (
+                                                                                                 <Link 
+                                                                                                    href={`/teacher/smartboard/ozetler/goruntule/${course.id}/${unit.id}`}
+                                                                                                    className="group relative w-full flex flex-col justify-center items-center text-center font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-[2rem] shadow-2xl min-h-[14rem] break-words whitespace-normal leading-tight p-8 bg-gradient-to-br from-amber-500 to-orange-600 border-b-8 border-orange-800 text-white"
+                                                                                                 >
+                                                                                                    <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                    <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
+                                                                                                 </Link>
+                                                                                            )}
                                                                                             {unit.topics.map((topic, topicIndex) => {
                                                                                                 const isLink = topic.externalLink;
                                                                                                 const hasStudentContent = (topic.steps?.length || 0) > 0;
@@ -335,4 +344,3 @@ export default function DersAkisiPage() {
         </div>
     );
 }
-
