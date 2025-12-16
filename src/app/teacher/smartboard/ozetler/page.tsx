@@ -34,7 +34,6 @@ export default function OzetlerSetupPage() {
   const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [courses, setCourses] = useState<EnrichedCourse[]>([]);
   const [units, setUnits] = useState<EnrichedUnit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
   
   const [selection, setSelection] = useState({
     classId: "",
@@ -106,7 +105,7 @@ export default function OzetlerSetupPage() {
         } as EnrichedUnit
     }));
     
-    setUnits(unitsWithTopics.filter(u => u.htmlContent || u.topics.some(t => t.htmlContent)));
+    setUnits(unitsWithTopics.filter(u => (u.isPublished ?? true) && (u.htmlContent || u.topics.some(t => (t.isPublished ?? true) && t.htmlContent))));
 
     setIsDataLoading(false);
     handleNext();
@@ -115,8 +114,6 @@ export default function OzetlerSetupPage() {
   const handleSelectUnit = (unitId: string, unitName: string) => {
     setSelection(prev => ({ ...prev, unitId }));
     setSelectionNames(prev => ({ ...prev, unitName }));
-    const selectedUnit = units.find(u => u.id === unitId);
-    setTopics(selectedUnit?.topics || []);
     handleNext();
   };
   
@@ -125,9 +122,9 @@ export default function OzetlerSetupPage() {
       const unitIdParam = selection.unitId;
 
       if (type === 'unit') {
-          router.push(`/teacher/smartboard/ozetler/goruntule?courseId=${courseIdParam}&unitId=${id}`);
+          router.push(`/teacher/smartboard/ozetler/goruntule/${courseIdParam}/${id}`);
       } else { // topic
-          router.push(`/teacher/smartboard/ozetler/goruntule?courseId=${courseIdParam}&unitId=${unitIdParam}&topicId=${id}`);
+          router.push(`/teacher/smartboard/ozetler/goruntule/${courseIdParam}/${unitIdParam}/${id}`);
       }
   }
 
@@ -148,7 +145,7 @@ export default function OzetlerSetupPage() {
             return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
         case 4:
             const selectedUnit = units.find(u => u.id === selection.unitId);
-            const contentTopics = topics.filter(t => t.htmlContent);
+            const contentTopics = selectedUnit?.topics.filter(t => t.htmlContent && (t.isPublished ?? true)) || [];
             return (
                 <div className="w-full max-w-4xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
