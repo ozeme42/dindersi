@@ -28,7 +28,7 @@ import {
   Move,
   AlertTriangle,
   Home,
-  Upload // Toplu yükleme için eklendi
+  Upload
 } from "lucide-react";
 import {
   AlertDialog,
@@ -71,10 +71,10 @@ import Link from 'next/link';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage, saveBulkImageRecords } from './actions'; // saveBulkImageRecords eklendi
+import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage, saveBulkImageRecords } from './actions';
 import { cn } from "@/lib/utils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { BulkImageUploadDialog } from '@/components/bulk-image-upload-dialog'; // Yeni bileşen import edildi
+import { BulkImageUploadDialog } from '@/components/bulk-image-upload-dialog';
 
 
 function ErrorWithLink({ message }: { message: string }) {
@@ -105,7 +105,7 @@ export default function ImageLibraryPage() {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false); // Toplu yükleme için state
+  const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false);
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<ImageAsset | null>(null);
@@ -289,16 +289,35 @@ export default function ImageLibraryPage() {
         setMovingImageId(null);
     }
     
-    const handleBulkSave = async (urls: {title: string, url: string}[]) => {
-        if (!user || urls.length === 0) return;
+     const handleBulkSave = async (files: FileList) => {
+        if (!user || files.length === 0) return;
+
+        toast({ title: "Yükleniyor...", description: `${files.length} görsel yükleniyor ve kaydediliyor.` });
         
-        const result = await saveBulkImageRecords(urls, user.uid, currentFolder?.id || null, currentFolder?.name || null);
-        
-        if (result.success) {
-            toast({ title: "Başarılı", description: `${result.count} görsel başarıyla arşive eklendi.` });
-            await fetchLibrary();
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        const storage = getStorage();
+        const uploadPromises = Array.from(files).map(async (file) => {
+            const path = `imageLibrary/${user.uid}/${Date.now()}-${file.name}`;
+            const storageRef = ref(storage, path);
+            const snapshot = await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(snapshot.ref);
+            // Dosya adından uzantıyı ve özel karakterleri temizleyerek bir başlık oluştur
+            const title = file.name.split('.').slice(0, -1).join('.').replace(/[-_]/g, ' ');
+            return { title, url };
+        });
+
+        try {
+            const uploadedUrls = await Promise.all(uploadPromises);
+            const result = await saveBulkImageRecords(uploadedUrls, user.uid, currentFolder?.id || null, currentFolder?.name || null);
+
+            if (result.success) {
+                toast({ title: "Başarılı!", description: `${result.count} görsel arşive eklendi.` });
+                await fetchLibrary();
+            } else {
+                throw new Error(result.error);
+            }
+        } catch (error: any) {
+            console.error("Bulk upload error:", error);
+            toast({ title: "Toplu Yükleme Hatası", description: error.message || "Görseller yüklenirken bir sorun oluştu.", variant: "destructive" });
         }
     };
 
