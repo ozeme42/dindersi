@@ -22,13 +22,13 @@ import type { ImageAsset, Folder } from "@/lib/types";
 
 export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: string): Promise<{ success: boolean; error?: string; }> {
     if (!teacherId) return { success: false, error: 'Kullanıcı kimliği bulunamadı.' };
-    if (!data.title || !data.url || !data.storagePath) return { success: false, error: 'Eksik görsel bilgileri.' };
+    if (!data.title || !data.url) return { success: false, error: 'Eksik görsel bilgileri.' };
 
     try {
-        const dataToSave = {
+        const dataToSave: any = {
             title: data.title,
             url: data.url,
-            storagePath: data.storagePath,
+            storagePath: data.storagePath || null, // storagePath can be null for external URLs
             teacherId: teacherId,
             folderId: data.folderId || null,
             folderName: data.folderName || null,
@@ -51,6 +51,42 @@ export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: stri
         return { success: false, error: "Görsel bilgisi veritabanına kaydedilemedi." };
     }
 }
+
+export async function saveBulkImageRecords(
+    urls: { title: string; url: string }[],
+    teacherId: string,
+    folderId: string | null,
+    folderName: string | null
+): Promise<{ success: boolean; count?: number; error?: string }> {
+    if (!teacherId) return { success: false, error: 'Kullanıcı kimliği bulunamadı.' };
+    if (urls.length === 0) return { success: true, count: 0 };
+
+    try {
+        const batch = writeBatch(db);
+        const imageLibraryCollection = collection(db, 'imageLibrary');
+        
+        urls.forEach(item => {
+            const docRef = doc(imageLibraryCollection);
+            batch.set(docRef, {
+                title: item.title,
+                url: item.url,
+                storagePath: null, // External URLs don't have a storage path
+                teacherId: teacherId,
+                folderId: folderId,
+                folderName: folderName,
+                createdAt: serverTimestamp()
+            });
+        });
+
+        await batch.commit();
+        return { success: true, count: urls.length };
+
+    } catch (e: any) {
+        console.error("Error saving bulk image records to Firestore:", e);
+        return { success: false, error: "Toplu görsel kaydı sırasında bir hata oluştu." };
+    }
+}
+
 
 export async function getImagesAndFolders(teacherId: string): Promise<{ success: boolean; images?: ImageAsset[]; folders?: Folder[]; error?: string }> {
     try {

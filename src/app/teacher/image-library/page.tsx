@@ -28,6 +28,7 @@ import {
   Move,
   AlertTriangle,
   Home,
+  Upload // Toplu yükleme için eklendi
 } from "lucide-react";
 import {
   AlertDialog,
@@ -48,13 +49,6 @@ import {
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
@@ -70,9 +64,10 @@ import Link from 'next/link';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage } from './actions';
+import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage, saveBulkImageRecords } from './actions'; // saveBulkImageRecords eklendi
 import { cn } from "@/lib/utils";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { BulkImageUploadDialog } from '@/components/bulk-image-upload-dialog'; // Yeni bileşen import edildi
 
 
 function ErrorWithLink({ message }: { message: string }) {
@@ -103,6 +98,7 @@ export default function ImageLibraryPage() {
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [isBulkUploadOpen, setIsBulkUploadOpen] = useState(false); // Toplu yükleme için state
   const [editingImage, setEditingImage] = useState<Partial<ImageAsset> | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<ImageAsset | null>(null);
@@ -176,7 +172,7 @@ export default function ImageLibraryPage() {
             title: editingImage.title || 'İsimsiz Görsel',
             url: imageUrl,
             storagePath: imageStoragePath,
-            folderId: currentFolder?.id || null, // Add current folder context
+            folderId: currentFolder?.id || null, 
             folderName: currentFolder?.name || null
         };
         
@@ -285,6 +281,19 @@ export default function ImageLibraryPage() {
         setIsMoveDialogOpen(false);
         setMovingImageId(null);
     }
+    
+    const handleBulkSave = async (urls: {title: string, url: string}[]) => {
+        if (!user || urls.length === 0) return;
+        
+        const result = await saveBulkImageRecords(urls, user.uid, currentFolder?.id || null, currentFolder?.name || null);
+        
+        if (result.success) {
+            toast({ title: "Başarılı", description: `${result.count} görsel başarıyla arşive eklendi.` });
+            await fetchLibrary();
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+    };
 
     const filteredFolders = folders;
     const filteredImages = images.filter(image => 
@@ -311,6 +320,9 @@ export default function ImageLibraryPage() {
                  </Button>
                  <Button variant="outline" onClick={() => setIsFolderCreatorOpen(true)}>
                     <FolderPlus className="mr-2 h-4 w-4"/> Yeni Klasör
+                </Button>
+                <Button variant="outline" onClick={() => setIsBulkUploadOpen(true)}>
+                    <Upload className="mr-2 h-4 w-4"/> Toplu Yükle
                 </Button>
                 <Button onClick={() => handleOpenDialog()}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Yeni Görsel Yükle
@@ -525,6 +537,11 @@ export default function ImageLibraryPage() {
             )}
         </DialogContent>
       </Dialog>
+       <BulkImageUploadDialog
+        isOpen={isBulkUploadOpen}
+        onOpenChange={setIsBulkUploadOpen}
+        onSave={handleBulkSave}
+      />
     </div>
   );
 }
