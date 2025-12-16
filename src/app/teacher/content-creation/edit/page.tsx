@@ -39,6 +39,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { playableActivities } from '@/lib/game-config';
 import React from 'react';
+import { Input } from '@/components/ui/input';
 
 
 type DraggableLessonStep = LessonStep & { id: string };
@@ -416,17 +417,16 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
                 
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-white/5 pb-6">
-                    <div>
-                        <Button asChild variant="ghost" size="sm" className="mb-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
+                     <div className="flex items-start gap-4">
+                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12 flex-shrink-0">
                             <Link href="/teacher/content-creation">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                İçerik Yönetimine Dön
+                                <ArrowLeft className="h-6 w-6" />
                             </Link>
                         </Button>
                         <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                         <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
-                    </div>
-                    <div className="flex gap-2 flex-wrap">
+                     </div>
+                     <div className="flex gap-2 flex-wrap">
                           <Button variant="secondary" onClick={() => setIsPreviewOpen(true)} className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-lg">
                             <Eye className="mr-2 h-4 w-4" />
                             Önizle
@@ -665,3 +665,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+    
