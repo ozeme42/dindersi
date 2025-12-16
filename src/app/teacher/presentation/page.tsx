@@ -1,11 +1,12 @@
+
 'use client';
 
-import { Suspense, useEffect, useState, useRef } from 'react';
+import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Loader2, ArrowLeft, Presentation } from 'lucide-react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { Topic } from '@/lib/types';
+import type { Topic, Unit } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { Button } from '@/components/ui/button';
@@ -35,26 +36,54 @@ function PresentationPageContent() {
         };
     }, []);
 
-    useEffect(() => {
-        const fetchTopic = async () => {
-            if (!courseId || !unitId || !topicId) {
-                setIsLoading(false);
-                return;
-            }
-            try {
+    const fetchContent = useCallback(async () => {
+        setIsLoading(true);
+        if (!courseId || !unitId) {
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            if (topicId) {
+                // Fetch single topic
                 const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
                 const topicSnap = await getDoc(topicRef);
                 if (topicSnap.exists()) {
                     setTopic({ id: topicSnap.id, ...topicSnap.data() } as Topic);
                 }
-            } catch (error) {
-                console.error("Error fetching topic for presentation:", error);
-            } finally {
-                setIsLoading(false);
+            } else {
+                // Fetch all topics in the unit and merge them
+                const topicsRef = collection(db, 'courses', courseId, 'units', unitId, 'topics');
+                const topicsQuery = query(topicsRef, orderBy("title"));
+                const topicsSnap = await getDocs(topicsQuery);
+
+                let allSteps: Topic['steps'] = [];
+                let combinedTitle = `${unitName || 'Ünite'} Akışı`;
+                topicsSnap.forEach(topicDoc => {
+                    const topicData = topicDoc.data() as Topic;
+                    if (topicData.steps && topicData.steps.length > 0) {
+                        allSteps = allSteps.concat(topicData.steps);
+                    }
+                });
+
+                if (allSteps.length > 0) {
+                     setTopic({
+                        id: unitId,
+                        title: combinedTitle,
+                        steps: allSteps,
+                    });
+                }
             }
-        };
-        fetchTopic();
-    }, [courseId, unitId, topicId]);
+        } catch (error) {
+            console.error("Error fetching content for presentation:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [courseId, unitId, topicId, unitName]);
+
+    useEffect(() => {
+        fetchContent();
+    }, [fetchContent]);
 
     if (isLoading) {
         return (
@@ -88,14 +117,12 @@ function PresentationPageContent() {
                 !isFullscreen && "p-4 md:p-6"
             )}
         >
-             {/* Arka Plan Efektleri */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
             </div>
 
-            {/* Üst Bar */}
-            <div className={cn(
+            <header className={cn(
                 "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
                 isFullscreen 
                     ? "absolute top-0 left-0 right-0 p-2 bg-slate-900/80 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 focus-within:opacity-100" 
@@ -105,7 +132,7 @@ function PresentationPageContent() {
                     <div className={cn("p-2.5 rounded-xl shadow-lg flex-shrink-0", isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-purple-500 to-indigo-600")}>
                         <Presentation className={cn("text-white", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
                     </div>
-                    <div className="flex flex-col overflow-hidden">
+                    <div className="overflow-hidden">
                         <h1 className={cn("font-black tracking-tight text-white uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
                             {topic.title}
                         </h1>
@@ -121,9 +148,8 @@ function PresentationPageContent() {
                         </Button>
                     )}
                  </div>
-            </div>
+            </header>
             
-            {/* İçerik Alanı (Monitör) */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10">
                  <div className={cn(
                     "w-full h-full overflow-hidden transition-all duration-300 bg-white dark:bg-slate-900",

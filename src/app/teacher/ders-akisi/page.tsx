@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-    Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
+    Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -54,7 +54,7 @@ export default function DersAkisiPage() {
                     const classCourses = allCourses.filter(
                         (course) => course.classId === classDoc.id
                     );
-
+                    
                     for (const courseData of classCourses) {
                         const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
 
@@ -124,7 +124,7 @@ export default function DersAkisiPage() {
                         name: 'Genel',
                         courses: generalCourses,
                         createdAt: new Date()
-                    });
+                    } as EnrichedClass);
                 }
                 setCurriculum(enrichedClasses);
             } catch (error) {
@@ -166,7 +166,7 @@ export default function DersAkisiPage() {
                 </div>
             );
         }
-
+        
         const colorClasses = [
             'bg-blue-600 border-blue-500 shadow-blue-500/20',
             'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
@@ -183,7 +183,6 @@ export default function DersAkisiPage() {
                 {courseGroups.map((group, groupIndex) => (
                     <AccordionItem value={group.title} key={group.title} className="border-none">
                         <Card className="bg-slate-900/80 backdrop-blur-xl border-2 border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem]">
-                            {/* Grup Başlığı */}
                             <CardHeader className="p-0 border-b border-white/5">
                                 <AccordionTrigger className={cn(
                                     "text-3xl md:text-5xl font-black hover:no-underline px-8 py-8 transition-all",
@@ -203,7 +202,6 @@ export default function DersAkisiPage() {
                                 {group.courses.map((course, courseIndex) => (
                                     <div key={course.id} className="pl-6 md:pl-10 border-l-4 border-indigo-500/30">
                                             <div className="flex items-start">
-                                                {/* Bağlantı Çizgisi */}
                                                 <div className="w-8 h-1 bg-indigo-500/30 -ml-10 mt-10 mr-4"></div>
                                                 
                                                 <Accordion type="single" collapsible className="w-full">
@@ -233,25 +231,16 @@ export default function DersAkisiPage() {
                                                                                     "px-6 py-5 text-xl md:text-2xl font-bold hover:no-underline transition-colors",
                                                                                     "text-slate-400 hover:text-white hover:bg-white/5"
                                                                                 )}>
-                                                                                    <span className="flex items-center gap-4">
+                                                                                    <Link href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`} className="flex items-center gap-4 group/unit-link" onClick={(e) => e.stopPropagation()}>
                                                                                         <div className="p-2 bg-white/5 rounded-lg">
-                                                                                            <Book className="w-6 h-6 text-slate-500" />
+                                                                                            <Book className="w-6 h-6 text-slate-500 group-hover/unit-link:text-white transition-colors" />
                                                                                         </div>
                                                                                         {unit.title}
-                                                                                    </span>
+                                                                                    </Link>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="p-6 bg-black/20">
-                                                                                    {unit.topics && unit.topics.length > 0 || unit.htmlContent ? (
+                                                                                    {unit.topics && unit.topics.length > 0 ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                                             {unit.htmlContent && (
-                                                                                                 <Link 
-                                                                                                    href={`/teacher/smartboard/ozetler/goruntule/${course.id}/${unit.id}`}
-                                                                                                    className="group relative w-full flex flex-col justify-center items-center text-center font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-[2rem] shadow-2xl min-h-[14rem] break-words whitespace-normal leading-tight p-8 bg-gradient-to-br from-amber-500 to-orange-600 border-b-8 border-orange-800 text-white"
-                                                                                                 >
-                                                                                                    <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                    <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
-                                                                                                 </Link>
-                                                                                            )}
                                                                                             {unit.topics?.map((topic, topicIndex) => {
                                                                                                 const isLink = topic.externalLink;
                                                                                                 const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
@@ -272,19 +261,16 @@ export default function DersAkisiPage() {
                                                                                                             neonClass
                                                                                                         )}
                                                                                                     >
-                                                                                                        {/* İkon */}
                                                                                                         {isLink ? (
                                                                                                             <LinkIcon className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
                                                                                                         ) : (
                                                                                                             <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
                                                                                                         )}
 
-                                                                                                        {/* Başlık */}
                                                                                                         <span className="text-2xl md:text-3xl line-clamp-3">
                                                                                                             {topic.title}
                                                                                                         </span>
 
-                                                                                                        {/* Action Buttons Overlay - Sabit Sağ Üst */}
                                                                                                         <div className={cn(
                                                                                                             "absolute top-4 right-4 flex gap-2 z-20",
                                                                                                             "transition-all duration-300 ease-in-out",
@@ -380,7 +366,6 @@ export default function DersAkisiPage() {
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-6 md:p-10 relative overflow-hidden">
             
-            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[200px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[200px]" />
@@ -389,7 +374,6 @@ export default function DersAkisiPage() {
 
             <div className="max-w-[95%] mx-auto relative z-10 space-y-12">
                 
-                 {/* Header */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-6xl md:text-8xl font-black text-white tracking-tight uppercase drop-shadow-2xl">
@@ -406,7 +390,6 @@ export default function DersAkisiPage() {
                     </Button>
                 </div>
 
-                {/* İçerik */}
                 {renderCourseContent(courseGroups)}
             </div>
         </div>
