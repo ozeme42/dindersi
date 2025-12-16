@@ -1,7 +1,6 @@
 
 'use client';
 
-import * as React from 'react';
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,7 +21,7 @@ import {
     LayoutGrid,
     Eye,
     EyeOff,
-    FileText // İkon eklendi
+    FileText
 } from 'lucide-react';
 import {
     saveCurriculumItem,
@@ -159,6 +158,7 @@ export default function ContentCreationPage() {
                     (course) => course.classId === classDoc.id
                 );
                 
+                // İlk sınıfa "Genel" dersleri ekle
                 if (enrichedClasses.length === 0) {
                     const generalCourses = allCourses.filter(course => !course.classId);
                     classCourses.push(...generalCourses);
@@ -190,6 +190,7 @@ export default function ContentCreationPage() {
                             (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
                         );
                         
+                        // Her ünite için toplam soru sayısını hesapla
                         const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
                         enrichedUnit.questionCount = unitQuestionCount;
 
@@ -274,7 +275,7 @@ export default function ContentCreationPage() {
         setExternalLink(
             type === 'Konu' && mode === 'edit' && currentItem ? currentItem.externalLink || '' : ''
         );
-        setSourceText(
+         setSourceText(
             type === 'Konu' && mode === 'edit' && currentItem ? currentItem.sourceText || '' : ''
         );
     };
@@ -353,6 +354,7 @@ export default function ContentCreationPage() {
         setIsSaving(true);
         const names = bulkText.split('\n').map(n => n.trim()).filter(Boolean);
         const { type, parentId } = bulkAddDialogState;
+        // Konu ekliyorsak, path'i doğru oluşturmamız lazım. `parentId` burada unitId oluyor.
         let finalParentId = parentId;
         if (type === 'Konu' && parentId) {
             finalParentId = `${selections.courseId}/${parentId}`;
@@ -426,38 +428,9 @@ export default function ContentCreationPage() {
             );
         }
 
-        const isTopicStep = currentStep === 4;
-        const isUnitStep = currentStep === 3; 
-
-        const handleButtonClick = (item: any) => {
-            const displayName = item[itemTitleKey] || item.name;
-            if (isTopicStep) {
-                router.push(`/teacher/content-creation/edit?courseId=${selections.courseId}&unitId=${selections.unitId}&topicId=${item.id}`);
-            } else if (isUnitStep) {
-                handleSelect('unit', item.id, displayName);
-            } else {
-                let type: 'class' | 'course' | 'unit' = 'class';
-                if (currentStep === 1) type = 'class';
-                if (currentStep === 2) type = 'course';
-                handleSelect(type, item.id, displayName);
-            }
-        };
-
-        const colorClasses = [
-            'bg-blue-600 border-blue-500 shadow-blue-500/20',
-            'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
-            'bg-purple-600 border-purple-500 shadow-purple-500/20',
-            'bg-rose-600 border-rose-500 shadow-rose-500/20',
-            'bg-amber-600 border-amber-500 shadow-amber-500/20',
-            'bg-indigo-600 border-indigo-500 shadow-indigo-500/20',
-            'bg-teal-600 border-teal-500 shadow-teal-500/20',
-            'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
-        ];
-
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {itemsToRender.map((item, index) => {
-                    const colorClass = colorClasses[index % colorClasses.length];
+                {itemsToRender.map((item) => {
                      let path = '';
                      if (currentStep === 1) path = `classes/${item.id}`;
                      else if (currentStep === 2) path = `courses/${item.id}`;
@@ -468,41 +441,38 @@ export default function ContentCreationPage() {
                     const questionCount = item.questionCount;
 
                     return (
-                        <div key={item.id} className={cn("relative group min-h-[12rem] transition-opacity duration-300", !isPublished && "opacity-40 hover:opacity-100")}>
+                        <div key={item.id} className={cn("relative group", !isPublished && "opacity-40 hover:opacity-100")}>
                             <Button
                                 variant="ghost"
-                                className={cn(
-                                    "w-full h-full p-6 flex flex-col items-center justify-center text-center transition-all duration-300",
-                                    "rounded-3xl border-b-[8px] active:border-b-0 active:translate-y-[8px] hover:-translate-y-2",
-                                    "text-white shadow-2xl hover:shadow-3xl",
-                                    colorClass,
-                                    !isPublished && "grayscale"
-                                )}
-                                onClick={() => handleButtonClick(item)}
+                                className="w-full h-32 p-6 flex flex-col items-start justify-between text-left transition-all duration-300 rounded-2xl border-2 border-white/5 bg-slate-800/50 hover:bg-slate-800 hover:border-white/10"
+                                onClick={() => {
+                                    const displayName = item[itemTitleKey] || item.name;
+                                    if (currentStep === 1) handleSelect('class', item.id, displayName);
+                                    else if (currentStep === 2) handleSelect('course', item.id, displayName);
+                                    else if (currentStep === 3) handleSelect('unit', item.id, displayName);
+                                    else if (currentStep === 4) router.push(`/teacher/content-creation/edit?courseId=${selections.courseId}&unitId=${selections.unitId}&topicId=${item.id}`);
+                                }}
                             >
-                                <div className="p-4 bg-white/20 rounded-full mb-4 shadow-inner backdrop-blur-sm">
-                                    {isTopicStep ? <FilePenLine className="h-10 w-10" /> : isUnitStep ? <Library className="h-10 w-10"/> : <LayoutGrid className="h-10 w-10" />}
-                                </div>
-                                <span className="text-2xl font-black leading-tight line-clamp-2">
+                                <span className="text-xl font-bold text-white leading-tight line-clamp-2">
                                     {item[itemTitleKey] || item.name}
                                 </span>
-                                {questionCount !== undefined && <Badge variant="secondary" className="mt-3 text-sm px-3 py-1 font-bold bg-white/20 text-white border-none backdrop-blur-md">({questionCount} Soru)</Badge>}
+                                {questionCount !== undefined && <Badge variant="secondary" className="mt-2 text-xs">{questionCount} Soru</Badge>}
                             </Button>
                             
-                            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                                {isUnitStep && ( 
-                                    <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-green-500/90 text-white hover:bg-green-400 hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Özeti Düzenle">
-                                        <FileText className="h-5 w-5" />
+                            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                {currentStep === 3 && ( // Sadece Ünite seviyesinde göster
+                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-green-500/90 text-white hover:bg-green-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Özeti Düzenle">
+                                        <FileText className="h-4 w-4" />
                                     </Button>
                                 )}
-                                <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-white/90 text-slate-900 hover:bg-white hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
-                                    {isPublished ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
+                                    {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                                 </Button>
-                                <Button size="icon" variant="secondary" className="h-10 w-10 rounded-xl shadow-lg bg-white/90 text-slate-900 hover:bg-white hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
-                                    <FilePenLine className="h-5 w-5" />
+                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
+                                    <FilePenLine className="h-4 w-4" />
                                 </Button>
-                                <Button size="icon" variant="destructive" className="h-10 w-10 rounded-xl shadow-lg hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
-                                    <Trash2 className="h-5 w-5" />
+                                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemDelete(item); }} title="Sil">
+                                    <Trash2 className="h-4 w-4" />
                                 </Button>
                             </div>
                         </div>
@@ -566,7 +536,7 @@ export default function ContentCreationPage() {
                 </div>
 
                 {/* Stepper */}
-                <div className="flex justify-center items-center px-4 w-full mb-8">
+                <div className="flex justify-center items-center px-4 w-full">
                     <div className="relative flex items-center justify-between w-full max-w-3xl">
                         <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                         <div 
@@ -610,13 +580,13 @@ export default function ContentCreationPage() {
 
                 <div className="mt-12">
                     <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
-                        <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <div>
-                                <h2 className="text-2xl font-black text-white flex items-center gap-3">
+                                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                                     <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 text-lg">
                                         {currentStep}
                                     </span>
-                                    <span>{steps.find(s => s.id === currentStep)?.name}</span>
+                                    {steps.find(s => s.id === currentStep)?.name}
                                 </h2>
                                 <p className="text-sm text-slate-400 mt-1 pl-14">
                                     {selectionNames.className}
@@ -638,7 +608,7 @@ export default function ContentCreationPage() {
                         </div>
 
                         <div className="flex-grow p-6 md:p-10 bg-black/20">
-                            {renderContent()}
+                            {renderCurrentStep()}
                         </div>
 
                         <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">

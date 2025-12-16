@@ -52,25 +52,15 @@ function PresentationPageContent() {
                     setTopic({ id: topicSnap.id, ...topicSnap.data() } as Topic);
                 }
             } else {
-                // Fetch all topics in the unit and merge them
-                const topicsRef = collection(db, 'courses', courseId, 'units', unitId, 'topics');
-                const topicsQuery = query(topicsRef, orderBy("title"));
-                const topicsSnap = await getDocs(topicsQuery);
-
-                let allSteps: Topic['steps'] = [];
-                let combinedTitle = `${unitName || 'Ünite'} Akışı`;
-                topicsSnap.forEach(topicDoc => {
-                    const topicData = topicDoc.data() as Topic;
-                    if (topicData.steps && topicData.steps.length > 0) {
-                        allSteps = allSteps.concat(topicData.steps);
-                    }
-                });
-
-                if (allSteps.length > 0) {
-                     setTopic({
+                // Fetch all topics in the unit and merge their steps for a full unit presentation
+                const unitRef = doc(db, `courses/${courseId}/units/${unitId}`);
+                const unitSnap = await getDoc(unitRef);
+                if (unitSnap.exists()) {
+                    const unitData = unitSnap.data() as Unit;
+                    setTopic({
                         id: unitId,
-                        title: combinedTitle,
-                        steps: allSteps,
+                        title: unitData.title,
+                        steps: unitData.steps || [],
                     });
                 }
             }

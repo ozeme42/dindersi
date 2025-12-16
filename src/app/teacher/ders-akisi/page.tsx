@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-    Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home
+    Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -20,6 +20,17 @@ type EnrichedTopic = Topic & { questionCount?: number };
 type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string };
 type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
 type CourseGroup = { title: string; courses: EnrichedCourse[] };
+
+const colorClasses = [
+    'bg-blue-600 border-blue-500 shadow-blue-500/20',
+    'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
+    'bg-purple-600 border-purple-500 shadow-purple-500/20',
+    'bg-rose-600 border-rose-500 shadow-rose-500/20',
+    'bg-amber-600 border-amber-500 shadow-amber-500/20',
+    'bg-indigo-600 border-indigo-500 shadow-indigo-500/20',
+    'bg-teal-600 border-teal-500 shadow-teal-500/20',
+    'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
+];
 
 export default function DersAkisiPage() {
     const router = useRouter();
@@ -91,7 +102,7 @@ export default function DersAkisiPage() {
                     enrichedClasses.push(enrichedClass);
                 }
                 
-                // Handle general (no-class) courses separately
+                // Handle general (no-class) courses separately and add them to a "Genel" class group
                 const generalCoursesData = allCourses.filter(course => !course.classId);
                 const generalCourses: EnrichedCourse[] = [];
                 for (const courseData of generalCoursesData) {
@@ -118,14 +129,21 @@ export default function DersAkisiPage() {
                     }
                     generalCourses.push(enrichedCourse);
                 }
+
                 if (generalCourses.length > 0) {
-                     enrichedClasses.push({
-                        id: 'general',
-                        name: 'Genel',
-                        courses: generalCourses,
-                        createdAt: new Date()
-                    } as EnrichedClass);
+                     const generalClass = enrichedClasses.find(c => c.name === "Genel");
+                     if (generalClass) {
+                         generalClass.courses.push(...generalCourses);
+                     } else {
+                         enrichedClasses.push({
+                            id: 'general',
+                            name: 'Genel',
+                            courses: generalCourses,
+                            createdAt: new Date()
+                        } as EnrichedClass);
+                     }
                 }
+
                 setCurriculum(enrichedClasses);
             } catch (error) {
                 console.error('Error fetching curriculum: ', error);
@@ -167,17 +185,6 @@ export default function DersAkisiPage() {
             );
         }
         
-        const colorClasses = [
-            'bg-blue-600 border-blue-500 shadow-blue-500/20',
-            'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
-            'bg-purple-600 border-purple-500 shadow-purple-500/20',
-            'bg-rose-600 border-rose-500 shadow-rose-500/20',
-            'bg-amber-600 border-amber-500 shadow-amber-500/20',
-            'bg-indigo-600 border-indigo-500 shadow-indigo-500/20',
-            'bg-teal-600 border-teal-500 shadow-teal-500/20',
-            'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
-        ];
-
         return (
             <Accordion type="multiple" className="w-full space-y-8">
                 {courseGroups.map((group, groupIndex) => (
@@ -231,81 +238,53 @@ export default function DersAkisiPage() {
                                                                                     "px-6 py-5 text-xl md:text-2xl font-bold hover:no-underline transition-colors",
                                                                                     "text-slate-400 hover:text-white hover:bg-white/5"
                                                                                 )}>
-                                                                                    <Link href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`} className="flex items-center gap-4 group/unit-link" onClick={(e) => e.stopPropagation()}>
+                                                                                    <div className="flex items-center gap-4 group/unit-link">
                                                                                         <div className="p-2 bg-white/5 rounded-lg">
                                                                                             <Book className="w-6 h-6 text-slate-500 group-hover/unit-link:text-white transition-colors" />
                                                                                         </div>
                                                                                         {unit.title}
-                                                                                    </Link>
+                                                                                    </div>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="p-6 bg-black/20">
                                                                                     {unit.topics && unit.topics.length > 0 ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                                                            {unit.htmlContent && (
+                                                                                                 <Link 
+                                                                                                    href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
+                                                                                                    className={cn(
+                                                                                                        "group relative w-full flex flex-col justify-center items-center text-center font-bold",
+                                                                                                        "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                        "rounded-[2rem] shadow-2xl min-h-[14rem]",
+                                                                                                        "break-words whitespace-normal leading-tight p-8",
+                                                                                                        "border-b-8 text-white",
+                                                                                                        "bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800"
+                                                                                                    )}
+                                                                                                 >
+                                                                                                    <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                    <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
+                                                                                                 </Link>
+                                                                                            )}
                                                                                             {unit.topics?.map((topic, topicIndex) => {
-                                                                                                const isLink = topic.externalLink;
                                                                                                 const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
-                                                                                                
                                                                                                 const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
 
                                                                                                 return (
                                                                                                     <Link 
                                                                                                         key={topic.id}
-                                                                                                        href={isLink ? topic.externalLink! : presentationUrl}
-                                                                                                        target={isLink ? "_blank" : undefined}
+                                                                                                        href={presentationUrl}
                                                                                                         className={cn(
                                                                                                             "group relative w-full flex flex-col justify-center items-center text-center font-bold",
                                                                                                             "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
                                                                                                             "rounded-[2rem] shadow-2xl min-h-[14rem]",
                                                                                                             "break-words whitespace-normal leading-tight p-8",
-                                                                                                            "border-b-8",
+                                                                                                            "border-b-8 text-white",
                                                                                                             neonClass
                                                                                                         )}
                                                                                                     >
-                                                                                                        {isLink ? (
-                                                                                                            <LinkIcon className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                        ) : (
-                                                                                                            <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                        )}
-
+                                                                                                        <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
                                                                                                         <span className="text-2xl md:text-3xl line-clamp-3">
                                                                                                             {topic.title}
                                                                                                         </span>
-
-                                                                                                        <div className={cn(
-                                                                                                            "absolute top-4 right-4 flex gap-2 z-20",
-                                                                                                            "transition-all duration-300 ease-in-out",
-                                                                                                            "opacity-100 visible translate-y-0", 
-                                                                                                            "md:opacity-0 md:invisible md:-translate-y-2",
-                                                                                                            "md:group-hover:opacity-100 md:group-hover:visible md:group-hover:translate-y-0"
-                                                                                                        )}>
-                                                                                                            {(topic.steps?.length || 0) > 0 && !isLink && (
-                                                                                                                <div 
-                                                                                                                    onClick={(e) => {
-                                                                                                                        e.preventDefault();
-                                                                                                                        e.stopPropagation();
-                                                                                                                        window.open(`/student/ders/${course.id}?topicId=${topic.id}`, '_blank');
-                                                                                                                    }}
-                                                                                                                    className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-emerald-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                    title="Öğrenci Görünümü"
-                                                                                                                >
-                                                                                                                    <BookOpen className="h-6 w-6" />
-                                                                                                                </div>
-                                                                                                            )}
-                                                                                                            <div 
-                                                                                                                onClick={(e) => handleEditClick(e, topic, course.id, unit.id)}
-                                                                                                                className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-amber-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                title="Düzenle"
-                                                                                                            >
-                                                                                                                <FilePenLine className="h-6 w-6" />
-                                                                                                            </div>
-                                                                                                            <div 
-                                                                                                                onClick={(e) => handleSummaryClick(e, course.id, unit.id, topic.id)}
-                                                                                                                className="h-12 w-12 flex items-center justify-center rounded-xl bg-black/60 hover:bg-purple-600 text-white border-2 border-white/20 backdrop-blur-md shadow-xl transition-all cursor-pointer"
-                                                                                                                title="Özet"
-                                                                                                            >
-                                                                                                                <Columns className="h-6 w-6" />
-                                                                                                            </div>
-                                                                                                        </div>
                                                                                                     </Link>
                                                                                                 );
                                                                                             })}

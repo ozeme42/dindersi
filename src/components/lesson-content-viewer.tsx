@@ -124,77 +124,33 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ALT BİLEŞENLER ---
 
-// 1. VisualPlayer (Görsel Büyütme)
+// 1. VisualPlayer (Görsel Büyütme - GÜNCELLENDİ: TAM EKRAN MODU)
 function VisualPlayer({ step }: { step: VisualStep }) {
-    const [isZoomed, setIsZoomed] = useState(false);
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setIsZoomed(false);
-        };
-        if (isZoomed) {
-            window.addEventListener('keydown', handleKeyDown);
-        }
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isZoomed]);
-
+    // Zoom mantığı kaldırıldı, görsel doğrudan container'ı dolduracak şekilde ayarlandı.
     return (
-        <>
-            <div className="flex flex-col justify-center items-center h-full p-4 w-full">
-                <div 
-                    className="relative group rounded-3xl overflow-hidden border-4 border-slate-800 bg-black cursor-zoom-in shadow-2xl transition-transform duration-300 hover:scale-[1.02] max-w-4xl w-full"
-                    onClick={() => setIsZoomed(true)}
-                >
-                    <Image 
-                        src={step.imageUrl} 
-                        alt={step.title} 
-                        width={1200} 
-                        height={800} 
-                        className="w-full h-auto max-h-[70vh] object-contain" 
-                    />
-                    
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <div className="bg-white/20 backdrop-blur-md p-4 rounded-full border border-white/30 text-white">
-                            <Maximize2 className="h-8 w-8" />
-                        </div>
-                    </div>
-                </div>
-                {step.title && <p className="mt-4 text-slate-400 font-medium text-lg">{step.title}</p>}
+        <div className="relative w-full h-full flex flex-col items-center justify-center bg-black/5 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+            {/* Resim Container */}
+            <div className="relative w-full h-full">
+                <Image 
+                    src={step.imageUrl} 
+                    alt={step.title} 
+                    fill
+                    className="object-contain" // Resmi orantılı sığdırır. Tam doldurmak için 'object-cover' kullanabilirsiniz.
+                    priority
+                />
             </div>
-
-            {isZoomed && (
-                <div 
-                    className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-4 animate-in fade-in zoom-in duration-300"
-                    onClick={() => setIsZoomed(false)}
-                >
-                    <button 
-                        onClick={() => setIsZoomed(false)}
-                        className="absolute top-4 right-4 md:top-8 md:right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-50 group"
-                    >
-                        <X className="h-8 w-8 group-hover:rotate-90 transition-transform" />
-                    </button>
-
-                    <div 
-                        className="relative w-full h-full flex items-center justify-center p-2 md:p-10"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <Image 
-                            src={step.imageUrl} 
-                            alt={step.title} 
-                            fill
-                            className="object-contain drop-shadow-2xl"
-                            quality={100}
-                        />
-                    </div>
-                    
-                    <div className="absolute bottom-8 px-4 text-center">
-                        <p className="text-white/80 text-sm md:text-lg font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
-                            Kapatmak için tıklayın veya ESC tuşuna basın
+            
+            {/* Başlık (Opsiyonel: Alt kısımda yüzer bar olarak) */}
+            {step.title && (
+                <div className="absolute bottom-6 px-4 w-full flex justify-center z-10 pointer-events-none">
+                    <div className="bg-black/60 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-lg pointer-events-auto">
+                        <p className="text-white text-lg md:text-xl font-bold text-center">
+                            {step.title}
                         </p>
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
 
@@ -365,7 +321,7 @@ function ContentListPlayer({
                 {visibleSentences.map((sentence, index) => {
                     const Icon = summaryIcons[index % summaryIcons.length];
                     const colorClass = summaryColorClasses[index % summaryColorClasses.length];
-                     
+                      
                     const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
 
                     return (
@@ -833,8 +789,9 @@ export function StepContent({
                 return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
             }
             case 'visual':
+                // GÜNCELLEME: Görsel için padding kaldırıldı ve tam boyut kullanıldı
                 return (
-                     <div className="flex justify-center items-center h-full p-4 w-full">
+                     <div className="w-full h-full p-0 md:p-2">
                         <VisualPlayer step={step as VisualStep} />
                      </div>
                 );
@@ -862,7 +819,7 @@ export function StepContent({
                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                              allowFullScreen
                              loading="lazy"
-                         />
+                          />
                     </div>
                 );
 
@@ -880,11 +837,11 @@ export function StepContent({
                 return (
                     <div className="w-full h-full flex flex-col items-center justify-center p-4">
                         <div className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
-                            <iframe
-                                src={embedUrl}
-                                title={videoStep.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
+                            <iframe 
+                                src={embedUrl} 
+                                title={videoStep.title} 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowFullScreen 
                                 className="w-full h-full"
                             ></iframe>
                         </div>
@@ -950,9 +907,9 @@ export function StepContent({
                              "border-4 border-purple-500/50",
                              "shadow-[0_0_30px_rgba(168,85,247,0.3)]",
                              isTeacher ? "p-10" : "p-10"
-                         )}>
+                          )}>
                              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-pink-500" />
-                            <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
+                             <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
                         </div>
                         <div className="flex gap-8 justify-center">
                             {["Doğru", "Yanlış"].map((option) => {
@@ -999,8 +956,8 @@ export function StepContent({
                                 const colorClass = optionColors[index % optionColors.length];
                                 return (
                                     <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-600 border-emerald-800 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-600 border-red-800 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-900/50 border-transparent text-slate-600 opacity-30" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
-                                        <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
-                                        {option}
+                                            <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
+                                            {option}
                                     </Button>
                                 );
                             })}
@@ -1038,7 +995,7 @@ export function LessonContentViewer({
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
     const { toast } = useToast();
-    
+     
     // State tanımları
     const [isAnimating, setIsAnimating] = useState(false);
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
@@ -1048,7 +1005,7 @@ export function LessonContentViewer({
     const steps = useMemo(() => topic?.steps || [], [topic]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
-    
+     
     // --- RESUME (KALINAN YERDEN DEVAM) ---
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
@@ -1058,7 +1015,7 @@ export function LessonContentViewer({
             // LocalStorage'dan kontrol et
             const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
             const savedData = localStorage.getItem(storageKey);
-            
+             
             if (savedData) {
                 const savedIndex = parseInt(savedData);
                 if (!isNaN(savedIndex) && savedIndex > 0 && savedIndex < steps.length) {
@@ -1127,19 +1084,19 @@ export function LessonContentViewer({
     useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
-    
+     
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
     // Full width adımlar (Alt menüsü gizlenecekler)
     const isFullWidthStep = isActivityStep || isHtmlSlideStep;
-    
+     
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
     const isNextButtonEnabled = useMemo(() => {
         if (!currentStep) return false;
         if (isTeacher) return true;
-        
+         
         // HTML Slide için her zaman aktif
         if (isHtmlSlideStep) return true;
 
@@ -1156,16 +1113,16 @@ export function LessonContentViewer({
             const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
             return cardSet.size === cards.length;
         }
-        
+         
         const answer = internalProgress.answers[currentStepIndex];
         if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-        
+         
         return answer !== undefined && answer !== null;
     }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     const handleNext = useCallback(() => {
         if (!currentStep) return;
-        
+         
         // Bitirince LocalStorage'ı temizle
         if (currentStepIndex === steps.length - 1) {
              if (topic) {
@@ -1253,7 +1210,7 @@ export function LessonContentViewer({
         const newAnswersForStep = { ...existingAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
         setInternalProgress(prev => ({ ...prev, answers: { ...prev.answers, [currentStepIndex]: newAnswersForStep }}));
     };
-    
+     
     const handleLocalAllTfAnswered = () => {
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
@@ -1294,7 +1251,7 @@ export function LessonContentViewer({
              </div>
          )
     }
-    
+     
     if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
 
     const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
