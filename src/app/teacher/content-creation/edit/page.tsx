@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset } from '@/lib/types';
@@ -292,7 +293,7 @@ export function TopicEditor({
         
         let newSteps: LessonStep[] = [];
         
-        if (stepType === 'visual' && config.filter.includes('images')) {
+        if (stepType === 'visual' && libraryConfig.filter.includes('images')) {
              newSteps = importedItems.map(item => ({
                 type: 'visual',
                 title: (item as ImageAsset).title || 'Arşivden Görsel',
@@ -414,7 +415,7 @@ export function TopicEditor({
                 
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-white/5 pb-6">
-                     <div className="flex items-start gap-4">
+                     <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12 flex-shrink-0">
                             <Link href="/teacher/content-creation">
                                 <ArrowLeft className="h-6 w-6" />
