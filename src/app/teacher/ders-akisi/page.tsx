@@ -23,7 +23,7 @@ type CourseGroup = { title: string; courses: EnrichedCourse[] };
 
 export default function DersAkisiPage() {
     const router = useRouter();
-    const [curriculum, setCurriculum] = useState<EnrichedCourse[]>([]);
+    const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     
     const { toast } = useToast();
@@ -32,19 +32,71 @@ export default function DersAkisiPage() {
         const fetchCurriculum = async () => {
             setIsLoading(true);
             try {
-                const [allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
-                    getDocs(collection(db, 'courses')),
-                    getDocs(collection(db, 'questions')), 
+                const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
+                    getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
+                    getDocs(query(collection(db, 'courses'))),
+                    getDocs(query(collection(db, 'questions'))), 
                 ]);
                 
                 const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
-                const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-                const enrichedCourses: EnrichedCourse[] = [];
+                const allCourses = allCoursesSnapshot.docs.map(
+                    (doc) => ({ id: doc.id, ...doc.data() } as Course)
+                );
+                const enrichedClasses: EnrichedClass[] = [];
 
-                for (const courseData of allCourses) {
-                    const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
+                for (const classDoc of classesSnapshot.docs) {
+                    const classData = {
+                        id: classDoc.id,
+                        ...classDoc.data(),
+                    } as SchoolClass;
+                    const enrichedClass: EnrichedClass = { ...classData, courses: [] };
 
-                    const unitsSnapshot = await getDocs(
+                    const classCourses = allCourses.filter(
+                        (course) => course.classId === classDoc.id
+                    );
+
+                    for (const courseData of classCourses) {
+                        const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
+
+                        const unitsSnapshot = await getDocs(
+                            query(
+                                collection(db, `courses/${courseData.id}/units`),
+                                orderBy('title')
+                            )
+                        );
+                        for (const unitDoc of unitsSnapshot.docs) {
+                            const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
+                            const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, htmlContent: unitData.htmlContent || '' };
+
+                            const topicsSnapshot = await getDocs(
+                                query(
+                                    collection(
+                                        db,
+                                        `courses/${courseData.id}/units/${unitDoc.id}/topics`
+                                    ),
+                                    orderBy('title')
+                                )
+                            );
+                            enrichedUnit.topics = topicsSnapshot.docs.map(
+                                (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
+                            );
+                            
+                            const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
+                            enrichedUnit.questionCount = unitQuestionCount;
+
+                            enrichedCourse.units.push(enrichedUnit);
+                        }
+                        enrichedClass.courses.push(enrichedCourse);
+                    }
+                    enrichedClasses.push(enrichedClass);
+                }
+                
+                // Handle general (no-class) courses separately
+                const generalCoursesData = allCourses.filter(course => !course.classId);
+                const generalCourses: EnrichedCourse[] = [];
+                for (const courseData of generalCoursesData) {
+                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
+                      const unitsSnapshot = await getDocs(
                         query(
                             collection(db, `courses/${courseData.id}/units`),
                             orderBy('title')
@@ -53,39 +105,38 @@ export default function DersAkisiPage() {
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
                         const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, htmlContent: unitData.htmlContent || '' };
-
                         const topicsSnapshot = await getDocs(
                             query(
-                                collection(
-                                    db,
-                                    `courses/${courseData.id}/units/${unitDoc.id}/topics`
-                                ),
+                                collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`),
                                 orderBy('title')
                             )
                         );
-                        enrichedUnit.topics = topicsSnapshot.docs.map(
-                            (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
-                        );
-                        
+                        enrichedUnit.topics = topicsSnapshot.docs.map((topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
                         const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
                         enrichedUnit.questionCount = unitQuestionCount;
-
                         enrichedCourse.units.push(enrichedUnit);
                     }
-                    enrichedCourses.push(enrichedCourse);
+                    generalCourses.push(enrichedCourse);
                 }
-                setCurriculum(enrichedCourses);
+                if (generalCourses.length > 0) {
+                     enrichedClasses.push({
+                        id: 'general',
+                        name: 'Genel',
+                        courses: generalCourses,
+                        createdAt: new Date()
+                    });
+                }
+                setCurriculum(enrichedClasses);
             } catch (error) {
                 console.error('Error fetching curriculum: ', error);
-                toast({ title: 'Hata', description: 'Müfredat yüklenirken bir hata oluştu.', variant: 'destructive' });
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchCurriculum();
-    }, [toast]);
-    
+    }, []);
+
     const handleEditClick = (e: React.MouseEvent, topic: Topic, courseId: string, unitId: string) => {
         e.preventDefault();
         e.stopPropagation();
@@ -115,6 +166,17 @@ export default function DersAkisiPage() {
                 </div>
             );
         }
+
+        const colorClasses = [
+            'bg-blue-600 border-blue-500 shadow-blue-500/20',
+            'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
+            'bg-purple-600 border-purple-500 shadow-purple-500/20',
+            'bg-rose-600 border-rose-500 shadow-rose-500/20',
+            'bg-amber-600 border-amber-500 shadow-amber-500/20',
+            'bg-indigo-600 border-indigo-500 shadow-indigo-500/20',
+            'bg-teal-600 border-teal-500 shadow-teal-500/20',
+            'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
+        ];
 
         return (
             <Accordion type="multiple" className="w-full space-y-8">
@@ -164,7 +226,7 @@ export default function DersAkisiPage() {
                                                         </AccordionTrigger>
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
-                                                                {course.units.map((unit, unitIndex) => (
+                                                                {course.units?.map((unit, unitIndex) => (
                                                                     <Accordion key={unit.id} type="multiple" className="w-full">
                                                                         <AccordionItem value={unit.id} className="border-2 border-white/5 rounded-2xl bg-slate-900/50 overflow-hidden">
                                                                                 <AccordionTrigger className={cn(
@@ -179,7 +241,7 @@ export default function DersAkisiPage() {
                                                                                     </span>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="p-6 bg-black/20">
-                                                                                    {unit.topics.length > 0 || unit.htmlContent ? (
+                                                                                    {unit.topics && unit.topics.length > 0 || unit.htmlContent ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                                                                              {unit.htmlContent && (
                                                                                                  <Link 
@@ -190,7 +252,7 @@ export default function DersAkisiPage() {
                                                                                                     <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
                                                                                                  </Link>
                                                                                             )}
-                                                                                            {unit.topics.map((topic, topicIndex) => {
+                                                                                            {unit.topics?.map((topic, topicIndex) => {
                                                                                                 const isLink = topic.externalLink;
                                                                                                 const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
                                                                                                 
@@ -287,12 +349,11 @@ export default function DersAkisiPage() {
         );
     }
     
-    // Group courses by title for main accordion
     const courseGroups: CourseGroup[] = useMemo(() => {
         const grouped: { [title: string]: EnrichedCourse[] } = {};
         
         curriculum.forEach(cls => {
-            cls.courses.forEach(course => {
+            cls.courses?.forEach(course => {
                 let courseTitle = course.title;
                 if (courseTitle.toUpperCase() === 'DKAB') courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
                 else if (courseTitle.toUpperCase() === 'SİYER') courseTitle = 'Peygamberimizin Hayatı (Siyer)';
