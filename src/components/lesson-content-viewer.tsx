@@ -875,7 +875,7 @@ export function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                  return <div className="text-center p-8 text-slate-500 text-lg">Kavram haritası bu görünümde desteklenmiyor.</div>; 
             case 'video': {
@@ -1384,7 +1384,10 @@ export function LessonContentViewer({
         </div>
         
         {/* ALT MENÜ VE KONTROLLER */}
-        <div className={cn("flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4", isFullscreen ? "opacity-0 pointer-events-none" : "")}>
+        <div className={cn(
+            "flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md z-30",
+            isFullscreen ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" : "relative h-16 px-4"
+        )}>
              <div className="flex items-center gap-4 flex-1">
                  <Button 
                     variant="outline" 
@@ -1418,20 +1421,6 @@ export function LessonContentViewer({
             </div>
         </div>
 
-        {isFullWidthStep && (
-            <div className="absolute bottom-4 left-4 z-50">
-                <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={handlePrev}
-                    disabled={currentStepIndex === 0}
-                    className="bg-black/30 hover:bg-black/50 text-white/70 hover:text-white rounded-full h-12 w-12 backdrop-blur-sm border border-white/10"
-                >
-                    <ArrowLeft className="h-6 w-6" />
-                </Button>
-            </div>
-        )}
-
         {showFloatingButton && (
             <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
                 <Button 
@@ -1452,5 +1441,3 @@ export function LessonContentViewer({
       </div>
     );
 }
-
-```
