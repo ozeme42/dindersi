@@ -55,9 +55,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, query, where, orderBy } from 'firebase/firestore';
-import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
+import type { SchoolClass, Course, Unit, Topic, Question, LessonStep } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 
 type EnrichedTopic = Topic & { questionCount?: number };
 type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number };
@@ -127,6 +128,55 @@ export default function ContentCreationPage() {
     const [externalLink, setExternalLink] = useState('');
     const [sourceText, setSourceText] = useState('');
     const [bulkText, setBulkText] = useState('');
+    const [isAIGenOpen, setIsAIGenOpen] = useState(false);
+    
+    // Veri state'ini güncellemek için merkezi bir fonksiyon
+    const setCourseData = (courseId: string, unitId: string, updatedData: Partial<Topic | Unit>) => {
+        setCurriculum(prevCurriculum => 
+            prevCurriculum.map(cls => ({
+                ...cls,
+                courses: cls.courses.map(c => {
+                    if (c.id !== courseId) return c;
+                    return {
+                        ...c,
+                        units: c.units.map(u => {
+                            if (u.id !== unitId) return u;
+                            if (updatedData.hasOwnProperty('steps')) { // Ünite akışı güncelleniyor
+                                return { ...u, ...updatedData };
+                            }
+                            return { // Konu akışı güncelleniyor
+                                ...u,
+                                topics: u.topics.map(t => t.id === (updatedData as Topic).id ? { ...t, ...updatedData } : t)
+                            };
+                        })
+                    };
+                })
+            }))
+        );
+    };
+
+    const handleAiStepsGenerated = (newSteps: LessonStep[], context: { topicId?: string; unitId?: string; courseId: string; }) => {
+        const { courseId, unitId, topicId } = context;
+        if (topicId) {
+            // Konuya adım ekle
+            const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
+            const unit = course?.units.find(u => u.id === unitId);
+            const topic = unit?.topics.find(t => t.id === topicId);
+            if (topic) {
+                const updatedTopic = { ...topic, steps: [...(topic.steps || []), ...newSteps] };
+                setCourseData(courseId, unitId, updatedTopic);
+            }
+        } else {
+             // Üniteye adım ekle
+            const course = curriculum.flatMap(c => c.courses).find(c => c.id === courseId);
+            const unit = course?.units.find(u => u.id === unitId);
+            if(unit) {
+                 const updatedUnit = { ...unit, steps: [...(unit.steps || []), ...newSteps] };
+                 setCourseData(courseId, unitId, updatedUnit);
+            }
+        }
+        toast({ title: "Başarılı", description: `${newSteps.length} yeni adım akışa eklendi.` });
+    };
 
     const fetchCurriculum = async () => {
         setIsLoading(true);
@@ -200,7 +250,7 @@ export default function ContentCreationPage() {
                  const generalCourses: EnrichedCourse[] = [];
                  for (const courseData of generalCoursesData) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
-                     const unitsSnapshot = await getDocs(
+                      const unitsSnapshot = await getDocs(
                         query(
                             collection(db, `courses/${courseData.id}/units`),
                             orderBy('title')
@@ -295,6 +345,18 @@ export default function ContentCreationPage() {
         () => selectedCourse?.units.find((u) => u.id === selections.unitId),
         [selectedCourse, selections.unitId]
     );
+    
+     const aiGenerationContext = useMemo(() => {
+        if (currentStep === 4 && selectedUnit && selections.courseId && selections.unitId) {
+            return {
+                courseId: selections.courseId,
+                unitId: selections.unitId,
+                topicTitle: selectedUnit.title,
+                sourceText: selectedUnit.sourceText || selectedUnit.title
+            }
+        }
+        return null;
+    }, [currentStep, selectedUnit, selections]);
 
     const openDialog = (
         mode: 'add' | 'edit',
@@ -637,6 +699,11 @@ export default function ContentCreationPage() {
                                         <Layers className="h-4 w-4 mr-2" /> Toplu Ekle
                                     </Button>
                                 )}
+                                {currentStep === 4 && (
+                                     <Button size="sm" onClick={() => setIsAIGenOpen(true)} disabled={!aiGenerationContext} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-purple-900/20">
+                                        <Sparkles className="mr-2 h-4 w-4"/> AI Adım Üret
+                                    </Button>
+                                )}
                                 <Button size="sm" onClick={getAddButtonAction()} className="bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20">
                                     <PlusCircle className="h-4 w-4 mr-2" /> Yeni Ekle
                                 </Button>
@@ -753,6 +820,118 @@ export default function ContentCreationPage() {
                 </AlertDialog>
             )}
 
+            <AiLessonStepGenerationDialog
+                isOpen={isAIGenOpen}
+                onOpenChange={setIsAIGenOpen}
+                context={aiGenerationContext}
+                onStepsGenerated={(steps, context) => handleAiStepsGenerated(steps, context)}
+                generationType={'anlatim'}
+            />
+
         </div>
     );
 }
+
+```
+- src/lib/firebase-admin.ts:
+```ts
+
+
+import 'dotenv/config';
+import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
+
+let adminApp: App;
+
+try {
+  adminApp = getApp('admin');
+} catch (e) {
+  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+    : undefined;
+
+  if (!serviceAccount) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Cannot initialize Firebase Admin SDK.');
+  }
+
+  adminApp = initializeApp({
+    credential: cert(serviceAccount)
+  }, 'admin');
+}
+
+// Ensure services are initialized
+getFirestore(adminApp);
+getAuth(adminApp);
+
+export { adminApp };
+
+```
+- src/lib/utils.ts:
+```ts
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function normalizeNameToEmailLocalPart(name: string): string {
+  if (!name) return '';
+  return name
+    .trim()
+    .toLocaleLowerCase('tr-TR')
+    .replace(/\s+/g, '.') // handle one or more spaces
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9.-_]/g, ''); // Allow dots and hyphens
+}
+
+```
+- tsconfig.json:
+```json
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+```
