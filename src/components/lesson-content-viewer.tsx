@@ -8,7 +8,8 @@ import {
     CheckCircle2, XCircle, Link as LinkIcon, Layers, Star, 
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
-    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History
+    CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
+    Maximize2 
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -121,8 +122,83 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
     return <div dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
 
-// --- ALT BİLEŞENLER (GÜNCELLENDİ) ---
+// --- ALT BİLEŞENLER ---
 
+// 1. VisualPlayer (Görsel Büyütme)
+function VisualPlayer({ step }: { step: VisualStep }) {
+    const [isZoomed, setIsZoomed] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsZoomed(false);
+        };
+        if (isZoomed) {
+            window.addEventListener('keydown', handleKeyDown);
+        }
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isZoomed]);
+
+    return (
+        <>
+            <div className="flex flex-col justify-center items-center h-full p-4 w-full">
+                <div 
+                    className="relative group rounded-3xl overflow-hidden border-4 border-slate-800 bg-black cursor-zoom-in shadow-2xl transition-transform duration-300 hover:scale-[1.02] max-w-4xl w-full"
+                    onClick={() => setIsZoomed(true)}
+                >
+                    <Image 
+                        src={step.imageUrl} 
+                        alt={step.title} 
+                        width={1200} 
+                        height={800} 
+                        className="w-full h-auto max-h-[70vh] object-contain" 
+                    />
+                    
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="bg-white/20 backdrop-blur-md p-4 rounded-full border border-white/30 text-white">
+                            <Maximize2 className="h-8 w-8" />
+                        </div>
+                    </div>
+                </div>
+                {step.title && <p className="mt-4 text-slate-400 font-medium text-lg">{step.title}</p>}
+            </div>
+
+            {isZoomed && (
+                <div 
+                    className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-4 animate-in fade-in zoom-in duration-300"
+                    onClick={() => setIsZoomed(false)}
+                >
+                    <button 
+                        onClick={() => setIsZoomed(false)}
+                        className="absolute top-4 right-4 md:top-8 md:right-8 p-3 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors z-50 group"
+                    >
+                        <X className="h-8 w-8 group-hover:rotate-90 transition-transform" />
+                    </button>
+
+                    <div 
+                        className="relative w-full h-full flex items-center justify-center p-2 md:p-10"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <Image 
+                            src={step.imageUrl} 
+                            alt={step.title} 
+                            fill
+                            className="object-contain drop-shadow-2xl"
+                            quality={100}
+                        />
+                    </div>
+                    
+                    <div className="absolute bottom-8 px-4 text-center">
+                        <p className="text-white/80 text-sm md:text-lg font-medium bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                            Kapatmak için tıklayın veya ESC tuşuna basın
+                        </p>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+// 2. InteractiveTrueFalseList
 function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
@@ -133,14 +209,13 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
         }
     }, [allAnswered, onAllAnswered]);
 
-    // GÜNCELLEME: Daha parlak ve renkli temalar (Kenarlık ve Arka Plan eşleşiyor)
     const colorThemes = [
-        { border: 'border-cyan-500', bg: 'bg-cyan-500/20', text: 'text-cyan-400', shadow: 'shadow-cyan-500/30' },
-        { border: 'border-purple-500', bg: 'bg-purple-500/20', text: 'text-purple-400', shadow: 'shadow-purple-500/30' },
-        { border: 'border-amber-500', bg: 'bg-amber-500/20', text: 'text-amber-400', shadow: 'shadow-amber-500/30' },
-        { border: 'border-rose-500', bg: 'bg-rose-500/20', text: 'text-rose-400', shadow: 'shadow-rose-500/30' },
-        { border: 'border-lime-500', bg: 'bg-lime-500/20', text: 'text-lime-400', shadow: 'shadow-lime-500/30' },
-        { border: 'border-indigo-500', bg: 'bg-indigo-500/20', text: 'text-indigo-400', shadow: 'shadow-indigo-500/30' },
+        { card: 'border-cyan-500/50 bg-cyan-500/5 hover:bg-cyan-500/10', number: 'text-cyan-400' },
+        { card: 'border-purple-500/50 bg-purple-500/5 hover:bg-purple-500/10', number: 'text-purple-400' },
+        { card: 'border-amber-500/50 bg-amber-500/5 hover:bg-amber-500/10', number: 'text-amber-400' },
+        { card: 'border-rose-500/50 bg-rose-500/5 hover:bg-rose-500/10', number: 'text-rose-400' },
+        { card: 'border-lime-500/50 bg-lime-500/5 hover:bg-lime-500/10', number: 'text-lime-400' },
+        { card: 'border-indigo-500/50 bg-indigo-500/5 hover:bg-indigo-500/10', number: 'text-indigo-400' },
     ];
 
     return (
@@ -164,21 +239,17 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
                     return (
                         <div key={index} className={cn(
-                            "rounded-3xl border-4 transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                            "rounded-3xl border-4 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
                             isTeacher ? "p-6 min-h-[16rem]" : "p-4 min-h-[10rem]",
-                            // Genel parlaklık ve hover efekti
-                            "shadow-lg hover:shadow-2xl hover:-translate-y-1",
                             isAnswered 
-                                ? (isCorrect 
-                                    ? "border-emerald-500/80 bg-emerald-500/20 shadow-emerald-500/30" // Daha parlak yeşil
-                                    : "border-red-500/80 bg-red-500/20 shadow-red-500/30") // Daha parlak kırmızı
-                                : cn(theme.border, theme.bg, theme.shadow) // Renkli tema
+                                ? (isCorrect ? "border-emerald-500 bg-emerald-500/10" : "border-red-500 bg-red-500/10") 
+                                : `border-white/10 ${theme.card}`
                         )}>
                             <div className="flex gap-4 mb-6">
-                                <span className={cn("font-black", isTeacher ? "text-3xl" : "text-xl", isAnswered ? "text-white" : theme.text)}>
+                                <span className={cn("font-black", isTeacher ? "text-3xl" : "text-xl", isAnswered ? "text-white" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-3xl" : "text-lg")}>
+                                <p className={cn("font-bold text-white leading-relaxed", isTeacher ? "text-3xl" : "text-lg")}>
                                     {q.statement}
                                 </p>
                             </div>
@@ -188,12 +259,12 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all shadow-md",
+                                        "flex-1 font-bold rounded-xl transition-all",
                                         isTeacher ? "h-20 text-2xl" : "h-12 text-lg",
                                         isAnswered && userAnswer.answer === true 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-500 opacity-100 shadow-emerald-600/50" : "bg-red-600 hover:bg-red-500 opacity-100 shadow-red-600/50")
-                                            : "bg-slate-700/50 hover:bg-slate-600/80 text-white border border-white/10",
-                                        isAnswered && userAnswer.answer !== true && "opacity-30 grayscale"
+                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-600 opacity-100" : "bg-red-600 hover:bg-red-600 opacity-100")
+                                            : "bg-slate-700 hover:bg-slate-600 text-white",
+                                        isAnswered && userAnswer.answer !== true && "opacity-30"
                                     )}
                                 >
                                     <CheckCircle className={cn("mr-2", isTeacher ? "h-8 w-8" : "h-5 w-5")} /> Doğru
@@ -202,12 +273,12 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all shadow-md",
+                                        "flex-1 font-bold rounded-xl transition-all",
                                         isTeacher ? "h-20 text-2xl" : "h-12 text-lg",
                                         isAnswered && userAnswer.answer === false 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-500 opacity-100 shadow-emerald-600/50" : "bg-red-600 hover:bg-red-500 opacity-100 shadow-red-600/50")
-                                            : "bg-slate-700/50 hover:bg-slate-600/80 text-white border border-white/10",
-                                        isAnswered && userAnswer.answer !== false && "opacity-30 grayscale"
+                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-600 opacity-100" : "bg-red-600 hover:bg-red-600 opacity-100")
+                                            : "bg-slate-700 hover:bg-slate-600 text-white",
+                                        isAnswered && userAnswer.answer !== false && "opacity-30"
                                     )}
                                 >
                                     <XCircle className={cn("mr-2", isTeacher ? "h-8 w-8" : "h-5 w-5")} /> Yanlış
@@ -221,6 +292,7 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     )
 }
 
+// 3. ContentListPlayer
 function ContentListPlayer({ 
     step, 
     revealedSentencesCount, 
@@ -324,6 +396,7 @@ function ContentListPlayer({
     );
 }
 
+// 4. ConceptExplanationPlayer
 function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
@@ -355,6 +428,7 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
     );
 }
 
+// 5. AnagramFlashcardPlayer
 function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
     step: AnagramFlashcardStep, 
     flippedCards: Set<number>, 
@@ -431,6 +505,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     );
 }
 
+// 6. FlashcardPlayer
 function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: { 
     step: FlashcardStep, 
     flippedCards: Set<number>, 
@@ -500,7 +575,7 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFull
     );
 };
 
-// Interactive Anagram Component
+// 7. AnagramGame
 function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: AnagramStep, onAnswer: (answer: string) => void, answer: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
     const isTeacher = useTeacherMode();
     const initialLetters = useMemo(() => step.scrambledWord.toLocaleUpperCase('tr-TR').split('').map((letter, index) => ({ id: index, letter })), [step.scrambledWord]);
@@ -581,7 +656,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed }: { step: Anagr
     );
 };
 
-// Interactive Sentence Scramble Component
+// 8. SentenceScrambleGame
 function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnswerRevealed }: { step: SentenceScrambleStep, onAnswer: (answer: string) => void, onCorrectAndNext: () => void, answer?: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
     const isTeacher = useTeacherMode();
     const initialWords = useMemo(() => step.scrambledSentence.split(' ').map((word, index) => ({ id: index, word })), [step.scrambledSentence]);
@@ -686,9 +761,9 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     );
 };
 
+// 9. HtmlSlidePlayer
 function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, onSlideScrolledToEnd: () => void }) {
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    
     useEffect(() => {
         const iframe = iframeRef.current;
         const handleScroll = () => {
@@ -759,11 +834,9 @@ export function StepContent({
             }
             case 'visual':
                 return (
-                    <div className="flex justify-center items-center h-full p-4">
-                         <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-black">
-                             <Image src={(step as VisualStep).imageUrl} alt={step.title} width={1000} height={800} className="max-w-full max-h-[75vh] object-contain" />
-                         </div>
-                    </div>
+                     <div className="flex justify-center items-center h-full p-4 w-full">
+                        <VisualPlayer step={step as VisualStep} />
+                     </div>
                 );
             case 'iframe':
                  return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-2xl bg-white", "h-full")} allowFullScreen></iframe></div>
@@ -871,17 +944,13 @@ export function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl justify-center")}>
-                         {/* GÜNCELLENDİ: Tekli TF için parlak ve renkli kutu */}
                          <div className={cn(
                              "rounded-3xl shadow-2xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
-                             // Yeni parlak arka plan ve kenarlık
                              "bg-gradient-to-br from-purple-500/20 to-pink-500/20",
                              "border-4 border-purple-500/50",
-                             // Parlama efekti (glow shadow)
                              "shadow-[0_0_30px_rgba(168,85,247,0.3)]",
                              isTeacher ? "p-10" : "p-10"
                          )}>
-                             {/* Üstteki ince çizgi de kalsın, ekstra parlaklık katar */}
                              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-pink-500" />
                             <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
                         </div>
@@ -1267,7 +1336,7 @@ export function LessonContentViewer({
             </div>
         )}
 
-        {/* HUD (Üst Bar) */}
+        {/* HUD (Üst Bar) - Tam Ekran Adımlarda Gizle */}
         {!isFullscreen && !isFullWidthStep && (
             <div className="flex-shrink-0 border-b border-white/5 bg-slate-900/80 backdrop-blur-md z-20 flex justify-between items-center px-4 h-12">
                  <div className="flex items-center gap-4 flex-1">
@@ -1283,6 +1352,7 @@ export function LessonContentViewer({
           "flex-1 relative w-full",
           isFullWidthStep ? "overflow-hidden" : "overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent pb-24" 
         )}>
+             {/* Arka Plan Efektleri - Tam ekranda gizle */}
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" />
@@ -1318,6 +1388,7 @@ export function LessonContentViewer({
         
         {/* --- ALT MENÜ VE KONTROLLER --- */}
         
+        {/* 1. STANDART NAVİGASYON (Tam Ekran Olmayan Adımlarda) */}
         {!isFullWidthStep && (
             <div className="flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md absolute bottom-0 w-full z-30 h-16 px-4">
                  <div className="flex gap-2">

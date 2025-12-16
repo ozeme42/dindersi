@@ -121,10 +121,13 @@ export default function OzetlerSetupPage() {
   };
   
   const handleSelectContent = (type: 'unit' | 'topic', id: string) => {
+      const courseIdParam = selection.courseId;
+      const unitIdParam = selection.unitId;
+
       if (type === 'unit') {
-          router.push(`/teacher/smartboard/ozetler/goruntule?courseId=${selection.courseId}&unitId=${id}`);
-      } else {
-          router.push(`/teacher/presentation?courseId=${selection.courseId}&unitId=${selection.unitId}&topicId=${id}`);
+          router.push(`/teacher/smartboard/ozetler/goruntule?courseId=${courseIdParam}&unitId=${id}`);
+      } else { // topic
+          router.push(`/teacher/smartboard/ozetler/goruntule?courseId=${courseIdParam}&unitId=${unitIdParam}&topicId=${id}`);
       }
   }
 
@@ -132,7 +135,7 @@ export default function OzetlerSetupPage() {
     if (isLoading && currentStep > 1) {
         return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     }
-    if (isDataLoading) {
+     if (isDataLoading) {
         return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     }
     
@@ -179,28 +182,36 @@ export default function OzetlerSetupPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center p-4 sm:p-6 md:p-8 relative overflow-hidden">
       
+      {/* Arka Plan Efektleri */}
       <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-rose-900/20 rounded-full blur-[120px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[120px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-5xl space-y-8">
+        
+        {/* Başlık Alanı */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500 drop-shadow-sm">
             Özet Sunum Modu
           </h1>
           <p className="text-slate-400 text-lg">İçeriği tahtada göstermek için seçim yapın.</p>
         </div>
+
+        {/* Stepper (Adım Göstergesi) */}
         <div className="flex justify-center items-center px-4 w-full">
             <div className="relative flex items-center justify-between w-full max-w-3xl">
+                {/* Bağlantı Çizgisi */}
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                 <div 
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-rose-500 to-indigo-500 -z-10 rounded-full transition-all duration-500 ease-out"
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
+
                 {steps.map((step, index) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
+                    
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-2 group cursor-default">
                             <div className={cn(
@@ -216,15 +227,19 @@ export default function OzetlerSetupPage() {
                             <span className={cn(
                                 "text-[9px] md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap",
                                 isCurrent ? "text-rose-400" : isActive ? "text-indigo-500" : "text-slate-600"
-                            )}>{step.name}</span>
+                            )}>
+                                {step.name}
+                            </span>
                         </div>
                     );
                 })}
             </div>
         </div>
+
+        {/* Ana İçerik Kartı */}
         <div className="mt-12">
-            <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
-                <CardHeader className="p-6 border-b border-white/5 bg-slate-900/80 flex items-center justify-between">
+            <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
+                <div className="p-6 border-b border-white/5 bg-slate-900/80 flex items-center justify-between">
                      <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
                             {currentStep}
@@ -232,11 +247,13 @@ export default function OzetlerSetupPage() {
                         {steps.find(s => s.id === currentStep)?.name}
                      </h2>
                      <div className="h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_#f43f5e]"></div>
-                </CardHeader>
-                <CardContent className="flex-grow p-8 flex items-center justify-center">
-                    {renderContent()}
-                </CardContent>
-                <CardFooter className="p-6 border-t border-white/5 bg-slate-900/80 flex justify-between items-center">
+                </div>
+
+                <div className="flex-grow p-8 flex items-center justify-center bg-slate-950/30">
+                     {renderContent()}
+                </div>
+
+                <div className="p-6 border-t border-white/5 bg-slate-900/80 flex justify-between items-center">
                     {currentStep === 1 ? (
                         <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-12 px-6 rounded-xl">
                             <Link href="/teacher/smartboard"><ArrowLeft className="mr-2 h-4 w-4" /> Akıllı Tahtaya Dön</Link>
@@ -250,11 +267,11 @@ export default function OzetlerSetupPage() {
                             <ArrowLeft className="mr-2 h-4 w-4" /> Geri
                         </Button>
                     )}
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
         </div>
+
       </div>
     </div>
   );
 }
-
