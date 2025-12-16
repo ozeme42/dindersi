@@ -141,14 +141,24 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
     )
 }
 
-export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdProp, onSave, isSaving, isUnitFlow = false }: { 
+export function TopicEditor({ 
+    initialTopic, 
+    courseId, 
+    unitId, 
+    topicId: topicIdProp, 
+    onSave, 
+    isSaving,
+    isUnitFlow = false,
+    onOpenAIGeneration
+}: { 
     initialTopic: Topic | null,
     courseId: string,
     unitId: string,
-    topicId?: string | null, // Can be null if it's a new unit flow
+    topicId?: string | null,
     onSave: (steps: LessonStep[], title?: string, sourceText?: string) => Promise<void>,
     isSaving: boolean,
-    isUnitFlow?: boolean
+    isUnitFlow?: boolean,
+    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
 }) {
     const topicId = isUnitFlow ? null : (topicIdProp || initialTopic?.id);
     
@@ -158,16 +168,13 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
     const [sourceText, setSourceText] = useState(initialTopic?.sourceText || '');
     const [htmlContent, setHtmlContent] = useState(initialTopic?.htmlContent || '');
     
-    const [isLoading, setIsLoading] = useState(!initialTopic); // Only load if not passed as prop
+    const [isLoading, setIsLoading] = useState(!initialTopic);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
     const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
-    
-    const [isAiStepDialogOpen, setIsAiStepDialogOpen] = useState(false);
-    const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
 
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
         return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
@@ -239,8 +246,8 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
             case 'htmlSlide': newStep = { type, title: defaultTitle, htmlContent: '<!DOCTYPE html>\\n<html lang="tr">\\n<head>\\n  <title>Başlık</title>\\n</head>\\n<body>\\n  <h1>Merhaba Dünya</h1>\\n</body>\\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
-            case 'conceptMap': newStep = { type, 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
-            case 'accordion': newStep = { type, title: 'Akordiyon Başlık', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
+            case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
+            case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Başlık', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
 
@@ -359,11 +366,6 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
             else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
         }
     };
-    
-    const openAIGenerationDialog = (type: 'anlatim' | 'degerlendirme') => {
-        setAiGenerationType(type);
-        setIsAiStepDialogOpen(true);
-    };
 
     if (isLoading) {
         return (
@@ -371,10 +373,6 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
                 <Loader2 className="h-16 w-16 animate-spin text-purple-500" />
             </div>
         );
-    }
-
-    if (!initialTopic) {
-        return <div className="text-center text-slate-400 p-8">Konu yüklenemedi.</div>
     }
 
     const anlatimStepOptions: {label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void}[] = [
@@ -423,10 +421,12 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
                                 <ArrowLeft className="h-6 w-6" />
                             </Link>
                         </Button>
-                        <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
-                        <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
+                        <div>
+                             <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                            <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
+                        </div>
                      </div>
-                     <div className="flex gap-2 flex-wrap">
+                     <div className="flex gap-2 flex-wrap self-end sm:self-center">
                           <Button variant="secondary" onClick={() => setIsPreviewOpen(true)} className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-lg">
                             <Eye className="mr-2 h-4 w-4" />
                             Önizle
@@ -446,10 +446,10 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
                                 </Button>
                             </DropdownMenuTrigger>
                              <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
-                                <DropdownMenuItem onClick={() => openAIGenerationDialog('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => openAIGenerationDialog('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -607,13 +607,6 @@ export function TopicEditor({ initialTopic, courseId, unitId, topicId: topicIdPr
                     onOpenChange={setIsPreviewOpen}
                     steps={steps}
                 />
-                 <AiLessonStepGenerationDialog
-                    isOpen={isAiStepDialogOpen}
-                    onOpenChange={setIsAiStepDialogOpen}
-                    context={initialTopic ? { topicId: initialTopic.id, topicTitle: title, sourceText: sourceText } : null}
-                    onStepsGenerated={handleAddSteps}
-                    generationType={aiGenerationType}
-                />
             </div>
         </div>
     );
@@ -665,5 +658,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
-    

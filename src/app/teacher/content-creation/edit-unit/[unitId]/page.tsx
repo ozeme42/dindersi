@@ -10,6 +10,7 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateUnitContent } from '../actions';
 import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
+import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 
 function UnitFlowEditor() {
     const params = useParams();
@@ -20,13 +21,13 @@ function UnitFlowEditor() {
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);
+    const [steps, setSteps] = useState<LessonStep[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     
-    // We use this version state to force a re-render of the editor 
-    // when new data is fetched, ensuring it gets the latest props.
-    const [dataVersion, setDataVersion] = useState(0); 
-
+    const [isAiOpen, setIsAiOpen] = useState(false);
+    const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    
     const { toast } = useToast();
 
     const fetchUnitData = useCallback(async () => {
@@ -45,7 +46,7 @@ function UnitFlowEditor() {
                 if (!unitData.steps) unitData.steps = [];
                 
                 setUnit(unitData);
-                setDataVersion(prev => prev + 1); // Increment version on new data
+                setSteps(unitData.steps);
             } else {
                 toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
                 router.back();
@@ -78,8 +79,8 @@ function UnitFlowEditor() {
 
             if (result.success) {
                 toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
-                // Optimistically update the local state to reflect the save without a full refetch
                 setUnit(prev => prev ? { ...prev, ...dataToSave } : null);
+                setSteps(newSteps);
             } else {
                 toast({ title: "Hata", description: result.error, variant: "destructive" });
             }
@@ -88,6 +89,14 @@ function UnitFlowEditor() {
         } finally {
             setIsSaving(false);
         }
+    };
+    
+    const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
+        setSteps(prevSteps => [...prevSteps, ...newSteps]);
+        toast({
+            title: "Başarılı",
+            description: `${newSteps.length} yeni adım taslağa eklendi. Değişiklikleri kaydetmeyi unutmayın.`
+        });
     };
 
     if (isLoading || !unit) {
@@ -98,25 +107,39 @@ function UnitFlowEditor() {
         );
     }
     
+    // TopicEditor'a geçici bir Topic nesnesi oluşturuyoruz
+    const pseudoTopic = {
+        id: unit.id,
+        title: unit.title,
+        steps: steps, // Dışarıdaki state'i kullan
+        sourceText: unit.sourceText || ''
+    } as Topic;
+
     return (
-        <div>
-            {/* The key is crucial here. It forces React to create a new instance of TopicEditor 
-                when the unit data changes, ensuring the editor's internal state is always fresh. */}
+        <>
             <TopicEditor
-                key={`editor-${unit.id}-${dataVersion}`}
-                initialTopic={{
-                    id: unit.id,
-                    title: unit.title,
-                    steps: unit.steps || [],
-                    sourceText: unit.sourceText
-                } as Topic}
+                key={`editor-${unit.id}-${steps.length}`}
+                initialTopic={pseudoTopic}
                 courseId={courseId!}
                 unitId={unitId}
-                onSave={handleSave}
+                // onSave, TopicEditor'ın kendi içindeki title ve sourceText'i de gönderir.
+                onSave={(updatedSteps, updatedTitle, updatedSourceText) => handleSave(updatedSteps, updatedTitle, updatedSourceText)}
                 isSaving={isSaving}
-                isUnitFlow={true} 
+                isUnitFlow={true}
+                onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
             />
-        </div>
+             <AiLessonStepGenerationDialog
+                isOpen={isAiOpen}
+                onOpenChange={setIsAiOpen}
+                context={{ 
+                    topicId: unit.id, // We use unit ID as context ID here
+                    topicTitle: unit.title, 
+                    sourceText: unit.sourceText 
+                }}
+                onStepsGenerated={handleAiStepsGenerated}
+                generationType={aiGenerationType}
+            />
+        </>
     );
 }
 
