@@ -7,161 +7,41 @@ import { useRouter } from 'next/navigation';
 import {
     Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
 } from 'lucide-react';
-import {
-    saveCurriculumItem,
-    deleteCurriculumItem,
-    bulkAddCurriculumItems,
-    togglePublishState,
-} from './actions';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-} from '@/components/ui/dialog';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, doc, query, where, orderBy } from 'firebase/firestore';
 import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardHeader } from '@/components/ui/card';
 
 type EnrichedTopic = Topic & { questionCount?: number };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number };
-type EnrichedCourse = Course & { units: EnrichedUnit[] };
-type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
-
-const steps = [
-    { id: 1, name: 'Sınıf Seçimi', icon: <Users className="w-6 h-6" /> },
-    { id: 2, name: 'Ders Seçimi', icon: <Book className="w-6 h-6" /> },
-    { id: 3, name: 'Ünite Yönetimi', icon: <Library className="w-6 h-6" /> }, // Değiştirildi
-    { id: 4, name: 'Konu Yönetimi', icon: <ListTodo className="w-6 h-6" /> },
-];
-
-const colorClasses = [
-    'bg-blue-600 border-blue-500 shadow-blue-500/20',
-    'bg-emerald-600 border-emerald-500 shadow-emerald-500/20',
-    'bg-purple-600 border-purple-500 shadow-purple-500/20',
-    'bg-rose-600 border-rose-500 shadow-rose-500/20',
-    'bg-amber-600 border-amber-500 shadow-amber-500/20',
-    'bg-indigo-600 border-indigo-500 shadow-indigo-500/20',
-    'bg-teal-600 border-teal-500 shadow-teal-500/20',
-    'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
-];
-
-
-type DialogState = {
-    isOpen: boolean;
-    mode: 'add' | 'edit';
-    type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu' | null;
-    parentId?: string;
-    currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string, isPublished?: boolean };
-};
-
-type BulkAddDialogState = {
-    isOpen: boolean;
-    type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu' | null;
-    parentId?: string;
-    parentName?: string;
-};
-
-type DeleteDialogState = {
-    isOpen: boolean;
-    type: 'Sınıf' | 'Ders' | 'Ünite' | 'Konu' | null;
-    item: { id: string; name: string; path: string };
-};
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string };
+type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
+type CourseGroup = { title: string; courses: EnrichedCourse[] };
 
 export default function DersAkisiPage() {
     const router = useRouter();
-    const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
+    const [curriculum, setCurriculum] = useState<EnrichedCourse[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentStep, setCurrentStep] = useState(1);
-    const [selections, setSelections] = useState({
-        classId: '',
-        courseId: '',
-        unitId: '',
-    });
-    const [selectionNames, setSelectionNames] = useState({
-        className: '',
-        courseName: '',
-        unitName: '',
-    });
-
+    
     const { toast } = useToast();
 
-    const [dialogState, setDialogState] = useState<DialogState>({
-        isOpen: false,
-        mode: 'add',
-        type: null,
-    });
-    const [deleteDialogState, setDeleteDialogState] =
-        useState<DeleteDialogState | null>(null);
-    const [bulkAddDialogState, setBulkAddDialogState] =
-        useState<BulkAddDialogState>({ isOpen: false, type: null });
-
-    const [isSaving, setIsSaving] = useState(false);
-    const [newItemName, setNewItemName] = useState('');
-    const [branches, setBranches] = useState<string[]>([]);
-    const [newBranchName, setNewBranchName] = useState('');
-    const [externalLink, setExternalLink] = useState('');
-    const [sourceText, setSourceText] = useState('');
-    const [bulkText, setBulkText] = useState('');
-
-    const fetchCurriculum = async () => {
-        setIsLoading(true);
-        try {
-            const classesQuery = query(
-                collection(db, 'classes'),
-                orderBy('createdAt', 'asc')
-            );
-            const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
-                getDocs(classesQuery),
-                getDocs(collection(db, 'courses')),
-                getDocs(collection(db, 'questions')), 
-            ]);
-            
-            const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
-
-            const allCourses = allCoursesSnapshot.docs.map(
-                (doc) => ({ id: doc.id, ...doc.data() } as Course)
-            );
-            const enrichedClasses: EnrichedClass[] = [];
-
-            for (const classDoc of classesSnapshot.docs) {
-                const classData = {
-                    id: classDoc.id,
-                    ...classDoc.data(),
-                } as SchoolClass;
-                const enrichedClass: EnrichedClass = { ...classData, courses: [] };
-
-                const classCourses = allCourses.filter(
-                    (course) => course.classId === classDoc.id
-                );
+    useEffect(() => {
+        const fetchCurriculum = async () => {
+            setIsLoading(true);
+            try {
+                const [allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
+                    getDocs(collection(db, 'courses')),
+                    getDocs(collection(db, 'questions')), 
+                ]);
                 
-                if (enrichedClasses.length === 0) {
-                    const generalCourses = allCourses.filter(course => !course.classId);
-                    classCourses.push(...generalCourses);
-                }
+                const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
+                const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+                const enrichedCourses: EnrichedCourse[] = [];
 
-                for (const courseData of classCourses) {
+                for (const courseData of allCourses) {
                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
 
                     const unitsSnapshot = await getDocs(
@@ -172,7 +52,7 @@ export default function DersAkisiPage() {
                     );
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
+                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, htmlContent: unitData.htmlContent || '' };
 
                         const topicsSnapshot = await getDocs(
                             query(
@@ -192,178 +72,30 @@ export default function DersAkisiPage() {
 
                         enrichedCourse.units.push(enrichedUnit);
                     }
-                    enrichedClass.courses.push(enrichedCourse);
+                    enrichedCourses.push(enrichedCourse);
                 }
-                enrichedClasses.push(enrichedClass);
+                setCurriculum(enrichedCourses);
+            } catch (error) {
+                console.error('Error fetching curriculum: ', error);
+                toast({ title: 'Hata', description: 'Müfredat yüklenirken bir hata oluştu.', variant: 'destructive' });
+            } finally {
+                setIsLoading(false);
             }
-            setCurriculum(enrichedClasses);
-        } catch (error) {
-            console.error('Error fetching curriculum: ', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
 
-    useEffect(() => {
         fetchCurriculum();
-    }, []);
-
-    const handleSelect = (
-        type: 'class' | 'course' | 'unit',
-        id: string,
-        name: string
-    ) => {
-        if (type === 'class') {
-            setSelections({ classId: id, courseId: '', unitId: '' });
-            setSelectionNames({ className: name, courseName: '', unitName: '' });
-        } else if (type === 'course') {
-            setSelections((s) => ({ ...s, courseId: id, unitId: '' }));
-            setSelectionNames((s) => ({ ...s, courseName: name, unitName: '' }));
-        } else if (type === 'unit') {
-            setSelections((s) => ({ ...s, unitId: id }));
-            setSelectionNames((s) => ({ ...s, unitName: name }));
-        }
-        setCurrentStep((s) => s + 1);
+    }, [toast]);
+    
+    const handleEditClick = (e: React.MouseEvent, topic: Topic, courseId: string, unitId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+        router.push(`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`);
     };
 
-    const handleBack = () => {
-        if (currentStep > 1) {
-            if (currentStep === 2) {
-                setSelections({ classId: '', courseId: '', unitId: '' });
-                setSelectionNames({ className: '', courseName: '', unitName: '' });
-            } else if (currentStep === 3) {
-                setSelections((s) => ({ ...s, courseId: '', unitId: '' }));
-                setSelectionNames((s) => ({ ...s, courseName: '', unitName: '' }));
-            } else if (currentStep === 4) {
-                setSelections((s) => ({ ...s, unitId: '' }));
-                setSelectionNames((s) => ({ ...s, unitName: '' }));
-            }
-            setCurrentStep((s) => s - 1);
-        }
-    };
-
-    const selectedClass = useMemo(
-        () => curriculum.find((c) => c.id === selections.classId),
-        [curriculum, selections.classId]
-    );
-    const selectedCourse = useMemo(
-        () => selectedClass?.courses.find((c) => c.id === selections.courseId),
-        [selectedClass, selections.courseId]
-    );
-    const selectedUnit = useMemo(
-        () => selectedCourse?.units.find((u) => u.id === selections.unitId),
-        [selectedCourse, selections.unitId]
-    );
-
-    const openDialog = (
-        mode: 'add' | 'edit',
-        type: DialogState['type'],
-        currentItem?: { id: string; name?: string; title?: string; branches?: string[], externalLink?: string, sourceText?: string, isPublished?: boolean },
-        parentId?: string
-    ) => {
-        setDialogState({ isOpen: true, mode, type, parentId, currentItem });
-        setNewItemName(mode === 'edit' && currentItem ? (currentItem.name || currentItem.title || '') : '');
-        setBranches(
-            type === 'Sınıf' && mode === 'edit' && currentItem
-                ? currentItem.branches || []
-                : []
-        );
-        setExternalLink(
-            type === 'Konu' && mode === 'edit' && currentItem ? currentItem.externalLink || '' : ''
-        );
-        setSourceText(
-            type === 'Konu' && mode === 'edit' && currentItem ? currentItem.sourceText || '' : ''
-        );
-    };
-
-    const openDeleteDialog = (
-        type: DeleteDialogState['type'],
-        item: DeleteDialogState['item']
-    ) => {
-        setDeleteDialogState({ isOpen: true, type, item });
-    };
-
-    const openBulkAddDialog = (
-        type: BulkAddDialogState['type'],
-        parentId?: string,
-        parentName?: string
-    ) => {
-        setBulkAddDialogState({ isOpen: true, type, parentId, parentName });
-    };
-
-    const handleSave = async () => {
-        if (!dialogState.type) return;
-        setIsSaving(true);
-        const { type, mode, currentItem, parentId } = dialogState;
-
-        const result = await saveCurriculumItem(type, mode, {
-            name: newItemName,
-            id: currentItem?.id,
-            parentId: parentId,
-            courseId: selections.courseId,
-            branches: branches,
-            externalLink: externalLink,
-            sourceText: sourceText,
-        });
-
-        if (result.success) {
-            toast({ title: 'Başarılı', description: `${type} kaydedildi.` });
-            fetchCurriculum();
-            setDialogState({ isOpen: false, mode: 'add', type: null });
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    };
-
-    const handleDelete = async () => {
-        if (!deleteDialogState) return;
-        setIsSaving(true);
-        const result = await deleteCurriculumItem(deleteDialogState.item.path);
-        if (result.success) {
-            toast({
-                title: 'Başarılı',
-                description: `${deleteDialogState.type} silindi.`,
-            });
-            fetchCurriculum();
-            setDeleteDialogState(null);
-        } else {
-            toast({ title: 'Hata', description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    };
-
-    const handleTogglePublish = async (path: string, currentState: boolean) => {
-        setIsSaving(true);
-        const result = await togglePublishState(path, currentState);
-        if (result.success) {
-            toast({ title: 'Başarılı', description: `Durum güncellendi.` });
-            await fetchCurriculum(); 
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    }
-
-    const handleBulkSave = async () => {
-        if (!bulkAddDialogState.type) return;
-        setIsSaving(true);
-        const names = bulkText.split('\n').map(n => n.trim()).filter(Boolean);
-        const { type, parentId } = bulkAddDialogState;
-        let finalParentId = parentId;
-        if (type === 'Konu' && parentId) {
-            finalParentId = `${selections.courseId}/${parentId}`;
-        }
-
-        const result = await bulkAddCurriculumItems(type, names, finalParentId);
-        if (result.success) {
-            toast({ title: "Başarılı", description: `${result.count} öğe eklendi.` });
-            fetchCurriculum();
-            setBulkAddDialogState({ isOpen: false, type: null });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
+    const handleSummaryClick = (e: React.MouseEvent, courseId: string, unitId: string, topicId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+        router.push(`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`);
     }
 
     const renderCourseContent = (courseGroups: CourseGroup[]) => {
@@ -447,7 +179,7 @@ export default function DersAkisiPage() {
                                                                                     </span>
                                                                                 </AccordionTrigger>
                                                                                 <AccordionContent className="p-6 bg-black/20">
-                                                                                    {unit.topics.length > 0 ? (
+                                                                                    {unit.topics.length > 0 || unit.htmlContent ? (
                                                                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                                                                              {unit.htmlContent && (
                                                                                                  <Link 
@@ -474,6 +206,7 @@ export default function DersAkisiPage() {
                                                                                                             "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
                                                                                                             "rounded-[2rem] shadow-2xl min-h-[14rem]",
                                                                                                             "break-words whitespace-normal leading-tight p-8",
+                                                                                                            "border-b-8",
                                                                                                             neonClass
                                                                                                         )}
                                                                                                     >
@@ -493,14 +226,8 @@ export default function DersAkisiPage() {
                                                                                                         <div className={cn(
                                                                                                             "absolute top-4 right-4 flex gap-2 z-20",
                                                                                                             "transition-all duration-300 ease-in-out",
-                                                                                                            
-                                                                                                            // MOBİL (< 768px): Her zaman görünür ve yerinde
                                                                                                             "opacity-100 visible translate-y-0", 
-                                                                                                            
-                                                                                                            // MASAÜSTÜ (>= 768px): Başlangıçta Görünmez ve Gizli
                                                                                                             "md:opacity-0 md:invisible md:-translate-y-2",
-                                                                                                            
-                                                                                                            // MASAÜSTÜ HOVER: Görünür, Visible ve Yerine Gelir
                                                                                                             "md:group-hover:opacity-100 md:group-hover:visible md:group-hover:translate-y-0"
                                                                                                         )}>
                                                                                                             {(topic.steps?.length || 0) > 0 && !isLink && (
@@ -559,44 +286,22 @@ export default function DersAkisiPage() {
             </Accordion>
         );
     }
-
-    const { className, courseName, unitName } = selectionNames;
-    const groupName = useMemo(() => {
-        const course = curriculum.find(c => c.id === selections.classId)?.courses.find(c => c.id === selections.courseId);
-        if (!course) return '';
-        const unit = course.units.find(u => u.id === selections.unitId);
-        if (unit) {
-            return `${course.title} > ${unit.title}`;
-        }
-        return course.title;
-    }, [curriculum, selections]);
-
-    const handleEditClick = (e: React.MouseEvent, topic: Topic, courseId: string, unitId: string) => {
-        e.preventDefault();
-        e.stopPropagation();
-        router.push(`/teacher/content-creation/edit?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`);
-    };
-
-    const handleSummaryClick = (e: React.MouseEvent, courseId: string, unitId: string, topicId: string) => {
-        e.preventDefault();
-        e.stopPropagation();
-        router.push(`/teacher/ders-akisi/ozet/${topicId}?courseId=${courseId}&unitId=${unitId}`);
-    }
     
     // Group courses by title for main accordion
     const courseGroups: CourseGroup[] = useMemo(() => {
         const grouped: { [title: string]: EnrichedCourse[] } = {};
-        const allEnrichedCourses: EnrichedCourse[] = curriculum.flatMap(c => c.courses.map(course => ({...course, className: c.name})));
         
-        allEnrichedCourses.forEach(course => {
-            let courseTitle = course.title;
-            if (courseTitle.toUpperCase() === 'DKAB') courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
-            else if (courseTitle.toUpperCase() === 'SİYER') courseTitle = 'Peygamberimizin Hayatı (Siyer)';
+        curriculum.forEach(cls => {
+            cls.courses.forEach(course => {
+                let courseTitle = course.title;
+                if (courseTitle.toUpperCase() === 'DKAB') courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
+                else if (courseTitle.toUpperCase() === 'SİYER') courseTitle = 'Peygamberimizin Hayatı (Siyer)';
 
-            if (!grouped[courseTitle]) {
-                grouped[courseTitle] = [];
-            }
-            grouped[courseTitle].push(course);
+                if (!grouped[courseTitle]) {
+                    grouped[courseTitle] = [];
+                }
+                grouped[courseTitle].push({...course, className: cls.name});
+            });
         });
 
         return Object.keys(grouped)
