@@ -162,7 +162,6 @@ export function TopicEditor({
 }) {
     const topicId = isUnitFlow ? null : (topicIdProp || initialTopic?.id);
     
-    // Internal state management
     const [title, setTitle] = useState(initialTopic?.title || '');
     const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
     const [sourceText, setSourceText] = useState(initialTopic?.sourceText || '');
@@ -283,7 +282,7 @@ export function TopicEditor({
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[];, multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
@@ -293,7 +292,7 @@ export function TopicEditor({
         
         let newSteps: LessonStep[] = [];
         
-        if (stepType === 'visual' && 'url' in importedItems[0]) {
+        if (stepType === 'visual' && config.filter.includes('images')) {
              newSteps = importedItems.map(item => ({
                 type: 'visual',
                 title: (item as ImageAsset).title || 'Arşivden Görsel',
@@ -421,10 +420,8 @@ export function TopicEditor({
                                 <ArrowLeft className="h-6 w-6" />
                             </Link>
                         </Button>
-                        <div>
-                             <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
-                            <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
-                        </div>
+                        <Input value={title} onChange={(e) => setTitle(e.target.value)} className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md bg-transparent border-0 h-auto p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <p className="text-slate-400 font-medium">{isUnitFlow ? 'Ünite' : 'Konu'} içeriğini ve adımlarını buradan yönetin.</p>
                      </div>
                      <div className="flex gap-2 flex-wrap self-end sm:self-center">
                           <Button variant="secondary" onClick={() => setIsPreviewOpen(true)} className="bg-slate-800 text-white hover:bg-slate-700 border border-white/10 shadow-lg">
