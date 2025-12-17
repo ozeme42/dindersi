@@ -237,7 +237,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
             <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12 space-y-6">
                  <a 
-                    href="https://drive.google.com/file/d/1_yEKAVgDXvrjINJHvSZo2l1Hwx4dmOgH/view" 
+                    href="https://dosya.co/ug6tf9joqc7i/Değerler_Oyunu.apk.html" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
@@ -474,5 +474,3 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     
     return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
 }
-
-    
