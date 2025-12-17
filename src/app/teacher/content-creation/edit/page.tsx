@@ -156,7 +156,7 @@ export function TopicEditor({
     courseId: string,
     unitId: string,
     topicId?: string | null,
-    onSave: (data: { steps: LessonStep[], title: string, sourceText: string }) => Promise<void>,
+    onSave: (data: { steps: LessonStep[], title: string, sourceText: string, htmlContent?: string }) => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
     onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
@@ -173,7 +173,7 @@ export function TopicEditor({
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
-    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions'; }>({ filter: [], multiSelect: false, stepType: 'content' });
+    const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
 
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
@@ -240,6 +240,7 @@ export function TopicEditor({
             case 'trueFalseList': newStep = { type, title: defaultTitle, questions: [{ statement: 'Yeni ifade...', isTrue: true}] }; break;
             case 'fitb': newStep = { type, title: defaultTitle, sentenceWithBlank: 'Boşluğu ___ doldurun.', options: ['Cevap A', 'Cevap B', 'Cevap C', 'Cevap D'], correctAnswer: 'Cevap A' }; break;
             case 'anagram': newStep = { type, title: defaultTitle, definition: "Doğru kelime için bir ipucu veya tanım.", scrambledWord: 'gnamara', correctAnswer: 'anagram' }; break;
+            case 'anagramGame': newStep = { type, title: 'Kelime Dehası', cards: [] }; break;
             case 'anagramFlashcard': newStep = { type, title: defaultTitle, cards: [{ definition: 'İpucu', scrambledWord: 'AKARNA', correctAnswer: 'ANKARA' }] }; break;
             case 'sentenceScramble': newStep = { type, title: defaultTitle, scrambledSentence: 'bir bu cümledir karışık', correctSentence: 'bu bir karışık cümledir' }; break;
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
@@ -283,12 +284,12 @@ export function TopicEditor({
         });
     };
     
-    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleOpenLibrary = (filter: (ActivityItem['type'] | 'questions' | 'images')[], multiSelect: boolean, stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame') => {
         setLibraryConfig({ filter, multiSelect, stepType });
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions') => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame') => {
         if (importedItems.length === 0) return;
         
         let newSteps: LessonStep[] = [];
@@ -302,6 +303,13 @@ export function TopicEditor({
         } else if (stepType === 'flashcard') {
             const cards = importedItems.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
             newSteps.push({ type: 'flashcard', title: 'Veri Bankası Bilgi Kartları', cards: cards });
+        } else if (stepType === 'anagramGame') {
+            const cards = importedItems.map(item => ({
+                definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
+                correctAnswer: (item as ActivityItem).content.term || '',
+                scrambledWord: ((item as ActivityItem).content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
+            }));
+            newSteps.push({ type: 'anagramGame', title: 'Kelime Dehası', cards: cards });
         } else if (stepType === 'anagramFlashcard') {
             const cards = importedItems.map(item => ({
                 definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`,
@@ -391,13 +399,14 @@ export function TopicEditor({
         { label: 'İnteraktif HTML Sayfası', type: 'htmlSlide', defaultTitle: 'İnteraktif Sunum' },
     ];
     const degerlendirmeStepOptions: {label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void}[] = [
-        { label: 'Çoktan Seçmeli', type: 'mcq', defaultTitle: 'Çoktan Seçmeli Soru' },
+        { label: 'Çoktan Seçmeli', type: 'mcq', defaultTitle: 'Kontrol Sorusu' },
         { label: 'Doğru/Yanlış', type: 'tf', defaultTitle: 'Doğru/Yanlış' },
         { label: 'Doğru/Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
         { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
+        { label: 'Kelime Dehası (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
 
@@ -617,7 +626,10 @@ function TopicEditorWrapper() {
     const unitId = searchParams.get('unitId');
     const topicId = searchParams.get('topicId');
     const { toast } = useToast();
-
+    
+    const [aiGenType, setAIGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    const [isAIOpen, setIsAIOpen] = useState(false);
+    
     // This is a topic editor, so it needs a topicId.
     useEffect(() => {
         if (!topicId) {
@@ -631,21 +643,36 @@ function TopicEditorWrapper() {
             Geçersiz URL. Lütfen içerik yönetimi sayfasından bir konu seçin.
         </div>;
     }
+    
+    const initialTopic = { id: topicId, title: '', steps: [] };
 
     return (
-        <TopicEditor 
-            key={`${courseId}-${unitId}-${topicId}`} // Re-mount component if IDs change
-            initialTopic={null}
-            courseId={courseId}
-            unitId={unitId}
-            topicId={topicId}
-            onSave={async (data) => {
-                const result = await updateTopicContent({ courseId, unitId, topicId, steps: data.steps, sourceText: data.sourceText || '' });
-                if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
-                else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
-            }}
-            isSaving={false}
-        />
+        <>
+            <TopicEditor 
+                key={`${courseId}-${unitId}-${topicId}`} // Re-mount component if IDs change
+                initialTopic={null}
+                courseId={courseId}
+                unitId={unitId}
+                topicId={topicId}
+                onSave={async (data) => {
+                    const result = await updateTopicContent({ courseId, unitId, topicId, steps: data.steps, sourceText: data.sourceText || '', htmlContent: data.htmlContent || '' });
+                    if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
+                    else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
+                }}
+                isSaving={false}
+                onOpenAIGeneration={(type) => {
+                    setAIGenType(type);
+                    setIsAIOpen(true);
+                }}
+            />
+             <AiLessonStepGenerationDialog
+                isOpen={isAIOpen}
+                onOpenChange={setIsAIOpen}
+                context={{ topicId: topicId, topicTitle: "...", sourceText: "..." }}
+                onStepsGenerated={() => {}}
+                generationType={aiGenType}
+            />
+        </>
     )
 }
 
