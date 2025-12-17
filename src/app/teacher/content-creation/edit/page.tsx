@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
@@ -161,7 +160,7 @@ export function TopicEditor({
     onSave: (data: { steps: LessonStep[], title: string, sourceText: string, htmlContent?: string }) => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
-    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
+    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { topicTitle: string, sourceText: string }) => void;
 }) {
     const topicId = isUnitFlow ? null : (topicIdProp || initialTopic?.id);
     
@@ -250,7 +249,7 @@ export function TopicEditor({
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
-            case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Başlık', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
+            case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
 
@@ -318,7 +317,7 @@ export function TopicEditor({
                 scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
                 correctAnswer: (item as ActivityItem).content.text || ''
             }));
-             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: cards });
+             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: newCards });
         } else if (stepType === 'sentenceScramble') {
              const newSentence = (importedItems[0] as ActivityItem)?.content.text || '';
              newSteps.push({
@@ -367,14 +366,7 @@ export function TopicEditor({
     
     const handleSaveFlow = async () => {
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        if (isUnitFlow) {
-            onSave({ steps: stepsToSave, title, sourceText });
-        } else {
-             if (!courseId || !unitId || !topicId) return;
-            const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
-            if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
-            else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
-        }
+        await onSave({ steps: stepsToSave, title, sourceText, htmlContent });
     };
 
     if (isLoading) {
@@ -455,10 +447,10 @@ export function TopicEditor({
                                 </Button>
                             </DropdownMenuTrigger>
                              <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim', {topicTitle: title, sourceText})} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme', {topicTitle: title, sourceText})} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -630,9 +622,19 @@ function TopicEditorWrapper() {
     const { toast } = useToast();
     
     const [aiGenType, setAIGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    const [aiGenContext, setAiGenContext] = useState<{ topicId: string, topicTitle: string, sourceText: string } | null>(null);
     const [isAIOpen, setIsAIOpen] = useState(false);
     
-    // This is a topic editor, so it needs a topicId.
+    const [localSteps, setLocalSteps] = useState<LessonStep[]>([]);
+    
+    const handleStepsGenerated = (newSteps: LessonStep[]) => {
+        setLocalSteps(prev => [...prev, ...newSteps]);
+        toast({
+            title: "Başarılı!",
+            description: `${newSteps.length} yeni adım taslağa eklendi. Ana Kaydet butonuyla kalıcı hale getirin.`
+        });
+    };
+    
     useEffect(() => {
         if (!topicId) {
             toast({ title: "Hata", description: "Düzenlenecek bir konu seçilmedi.", variant: 'destructive' });
@@ -646,13 +648,14 @@ function TopicEditorWrapper() {
         </div>;
     }
     
-    const initialTopic = { id: topicId, title: '', steps: [] };
+    // Create a temporary Topic object to pass to TopicEditor
+    const initialTopic = { id: topicId, title: '', steps: localSteps };
 
     return (
         <>
             <TopicEditor 
                 key={`${courseId}-${unitId}-${topicId}`} // Re-mount component if IDs change
-                initialTopic={null}
+                initialTopic={null} // Let TopicEditor fetch its own data
                 courseId={courseId}
                 unitId={unitId}
                 topicId={topicId}
@@ -662,18 +665,21 @@ function TopicEditorWrapper() {
                     else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
                 }}
                 isSaving={false}
-                onOpenAIGeneration={(type) => {
-                    setAIGenType(type);
+                onOpenAIGeneration={(type, context) => {
+                    setAiGenType(type);
+                    setAiGenContext({topicId, ...context});
                     setIsAIOpen(true);
                 }}
             />
-             <AiLessonStepGenerationDialog
-                isOpen={isAIOpen}
-                onOpenChange={setIsAIOpen}
-                context={{ topicId: topicId, topicTitle: "...", sourceText: "..." }}
-                onStepsGenerated={() => {}}
-                generationType={aiGenType}
-            />
+            {aiGenContext && (
+                 <AiLessonStepGenerationDialog
+                    isOpen={isAIOpen}
+                    onOpenChange={setIsAIOpen}
+                    context={aiGenContext}
+                    onStepsGenerated={handleStepsGenerated}
+                    generationType={aiGenType}
+                />
+            )}
         </>
     )
 }
@@ -685,5 +691,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
-    
