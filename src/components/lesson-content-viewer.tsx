@@ -124,7 +124,7 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ALT BİLEŞENLER ---
 
-// 1. VisualPlayer
+// 1. VisualPlayer (GÜNCELLENMİŞ: Başlık Kaldırıldı)
 function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualStep, isMaximized: boolean, onToggleMaximize: () => void }) {
     
     useEffect(() => {
@@ -161,7 +161,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
             <div className="relative w-full h-full">
                 <Image 
                     src={step.imageUrl} 
-                    alt={step.title} 
+                    alt={step.title || 'Görsel'} 
                     fill
                     className={cn(
                         "transition-all duration-500",
@@ -171,18 +171,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
                 />
             </div>
             
-            {step.title && (
-                <div className={cn(
-                    "absolute bottom-6 px-4 w-full flex justify-center z-10 pointer-events-none transition-all duration-500",
-                    isMaximized ? "bottom-10 scale-110" : "bottom-6"
-                )}>
-                    <div className="bg-black/60 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-lg pointer-events-auto">
-                        <p className="text-white text-lg md:text-xl font-bold text-center">
-                            {step.title}
-                        </p>
-                    </div>
-                </div>
-            )}
+            {/* BAŞLIK KISMI KALDIRILDI */}
         </div>
     );
 }
@@ -704,7 +693,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     );
 };
 
-// 7.1 AnagramGamePlayer (Çoklu Kartlar İçin - GÜNCELLENMİŞ: ÖĞRETMEN İÇİN ATLA BUTONU)
+// 7.1 AnagramGamePlayer (Çoklu Kartlar İçin)
 function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step: AnagramGameStep, onAnswered: () => void, isTeacher: boolean, isFullscreen: boolean }) {
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [answerState, setAnswerState] = useState<{ [cardIndex: number]: { answer: string; isCorrect: boolean } }>({});
@@ -736,10 +725,9 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
         }
     };
 
-    // Öğretmen için zorla geçme fonksiyonu
     const handleSkip = () => {
-        handleAnswer(currentCard.correctAnswer); // Doğru bilmiş gibi işaretle
-        setTimeout(handleNext, 300); // Kısa bir gecikmeyle geç
+        handleAnswer(currentCard.correctAnswer); 
+        setTimeout(handleNext, 300);
     };
 
     if (isFinished) {
@@ -755,7 +743,6 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
 
     return (
         <div className="w-full h-full flex flex-col justify-center relative">
-             {/* Sayaç ve Atla Butonu */}
              <div className="flex justify-between items-center px-4 mb-2 md:mb-4">
                  <div className="text-slate-400 font-bold uppercase tracking-widest text-xs md:text-sm">
                     Kelime {currentCardIndex + 1} / {step.cards.length}
@@ -1477,6 +1464,10 @@ export function LessonContentViewer({
         (currentStep?.type === 'visual' && isVisualMaximized)
     );
 
+    // Yeni Özellik: "Immersive" (Sürükleyici) Adım Kontrolü
+    // Visual veya HTML slide ise ve öğretmen tam ekrandaysa, alt menüyü gizle (hover ile göster)
+    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
+
     return (
       <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
         
@@ -1495,7 +1486,10 @@ export function LessonContentViewer({
             </div>
         )}
 
-        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : "overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent pb-24")}>
+        {/* --- İÇERİK ALANI --- */}
+        {/* Fullscreen ve Teacher modunda alt bar sabit olacağı için padding-bottom ekliyoruz. 
+            Ancak immersive modda (visual/html) padding gerekmez çünkü overlay olacak. */}
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
                      <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" />
@@ -1531,40 +1525,79 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* ALT MENÜ VE KONTROLLER */}
+        {/* --- ALT MENÜ VE KONTROLLER (GÜNCELLENMİŞ) --- */}
         <div className={cn(
-            "flex-shrink-0 flex justify-between items-center border-t border-white/5 bg-slate-900/90 backdrop-blur-md z-30",
-            isFullscreen ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" : "relative h-16 px-4"
+            "flex-shrink-0 flex justify-between items-center z-30",
+            // ÖĞRETMEN MODU + FULLSCREEN İÇİN ÖZEL STİL: 
+            isTeacher && isFullscreen 
+                ? (isImmersiveStep 
+                    // Visual/HTML ise: Transparan, hover ile görünür, border yok.
+                    ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none"
+                    // Diğer adımlar (Test vs) ise: Sabit, koyu zemin, border var.
+                    : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10"
+                  )
+                : (isFullscreen 
+                    // Öğrenci Fullscreen -> Gizli (Hover)
+                    ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" 
+                    // Normal -> Sabit
+                    : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md"
+                  )
         )}>
              <div className="flex items-center gap-4 flex-1">
                  <Button 
                     variant="outline" 
-                    size='sm'
+                    size={isTeacher && isFullscreen ? "lg" : "sm"}
                     onClick={handlePrev} 
                     disabled={currentStepIndex === 0} 
-                    className="border-white/10 hover:bg-white/5 text-slate-300 hover:text-white"
+                    className={cn(
+                        "border-white/10 hover:bg-white/5 text-slate-300 hover:text-white",
+                        isTeacher && isFullscreen && "text-lg font-bold border-2"
+                    )}
                 >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    <ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
                     Geri
                 </Button>
+                
+                {/* İlerleme Çubuğu */}
                 <div className="hidden md:flex items-center gap-2">
                     <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
                     <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
                 </div>
              </div>
+
             <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
-            <div className="flex gap-4 md:gap-6 flex-1 justify-end">
+
+            <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
+                
+                {/* --- GLOBAL "ADIMI ATLA" TUŞU (Sadece Öğretmen) --- */}
+                {isTeacher && (
+                    <Button 
+                        variant="ghost" 
+                        size={isTeacher && isFullscreen ? "default" : "sm"}
+                        onClick={handleNext} 
+                        className={cn(
+                            "text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors",
+                            isTeacher && isFullscreen && "text-base font-semibold"
+                        )}
+                        title="Bu adımı zorla geç (Puan verilmez)"
+                    >
+                        <FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> 
+                        Atla
+                    </Button>
+                )}
+
                 <Button 
-                    size='sm'
+                    size={isTeacher && isFullscreen ? "lg" : "sm"}
                     onClick={handleContinueOrNext} 
                     disabled={!isNextButtonEnabled} 
                     className={cn(
                         "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
-                        showContinueButton ? "px-6" : "px-4"
+                        showContinueButton ? "px-6" : "px-4",
+                        isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
                     )}
                 >
                     {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
                 </Button>
             </div>
         </div>

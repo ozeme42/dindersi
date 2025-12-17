@@ -2,26 +2,57 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ActivityItem, ObjectiveListStep, VideoStep } from '@/lib/types';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { useState, useEffect } from "react";
+import isEqual from 'lodash.isequal';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+    DialogClose,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2, PlusCircle, Trash2, Library } from 'lucide-react';
-import { Switch } from './ui/switch';
-import { getLibraryItems, type LibraryFilter } from '@/app/teacher/content-creation/edit/library-actions';
+import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library } from 'lucide-react';
+import type { ActivityItem, LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep } from '@/lib/types';
+import { ScrollArea } from "./ui/scroll-area";
+import { cn } from "@/lib/utils";
 import { Checkbox } from './ui/checkbox';
 import { LibraryImportDialog } from './library-import-dialog';
 
+const getInitialFormData = (item: Partial<LessonStep> | null) => {
+    const initialContent = (item as any)?.content || {};
+    const categories = Array.isArray(initialContent.categories)
+        ? initialContent.categories.map((c: any) => (typeof c === 'string' ? { value: c } : c))
+        : [];
+    
+    return {
+        id: item?.id || `new-${Date.now()}`,
+        type: item?.type || 'content',
+        title: item?.title || '',
+        content: {
+            text: initialContent.text || '',
+            term: initialContent.term || '',
+            definition: initialContent.definition || '',
+            title: initialContent.title || '',
+            categories: categories,
+            items: initialContent.items || [],
+        },
+        ...item, // Spread the rest of the item properties
+    };
+};
+
 type StepEditorDialogProps = {
     isOpen: boolean;
-    onOpenChange: (isOpen: boolean) => void;
+    onOpenChange: (open: boolean) => void;
     step: LessonStep | null;
     onSave: (updatedStep: LessonStep) => void;
+    isSaving: boolean;
     context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
 };
 
@@ -43,6 +74,7 @@ function shuffleSentence(sentence: string): string {
 
 export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
+    const [isSaving, setIsSaving] = useState(false);
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     
     useEffect(() => {
@@ -55,7 +87,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
         }
     };
 
-    const handleSelectFromLibrary = (items: ActivityItem[], stepType: LessonStep['type'] | 'keyConcepts') => {
+    const handleSelectFromLibrary = (items: ActivityItem[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame') => {
         if (!editedStep) return;
 
         switch(stepType) {
@@ -73,6 +105,15 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 setEditedStep({...editedStep, cards: newCards});
                 break;
              }
+            case 'anagramGame': {
+                const newCards = items.map(item => ({
+                    definition: item.content.definition || 'Tanım bulunamadı.',
+                    correctAnswer: item.content.term || '',
+                    scrambledWord: (item.content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
+                }));
+                setEditedStep({...editedStep, cards: newCards});
+                break;
+            }
             case 'sentenceScramble': {
                  const newSentence = items[0]?.content.text || '';
                  setEditedStep({
@@ -98,7 +139,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
     const renderEditorFields = () => {
         if (!editedStep) return null;
 
-        const libraryConfig: { enabled: boolean; filter: ActivityItem['type'][]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts'} = {
+        const libraryConfig: { enabled: boolean; filter: ActivityItem['type'][]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame'; } = {
             enabled: false,
             filter: [],
             multiSelect: false,
@@ -120,6 +161,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
              libraryConfig.filter = ['sentence'];
              libraryConfig.multiSelect = false;
              libraryConfig.stepType = 'sentenceScramble';
+        } else if (editedStep.type === 'anagramGame') {
+            libraryConfig.enabled = true;
+            libraryConfig.filter = ['definition'];
+            libraryConfig.multiSelect = true;
+            libraryConfig.stepType = 'anagramGame';
         }
 
         switch (editedStep.type) {
@@ -128,7 +174,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     <div className="space-y-2">
                         <Label>İçerik (HTML destekler)</Label>
                         {libraryConfig.enabled && <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>}
-                        <Textarea value={editedStep.content} onChange={(e) => setEditedStep({ ...editedStep, content: e.target.value })} className="min-h-[200px]" />
+                        <Textarea value={(editedStep as any).content} onChange={(e) => setEditedStep({ ...editedStep, content: e.target.value })} className="min-h-[200px]" />
                     </div>
                 );
             case 'objectiveList': {
@@ -197,11 +243,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     <div className="space-y-4">
                          <div className="space-y-2">
                             <Label>Video URL (YouTube, Vimeo)</Label>
-                            <Input value={editedStep.url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} placeholder="https://www.youtube.com/watch?v=..."/>
+                            <Input value={(editedStep as any).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} placeholder="https://www.youtube.com/watch?v=..."/>
                         </div>
                         <div className="space-y-2">
                             <Label>Açıklama (İsteğe Bağlı)</Label>
-                            <Textarea value={editedStep.description || ''} onChange={(e) => setEditedStep({ ...editedStep, description: e.target.value })} />
+                            <Textarea value={(editedStep as any).description || ''} onChange={(e) => setEditedStep({ ...editedStep, description: e.target.value })} />
                         </div>
                     </div>
                 );
@@ -209,7 +255,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 return (
                     <div className="space-y-2">
                         <Label>Görsel URL</Label>
-                        <Input value={editedStep.imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
+                        <Input value={(editedStep as any).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
                     </div>
                 );
             case 'iframe':
@@ -307,6 +353,40 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     </div>
                 );
             }
+             case 'anagramGame': {
+                const agStep = editedStep as AnagramGameStep;
+                 const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
+                    const newCards = [...agStep.cards];
+                    newCards[index][field] = value;
+                    setEditedStep({ ...agStep, cards: newCards });
+                };
+                const addCard = () => {
+                    const newCards = [...agStep.cards, { definition: 'Yeni ipucu...', scrambledWord: 'KELİME', correctAnswer: 'KELİME' }];
+                    setEditedStep({ ...agStep, cards: newCards });
+                };
+                const removeCard = (index: number) => {
+                    const newCards = agStep.cards.filter((_, i) => i !== index);
+                    setEditedStep({ ...agStep, cards: newCards });
+                };
+                return (
+                    <div className="space-y-4">
+                        <div className="flex justify-end gap-2">
+                             <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
+                            <Button size="sm" onClick={addCard}><PlusCircle className="mr-2 h-4 w-4"/> Kelime Ekle</Button>
+                        </div>
+                        {agStep.cards.map((card, index) => (
+                            <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md items-center">
+                                <div className="col-span-11 space-y-2">
+                                     <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu/Tanım..." className="min-h-[50px]"/>
+                                     <Input value={card.scrambledWord} onChange={e => handleCardChange(index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/>
+                                     <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
+                                </div>
+                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                            </div>
+                        ))}
+                    </div>
+                );
+            }
             case 'mcq':
                 const mcqStep = editedStep as McqStep;
                  return (
@@ -318,11 +398,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                         <div className="space-y-2">
                             <Label>Seçenekler ve Doğru Cevap</Label>
                             <RadioGroup value={mcqStep.correctAnswer} onValueChange={(val) => setEditedStep({ ...mcqStep, correctAnswer: val })}>
-                                {mcqStep.options.map((option, index) => (
+                                {(mcqStep.options || ['', '', '', '']).map((option, index) => (
                                     <div key={index} className="flex items-center gap-2">
                                         <RadioGroupItem value={option} id={`mcq-opt-${index}`} />
                                         <Input value={option} onChange={(e) => {
-                                            const newOptions = [...mcqStep.options];
+                                            const newOptions = [...(mcqStep.options || [])];
                                             newOptions[index] = e.target.value;
                                             setEditedStep({ ...mcqStep, options: newOptions });
                                         }} />
@@ -350,8 +430,8 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 const tflStep = editedStep as TrueFalseListStep;
                 const handleTflChange = (index: number, field: 'statement' | 'isTrue', value: string | boolean) => {
                     const newQuestions = [...tflStep.questions];
-                    if (field === 'statement') newQuestions[index].statement = value as string;
-                    if (field === 'isTrue') newQuestions[index].isTrue = value as boolean;
+                    if (field === 'statement') (newQuestions[index] as any)[field] = value;
+                    if (field === 'isTrue') (newQuestions[index] as any)[field] = value;
                     setEditedStep({ ...tflStep, questions: newQuestions });
                 };
                 const addTflQuestion = () => {
@@ -484,15 +564,46 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
          <LibraryImportDialog 
             isOpen={isLibraryOpen}
             onOpenChange={setIsLibraryOpen}
-            onItemsSelected={handleSelectFromLibrary}
+            onItemsSelected={(handleSelectFromLibrary as any)}
             context={context}
             config={
                 editedStep.type === 'flashcard' ? { filter: ['definition'], multiSelect: true, stepType: 'flashcard' } :
                 editedStep.type === 'anagramFlashcard' ? { filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' } :
                 editedStep.type === 'sentenceScramble' ? { filter: ['sentence'], multiSelect: false, stepType: 'sentenceScramble' } :
+                editedStep.type === 'anagramGame' ? { filter: ['definition'], multiSelect: true, stepType: 'anagramGame' } :
                 { filter: ['concept'], multiSelect: true, stepType: 'keyConcepts' } // Default for content with 'kavramlar'
             }
         />
         </>
     );
 }
+
+```
+- src/lib/placeholders.ts:
+```ts
+
+export function getGenericPlaceholderImage(seed?: string) {
+  return `https://picsum.photos/seed/${seed || Math.random()}/600/400`;
+}
+
+export function getAvatarPlaceholder(seed?: string) {
+  return `https://i.pravatar.cc/150?u=${seed || Math.random()}`;
+}
+
+export const placeholderCourseImages = [
+    '/images/placeholder/course-1.jpg',
+    '/images/placeholder/course-2.jpg',
+    '/images/placeholder/course-3.jpg',
+    '/images/placeholder/course-4.jpg',
+    '/images/placeholder/course-5.jpg',
+]
+
+```
+- src/public/grid-pattern.svg:
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><defs><style>.cls-1{fill:none;stroke:#374151;stroke-miterlimit:10;opacity:0.2;}</style></defs><rect class="cls-1" x="0.5" y="0.5" width="39" height="39"/></svg>
+```
+- public/grid-pattern.svg:
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><defs><style>.cls-1{fill:none;stroke:#374151;stroke-miterlimit:10;opacity:0.2;}</style></defs><rect class="cls-1" x="0.5" y="0.5" width="39" height="39"/></svg>
+```
