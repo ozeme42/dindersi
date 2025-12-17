@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import isEqual from 'lodash.isequal';
 import {
     Dialog,
@@ -31,7 +31,7 @@ const getInitialFormData = (item: Partial<LessonStep> | null) => {
         : [];
     
     return {
-        id: item?.id || `new-${Date.now()}`,
+        id: item?.id || `new-${Date.now()}-${Math.random()}`,
         type: item?.type || 'content',
         title: item?.title || '',
         content: {
@@ -91,7 +91,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             if (!prev) return null;
             const newStepData: any = { ...prev };
             
-            let array;
+            let array: any[] | undefined;
             let isContentArray = false;
 
             if (newStepData[arrayPath] && Array.isArray(newStepData[arrayPath])) {
@@ -111,6 +111,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             }
 
             if (isContentArray) {
+                if (!newStepData.content) newStepData.content = {};
                 newStepData.content[arrayPath] = newArray;
             } else {
                 newStepData[arrayPath] = newArray;
@@ -129,8 +130,8 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             
             let newItem: any;
             if (path === 'categories') newItem = { value: '' };
-            else if (path === 'items' && prev.type === 'conceptExplanation') newItem = { concept: 'Yeni Kavram', definition: 'Yeni Tanım' };
-            else if (path === 'items' && prev.type === 'accordion') newItem = { title: 'Yeni Başlık', content: 'Yeni İçerik' };
+            else if (path === 'items' && prev.type === 'conceptExplanation') newItem = { id: `item-${Date.now()}`, concept: 'Yeni Kavram', definition: 'Yeni Tanım' };
+            else if (path === 'items' && prev.type === 'accordion') newItem = { id: `item-${Date.now()}`, title: 'Yeni Başlık', content: 'Yeni İçerik' };
             else if (path === 'items') newItem = prev.type === 'sorting' ? '' : { text: '', category: '' };
             else if (path === 'cards' && prev.type === 'flashcard') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
             else if (path === 'cards' && (prev.type === 'anagramGame' || prev.type === 'anagramFlashcard')) newItem = { definition: 'İpucu', scrambledWord: 'YENI', correctAnswer: 'YENİ' };
@@ -211,7 +212,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     return {
                         definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
                         correctAnswer: cleanWord,
-                        scrambledWord: cleanWord.split('').sort(() => 0.5 - Math.random()).join(''),
+                        scrambledWord: cleanWord.split('').sort(() => Math.random() - 0.5).join(''),
                     };
                 });
                 setEditedStep({...(editedStep as AnagramGameStep), cards: newCards});
@@ -304,7 +305,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                      </>
                  ) : editedStep.type === 'sentenceScramble' ? (
                     <>
-                        <Textarea value={(editedStep as SentenceScrambleStep).correctSentence} onChange={e => { const newCorrect = e.target.value; const newScrambled = newCorrect.split(' ').sort(() => 0.5 - Math.random()).join(' '); setEditedStep({...editedStep, correctSentence: newCorrect, scrambledSentence: newScrambled }); }} placeholder="Doğru cümleyi yazın..." />
+                        <Textarea value={(editedStep as SentenceScrambleStep).correctSentence} onChange={e => { const newCorrect = e.target.value; const newScrambled = newCorrect.split(' ').sort(() => Math.random() - 0.5).join(' '); setEditedStep({...editedStep, correctSentence: newCorrect, scrambledSentence: newScrambled }); }} placeholder="Doğru cümleyi yazın..." />
                         <Input value={(editedStep as SentenceScrambleStep).scrambledSentence} readOnly disabled className="bg-muted"/>
                     </>
                  ) : null

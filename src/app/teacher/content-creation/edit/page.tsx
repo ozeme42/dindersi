@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
@@ -178,7 +177,10 @@ export function TopicEditor({
     );
     
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map((step, index) => ({ ...step, id: `step-${Date.now()}-${index}` }));
+        return steps.map((step, index) => ({ 
+            ...step, 
+            id: `step-${Date.now()}-${index}-${Math.random()}` 
+        }));
     };
     
     const handleDragEnd = (event: DragEndEvent) => {
@@ -218,7 +220,7 @@ export function TopicEditor({
             default: return;
         }
 
-        const newStepWithId: DraggableLessonStep = { ...newStep, id: `new-step-${Date.now()}` };
+        const newStepWithId: DraggableLessonStep = { ...newStep, id: `new-step-${Date.now()}-${Math.random()}` };
         setSteps(currentSteps => [...currentSteps, newStepWithId]);
     };
 
@@ -289,7 +291,7 @@ export function TopicEditor({
                 type: 'sentenceScramble',
                 title: 'Cümle Düzeltme',
                 correctSentence: newSentence,
-                scrambledSentence: newSentence.split(' ').sort(() => 0.5 - Math.random()).join(' ')
+                scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
              const concepts = importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
@@ -581,7 +583,10 @@ function TopicEditorWrapper() {
     const [isAIOpen, setIsAIOpen] = useState(false);
     
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map((step, index) => ({ ...step, id: `step-${Date.now()}-${index}` }));
+        return steps.map((step, index) => ({ 
+            ...step, 
+            id: step.id || `step-${Date.now()}-${index}-${Math.random()}` 
+        }));
     };
 
     const fetchTopicData = useCallback(async () => {
@@ -654,9 +659,11 @@ function TopicEditorWrapper() {
                 onSave={handleSaveFlow}
                 isSaving={isSaving}
                 onOpenAIGeneration={(type, context) => {
-                    setAiGenType(type);
-                    setAiGenContext({topicId, ...context});
-                    setIsAIOpen(true);
+                    if (topicId) {
+                        setAiGenType(type);
+                        setAiGenContext({topicId, ...context});
+                        setIsAIOpen(true);
+                    }
                 }}
             />
             <AiLessonStepGenerationDialog
