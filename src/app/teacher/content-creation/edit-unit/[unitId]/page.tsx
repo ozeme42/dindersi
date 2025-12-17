@@ -12,6 +12,19 @@ import { updateUnitContent } from '../actions';
 import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 
+// Adımlara benzersiz ve istikrarlı ID'ler atayan yardımcı fonksiyon
+const addStableIdsToSteps = (steps: LessonStep[]): (LessonStep & { id: string })[] => {
+    return steps.map((step, index) => {
+        // Eğer adımda zaten bir ID varsa onu kullan, yoksa yeni bir tane oluştur.
+        const existingId = (step as any).id;
+        return {
+            ...step,
+            id: existingId || `step-${Date.now()}-${index}-${Math.random()}`
+        };
+    });
+};
+
+
 function UnitFlowEditor() {
     const params = useParams();
     const searchParams = useSearchParams();
@@ -30,7 +43,7 @@ function UnitFlowEditor() {
     const { toast } = useToast();
     
     const [title, setTitle] = useState('');
-    const [steps, setSteps] = useState<LessonStep[]>([]);
+    const [steps, setSteps] = useState<(LessonStep & { id: string })[]>([]); // Adım state'i artık ID içerecek
     const [sourceText, setSourceText] = useState('');
 
     const fetchUnitData = useCallback(async () => {
@@ -48,7 +61,8 @@ function UnitFlowEditor() {
                 const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
                 
                 setTitle(unitData.title);
-                setSteps(unitData.steps || []);
+                // DÜZELTME: Veritabanından gelen adımlara ID atama işlemi burada yapılıyor.
+                setSteps(addStableIdsToSteps(unitData.steps || []));
                 setSourceText(unitData.sourceText || '');
                 setUnit(unitData);
 
@@ -75,7 +89,7 @@ function UnitFlowEditor() {
         
         const dataToSave = {
             title: title,
-            steps: steps.map(({ id, ...rest }) => rest), // Remove temporary IDs
+            steps: steps.map(({ id, ...rest }) => rest), // Kaydederken geçici ID'leri kaldır
             sourceText: sourceText,
         };
 
@@ -96,7 +110,9 @@ function UnitFlowEditor() {
     };
     
     const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
-        setSteps(prev => [...prev, ...newSteps]);
+        // AI'dan gelen yeni adımlara da ID ata
+        const stepsWithIds = addStableIdsToSteps(newSteps);
+        setSteps(prev => [...prev, ...stepsWithIds]);
         toast({
             title: "Başarılı",
             description: `${newSteps.length} yeni adım taslağa eklendi. Değişiklikleri kaydetmeyi unutmayın.`
@@ -116,7 +132,7 @@ function UnitFlowEditor() {
             <TopicEditor
                 title={title}
                 setTitle={setTitle}
-                steps={steps as any[]}
+                steps={steps}
                 setSteps={setSteps as any}
                 sourceText={sourceText}
                 setSourceText={setSourceText}
