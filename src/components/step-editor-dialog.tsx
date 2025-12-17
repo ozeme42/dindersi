@@ -17,12 +17,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Library, Layers } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Library, Layers, PlusCircle } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, ActivityItem, Question, ImageAsset } from '@/lib/types';
+import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, ActivityItem, Question, ImageAsset, Course, SchoolClass, Unit, Topic } from '@/lib/types';
 import { ScrollArea } from "./ui/scroll-area";
 import { Checkbox } from './ui/checkbox';
 import { LibraryImportDialog } from './library-import-dialog';
@@ -157,15 +157,15 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         return null;
     }
 
+    const libraryConfig: { enabled: boolean; filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions'; } = {
+        enabled: false,
+        filter: [],
+        multiSelect: false,
+        stepType: 'content'
+    };
+    
     const renderEditorFields = () => {
         if (!editedStep) return null;
-
-        const libraryConfig: { enabled: boolean; filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions'; } = {
-            enabled: false,
-            filter: [],
-            multiSelect: false,
-            stepType: 'content'
-        };
 
         if (editedStep.type === 'flashcard') {
             libraryConfig.enabled = true;
@@ -592,40 +592,5 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         </>
     );
 }
-```
-- src/components/ui/textarea.tsx:
-```tsx
-import * as React from "react"
 
-import { cn } from "@/lib/utils"
-
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <textarea
-        className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Textarea.displayName = "Textarea"
-
-export { Textarea }
-
-```
-- src/lib/placeholders.ts:
-```ts
-
-
-export function getGenericPlaceholderImage(seed?: string) {
-  return `https://picsum.photos/seed/${seed || Math.random()}/600/400`;
-}
-```
+    
