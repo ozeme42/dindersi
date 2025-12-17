@@ -17,15 +17,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Library, Layers, PlusCircle } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List } from 'lucide-react';
+import type { ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, VideoStep, VisualStep, Question, ImageAsset } from '@/lib/types';
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
-import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, ActivityItem, Question, ImageAsset, Course, SchoolClass, Unit, Topic } from '@/lib/types';
-import { ScrollArea } from "./ui/scroll-area";
-import { Checkbox } from './ui/checkbox';
 import { LibraryImportDialog } from './library-import-dialog';
+import { useToast } from "@/hooks/use-toast";
 
 const getInitialFormData = (item: Partial<LessonStep> | null) => {
     const initialContent = (item as any)?.content || {};
@@ -58,31 +55,124 @@ type StepEditorDialogProps = {
     context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
 };
 
-// Helper function to shuffle words in a sentence
-function shuffleSentence(sentence: string): string {
-  const words = sentence.split(' ');
-  for (let i = words.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [words[i], words[j]] = [words[j], words[i]];
-  }
-  return words.join(' ');
-}
-
 export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
+    const [initialData, setInitialData] = useState<Partial<LessonStep>>({});
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     
+    const { toast } = useToast();
+
     useEffect(() => {
-        setEditedStep(step);
-    }, [step]);
+        const initial = getInitialFormData(step);
+        setEditedStep(initial as LessonStep);
+        setInitialData(initial);
+    }, [step, isOpen]);
+
+    const isDirty = !isEqual(initialData, editedStep);
+
+    const handleValueChange = (path: string, value: any) => {
+        setEditedStep(prev => {
+            if (!prev) return null;
+            const keys = path.split('.');
+            let newStepData: any = { ...prev };
+            let currentLevel = newStepData;
+
+            for (let i = 0; i < keys.length - 1; i++) {
+                currentLevel[keys[i]] = { ...(currentLevel[keys[i]] || {}) };
+                currentLevel = currentLevel[keys[i]];
+            }
+            currentLevel[keys[keys.length - 1]] = value;
+            return newStepData;
+        });
+    };
     
-    const handleSave = () => {
+    const handleArrayChange = (arrayPath: string, index: number, fieldPath: string | null, value: any) => {
+        setEditedStep(prev => {
+            if (!prev) return null;
+            const newStepData: any = { ...prev };
+            if (!newStepData.content) newStepData.content = {};
+            
+            let array = newStepData.content[arrayPath];
+
+            if (Array.isArray(array)) {
+                const newArray = [...array];
+                if (fieldPath) {
+                    newArray[index] = { ...newArray[index], [fieldPath]: value };
+                } else {
+                    newArray[index] = value;
+                }
+                newStepData.content[arrayPath] = newArray;
+            }
+            return newStepData;
+        });
+    };
+    
+    const addToArray = (path: 'categories' | 'items' | 'cards' | 'questions') => {
+        setEditedStep(prev => {
+            if (!prev) return null;
+            const newStepData: any = { ...prev };
+            
+            let targetArray: any[] = newStepData[path] || newStepData.content?.[path] || [];
+            
+            let newItem: any;
+            if (path === 'categories') newItem = { value: '' };
+            else if (path === 'items') newItem = prev.type === 'sorting' ? '' : { text: '', category: '' };
+            else if (path === 'cards') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
+            else if (path === 'questions') newItem = { statement: 'Yeni İfade', isTrue: true };
+            else return prev;
+
+            const updatedArray = [...targetArray, newItem];
+
+            if (['categories', 'items'].includes(path)) {
+                 if (!newStepData.content) newStepData.content = {};
+                 newStepData.content[path] = updatedArray;
+            } else {
+                 newStepData[path] = updatedArray;
+            }
+
+            return newStepData;
+        });
+    };
+    
+    const removeFromArray = (path: 'categories' | 'items' | 'cards' | 'questions', indexToRemove: number) => {
+         setEditedStep(prev => {
+            if (!prev) return null;
+            const newStepData: any = { ...prev };
+            
+            let targetArray: any[] | undefined = newStepData[path] || newStepData.content?.[path];
+            if (!targetArray) return prev;
+
+            const updatedArray = targetArray.filter((_: any, index: number) => index !== indexToRemove);
+            
+            if (['categories', 'items'].includes(path)) {
+                 newStepData.content[path] = updatedArray;
+            } else {
+                 newStepData[path] = updatedArray;
+            }
+
+            return newStepData;
+        });
+    };
+
+    const handleSubmit = () => {
         if (editedStep) {
             onSave(editedStep);
         }
     };
+    
+    const libraryConfig = useMemo(() => {
+        if (!editedStep) return null;
+        switch(editedStep.type) {
+            case 'flashcard': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'flashcard' };
+            case 'anagramFlashcard': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' };
+            case 'anagramGame': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'anagramGame' };
+            case 'sentenceScramble': return { enabled: true, filter: ['sentence'], multiSelect: true, stepType: 'sentenceScramble' };
+            case 'content': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'keyConcepts' };
+            default: return { enabled: false, filter: [], multiSelect: false, stepType: 'content' };
+        }
+    }, [editedStep]);
 
-    const handleSelectFromLibrary = (items: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions') => {
+     const handleSelectFromLibrary = (items: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions') => {
         if (!editedStep || items.length === 0) return;
 
         switch(stepType) {
@@ -91,10 +181,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 setEditedStep({...editedStep, cards: newCards } as FlashcardStep);
                 break;
             }
-             case 'anagramFlashcard': {
+            case 'anagramFlashcard': {
                 const newCards = items.map(item => ({
                     definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`, // Default hint
-                    scrambledWord: shuffleSentence((item as ActivityItem).content.text || '').toLocaleUpperCase('tr-TR'),
+                    scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
                     correctAnswer: (item as ActivityItem).content.text || ''
                 }));
                 setEditedStep({...editedStep, cards: newCards} as AnagramFlashcardStep);
@@ -114,6 +204,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             }
             case 'sentenceScramble': {
                  const newSentence = (items[0] as ActivityItem)?.content.text || '';
+                 const shuffleSentence = (s: string) => s.split(' ').sort(() => Math.random() - 0.5).join(' ');
                  setEditedStep({
                     ...editedStep,
                     correctSentence: newSentence,
@@ -121,455 +212,96 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 } as SentenceScrambleStep);
                 break;
             }
-             case 'content': { // Used for "Anahtar Kavramlar"
+             case 'keyConcepts': {
                  const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
                  setEditedStep({...editedStep, content: newContent});
                  break;
             }
-            case 'questions': {
-                const questionItems = items as Question[];
-                const newSteps: LessonStep[] = [];
-                questionItems.forEach(q => {
-                    if (q.type === 'Çoktan Seçmeli') newSteps.push({ type: 'mcq', title: q.text, ...q });
-                    else if (q.type === 'Doğru/Yanlış') newSteps.push({ type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' });
-                    else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
-                });
-                // This case needs special handling since it creates multiple steps.
-                // For now, let's just log a warning or take the first one.
-                if(newSteps.length > 0) {
-                     onSave(newSteps[0]); // Just add the first one for now
-                }
-                break;
-            }
         }
         setIsLibraryOpen(false);
-    }
-    
-    if (!editedStep) {
-        return null;
-    }
-
-    const libraryConfig: { enabled: boolean; filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions'; } = {
-        enabled: false,
-        filter: [],
-        multiSelect: false,
-        stepType: 'content'
     };
-    
+
+    if (!isOpen || !editedStep) return null;
+
     const renderEditorFields = () => {
-        if (!editedStep) return null;
-
-        if (editedStep.type === 'flashcard') {
-            libraryConfig.enabled = true;
-            libraryConfig.filter = ['definition'];
-            libraryConfig.multiSelect = true;
-            libraryConfig.stepType = 'flashcard';
-        } else if (editedStep.type === 'anagramFlashcard' || (editedStep.type === 'content' && editedStep.title.toLowerCase().includes('kavramlar'))) {
-             libraryConfig.enabled = true;
-             libraryConfig.filter = ['concept'];
-             libraryConfig.multiSelect = true;
-             libraryConfig.stepType = editedStep.type === 'anagramFlashcard' ? 'anagramFlashcard' : 'keyConcepts';
-        } else if (editedStep.type === 'sentenceScramble') {
-             libraryConfig.enabled = true;
-             libraryConfig.filter = ['sentence'];
-             libraryConfig.multiSelect = false;
-             libraryConfig.stepType = 'sentenceScramble';
-        } else if (editedStep.type === 'anagramGame') {
-            libraryConfig.enabled = true;
-            libraryConfig.filter = ['definition'];
-            libraryConfig.multiSelect = true;
-            libraryConfig.stepType = 'anagramGame';
-        }
-
-
-        switch (editedStep.type) {
-            case 'content':
-                return (
-                    <div className="space-y-2">
-                        <Label>İçerik (HTML destekler)</Label>
-                        {libraryConfig.enabled && <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>}
-                        <Textarea value={(editedStep as any).content} onChange={(e) => setEditedStep({ ...editedStep, content: e.target.value })} className="min-h-[200px]" />
-                    </div>
-                );
-            case 'objectiveList': {
-                 const objStep = editedStep as ObjectiveListStep;
-                 const handleItemChange = (index: number, value: string) => {
-                    const newItems = [...objStep.items];
-                    newItems[index] = value;
-                    setEditedStep({ ...objStep, items: newItems });
-                 };
-                 const addItem = () => {
-                     const newItems = [...objStep.items, 'Yeni hedef...'];
-                     setEditedStep({ ...objStep, items: newItems });
-                 };
-                 const removeItem = (index: number) => {
-                     const newItems = objStep.items.filter((_, i) => i !== index);
-                     setEditedStep({ ...objStep, items: newItems });
-                 };
-                return (
-                     <div className="space-y-4">
-                        <div className="flex justify-end">
-                            <Button size="sm" onClick={addItem}><PlusCircle className="mr-2 h-4 w-4"/> Hedef Ekle</Button>
-                        </div>
-                         {objStep.items.map((item, index) => (
-                            <div key={index} className="flex items-center gap-2">
-                                <Input value={item} onChange={(e) => handleItemChange(index, e.target.value)} placeholder={`Hedef ${index + 1}`}/>
-                                <Button size="icon" variant="ghost" className="shrink-0" onClick={() => removeItem(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
-                         ))}
-                    </div>
-                )
-            }
-            case 'conceptExplanation': {
-                const ceStep = editedStep as ConceptExplanationStep;
-                const handleItemChange = (index: number, field: 'concept' | 'definition', value: string) => {
-                    const newItems = [...ceStep.items];
-                    (newItems[index] as any)[field] = value;
-                    setEditedStep({ ...ceStep, items: newItems });
-                };
-                const addItem = () => {
-                    const newItems = [...ceStep.items, { concept: 'Yeni Kavram', definition: 'Yeni Tanım' }];
-                    setEditedStep({ ...ceStep, items: newItems });
-                };
-                const removeItem = (index: number) => {
-                    const newItems = ceStep.items.filter((_, i) => i !== index);
-                    setEditedStep({ ...ceStep, items: newItems });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end">
-                            <Button size="sm" onClick={addItem}><PlusCircle className="mr-2 h-4 w-4"/> Kavram Ekle</Button>
-                        </div>
-                        {ceStep.items.map((item, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 items-start border p-3 rounded-md">
-                                <div className="col-span-11 space-y-2">
-                                     <Input value={item.concept} onChange={(e) => handleItemChange(index, 'concept', e.target.value)} placeholder="Kavram"/>
-                                     <Textarea value={item.definition} onChange={(e) => handleItemChange(index, 'definition', e.target.value)} placeholder="Tanım"/>
-                                </div>
-                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeItem(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
+        // This function will now be much shorter
+        return (
+             <div className="space-y-4">
+                 {libraryConfig?.enabled && <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)} className="border-white/10 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20"><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>}
+                 {
+                 editedStep.type === 'content' ? (
+                    <Textarea value={(editedStep as any).content || ''} onChange={(e) => setEditedStep({ ...editedStep, content: e.target.value })} className="min-h-[200px]" placeholder="Metin içeriği (HTML destekler)"/>
+                 ) : editedStep.type === 'objectiveList' ? (
+                     <>
+                        <Button size="sm" onClick={() => addToArray('items')}><PlusCircle className="mr-2 h-4 w-4"/>Hedef Ekle</Button>
+                        {(editedStep.items || []).map((item, index) => (
+                             <div key={index} className="flex gap-2"><Input value={item} onChange={e => handleArrayChange('items', index, null, e.target.value)} /><Button variant="ghost" size="icon" onClick={() => removeFromArray('items', index)}><Trash2 className="h-4 w-4"/></Button></div>
                         ))}
-                    </div>
-                );
-            }
-            case 'video':
-                return (
-                    <div className="space-y-4">
-                         <div className="space-y-2">
-                            <Label>Video URL (YouTube, Vimeo)</Label>
-                            <Input value={(editedStep as VideoStep).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} placeholder="https://www.youtube.com/watch?v=..."/>
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Açıklama (İsteğe Bağlı)</Label>
-                            <Textarea value={(editedStep as VideoStep).description || ''} onChange={(e) => setEditedStep({ ...editedStep, description: e.target.value })} />
-                        </div>
-                    </div>
-                );
-            case 'visual':
-                return (
-                    <div className="space-y-2">
-                        <Label>Görsel URL</Label>
-                        <Input value={(editedStep as VisualStep).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
-                    </div>
-                );
-            case 'iframe':
-                const iframeStep = editedStep as IframeStep;
-                return (
-                    <div className="space-y-2">
-                        <Label htmlFor="iframe-url">Sayfa URL'i</Label>
-                        <Input id="iframe-url" value={iframeStep.url} onChange={(e) => setEditedStep({ ...iframeStep, url: e.target.value })} placeholder="https://..." />
-                    </div>
-                );
-            case 'htmlSlide':
-                const htmlStep = editedStep as HtmlSlideStep;
-                 return (
-                    <div className="space-y-2">
-                        <Label>HTML İçeriği</Label>
-                        <Textarea
-                            value={htmlStep.htmlContent}
-                            onChange={(e) => setEditedStep({ ...htmlStep, htmlContent: e.target.value })}
-                            className="min-h-[300px] font-mono text-xs"
-                            placeholder="<!DOCTYPE html>..."
-                        />
-                    </div>
-                );
-            case 'activityLink':
-                const activityStep = editedStep as ActivityLinkStep;
-                return (
-                    <div className="space-y-2">
-                        <Label>Etkinlik Türü</Label>
-                        <Input value={activityStep.activityLabel} disabled />
-                        <p className="text-xs text-muted-foreground">Etkinlik bağlantısı adımı düzenlenemez. Silip yenisini ekleyebilirsiniz.</p>
-                    </div>
-                );
-            case 'flashcard': {
-                const fcStep = editedStep as FlashcardStep;
-                const handleCardChange = (index: number, field: 'term' | 'definition', value: string) => {
-                    const newCards = [...fcStep.cards];
-                    (newCards[index] as any)[field] = value;
-                    setEditedStep({ ...fcStep, cards: newCards });
-                };
-                const addCard = () => {
-                    const newCards = [...fcStep.cards, { term: 'Yeni Terim', definition: 'Yeni Tanım' }];
-                    setEditedStep({ ...fcStep, cards: newCards });
-                };
-                const removeCard = (index: number) => {
-                    const newCards = fcStep.cards.filter((_, i) => i !== index);
-                    setEditedStep({ ...fcStep, cards: newCards });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end gap-2">
-                            <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
-                            <Button size="sm" onClick={addCard}><PlusCircle className="mr-2 h-4 w-4"/> Kart Ekle</Button>
-                        </div>
-                        {fcStep.cards.map((card, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 items-center">
-                                <Input value={card.term} onChange={(e) => handleCardChange(index, 'term', e.target.value)} className="col-span-5" />
-                                <Textarea value={card.definition} onChange={(e) => handleCardChange(index, 'definition', e.target.value)} className="col-span-6" />
-                                <Button size="icon" variant="ghost" className="col-span-1" onClick={() => removeCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
+                     </>
+                 ) : editedStep.type === 'conceptExplanation' ? (
+                     <>
+                        <Button size="sm" onClick={() => addToArray('items')}><PlusCircle className="mr-2 h-4 w-4"/>Kavram Ekle</Button>
+                        {(editedStep.items || []).map((item: any, index: number) => (
+                             <div key={index} className="space-y-2 border p-2 rounded-md"><Input value={item.concept} onChange={e => handleArrayChange('items', index, 'concept', e.target.value)} placeholder="Kavram" /><Textarea value={item.definition} onChange={e => handleArrayChange('items', index, 'definition', e.target.value)} placeholder="Tanım"/><Button variant="ghost" size="sm" onClick={() => removeFromArray('items', index)}>Sil</Button></div>
                         ))}
-                    </div>
-                );
-            }
-            case 'anagramGame': {
-                const agStep = editedStep as AnagramGameStep;
-                 const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
-                    const newCards = [...agStep.cards];
-                    let cardToUpdate = { ...newCards[index] };
-                    
-                    if (field === 'correctAnswer') {
-                        const cleanValue = cleanForAnagram(value);
-                        cardToUpdate.correctAnswer = cleanValue;
-                        cardToUpdate.scrambledWord = cleanValue.split('').sort(() => 0.5 - Math.random()).join('');
-                    } else if (field === 'definition') {
-                        cardToUpdate.definition = value;
-                    }
-
-                    newCards[index] = cardToUpdate;
-                    setEditedStep({ ...agStep, cards: newCards });
-                };
-                const addCard = () => {
-                    const newCards = [...agStep.cards, { definition: 'Yeni ipucu...', scrambledWord: 'KELİME', correctAnswer: 'KELİME' }];
-                    setEditedStep({ ...agStep, cards: newCards });
-                };
-                const removeCard = (index: number) => {
-                    const newCards = agStep.cards.filter((_, i) => i !== index);
-                    setEditedStep({ ...agStep, cards: newCards });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end gap-2">
-                             <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
-                            <Button size="sm" onClick={addCard}><PlusCircle className="mr-2 h-4 w-4"/> Kelime Ekle</Button>
-                        </div>
-                        {agStep.cards.map((card, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md items-center">
-                                <div className="col-span-11 space-y-2">
-                                     <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu/Tanım..." className="min-h-[50px]"/>
-                                     <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
-                                     <Input value={card.scrambledWord} readOnly disabled placeholder="Karışık Kelime (Oto)" className="bg-muted"/>
-                                </div>
-                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
+                     </>
+                 ) : editedStep.type === 'video' ? (
+                     <div className="space-y-4"><Input value={(editedStep as VideoStep).url} onChange={e => setEditedStep({...editedStep, url: e.target.value})} placeholder="YouTube/Vimeo URL"/> <Textarea value={(editedStep as VideoStep).description || ''} onChange={e => setEditedStep({...editedStep, description: e.target.value})} placeholder="Açıklama..."/></div>
+                 ) : editedStep.type === 'visual' ? (
+                    <Input value={(editedStep as VisualStep).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
+                 ) : editedStep.type === 'iframe' ? (
+                    <Input value={(editedStep as IframeStep).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} />
+                 ) : editedStep.type === 'htmlSlide' ? (
+                     <Textarea value={(editedStep as HtmlSlideStep).htmlContent} onChange={(e) => setEditedStep({ ...editedStep, htmlContent: e.target.value })} className="min-h-[250px] font-mono text-xs"/>
+                 ) : editedStep.type === 'mcq' ? (
+                    <div className="space-y-2"><Textarea value={(editedStep as McqStep).question} onChange={e => setEditedStep({...editedStep, question: e.target.value})}/><RadioGroup value={(editedStep as McqStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as McqStep).options.map((opt, i) => <div key={i} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as McqStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                 ) : editedStep.type === 'tf' ? (
+                    <div className="space-y-2"><Textarea value={(editedStep as TfStep).statement} onChange={e => setEditedStep({...editedStep, statement: e.target.value})}/><div className="flex items-center space-x-2"><Checkbox id="isTrue" checked={(editedStep as TfStep).isTrue} onCheckedChange={c => setEditedStep({...editedStep, isTrue: !!c})}/><Label htmlFor="isTrue">Bu ifade doğru</Label></div></div>
+                 ) : editedStep.type === 'fitb' ? (
+                    <div className="space-y-2"><Textarea value={(editedStep as FitbStep).sentenceWithBlank} onChange={e => setEditedStep({...editedStep, sentenceWithBlank: e.target.value})}/><RadioGroup value={(editedStep as FitbStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as FitbStep).options.map((opt, i) => <div key={i} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-fitb-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as FitbStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                 ) : editedStep.type === 'flashcard' || editedStep.type === 'anagramFlashcard' ? (
+                     <>
+                        <div className="flex justify-end"><Button size="sm" onClick={() => addToArray('cards')}><PlusCircle className="mr-2 h-4 w-4"/>Kart Ekle</Button></div>
+                        {(editedStep.cards || []).map((card: any, index: number) => (
+                           <div key={index} className="space-y-2 p-2 border rounded-md">
+                               { 'term' in card ? <><Input value={card.term} onChange={e => handleArrayChange('cards', index, 'term', e.target.value)} placeholder="Terim"/><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="Tanım"/></> 
+                                : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.scrambledWord} onChange={e => handleArrayChange('cards', index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/></>}
+                               <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
+                           </div>
                         ))}
-                    </div>
-                );
-            }
-            case 'anagramFlashcard': {
-                const afcStep = editedStep as AnagramFlashcardStep;
-                 const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
-                    const newCards = [...afcStep.cards];
-                    (newCards[index] as any)[field] = value;
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                const addAnagramCard = () => {
-                    const newCards = [...afcStep.cards, { definition: 'İpucu', scrambledWord: 'YENİKELİME', correctAnswer: 'YENI KELIME' }];
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                const removeAnagramCard = (index: number) => {
-                    const newCards = afcStep.cards.filter((_, i) => i !== index);
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end gap-2">
-                             <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
-                            <Button size="sm" onClick={addAnagramCard}><PlusCircle className="mr-2 h-4 w-4"/> Anagram Kartı Ekle</Button>
-                        </div>
-                        {afcStep.cards.map((card, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md items-center">
-                                <div className="col-span-11 space-y-2">
-                                     <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu..."/>
-                                     <Input value={card.scrambledWord} onChange={e => handleCardChange(index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/>
-                                     <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
-                                </div>
-                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeAnagramCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
+                     </>
+                 ) : editedStep.type === 'anagramGame' ? (
+                     <>
+                        <div className="flex justify-end"><Button size="sm" onClick={() => addToArray('cards')}><PlusCircle className="mr-2 h-4 w-4"/>Kelime Ekle</Button></div>
+                        {(editedStep.cards || []).map((card: any, index: number) => (
+                           <div key={index} className="space-y-2 p-2 border rounded-md">
+                             <Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/>
+                             <Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap (Boşluksuz)"/>
+                             <Input value={card.scrambledWord} disabled readOnly className="bg-muted"/>
+                             <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
+                           </div>
                         ))}
-                    </div>
-                );
-            }
-            case 'mcq':
-                const mcqStep = editedStep as McqStep;
-                 return (
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>Soru Metni</Label>
-                            <Textarea value={mcqStep.question} onChange={(e) => setEditedStep({ ...mcqStep, question: e.target.value })} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Seçenekler ve Doğru Cevap</Label>
-                            <RadioGroup value={mcqStep.correctAnswer} onValueChange={(val) => setEditedStep({ ...mcqStep, correctAnswer: val })}>
-                                {(mcqStep.options || ['', '', '', '']).map((option, index) => (
-                                    <div key={index} className="flex items-center gap-2">
-                                        <RadioGroupItem value={option} id={`mcq-opt-${index}`} />
-                                        <Input value={option} onChange={(e) => {
-                                            const newOptions = [...(mcqStep.options || [])];
-                                            newOptions[index] = e.target.value;
-                                            setEditedStep({ ...mcqStep, options: newOptions });
-                                        }} />
-                                    </div>
-                                ))}
-                            </RadioGroup>
-                        </div>
-                    </div>
-                );
-            case 'tf':
-                const tfStep = editedStep as TfStep;
-                return (
-                    <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>İfade</Label>
-                            <Textarea value={tfStep.statement} onChange={e => setEditedStep({ ...tfStep, statement: e.target.value })} />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox id="is-true-switch" checked={tfStep.isTrue} onCheckedChange={checked => setEditedStep({ ...tfStep, isTrue: !!checked })} />
-                            <Label htmlFor="is-true-switch">{tfStep.isTrue ? "Bu ifade Doğru" : "Bu ifade Yanlış"}</Label>
-                        </div>
-                    </div>
-                );
-             case 'trueFalseList':
-                const tflStep = editedStep as TrueFalseListStep;
-                const handleTflChange = (index: number, field: 'statement' | 'isTrue', value: string | boolean) => {
-                    const newQuestions = [...tflStep.questions];
-                    if (field === 'statement') (newQuestions[index] as any)[field] = value;
-                    if (field === 'isTrue') (newQuestions[index] as any)[field] = value;
-                    setEditedStep({ ...tflStep, questions: newQuestions });
-                };
-                const addTflQuestion = () => {
-                    const newQuestions = [...tflStep.questions, { statement: 'Yeni ifade...', isTrue: true }];
-                    setEditedStep({ ...tflStep, questions: newQuestions });
-                };
-                const removeTflQuestion = (index: number) => {
-                    const newQuestions = tflStep.questions.filter((_, i) => i !== index);
-                    setEditedStep({ ...tflStep, questions: newQuestions });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end">
-                            <Button size="sm" onClick={addTflQuestion}><PlusCircle className="mr-2 h-4 w-4"/> Soru Ekle</Button>
-                        </div>
-                        {tflStep.questions.map((q, index) => (
-                            <div key={index} className="space-y-2 p-3 border rounded-md">
-                                <Label>İfade {index + 1}</Label>
-                                <Textarea value={q.statement} onChange={(e) => handleTflChange(index, 'statement', e.target.value)} />
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-2">
-                                        <Checkbox id={`is-true-${index}`} checked={q.isTrue} onCheckedChange={checked => handleTflChange(index, 'isTrue', !!checked)} />
-                                        <Label htmlFor={`is-true-${index}`}>{q.isTrue ? "Doğru" : "Yanlış"}</Label>
-                                    </div>
-                                    <Button size="icon" variant="ghost" className="col-span-1" onClick={() => removeTflQuestion(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                );
-            case 'fitb':
-                const fitbStep = editedStep as FitbStep;
-                return (
-                     <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>Boşluklu Cümle</Label>
-                            <Textarea value={fitbStep.sentenceWithBlank} onChange={(e) => setEditedStep({ ...fitbStep, sentenceWithBlank: e.target.value })} placeholder="Boşluğu göstermek için ___ kullanın." />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Seçenekler ve Doğru Cevap</Label>
-                            <RadioGroup value={fitbStep.correctAnswer} onValueChange={(val) => setEditedStep({ ...fitbStep, correctAnswer: val })}>
-                                {(fitbStep.options || []).map((option, index) => (
-                                    <div key={index} className="flex items-center gap-2">
-                                        <RadioGroupItem value={option} id={`fitb-opt-${index}`} />
-                                        <Input value={option} onChange={(e) => {
-                                            const newOptions = [...(fitbStep.options || [])];
-                                            newOptions[index] = e.target.value;
-                                            setEditedStep({ ...fitbStep, options: newOptions });
-                                        }} />
-                                    </div>
-                                ))}
-                            </RadioGroup>
-                        </div>
-                    </div>
-                );
-            case 'anagram':
-                const anagramStep = editedStep as AnagramStep;
-                return (
-                     <div className="space-y-4">
-                        <div className="space-y-2">
-                            <Label>İpucu / Tanım</Label>
-                            <Textarea value={anagramStep.definition} onChange={e => setEditedStep({ ...anagramStep, definition: e.target.value })} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Karışık Kelime</Label>
-                            <Input value={anagramStep.scrambledWord} onChange={e => setEditedStep({ ...anagramStep, scrambledWord: e.target.value })} />
-                        </div>
-                         <div className="space-y-2">
-                            <Label>Doğru Cevap</Label>
-                            <Input value={anagramStep.correctAnswer} onChange={e => setEditedStep({ ...anagramStep, correctAnswer: e.target.value })} />
-                        </div>
-                    </div>
-                );
-            case 'sentenceScramble':
-                const ssStep = editedStep as SentenceScrambleStep;
-                const handleCorrectSentenceChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                    const correct = e.target.value;
-                    const scrambled = shuffleSentence(correct);
-                    setEditedStep({ ...ssStep, correctSentence: correct, scrambledSentence: scrambled });
-                };
-                return (
-                     <div className="space-y-4">
-                         <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
-                         <div className="space-y-2">
-                            <Label>Doğru Cümle</Label>
-                            <Textarea value={ssStep.correctSentence} onChange={handleCorrectSentenceChange} placeholder="Doğru cümleyi buraya yazın, sistem otomatik olarak karıştıracaktır."/>
-                        </div>
-                         <div className="space-y-2">
-                            <Label>Karışık Cümle (Otomatik Oluşturuldu)</Label>
-                            <Textarea value={ssStep.scrambledSentence} readOnly disabled className="bg-muted/50" />
-                        </div>
-                    </div>
-                );
-            case 'conceptMap':
-                return (
-                    <div className="space-y-2">
-                        <Label>Kavram Haritası Verisi</Label>
-                        <p className="text-sm text-muted-foreground">Kavram haritaları doğrudan bu ekrandan düzenlenemez. Lütfen adımı silip yapay zeka ile yenisini oluşturun.</p>
-                    </div>
-                );
-            default:
-                return <p>Bu adım türü için düzenleyici bulunmuyor.</p>;
-        }
-    }
+                     </>
+                 ) : editedStep.type === 'sentenceScramble' ? (
+                    <>
+                        <Textarea value={(editedStep as SentenceScrambleStep).correctSentence} onChange={e => { const newCorrect = e.target.value; const newScrambled = newCorrect.split(' ').sort(() => 0.5 - Math.random()).join(' '); setEditedStep({...editedStep, correctSentence: newCorrect, scrambledSentence: newScrambled }); }} placeholder="Doğru cümleyi yazın..." />
+                        <Input value={(editedStep as SentenceScrambleStep).scrambledSentence} readOnly disabled className="bg-muted"/>
+                    </>
+                 ) : null
+                }
+             </div>
+        )
+    };
 
     return (
-        <>
+    <>
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl">
-                <DialogHeader>
+            <DialogContent className="max-w-3xl h-[90vh] flex flex-col p-0">
+                <DialogHeader className="p-6 pb-4 border-b">
                     <DialogTitle>Adımı Düzenle</DialogTitle>
                 </DialogHeader>
-                <ScrollArea className="max-h-[60vh]">
-                    <div className="py-4 space-y-4 pr-6">
+                <ScrollArea className="flex-1">
+                    <div className="px-6 py-4 space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="step-title">Adım Başlığı</Label>
                             <Input id="step-title" value={editedStep.title} onChange={(e) => setEditedStep({ ...editedStep, title: e.target.value })} />
@@ -577,87 +309,27 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         {renderEditorFields()}
                     </div>
                 </ScrollArea>
-                <DialogFooter>
-                    <Button variant="ghost" onClick={() => onOpenChange(false)}>İptal</Button>
-                    <Button onClick={handleSave}>Değişiklikleri Kaydet</Button>
+                <DialogFooter className="p-6 border-t">
+                    <DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose>
+                    <Button onClick={handleSave} disabled={isSaving || !isDirty}>
+                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
+                        Değişiklikleri Kaydet
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
         
-         <LibraryImportDialog 
-            isOpen={isLibraryOpen}
-            onOpenChange={setIsLibraryOpen}
-            onItemsSelected={(handleSelectFromLibrary as any)}
-            context={context}
-            config={libraryConfig}
-        />
+        {libraryConfig && (
+             <LibraryImportDialog 
+                isOpen={isLibraryOpen}
+                onOpenChange={setIsLibraryOpen}
+                onItemsSelected={(handleSelectFromLibrary as any)}
+                context={context}
+                config={libraryConfig}
+            />
+        )}
         </>
     );
 }
 
-```
-- src/hooks/use-local-storage.ts:
-```ts
-'use client'
-
-import { useState, useEffect } from 'react';
-
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
-      return initialValue;
-    }
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.log(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  return [storedValue, setValue];
-}
-```
-- tsconfig.json:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-}
-```
+    
