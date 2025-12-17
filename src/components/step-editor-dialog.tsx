@@ -1,5 +1,6 @@
 
-'use client';
+
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import isEqual from 'lodash.isequal';
@@ -17,10 +18,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library, FilePenLine } from 'lucide-react';
-import type { ActivityItem, LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, Question } from '@/lib/types';
-import { ScrollArea } from "./ui/scroll-area";
+// Layers ikonu buraya eklendi
+import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Layers, Library } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, ActivityItem, Question, ImageAsset } from '@/lib/types';
+import { ScrollArea } from "./ui/scroll-area";
 import { Checkbox } from './ui/checkbox';
 import { LibraryImportDialog } from './library-import-dialog';
 
@@ -86,13 +91,13 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
         }
     };
 
-    const handleSelectFromLibrary = (items: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions') => {
+    const handleSelectFromLibrary = (items: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions') => {
         if (!editedStep || items.length === 0) return;
 
         switch(stepType) {
             case 'flashcard': {
                 const newCards = items.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
-                setEditedStep({...editedStep, cards: newCards });
+                setEditedStep({...editedStep, cards: newCards } as FlashcardStep);
                 break;
             }
              case 'anagramFlashcard': {
@@ -101,7 +106,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     scrambledWord: shuffleSentence((item as ActivityItem).content.text || '').toLocaleUpperCase('tr-TR'),
                     correctAnswer: (item as ActivityItem).content.text || ''
                 }));
-                setEditedStep({...editedStep, cards: newCards});
+                setEditedStep({...editedStep, cards: newCards} as AnagramFlashcardStep);
                 break;
              }
             case 'anagramGame': {
@@ -110,7 +115,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     correctAnswer: (item as ActivityItem).content.term || '',
                     scrambledWord: ((item as ActivityItem).content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
                 }));
-                setEditedStep({...editedStep, cards: newCards});
+                setEditedStep({...editedStep, cards: newCards} as AnagramGameStep);
                 break;
             }
             case 'sentenceScramble': {
@@ -119,7 +124,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     ...editedStep,
                     correctSentence: newSentence,
                     scrambledSentence: shuffleSentence(newSentence),
-                });
+                } as SentenceScrambleStep);
                 break;
             }
              case 'content': { // Used for "Anahtar Kavramlar"

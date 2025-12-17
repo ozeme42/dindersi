@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
@@ -47,7 +48,7 @@ import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-genera
 type DraggableLessonStep = LessonStep & { id: string };
 
 // --- STEP CARD COMPONENT (Updated Colors) ---
-function StepCard({ step, order, onEdit, onDelete, onSplit, id }: { 
+function StepCard({ step, order, id, onEdit, onDelete, onSplit }: { 
     step: LessonStep; 
     order: number;
     id: string;
@@ -72,24 +73,25 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
             case 'content': return <FileText className="w-5 h-5 text-blue-400" />;
             case 'objectiveList': return <GraduationCap className="w-5 h-5 text-yellow-400" />;
             case 'conceptExplanation': return <Brain className="w-5 h-5 text-blue-400" />;
-            case 'mcq': case 'tf': case 'fitb': return <HelpCircle className="w-5 h-5 text-purple-400" />;
+            case 'mcq': case 'tf': case 'fitb': case 'trueFalseList': return <HelpCircle className="w-5 h-5 text-purple-400" />;
             case 'game': case 'activityLink': return <Gamepad2 className="w-5 h-5 text-orange-400" />;
+            case 'anagramGame': return <Puzzle className="w-5 h-5 text-fuchsia-400" />;
             default: return <BookOpen className="w-5 h-5 text-slate-400" />;
         }
     };
 
     const renderContentPreview = () => {
          switch (step.type) {
-            case 'content': return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: step.content }} />;
-            case 'objectiveList': return <span className="text-xs text-yellow-400/80">{(step as ObjectiveListStep).items.length} hedef</span>;
-            case 'conceptExplanation': return <span className="text-xs text-blue-400/80">{(step as ConceptExplanationStep).items.length} kavram</span>;
-            case 'mcq': return <span className="text-xs text-purple-400/80 italic">{step.question}</span>;
-            case 'tf': return <span className="text-xs text-purple-400/80 italic">{step.statement}</span>;
-            case 'fitb': return <span className="text-xs text-purple-400/80 italic">{step.sentenceWithBlank}</span>;
-            case 'flashcard': return <span className="text-xs text-emerald-400/80">{step.cards.length} kart</span>;
-            case 'anagram': return <span className="text-xs text-orange-400/80 font-mono">{step.scrambledWord}</span>;
-            case 'visual': return step.imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={step.imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
-            case 'video': return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{step.url}</span>;
+            case 'content': return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content }} />;
+            case 'objectiveList': return <span className="text-xs text-yellow-400/80">{(step as any).items.length} hedef</span>;
+            case 'conceptExplanation': return <span className="text-xs text-blue-400/80">{(step as any).items.length} kavram</span>;
+            case 'mcq': return <span className="text-xs text-purple-400/80 italic">{(step as any).question}</span>;
+            case 'tf': return <span className="text-xs text-purple-400/80 italic">{(step as any).statement}</span>;
+            case 'fitb': return <span className="text-xs text-purple-400/80 italic">{(step as any).sentenceWithBlank}</span>;
+            case 'flashcard': return <span className="text-xs text-emerald-400/80">{(step as any).cards.length} kart</span>;
+            case 'anagram': return <span className="text-xs text-orange-400/80 font-mono">{(step as any).scrambledWord}</span>;
+            case 'visual': return (step as any).imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={(step as any).imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
+            case 'video': return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{(step as any).url}</span>;
             default: return null;
         }
     }
@@ -176,7 +178,7 @@ export function TopicEditor({
     );
     
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
+        return steps.map((step, index) => ({ ...step, id: `step-${Date.now()}-${index}` }));
     };
     
     const handleDragEnd = (event: DragEndEvent) => {
@@ -579,7 +581,7 @@ function TopicEditorWrapper() {
     const [isAIOpen, setIsAIOpen] = useState(false);
     
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
+        return steps.map((step, index) => ({ ...step, id: `step-${Date.now()}-${index}` }));
     };
 
     const fetchTopicData = useCallback(async () => {
