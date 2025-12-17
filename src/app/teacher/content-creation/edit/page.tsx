@@ -317,7 +317,7 @@ export function TopicEditor({
                 scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
                 correctAnswer: (item as ActivityItem).content.text || ''
             }));
-             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: newCards });
+             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards });
         } else if (stepType === 'sentenceScramble') {
              const newSentence = (importedItems[0] as ActivityItem)?.content.text || '';
              newSteps.push({
@@ -399,7 +399,7 @@ export function TopicEditor({
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
         { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
-        { label: "Kelime Dehası (Veri Bankası)", action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
+        { label: 'Kelime Dehası (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
@@ -621,10 +621,10 @@ function TopicEditorWrapper() {
     const topicId = searchParams.get('topicId');
     const { toast } = useToast();
     
-    const [aiGenType, setAIGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    // State'leri TopicEditorWrapper içine taşıdık
+    const [aiGenType, setAiGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
     const [aiGenContext, setAiGenContext] = useState<{ topicId: string, topicTitle: string, sourceText: string } | null>(null);
     const [isAIOpen, setIsAIOpen] = useState(false);
-    
     const [localSteps, setLocalSteps] = useState<LessonStep[]>([]);
     
     const handleStepsGenerated = (newSteps: LessonStep[]) => {
@@ -642,32 +642,33 @@ function TopicEditorWrapper() {
     }, [topicId, toast]);
 
     if (!courseId || !unitId || !topicId) {
-        // You can return a more user-friendly error message or a redirect component
         return <div className="flex h-screen items-center justify-center bg-slate-950 text-red-500">
             Geçersiz URL. Lütfen içerik yönetimi sayfasından bir konu seçin.
         </div>;
     }
     
-    // Create a temporary Topic object to pass to TopicEditor
-    const initialTopic = { id: topicId, title: '', steps: localSteps };
-
     return (
         <>
             <TopicEditor 
-                key={`${courseId}-${unitId}-${topicId}`} // Re-mount component if IDs change
-                initialTopic={null} // Let TopicEditor fetch its own data
+                key={`${courseId}-${unitId}-${topicId}`}
+                initialTopic={null}
                 courseId={courseId}
                 unitId={unitId}
                 topicId={topicId}
                 onSave={async (data) => {
-                    const result = await updateTopicContent({ courseId, unitId, topicId, steps: data.steps, sourceText: data.sourceText || '', htmlContent: data.htmlContent || '' });
-                    if(result.success) { toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." }); } 
-                    else { toast({ title: "Hata", description: result.error, variant: "destructive" }); }
+                    const combinedSteps = [...data.steps, ...localSteps];
+                    const result = await updateTopicContent({ courseId, unitId, topicId, steps: combinedSteps, sourceText: data.sourceText || '', htmlContent: data.htmlContent || '' });
+                    if(result.success) { 
+                        toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." });
+                        setLocalSteps([]); // Clear local steps after saving
+                    } else { 
+                        toast({ title: "Hata", description: result.error, variant: "destructive" }); 
+                    }
                 }}
                 isSaving={false}
                 onOpenAIGeneration={(type, context) => {
                     setAiGenType(type);
-                    setAiGenContext({topicId, ...context});
+                    setAiGenContext({ topicId, topicTitle: context.topicTitle, sourceText: context.sourceText });
                     setIsAIOpen(true);
                 }}
             />
