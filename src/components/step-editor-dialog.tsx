@@ -17,11 +17,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+// Layers ikonu buraya eklendi
 import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Library, Layers, PlusCircle } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn, cleanForAnagram } from "@/lib/utils";
 import type { LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, ActivityItem, Question, ImageAsset, Course, SchoolClass, Unit, Topic } from '@/lib/types';
 import { ScrollArea } from "./ui/scroll-area";
 import { Checkbox } from './ui/checkbox';
@@ -67,14 +68,6 @@ function shuffleSentence(sentence: string): string {
   }
   return words.join(' ');
 }
-
-// Helper function to clean words for anagrams
-const cleanForAnagram = (text: string): string => {
-  return text
-    .toLocaleUpperCase('tr-TR')
-    .replace(/[^A-Z0-9ÇĞİÖŞÜ]/g, ''); // Sadece harfler ve rakamlar kalır
-};
-
 
 export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
@@ -345,7 +338,17 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 const agStep = editedStep as AnagramGameStep;
                  const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
                     const newCards = [...agStep.cards];
-                    (newCards[index] as any)[field] = value;
+                    let cardToUpdate = { ...newCards[index] };
+                    
+                    if (field === 'correctAnswer') {
+                        const cleanValue = cleanForAnagram(value);
+                        cardToUpdate.correctAnswer = cleanValue;
+                        cardToUpdate.scrambledWord = cleanValue.split('').sort(() => 0.5 - Math.random()).join('');
+                    } else if (field === 'definition') {
+                        cardToUpdate.definition = value;
+                    }
+
+                    newCards[index] = cardToUpdate;
                     setEditedStep({ ...agStep, cards: newCards });
                 };
                 const addCard = () => {
@@ -366,8 +369,8 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                             <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md items-center">
                                 <div className="col-span-11 space-y-2">
                                      <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu/Tanım..." className="min-h-[50px]"/>
-                                     <Input value={card.scrambledWord} onChange={e => handleCardChange(index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/>
                                      <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
+                                     <Input value={card.scrambledWord} readOnly disabled placeholder="Karışık Kelime (Oto)" className="bg-muted"/>
                                 </div>
                                 <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
                             </div>
@@ -592,5 +595,3 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         </>
     );
 }
-
-    

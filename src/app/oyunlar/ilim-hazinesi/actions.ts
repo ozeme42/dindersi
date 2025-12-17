@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
+import { cleanForAnagram } from '@/lib/utils';
 
 export type IlimHazinesiLevel = {
     letters: string[];
@@ -50,9 +51,8 @@ export async function getIlimHazinesiAction(
                 item.content &&
                 item.content.term &&
                 item.content.definition &&
-                item.content.term.trim().length >= 3 &&
-                item.content.term.trim().length <= 10 && // Keep word length reasonable
-                !item.content.term.includes(' ')
+                cleanForAnagram(item.content.term).length >= 3 &&
+                cleanForAnagram(item.content.term).length <= 10
             );
 
         if (allDefinitions.length === 0) {
@@ -64,7 +64,7 @@ export async function getIlimHazinesiAction(
         const gameLevels: IlimHazinesiLevel[] = [];
 
         for (const item of shuffled) {
-            const mainWord = item.content.term!.toLocaleUpperCase('tr-TR');
+            const mainWord = cleanForAnagram(item.content.term!);
             const definition = item.content.definition!;
             
             // The letters will only be from the main word itself.

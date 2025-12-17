@@ -19,3 +19,17 @@ export function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/ç/g, 'c')
     .replace(/[^a-z0-9.-]/g, '');
 }
+
+// SADECE HARFLERİ VE SAYILARI BIRAKAN YENİ FONKSİYON
+export const cleanForAnagram = (text: string): string => {
+  if (!text) return '';
+  return text
+    .toLocaleUpperCase('tr-TR')
+    .replace(/Ğ/g, 'G')
+    .replace(/Ü/g, 'U')
+    .replace(/Ş/g, 'S')
+    .replace(/İ/g, 'I')
+    .replace(/Ö/g, 'O')
+    .replace(/Ç/g, 'C')
+    .replace(/[^A-Z0-9]/g, ''); // Sadece büyük harfler ve rakamlar kalır
+};
