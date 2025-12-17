@@ -41,6 +41,7 @@ import { cn } from '@/lib/utils';
 import { playableActivities } from '@/lib/game-config';
 import React from 'react';
 import { Input } from '@/components/ui/input';
+import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 
 
 type DraggableLessonStep = LessonStep & { id: string };
@@ -70,6 +71,7 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
             case 'visual': return <ImageIcon className="w-5 h-5 text-emerald-400" />;
             case 'content': return <FileText className="w-5 h-5 text-blue-400" />;
             case 'objectiveList': return <GraduationCap className="w-5 h-5 text-yellow-400" />;
+            case 'conceptExplanation': return <Brain className="w-5 h-5 text-blue-400" />;
             case 'mcq': case 'tf': case 'fitb': return <HelpCircle className="w-5 h-5 text-purple-400" />;
             case 'game': case 'activityLink': return <Gamepad2 className="w-5 h-5 text-orange-400" />;
             default: return <BookOpen className="w-5 h-5 text-slate-400" />;
@@ -405,8 +407,8 @@ export function TopicEditor({
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
         { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
+        { label: "Kelime Dehası (Veri Bankası)", action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
-        { label: 'Kelime Dehası (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
 
@@ -683,3 +685,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+    
