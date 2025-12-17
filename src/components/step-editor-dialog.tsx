@@ -90,24 +90,32 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         setEditedStep(prev => {
             if (!prev) return null;
             const newStepData: any = { ...prev };
-            if (!newStepData.content) newStepData.content = {};
             
-            let array = newStepData[arrayPath] || newStepData.content?.[arrayPath];
+            let array;
+            let isContentArray = false;
 
-            if (Array.isArray(array)) {
-                const newArray = [...array];
-                if (fieldPath) {
-                    newArray[index] = { ...newArray[index], [fieldPath]: value };
-                } else {
-                    newArray[index] = value;
-                }
-
-                if (arrayPath === 'cards' || arrayPath === 'questions' || arrayPath === 'items') {
-                    newStepData[arrayPath] = newArray;
-                } else if (arrayPath === 'categories') {
-                    newStepData.content[arrayPath] = newArray;
-                }
+            if (newStepData[arrayPath] && Array.isArray(newStepData[arrayPath])) {
+                array = newStepData[arrayPath];
+            } else if (newStepData.content && newStepData.content[arrayPath] && Array.isArray(newStepData.content[arrayPath])) {
+                array = newStepData.content[arrayPath];
+                isContentArray = true;
+            } else {
+                 return prev;
             }
+
+            const newArray = [...array];
+            if (fieldPath) {
+                newArray[index] = { ...newArray[index], [fieldPath]: value };
+            } else {
+                newArray[index] = value;
+            }
+
+            if (isContentArray) {
+                newStepData.content[arrayPath] = newArray;
+            } else {
+                newStepData[arrayPath] = newArray;
+            }
+            
             return newStepData;
         });
     };
@@ -273,7 +281,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         {(editedStep.cards || []).map((card: any, index: number) => (
                            <div key={`card-${index}`} className="space-y-2 p-2 border rounded-md">
                                { 'term' in card ? <><Input value={card.term} onChange={e => handleArrayChange('cards', index, 'term', e.target.value)} placeholder="Terim"/><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="Tanım"/></> 
-                                : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/><Input value={card.scrambledWord} onChange={e => handleArrayChange('cards', index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime" disabled/></>}
+                                : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/><Input value={card.scrambledWord} disabled readOnly className="bg-muted"/></>}
                                <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
                            </div>
                         ))}
@@ -284,7 +292,12 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         {(editedStep.cards || []).map((card: any, index: number) => (
                            <div key={`anagram-card-${index}`} className="space-y-2 p-2 border rounded-md">
                              <Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/>
-                             <Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap (Boşluksuz)"/>
+                             <Input value={card.correctAnswer} onChange={e => {
+                                 const cleanWord = cleanForAnagram(e.target.value);
+                                 const newScrambled = cleanWord.split('').sort(() => Math.random() - 0.5).join('');
+                                 handleArrayChange('cards', index, 'correctAnswer', cleanWord);
+                                 handleArrayChange('cards', index, 'scrambledWord', newScrambled);
+                             }} placeholder="Doğru Cevap (Boşluksuz)"/>
                              <Input value={card.scrambledWord} disabled readOnly className="bg-muted"/>
                              <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
                            </div>
@@ -304,10 +317,18 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     return (
     <>
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-3xl h-[90vh] flex flex-col p-0">
-                <DialogHeader className="p-6 pb-4 border-b">
-                    <DialogTitle>Adımı Düzenle</DialogTitle>
+            <DialogContent className="max-w-3xl h-[90vh] flex flex-col p-0 bg-slate-950 border-white/10 text-slate-100 shadow-2xl">
+                
+                {/* Header */}
+                <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-slate-900/50 flex flex-row items-center justify-between">
+                    <DialogTitle className="flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-white">
+                         <div className="p-2 bg-indigo-500/20 rounded-lg border border-indigo-500/30">
+                            <FileEdit className="h-6 w-6 text-indigo-400" />
+                         </div>
+                         {step?.id && !step.id.startsWith('new-') ? 'Adımı Düzenle' : 'Yeni Adım Ekle'}
+                    </DialogTitle>
                 </DialogHeader>
+
                 <ScrollArea className="flex-1">
                     <div className="px-6 py-4 space-y-4">
                         <div className="space-y-2">
@@ -317,11 +338,12 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         {renderEditorFields()}
                     </div>
                 </ScrollArea>
-                <DialogFooter className="p-6 border-t">
-                    <DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose>
-                    <Button onClick={handleSubmit} disabled={isSaving || !isDirty}>
-                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
-                        Değişiklikleri Kaydet
+                
+                {/* Footer */}
+                <DialogFooter className="p-6 border-t border-white/5 bg-slate-900/80 backdrop-blur-sm flex justify-end gap-3">
+                    <DialogClose asChild><Button type="button" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/5">İptal</Button></DialogClose>
+                    <Button onClick={handleSubmit} disabled={isSaving || !isDirty} className="bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 shadow-lg shadow-teal-900/20">
+                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>} Kaydet
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -339,7 +361,3 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         </>
     );
 }
-
-    
-
-    
