@@ -20,7 +20,7 @@ export function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/[^a-z0-9.-]/g, '');
 }
 
-// SADECE HARFLERİ VE SAYILARI BIRAKAN YENİ FONKSİYON
+// SADECE HARFLERİ, SAYILARI VE BOŞLUKLARI BIRAKAN GÜNCELLENMİŞ FONKSİYON
 export const cleanForAnagram = (text: string): string => {
   if (!text) return '';
   return text
@@ -31,5 +31,5 @@ export const cleanForAnagram = (text: string): string => {
     .replace(/İ/g, 'I')
     .replace(/Ö/g, 'O')
     .replace(/Ç/g, 'C')
-    .replace(/[^A-Z0-9]/g, ''); // Sadece büyük harfler ve rakamlar kalır
+    .replace(/[^A-Z0-9\s]/g, ''); // Sadece büyük harfler, rakamlar ve boşluklar kalır
 };

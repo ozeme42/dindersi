@@ -204,7 +204,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             case 'anagramFlashcard': {
                 const newCards = items.map(item => ({
                     definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`, // Default hint
-                    scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
+                    scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
                     correctAnswer: (item as ActivityItem).content.text || ''
                 }));
                 setEditedStep({...editedStep, cards: newCards} as AnagramFlashcardStep);
@@ -216,7 +216,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     return {
                         definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
                         correctAnswer: cleanWord,
-                        scrambledWord: cleanWord.split('').sort(() => Math.random() - 0.5).join(''),
+                        scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join(''),
                     };
                 });
                 setEditedStep({...(editedStep as AnagramGameStep), cards: newCards});
@@ -298,10 +298,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                              <Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/>
                              <Input value={card.correctAnswer} onChange={e => {
                                  const cleanWord = cleanForAnagram(e.target.value);
-                                 const newScrambled = cleanWord.split('').sort(() => Math.random() - 0.5).join('');
+                                 const newScrambled = cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join('');
                                  handleArrayChange('cards', index, 'correctAnswer', cleanWord);
                                  handleArrayChange('cards', index, 'scrambledWord', newScrambled);
-                             }} placeholder="Doğru Cevap (Boşluksuz)"/>
+                             }} placeholder="Doğru Cevap (Boşluk olabilir)"/>
                              <Input value={card.scrambledWord} disabled readOnly className="bg-muted"/>
                              <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
                            </div>

@@ -100,9 +100,9 @@ function GameComponent() {
         if (!currentLevel) return;
         if (score >= 50) {
             setScore(s => s - 50);
-            toast({ title: 'İpucu', description: `İlk harf: ${currentLevel.mainWord[0]}` });
+            toast({ title: 'İpucu', description: `Kelimenin ilk harfi: ${currentLevel.mainWord.replace(/\s/g, '')[0]}` });
         } else {
-            toast({ title: 'Yetersiz Puan', description: 'İpucu için 50 puan gerekli.', variant: 'destructive' });
+            toast({ title: 'Yetersiz Puan', description: 'İpucu için 50 puan gerekli.', variant: "destructive" });
         }
     };
 
@@ -250,6 +250,8 @@ function GameComponent() {
     
     if (!currentLevel) return null;
 
+    const targetWords = currentLevel.mainWord.split(' ');
+
     return (
         <div 
             ref={mainContentRef}
@@ -278,14 +280,13 @@ function GameComponent() {
                     </div>
 
                     <div className="flex items-center gap-2 md:gap-3">
-                        {/* YENİ EKLENEN BİTİR BUTONU */}
                         <Button 
                             onClick={() => setIsFinished(true)}
                             variant="ghost"
-                            className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10"
+                            className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10 hidden sm:flex"
                         >
                             <XOctagon className="h-4 w-4 mr-1.5" />
-                            <span className="hidden sm:inline">BİTİR</span>
+                            Bitir
                         </Button>
 
                         <div className="flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
@@ -300,13 +301,26 @@ function GameComponent() {
             {/* --- OYUN ALANI --- */}
             <div className="relative flex-grow flex flex-col justify-center items-center w-full max-w-4xl z-10 pb-12">
                 
-                <div className="h-20 flex items-center justify-center mb-8">
-                    <div className={cn(
-                        "text-5xl md:text-6xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-fuchsia-200 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-150",
-                        currentWordString ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-4"
-                    )}>
-                        {currentWordString}
-                    </div>
+                <div className="h-24 flex items-center justify-center gap-4 mb-8">
+                    {targetWords.map((word, wordIndex) => (
+                        <div key={wordIndex} className="flex gap-2">
+                            {word.split('').map((char, charIndex) => {
+                                const overallIndex = targetWords.slice(0, wordIndex).join('').length + charIndex;
+                                const letterObj = constructedLetters[overallIndex];
+                                return (
+                                    <div 
+                                        key={`${wordIndex}-${charIndex}`}
+                                        className={cn(
+                                            "w-16 h-20 md:w-20 md:h-24 rounded-xl flex items-center justify-center text-4xl md:text-5xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-fuchsia-200 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-150",
+                                            currentWordString.length > overallIndex ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-4"
+                                        )}
+                                    >
+                                        {currentWordString.length > overallIndex ? currentWordString[overallIndex] : ''}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
                 </div>
 
                 <div 

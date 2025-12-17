@@ -51,8 +51,8 @@ export async function getIlimHazinesiAction(
                 item.content &&
                 item.content.term &&
                 item.content.definition &&
-                cleanForAnagram(item.content.term).length >= 3 &&
-                cleanForAnagram(item.content.term).length <= 10
+                cleanForAnagram(item.content.term).replace(/\s/g, '').length >= 3 &&
+                cleanForAnagram(item.content.term).replace(/\s/g, '').length <= 12
             );
 
         if (allDefinitions.length === 0) {
@@ -68,7 +68,7 @@ export async function getIlimHazinesiAction(
             const definition = item.content.definition!;
             
             // The letters will only be from the main word itself.
-            const letters = mainWord.split('').sort(() => Math.random() - 0.5);
+            const letters = mainWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5);
             
             gameLevels.push({
                 mainWord,
