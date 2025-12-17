@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import isEqual from 'lodash.isequal';
 import {
     Dialog,
@@ -92,7 +92,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             const newStepData: any = { ...prev };
             if (!newStepData.content) newStepData.content = {};
             
-            let array = newStepData[path] || newStepData.content?.[path];
+            let array = newStepData[arrayPath] || newStepData.content?.[arrayPath];
 
             if (Array.isArray(array)) {
                 const newArray = [...array];
@@ -102,10 +102,10 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     newArray[index] = value;
                 }
 
-                if (path === 'cards' || path === 'questions' || path === 'items') {
-                    newStepData[path] = newArray;
-                } else if (path === 'categories') {
-                    newStepData.content[path] = newArray;
+                if (arrayPath === 'cards' || arrayPath === 'questions' || arrayPath === 'items') {
+                    newStepData[arrayPath] = newArray;
+                } else if (arrayPath === 'categories') {
+                    newStepData.content[arrayPath] = newArray;
                 }
             }
             return newStepData;
@@ -131,7 +131,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
 
             const updatedArray = [...targetArray, newItem];
 
-            if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting')) {
+            if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting' || prev.type === 'conceptExplanation' || prev.type === 'accordion')) {
                  if (!newStepData.content) newStepData.content = {};
                  newStepData.content[path] = updatedArray;
             } else {
@@ -273,7 +273,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         {(editedStep.cards || []).map((card: any, index: number) => (
                            <div key={`card-${index}`} className="space-y-2 p-2 border rounded-md">
                                { 'term' in card ? <><Input value={card.term} onChange={e => handleArrayChange('cards', index, 'term', e.target.value)} placeholder="Terim"/><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="Tanım"/></> 
-                                : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.scrambledWord} onChange={e => handleArrayChange('cards', index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/></>}
+                                : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/><Input value={card.scrambledWord} onChange={e => handleArrayChange('cards', index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime" disabled/></>}
                                <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
                            </div>
                         ))}
@@ -339,5 +339,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
         </>
     );
 }
+
+    
 
     
