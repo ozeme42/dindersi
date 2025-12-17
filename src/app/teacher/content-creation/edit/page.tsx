@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
@@ -144,70 +145,28 @@ function StepCard({ step, order, onEdit, onDelete, onSplit, id }: {
 }
 
 export function TopicEditor({ 
-    initialTopic, 
-    courseId, 
-    unitId, 
-    topicId: topicIdProp, 
-    onSave, 
-    isSaving,
-    isUnitFlow = false,
-    onOpenAIGeneration
+    title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
+    onSave, isSaving, isUnitFlow = false, onOpenAIGeneration
 }: { 
-    initialTopic: Topic | null,
-    courseId: string,
-    unitId: string,
-    topicId?: string | null,
-    onSave: (data: { steps: LessonStep[], title: string, sourceText: string, htmlContent?: string }) => Promise<void>,
+    title: string, setTitle: (t: string) => void,
+    steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
+    sourceText: string, setSourceText: (t: string) => void,
+    htmlContent: string, setHtmlContent: (h: string) => void,
+    onSave: () => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
-    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { topicTitle: string, sourceText: string }) => void;
+    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
 }) {
-    const topicId = isUnitFlow ? null : (topicIdProp || initialTopic?.id);
-    
-    const [title, setTitle] = useState(initialTopic?.title || '');
-    const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
-    const [sourceText, setSourceText] = useState(initialTopic?.sourceText || '');
-    const [htmlContent, setHtmlContent] = useState(initialTopic?.htmlContent || '');
-    
-    const [isLoading, setIsLoading] = useState(!initialTopic);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
     const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
     const [isLibraryPanelOpen, setIsLibraryPanelOpen] = useState(false);
     const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
-
-    const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
-    };
-
-    useEffect(() => {
-        if (initialTopic) {
-            setTitle(initialTopic.title);
-            setSteps(addIdToSteps(initialTopic.steps || []));
-            setSourceText(initialTopic.sourceText || '');
-            setHtmlContent(initialTopic.htmlContent || '');
-            setIsLoading(false);
-        } else {
-             const fetchTopicData = async () => {
-                if (!courseId || !unitId || !topicId) return;
-                setIsLoading(true);
-                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                if (topicSnap.exists()) {
-                    const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
-                    setTitle(topicData.title);
-                    setSteps(addIdToSteps(topicData.steps || []));
-                    setSourceText(topicData.sourceText || '');
-                    setHtmlContent(topicData.htmlContent || '');
-                } else {
-                    toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
-                }
-                setIsLoading(false);
-            }
-            fetchTopicData();
-        }
-    }, [initialTopic, courseId, unitId, topicId, toast]);
+    const searchParams = useSearchParams();
+    const courseId = searchParams.get('courseId');
+    const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
     
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -215,15 +174,19 @@ export function TopicEditor({
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-
+    
+    const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
+        return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
+    };
+    
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         if (over && active.id !== over.id) {
-            const oldIndex = steps.findIndex((step) => step.id === active.id);
-            const newIndex = steps.findIndex((step) => step.id === over.id);
-            if (oldIndex !== -1 && newIndex !== -1) {
-                setSteps((items) => arrayMove(items, oldIndex, newIndex));
-            }
+            setSteps((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+                return arrayMove(items, oldIndex, newIndex);
+            });
         }
     };
 
@@ -364,19 +327,6 @@ export function TopicEditor({
         }
     };
     
-    const handleSaveFlow = async () => {
-        const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        await onSave({ steps: stepsToSave, title, sourceText, htmlContent });
-    };
-
-    if (isLoading) {
-        return (
-            <div className="flex h-screen items-center justify-center bg-slate-950">
-                <Loader2 className="h-16 w-16 animate-spin text-purple-500" />
-            </div>
-        );
-    }
-
     const anlatimStepOptions: {label: string, type?: LessonStep['type'], defaultTitle?: string, action?: () => void}[] = [
         { label: 'Metin İçeriği', type: 'content', defaultTitle: 'Metin İçeriği' },
         { label: 'Öğrenme Hedefleri', type: 'objectiveList', defaultTitle: 'Bu Konuda Öğreneceklerimiz' },
@@ -398,8 +348,8 @@ export function TopicEditor({
         { label: 'Doğru/Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
-        { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
         { label: 'Kelime Dehası (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
+        { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
     ];
@@ -407,7 +357,6 @@ export function TopicEditor({
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
             
-            {/* Arka Plan */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
@@ -416,7 +365,6 @@ export function TopicEditor({
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-6">
                 
-                {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                      <div className="flex items-center gap-4">
                         <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl h-12 w-12 flex-shrink-0">
@@ -447,22 +395,21 @@ export function TopicEditor({
                                 </Button>
                             </DropdownMenuTrigger>
                              <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim', {topicTitle: title, sourceText})} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme', {topicTitle: title, sourceText})} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Button onClick={handleSaveFlow} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
+                        <Button onClick={onSave} disabled={isSaving} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
                             Kaydet
                         </Button>
                     </div>
                 </div>
 
-                {/* Kaynak İçerik Alanı */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="source-text" className="border-b-0">
@@ -505,7 +452,6 @@ export function TopicEditor({
                     </Accordion>
                 </Card>
 
-                {/* Ders Akışı Yönetimi */}
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">
                         <h2 className="text-2xl font-black text-white flex items-center gap-2">
@@ -583,7 +529,6 @@ export function TopicEditor({
                     </DndContext>
                 </div>
 
-                {/* Dialoglar */}
                 <BulkStepImportDialog 
                     isOpen={isBulkImportOpen}
                     onOpenChange={setIsBulkImportOpen}
@@ -613,7 +558,6 @@ export function TopicEditor({
     );
 }
 
-// Wrapper component to handle Suspense
 function TopicEditorWrapper() {
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
@@ -621,26 +565,75 @@ function TopicEditorWrapper() {
     const topicId = searchParams.get('topicId');
     const { toast } = useToast();
     
-    // State'leri TopicEditorWrapper içine taşıdık
-    const [aiGenType, setAiGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
-    const [aiGenContext, setAiGenContext] = useState<{ topicId: string, topicTitle: string, sourceText: string } | null>(null);
-    const [isAIOpen, setIsAIOpen] = useState(false);
-    const [localSteps, setLocalSteps] = useState<LessonStep[]>([]);
+    // --- State Lifted Up ---
+    const [title, setTitle] = useState('');
+    const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
+    const [sourceText, setSourceText] = useState('');
+    const [htmlContent, setHtmlContent] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
     
+    const [aiGenType, setAiGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    const [isAIOpen, setIsAIOpen] = useState(false);
+
+    const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
+        return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
+    };
+
+    const fetchTopicData = useCallback(async () => {
+        if (!courseId || !unitId || !topicId) {
+            setIsLoading(false);
+            return;
+        };
+        setIsLoading(true);
+        const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+        const topicSnap = await getDoc(topicRef);
+        if (topicSnap.exists()) {
+            const topicData = { id: topicSnap.id, ...topicSnap.data() } as Topic;
+            setTitle(topicData.title);
+            setSteps(addIdToSteps(topicData.steps || []));
+            setSourceText(topicData.sourceText || '');
+            setHtmlContent(topicData.htmlContent || '');
+        } else {
+            toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
+        }
+        setIsLoading(false);
+    }, [courseId, unitId, topicId, toast]);
+
+    useEffect(() => {
+        fetchTopicData();
+    }, [fetchTopicData]);
+
+    const handleSaveFlow = async () => {
+        if (!courseId || !unitId || !topicId) return;
+        setIsSaving(true);
+        const stepsToSave = steps.map(({ id, ...rest }) => rest);
+        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
+        if(result.success) { 
+            toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." });
+        } else { 
+            toast({ title: "Hata", description: result.error, variant: "destructive" }); 
+        }
+        setIsSaving(false);
+    };
+
     const handleStepsGenerated = (newSteps: LessonStep[]) => {
-        setLocalSteps(prev => [...prev, ...newSteps]);
+        const newStepsWithIds = addIdToSteps(newSteps);
+        setSteps(prev => [...prev, ...newStepsWithIds]);
         toast({
             title: "Başarılı!",
             description: `${newSteps.length} yeni adım taslağa eklendi. Ana Kaydet butonuyla kalıcı hale getirin.`
         });
     };
-    
-    useEffect(() => {
-        if (!topicId) {
-            toast({ title: "Hata", description: "Düzenlenecek bir konu seçilmedi.", variant: 'destructive' });
-        }
-    }, [topicId, toast]);
 
+    if (isLoading) {
+         return (
+            <div className="flex h-screen items-center justify-center bg-slate-950">
+                <Loader2 className="h-16 w-16 animate-spin text-purple-500" />
+            </div>
+        );
+    }
+    
     if (!courseId || !unitId || !topicId) {
         return <div className="flex h-screen items-center justify-center bg-slate-950 text-red-500">
             Geçersiz URL. Lütfen içerik yönetimi sayfasından bir konu seçin.
@@ -649,38 +642,25 @@ function TopicEditorWrapper() {
     
     return (
         <>
-            <TopicEditor 
-                key={`${courseId}-${unitId}-${topicId}`}
-                initialTopic={null}
-                courseId={courseId}
-                unitId={unitId}
-                topicId={topicId}
-                onSave={async (data) => {
-                    const combinedSteps = [...data.steps, ...localSteps];
-                    const result = await updateTopicContent({ courseId, unitId, topicId, steps: combinedSteps, sourceText: data.sourceText || '', htmlContent: data.htmlContent || '' });
-                    if(result.success) { 
-                        toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." });
-                        setLocalSteps([]); // Clear local steps after saving
-                    } else { 
-                        toast({ title: "Hata", description: result.error, variant: "destructive" }); 
-                    }
-                }}
-                isSaving={false}
-                onOpenAIGeneration={(type, context) => {
+            <TopicEditor
+                title={title} setTitle={setTitle}
+                steps={steps} setSteps={setSteps}
+                sourceText={sourceText} setSourceText={setSourceText}
+                htmlContent={htmlContent} setHtmlContent={setHtmlContent}
+                onSave={handleSaveFlow}
+                isSaving={isSaving}
+                onOpenAIGeneration={(type) => {
                     setAiGenType(type);
-                    setAiGenContext({ topicId, topicTitle: context.topicTitle, sourceText: context.sourceText });
                     setIsAIOpen(true);
                 }}
             />
-            {aiGenContext && (
-                 <AiLessonStepGenerationDialog
-                    isOpen={isAIOpen}
-                    onOpenChange={setIsAIOpen}
-                    context={aiGenContext}
-                    onStepsGenerated={handleStepsGenerated}
-                    generationType={aiGenType}
-                />
-            )}
+            <AiLessonStepGenerationDialog
+                isOpen={isAIOpen}
+                onOpenChange={setIsAIOpen}
+                context={{ topicId, topicTitle: title, sourceText }}
+                onStepsGenerated={handleStepsGenerated}
+                generationType={aiGenType}
+            />
         </>
     )
 }
