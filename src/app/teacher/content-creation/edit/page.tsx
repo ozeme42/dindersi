@@ -155,7 +155,7 @@ export function TopicEditor({
     onSave: () => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
-    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme') => void;
+    onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { title: string, sourceText: string }) => void;
 }) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
@@ -395,10 +395,10 @@ export function TopicEditor({
                                 </Button>
                             </DropdownMenuTrigger>
                              <DropdownMenuContent className="bg-slate-900 border-white/10 text-white w-56">
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim', { title, sourceText })} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme')} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme', { title, sourceText })} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -546,6 +546,7 @@ export function TopicEditor({
                     onOpenChange={(isOpen) => !isOpen && setEditingStep(null)}
                     step={editingStep?.step ?? null}
                     onSave={handleUpdateStep}
+                    isSaving={isSaving}
                     context={{ courseId, unitId, topicId }}
                 />
                 <LessonPreviewDialog 
@@ -574,8 +575,9 @@ function TopicEditorWrapper() {
     const [isSaving, setIsSaving] = useState(false);
     
     const [aiGenType, setAiGenType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    const [aiGenContext, setAiGenContext] = useState<{ topicId: string, topicTitle: string, sourceText?: string } | null>(null);
     const [isAIOpen, setIsAIOpen] = useState(false);
-
+    
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
         return steps.map(step => ({ ...step, id: `step-${Math.random().toString(36).substr(2, 9)}` }));
     };
@@ -616,7 +618,7 @@ function TopicEditorWrapper() {
         }
         setIsSaving(false);
     };
-
+    
     const handleStepsGenerated = (newSteps: LessonStep[]) => {
         const newStepsWithIds = addIdToSteps(newSteps);
         setSteps(prev => [...prev, ...newStepsWithIds]);
@@ -649,15 +651,16 @@ function TopicEditorWrapper() {
                 htmlContent={htmlContent} setHtmlContent={setHtmlContent}
                 onSave={handleSaveFlow}
                 isSaving={isSaving}
-                onOpenAIGeneration={(type) => {
+                onOpenAIGeneration={(type, context) => {
                     setAiGenType(type);
+                    setAiGenContext({topicId, ...context});
                     setIsAIOpen(true);
                 }}
             />
             <AiLessonStepGenerationDialog
                 isOpen={isAIOpen}
                 onOpenChange={setIsAIOpen}
-                context={{ topicId, topicTitle: title, sourceText }}
+                context={aiGenContext}
                 onStepsGenerated={handleStepsGenerated}
                 generationType={aiGenType}
             />

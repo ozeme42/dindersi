@@ -28,6 +28,10 @@ function UnitFlowEditor() {
     const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
     
     const { toast } = useToast();
+    
+    const [title, setTitle] = useState('');
+    const [steps, setSteps] = useState<LessonStep[]>([]);
+    const [sourceText, setSourceText] = useState('');
 
     const fetchUnitData = useCallback(async () => {
         if (!courseId || !unitId) {
@@ -42,9 +46,12 @@ function UnitFlowEditor() {
 
             if (unitSnap.exists()) {
                 const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
-                if (!unitData.steps) unitData.steps = [];
                 
+                setTitle(unitData.title);
+                setSteps(unitData.steps || []);
+                setSourceText(unitData.sourceText || '');
                 setUnit(unitData);
+
             } else {
                 toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
                 router.back();
@@ -61,15 +68,15 @@ function UnitFlowEditor() {
         fetchUnitData();
     }, [fetchUnitData]);
 
-    const handleSave = async (data: { steps: LessonStep[], title: string, sourceText: string }) => {
+    const handleSave = async () => {
         if (!courseId || !unitId || !unit) return;
         
         setIsSaving(true);
         
         const dataToSave = {
-            title: data.title,
-            steps: data.steps,
-            sourceText: data.sourceText,
+            title: title,
+            steps: steps.map(({ id, ...rest }) => rest), // Remove temporary IDs
+            sourceText: sourceText,
         };
 
         try {
@@ -77,7 +84,7 @@ function UnitFlowEditor() {
 
             if (result.success) {
                 toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
-                setUnit(prev => prev ? { ...prev, ...dataToSave } : null);
+                await fetchUnitData();
             } else {
                 toast({ title: "Hata", description: result.error, variant: "destructive" });
             }
@@ -89,11 +96,7 @@ function UnitFlowEditor() {
     };
     
     const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
-        if (!unit) return;
-        
-        const updatedUnit = { ...unit, steps: [...(unit.steps || []), ...newSteps] };
-        setUnit(updatedUnit);
-
+        setSteps(prev => [...prev, ...newSteps]);
         toast({
             title: "Başarılı",
             description: `${newSteps.length} yeni adım taslağa eklendi. Değişiklikleri kaydetmeyi unutmayın.`
@@ -111,10 +114,14 @@ function UnitFlowEditor() {
     return (
         <>
             <TopicEditor
-                key={`editor-${unit.id}-${unit.steps?.length}`}
-                initialTopic={unit as Topic} // Cast Unit to Topic for props compatibility
-                courseId={courseId!}
-                unitId={unitId}
+                title={title}
+                setTitle={setTitle}
+                steps={steps as any[]}
+                setSteps={setSteps as any}
+                sourceText={sourceText}
+                setSourceText={setSourceText}
+                htmlContent={unit.htmlContent || ''} // This is not editable here, so we pass it directly
+                setHtmlContent={() => {}} // Dummy function
                 onSave={handleSave}
                 isSaving={isSaving}
                 isUnitFlow={true}
@@ -124,9 +131,9 @@ function UnitFlowEditor() {
                 isOpen={isAiOpen}
                 onOpenChange={setIsAiOpen}
                 context={{ 
-                    topicId: unit.id,
+                    topicId: unit.id, // Pass unitId as topicId for context
                     topicTitle: unit.title, 
-                    sourceText: unit.sourceText 
+                    sourceText: sourceText
                 }}
                 onStepsGenerated={handleAiStepsGenerated}
                 generationType={aiGenerationType}
