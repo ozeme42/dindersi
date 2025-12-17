@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -18,8 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-// Layers ikonu buraya eklendi
-import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Layers, Library } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Trash2, Save, FileEdit, CheckCircle2, XCircle, Library, Layers } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,23 +60,24 @@ type StepEditorDialogProps = {
 
 // Helper function to shuffle words in a sentence
 function shuffleSentence(sentence: string): string {
-  return sentence
-    .split(' ')
-    .map(word => {
-      let chars = word.split('');
-      for (let i = chars.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [chars[i], chars[j]] = [chars[j], chars[i]];
-      }
-      return chars.join('');
-    })
-    .join(' ');
+  const words = sentence.split(' ');
+  for (let i = words.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [words[i], words[j]] = [words[j], words[i]];
+  }
+  return words.join(' ');
 }
 
+// Helper function to clean words for anagrams
+const cleanForAnagram = (text: string): string => {
+  return text
+    .toLocaleUpperCase('tr-TR')
+    .replace(/[^A-Z0-9ÇĞİÖŞÜ]/g, ''); // Sadece harfler ve rakamlar kalır
+};
 
-export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }: StepEditorDialogProps) {
+
+export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
-    const [isSaving, setIsSaving] = useState(false);
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     
     useEffect(() => {
@@ -110,12 +109,15 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 break;
              }
             case 'anagramGame': {
-                const newCards = items.map(item => ({
-                    definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
-                    correctAnswer: (item as ActivityItem).content.term || '',
-                    scrambledWord: ((item as ActivityItem).content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
-                }));
-                setEditedStep({...editedStep, cards: newCards} as AnagramGameStep);
+                const newCards = items.map(item => {
+                    const cleanWord = cleanForAnagram((item as ActivityItem).content.term || '');
+                    return {
+                        definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
+                        correctAnswer: cleanWord,
+                        scrambledWord: cleanWord.split('').sort(() => 0.5 - Math.random()).join(''),
+                    };
+                });
+                setEditedStep({...(editedStep as AnagramGameStep), cards: newCards});
                 break;
             }
             case 'sentenceScramble': {
@@ -141,7 +143,6 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
                 });
                 // This case needs special handling since it creates multiple steps.
-                // It's better handled by a separate callback in the parent.
                 // For now, let's just log a warning or take the first one.
                 if(newSteps.length > 0) {
                      onSave(newSteps[0]); // Just add the first one for now
@@ -586,14 +587,45 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
             onOpenChange={setIsLibraryOpen}
             onItemsSelected={(handleSelectFromLibrary as any)}
             context={context}
-            config={
-                editedStep.type === 'flashcard' ? { filter: ['definition'], multiSelect: true, stepType: 'flashcard' } :
-                editedStep.type === 'anagramFlashcard' ? { filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' } :
-                editedStep.type === 'sentenceScramble' ? { filter: ['sentence'], multiSelect: false, stepType: 'sentenceScramble' } :
-                editedStep.type === 'anagramGame' ? { filter: ['definition'], multiSelect: true, stepType: 'anagramGame' } :
-                { filter: ['concept'], multiSelect: true, stepType: 'keyConcepts' } // Default for content with 'kavramlar'
-            }
+            config={libraryConfig}
         />
         </>
     );
 }
+```
+- src/components/ui/textarea.tsx:
+```tsx
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={cn(
+          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Textarea.displayName = "Textarea"
+
+export { Textarea }
+
+```
+- src/lib/placeholders.ts:
+```ts
+
+
+export function getGenericPlaceholderImage(seed?: string) {
+  return `https://picsum.photos/seed/${seed || Math.random()}/600/400`;
+}
+```
