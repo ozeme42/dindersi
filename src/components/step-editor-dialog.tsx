@@ -1,7 +1,7 @@
 
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import isEqual from 'lodash.isequal';
 import {
     Dialog,
@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List } from 'lucide-react';
+import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library } from 'lucide-react';
 import type { ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, VideoStep, VisualStep, Question, ImageAsset } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
@@ -92,7 +92,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             const newStepData: any = { ...prev };
             if (!newStepData.content) newStepData.content = {};
             
-            let array = newStepData.content[arrayPath];
+            let array = newStepData[path] || newStepData.content?.[path];
 
             if (Array.isArray(array)) {
                 const newArray = [...array];
@@ -101,7 +101,12 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 } else {
                     newArray[index] = value;
                 }
-                newStepData.content[arrayPath] = newArray;
+
+                if (path === 'cards' || path === 'questions' || path === 'items') {
+                    newStepData[path] = newArray;
+                } else if (path === 'categories') {
+                    newStepData.content[path] = newArray;
+                }
             }
             return newStepData;
         });
@@ -116,14 +121,17 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
             
             let newItem: any;
             if (path === 'categories') newItem = { value: '' };
+            else if (path === 'items' && prev.type === 'conceptExplanation') newItem = { concept: 'Yeni Kavram', definition: 'Yeni Tanım' };
+            else if (path === 'items' && prev.type === 'accordion') newItem = { title: 'Yeni Başlık', content: 'Yeni İçerik' };
             else if (path === 'items') newItem = prev.type === 'sorting' ? '' : { text: '', category: '' };
-            else if (path === 'cards') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
+            else if (path === 'cards' && prev.type === 'flashcard') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
+            else if (path === 'cards' && (prev.type === 'anagramGame' || prev.type === 'anagramFlashcard')) newItem = { definition: 'İpucu', scrambledWord: 'YENI', correctAnswer: 'YENİ' };
             else if (path === 'questions') newItem = { statement: 'Yeni İfade', isTrue: true };
             else return prev;
 
             const updatedArray = [...targetArray, newItem];
 
-            if (['categories', 'items'].includes(path)) {
+            if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting')) {
                  if (!newStepData.content) newStepData.content = {};
                  newStepData.content[path] = updatedArray;
             } else {
@@ -144,7 +152,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
 
             const updatedArray = targetArray.filter((_: any, index: number) => index !== indexToRemove);
             
-            if (['categories', 'items'].includes(path)) {
+            if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting' || prev.type === 'conceptExplanation' || prev.type === 'accordion')) {
                  newStepData.content[path] = updatedArray;
             } else {
                  newStepData[path] = updatedArray;
@@ -235,14 +243,14 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                      <>
                         <Button size="sm" onClick={() => addToArray('items')}><PlusCircle className="mr-2 h-4 w-4"/>Hedef Ekle</Button>
                         {(editedStep.items || []).map((item, index) => (
-                             <div key={index} className="flex gap-2"><Input value={item} onChange={e => handleArrayChange('items', index, null, e.target.value)} /><Button variant="ghost" size="icon" onClick={() => removeFromArray('items', index)}><Trash2 className="h-4 w-4"/></Button></div>
+                             <div key={`obj-${index}`} className="flex gap-2"><Input value={item} onChange={e => handleArrayChange('items', index, null, e.target.value)} /><Button variant="ghost" size="icon" onClick={() => removeFromArray('items', index)}><Trash2 className="h-4 w-4"/></Button></div>
                         ))}
                      </>
                  ) : editedStep.type === 'conceptExplanation' ? (
                      <>
                         <Button size="sm" onClick={() => addToArray('items')}><PlusCircle className="mr-2 h-4 w-4"/>Kavram Ekle</Button>
                         {(editedStep.items || []).map((item: any, index: number) => (
-                             <div key={index} className="space-y-2 border p-2 rounded-md"><Input value={item.concept} onChange={e => handleArrayChange('items', index, 'concept', e.target.value)} placeholder="Kavram" /><Textarea value={item.definition} onChange={e => handleArrayChange('items', index, 'definition', e.target.value)} placeholder="Tanım"/><Button variant="ghost" size="sm" onClick={() => removeFromArray('items', index)}>Sil</Button></div>
+                             <div key={`concept-${index}`} className="space-y-2 border p-2 rounded-md"><Input value={item.concept} onChange={e => handleArrayChange('items', index, 'concept', e.target.value)} placeholder="Kavram" /><Textarea value={item.definition} onChange={e => handleArrayChange('items', index, 'definition', e.target.value)} placeholder="Tanım"/><Button variant="ghost" size="sm" onClick={() => removeFromArray('items', index)}>Sil</Button></div>
                         ))}
                      </>
                  ) : editedStep.type === 'video' ? (
@@ -254,16 +262,16 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                  ) : editedStep.type === 'htmlSlide' ? (
                      <Textarea value={(editedStep as HtmlSlideStep).htmlContent} onChange={(e) => setEditedStep({ ...editedStep, htmlContent: e.target.value })} className="min-h-[250px] font-mono text-xs"/>
                  ) : editedStep.type === 'mcq' ? (
-                    <div className="space-y-2"><Textarea value={(editedStep as McqStep).question} onChange={e => setEditedStep({...editedStep, question: e.target.value})}/><RadioGroup value={(editedStep as McqStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as McqStep).options.map((opt, i) => <div key={i} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as McqStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                    <div className="space-y-2"><Textarea value={(editedStep as McqStep).question} onChange={e => setEditedStep({...editedStep, question: e.target.value})}/><RadioGroup value={(editedStep as McqStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as McqStep).options.map((opt, i) => <div key={`mcq-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as McqStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
                  ) : editedStep.type === 'tf' ? (
                     <div className="space-y-2"><Textarea value={(editedStep as TfStep).statement} onChange={e => setEditedStep({...editedStep, statement: e.target.value})}/><div className="flex items-center space-x-2"><Checkbox id="isTrue" checked={(editedStep as TfStep).isTrue} onCheckedChange={c => setEditedStep({...editedStep, isTrue: !!c})}/><Label htmlFor="isTrue">Bu ifade doğru</Label></div></div>
                  ) : editedStep.type === 'fitb' ? (
-                    <div className="space-y-2"><Textarea value={(editedStep as FitbStep).sentenceWithBlank} onChange={e => setEditedStep({...editedStep, sentenceWithBlank: e.target.value})}/><RadioGroup value={(editedStep as FitbStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as FitbStep).options.map((opt, i) => <div key={i} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-fitb-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as FitbStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                    <div className="space-y-2"><Textarea value={(editedStep as FitbStep).sentenceWithBlank} onChange={e => setEditedStep({...editedStep, sentenceWithBlank: e.target.value})}/><RadioGroup value={(editedStep as FitbStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as FitbStep).options.map((opt, i) => <div key={`fitb-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-fitb-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as FitbStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
                  ) : editedStep.type === 'flashcard' || editedStep.type === 'anagramFlashcard' ? (
                      <>
                         <div className="flex justify-end"><Button size="sm" onClick={() => addToArray('cards')}><PlusCircle className="mr-2 h-4 w-4"/>Kart Ekle</Button></div>
                         {(editedStep.cards || []).map((card: any, index: number) => (
-                           <div key={index} className="space-y-2 p-2 border rounded-md">
+                           <div key={`card-${index}`} className="space-y-2 p-2 border rounded-md">
                                { 'term' in card ? <><Input value={card.term} onChange={e => handleArrayChange('cards', index, 'term', e.target.value)} placeholder="Terim"/><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="Tanım"/></> 
                                 : <><Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/><Input value={card.scrambledWord} onChange={e => handleArrayChange('cards', index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/><Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/></>}
                                <Button size="icon" variant="ghost" onClick={() => removeFromArray('cards', index)}><Trash2 className="h-4 w-4"/></Button>
@@ -274,7 +282,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                      <>
                         <div className="flex justify-end"><Button size="sm" onClick={() => addToArray('cards')}><PlusCircle className="mr-2 h-4 w-4"/>Kelime Ekle</Button></div>
                         {(editedStep.cards || []).map((card: any, index: number) => (
-                           <div key={index} className="space-y-2 p-2 border rounded-md">
+                           <div key={`anagram-card-${index}`} className="space-y-2 p-2 border rounded-md">
                              <Textarea value={card.definition} onChange={e => handleArrayChange('cards', index, 'definition', e.target.value)} placeholder="İpucu"/>
                              <Input value={card.correctAnswer} onChange={e => handleArrayChange('cards', index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap (Boşluksuz)"/>
                              <Input value={card.scrambledWord} disabled readOnly className="bg-muted"/>
@@ -311,7 +319,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                 </ScrollArea>
                 <DialogFooter className="p-6 border-t">
                     <DialogClose asChild><Button type="button" variant="ghost">İptal</Button></DialogClose>
-                    <Button onClick={handleSave} disabled={isSaving || !isDirty}>
+                    <Button onClick={handleSubmit} disabled={isSaving || !isDirty}>
                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                         Değişiklikleri Kaydet
                     </Button>
