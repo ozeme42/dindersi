@@ -1,5 +1,5 @@
 
-'use client';
+"use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import isEqual from 'lodash.isequal';
@@ -23,6 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
 import { LibraryImportDialog } from './library-import-dialog';
 import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "./ui/checkbox";
 
 const getInitialFormData = (item: Partial<LessonStep> | null) => {
     const initialContent = (item as any)?.content || {};
@@ -31,7 +32,7 @@ const getInitialFormData = (item: Partial<LessonStep> | null) => {
         : [];
     
     return {
-        id: item?.id || `new-${Date.now()}-${Math.random()}`,
+        id: (item as any)?.id || `new-${Date.now()}-${Math.random()}`,
         type: item?.type || 'content',
         title: item?.title || '',
         content: {
@@ -87,68 +88,71 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     };
     
     const handleArrayChange = (arrayPath: string, index: number, fieldPath: string | null, value: any) => {
-        setEditedStep(prev => {
-            if (!prev) return null;
-            const newStepData: any = { ...prev };
-            
-            let array: any[] | undefined;
-            let isContentArray = false;
-
-            if (newStepData[arrayPath] && Array.isArray(newStepData[arrayPath])) {
-                array = newStepData[arrayPath];
-            } else if (newStepData.content && newStepData.content[arrayPath] && Array.isArray(newStepData.content[arrayPath])) {
-                array = newStepData.content[arrayPath];
-                isContentArray = true;
-            } else {
-                 return prev;
-            }
-
-            const newArray = [...array];
-            if (fieldPath) {
-                newArray[index] = { ...newArray[index], [fieldPath]: value };
-            } else {
-                newArray[index] = value;
-            }
-
-            if (isContentArray) {
-                if (!newStepData.content) newStepData.content = {};
-                newStepData.content[arrayPath] = newArray;
-            } else {
-                newStepData[arrayPath] = newArray;
-            }
-            
-            return newStepData;
-        });
+      setEditedStep(prev => {
+          if (!prev) return null;
+          const newStepData: any = { ...prev };
+          
+          let array: any[] | undefined;
+          let isContentArray = false;
+    
+          if (newStepData[arrayPath] && Array.isArray(newStepData[arrayPath])) {
+              array = newStepData[arrayPath];
+          } else if (newStepData.content && newStepData.content[arrayPath] && Array.isArray(newStepData.content[arrayPath])) {
+              array = newStepData.content[arrayPath];
+              isContentArray = true;
+          } else {
+               return prev;
+          }
+    
+          const newArray = [...array];
+          if (fieldPath) {
+              newArray[index] = { ...newArray[index], [fieldPath]: value };
+          } else {
+              newArray[index] = value;
+          }
+    
+          if (isContentArray) {
+              if (!newStepData.content) newStepData.content = {};
+              newStepData.content[arrayPath] = newArray;
+          } else {
+              newStepData[arrayPath] = newArray;
+          }
+          
+          return newStepData;
+      });
     };
     
     const addToArray = (path: 'categories' | 'items' | 'cards' | 'questions') => {
-        setEditedStep(prev => {
-            if (!prev) return null;
-            const newStepData: any = { ...prev };
-            
-            let targetArray: any[] = newStepData[path] || newStepData.content?.[path] || [];
-            
-            let newItem: any;
-            if (path === 'categories') newItem = { value: '' };
-            else if (path === 'items' && prev.type === 'conceptExplanation') newItem = { id: `item-${Date.now()}`, concept: 'Yeni Kavram', definition: 'Yeni Tanım' };
-            else if (path === 'items' && prev.type === 'accordion') newItem = { id: `item-${Date.now()}`, title: 'Yeni Başlık', content: 'Yeni İçerik' };
-            else if (path === 'items') newItem = prev.type === 'sorting' ? '' : { text: '', category: '' };
-            else if (path === 'cards' && prev.type === 'flashcard') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
-            else if (path === 'cards' && (prev.type === 'anagramGame' || prev.type === 'anagramFlashcard')) newItem = { definition: 'İpucu', scrambledWord: 'YENI', correctAnswer: 'YENİ' };
-            else if (path === 'questions') newItem = { statement: 'Yeni İfade', isTrue: true };
-            else return prev;
-
-            const updatedArray = [...targetArray, newItem];
-
-            if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting' || prev.type === 'conceptExplanation' || prev.type === 'accordion')) {
-                 if (!newStepData.content) newStepData.content = {};
-                 newStepData.content[path] = updatedArray;
-            } else {
-                 newStepData[path] = updatedArray;
-            }
-
-            return newStepData;
-        });
+      setEditedStep(prev => {
+          if (!prev) return null;
+          const newStepData: any = { ...prev };
+          
+          // Use a stable and unique ID for new items
+          const newItemId = `item-${Date.now()}-${Math.random()}`;
+    
+          let targetArray: any[] = newStepData[path] || newStepData.content?.[path] || [];
+          
+          let newItem: any;
+          if (path === 'categories') newItem = { value: '', id: newItemId };
+          else if (path === 'items' && prev.type === 'conceptExplanation') newItem = { id: newItemId, concept: 'Yeni Kavram', definition: 'Yeni Tanım' };
+          else if (path === 'items' && prev.type === 'accordion') newItem = { id: newItemId, title: 'Yeni Başlık', content: 'Yeni İçerik' };
+          else if (path === 'items') newItem = prev.type === 'sorting' ? '' : { text: '', category: '' };
+          else if (path === 'cards' && prev.type === 'flashcard') newItem = { term: 'Yeni Terim', definition: 'Yeni Tanım' };
+          else if (path === 'cards' && (prev.type === 'anagramGame' || prev.type === 'anagramFlashcard')) newItem = { definition: 'İpucu', scrambledWord: 'YENI', correctAnswer: 'YENİ' };
+          else if (path === 'questions') newItem = { statement: 'Yeni İfade', isTrue: true };
+          else return prev;
+    
+          const updatedArray = [...targetArray, newItem];
+    
+          if (['categories', 'items'].includes(path) && (prev.type === 'categorization' || prev.type === 'sorting' || prev.type === 'conceptExplanation' || prev.type === 'accordion')) {
+               if (!newStepData.content) newStepData.content = {};
+               newStepData.content[path] = updatedArray;
+          } else {
+               newStepData[path] = updatedArray;
+          }
+    
+          return newStepData;
+      });
     };
     
     const removeFromArray = (path: 'categories' | 'items' | 'cards' | 'questions', indexToRemove: number) => {

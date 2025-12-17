@@ -177,10 +177,10 @@ export function TopicEditor({
     );
     
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
-        return steps.map((step, index) => ({ 
-            ...step, 
-            id: `step-${Date.now()}-${index}-${Math.random()}` 
-        }));
+      return steps.map((step, index) => ({ 
+        ...step, 
+        id: (step as any).id || `step-${Date.now()}-${index}-${Math.random()}` 
+      }));
     };
     
     const handleDragEnd = (event: DragEndEvent) => {
@@ -216,11 +216,11 @@ export function TopicEditor({
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
             case 'activityLink': return;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
-            case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ title: 'Başlık 1', content: 'İçerik 1'}] }; break;
+            case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
         }
 
-        const newStepWithId: DraggableLessonStep = { ...newStep, id: `new-step-${Date.now()}-${Math.random()}` };
+        const newStepWithId: DraggableLessonStep = { ...newStep, id: `step-${Date.now()}-${Math.random()}` };
         setSteps(currentSteps => [...currentSteps, newStepWithId]);
     };
 
@@ -294,8 +294,8 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const concepts = importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
-             newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: `<ul>${concepts}</ul>` });
+             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
                 const q = item as Question;
@@ -497,7 +497,7 @@ export function TopicEditor({
                                                 activityType: act.href,
                                                 activityLabel: act.label,
                                             } as any;
-                                            const newStepWithId: DraggableLessonStep = { ...newStep, id: `new-step-${Date.now()}` };
+                                            const newStepWithId: DraggableLessonStep = { ...newStep, id: `step-${Date.now()}-${Math.random()}` };
                                             setSteps(currentSteps => [...currentSteps, newStepWithId]);
                                         }} className="focus:bg-white/10 focus:text-white cursor-pointer">{act.label}</DropdownMenuItem>
                                     ))}
@@ -585,7 +585,7 @@ function TopicEditorWrapper() {
     const addIdToSteps = (steps: LessonStep[]): DraggableLessonStep[] => {
         return steps.map((step, index) => ({ 
             ...step, 
-            id: step.id || `step-${Date.now()}-${index}-${Math.random()}` 
+            id: (step as any).id || `step-${Date.now()}-${index}-${Math.random()}` 
         }));
     };
 
@@ -627,7 +627,10 @@ function TopicEditorWrapper() {
     };
     
     const handleStepsGenerated = (newSteps: LessonStep[]) => {
-        const newStepsWithIds = addIdToSteps(newSteps);
+        const newStepsWithIds = newSteps.map((step, index) => ({
+            ...step,
+            id: `step-${Date.now()}-${index}-${Math.random()}`
+        }));
         setSteps(prev => [...prev, ...newStepsWithIds]);
         toast({
             title: "Başarılı!",
