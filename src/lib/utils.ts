@@ -20,16 +20,12 @@ export function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/[^a-z0-9.-]/g, '');
 }
 
-// SADECE HARFLERİ, SAYILARI VE BOŞLUKLARI BIRAKAN GÜNCELLENMİŞ FONKSİYON
+// GÜNCELLENMİŞ FONKSİYON: Türkçe karakterleri korur.
 export const cleanForAnagram = (text: string): string => {
   if (!text) return '';
-  return text
-    .toLocaleUpperCase('tr-TR')
-    .replace(/Ğ/g, 'G')
-    .replace(/Ü/g, 'U')
-    .replace(/Ş/g, 'S')
-    .replace(/İ/g, 'I')
-    .replace(/Ö/g, 'O')
-    .replace(/Ç/g, 'C')
-    .replace(/[^A-Z0-9\s]/g, ''); // Sadece büyük harfler, rakamlar ve boşluklar kalır
+  // Metni tamamen büyük harfe çevir (Türkçe karakterlere duyarlı)
+  const upperCaseText = text.toLocaleUpperCase('tr-TR');
+  // Sadece izin verilen Türkçe alfabe harfleri, rakamlar ve boşluklar dışındaki her şeyi sil
+  const cleanedText = upperCaseText.replace(/[^A-ZĞÜŞİÖÇ0-9\s]/g, '');
+  return cleanedText;
 };
