@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -32,12 +30,11 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
         }
         const className = classDoc.data().name;
 
-        // 1. Get all students matching the criteria (Only guests)
+        // 1. Get all students matching the criteria
         let studentsQuery;
         if (branch === 'all') {
             studentsQuery = query(
                 collection(db, 'users'),
-                where('role', '==', 'guest'), // *** DÜZELTME: 'student' yerine 'guest'
                 where('class', '>=', className),
                 where('class', '<', className + '\uf8ff')
             );
@@ -46,7 +43,6 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
             const poolClassName = `${fullClassName} (Havuz)`;
             studentsQuery = query(
                 collection(db, 'users'),
-                where('role', '==', 'guest'), // *** DÜZELTME: 'student' yerine 'guest'
                 where('class', 'in', [fullClassName, poolClassName])
             );
         }
@@ -63,10 +59,16 @@ export async function getStudentAnalysis(classId: string, branch: string): Promi
 
         const allScalesSnap = await getDocs(query(collection(db, 'evaluationScales'), where('type', '==', 'checklist')));
         
+        // Chunk studentIds to avoid 'in' query limit of 30
+        const studentIdChunks: string[][] = [];
+        for (let i = 0; i < studentIds.length; i += 30) {
+            studentIdChunks.push(studentIds.slice(i, i + 30));
+        }
+
         for(const scaleDoc of allScalesSnap.docs) {
-            // Firestore 'in' query supports up to 30 values. If more students, this needs chunking.
-            if (studentIds.length > 0) {
-                const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', studentIds.slice(0, 30)));
+            for (const chunk of studentIdChunks) {
+                if(chunk.length === 0) continue;
+                const entriesSubCollQuery = query(collection(db, `evaluationScales/${scaleDoc.id}/entries`), where('__name__', 'in', chunk));
                 const entriesSnap = await getDocs(entriesSubCollQuery);
                 entriesSnap.forEach(entryDoc => {
                     const studentId = entryDoc.id;

@@ -87,7 +87,7 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
                     student: student,
                     scoreEvent: event ? {...event, timestamp: (event.timestamp as any).toDate().toISOString()} : null,
                 };
-            }).filter(p => p.scoreEvent !== null); // Only include students who have taken the exam
+            }); // Keep all students, even those who haven't attempted.
             studentProgress.push(...progressChunk);
         }
 
@@ -100,6 +100,4 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
              const url = error.message.match(urlRegex)?.[0] || '#';
              return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
         }
-        return { success: false, error: 'Ödev detayları alınırken bir hata oluştu.' };
-    }
-}
+        return { success: false,

@@ -2,11 +2,11 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, Bug, User, Clock, FileText, CheckCircle2, AlertCircle, RefreshCw, Send } from 'lucide-react';
-import { getErrorReports, addResponseToReport } from './actions';
+import { addResponseToReport } from './actions';
 import type { ErrorReport } from '@/lib/types';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
@@ -18,6 +18,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { collection, query, orderBy, onSnapshot, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 function ReportDetailDialog({ report, isOpen, onOpenChange, onStatusChange }: {
     report: ErrorReport | null,
@@ -178,30 +180,53 @@ function ReportCard({ report, onSelect }: { report: ErrorReport, onSelect: () =>
 export default function ErrorReportsPage() {
     const [reports, setReports] = useState<ErrorReport[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [filter, setFilter] = useState<'all' | 'active' | ErrorReport['status']>('active');
     const [selectedReport, setSelectedReport] = useState<ErrorReport | null>(null);
     const { toast } = useToast();
 
-    const fetchReports = async () => {
-        setIsLoading(true);
-        const result = await getErrorReports();
-        if (result.success && result.data) {
-            setReports(result.data);
-        } else {
-            toast({ title: 'Hata', description: 'Raporlar alınamadı.', variant: 'destructive'});
-        }
-        setIsLoading(false);
-    }
-    
     useEffect(() => {
-        fetchReports();
+        setIsLoading(true);
+        const q = query(collection(db, 'errorReports'), orderBy('createdAt', 'desc'));
+        
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const fetchedReports: ErrorReport[] = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                 let conversation: any[] = [];
+                if (Array.isArray(data.conversation) && data.conversation.length > 0) {
+                    conversation = data.conversation.map((msg: any) => ({
+                        ...msg,
+                        createdAt: (msg.createdAt instanceof Timestamp ? msg.createdAt.toDate().toISOString() : msg.createdAt),
+                    }));
+                } else {
+                     conversation = [{ sender: 'student', message: data.message, createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString() }];
+                     if (data.response) conversation.push({ sender: 'teacher' as const, message: data.response, createdAt: new Date().toISOString() });
+                }
+                fetchedReports.push({
+                    id: doc.id,
+                    ...data,
+                    createdAt: (data.createdAt as Timestamp)?.toDate().toISOString(),
+                    conversation: conversation,
+                } as ErrorReport);
+            });
+            setReports(fetchedReports);
+            setIsLoading(false);
+            setError(null);
+        }, (err) => {
+            console.error("Error fetching reports in real-time:", err);
+            setError("Raporlar yüklenirken bir hata oluştu.");
+            setIsLoading(false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const handleStatusChange = async (id: string, status: ErrorReport['status'], response: string) => {
         const result = await addResponseToReport(id, status, response);
         if (result.success) {
             toast({ title: 'Başarılı', description: 'Rapor güncellendi.' });
-            fetchReports();
+            // No need to call fetchReports, onSnapshot will handle it.
         } else {
             toast({ title: 'Hata', description: 'Rapor güncellenemedi.', variant: 'destructive' });
         }
