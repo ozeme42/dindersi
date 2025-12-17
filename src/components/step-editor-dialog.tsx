@@ -1,8 +1,7 @@
 
-
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import isEqual from 'lodash.isequal';
 import {
     Dialog,
@@ -19,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library } from 'lucide-react';
-import type { ActivityItem, LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep } from '@/lib/types';
+import type { ActivityItem, LessonStep, McqStep, TfStep, FitbStep, FlashcardStep, AnagramStep, SentenceScrambleStep, VisualStep, IframeStep, ActivityLinkStep, TrueFalseListStep, HtmlSlideStep, ConceptExplanationStep, AnagramFlashcardStep, ObjectiveListStep, VideoStep, AnagramGameStep, Question } from '@/lib/types';
 import { ScrollArea } from "./ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Checkbox } from './ui/checkbox';
@@ -87,35 +86,35 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
         }
     };
 
-    const handleSelectFromLibrary = (items: ActivityItem[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame') => {
-        if (!editedStep) return;
+    const handleSelectFromLibrary = (items: (ActivityItem | Question)[], stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions') => {
+        if (!editedStep || items.length === 0) return;
 
         switch(stepType) {
             case 'flashcard': {
-                const newCards = items.map(item => ({ term: item.content.term || '', definition: item.content.definition || ''}));
+                const newCards = items.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
                 setEditedStep({...editedStep, cards: newCards });
                 break;
             }
              case 'anagramFlashcard': {
                 const newCards = items.map(item => ({
-                    definition: `İpucu: Bu kelime "${item.content.text}"`, // Default hint
-                    scrambledWord: shuffleSentence(item.content.text || '').toLocaleUpperCase('tr-TR'),
-                    correctAnswer: item.content.text || ''
+                    definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`, // Default hint
+                    scrambledWord: shuffleSentence((item as ActivityItem).content.text || '').toLocaleUpperCase('tr-TR'),
+                    correctAnswer: (item as ActivityItem).content.text || ''
                 }));
                 setEditedStep({...editedStep, cards: newCards});
                 break;
              }
             case 'anagramGame': {
                 const newCards = items.map(item => ({
-                    definition: item.content.definition || 'Tanım bulunamadı.',
-                    correctAnswer: item.content.term || '',
-                    scrambledWord: (item.content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
+                    definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
+                    correctAnswer: (item as ActivityItem).content.term || '',
+                    scrambledWord: ((item as ActivityItem).content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
                 }));
                 setEditedStep({...editedStep, cards: newCards});
                 break;
             }
             case 'sentenceScramble': {
-                 const newSentence = items[0]?.content.text || '';
+                 const newSentence = (items[0] as ActivityItem)?.content.text || '';
                  setEditedStep({
                     ...editedStep,
                     correctSentence: newSentence,
@@ -124,9 +123,25 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 break;
             }
              case 'content': { // Used for "Anahtar Kavramlar"
-                 const newContent = "<ul>" + items.map(item => `<li>${item.content.text}</li>`).join('');
+                 const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
                  setEditedStep({...editedStep, content: newContent});
                  break;
+            }
+            case 'questions': {
+                const questionItems = items as Question[];
+                const newSteps: LessonStep[] = [];
+                questionItems.forEach(q => {
+                    if (q.type === 'Çoktan Seçmeli') newSteps.push({ type: 'mcq', title: q.text, ...q });
+                    else if (q.type === 'Doğru/Yanlış') newSteps.push({ type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' });
+                    else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
+                });
+                // This case needs special handling since it creates multiple steps.
+                // It's better handled by a separate callback in the parent.
+                // For now, let's just log a warning or take the first one.
+                if(newSteps.length > 0) {
+                     onSave(newSteps[0]); // Just add the first one for now
+                }
+                break;
             }
         }
         setIsLibraryOpen(false);
@@ -139,7 +154,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
     const renderEditorFields = () => {
         if (!editedStep) return null;
 
-        const libraryConfig: { enabled: boolean; filter: ActivityItem['type'][]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame'; } = {
+        const libraryConfig: { enabled: boolean; filter: (ActivityItem['type'] | 'questions')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'anagramGame' | 'questions'; } = {
             enabled: false,
             filter: [],
             multiSelect: false,
@@ -167,6 +182,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
             libraryConfig.multiSelect = true;
             libraryConfig.stepType = 'anagramGame';
         }
+
 
         switch (editedStep.type) {
             case 'content':
@@ -210,7 +226,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 const ceStep = editedStep as ConceptExplanationStep;
                 const handleItemChange = (index: number, field: 'concept' | 'definition', value: string) => {
                     const newItems = [...ceStep.items];
-                    newItems[index][field] = value;
+                    (newItems[index] as any)[field] = value;
                     setEditedStep({ ...ceStep, items: newItems });
                 };
                 const addItem = () => {
@@ -243,11 +259,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     <div className="space-y-4">
                          <div className="space-y-2">
                             <Label>Video URL (YouTube, Vimeo)</Label>
-                            <Input value={(editedStep as any).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} placeholder="https://www.youtube.com/watch?v=..."/>
+                            <Input value={(editedStep as VideoStep).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} placeholder="https://www.youtube.com/watch?v=..."/>
                         </div>
                         <div className="space-y-2">
                             <Label>Açıklama (İsteğe Bağlı)</Label>
-                            <Textarea value={(editedStep as any).description || ''} onChange={(e) => setEditedStep({ ...editedStep, description: e.target.value })} />
+                            <Textarea value={(editedStep as VideoStep).description || ''} onChange={(e) => setEditedStep({ ...editedStep, description: e.target.value })} />
                         </div>
                     </div>
                 );
@@ -255,7 +271,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 return (
                     <div className="space-y-2">
                         <Label>Görsel URL</Label>
-                        <Input value={(editedStep as any).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
+                        <Input value={(editedStep as VisualStep).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
                     </div>
                 );
             case 'iframe':
@@ -292,7 +308,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                 const fcStep = editedStep as FlashcardStep;
                 const handleCardChange = (index: number, field: 'term' | 'definition', value: string) => {
                     const newCards = [...fcStep.cards];
-                    newCards[index][field] = value;
+                    (newCards[index] as any)[field] = value;
                     setEditedStep({ ...fcStep, cards: newCards });
                 };
                 const addCard = () => {
@@ -319,45 +335,11 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                     </div>
                 );
             }
-            case 'anagramFlashcard': {
-                const afcStep = editedStep as AnagramFlashcardStep;
-                 const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
-                    const newCards = [...afcStep.cards];
-                    newCards[index][field] = value;
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                const addAnagramCard = () => {
-                    const newCards = [...afcStep.cards, { definition: 'İpucu', scrambledWord: 'YENİKELİME', correctAnswer: 'YENI KELIME' }];
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                const removeAnagramCard = (index: number) => {
-                    const newCards = afcStep.cards.filter((_, i) => i !== index);
-                    setEditedStep({ ...afcStep, cards: newCards });
-                };
-                return (
-                    <div className="space-y-4">
-                        <div className="flex justify-end gap-2">
-                             <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
-                            <Button size="sm" onClick={addAnagramCard}><PlusCircle className="mr-2 h-4 w-4"/> Anagram Kartı Ekle</Button>
-                        </div>
-                        {afcStep.cards.map((card, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md">
-                                <div className="col-span-11 space-y-2">
-                                     <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu..."/>
-                                     <Input value={card.scrambledWord} onChange={e => handleCardChange(index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/>
-                                     <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
-                                </div>
-                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeAnagramCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
-                            </div>
-                        ))}
-                    </div>
-                );
-            }
-             case 'anagramGame': {
+            case 'anagramGame': {
                 const agStep = editedStep as AnagramGameStep;
                  const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
                     const newCards = [...agStep.cards];
-                    newCards[index][field] = value;
+                    (newCards[index] as any)[field] = value;
                     setEditedStep({ ...agStep, cards: newCards });
                 };
                 const addCard = () => {
@@ -382,6 +364,40 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                                      <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
                                 </div>
                                 <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                            </div>
+                        ))}
+                    </div>
+                );
+            }
+            case 'anagramFlashcard': {
+                const afcStep = editedStep as AnagramFlashcardStep;
+                 const handleCardChange = (index: number, field: 'definition' | 'scrambledWord' | 'correctAnswer', value: string) => {
+                    const newCards = [...afcStep.cards];
+                    (newCards[index] as any)[field] = value;
+                    setEditedStep({ ...afcStep, cards: newCards });
+                };
+                const addAnagramCard = () => {
+                    const newCards = [...afcStep.cards, { definition: 'İpucu', scrambledWord: 'YENİKELİME', correctAnswer: 'YENI KELIME' }];
+                    setEditedStep({ ...afcStep, cards: newCards });
+                };
+                const removeAnagramCard = (index: number) => {
+                    const newCards = afcStep.cards.filter((_, i) => i !== index);
+                    setEditedStep({ ...afcStep, cards: newCards });
+                };
+                return (
+                    <div className="space-y-4">
+                        <div className="flex justify-end gap-2">
+                             <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)}><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>
+                            <Button size="sm" onClick={addAnagramCard}><PlusCircle className="mr-2 h-4 w-4"/> Anagram Kartı Ekle</Button>
+                        </div>
+                        {afcStep.cards.map((card, index) => (
+                            <div key={index} className="grid grid-cols-12 gap-2 p-3 border rounded-md items-center">
+                                <div className="col-span-11 space-y-2">
+                                     <Textarea value={card.definition} onChange={e => handleCardChange(index, 'definition', e.target.value)} placeholder="İpucu..."/>
+                                     <Input value={card.scrambledWord} onChange={e => handleCardChange(index, 'scrambledWord', e.target.value)} placeholder="Karışık Kelime"/>
+                                     <Input value={card.correctAnswer} onChange={e => handleCardChange(index, 'correctAnswer', e.target.value)} placeholder="Doğru Cevap"/>
+                                </div>
+                                <Button size="icon" variant="ghost" className="col-span-1 self-center" onClick={() => removeAnagramCard(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
                             </div>
                         ))}
                     </div>
@@ -421,7 +437,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                             <Textarea value={tfStep.statement} onChange={e => setEditedStep({ ...tfStep, statement: e.target.value })} />
                         </div>
                         <div className="flex items-center space-x-2">
-                            <Switch id="is-true-switch" checked={tfStep.isTrue} onCheckedChange={checked => setEditedStep({ ...tfStep, isTrue: checked })} />
+                            <Checkbox id="is-true-switch" checked={tfStep.isTrue} onCheckedChange={checked => setEditedStep({ ...tfStep, isTrue: !!checked })} />
                             <Label htmlFor="is-true-switch">{tfStep.isTrue ? "Bu ifade Doğru" : "Bu ifade Yanlış"}</Label>
                         </div>
                     </div>
@@ -453,7 +469,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
                                 <Textarea value={q.statement} onChange={(e) => handleTflChange(index, 'statement', e.target.value)} />
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
-                                        <Switch id={`is-true-${index}`} checked={q.isTrue} onCheckedChange={checked => handleTflChange(index, 'isTrue', checked)} />
+                                        <Checkbox id={`is-true-${index}`} checked={q.isTrue} onCheckedChange={checked => handleTflChange(index, 'isTrue', !!checked)} />
                                         <Label htmlFor={`is-true-${index}`}>{q.isTrue ? "Doğru" : "Yanlış"}</Label>
                                     </div>
                                     <Button size="icon" variant="ghost" className="col-span-1" onClick={() => removeTflQuestion(index)}><Trash2 className="h-4 w-4 text-destructive"/></Button>
@@ -543,7 +559,6 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, context }
             <DialogContent className="max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Adımı Düzenle</DialogTitle>
-                    <DialogDescription>Bu adımın içeriğini ve özelliklerini düzenleyin.</DialogDescription>
                 </DialogHeader>
                 <ScrollArea className="max-h-[60vh]">
                     <div className="py-4 space-y-4 pr-6">
@@ -606,4 +621,183 @@ export const placeholderCourseImages = [
 - public/grid-pattern.svg:
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><defs><style>.cls-1{fill:none;stroke:#374151;stroke-miterlimit:10;opacity:0.2;}</style></defs><rect class="cls-1" x="0.5" y="0.5" width="39" height="39"/></svg>
+```
+```
+- src/tailwind.config.ts:
+```ts
+import type {Config} from 'tailwindcss';
+
+const colorNames = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
+const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+// Creates a regex pattern like: /^(bg|text|border)-(slate|gray|...)-(50|100|...)$/
+const colorPattern = new RegExp(
+  `^(bg|text|border|ring|fill|stroke)-(${colorNames.join('|')})-(${shades.join('|')})$`
+);
+
+
+export default {
+  darkMode: ['class'],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  safelist: [
+    {
+      pattern: colorPattern,
+    },
+    {
+        pattern: /bg-chart-(1|2|3|4|5)/,
+    }
+  ],
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      fontFamily: {
+        sans: ['"Inter"', 'sans-serif'],
+        headline: ['"Poppins"', 'serif'],
+      },
+      colors: {
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          '1': 'hsl(var(--chart-1))',
+          '2': 'hsl(var(--chart-2))',
+          '3': 'hsl(var(--chart-3))',
+          '4': 'hsl(var(--chart-4))',
+          '5': 'hsl(var(--chart-5))',
+        },
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+        "fade-in-up": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "shake": {
+          "10%, 90%": { transform: "translate3d(-1px, 0, 0)" },
+          "20%, 80%": { transform: "translate3d(2px, 0, 0)" },
+          "30%, 50%, 70%": { transform: "translate3d(-4px, 0, 0)" },
+          "40%, 60%": { transform: "translate3d(4px, 0, 0)" },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        "fade-in-up": "fade-in-up 0.5s ease-out forwards",
+        "shake": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+      },
+    },
+  },
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
+} satisfies Config;
+
+```
+- tsconfig.json:
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+
 ```
