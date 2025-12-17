@@ -154,8 +154,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
          setEditedStep(prev => {
             if (!prev) return null;
             const newStepData: any = { ...prev };
-            
-            let targetArray: any[] | undefined = newStepData[path] || newStepData.content?.[path];
+             let targetArray: any[] | undefined = newStepData[path] || newStepData.content?.[path];
             if (!targetArray) return prev;
 
             const updatedArray = targetArray.filter((_: any, index: number) => index !== indexToRemove);
@@ -179,12 +178,12 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     const libraryConfig = useMemo(() => {
         if (!editedStep) return null;
         switch(editedStep.type) {
-            case 'flashcard': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'flashcard' };
-            case 'anagramFlashcard': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' };
-            case 'anagramGame': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'anagramGame' };
-            case 'sentenceScramble': return { enabled: true, filter: ['sentence'], multiSelect: true, stepType: 'sentenceScramble' };
-            case 'content': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'keyConcepts' };
-            default: return { enabled: false, filter: [], multiSelect: false, stepType: 'content' };
+            case 'flashcard': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'flashcard' as const };
+            case 'anagramFlashcard': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'anagramFlashcard' as const };
+            case 'anagramGame': return { enabled: true, filter: ['definition'], multiSelect: true, stepType: 'anagramGame' as const };
+            case 'sentenceScramble': return { enabled: true, filter: ['sentence'], multiSelect: true, stepType: 'sentenceScramble' as const };
+            case 'content': return { enabled: true, filter: ['concept'], multiSelect: true, stepType: 'keyConcepts' as const };
+            default: return { enabled: false, filter: [], multiSelect: false, stepType: 'content' as const };
         }
     }, [editedStep]);
 
