@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
@@ -300,8 +300,15 @@ function DuelGameComponent() {
                         <div className="w-full px-8 relative">
                              <div className="h-8 w-full bg-slate-800 rounded-full overflow-hidden border-4 border-slate-700 shadow-inner relative">
                                  <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-white/20 -translate-x-1/2" />
-                                 <div className="absolute left-0 top-0 bottom-0 w-1/2 bg-blue-600/30" />
-                                 <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-red-600/30" />
+                                 <div 
+                                    className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-blue-800 to-blue-500 transition-all duration-700 ease-out shadow-[0_0_20px_rgba(59,130,246,0.5)]"
+                                    style={{ width: `${50 + tugProgress / 2}%` }}
+                                 />
+                                 <div 
+                                    className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-red-800 to-red-500 transition-all duration-700 ease-out shadow-[0_0_20px_rgba(239,68,68,0.5)]"
+                                    style={{ width: `${50 - tugProgress / 2}%` }}
+                                 />
+                                 
                                  <div 
                                     className="absolute top-1/2 -translate-y-1/2 z-30 transition-all duration-700 ease-out"
                                     style={{ left: `${50 + tugProgress / 2}%`, transform: 'translate(-50%, -50%)' }}
@@ -320,14 +327,12 @@ function DuelGameComponent() {
                         </div>
                     </div>
                 )}
-                 {/* 2. ALT: SORU PANELİ */}
-                <div className="flex-1 min-h-0 pb-2">
+                {/* 2. ALT: SORU PANELİ */}
+                <div className="flex-1 min-h-0 px-2 pb-2">
                      <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-6 shadow-inner overflow-hidden flex flex-col">
-                        
-                        {/* Panel Header */}
                         <div className="flex flex-col md:flex-row items-center justify-between mb-6 shrink-0 border-b border-white/5 pb-4 gap-4">
                             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                                <span className="bg-red-500/20 text-red-400 p-1.5 rounded-lg border border-red-500/30"><ShieldAlert className="h-5 w-5"/></span>
+                                <span className="bg-red-500/20 text-red-400 p-1.5 rounded-lg border border-red-500/30"><Shield className="h-5 w-5"/></span>
                                 Soru Alanı
                             </h2>
                             <Button 
@@ -354,7 +359,7 @@ function DuelGameComponent() {
                                         <button
                                             key={i}
                                             disabled={isAnswered || !activePlayer}
-                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
+                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q as Question })}
                                             className={cn(
                                                 "aspect-square rounded-xl flex items-center justify-center text-2xl font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
                                                 isAnswered 
@@ -393,6 +398,6 @@ function DuelGameComponent() {
 }
 
 export default function SmartboardDuelloOyunPage() {
-  return <Suspense fallback={<CompetitionLoadingSkeleton />}><DuelGameComponent /></Suspense>
+    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}><DuelGameComponent /></Suspense>
 }
 ```
