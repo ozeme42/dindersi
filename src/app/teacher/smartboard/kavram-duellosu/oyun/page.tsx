@@ -5,7 +5,7 @@ import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "rea
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
+import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { getKavramDuellosuQuestions } from '../actions';
 import type { KavramDuellosuQuestion } from '../actions';
@@ -92,7 +92,7 @@ function DuelGameComponent() {
         if (gameState !== 'playing' || !activeTeamId || !teams) return;
         
         const direction = activeTeamId === 1 ? 1 : -1;
-        const impact = isCorrect ? pullStrength : -pullStrength;
+        const impact = isCorrect ? pullStrength : -pullStrength; 
         
         let newTugProgress = tugProgress + (direction * impact);
         newTugProgress = Math.max(-100, Math.min(100, newTugProgress));
@@ -119,7 +119,7 @@ function DuelGameComponent() {
         }
     };
     
-    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500"/></div>;
+    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500"/></div>
     if (error) return (
         <div className="flex h-screen items-center justify-center bg-slate-950">
             <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-900 text-red-200">
@@ -204,13 +204,19 @@ function DuelGameComponent() {
                 {teams && (
                     <div className="flex-shrink-0 flex flex-col gap-6 justify-center min-h-[250px] relative">
                         <div className="flex justify-between items-center w-full px-4 md:px-12 relative z-10">
-                            <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activeTeamId === teams[0].id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95")}>
+                            <div className={cn(
+                                "flex flex-col items-center gap-2 transition-all duration-300 transform",
+                                activeTeamId === teams[0].id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95"
+                            )}>
                                 <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activeTeamId === teams[0].id ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-400")}>{teams[0].name}</div>
                             </div>
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                                 <div className="w-16 h-16 bg-slate-950 border-4 border-white/10 rounded-full flex items-center justify-center shadow-2xl"><span className="font-black text-2xl text-slate-500 italic">VS</span></div>
                             </div>
-                             <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activeTeamId === teams[1].id ? "scale-110 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]" : "opacity-70 scale-95")}>
+                             <div className={cn(
+                                "flex flex-col items-center gap-2 transition-all duration-300 transform",
+                                activeTeamId === teams[1].id ? "scale-110 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]" : "opacity-70 scale-95"
+                            )}>
                                 <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activeTeamId === teams[1].id ? "bg-red-600 text-white" : "bg-slate-800 text-slate-400")}>{teams[1].name}</div>
                             </div>
                         </div>
@@ -245,7 +251,7 @@ function DuelGameComponent() {
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
                             <div className={cn(
                                 "grid gap-3",
-                                isFullscreen ? "grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
+                                isFullscreen ? "grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
                             )}>
                                 {questions.map((q, i) => {
                                     const questionNumber = i + 1;
@@ -254,8 +260,8 @@ function DuelGameComponent() {
                                     return (
                                         <button
                                             key={i}
-                                            disabled={isAnswered}
-                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
+                                            disabled={isAnswered || !activeTeamId}
+                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q as Question })}
                                             className={cn(
                                                 "aspect-square rounded-xl flex items-center justify-center text-2xl md:text-3xl font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
                                                 isAnswered 
@@ -281,10 +287,10 @@ function DuelGameComponent() {
                     isOpen={!!openedQuestion}
                     onClose={() => setOpenedQuestion(null)}
                     questionData={openedQuestion}
-                    onAnswer={(qNum, isCorrect) => handleAnswerQuestion(qNum, isCorrect)}
+                    onAnswer={(qNum, isCorrect, score) => handleAnswerQuestion(qNum, isCorrect)}
                     timerDuration={0}
-                    pointsConfig={{ 'default': {points: 1}}} // Puan yerine çekme gücü
-                    penaltyConfig={{}}
+                    pointsConfig={{ 'default': {points: pullStrength}}}
+                    penaltyConfig={{ 'default': {penalty: pullStrength}}}
                 />
             )}
         </div>
@@ -292,5 +298,9 @@ function DuelGameComponent() {
 }
 
 export default function SmartboardKavramDuellosuOyunPage() {
-    return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}><DuelGameComponent /></Suspense>
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}>
+        <DuelGameComponent />
+    </Suspense>
+  )
 }
