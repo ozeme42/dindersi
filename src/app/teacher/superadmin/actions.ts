@@ -1,15 +1,14 @@
 
 'use server';
 
-import { getAdminApp } from "@/lib/firebase-admin";
-import { getFirestore, Timestamp } from "firebase-admin/firestore";
-import { getAuth } from 'firebase-admin/auth';
+import { getAdminApp, getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
 
 export async function getAllUsers(): Promise<UserProfile[]> {
-    const db = getFirestore(getAdminApp());
+    const db = getAdminDb();
     const usersSnapshot = await db.collection('users').get();
     return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
 }
@@ -19,10 +18,10 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
     }
     try {
-        const auth = getAuth(getAdminApp());
+        const auth = getAdminAuth();
         await auth.deleteUser(userId);
 
-        const db = getFirestore(getAdminApp());
+        const db = getAdminDb();
         await db.collection('users').doc(userId).delete();
 
         return { success: true };
@@ -38,8 +37,8 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
     }
 
     try {
-        const db = getFirestore(getAdminApp());
-        const auth = getAuth(getAdminApp());
+        const db = getAdminDb();
+        const auth = getAdminAuth();
         const { uid, email, displayName, password } = user;
         const firestoreData: any = {
             displayName: user.displayName,
@@ -67,7 +66,7 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
 
 export async function resetAllGeneralScores(): Promise<{success: boolean, error?: string}> {
     try {
-        const db = getFirestore(getAdminApp());
+        const db = getAdminDb();
         const usersSnapshot = await db.collection('users').where('role', '==', 'student').get();
         if (usersSnapshot.empty) {
             return { success: true };
@@ -89,7 +88,7 @@ export async function resetAllGeneralScores(): Promise<{success: boolean, error?
 
 
 export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar') {
-    const db = getFirestore(getAdminApp());
+    const db = getAdminDb();
     switch (dataType) {
         case 'users':
             return await getAllUsers();
@@ -159,7 +158,7 @@ async function ensureDir(dirPath: string) {
 
 export async function exportDataForStaticSite() {
     try {
-        const db = getFirestore(getAdminApp());
+        const db = getAdminDb();
         const publicDir = path.join(process.cwd(), 'public');
         const curriculumDir = path.join(publicDir, 'curriculum');
         

@@ -1,64 +1,69 @@
 
 import 'dotenv/config';
 import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import { getAuth } from 'firebase-admin/auth';
+import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { getAuth, Auth } from 'firebase-admin/auth';
 
 let adminApp: App | null = null;
+let adminAuth: Auth | null = null;
+let adminDb: Firestore | null = null;
 
 function initializeAdminApp() {
-    // If already initialized, return the app
     if (adminApp) {
         return adminApp;
     }
-    
-    // During build, the env var might not be available. We should not throw an error here.
-    // Instead, we should only initialize if the credentials are provided.
-    // The check for a valid app will happen in getAdminApp.
+
     const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
     
     if (serviceAccountString) {
         try {
             const serviceAccount = JSON.parse(serviceAccountString);
-            // Use a unique name to avoid conflicts in dev environments with hot-reloading
             adminApp = initializeApp({
                 credential: cert(serviceAccount)
-            }, 'adminApp-' + Date.now()); 
+            }, 'adminApp-' + Date.now());
             return adminApp;
         } catch (e: any) {
-             console.error("Firebase Admin SDK initialization error:", e.message);
-             // Fallback to get the default app if it exists
-             try {
-                 adminApp = getApp('admin');
-                 return adminApp;
-             } catch(getAppError) {
-                // This will be caught by the check in getAdminApp
+            console.error("Firebase Admin SDK initialization error:", e.message);
+            try {
+                // Fallback to get default app if it exists (useful in some environments)
+                adminApp = getApp();
+                return adminApp;
+            } catch (getAppError) {
+                console.warn('Could not get default Firebase admin app.');
                 return null;
-             }
+            }
         }
     } else {
-        // Log a warning during runtime if the variable is missing. This won't run at build time.
-        if (typeof window === 'undefined') {
+        if (typeof window === 'undefined') { // Only log on the server
             console.warn('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Admin SDK will not be initialized.');
         }
         return null;
     }
 }
 
+// Lazy initialization getters
+export function getAdminAuth(): Auth {
+    if (!adminAuth) {
+        const app = getAdminApp();
+        adminAuth = getAuth(app);
+    }
+    return adminAuth;
+}
+
+export function getAdminDb(): Firestore {
+    if (!adminDb) {
+        const app = getAdminApp();
+        adminDb = getFirestore(app);
+    }
+    return adminDb;
+}
+
 export function getAdminApp(): App {
     if (!adminApp) {
         initializeAdminApp();
     }
-    
-    // This check is now robust. It will only fail at RUNTIME if the credentials are
-    // actually missing or invalid when an admin function is called. It will NOT fail during build.
     if (!adminApp) {
         throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
     }
     return adminApp;
 }
-
-
-// These are now functions that will call getAdminApp only when they are executed.
-export const getAdminAuth = () => getAuth(getAdminApp());
-export const getAdminDb = () => getFirestore(getAdminApp());

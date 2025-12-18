@@ -1,10 +1,9 @@
 
 'use server';
 
-import { getAdminApp } from "@/lib/firebase-admin";
-import { getFirestore, doc, collection, writeBatch, serverTimestamp, updateDoc, setDoc } from "firebase-admin/firestore";
+import { getAdminApp, getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { collection, writeBatch, serverTimestamp, updateDoc, setDoc, doc } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
-import { getAuth } from 'firebase-admin/auth';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
 // This is a simplified version of student creation that does NOT create an auth user.
@@ -16,7 +15,7 @@ export async function addGuestStudent(displayName: string, className: string): P
     }
 
     try {
-        const db = getFirestore(getAdminApp());
+        const db = getAdminDb();
         const docRef = doc(collection(db, "users"));
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
@@ -51,8 +50,8 @@ export async function bulkAddGuestStudents(names: string[], className: string): 
     }
     
     try {
-        const db = getFirestore(getAdminApp());
-        const batch = writeBatch(db);
+        const db = getAdminDb();
+        const batch = db.batch();
         const usersCollection = collection(db, "users");
 
         names.forEach(name => {
@@ -85,7 +84,7 @@ export async function updateStudentClass(studentId: string, newClassName: string
     }
 
     try {
-        const db = getFirestore(getAdminApp());
+        const db = getAdminDb();
         const studentRef = doc(db, 'users', studentId);
         await updateDoc(studentRef, {
             class: newClassName
@@ -108,7 +107,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
     }
 
     try {
-        const auth = getAuth(getAdminApp());
+        const auth = getAdminAuth();
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
@@ -136,7 +135,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             displayName: finalDisplayName,
         });
         
-        const firestore = getFirestore(getAdminApp());
+        const firestore = getAdminDb();
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
