@@ -1,0 +1,1454 @@
+[
+  {
+    "id": "0raRSfOhkVhE8lAcjnuk",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "className": "7",
+    "difficulty": "Zor",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Herkesin dünyadaki amellerinin karşılığını tam olarak almasını sağlamak",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "İnsanın varlığına son vermek",
+      "Evreni yok etmek",
+      "Herkesin dünyadaki amellerinin karşılığını tam olarak almasını sağlamak",
+      "Sadece inananları mükafatlandırmak"
+    ],
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "text": "Ahiret aşamaları bir bütün olarak değerlendirildiğinde, 'Ecel' ile başlayan sürecin nihai amacı nedir?",
+    "type": "Çoktan Seçmeli",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "0zLzjytmbmMqySR7HVTR",
+    "correctAnswer": "kabir",
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "kabir",
+      "dünya",
+      "ahiret",
+      "cennet"
+    ],
+    "type": "Boşluk Doldurma",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "text": "Berzah âlemi, ölümden sonra dirilmeye kadar geçen süreye verilen addır. Diğer adı ise ___ hayatıdır.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "16sN2HnuDk26zshMc4fY",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Zor",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Tevbe suresi 72. ayette geçen 'Allah’ın rızası ise bunların hepsinden daha büyüktür' ifadesi, cennetin hangi yönüne işaret eder?",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Sadece maddi nimetlerden ibaret olmadığına",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Sadece maddi nimetlerden ibaret olmadığına",
+      "Girişinin çok zor olduğuna",
+      "Sonsuz olmadığına",
+      "Sadece belirli kişilere vaat edildiğine"
+    ]
+  },
+  {
+    "id": "1UU5Bg3vrnb4FvVFlZhz",
+    "text": "Yâsîn suresinde geçen 'Şu çürümüş kemiklere kim can verecekmiş?' sorusuna verilen cevap, Allah'ın hangi sıfatına vurgu yapar?",
+    "correctAnswer": "İlk kez yoktan yarattığına (el-Hâlık)",
+    "type": "Çoktan Seçmeli",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Her şeyi bildiğine (el-Alîm)",
+      "Adaletli olduğuna (el-Adl)",
+      "İlk kez yoktan yarattığına (el-Hâlık)",
+      "Çok merhametli olduğuna (er-Rahmân)"
+    ],
+    "difficulty": "Orta",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  },
+  {
+    "id": "1bV5CWCkoVDKjPLYzz5k",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Orta",
+    "className": "7",
+    "correctAnswer": "Ölüm - Diriliş",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Diriliş - Ölüm",
+      "Ölüm - Diriliş",
+      "Hesap - Mizan",
+      "Haşr - Mahşer"
+    ],
+    "type": "Çoktan Seçmeli",
+    "text": "İsrafil'in (as) Sûr'a birinci ve ikinci kez üflemesiyle gerçekleşen olaylar sırasıyla hangileridir?"
+  },
+  {
+    "id": "2Xnir0Ag1Z8s70GhuFKD",
+    "text": "İnsanın ruh ve bedenden oluşması gerçeği, ahiret aşamalarından hangisiyle doğrudan ilişkilidir?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Ölümde ayrılmaları ve Ba's'ta tekrar birleşmeleri",
+      "Sadece Mizan'da birlikte tartılmaları",
+      "Sadece Sırat'tan birlikte geçmeleri",
+      "Kıyamet anında yok olmaları"
+    ],
+    "difficulty": "Orta",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Ölümde ayrılmaları ve Ba's'ta tekrar birleşmeleri",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "2pCnm8UQMQhBlpOTa6UU",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Al-i İmran",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Al-i İmran",
+      "Bakara",
+      "Nisa",
+      "Maide"
+    ],
+    "text": "“Her nefis ölümü tadacaktır...” ayeti hangi surede yer alır?",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "36EKBbQRnewgi5OGYyjf",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "Cennet",
+      "Cehennem",
+      "Araf",
+      "Dünya"
+    ],
+    "difficulty": "Orta",
+    "correctAnswer": "Cennet",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Sırat köprüsünden geçenler nereye ulaşır?"
+  },
+  {
+    "id": "5wgnegQsQgD7r7l03s87",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "berzah",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "berzah",
+      "cennet",
+      "cehennem",
+      "dünya"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "difficulty": "Orta",
+    "text": "Ahiret hayatının ilk aşaması ___ âlemidir."
+  },
+  {
+    "id": "6YnPeLI7knvEBJAGUXH2",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "text": "Ahirette insanların üzerinden geçeceği köprünün adı nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Mizan",
+      "Sırat",
+      "Berzah",
+      "Haşr"
+    ],
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "correctAnswer": "Sırat",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "7TAuZMDUhkEmHRb15uod",
+    "options": [
+      "Tüm canlıların ölmesi",
+      "İnsanların yeniden dirilmesi",
+      "Hesabın başlaması",
+      "Cennete girilmesi"
+    ],
+    "correctAnswer": "İnsanların yeniden dirilmesi",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Orta",
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Çoktan Seçmeli",
+    "text": "Sûr'a ikinci kez üflenmesiyle hangi olay gerçekleşir?",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "807Ouy44CPP0vM5WFyTo",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Maddi bir ağırlık ölçümü yapmaması",
+      "Sadece günahları tartması",
+      "Sadece sevapları tartması",
+      "Görünmez olduğu için"
+    ],
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Mizan'ın 'manevi bir terazi' olarak tanımlanmasının sebebi nedir?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "correctAnswer": "Maddi bir ağırlık ölçümü yapmaması",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Orta",
+    "className": "7"
+  },
+  {
+    "id": "8LCrZ2CgGEMBXIxleSQH",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Allah",
+      "melekler",
+      "peygamberler",
+      "insanlar"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Boşluk Doldurma",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Kıyametin ne zaman kopacağını yalnızca ___ bilir.",
+    "correctAnswer": "Allah",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "difficulty": "Kolay",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "8YC004XZ5iCtSitJo2ei",
+    "type": "Boşluk Doldurma",
+    "difficulty": "Zor",
+    "text": "Ahirette insanların yaptıklarından ___ tutulacaktır.",
+    "options": [
+      "sorumlu",
+      "bağımsız",
+      "habersiz",
+      "uzak"
+    ],
+    "correctAnswer": "sorumlu",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "8ndRj5j83ba2Rxm91NzB",
+    "difficulty": "Orta",
+    "options": [
+      "Mizan",
+      "Sırat",
+      "Haşr",
+      "Kabir Hayatı"
+    ],
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Kabir Hayatı",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Aşağıdaki ahiret aşamalarından hangisi diğerlerinden daha önce gerçekleşir?"
+  },
+  {
+    "id": "9z4dtzd29Zg4IWpxsfpR",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Boşluk Doldurma",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Dünyada yapılanların tartılacağı manevi teraziye ___ denir.",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "difficulty": "Orta",
+    "correctAnswer": "mizan",
+    "options": [
+      "mizan",
+      "haşr",
+      "sırat",
+      "mahşer"
+    ]
+  },
+  {
+    "id": "A0vkB94sRUFn7YgV5SFw",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Mizan'daki hesabın neticesinin",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Sırat köprüsünden geçiş, hangi önceki aşamanın doğrudan bir sonucudur?",
+    "options": [
+      "Kıyametin kopmasının",
+      "Ba's (yeniden dirilişin)",
+      "Mizan'daki hesabın neticesinin",
+      "Berzah'taki bekleyişin"
+    ],
+    "className": "7"
+  },
+  {
+    "id": "Abb58UEIbwv4pLn7dyrE",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "text": "Ahirette sevap ve günahların tartılacağı manevi terazi aşağıdakilerden hangisidir?",
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Sırat",
+      "Amel Defteri",
+      "Hesap",
+      "Mizan"
+    ],
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Mizan",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "BlozujVOzCjlVv5r6mzP",
+    "text": "Hesap vermek için insanların toplanacağı meydanın adı ___'dır.",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Boşluk Doldurma",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "options": [
+      "mahşer",
+      "haşr",
+      "mizan",
+      "sırat"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "mahşer",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "difficulty": "Kolay"
+  },
+  {
+    "id": "BtWlOYQZbdrLR9ZKbSli",
+    "type": "Çoktan Seçmeli",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Orta",
+    "options": [
+      "Hayatın anlamsız olduğu",
+      "Eylemlerinden sorumlu olduğu ve sınandığı",
+      "Her şeyin önceden belirlendiği",
+      "Sonsuza kadar yaşayacağı"
+    ],
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "İnsanın dünyada 'imtihan amacıyla' bulunması ne anlama gelmektedir?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "Eylemlerinden sorumlu olduğu ve sınandığı"
+  },
+  {
+    "id": "CEKfeYSH1nFGwdTGIDC4",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "difficulty": "Zor",
+    "options": [
+      "Unutkanlığı",
+      "İrade ve sorumluluğu",
+      "Fiziksel gücü",
+      "Duygusallığı"
+    ],
+    "text": "'Amel defterleri'nin varlığı, insanın hangi özelliğiyle doğrudan ilişkilidir?",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "İrade ve sorumluluğu"
+  },
+  {
+    "id": "DMKM4pS87XxMuojeT3sZ",
+    "difficulty": "Zor",
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Merhamet",
+      "Adalet",
+      "Kader",
+      "Sabır"
+    ],
+    "correctAnswer": "Adalet",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Hesap ve Mizan aşamaları, ahiret inancının hangi temel ilkesini yansıtır?",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "DO9bPMqwE3ksd501Nqbp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "İnsanın bu dünyada yaptığı iyilik ve kötülüklerle sınanması, ahiret hayatının hangi aşamasının temelini oluşturur?",
+    "options": [
+      "Kıyamet",
+      "Ecel",
+      "Hesap",
+      "Ba's"
+    ],
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "correctAnswer": "Hesap",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "DSdMcFohN6fz9gksNSNi",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Bir yolcunun ağaç altında dinlenmesine",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Bir yolcunun ağaç altında dinlenmesine",
+      "Bir rüyaya",
+      "Bir oyuna",
+      "Bir nehir yolculuğuna"
+    ],
+    "difficulty": "Kolay",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "text": "Hz. Peygamber, dünya hayatının kısalığını neye benzetmiştir?",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "EVIVVCuf39CDmAAA2QMD",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Ölüm, ruh ve bedenin birbirinden ayrılmasıyla gerçekleşir.",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "className": "7",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "type": "Doğru/Yanlış"
+  },
+  {
+    "id": "EwgHT1j7LF04mUMTBBp0",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Çoktan Seçmeli",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Mutlak adaletin sağlanacağı hesap gününü başlatmak",
+    "className": "7",
+    "text": "İnfitâr suresinde kıyamet sahneleri (göğün yarılması, yıldızların saçılması) anlatıldıktan sonra 'herkes yaptığı ve yapmadığı şeyleri bilecek' denmesi, bu olayların nihai amacının ne olduğunu gösterir?",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Zor",
+    "options": [
+      "Evrenin ne kadar büyük olduğunu göstermek",
+      "İnsanları korkutmak",
+      "Mutlak adaletin sağlanacağı hesap gününü başlatmak",
+      "Yeni bir evren yaratmak"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "GtBYkWDZkgJISTuGGIkA",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Zor",
+    "text": "Berzah âleminde insan ___ olarak yaşar.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "ruh",
+      "beden",
+      "ruh ve beden",
+      "madde"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "ruh",
+    "type": "Boşluk Doldurma",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "className": "7"
+  },
+  {
+    "id": "HHJtIMszGSVYaQ4lJexd",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Ahirete iman",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Meleklere iman",
+      "Kadere iman",
+      "Ahirete iman",
+      "Kitaplara iman"
+    ],
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "text": "İnsanın 'sonsuzluğu arzulaması' ile 'dünyanın geçici olması' arasındaki çelişki, hangi inançla bir anlam kazanır?"
+  },
+  {
+    "id": "HeoGMctPJu2dObplCbKE",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Dünya hayatının son bulmasına ne ad verilir?",
+    "difficulty": "Kolay",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "correctAnswer": "Ecel",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "options": [
+      "Kıyamet",
+      "Ecel",
+      "Haşr",
+      "Ba's"
+    ]
+  },
+  {
+    "id": "HunEJdRiUTFQD9K3I4rS",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "correctAnswer": "Sevap ve günahların tartılması",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Sevap ve günahların tartılması",
+      "Dünya hayatının uzunluğu",
+      "Kıyametin zamanı",
+      "Cennetin kapıları"
+    ],
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Mizan neyi temsil eder?",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Zor",
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "Iy5sxtvYbnDiTPsY8llO",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "difficulty": "Orta",
+    "correctAnswer": "Ölümden sonra dirilme",
+    "options": [
+      "Ölümden sonra dirilme",
+      "Hesap günü",
+      "Sırat köprüsü",
+      "Cennet"
+    ],
+    "text": "Ba's ne anlama gelir?",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "Ka6AumMnhsmkan2Swbcz",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Doğru/Yanlış",
+    "difficulty": "Kolay",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "text": "Ahiret hayatı, dünya hayatından daha kısa ve geçicidir.",
+    "correctAnswer": "Yanlış",
+    "className": "7"
+  },
+  {
+    "id": "Rwr4CqG9YmTLZiDinmTv",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "sırat",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "sırat",
+      "mizan",
+      "haşr",
+      "mahşer"
+    ],
+    "type": "Boşluk Doldurma",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Cehennem üzerindeki köprüye ___ denir.",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "TAEaXSAJYN1hG5LXZHxD",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Ahirette sorguya çekilme işlemine ne ad verilir?",
+    "className": "7",
+    "correctAnswer": "Hesap",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "Mizan",
+      "Hesap",
+      "Sırat",
+      "Haşr"
+    ]
+  },
+  {
+    "id": "TX31ycu2GRazxXJgkEng",
+    "text": "İnsanın dünyada imtihan edilmesi ilkesi, ahiretteki 'Cennet' ve 'Cehennem' kavramlarının varlığını nasıl mantıksal bir zemine oturtur?",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "difficulty": "Zor",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "İmtihanın bir sonucu olması gerektiğini, dolayısıyla bir ödül ve ceza mekanizmasının bulunması gerektiğini ortaya koyar.",
+    "options": [
+      "Cennet ve Cehennem'in keyfi birer seçim olduğunu gösterir.",
+      "İmtihanın bir sonucu olması gerektiğini, dolayısıyla bir ödül ve ceza mekanizmasının bulunması gerektiğini ortaya koyar.",
+      "İmtihanın sonucunun önemli olmadığını gösterir.",
+      "Herkesin imtihanı geçeceğini varsayar."
+    ]
+  },
+  {
+    "id": "US89ueS9gzViExfNe6X6",
+    "difficulty": "Orta",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "İsrafil",
+      "Cebrail",
+      "Mikail",
+      "Azrail"
+    ],
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "İsrafil",
+    "text": "Kıyamet, hangi meleğin sûr'a üflemesiyle kopacaktır?"
+  },
+  {
+    "id": "UWop6NRNB7vnnczvOhEG",
+    "correctAnswer": "beden",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "type": "Boşluk Doldurma",
+    "options": [
+      "beden",
+      "akıl",
+      "kalp",
+      "nefes"
+    ],
+    "text": "İnsan ruhu ve ___ ayrıldığında ölüm gerçekleşir.",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "UsT71iOwNULzgMa4oNeF",
+    "difficulty": "Kolay",
+    "options": [
+      "Cennet",
+      "Dünya",
+      "Berzah",
+      "Kabir"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Boşluk Doldurma",
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "___ ve cehennem, ahiret hayatının iki sonucudur.",
+    "correctAnswer": "Cennet",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "W6lkO3VeqgBVOCHowofM",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "difficulty": "Kolay",
+    "correctAnswer": "Berzah",
+    "className": "7",
+    "options": [
+      "Mahşer",
+      "Berzah",
+      "Mizan",
+      "Sırat"
+    ],
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Çoktan Seçmeli",
+    "text": "İnsanların öldükten sonra yeniden dirilene kadar ruhlarıyla yaşadıkları aleme ne denir?"
+  },
+  {
+    "id": "WHQ0yjHjIq6HhkTJ6Srv",
+    "difficulty": "Zor",
+    "options": [
+      "Geleceği düşünmeden yaşaması gerektiğini",
+      "Sürekli bir hazırlık ve bilinç içinde olması gerektiğini",
+      "Bu konuyu hiç düşünmemesi gerektiğini",
+      "Kıyametin hiç kopmayabileceğini"
+    ],
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "text": "Kıyametin zamanının yalnızca Allah tarafından bilinmesi, insana dünya hayatıyla ilgili nasıl bir sorumluluk yükler?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Sürekli bir hazırlık ve bilinç içinde olması gerektiğini",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "WMAmg4sSQBbg9JipPIVw",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Kolay",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Berzah alemi",
+    "options": [
+      "Berzah alemi",
+      "Cennet",
+      "Cehennem",
+      "Mahşer"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Ahiret hayatının ilk aşaması nedir?"
+  },
+  {
+    "id": "XIetxblwt7PjM9s62GV3",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Yeniden diriltildikten sonra insanların bir meydanda toplanması olayına ne denir?",
+    "correctAnswer": "Haşr",
+    "difficulty": "Kolay",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "options": [
+      "Haşr",
+      "Hesap",
+      "Mizan",
+      "Mahşer"
+    ],
+    "type": "Çoktan Seçmeli"
+  },
+  {
+    "id": "XLJtYI5UwBNHeZ6eLVCY",
+    "type": "Doğru/Yanlış",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Kıyametin ne zaman kopacağını peygamberler de dahil olmak üzere herkes bilir.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "difficulty": "Kolay",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "correctAnswer": "Yanlış"
+  },
+  {
+    "id": "XmByGnUPB4V6hZHqFV9m",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "options": [
+      "Haşr",
+      "Mizan",
+      "Sırat",
+      "Ba's"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "Haşr",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "___, insanların toplanıp mahşer meydanında bir araya gelmesidir.",
+    "difficulty": "Orta"
+  },
+  {
+    "id": "YK1RVPJ29ofdWJDMETGg",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Dağların yürütülmesi",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "İnfitâr suresinde kıyamet anı tasvir edilirken aşağıdakilerden hangisinden bahsedilmemiştir?",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "options": [
+      "Göklerin yarılması",
+      "Yıldızların saçılması",
+      "Dağların yürütülmesi",
+      "Kabirlerin içinin dışına çıkarılması"
+    ],
+    "difficulty": "Orta"
+  },
+  {
+    "id": "ZfFmq9dH53kdDcQRjhKo",
+    "text": "Berzah aleminin varlığı, ölümün felsefi olarak hangi anlama geldiği fikrini geçersiz kılar?",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Bilincin ve varlığın tamamen sona erdiği mutlak bir yok oluş olduğu",
+      "Yeni bir hayatın başlangıcı olduğu",
+      "Sadece bedensel bir fonksiyonun durması olduğu",
+      "Ruhun bedenden ayrılması olduğu"
+    ],
+    "className": "7",
+    "correctAnswer": "Bilincin ve varlığın tamamen sona erdiği mutlak bir yok oluş olduğu",
+    "difficulty": "Zor",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "ZqCDdgvgJdbZ4akEyMjP",
+    "correctAnswer": "Ecel ve Ba's",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "Kıyamet ve Haşr",
+      "Ecel ve Ba's",
+      "Mizan ve Sırat",
+      "Hesap ve Cennet"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Orta",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "text": "Ahiret hayatının aşamaları düşünüldüğünde, 'Berzah alemi' hangi iki olay arasında yer alır?",
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn"
+  },
+  {
+    "id": "aPB9eCSV4YpUHEz8nx4g",
+    "difficulty": "Orta",
+    "correctAnswer": "Allah'ın rızası",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "İçinden ırmaklar akan bahçeler",
+      "Çok güzel köşkler",
+      "Ebedi olarak kalmak",
+      "Allah'ın rızası"
+    ],
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "type": "Çoktan Seçmeli",
+    "text": "Tevbe suresi 72. ayete göre, cennetin en büyük mükafatı nedir?"
+  },
+  {
+    "id": "bu0y3AUHnFwnTSe7Y20u",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Çünkü ahirette adalet yoktur.",
+      "Çünkü insanların dünyadaki iradeli seçimleri ve amelleri farklıdır.",
+      "Çünkü ölüm herkesi eşit yapmaz.",
+      "Bu durumun mantıksal bir açıklaması yoktur."
+    ],
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "difficulty": "Zor",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "correctAnswer": "Çünkü insanların dünyadaki iradeli seçimleri ve amelleri farklıdır.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Ölüm, tüm varlıklar için ortak bir son iken, ahiret hayatı neden farklılaşmaktadır (Cennet/Cehennem)?"
+  },
+  {
+    "id": "cUKo7pg4McQZ9HUCaKeO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "className": "7",
+    "correctAnswer": "sûr",
+    "text": "Kıyamet, İsrafil (as)'ın ___ üflemesiyle kopacaktır.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "sûr",
+      "ney",
+      "boru",
+      "düdük"
+    ],
+    "type": "Boşluk Doldurma",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  },
+  {
+    "id": "ehr7xnCrOCLJNUB5UnPa",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Çoktan Seçmeli",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "correctAnswer": "Kıyamet",
+    "text": "Tüm alemin ve canlıların hayatının son bulacağı büyük güne ne ad verilir?",
+    "difficulty": "Kolay",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Ecel",
+      "Ba's",
+      "Kıyamet",
+      "Haşr"
+    ],
+    "className": "7"
+  },
+  {
+    "id": "fFX7DZPshJrZogalVSVT",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "hesaba çekileceği",
+    "options": [
+      "hesaba çekileceği",
+      "uyuyacağı",
+      "yok olacağı",
+      "geri döneceği"
+    ],
+    "text": "Kıyametten sonra insanların ___ olacağı belirtilir.",
+    "difficulty": "Orta",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "type": "Boşluk Doldurma",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "gaZtK2Pl3siON8UKLQ53",
+    "difficulty": "Orta",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "ba's",
+    "type": "Boşluk Doldurma",
+    "text": "Yeniden dirilme anlamına gelen kelime ___'dir.",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "ba's",
+      "haşr",
+      "mizan",
+      "berzah"
+    ],
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  },
+  {
+    "id": "i9CMRfHZZ2IlnGNBhdM2",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "text": "Berzah alemi ile aynı anlamda kullanılan kavram hangisidir?",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "correctAnswer": "Kabir hayatı",
+    "difficulty": "Kolay",
+    "options": [
+      "Kabir hayatı",
+      "Dünya hayatı",
+      "Cennet hayatı",
+      "Cehennem hayatı"
+    ]
+  },
+  {
+    "id": "iU0lQIcLthGMsrtupimU",
+    "correctAnswer": "Cennet",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "difficulty": "Kolay",
+    "className": "7",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Cehennem",
+      "Berzah",
+      "Cennet",
+      "Mahşer"
+    ],
+    "text": "İman etmiş ve salih ameller işlemiş kişilerin mükafatlandırılacağı yurda ne ad verilir?",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  },
+  {
+    "id": "iyfDnfbYuAOS5S2wuhie",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Ayet, dirilişin bedensel boyutunu vurguladığı için bu vurgu kaybolurdu.",
+      "Ayetin anlamı daha da güçlenirdi.",
+      "Hiçbir anlam değişikliği olmazdı.",
+      "Ayet sadece ruhun ölümsüzlüğünü anlatırdı."
+    ],
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "Ayet, dirilişin bedensel boyutunu vurguladığı için bu vurgu kaybolurdu.",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "text": "Eğer 'Ba's' (yeniden dirilme) sadece ruhsal olsaydı, 'Şu çürümüş kemiklere kim can verecekmiş?' ayetindeki vurgu nasıl bir anlam değişikliğine uğrardı?"
+  },
+  {
+    "id": "j8SNWpBjIc7BgDRxo1Je",
+    "options": [
+      "Sorumluluk sadece dünyevi kanunlarla sınırlı kalırdı ve mutlak adalet tecelli etmezdi.",
+      "İnsanlar yine de birbirlerine karşı sorumlu olurlardı.",
+      "Hiçbir anlam kaybı olmazdı, ahlak aynı kalırdı.",
+      "Sorumluluk kavramı tamamen ortadan kalkardı."
+    ],
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Eğer ahiret inancı olmasaydı, 'insanın yaptıklarından sorumlu tutulması' ilkesi nasıl bir anlam kaybına uğrardı?",
+    "correctAnswer": "Sorumluluk sadece dünyevi kanunlarla sınırlı kalırdı ve mutlak adalet tecelli etmezdi.",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "difficulty": "Zor"
+  },
+  {
+    "id": "kK5HFREe9scke2Ssbfde",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "Mahşer",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "className": "7",
+    "options": [
+      "Berzah",
+      "Cennet",
+      "Mahşer",
+      "Sırat"
+    ],
+    "type": "Çoktan Seçmeli",
+    "text": "Yeniden diriltilen tüm insanların hesaba çekilmek için toplanacakları meydana ne denir?",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "kOYdhqJ2vTFuTR6HClcb",
+    "text": "Mizan, Cennet ve Cehennem gibi kavramlar, insanın hangi temel arayışına ilahi bir cevap niteliğindedir?",
+    "type": "Çoktan Seçmeli",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "options": [
+      "Bilgi arayışı",
+      "Güç arayışı",
+      "Adalet ve anlam arayışı",
+      "Ölümsüzlük arayışı"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Zor",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Adalet ve anlam arayışı",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "kaUGvXdoYVPEQHM97sis",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "kısa",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Boşluk Doldurma",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "Dünya hayatı, ahiret hayatına göre ___ bir süreçtir.",
+    "difficulty": "Orta",
+    "options": [
+      "kısa",
+      "uzun",
+      "eşit",
+      "belirsiz"
+    ]
+  },
+  {
+    "id": "lOAb4YFJ3TvzYb9Q6hS4",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "type": "Boşluk Doldurma",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "tadacaktır",
+      "görecektir",
+      "bilecektir",
+      "duyacaktır"
+    ],
+    "text": "“Her nefis ölümü ___.” (Al-i İmran suresi, 185. ayet)",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "difficulty": "Zor",
+    "correctAnswer": "tadacaktır",
+    "className": "7"
+  },
+  {
+    "id": "lpBl3n5Aop9Gct0f27d3",
+    "options": [
+      "Cebrail (as)",
+      "Mikail (as)",
+      "İsrafil (as)",
+      "Azrail (as)"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "İsrafil (as)",
+    "className": "7",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Kıyamet gününde 'sûr' adı verilen boruya üfleyecek olan melek aşağıdakilerden hangisidir?"
+  },
+  {
+    "id": "lysPPna7Iji0DaA7r7kZ",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "text": "İnsanların dünyada yaptıklarının kaydedildiği defterin adı nedir?",
+    "correctAnswer": "Amel Defteri",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "className": "7",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Zor",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Amel Defteri",
+      "Levh-i Mahfuz",
+      "Suhuf",
+      "Kitab-ı Mukaddes"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO"
+  },
+  {
+    "id": "mHty1ejfqU0QfG6bldyh",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "text": "Öldükten sonra insanların ruh ve bedenleriyle tekrar hayat bulmasına ne ad verilir?",
+    "correctAnswer": "Ba's",
+    "difficulty": "Kolay",
+    "type": "Çoktan Seçmeli",
+    "options": [
+      "Ba's",
+      "Haşr",
+      "Kıyamet",
+      "Ecel"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7"
+  },
+  {
+    "id": "p1nqJiSSBaE41rHE3WCf",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "text": "İnsanın asıl ve sonsuz olan yurdu neresidir?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Dünya",
+      "Ahiret",
+      "Berzah Alemi",
+      "Kabir"
+    ],
+    "correctAnswer": "Ahiret",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7"
+  },
+  {
+    "id": "qAXVVUleP7HXgIxe7EJM",
+    "className": "7",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Kabir hayatı",
+    "type": "Çoktan Seçmeli",
+    "text": "Berzah aleminin diğer adı nedir?",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Mahşer hayatı",
+      "Cennet hayatı",
+      "Kabir hayatı",
+      "Dünya hayatı"
+    ],
+    "difficulty": "Kolay",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "rKeNLQxjQH9hHkeEuUuN",
+    "type": "Boşluk Doldurma",
+    "correctAnswer": "ayrılır",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "difficulty": "Kolay",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Ölümle birlikte ruh bedenden ___ .",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "ayrılır",
+      "birleşir",
+      "büyür",
+      "küçülür"
+    ],
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "rg6pbZr5g83Mb4R196n9",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "text": "İnsanların dünyada yaptıkları işlerin yazılı olduğu defterlere 'amel defterleri' denir.",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "difficulty": "Kolay",
+    "type": "Doğru/Yanlış",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "correctAnswer": "Doğru",
+    "className": "7"
+  },
+  {
+    "id": "s6RONNLBak80wzInTqPs",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Zor",
+    "correctAnswer": "Bir şeyi bir kez yapanın, ikinci kez daha kolay yapabileceği",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "className": "7",
+    "options": [
+      "Bir şeyi bir kez yapanın, ikinci kez daha kolay yapabileceği",
+      "İkinci yaratılışın ilkine benzemeyeceği",
+      "Yaratılışın tesadüfen olduğu",
+      "Kemiklerin hiçbir zaman çürümeyeceği"
+    ],
+    "text": "Yeniden dirilmeyi inkar edenlere karşı Kur'an'ın 'onları ilk başta yaratmış olan diriltecek' delilini sunması, hangi mantıksal çıkarıma dayanır?"
+  },
+  {
+    "id": "sRSG50U4mVaFZd9b63ZA",
+    "text": "Sırat köprüsünden geçenler ___'e ulaşırlar.",
+    "correctAnswer": "cennete",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "options": [
+      "cennete",
+      "cehenneme",
+      "dünyaya",
+      "berzah âlemine"
+    ],
+    "difficulty": "Kolay",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "type": "Boşluk Doldurma",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "sSdLTZlbUJsLH9vOB5MS",
+    "className": "7",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "options": [
+      "Haşr toplanma yeridir, Mahşer toplanma olayıdır.",
+      "Haşr diriliştir, Mahşer ise ölümdür.",
+      "Haşr toplanma olayıdır, Mahşer toplanma yeridir.",
+      "İkisi de tamamen aynı anlama gelir."
+    ],
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "Haşr ve Mahşer kavramları arasındaki temel fark nedir?",
+    "difficulty": "Orta",
+    "type": "Çoktan Seçmeli",
+    "correctAnswer": "Haşr toplanma olayıdır, Mahşer toplanma yeridir.",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "tzDBpNRSdvhsjAONVKZj",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "text": "Ölümden sonraki hayatı ifade eden kavram hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Kolay",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "options": [
+      "Ahiret",
+      "Dünya",
+      "Berzah",
+      "Kıyamet"
+    ],
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "correctAnswer": "Ahiret"
+  },
+  {
+    "id": "v0o7ychAzXUj3DraJx3F",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "Cehennem",
+    "difficulty": "Kolay",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "type": "Çoktan Seçmeli",
+    "text": "İman etmemiş ve kötü işler yapmış kişilerin cezalandırılacağı yer neresidir?",
+    "className": "7",
+    "options": [
+      "Cennet",
+      "Mahşer",
+      "Berzah",
+      "Cehennem"
+    ]
+  },
+  {
+    "id": "xkEqfiaOUEfH61AoProw",
+    "className": "7",
+    "difficulty": "Zor",
+    "options": [
+      "Hayatın anlamsız ve rastgele olduğu",
+      "Hayatın, daha kalıcı bir varoluş için bir imtihan ve fırsat olduğu",
+      "Hayatın sadece zevk ve eğlenceden ibaret olduğu",
+      "Hayatın amacının sadece nesli devam ettirmek olduğu"
+    ],
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "correctAnswer": "Hayatın, daha kalıcı bir varoluş için bir imtihan ve fırsat olduğu",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "text": "İnsanın dünyadaki ömrünün 'ahiret öncesinde hazırlık süreci' olarak nitelendirilmesi, hayatın amacına dair nasıl bir bakış açısı sunar?",
+    "type": "Çoktan Seçmeli",
+    "classId": "Lebb8imNfFDlLpakVVgp"
+  },
+  {
+    "id": "xuZ04uOIAXdqNktSq8Tr",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Boşluk Doldurma",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "correctAnswer": "amel defteri",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "difficulty": "Kolay",
+    "text": "İnsanların dünyada yaptıklarının kayıtlı olduğu deftere ___ denir.",
+    "options": [
+      "amel defteri",
+      "ölüm defteri",
+      "hesap defteri",
+      "kıyamet defteri"
+    ]
+  },
+  {
+    "id": "yBLDSd5Ajrbxd4z0q349",
+    "text": "'Asıl hayat ahiret yurdundaki hayattır' (Ankebût, 64) ayetinin ana mesajı nedir?",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "topic": "4.Ahiret Hayatının Aşamaları",
+    "options": [
+      "Dünya hayatını tamamen terk etmek gerekir.",
+      "Ahiret hayatının üstünlüğü ve kalıcılığı.",
+      "Dünyada zengin olmak kötü bir şeydir.",
+      "Ahiret sadece zorluklardan ibarettir."
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "correctAnswer": "Ahiret hayatının üstünlüğü ve kalıcılığı.",
+    "courseId": "134DwgMfh8VYogm3gDyh"
+  },
+  {
+    "id": "yKg4eg0NwXphUrjnR0k0",
+    "correctAnswer": "Hesap için toplanılan yer",
+    "type": "Çoktan Seçmeli",
+    "text": "Mahşer nedir?",
+    "className": "7",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Orta",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "options": [
+      "Hesap için toplanılan yer",
+      "Cennet ve Cehennem'in arası",
+      "Sırat köprüsünün sonu",
+      "Berzah alemi"
+    ],
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  },
+  {
+    "id": "yffCE4TOgoo9dZYPDlUm",
+    "correctAnswer": "Doğru",
+    "text": "İslam inancına göre ölüm bir yok oluş değil, yeni bir yaşamın başlangıcıdır.",
+    "className": "7",
+    "topicId": "58Th1CNKsmeQCwKM4Gvn",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "type": "Doğru/Yanlış",
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "difficulty": "Kolay",
+    "topic": "4.Ahiret Hayatının Aşamaları"
+  }
+]

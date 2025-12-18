@@ -1,0 +1,387 @@
+[
+  {
+    "id": "3K0RnnFo0CqE1YZmsu3n",
+    "type": "definition",
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    },
+    "content": {
+      "definition": "İslam'ın ilk öğretmeni kabul edilen genç sahabidir.",
+      "term": "Musab b. Umeyr"
+    }
+  },
+  {
+    "id": "5g2mzk1kXa2V5z1CoLC9",
+    "type": "concept",
+    "content": {
+      "text": "Hicret"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "6VvoumQUIubXBcMAzGO4",
+    "type": "definition",
+    "content": {
+      "term": "Rehber",
+      "definition": "İnsanlara doğru yolu gösteren kişidir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "AYaFuIbUlzi4WIdHEuo8",
+    "type": "concept",
+    "content": {
+      "text": "Sahabi"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "DTBk92YthYUkLRx8Be8v",
+    "type": "definition",
+    "content": {
+      "term": "Tebliğ",
+      "definition": "Allah'tan gelen mesajları insanlara ulaştırma görevidir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "GCOmaXZ2mQWH3ma1ldFk",
+    "type": "concept",
+    "content": {
+      "text": "Rehber"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "GEpq8j7QoXRKgoDfVaMI",
+    "type": "concept",
+    "content": {
+      "text": "Hadis"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "H7ZAdc4EsAW5mbVClcij",
+    "type": "concept",
+    "content": {
+      "text": "Komutan"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "KEvp7g9a7JlLn4WU7btC",
+    "type": "sentence",
+    "content": {
+      "text": "Gençler, adaletsizliğe karşı mücadele etti."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "Mq7u0Wr1CPxBQQ7NiHae",
+    "type": "concept",
+    "content": {
+      "text": "Müşrik"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "OhexeNOgJ0EKqXWMLo5P",
+    "type": "concept",
+    "content": {
+      "text": "Tebliğ"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "TlPTznzM94GNPSCJBFQa",
+    "type": "sentence",
+    "content": {
+      "text": "Gençler, İslam'a ilk inananlardı."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "UjTvio4IEisKqjdnc0L6",
+    "type": "definition",
+    "content": {
+      "term": "Hicret",
+      "definition": "İnançlarını özgürce yaşamak için bir yerden başka bir yere göç etmektir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "aHjllODRRR6vj5uZi7Pl",
+    "type": "sentence",
+    "content": {
+      "text": "Gençler İslam'ı yaymak için çabaladı."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "dYDxNDXGd3clBKw2S8yO",
+    "type": "concept",
+    "content": {
+      "text": "Necaşi"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "hdzedSXufa5Qr6EgRHEe",
+    "type": "concept",
+    "content": {
+      "text": "Musab"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "hpHCkWaJc76vPJNlV6A6",
+    "type": "sentence",
+    "content": {
+      "text": "Gençler, Peygamberimizin rehberliğinde yetişti."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "iZf5gp3oxrZacmcvq7s5",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamberimiz gençlere çok kıymet verdi."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "jWQzEwM08LZWxRTHBMiW",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamberimiz, gençlere sorumluluk verdi."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "kFyJtFNVeXG9y0yccDQH",
+    "type": "sentence",
+    "content": {
+      "text": "Hicret, inançları özgürleştirdi."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "pBve0O224FQAi10caMdy",
+    "type": "definition",
+    "content": {
+      "term": "Sahabi",
+      "definition": "Peygamberimizi görüp ona inanmış kişilere verilen isimdir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "s6jnwofeNKeFyaWSolzG",
+    "type": "definition",
+    "content": {
+      "term": "Hadis",
+      "definition": "Peygamberimizin söz, fiil ve onaylarıdır."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "wHkdWmXSvhfIuPxXqDN6",
+    "type": "sentence",
+    "content": {
+      "text": "Musab bin Umeyr ilk öğretmendi."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "wJf838xqQtxXcuecVfnI",
+    "type": "sentence",
+    "content": {
+      "text": "Necaşi, Müslümanları ülkesinde ağırladı."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "yy4vT9iZXge99F70IX7M",
+    "type": "concept",
+    "content": {
+      "text": "Cahiliye"
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "yzu3M4i8Tk2pnQ1JzFgw",
+    "type": "sentence",
+    "content": {
+      "text": "Hz. Ali genç bir sancaktardı."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  },
+  {
+    "id": "zfdG5nvGTyfslVikMVzc",
+    "type": "definition",
+    "content": {
+      "term": "Müşrik",
+      "definition": "Allah'a ortak koşan, çok tanrılı inanca sahip olan kişidir."
+    },
+    "courseId": "e6sa39FUi02TyzJpvQ89",
+    "unitId": "t9HH1JF2D3UIsCnmUkWa",
+    "topicId": "PCxPOaMuvmnHDJoVXttx",
+    "createdAt": {
+      "_seconds": 1764153081,
+      "_nanoseconds": 766000000
+    }
+  }
+]

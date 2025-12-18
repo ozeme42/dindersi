@@ -1,0 +1,62 @@
+{
+  "courseGroups": [
+    {
+      "title": "Din Kültürü ve Ahlak Bilgisi",
+      "courses": [
+        {
+          "id": "134DwgMfh8VYogm3gDyh",
+          "title": "DKAB",
+          "className": "7",
+          "file": "134DwgMfh8VYogm3gDyh.json"
+        },
+        {
+          "id": "8h7JwF3M909ZeOTKqbrA",
+          "title": "DKAB",
+          "className": "8",
+          "file": "8h7JwF3M909ZeOTKqbrA.json"
+        },
+        {
+          "id": "9UqFYq2nwNkjBcq1mJ3o",
+          "title": "DKAB",
+          "className": "5",
+          "file": "9UqFYq2nwNkjBcq1mJ3o.json"
+        },
+        {
+          "id": "r5TWTCIlp018sP37lPL3",
+          "title": "DKAB",
+          "className": "6",
+          "file": "r5TWTCIlp018sP37lPL3.json"
+        }
+      ]
+    },
+    {
+      "title": "Peygamberimizin Hayatı (Siyer)",
+      "courses": [
+        {
+          "id": "A7wqX0KGBXmjOjmousTW",
+          "title": "SİYER",
+          "className": "8",
+          "file": "A7wqX0KGBXmjOjmousTW.json"
+        },
+        {
+          "id": "OgnmTvY8rxVpEIP45iq4",
+          "title": "SİYER",
+          "className": "5",
+          "file": "OgnmTvY8rxVpEIP45iq4.json"
+        },
+        {
+          "id": "XboyC5jGWhYxh8RHYtrC",
+          "title": "SİYER",
+          "className": "7",
+          "file": "XboyC5jGWhYxh8RHYtrC.json"
+        },
+        {
+          "id": "e6sa39FUi02TyzJpvQ89",
+          "title": "SİYER",
+          "className": "6",
+          "file": "e6sa39FUi02TyzJpvQ89.json"
+        }
+      ]
+    }
+  ]
+}

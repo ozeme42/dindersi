@@ -1,0 +1,137 @@
+{
+  "id": "XboyC5jGWhYxh8RHYtrC",
+  "title": "SİYER",
+  "classId": "Lebb8imNfFDlLpakVVgp",
+  "className": "7",
+  "createdAt": {
+    "_seconds": 1750857158,
+    "_nanoseconds": 866000000
+  },
+  "units": [
+    {
+      "id": "C0M499utiLGh647x2cnp",
+      "title": "1. Ünite: Peygamberimizin Mekke Yılları",
+      "topics": [
+        {
+          "id": "T326A9OOHtWd4mU6bN2r",
+          "title": "1. Peygamberimizin Çocukluk ve Gençlik Yılları",
+          "htmlContent": true
+        },
+        {
+          "id": "6FQTyaJFs3bjPjAa2OwO",
+          "title": "2. Peygamberimizin Mekke Yılları",
+          "htmlContent": true
+        },
+        {
+          "id": "SOxu0mWeXh96N3t9qo6a",
+          "title": "3. Peygamberimizin Medine Yılları",
+          "htmlContent": true
+        }
+      ]
+    },
+    {
+      "id": "PqkYDI0IbvELcbK6ooNX",
+      "title": "2. Ünite: Peygamberimizin Evrensel Mesajları",
+      "topics": [
+        {
+          "id": "tt4v21i5nr1gWUL0aTmf",
+          "title": "1. İnsanların Dokunulmazlıklarının Gözetilmesi",
+          "htmlContent": true
+        },
+        {
+          "id": "YX3z80lliabfu86zXY0S",
+          "title": "2. Adaletin Gözetilmesi",
+          "htmlContent": false
+        },
+        {
+          "id": "lhsjMp5YQn1mVuxMGjxT",
+          "title": "3. Kul Hakkının Gözetilmesi",
+          "htmlContent": false
+        },
+        {
+          "id": "fxcdLENmB3QrRrZQN89p",
+          "title": "4. Emanetin Gözetilmesi",
+          "htmlContent": false
+        }
+      ]
+    },
+    {
+      "id": "UiDbII92rXdWkFHhp5i7",
+      "title": "3. Ünite: Peygamberimiz ve Yakın Çevresi",
+      "topics": [
+        {
+          "id": "1tlWbYxDctomiuwNtCNS",
+          "title": "1. Peygamberimizin Ehlibeyti",
+          "htmlContent": false
+        },
+        {
+          "id": "uJPG1H7YhrF8dGx9LGgs",
+          "title": "2. İdeal Bir Eş Olarak Peygamberimiz",
+          "htmlContent": false
+        },
+        {
+          "id": "oN6xMOGO1pIDIVl3kMAi",
+          "title": "3. Şefkatli Bir Baba Olarak Peygamberimiz",
+          "htmlContent": false
+        },
+        {
+          "id": "okvbNhNzAHZ5n76LuXql",
+          "title": "4. Vefalı Bir Akraba Olarak Peygamberimiz",
+          "htmlContent": false
+        },
+        {
+          "id": "4OQHc69ENUrmTlPfnRSk",
+          "title": "5. Hayırlı Bir Komşu Olarak Peygamberimiz",
+          "htmlContent": false
+        }
+      ]
+    },
+    {
+      "id": "CLRnK4WzxcZiHtBctLdJ",
+      "title": "4. Ünite: En Güzel Örnek Peygamberimiz",
+      "topics": [
+        {
+          "id": "JeAHyFFh3qHp3xqqBmon",
+          "title": "1. Peygamberimizin İbadet Hayatı",
+          "htmlContent": false
+        },
+        {
+          "id": "UoalPl5R9L171dTN77Wj",
+          "title": "2. Peygamberimizin Hayatında Ramazan ve Oruç",
+          "htmlContent": false
+        },
+        {
+          "id": "ZwMkO3aWUOCdqbxmJsfb",
+          "title": "3. Peygamberimizin Giyim Kuşam Adabı",
+          "htmlContent": false
+        },
+        {
+          "id": "VEWFY0LgLVp8G2RpXtn2",
+          "title": "4. Peygamberimizin Nezaketi ve Hilmi",
+          "htmlContent": false
+        }
+      ]
+    },
+    {
+      "id": "3yBH0rGtnkkWFijmZn5h",
+      "title": "5. Ünite: Sahabeden Örnek Davranışlar",
+      "topics": [
+        {
+          "id": "Zg3pqvcjkb84lYwys9cK",
+          "title": "1. Sahabenin Cesaret ve Sadakati",
+          "htmlContent": false
+        },
+        {
+          "id": "RvvZOsI8Vu8juxnufoGV",
+          "title": "2. Sahabenin Yardımlaşma ve Dayanışması",
+          "htmlContent": false
+        },
+        {
+          "id": "I3cxlwVaU0XovoGuzR7Z",
+          "title": "3. Sahabenin Azmi ve Fedakârlığı",
+          "htmlContent": false
+        }
+      ]
+    }
+  ]
+}

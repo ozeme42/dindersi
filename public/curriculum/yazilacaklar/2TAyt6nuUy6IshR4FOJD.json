@@ -1,0 +1,64 @@
+{
+  "conceptDefinitions": [
+    {
+      "definition": "Vahiylerin yazılı hali",
+      "concept": "Kutsal Kitap"
+    },
+    {
+      "definition": "Allah'ın peygamberlerine iletmiş olduğu mesaj",
+      "concept": "Vahiy"
+    },
+    {
+      "concept": "Tebliğ",
+      "definition": "Bir mesajı iletme"
+    },
+    {
+      "definition": "Doğruluğuna inanılan şey",
+      "concept": "İnanç"
+    },
+    {
+      "concept": "Meal",
+      "definition": "Kuran- Kerim'in Türkçe anlamı"
+    },
+    {
+      "definition": "Kur’an-ı Kerim’deki geçmiş peygamberler ve milletlerle ilgili ibretli ve tarihî olaylar",
+      "concept": "Kıssa"
+    },
+    {
+      "definition": "Doğru ve yanlış davranışlar bütünü",
+      "concept": "Ahlak"
+    },
+    {
+      "concept": "İlahi Mesaj",
+      "definition": "Allah'tan gelen mesaj"
+    },
+    {
+      "concept": "Nübüvvet",
+      "definition": "Peygamberlik"
+    },
+    {
+      "concept": "Ayet",
+      "definition": "Allah'ın sözleri"
+    },
+    {
+      "concept": "Peygamber",
+      "definition": "Allah'ın elçisi"
+    },
+    {
+      "definition": "Peygamberlik görevi",
+      "concept": "Risalet"
+    }
+  ],
+  "notes": [
+    "Allah, insanların doğruyu yanlışı ayırt edebilmesi için akıl ve vahiy göndermiştir.",
+    "Vahiy, hayatın anlamı, ölümden sonraki yaşam gibi sorulara cevap verir.",
+    "Allah kendini vahiy yoluyla tanıtır ve insanlara görevlerini hatırlatır.",
+    "Kur'an'da inanç, ibadet, ahlak ve toplumsal konularda mesajlar bulunur.",
+    "Vahiy, insanları dünya ve ahiret mutluluğuna ulaştırmayı amaçlar.",
+    "Peygamberler, vahyi insanlara ileten elçilerdir.",
+    "Peygamberler, insanlara örnek olarak ibadetleri öğretmişlerdir.",
+    "Her peygamberin öne çıkan farklı özellikleri vardır (Hz. İbrahim'in teslimiyeti, Hz. Yusuf'un iffeti gibi).",
+    "Peygamberler toplumsal sorunların çözümü için çaba göstermişlerdir.",
+    "Peygamberler, insanları iyiliğe yönlendirip kötülükten sakındırmışlardır."
+  ]
+}

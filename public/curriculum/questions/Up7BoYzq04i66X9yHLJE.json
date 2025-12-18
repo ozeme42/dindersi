@@ -1,0 +1,1213 @@
+[
+  {
+    "id": "0OAepdNaBnhzdN356WVC",
+    "text": "Elbise temizliği, namaz ibadetinin hangi şartlarından biridir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Vakit",
+      "Kıble",
+      "Hazırlık",
+      "Niyet"
+    ],
+    "correctAnswer": "Hazırlık",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "1zOP8hwTuqUvyX28Jdo8",
+    "text": "Peygamberimiz bir hadisinde 'Allah temizdir, temiz olan şeyleri ___.' diyerek temizliğin önemini vurgulamıştır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "sevmez",
+      "sever",
+      "umursamaz",
+      "nefret eder"
+    ],
+    "correctAnswer": "sever",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "2MIJcGoCAurs7P05OylP",
+    "text": "Beden temizliği kişisel bakım ve hijyen için gereklidir. Kişisel bakım, bireylerin hayatını sağlıklı bir şekilde sürdürebilmesini sağlayan vücut, kıyafet gibi temizlik kurallarının ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "bir kısmıdır",
+      "parçasıdır",
+      "bütünüdür",
+      "dışındadır"
+    ],
+    "correctAnswer": "bütünüdür",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "3XSqKhmYvnqpTISsJxvl",
+    "text": "Peygamberimiz beden temizliğinde özellikle neyi önemsemiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Saç bakımı",
+      "El temizliği",
+      "Ağız ve diş temizliği",
+      "Ayak temizliği"
+    ],
+    "correctAnswer": "Ağız ve diş temizliği",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "4Z1d4vQTW6rOUWMMpyXf",
+    "text": "Peygamberimiz başka bir hadisinde ise kulun samimi bir şekilde tövbe ettiğinde hiç günah işlemeyen kişi gibi olacağını belirtmiştir. Bu durum, tövbenin hangi gücünü gösterir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "Sadece affedilme",
+      "Sadece unutulma",
+      "Günahları tamamen silme ve kişiyi temizleme",
+      "Sadece pişmanlık duyma"
+    ],
+    "correctAnswer": "Günahları tamamen silme ve kişiyi temizleme",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "5f2vKpwrv9Bx4Ln5Z2TH",
+    "text": "Temizlik, kirlerden arınmak, mikrop ve hastalıklardan korunmak için önemlidir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "5q4TTUms6xv6KbdBJUXM",
+    "text": "Temizlik, maddi ve manevi temizlik olmak üzere ikiye ayrılmaz.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "7mamNMnVxOeBlk2EXtVQ",
+    "text": "Hz. Peygamber temizliği ne olarak ifade etmiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Bir yük",
+      "İmanın yarısı",
+      "Bir zorunluluk",
+      "Bir alışkanlık"
+    ],
+    "correctAnswer": "İmanın yarısı",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "82IxEtTnoW191H5GjTp8",
+    "text": "Temizlik, kirlerden arınmak, mikrop ve hastalıklardan korunmak için önemlidir. Bazı ibadetlerin şartı olmasının yanı sıra günlük hayatın da vazgeçilmez ___ biridir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "yüklerinden",
+      "sorunlarından",
+      "unsurlarından",
+      "engellerinden"
+    ],
+    "correctAnswer": "unsurlarından",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "8zSLfnQqLai5rNwEdITH",
+    "text": "Manevi temizlik, insanın kalbini günahlardan ve kötü düşüncelerden korur. Kişinin düşünce dünyasının kötü niyetten ___ manevi temizliktir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "kirlenmesi",
+      "arınması",
+      "çoğalması",
+      "oluşması"
+    ],
+    "correctAnswer": "arınması",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "AFkCq2Ri8AmcWjDwDHyr",
+    "text": "Peygamberimiz, Müslümanlardan temizliğe önem vermelerini istemiştir. Temizlik insan sağlığı için önemlidir. Temiz olmak, bireyin sağlığını koruyacağı gibi sosyal ilişkilerini de olumlu ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "engeller",
+      "etkiler",
+      "bozar",
+      "yavaşlatır"
+    ],
+    "correctAnswer": "etkiler",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "APfMzXohEytRKASZ79jP",
+    "text": "Peygamberimiz beden temizliğinde özellikle ağız ve diş temizliğini önemsememiştir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "BCKR67eVplLXdvWKmu9R",
+    "text": "Çevre temizliği, Müslümanların ibadetlerini yerine getirmeleri için de gereklidir. Örneğin namaz ibadetinin şartlarından biri, namaz kılınan yerin ___ olmasıdır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "kalabalık",
+      "sessiz",
+      "temiz",
+      "geniş"
+    ],
+    "correctAnswer": "temiz",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "BI6RU6yIPrsGwbr3Od76",
+    "text": "Manevi temizliğin yolu günahlardan kaçınmak ve işlenen günahlardan tövbe etmektir. Peygamberimiz bir hadisinde, tövbe eden kulun kalbinin ne olacağını vurgulamıştır?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "Kirleneceğini",
+      "Kararacağını",
+      "Arınacağını",
+      "Değişmeyeceğini"
+    ],
+    "correctAnswer": "Arınacağını",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "E5MHMUpoKkoOzlfQph0u",
+    "text": "Peygamber Efendimiz Müslümanlara, yaşadıkları çevreyi temiz tutmalarını tavsiye etmiştir. O, bir hadisinde şöyle demiştir: 'Evlerinizin önünü ve civarını ___ tutunuz.'",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "kirli",
+      "dağınık",
+      "temiz",
+      "bakımsız"
+    ],
+    "correctAnswer": "temiz",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "EA64Hdvm5ZMWjdS5VbKk",
+    "text": "Peygamberimiz 'Misvak ağzı temizler, (ağzı temizlemek de) Allah’ı ___ eder.' demiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "üzgün",
+      "hoşnut",
+      "kızgın",
+      "mutsuz"
+    ],
+    "correctAnswer": "hoşnut",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "ERGEnBi6h6AZafkkpQNi",
+    "text": "Dinen pis kabul edilen şeyleri su ile yıkama veya temizleyici olan başka şeylerle temizlemeye ne denir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Necaset",
+      "Hadesten taharet",
+      "Taharet",
+      "Setr-i avret"
+    ],
+    "correctAnswer": "Taharet",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "FU0jeQkRZaS2JUZUqcSJ",
+    "text": "Manevi temizlik, insanın kalbini günahlardan ve kötü düşüncelerden korur. Kişinin düşünce dünyasının kötü niyetten arınması manevi temizliktir. Müslümanın niyeti, zihniyeti nasıl olmalıdır?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Kötü ve kirli",
+      "İyi ve güzel",
+      "Karmaşık ve belirsiz",
+      "Sadece kendi çıkarına"
+    ],
+    "correctAnswer": "İyi ve güzel",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "HI17uTMXwM3Uhft6zubt",
+    "text": "Peygamberimiz 'Misvak ağzı temizler, (ağzı temizlemek de) Allah’ı ___ eder.' demiştir.",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "üzgün",
+      "hoşnut",
+      "kızgın",
+      "mutsuz"
+    ],
+    "correctAnswer": "hoşnut",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "Hy7mQ6oRuYdStWcgKgI6",
+    "text": "Misvak kullanmak, sadece Peygamberimize özel bir uygulamadır.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "IqhqISSMqBrG9884haVd",
+    "text": "Abdest sayesinde vücudun en çok kullanılan el, yüz ve ___ bölgeleri temizlenir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "kol",
+      "ayak",
+      "göğüs",
+      "sırt"
+    ],
+    "correctAnswer": "ayak",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "IyKzOtqdc6PnZhEhDPE2",
+    "text": "Manevi temizlik, insanın yaptığı hatalara tövbe ederek iyi ve güzel şeylere yönelmesiyle gerçekleşmez.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "J4VDjrvq5qGRw8mZ0qzJ",
+    "text": "Peygamberimiz, bir gün mescitte otururken içeri gelmek isteyen saçı, sakalı dağınık bir kişiden saçını düzeltip gelmesini istemiştir. O kişi de Peygamberimizin uyarısından sonra saçını ve sakalını düzeltmiş, mescide öyle ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "gitmiştir",
+      "gelmiştir",
+      "kalmıştır",
+      "kaçmıştır"
+    ],
+    "correctAnswer": "gelmiştir",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "JRgt6wzhZnMoYl1dpid1",
+    "text": "Peygamberimiz bir hadisinde 'Allah temizdir, ___ olan şeyleri sever.' diyerek temizliğin önemini vurgulamıştır.",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "kirli",
+      "pis",
+      "temiz",
+      "dağınık"
+    ],
+    "correctAnswer": "temiz",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "Jxax0Rzo7cswYq03YhY4",
+    "text": "Manevi temizlik ise insanın kalbini kötülüklerden temizlemesi, olumsuz duygu ve düşüncelere kapılmaktan koruması, günah ve hatalardan ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "istemesidir",
+      "kaçınmasıdır",
+      "yapmasıdır",
+      "benimsemesidir"
+    ],
+    "correctAnswer": "kaçınmasıdır",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "K13855voWksdAPkn6lJ9",
+    "text": "Peygamberimiz, cuma günü hurmalıkta çalıştıktan sonra mescide toz toprak içinde ve terli bir şekilde gelen sahabileri 'Keşke yıkansaydınız!' diyerek neye önem vermiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Sadece iş temizliğine",
+      "Sadece kıyafet temizliğine",
+      "Bireyin ve toplumun sağlığını korumak için beden temizliğine",
+      "Sadece ibadet temizliğine"
+    ],
+    "correctAnswer": "Bireyin ve toplumun sağlığını korumak için beden temizliğine",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "K6wzkCqN9sB8PMw4QgjQ",
+    "text": "Peygamberimiz, hayatı boyunca temizliğe dikkat etmemiştir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "KRxxiXXGl4plRxvJrdVa",
+    "text": "İslam’ın önem verdiği konulardan biri de elbise temizliğidir. Bu konu Peygamber Efendimiz’e 'Oku!' emrinden sonra gelen ilk ___ vurgulanmıştır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "hadislerde",
+      "ayetlerde",
+      "kitaplarda",
+      "sözlerde"
+    ],
+    "correctAnswer": "ayetlerde",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "LeYvxSezV8Kss35a0np7",
+    "text": "Manevi temizlik, insanın yaptığı hatalara ___ ederek iyi ve güzel şeylere yönelmesiyle gerçekleşir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "inkar",
+      "tövbe",
+      "unutma",
+      "reddetme"
+    ],
+    "correctAnswer": "tövbe",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "LwdAsCYvFLEgBHTv5tSj",
+    "text": "Peygamber Efendimiz Müslümanlara, yaşadıkları çevreyi ___ tutmalarını tavsiye etmiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "kirli",
+      "dağınık",
+      "temiz",
+      "bakımsız"
+    ],
+    "correctAnswer": "temiz",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "McL2ElCkIhzyvnI1W1Mz",
+    "text": "Peygamberimiz, hayatı boyunca temizliğe dikkat etmesi ile bilinmiştir. Temizlik hakkındaki görüşleri ve temiz olmak için gösterdiği davranışlar onun temizlik ___ yansıtır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "kurallarını",
+      "adetlerini",
+      "adabını",
+      "geleneklerini"
+    ],
+    "correctAnswer": "adabını",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "NVussEZeiBphbRi40ODb",
+    "text": "Peygamberimiz başka bir hadisinde ise kulun samimi bir şekilde tövbe ettiğinde hiç günah işlemeyen kişi gibi ___ belirtmiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "olmayacağını",
+      "olacağını",
+      "kalacağını",
+      "unutacağını"
+    ],
+    "correctAnswer": "olacağını",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "PUisceanobwyMBO1C0wy",
+    "text": "Manevi temizlik, insanın kalbini kötülüklerden temizlemesi, olumsuz duygu ve düşüncelere kapılmaktan koruması, günah ve hatalardan kaçınmasıdır.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "RGurFIJViDfzYl0UJM16",
+    "text": "Peygamber Efendimiz namaz ibadeti için alınan abdesti neye benzeterek 'Cennetin anahtarı namaz, namazın anahtarı da temizliktir.' buyurmuştur?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Kapıya",
+      "Kilit",
+      "Anahtara",
+      "Pencereye"
+    ],
+    "correctAnswer": "Anahtara",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "RWnmwu6KtCyQXcNF1XgJ",
+    "text": "Kulun tövbe edip Allah’a (cc) dönmesi, bir silginin kalem ile yazılanı silmesi gibi önceki günah ve hatalarını silmez.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "S2jtL2X0GXD88EFfDpID",
+    "text": "Peygamberimiz, üzerinde kirli elbiseler bulunan bir kişiye 'Allah sana mal mülk ihsan etmişse, Allah’ın nimetinin ve ikramının eseri, üzerinde (kılık kıyafetinde) görünsün.' diyerek neyi vurgulamıştır?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Sadece zenginliği",
+      "Sadece fakirliği",
+      "Elbise temizliğine özen göstermenin önemini",
+      "Sadece dış görünüşün önemsizliğini"
+    ],
+    "correctAnswer": "Elbise temizliğine özen göstermenin önemini",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "TEuPlGc6pivQMyPE2FlX",
+    "text": "Abdest, insanı görünen kirlerden arındırarak maddi; ibadete hazırlayarak da manevi olarak temizler.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "UrnFwQm00F3Zxfx0EXax",
+    "text": "Taharet, dinen pis kabul edilen şeyleri su ile yıkama veya temizleyici olan başka şeylerle temizleme demektir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "a46r9R83ABDMlKXVz4DP",
+    "text": "Manevi temizlik, insanın kalbini kötülüklerden temizlemesi, olumsuz duygu ve düşüncelere kapılmaktan koruması, günah ve hatalardan kaçınmasıdır. Manevi temizlik nasıl gerçekleşir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Sadece ibadetle",
+      "Sadece maddi temizlikle",
+      "Yapılan hatalara tövbe ederek iyi ve güzel şeylere yönelmesiyle",
+      "Sadece başkalarına yardım ederek"
+    ],
+    "correctAnswer": "Yapılan hatalara tövbe ederek iyi ve güzel şeylere yönelmesiyle",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "aScn3xbB6fhhVRlluIsv",
+    "text": "Peygamber Efendimiz namaz ibadeti için alınan abdesti anahtara benzeterek 'Cennetin anahtarı namaz, namazın anahtarı da ___.' buyurmuştur.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "iman",
+      "temizliktir",
+      "oruç",
+      "zekât"
+    ],
+    "correctAnswer": "temizliktir",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "cNZeiGDU2x6NQLOyTtjL",
+    "text": "İslam’a göre beden temizliği için yapılan uygulamalardan biri olan bütün bedenin yıkanmasına ne denir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Abdest",
+      "Teyemmüm",
+      "Gusül abdesti",
+      "Mesh"
+    ],
+    "correctAnswer": "Gusül abdesti",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "cOx7CB7B9jeKQ5u2eL9p",
+    "text": "Elbise temizliği, namaz ibadetinin şartlarından biri değildir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "cfdts6Ym9HoKNW6NMUP7",
+    "text": "Peygamberimiz 'Kim cuma günü yıkanır, en güzel elbisesini giyer, yanında varsa (güzel) koku sürünür, sonra da cumaya gelirse (...) onun bu cuma ile geçmiş cuma arasındaki kusurları ___.' demiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "artar",
+      "bağışlanır",
+      "çoğalır",
+      "unutulur"
+    ],
+    "correctAnswer": "bağışlanır",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "dJwBhO65AmnMHxJ1fROK",
+    "text": "Temizlik anlamında kullanılan 'taharet' kelimesi ne anlama gelir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Kirlilik",
+      "Pislik",
+      "Temizlik ve temiz olma durumu",
+      "Bulaşma"
+    ],
+    "correctAnswer": "Temizlik ve temiz olma durumu",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "dmQnqEQkyQSgPz8tAr0O",
+    "text": "Peygamberimiz bir hadisinde, tövbe eden kulun kalbinin arınacağını, tövbe etmeyenlerin de kalplerinin ___ vurgulamıştır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "parlayacağını",
+      "kararacağını",
+      "aydınlanacağını",
+      "genişleyeceğini"
+    ],
+    "correctAnswer": "kararacağını",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "eV9V1hBMPiTH1WPoAGIL",
+    "text": "Çevre temizliği insanların ve diğer canlıların sağlığı için önemsizdir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "gWEmzbzgywhF44ELwZCl",
+    "text": "Kur’an-ı Kerim’de tövbe etmek ve temizlenmek övülerek Müslümanların hem maddi hem de manevi temizliğe ___ teşvik edilmiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "ilgisiz kalmaları",
+      "özen göstermeleri",
+      "karşı çıkmaları",
+      "ihmal etmeleri"
+    ],
+    "correctAnswer": "özen göstermeleri",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "hOWK49BDTSCwYeKN9Elv",
+    "text": "Manevi temizlik, sadece iyi niyetli olmakla sınırlıdır, kötü düşüncelerden kaçınmayı gerektirmez.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "iPP2D8nwz6cNDqQ5js85",
+    "text": "Peygamberimiz, 'Her yedi günde bir saçını ve bedenini yıkayarak banyo yapması, Allah’ın bütün Müslümanlar üzerindeki bir ___.' buyurmuştur.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "yüküdür",
+      "görevidir",
+      "hakkıdır",
+      "sorunudur"
+    ],
+    "correctAnswer": "hakkıdır",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "iYBqLWs1AuOr5LbCv2pr",
+    "text": "Peygamberimiz, Müslümanlara sıkıntı verebileceği düşüncesiyle her namazdan önce ağız ve diş temizliğini şart koşmuştur.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "jaNksuY26H2v7IKHsb83",
+    "text": "Peygamberimiz 'Saçı olan ona iyi baksın, ___ göstersin.' hadisiyle Müslümanlardan saç temizliği ve bakımına hassasiyet göstermesini istemiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "ilgisizlik",
+      "özen",
+      "kayıtsızlık",
+      "ihmal"
+    ],
+    "correctAnswer": "özen",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "kFiQssjrZVLwnK3shO9I",
+    "text": "Peygamberimiz, misvak kullanmanın bütün peygamberlerin ortak uygulamalarından biri olduğunu belirtmiştir. Misvak ne için kullanılır?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "Saç bakımı",
+      "El temizliği",
+      "Ağız ve diş temizliği",
+      "Ayak temizliği"
+    ],
+    "correctAnswer": "Ağız ve diş temizliği",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "kmMSeQrVeSwrgku3aVOC",
+    "text": "İslam’a göre beden temizliği için yapılan uygulamalardan biri olan bütün bedenin yıkanmasına gusül abdesti denir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "mQvZhENgLyoUBrZxlLyj",
+    "text": "Peygamberimiz, Müslümanların imkânlar ölçüsünde temiz ve düzenli giyinmelerini istememiştir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "nTdLjvej05IOTxnRlIqc",
+    "text": "Maddi temizlik; beden, kıyafet ve ___ temizliğidir.",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "ev",
+      "oda",
+      "çevre",
+      "okul"
+    ],
+    "correctAnswer": "çevre",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "njGmOfHz4v5PQkOo18Cu",
+    "text": "Peygamberimiz 'Saçı olan ona iyi baksın, özen göstersin.' hadisiyle Müslümanlardan saç temizliği ve bakımına ne göstermelerini istemiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "İlgisizlik",
+      "Özen",
+      "Kayıtsızlık",
+      "İhmal"
+    ],
+    "correctAnswer": "Özen",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "o1eb8hLf9WuLyvJRPeZZ",
+    "text": "Peygamberimiz 'Rahatsızlık veren şeyi ortadan kaldırmak sadakadır.' diyerek neye dikkat çekmiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Sadece maddi yardıma",
+      "Sadece manevi yardıma",
+      "Çevre temizliğine",
+      "Sadece ibadete"
+    ],
+    "correctAnswer": "Çevre temizliğine",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "owrvBXjVExwoAs2TO5wH",
+    "text": "Çevreyi temiz tutmak Müslümanlar için ibadet değildir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "pz4HS6XpwGtD5UnUUF0e",
+    "text": "Temizlik, maddi ve ___ temizlik olmak üzere ikiye ayrılır.",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "bedensel",
+      "ruhsal",
+      "manevi",
+      "çevresel"
+    ],
+    "correctAnswer": "manevi",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "qVxEctmHkExfUjZYCYfk",
+    "text": "Peygamberimiz, Müslümanlara sıkıntı verebileceği düşüncesiyle her namazdan önce ağız ve diş temizliğini şart koşmamış ancak neyi istemiştir?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "Hiç dikkat etmemelerini",
+      "Bu konuda hassas olunmasını",
+      "Sadece misvak kullanmalarını",
+      "Sadece diş fırçası kullanmalarını"
+    ],
+    "correctAnswer": "Bu konuda hassas olunmasını",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "qWtNsiH5OlAohXHkLu27",
+    "text": "Maddi temizlik; beden, kıyafet ve çevre temizliğidir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "sviF4DUKAMqpzJFHi3j6",
+    "text": "Peygamberimiz vefatından önce hasta yatağında bile dişlerini temizlememiştir.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "tety0R8lrEysBzLVVsO2",
+    "text": "Kur’an-ı Kerim’de 'Nefse ve onu düzgün bir biçimde şekillendirip ona kötülük duygusunu ve takvasını (kötülükten sakınma yeteneğini) ilham edene ant olsun ki, nefsini arındıran, kurtuluşa ermiştir. Onu kötülüklere gömüp kirleten kimse de ziyana uğramıştır.' ayetiyle neyin önemi vurgulanmıştır?",
+    "type": "Çoktan Seçmeli",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "Sadece maddi temizliğin",
+      "Sadece fiziksel sağlığın",
+      "Manevi temizliğin ve nefsi arındırmanın",
+      "Sadece dış görünüşün"
+    ],
+    "correctAnswer": "Manevi temizliğin ve nefsi arındırmanın",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "uWA62Vq2glIJ5nUKTyrn",
+    "text": "Peygamberimiz 'Rahatsızlık veren şeyi ortadan kaldırmak ___.' diyerek çevre temizliğine dikkat çekmiştir.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "günah",
+      "sadakadır",
+      "zorunluluktur",
+      "yük"
+    ],
+    "correctAnswer": "sadakadır",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "vLH7OW6fs8Tgw8m3kLoZ",
+    "text": "Peygamberimiz, cuma günü hurmalıkta çalıştıktan sonra mescide toz toprak içinde ve terli bir şekilde gelen sahabileri 'Keşke ___!' diyerek uyarmıştır.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Kolay",
+    "options": [
+      "dinlenseydiniz",
+      "yıkansaydınız",
+      "yemek yeseydiniz",
+      "uyusaydınız"
+    ],
+    "correctAnswer": "yıkansaydınız",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "vPPVCkFpVNAmDeJnjPKk",
+    "text": "Peygamberimiz, bireyin beden sağlığının korunması için maddi temizliğe önem vermiştir. Birey, sağlığını kaybederse toplum sağlığı da tehlikeye ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "options": [
+      "girmez",
+      "girer",
+      "iyileşir",
+      "güçlenir"
+    ],
+    "correctAnswer": "girer",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "vjvvtOTRNZc5c9rSCnkB",
+    "text": "Namaz ibadetinin şartlarından biri, namaz kılınan yerin kirli olmasıdır.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Yanlış",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "vp3ZUAVVbmgbJU7mmCfo",
+    "text": "Peygamberimizin 'Cennetin anahtarı namaz, namazın anahtarı da temizliktir.' hadisi, ibadetlerin kabulü için temizliğin vazgeçilmez bir ön şart olduğunu vurgular.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "vpR9SYa4ZseONLKsT4D3",
+    "text": "Peygamberimiz, cuma günü hurmalıkta çalıştıktan sonra mescide toz toprak içinde ve terli bir şekilde gelen sahabileri 'Keşke yıkansaydınız!' diyerek uyarmıştır.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "w0J68f0ARLR1Fdjg18P2",
+    "text": "Peygamberimizin temizlik adabı, sadece bireysel hijyenle sınırlı kalmayıp, toplum sağlığı ve çevrenin korunması gibi geniş bir alanı kapsar.",
+    "type": "Doğru/Yanlış",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Zor",
+    "correctAnswer": "Doğru",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  },
+  {
+    "id": "ysMFwjrAUpIqTPPDC6H4",
+    "text": "Kulun tövbe edip Allah’a (cc) dönmesi, bir silginin kalem ile yazılanı silmesi gibi önceki günah ve hatalarını ___.",
+    "type": "Boşluk Doldurma",
+    "courseId": "OgnmTvY8rxVpEIP45iq4",
+    "unitId": "KXaDVYOgeUiDEerxQ7jR",
+    "topicId": "Up7BoYzq04i66X9yHLJE",
+    "topic": "1. Peygamberimizin Temizlik Adabı",
+    "difficulty": "Orta",
+    "options": [
+      "yazar",
+      "silmez",
+      "silerek",
+      "artırır"
+    ],
+    "correctAnswer": "silerek",
+    "classId": "twWbpZwPI54mwIXyX7F0",
+    "className": "5"
+  }
+]

@@ -1,0 +1,142 @@
+{
+  "id": "r5TWTCIlp018sP37lPL3",
+  "title": "DKAB",
+  "classId": "2bn7xp3tBzOZZG6kHyXP",
+  "className": "6",
+  "createdAt": {
+    "_seconds": 1750832700,
+    "_nanoseconds": 762000000
+  },
+  "units": [
+    {
+      "id": "JiPLN1sC9hQG8PF6us3G",
+      "title": "1️⃣ Peygamber ve İlahi Kitap İnancı",
+      "topics": [
+        {
+          "id": "dUlyD8ZkXXJV4GUNBPnO",
+          "title": "1.İnsanlara Rehber: Peygamber",
+          "htmlContent": true
+        },
+        {
+          "id": "2TAyt6nuUy6IshR4FOJD",
+          "title": "2.Peygamberlerin İlettiği Mesaj: Vahiy",
+          "htmlContent": true
+        },
+        {
+          "id": "E2aSkPn1Md3Hzk5HN0Pw",
+          "title": "3.İlahi Kitaplar",
+          "htmlContent": true
+        },
+        {
+          "id": "sKQLddYwFN48D7kA4yPd",
+          "title": "4.Bir Sure Öğreniyorum: Felak Suresi",
+          "htmlContent": true
+        }
+      ]
+    },
+    {
+      "id": "HaG39Z2i3AIE1XQznLZw",
+      "title": "2️⃣ Ramazan ve Oruç",
+      "topics": [
+        {
+          "id": "lqcPizeedgkmT1jt4Dll",
+          "title": "1.Oruç ve Kur’an Ayı Ramazan",
+          "htmlContent": true
+        },
+        {
+          "id": "xFJRrKv6Pu6LK0Exwgjz",
+          "title": "2.Oruç İbadeti",
+          "htmlContent": true
+        },
+        {
+          "id": "ywfC564wdaGrMXDQYOiX",
+          "title": "3.Oruç İbadetinin İnsana Kazandırdıkları",
+          "htmlContent": true
+        },
+        {
+          "id": "5kqDLUxuero8jzCSE6Ao",
+          "title": "4.Bir Dua Öğreniyorum: İftar Duası",
+          "htmlContent": true
+        }
+      ]
+    },
+    {
+      "id": "wUVGPKdq7yagCGD7wtRK",
+      "title": "3️⃣ Ahlaki Davranışlar",
+      "topics": [
+        {
+          "id": "flcDmSUgs68wkQNPIi58",
+          "title": "1.Doğru Sözlü Olmak",
+          "htmlContent": false
+        },
+        {
+          "id": "oqBiWJeIxUHCq4hogKQc",
+          "title": "2.Merhametli Olmak",
+          "htmlContent": false
+        },
+        {
+          "id": "vRXPNsriVkZKk9ndhOw2",
+          "title": "3.Adap ve Nezaket Kurallarına Uymak",
+          "htmlContent": false
+        },
+        {
+          "id": "KE5H7oRL74FA4s1l7FTg",
+          "title": "4.Vatanımızı Sevmek",
+          "htmlContent": false
+        },
+        {
+          "id": "DponYCF3at5EHJaPRi0q",
+          "title": "5.Bir Dua Öğreniyorum: Kunut Duaları",
+          "htmlContent": false
+        }
+      ]
+    },
+    {
+      "id": "Hkzo15hb37oOcwf2WDHq",
+      "title": "4️⃣ Peygamberliğinden Önce Hz. Muhammed",
+      "topics": [
+        {
+          "id": "BPKtRX6eve1zlZ0svzbX",
+          "title": "1.Hz. Muhammed’in (sav) Doğduğu Çevre",
+          "htmlContent": false
+        },
+        {
+          "id": "nrV3kdiYM7TKs46bppjl",
+          "title": "2.Hz. Muhammed’in (sav) Ailesi ve Çocukluğu",
+          "htmlContent": false
+        },
+        {
+          "id": "x0Rh2GtQ42SgI3h5C0EG",
+          "title": "3.Hz. Muhammed’in (sav) Gençlik Yılları",
+          "htmlContent": false
+        },
+        {
+          "id": "TW2PjrNJipIWPFqo8hKO",
+          "title": "4.Bir Sure Öğreniyorum: Fil Suresi",
+          "htmlContent": false
+        }
+      ]
+    },
+    {
+      "id": "bYhBIoJ6Fe9QnpweyMtk",
+      "title": "5️⃣ Kültürümüzdeki Dinî Motifler",
+      "topics": [
+        {
+          "id": "uu0Uh2HmlXjWXYBrujL7",
+          "title": "1.Geleneğimizde Dinin İzleri",
+          "htmlContent": false
+        },
+        {
+          "id": "RUvgcUXaGIA7uEnogtbA",
+          "title": "2.Edebiyatımızda Dinin İzleri",
+          "htmlContent": false
+        },
+        {
+          "id": "lzNigntTSFsCjjVPD7JY",
+          "title": "3.Musikimizde Dinin İzleri",
+          "htmlContent": false
+        }
+      ]
+    }
+  ]
+}

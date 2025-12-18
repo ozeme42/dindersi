@@ -1,0 +1,706 @@
+[
+  {
+    "id": "07OJesZRyqg2dcsnCqxM",
+    "type": "concept",
+    "content": {
+      "text": "Fetanet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "0mnBtPwgDjiX7QwLjcfq",
+    "type": "definition",
+    "content": {
+      "term": "Fetanet",
+      "definition": "Akıl ve zekâ"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "4FwyN3UJO9xpg2Fe2cjQ",
+    "type": "definition",
+    "content": {
+      "term": "İsmet",
+      "definition": "Günahlardan korunma"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "4dEd3ulE8ypBQ6qgGAP6",
+    "type": "sentence",
+    "content": {
+      "text": "Mucizeler peygamberliği doğrular."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    }
+  },
+  {
+    "id": "5bu9ZBeO79Ad7Ei61A4R",
+    "type": "concept",
+    "content": {
+      "text": "İnzar"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788207,
+      "_nanoseconds": 449000000
+    }
+  },
+  {
+    "id": "75wpeSlhtb4mnLS1whdT",
+    "type": "sentence",
+    "content": {
+      "text": "Hz.Muhammed’e (sav) ilk vahiy Nur Dağı’ndaki Hira Mağarası’nda gelmiştir.",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1758132467,
+      "_nanoseconds": 275000000
+    }
+  },
+  {
+    "id": "BIh9hnQ4muTym3yDmRXM",
+    "type": "concept",
+    "content": {
+      "text": "Nübüvvet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "BwfkIspSuvKZ6jqdyJaB",
+    "type": "concept",
+    "content": {
+      "text": "Emanet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "CXr8u8kxUiFd0RYW1nsg",
+    "type": "definition",
+    "content": {
+      "term": "Sıdk",
+      "definition": "Peygamberlerin dürüst ve doğru sözlü olması"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  },
+  {
+    "id": "DclO21zboHEzEfmcKqh3",
+    "type": "definition",
+    "content": {
+      "term": "Tezkiye",
+      "definition": "İnsanların kötü huylardan uzaklaşmalarını sağlamaya çalışmaları. "
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  },
+  {
+    "id": "E8DCgo5n7HRrzcVvFVd2",
+    "type": "concept",
+    "content": {
+      "text": "Tezkiye"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788207,
+      "_nanoseconds": 449000000
+    }
+  },
+  {
+    "id": "Ecq5NibrE1Gn0YlH8Thy",
+    "type": "concept",
+    "content": {
+      "text": "Resul",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1758132167,
+      "_nanoseconds": 701000000
+    }
+  },
+  {
+    "id": "IT2JoNBukewS1uGYXruP",
+    "type": "concept",
+    "content": {
+      "text": "Mucize"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "JFXwJyl2QpjwA0N2DIcj",
+    "type": "definition",
+    "content": {
+      "term": "Peygamber",
+      "definition": "Allah'ın elçisi"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "K5PYs5JonJI4ozTWjw1t",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamberler Allah'ın elçileridir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    }
+  },
+  {
+    "id": "K8caDXXPY0NN7ZvxK2ra",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    },
+    "content": {
+      "text": "Hz. Peygamber’in en büyük mucizesi Kur’an-ı Kerim’dir",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    }
+  },
+  {
+    "id": "KBml9fm9nQ94kkLdP9mi",
+    "type": "definition",
+    "content": {
+      "term": "İnzar",
+      "definition": "Allah’ın (cc) emirlerine uymayanları uyarmak."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  },
+  {
+    "id": "KSZxvSDPV5KK1ffPTWlH",
+    "type": "definition",
+    "content": {
+      "term": "Tebyin",
+      "definition": "Allah’ın (cc) emir ve yasaklarını insanlara açıklamak."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  },
+  {
+    "id": "LdW0UxRkW3fyil22nzSV",
+    "type": "definition",
+    "content": {
+      "term": "Temsil",
+      "definition": "İslam’ı anlama ve yaşama konusunda insanlara örneklik etmek."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  },
+  {
+    "id": "Lxx7GPVliNY6BbZ5hbsH",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "content": {
+      "categories": [],
+      "text": "",
+      "title": "",
+      "term": "Tevhid",
+      "definition": "Tek yaratıcı inancı",
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "type": "definition",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "createdAt": {
+      "_seconds": 1758132375,
+      "_nanoseconds": 921000000
+    }
+  },
+  {
+    "id": "MRWO8AEOgtGjsowabnkk",
+    "type": "concept",
+    "content": {
+      "text": "Nebi",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1758132197,
+      "_nanoseconds": 175000000
+    }
+  },
+  {
+    "id": "Niux8pSZLWkFmrgpkz9o",
+    "type": "concept",
+    "content": {
+      "text": "Tebliğ"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "PJip4M1DtWqQU7hSKIQp",
+    "type": "definition",
+    "content": {
+      "term": "Risalet",
+      "definition": "Elçilik görevi"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "PrZ2BVqserMqk30FItq8",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    },
+    "content": {
+      "text": "Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber\ngörevlendirmiştir",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    }
+  },
+  {
+    "id": "R4PvP6KPi0trw3ntHC1N",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    },
+    "content": {
+      "text": " Peygamberler Allah’ın (cc) seçtiği elçilerdir.",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    }
+  },
+  {
+    "id": "S1gd2HG1wV4oH2Gmy2zN",
+    "type": "sentence",
+    "content": {
+      "text": "Son peygamber Hz. Muhammed'dir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    }
+  },
+  {
+    "id": "SVMKLf0UQfIAWrLeCSeJ",
+    "type": "definition",
+    "content": {
+      "text": "",
+      "term": "Resul",
+      "definition": "Elçi",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "topicTitle": "1.İnsanlara Rehber: Peygamber",
+    "sourceText": "INSANLARA REHBER: PEYGAMBER Konuya Başlarken\nHz. Âdem, yeryüzündeki ilk insan ve ilk peygamberdir. Peygamberler Allah’ın (cc) seçtiği elçilerdir. Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir. Bunlardan bazılarına da ilahi kitaplar göndermiştir.\nHangi peygamberleri ve ilahi kitapları biliyorsunuz? Etkinlik-1 20 dk. Adı Amaç Aklıma Takıldı Peygamber inancıyla ilgili merak ettiği soruları sorabilme\nYönerge • Öğretmen rehberliğinde beş kişilik gruplara ayrılınız. Grup arkadaşlarınızla fikir alışverişinde bulunarak aşağıdaki tabloyu doldurunuz.\n1. Bölüm: Peygamber kavramıyla ilgili zihninizde çağrışım yapan kelimeleri bir dakika içerisinde karşısındaki boş alana yazınız. Peygamber .............................................. Peygamber .............................................. Peygamber .............................................. Peygamber .............................................. Peygamber ..............................................\n2. Bölüm: Birinci bölümde tespit ettiğiniz kelimelerle peygamber kavramını birlikte kullanarak merak uyandırıcı sorular yazınız.\n1. Soru .................................................................................................................................. 2. Soru .................................................................................................................................. 3. Soru .................................................................................................................................. 4. Soru .................................................................................................................................. 5. Soru ..................................................................................................................................\n• Belirlediğiniz soruları seçtiğiniz grup sözcüsü aracılığıyla sınıfta paylaşınız. Değerlendirme Belirlediğiniz soruların peygamber inancıyla ilgili olup olmadığını öğretmen rehberliğinde değerlendiriniz. 14PEYGAMBER VE İLAHİ KİTAP İNANCI\nGörsel 1.1\nHz. Muhammed’e (sav) ilk\nvahiy Nur Dağı’ndaki Hira\nMağarası’nda gelmiştir.\n“Peygamber” kelimesi, Farsça kökenli olup sözlükte “haber getiren” anlamına\ngelir.1 Terim anlamı ise “Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildir-\nmekle görevli kişiler”dir.2 Peygamberlerin en önemli özelliği Allah’tan (cc) va-\nhiy almalarıdır (Görsel 1.1). Yüce Allah’ın, emir ve hükümlerini peygamberlere\nbildirmesine vahiy denir.3 Peygamberlerin bu vahiyleri insanlara Allah’tan (cc)\naldığı şekilde iletmesine de tebliğ adı verilir.4\nKur’an-ı Kerim’de peygamberler için “resul” ve “nebi” kavramları kullanılır.\nResul “elçi”, nebi ise “haberci” anlamına gelir. Hz. İsmail’den bahsedilen bir\nayette bu iki kavram şu şekilde geçmektedir: “Kitap’ta İsmail’i de an. Şüp-\nhesiz o, sözünde duran bir kimse idi. Bir resul, bir nebi idi.”5\nResul ve\nnebi kelimelerinden türeyen risalet ve nübüvvet kavramları da peygamberlik\ngörevini ifade eder.6\nBulalım\nPeygamberlerin özellikleriyle ilgili verilen ifadeleri değerlendirerek tabloyu doldurunuz.\nDoğru Yanlış\nPeygamberler insanlara her zaman doğruyu söylemiştir.\nPeygamberler sabırlı ve merhametlidir.\nPeygamberler güvenilir insanlardır.\nPeygamberler kibirli ve bencil olabilir.\nKur’an-ı Kerim’de\npeygamberlerin\ngörevlerini tam olarak\nyerine getirmeleri\nhakkında şöyle\nbuyrulmuştur: “O\npeygamberler ki Allah’ın\ngönderdiği emirleri\nduyururlar, Allah’tan\nkorkarlar ve O’ndan\nbaşka kimseden\nkorkmazlar…”\n(Ahzab suresi 39.\nayet)\nİslam’da peygamber inancı imanın şartları arasında yer alır. Tüm peygamber-\nlere ayrım yapılmadan inanılması gerektiği bir ayette şöyle ifade edilir: “Pey-\ngamber, Rabb’inden kendisine indirilene iman etti, müminler de iman et-\ntiler. Her biri; Allah’a, meleklerine, kitaplarına ve peygamberlerine iman\nettiler ve şöyle dediler: ‘O’nun peygamberlerinden hiçbirini diğerinden\nayırt etmeyiz.’ Şöyle de dediler: ‘İşittik ve itaat ettik. Ey Rabbimiz! Sen-\nden bağışlama dileriz. Sonunda dönüş yalnız sanadır.’ ”7\n“Peygamber,\nVahiy, Nübüvvet,\nRisalet Kavramları”\ne-içeriğine karekodla\nulaşabilirsiniz.\n151. ÜNİTE\nHz. Lokman,\nHz. Üzeyir ve\nHz. Zülkarneyn’in\nisimleri Kur’an’da\ngeçmesine rağmen\npeygamber olup\nolmadıklarıyla ilgili\nkesin bilgi yoktur.\n(bk. Sürmeli vd.,\n“peygamber”, 294-\n295.)\nPeygamberlik, Allah (cc) tarafından verilen bir görev olup insanların tercihine\nbağlı değildir. Allah (cc) tarafından seçilen peygamberler üstün ahlaka sahiptir.\nKur’an’da bu durum şöyle ifade edilir: “... Allah, elçilik görevini kime verece-\nğini çok iyi bilir...”8\nYüce Allah, tarih boyunca birçok peygamber göndermiştir.\nKur’an’da ismi geçen yirmi beş peygamber vardır. İlk peygamber Hz. Âdem, son\npeygamber Hz. Muhammed’dir (sav).9 Peygamberler Kur’an’da ismi geçenlerle\nsınırlı değildir. Bununla ilgili bir ayette “Ant olsun, senden önce de peygam-\nberler gönderdik. Onlardan sana kıssalarını anlattığımız kimseler de var,\ndurumlarını sana bildirmediğimiz kimseler de var...”10\nbuyrulur.\nKur’an-ı Kerim, peygamberler hakkında doğru bilgi elde edilebilecek temel kay-\nnaktır. Kur’an-ı Kerim’de bazı peygamberlerin hayatı, gönderiliş amaçları ve\ntevhit mücadelesi hakkında bilgiler verilmiştir. Hakkında ayrıntılı bilgi verilen\npeygamberlerden bazıları Hz. Musa, Hz. Yusuf ve Hz. İbrahim’dir.\nEtkinlik-2\nAdı\nAmaç\nÖn Hazırlık\nPeygamberleri Tanıyalım\nPeygamber inancıyla ilgili bilgileri bulabilme\nKur’an-ı Kerim’de adı geçen peygamberler, bu peygamberlerin görevleri ve özel-\nlikleriyle ilgili araştırma yapınız.\nYönerge\n• Sınıfınızda üç istasyon köşesi oluşturunuz.\n• Her bir istasyonu aşağıdaki şekilde adlandırınız.\n20 dk.\nKur’an’da Adı Geçen Peygamberler\nPeygamberlerin Görevleri\nPeygamberlerin Özellikleri\n• Sınıf mevcudunu dikkate alarak gruplara ayrılınız.\n• Süre yönetimini yapması için grup lideri seçiniz.\n• Etkinliğin sonuna kadar üç istasyonun tamamını dolaşarak konu başlıklarına göre çalışma ka-\nğıtlarınızı doldurunuz.\n• Hazırladığınız ürünleri arkadaşlarınıza sununuz.\nDeğerlendirme\nGrup değerlendirme formunu doldurunuz.\nBeceriler\nGrup üyeleri birbirleriyle yardımlaştı.\nGrup üyeleri birbirlerinin düşüncelerini dinledi.\nGrup üyelerinin her biri çalışmalarda rol aldı.\nGrup üyeleri birbirlerinin düşüncelerine saygı gösterdi.\nGrup üyeleri ulaştıkları sonucu birbirlerine iletti.\nHer Zaman\nBazen\nHiçbir Zaman\n16PEYGAMBER VE İLAHİ KİTAP İNANCI\nEtkinlik-3\n20 dk.\nAdı\nAmaç\nÖn Hazırlık\nAyet ile Kontrol Et\nPeygamber inancıyla ilgili ulaştığı bilgileri doğrulayabilme\nTabloda sure adı ve numaraları verilen ayetlerin anlamlarını Kur’an-ı Kerim mea-\nlinden bularak defterinize yazınız. Etkinlikte kullanmak üzere doğru-yanlış kartları\nhazırlayınız.\nYönerge\n• Defterinize yazdığınız ayet meallerini okuyunuz.\n• Ayet meallerinden hareketle ilgili bilginin doğru veya yanlış olduğunu belirleyiniz.\n• İlgili bilginin doğru olup olmadığı sorulduğunda doğru-yanlış kartınızı kaldırınız.\n• Verdiğiniz cevapları nedenleriyle açıklayınız.\n• Cevaplarınızı öğretmeninizin rehberliğinde kontrol ediniz.\n• Doğru bilgileri A4 kâğıdına yazarak sınıf panosunda paylaşınız.\nAyetler\nAraf suresi 187. ayet\nFussilet suresi 6. ayet\nİbrahim suresi 11. ayet\nAraf suresi 6. ayet\nKasas suresi 56. ayet\nDeğerlendirme\nÖz değerlendirme formunu doldurunuz.\nDeğerlendirilecek Tutum ve Davranışlar\nVerilen ayetlerle ilgili bilgi topladım.\nDoğru-yanlış kartları hazırladım.\nTopladığım bilgilerin doğruluğunu değerlendirdim.\nCevapları öğretmenimin rehberliğinde kontrol ettim.\nDoğru bilgileri sınıf panosunda paylaştım.\nEvet Kısmen Hayır\nDoğrulanacak Bilgiler\nPeygamberler kıyametin ne zaman kopacağını\nbilemezler.\nPeygamberlerin diğer insanlardan farklı olarak\nolağanüstü özellikleri vardır.\nÇok ibadet eden insanlar peygamber olabilir.\nAhirette peygamberler de hesaba çekilecektir.\nPeygamberler dilediğini doğru yola ulaştırabilir.\nDoğru Yanlış\n171. ÜNİTE\nHz. Âdem\nHz. İsmail\nHz. İdris\nHz. İbrahim\nHz. İshak\nHz. Süleyman\nHz. Eyyüb\nHz. İsa\nHz. Muhammed (sav)\nBilgi Grafiği 1.1: Kur’an-ı Kerim’de adı geçen peygamberler\nDolduralım\nKavram haritasında boş bırakılan yerlere tablodaki ifadelerden uygun olanı yazınız.\nArapça\nFarsça\ntebliğ\nvahiy\nnebi\nresul\ntir.\nsayısı Kur’an’da\nAllah’tan (cc)\nifadesi yerine Kur’an’da\nPeygamber\nAllah’ın (cc) emirlerini\neder.\nkullanılır.\nkökenli bir kelimedir.\nalır.\nyirmi sekiz\nyirmi beş\nHz. Yakub\nHz. Davud\nHz. Zülkifl\nHz. Yahya\nHz. Nuh\nHz. Lut\nHz. Yusuf\nHz. Harun\nHz. Yunus\nHz. Zekeriyya\nHz. Hud\nHz. Salih\nHz. Şuayb\nHz. Musa\nHz. İlyas\nHz. Elyesa\n18PEYGAMBER VE İLAHİ KİTAP İNANCI\nYüce Allah tarafından peygamberlere verilen çeşitli görevler vardır. Peygam-\nberler bu görevleri yerine getirirken zorluklarla karşılaşsalar da yılgınlık gös-\ntermemiştir. İnsanlara güzel söz ve yumuşak bir üslupla yaklaşarak onları\ndoğruya yönlendirmişlerdir.11\nPeygamberler, insanları kötülüklerden sakınma-\nları konusunda uyarmıştır. İnsanlara doğru yolu gösterip onları Allah’ın (cc)\nrızası ve nimetleriyle müjdelemiştir.\nGörsel 1.2\nHz. Peygamber\n“Ben namazı nasıl\nkılıyorsam siz de öyle\nkılın.” buyurmuştur.\n(Buhârî, “Ezan”, 18)\nPeygamberlerin insanları tevhid inancına davet etme, onlara vahyi açıkla-\nma, ibadetleri uygulamalı olarak gösterme ve vahye uygun hüküm koyma\ngörevleri vardır. Peygamberler, ibadetleri sadece öğretmekle kalmamış, aynı\nzamanda bu ibadetlerin insanın ruhunu güzelleştiren ve ahlaki gelişimine kat-\nkıda bulunan yönlerini de vurgulamışlardır. Sözleri ve davranışlarıyla insanla-\nra örnek olmuş, ibadetlerle ahlaki değerler arasındaki bağı güçlendirmişlerdir.\nBu yönleriyle peygamberler, insanların güzel ahlaklı bireyler olmalarına da\nkatkıda bulunmuştur.\nPeygamberleri yaşadıkları toplum içinde diğer in-\nsanlardan ayıran bazı özellikler vardır. Onlar bu\nnitelikleriyle toplum içinde ön plana çıkmıştır. Pey-\ngamberler, söz ve davranışlarıyla yaşadığı toplu-\nmun güvenini kazanmış ve günah işlemekten uzak\nduran kişilerdir. Ayrıca ikna kabiliyeti yüksek, zeki\ninsanlardır.\nPeygamberlerin kendilerine inanmayanlara pey-\ngamberliklerini ispat etmek amacıyla Allah’ın (cc)\nizniyle gösterdikleri olağanüstü olaylara mucize\ndenir. Mucizelerin inkârcılara meydan okumak,\npeygamberlere inanmayanları âciz bırakmak gibi\ngibi yönleri vardır. Hz. Peygamber’in en büyük mu-\ncizesi Kur’an-ı Kerim’dir.12\n1\n2\n3\n4\n5\nAteşin Hz. İbrahim’i yakmaması\nHz. Musa’nın asasını yere attığında\nyılan olması\nHz. İsa’nın ölüleri diriltmesi\nHz. Salih’in kayadan dişi bir\ndeve çıkarması\nHz. Süleyman’ın karıncanın\nkonuşmasını anlaması\nBilgi Grafiği 1.2\nPeygamberlerin mucizelerine örnekler\n191. ÜNİTE\nPeygamberlerin\ndürüst ve doğru\nsözlü olmalarına\nsıdk denir.\nPeygamberlerin\ngüvenilir olmalarına\nemanet denir.\nPeygamberlerin\nÖzellikleri\nPeygamberlerin\nAllah (cc)\ntarafından her türlü\ngünahtan korunmuş\nolmalarına ismet\ndenir.\nPeygamberlerin\nAllah’tan (cc)\naldıkları vahyi\neksiksiz olarak\ninsanlara\niletmelerine\ntebliğ denir.\nPeygamberlerin\nakıllı ve zeki\nolmalarına fetanet\ndenir.\nTebliğ\nTebyin\nPeygamberler\nAllah’tan (cc) aldıkları\nvahyi eksiklik ve fazlalık\nolmadan insanlara\nbildirirler.\nPeygamberler Allah’ın (cc)\nemir ve yasaklarını\ninsanlara açıklarlar.\nTemsil\nPeygamberler İslam’ı\nanlama ve yaşama\nkonusunda insanlara\nörneklik ederler.\nPeygamberlerin\nGörevleri\nPeygamberler\nAllah’ın (cc) emirlerine\nuymayanları uyarırlar.\nİnzar\nBilgi Grafiği 1.3\nPeygamberlerin özellikleri ve görevleri\n20\nPeygamberler\nAllah’ın (cc) emirlerine\nuyanları müjdelerler.\nTebşir\nPeygamberler insanların\nkötü huylardan\nuzaklaşmalarını\nsağlamaya çalışırlar.\nTezkiyePEYGAMBER VE İLAHİ KİTAP İNANCI\nEtkinlik-4\n25 dk.\nAdı\nAmaç\nPeygamberlerin Görevleri ve Özellikleri\nPeygamber inancıyla ilgili ulaşılan bilgileri kaydedebilme\nYönerge\n• Ayet meallerinden yola çıkarak peygamberlerin görev ve özelliklerini belirleyiniz.\n• Elde ettiğiniz bilgileri öğretmeninizin rehberliğinde doğrulayınız.\n• Doğruladığınız bilgileri tablodaki boş bırakılan alanlara yazınız.\nPeygamberlerin Görev ve Özellikleriyle İlgili Ayet Mealleri\n“Ey Peygamber! Rabb’inden sana indirileni tebliğ et. Eğer bunu yapmazsan O’nun verdiği\npeygamberlik görevini yerine getirmemiş olursun…”\n(Maide suresi 67. ayet)\n“Ant olsun, Allah’ın Resulü’nde sizin için Allah’a ve ahiret gününe kavuşmayı uman, Allah’ı\nçok zikreden kimseler için güzel bir örnek vardır.”\n(Ahzab suresi 21. ayet)\n“Biz her peygamberi, ancak kendi kavminin diliyle gönderdik ki onlara (Allah’ın emirlerini) iyice\naçıklasın...”\n(İbrahim suresi 4. ayet)\n“Müjdeleyiciler ve uyarıcılar olarak peygamberler gönderdik ki peygamberlerden sonra in-\nsanların Allah’a karşı bir bahaneleri olmasın…”\n(Nisa suresi 165. ayet)\n“Kitapta İdris’i de okuyarak an. Hakikaten o, pek doğru bir insandı ve bir peygamberdi.”\n(Meryem suresi 56. ayet)\n“Bakınız, ben size gönderilmiş güvenilir bir elçiyim.”\n(Şuara suresi 143. ayet)\n“Bunu ilahlarımıza sen mi yaptın ey İbrahim, diye sordular. İbrahim ‘Hayır!’ dedi. Bu işi şu\nbüyükleri yapmıştır. Konuşabiliyorlarsa onlara sorun!”\n(Enbiya suresi 62-63. ayetler)\n“Eğer Allah’ın sana lütuf ve merhameti olmasaydı, onlardan bir grup seni saptırmaya ça-\nlışırdı. Hâlbuki onlar, ancak kendilerini saptırırlar, sana hiçbir zarar veremezler…”\n(Nisa suresi 113. ayet)\n“Allah’a itaat edin, Resul’e de itaat edin ve (kötülüklerden) sakının. Eğer (itaatten) yüz\nçevirirseniz bilin ki Resul’ümüzün vazifesi apaçık duyurmak ve bildirmektir.”\n(Maide suresi 92. ayet)\nPeygamberlerin Görevleri\nPeygamberlerin Özellikleri\n211. ÜNİTE\nDeğerlendirme Peygamberlerin sahip oldukları özellikler görevlerini yapmalarını nasıl etkilemiştir? Düşüncelerinizi boş bırakılan alana yazınız. ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................\n“Peygamber İnancıyla İlgili Sorular” e-içeriğine karekodla ulaşabilirsiniz.\n“Peygamberlerin Görev ve Özellikleriyle İlgili Sorular” e-içeriğine karekodla ulaşabilirsiniz.\nKontrol Noktası\nAşağıdaki 3-2-1 kartını üzerinde yazan ifadelere göre doldurunuz. Bu konuda en iyi öğrendiğim üç bilgi\n3 2 1\n22\n1. ............................................................................................................ 2. ............................................................................................................ 3. ............................................................................................................\nBu konuda çalışmam gereken iki kavram\n1. ............................................................................................................ 2. ............................................................................................................\nBu konuda dikkatimi çeken bir kavram 1. ............................................................................................................",
+    "createdAt": {
+      "_seconds": 1757787326,
+      "_nanoseconds": 440000000
+    }
+  },
+  {
+    "id": "UFgXneo9c7t4smmRabi8",
+    "type": "definition",
+    "content": {
+      "term": "Emanet",
+      "definition": "Güvenilirlik"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "UFtLpEXFkggzcYjmA4Pj",
+    "type": "concept",
+    "content": {
+      "text": "İsmet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "WhVRSmYdEHTdioSAeGVk",
+    "type": "concept",
+    "content": {
+      "text": "Peygamber"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "ZGM8pjGPuxfe7FDUGGtc",
+    "type": "sentence",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    },
+    "content": {
+      "text": "O\npeygamberler ki Allah’ın\ngönderdiği emirleri\nduyururlar, Allah’tan\nkorkarlar ve O’ndan\nbaşka kimseden\nkorkmazlar.",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    }
+  },
+  {
+    "id": "f1jHskgyYtvDksd1ldTP",
+    "type": "definition",
+    "content": {
+      "term": "Mucize",
+      "definition": "Olağanüstü olay"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "fPhAUlJCZYymmpYoPcAU",
+    "type": "definition",
+    "content": {
+      "term": "Vahiy",
+      "definition": "Allah'tan gelen mesaj"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "j5QkRAxmWhqYUSPCh4C5",
+    "type": "concept",
+    "content": {
+      "text": "Vahiy"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "jUZLLET17nrWZhgQMpjy",
+    "type": "concept",
+    "content": {
+      "text": "Risalet"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "ksIwS0bR2kf0n8uWpRxd",
+    "type": "concept",
+    "content": {
+      "text": "Tebşir"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788207,
+      "_nanoseconds": 449000000
+    }
+  },
+  {
+    "id": "kxGmTKHhOXuxx4MGB8Kk",
+    "type": "concept",
+    "content": {
+      "text": "Tebyin"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788207,
+      "_nanoseconds": 449000000
+    }
+  },
+  {
+    "id": "l24vzA6ZlFCaWXc4eeHa",
+    "type": "definition",
+    "content": {
+      "term": "Tebliğ",
+      "definition": "Vahyi iletme"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "lxKZLdSGy2kkEoP7A2W9",
+    "type": "concept",
+    "content": {
+      "text": "Sıdk"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786346,
+      "_nanoseconds": 651000000
+    }
+  },
+  {
+    "id": "mo1p7KBvmY9PNWXOL15j",
+    "type": "definition",
+    "content": {
+      "text": "",
+      "term": "Nebi",
+      "definition": "Haberci",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "topicTitle": "1.İnsanlara Rehber: Peygamber",
+    "sourceText": "INSANLARA REHBER: PEYGAMBER Konuya Başlarken\nHz. Âdem, yeryüzündeki ilk insan ve ilk peygamberdir. Peygamberler Allah’ın (cc) seçtiği elçilerdir. Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir. Bunlardan bazılarına da ilahi kitaplar göndermiştir.\nHangi peygamberleri ve ilahi kitapları biliyorsunuz? Etkinlik-1 20 dk. Adı Amaç Aklıma Takıldı Peygamber inancıyla ilgili merak ettiği soruları sorabilme\nYönerge • Öğretmen rehberliğinde beş kişilik gruplara ayrılınız. Grup arkadaşlarınızla fikir alışverişinde bulunarak aşağıdaki tabloyu doldurunuz.\n1. Bölüm: Peygamber kavramıyla ilgili zihninizde çağrışım yapan kelimeleri bir dakika içerisinde karşısındaki boş alana yazınız. Peygamber .............................................. Peygamber .............................................. Peygamber .............................................. Peygamber .............................................. Peygamber ..............................................\n2. Bölüm: Birinci bölümde tespit ettiğiniz kelimelerle peygamber kavramını birlikte kullanarak merak uyandırıcı sorular yazınız.\n1. Soru .................................................................................................................................. 2. Soru .................................................................................................................................. 3. Soru .................................................................................................................................. 4. Soru .................................................................................................................................. 5. Soru ..................................................................................................................................\n• Belirlediğiniz soruları seçtiğiniz grup sözcüsü aracılığıyla sınıfta paylaşınız. Değerlendirme Belirlediğiniz soruların peygamber inancıyla ilgili olup olmadığını öğretmen rehberliğinde değerlendiriniz. 14PEYGAMBER VE İLAHİ KİTAP İNANCI\nGörsel 1.1\nHz. Muhammed’e (sav) ilk\nvahiy Nur Dağı’ndaki Hira\nMağarası’nda gelmiştir.\n“Peygamber” kelimesi, Farsça kökenli olup sözlükte “haber getiren” anlamına\ngelir.1 Terim anlamı ise “Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildir-\nmekle görevli kişiler”dir.2 Peygamberlerin en önemli özelliği Allah’tan (cc) va-\nhiy almalarıdır (Görsel 1.1). Yüce Allah’ın, emir ve hükümlerini peygamberlere\nbildirmesine vahiy denir.3 Peygamberlerin bu vahiyleri insanlara Allah’tan (cc)\naldığı şekilde iletmesine de tebliğ adı verilir.4\nKur’an-ı Kerim’de peygamberler için “resul” ve “nebi” kavramları kullanılır.\nResul “elçi”, nebi ise “haberci” anlamına gelir. Hz. İsmail’den bahsedilen bir\nayette bu iki kavram şu şekilde geçmektedir: “Kitap’ta İsmail’i de an. Şüp-\nhesiz o, sözünde duran bir kimse idi. Bir resul, bir nebi idi.”5\nResul ve\nnebi kelimelerinden türeyen risalet ve nübüvvet kavramları da peygamberlik\ngörevini ifade eder.6\nBulalım\nPeygamberlerin özellikleriyle ilgili verilen ifadeleri değerlendirerek tabloyu doldurunuz.\nDoğru Yanlış\nPeygamberler insanlara her zaman doğruyu söylemiştir.\nPeygamberler sabırlı ve merhametlidir.\nPeygamberler güvenilir insanlardır.\nPeygamberler kibirli ve bencil olabilir.\nKur’an-ı Kerim’de\npeygamberlerin\ngörevlerini tam olarak\nyerine getirmeleri\nhakkında şöyle\nbuyrulmuştur: “O\npeygamberler ki Allah’ın\ngönderdiği emirleri\nduyururlar, Allah’tan\nkorkarlar ve O’ndan\nbaşka kimseden\nkorkmazlar…”\n(Ahzab suresi 39.\nayet)\nİslam’da peygamber inancı imanın şartları arasında yer alır. Tüm peygamber-\nlere ayrım yapılmadan inanılması gerektiği bir ayette şöyle ifade edilir: “Pey-\ngamber, Rabb’inden kendisine indirilene iman etti, müminler de iman et-\ntiler. Her biri; Allah’a, meleklerine, kitaplarına ve peygamberlerine iman\nettiler ve şöyle dediler: ‘O’nun peygamberlerinden hiçbirini diğerinden\nayırt etmeyiz.’ Şöyle de dediler: ‘İşittik ve itaat ettik. Ey Rabbimiz! Sen-\nden bağışlama dileriz. Sonunda dönüş yalnız sanadır.’ ”7\n“Peygamber,\nVahiy, Nübüvvet,\nRisalet Kavramları”\ne-içeriğine karekodla\nulaşabilirsiniz.\n151. ÜNİTE\nHz. Lokman,\nHz. Üzeyir ve\nHz. Zülkarneyn’in\nisimleri Kur’an’da\ngeçmesine rağmen\npeygamber olup\nolmadıklarıyla ilgili\nkesin bilgi yoktur.\n(bk. Sürmeli vd.,\n“peygamber”, 294-\n295.)\nPeygamberlik, Allah (cc) tarafından verilen bir görev olup insanların tercihine\nbağlı değildir. Allah (cc) tarafından seçilen peygamberler üstün ahlaka sahiptir.\nKur’an’da bu durum şöyle ifade edilir: “... Allah, elçilik görevini kime verece-\nğini çok iyi bilir...”8\nYüce Allah, tarih boyunca birçok peygamber göndermiştir.\nKur’an’da ismi geçen yirmi beş peygamber vardır. İlk peygamber Hz. Âdem, son\npeygamber Hz. Muhammed’dir (sav).9 Peygamberler Kur’an’da ismi geçenlerle\nsınırlı değildir. Bununla ilgili bir ayette “Ant olsun, senden önce de peygam-\nberler gönderdik. Onlardan sana kıssalarını anlattığımız kimseler de var,\ndurumlarını sana bildirmediğimiz kimseler de var...”10\nbuyrulur.\nKur’an-ı Kerim, peygamberler hakkında doğru bilgi elde edilebilecek temel kay-\nnaktır. Kur’an-ı Kerim’de bazı peygamberlerin hayatı, gönderiliş amaçları ve\ntevhit mücadelesi hakkında bilgiler verilmiştir. Hakkında ayrıntılı bilgi verilen\npeygamberlerden bazıları Hz. Musa, Hz. Yusuf ve Hz. İbrahim’dir.\nEtkinlik-2\nAdı\nAmaç\nÖn Hazırlık\nPeygamberleri Tanıyalım\nPeygamber inancıyla ilgili bilgileri bulabilme\nKur’an-ı Kerim’de adı geçen peygamberler, bu peygamberlerin görevleri ve özel-\nlikleriyle ilgili araştırma yapınız.\nYönerge\n• Sınıfınızda üç istasyon köşesi oluşturunuz.\n• Her bir istasyonu aşağıdaki şekilde adlandırınız.\n20 dk.\nKur’an’da Adı Geçen Peygamberler\nPeygamberlerin Görevleri\nPeygamberlerin Özellikleri\n• Sınıf mevcudunu dikkate alarak gruplara ayrılınız.\n• Süre yönetimini yapması için grup lideri seçiniz.\n• Etkinliğin sonuna kadar üç istasyonun tamamını dolaşarak konu başlıklarına göre çalışma ka-\nğıtlarınızı doldurunuz.\n• Hazırladığınız ürünleri arkadaşlarınıza sununuz.\nDeğerlendirme\nGrup değerlendirme formunu doldurunuz.\nBeceriler\nGrup üyeleri birbirleriyle yardımlaştı.\nGrup üyeleri birbirlerinin düşüncelerini dinledi.\nGrup üyelerinin her biri çalışmalarda rol aldı.\nGrup üyeleri birbirlerinin düşüncelerine saygı gösterdi.\nGrup üyeleri ulaştıkları sonucu birbirlerine iletti.\nHer Zaman\nBazen\nHiçbir Zaman\n16PEYGAMBER VE İLAHİ KİTAP İNANCI\nEtkinlik-3\n20 dk.\nAdı\nAmaç\nÖn Hazırlık\nAyet ile Kontrol Et\nPeygamber inancıyla ilgili ulaştığı bilgileri doğrulayabilme\nTabloda sure adı ve numaraları verilen ayetlerin anlamlarını Kur’an-ı Kerim mea-\nlinden bularak defterinize yazınız. Etkinlikte kullanmak üzere doğru-yanlış kartları\nhazırlayınız.\nYönerge\n• Defterinize yazdığınız ayet meallerini okuyunuz.\n• Ayet meallerinden hareketle ilgili bilginin doğru veya yanlış olduğunu belirleyiniz.\n• İlgili bilginin doğru olup olmadığı sorulduğunda doğru-yanlış kartınızı kaldırınız.\n• Verdiğiniz cevapları nedenleriyle açıklayınız.\n• Cevaplarınızı öğretmeninizin rehberliğinde kontrol ediniz.\n• Doğru bilgileri A4 kâğıdına yazarak sınıf panosunda paylaşınız.\nAyetler\nAraf suresi 187. ayet\nFussilet suresi 6. ayet\nİbrahim suresi 11. ayet\nAraf suresi 6. ayet\nKasas suresi 56. ayet\nDeğerlendirme\nÖz değerlendirme formunu doldurunuz.\nDeğerlendirilecek Tutum ve Davranışlar\nVerilen ayetlerle ilgili bilgi topladım.\nDoğru-yanlış kartları hazırladım.\nTopladığım bilgilerin doğruluğunu değerlendirdim.\nCevapları öğretmenimin rehberliğinde kontrol ettim.\nDoğru bilgileri sınıf panosunda paylaştım.\nEvet Kısmen Hayır\nDoğrulanacak Bilgiler\nPeygamberler kıyametin ne zaman kopacağını\nbilemezler.\nPeygamberlerin diğer insanlardan farklı olarak\nolağanüstü özellikleri vardır.\nÇok ibadet eden insanlar peygamber olabilir.\nAhirette peygamberler de hesaba çekilecektir.\nPeygamberler dilediğini doğru yola ulaştırabilir.\nDoğru Yanlış\n171. ÜNİTE\nHz. Âdem\nHz. İsmail\nHz. İdris\nHz. İbrahim\nHz. İshak\nHz. Süleyman\nHz. Eyyüb\nHz. İsa\nHz. Muhammed (sav)\nBilgi Grafiği 1.1: Kur’an-ı Kerim’de adı geçen peygamberler\nDolduralım\nKavram haritasında boş bırakılan yerlere tablodaki ifadelerden uygun olanı yazınız.\nArapça\nFarsça\ntebliğ\nvahiy\nnebi\nresul\ntir.\nsayısı Kur’an’da\nAllah’tan (cc)\nifadesi yerine Kur’an’da\nPeygamber\nAllah’ın (cc) emirlerini\neder.\nkullanılır.\nkökenli bir kelimedir.\nalır.\nyirmi sekiz\nyirmi beş\nHz. Yakub\nHz. Davud\nHz. Zülkifl\nHz. Yahya\nHz. Nuh\nHz. Lut\nHz. Yusuf\nHz. Harun\nHz. Yunus\nHz. Zekeriyya\nHz. Hud\nHz. Salih\nHz. Şuayb\nHz. Musa\nHz. İlyas\nHz. Elyesa\n18PEYGAMBER VE İLAHİ KİTAP İNANCI\nYüce Allah tarafından peygamberlere verilen çeşitli görevler vardır. Peygam-\nberler bu görevleri yerine getirirken zorluklarla karşılaşsalar da yılgınlık gös-\ntermemiştir. İnsanlara güzel söz ve yumuşak bir üslupla yaklaşarak onları\ndoğruya yönlendirmişlerdir.11\nPeygamberler, insanları kötülüklerden sakınma-\nları konusunda uyarmıştır. İnsanlara doğru yolu gösterip onları Allah’ın (cc)\nrızası ve nimetleriyle müjdelemiştir.\nGörsel 1.2\nHz. Peygamber\n“Ben namazı nasıl\nkılıyorsam siz de öyle\nkılın.” buyurmuştur.\n(Buhârî, “Ezan”, 18)\nPeygamberlerin insanları tevhid inancına davet etme, onlara vahyi açıkla-\nma, ibadetleri uygulamalı olarak gösterme ve vahye uygun hüküm koyma\ngörevleri vardır. Peygamberler, ibadetleri sadece öğretmekle kalmamış, aynı\nzamanda bu ibadetlerin insanın ruhunu güzelleştiren ve ahlaki gelişimine kat-\nkıda bulunan yönlerini de vurgulamışlardır. Sözleri ve davranışlarıyla insanla-\nra örnek olmuş, ibadetlerle ahlaki değerler arasındaki bağı güçlendirmişlerdir.\nBu yönleriyle peygamberler, insanların güzel ahlaklı bireyler olmalarına da\nkatkıda bulunmuştur.\nPeygamberleri yaşadıkları toplum içinde diğer in-\nsanlardan ayıran bazı özellikler vardır. Onlar bu\nnitelikleriyle toplum içinde ön plana çıkmıştır. Pey-\ngamberler, söz ve davranışlarıyla yaşadığı toplu-\nmun güvenini kazanmış ve günah işlemekten uzak\nduran kişilerdir. Ayrıca ikna kabiliyeti yüksek, zeki\ninsanlardır.\nPeygamberlerin kendilerine inanmayanlara pey-\ngamberliklerini ispat etmek amacıyla Allah’ın (cc)\nizniyle gösterdikleri olağanüstü olaylara mucize\ndenir. Mucizelerin inkârcılara meydan okumak,\npeygamberlere inanmayanları âciz bırakmak gibi\ngibi yönleri vardır. Hz. Peygamber’in en büyük mu-\ncizesi Kur’an-ı Kerim’dir.12\n1\n2\n3\n4\n5\nAteşin Hz. İbrahim’i yakmaması\nHz. Musa’nın asasını yere attığında\nyılan olması\nHz. İsa’nın ölüleri diriltmesi\nHz. Salih’in kayadan dişi bir\ndeve çıkarması\nHz. Süleyman’ın karıncanın\nkonuşmasını anlaması\nBilgi Grafiği 1.2\nPeygamberlerin mucizelerine örnekler\n191. ÜNİTE\nPeygamberlerin\ndürüst ve doğru\nsözlü olmalarına\nsıdk denir.\nPeygamberlerin\ngüvenilir olmalarına\nemanet denir.\nPeygamberlerin\nÖzellikleri\nPeygamberlerin\nAllah (cc)\ntarafından her türlü\ngünahtan korunmuş\nolmalarına ismet\ndenir.\nPeygamberlerin\nAllah’tan (cc)\naldıkları vahyi\neksiksiz olarak\ninsanlara\niletmelerine\ntebliğ denir.\nPeygamberlerin\nakıllı ve zeki\nolmalarına fetanet\ndenir.\nTebliğ\nTebyin\nPeygamberler\nAllah’tan (cc) aldıkları\nvahyi eksiklik ve fazlalık\nolmadan insanlara\nbildirirler.\nPeygamberler Allah’ın (cc)\nemir ve yasaklarını\ninsanlara açıklarlar.\nTemsil\nPeygamberler İslam’ı\nanlama ve yaşama\nkonusunda insanlara\nörneklik ederler.\nPeygamberlerin\nGörevleri\nPeygamberler\nAllah’ın (cc) emirlerine\nuymayanları uyarırlar.\nİnzar\nBilgi Grafiği 1.3\nPeygamberlerin özellikleri ve görevleri\n20\nPeygamberler\nAllah’ın (cc) emirlerine\nuyanları müjdelerler.\nTebşir\nPeygamberler insanların\nkötü huylardan\nuzaklaşmalarını\nsağlamaya çalışırlar.\nTezkiyePEYGAMBER VE İLAHİ KİTAP İNANCI\nEtkinlik-4\n25 dk.\nAdı\nAmaç\nPeygamberlerin Görevleri ve Özellikleri\nPeygamber inancıyla ilgili ulaşılan bilgileri kaydedebilme\nYönerge\n• Ayet meallerinden yola çıkarak peygamberlerin görev ve özelliklerini belirleyiniz.\n• Elde ettiğiniz bilgileri öğretmeninizin rehberliğinde doğrulayınız.\n• Doğruladığınız bilgileri tablodaki boş bırakılan alanlara yazınız.\nPeygamberlerin Görev ve Özellikleriyle İlgili Ayet Mealleri\n“Ey Peygamber! Rabb’inden sana indirileni tebliğ et. Eğer bunu yapmazsan O’nun verdiği\npeygamberlik görevini yerine getirmemiş olursun…”\n(Maide suresi 67. ayet)\n“Ant olsun, Allah’ın Resulü’nde sizin için Allah’a ve ahiret gününe kavuşmayı uman, Allah’ı\nçok zikreden kimseler için güzel bir örnek vardır.”\n(Ahzab suresi 21. ayet)\n“Biz her peygamberi, ancak kendi kavminin diliyle gönderdik ki onlara (Allah’ın emirlerini) iyice\naçıklasın...”\n(İbrahim suresi 4. ayet)\n“Müjdeleyiciler ve uyarıcılar olarak peygamberler gönderdik ki peygamberlerden sonra in-\nsanların Allah’a karşı bir bahaneleri olmasın…”\n(Nisa suresi 165. ayet)\n“Kitapta İdris’i de okuyarak an. Hakikaten o, pek doğru bir insandı ve bir peygamberdi.”\n(Meryem suresi 56. ayet)\n“Bakınız, ben size gönderilmiş güvenilir bir elçiyim.”\n(Şuara suresi 143. ayet)\n“Bunu ilahlarımıza sen mi yaptın ey İbrahim, diye sordular. İbrahim ‘Hayır!’ dedi. Bu işi şu\nbüyükleri yapmıştır. Konuşabiliyorlarsa onlara sorun!”\n(Enbiya suresi 62-63. ayetler)\n“Eğer Allah’ın sana lütuf ve merhameti olmasaydı, onlardan bir grup seni saptırmaya ça-\nlışırdı. Hâlbuki onlar, ancak kendilerini saptırırlar, sana hiçbir zarar veremezler…”\n(Nisa suresi 113. ayet)\n“Allah’a itaat edin, Resul’e de itaat edin ve (kötülüklerden) sakının. Eğer (itaatten) yüz\nçevirirseniz bilin ki Resul’ümüzün vazifesi apaçık duyurmak ve bildirmektir.”\n(Maide suresi 92. ayet)\nPeygamberlerin Görevleri\nPeygamberlerin Özellikleri\n211. ÜNİTE\nDeğerlendirme Peygamberlerin sahip oldukları özellikler görevlerini yapmalarını nasıl etkilemiştir? Düşüncelerinizi boş bırakılan alana yazınız. ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................ ................................................................................................................................................................\n“Peygamber İnancıyla İlgili Sorular” e-içeriğine karekodla ulaşabilirsiniz.\n“Peygamberlerin Görev ve Özellikleriyle İlgili Sorular” e-içeriğine karekodla ulaşabilirsiniz.\nKontrol Noktası\nAşağıdaki 3-2-1 kartını üzerinde yazan ifadelere göre doldurunuz. Bu konuda en iyi öğrendiğim üç bilgi\n3 2 1\n22\n1. ............................................................................................................ 2. ............................................................................................................ 3. ............................................................................................................\nBu konuda çalışmam gereken iki kavram\n1. ............................................................................................................ 2. ............................................................................................................\nBu konuda dikkatimi çeken bir kavram 1. ............................................................................................................",
+    "createdAt": {
+      "_seconds": 1757787362,
+      "_nanoseconds": 129000000
+    }
+  },
+  {
+    "id": "qCeig529YpL2yzQ7B6Rq",
+    "type": "definition",
+    "content": {
+      "term": "Nübüvvet",
+      "definition": "Peygamberlik görevi"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786491,
+      "_nanoseconds": 64000000
+    }
+  },
+  {
+    "id": "rTpBM89qXZ1GxWRLjTAx",
+    "type": "concept",
+    "content": {
+      "text": "Temsil"
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788207,
+      "_nanoseconds": 449000000
+    }
+  },
+  {
+    "id": "shDuVGpj2vzkxCVhEyA8",
+    "type": "sentence",
+    "content": {
+      "text": "Kur'an peygamberler hakkında bilgi verir."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757786737,
+      "_nanoseconds": 357000000
+    }
+  },
+  {
+    "id": "vcEWCLn0g9K8F5mjVjkA",
+    "type": "concept",
+    "content": {
+      "items": [],
+      "term": "",
+      "definition": "",
+      "categories": [],
+      "title": "",
+      "text": "Tevhid"
+    },
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "createdAt": {
+      "_seconds": 1758132346,
+      "_nanoseconds": 450000000
+    }
+  },
+  {
+    "id": "vs9NOB7dhwlZKGF5Fm5k",
+    "type": "definition",
+    "content": {
+      "term": "Tebşir",
+      "definition": "Allah’ın (cc) emirlerine uyanları müjdelemek."
+    },
+    "courseId": "r5TWTCIlp018sP37lPL3",
+    "unitId": "JiPLN1sC9hQG8PF6us3G",
+    "topicId": "dUlyD8ZkXXJV4GUNBPnO",
+    "createdAt": {
+      "_seconds": 1757788629,
+      "_nanoseconds": 593000000
+    }
+  }
+]
