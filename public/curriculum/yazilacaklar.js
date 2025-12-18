@@ -1,59 +1,55 @@
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const container = document.getElementById('content-container');
-    const loadingText = document.querySelector('.loading-text');
-
-    const params = new URLSearchParams(window.location.search);
-    const topicId = params.get('topicId');
-    const topicName = params.get('topicName');
-
-    if (document.querySelector('h1')) {
-        document.querySelector('h1').textContent = decodeURIComponent(topicName || 'Yazılacaklar');
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const topicId = urlParams.get('topicId');
 
     if (!topicId) {
-        if (loadingText) loadingText.textContent = 'Hata: Konu bilgisi bulunamadı.';
+        displayError("Konu Belirtilmedi", "İçeriği görüntülemek için bir konu seçmelisiniz.");
         return;
     }
-
-    try {
-        const response = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-        if (!response.ok) {
-            // Eğer özel yazılacaklar dosyası yoksa, activityItems'tan definitionları çekmeyi dene
-            try {
-                const activityResponse = await fetch(`/curriculum/activities/${topicId}.json`);
-                if (!activityResponse.ok) throw new Error('Aktivite verisi de bulunamadı.');
-                const items = await activityResponse.json();
-                const definitions = items
-                    .filter(item => item.type === 'definition' && item.content.term && item.content.definition)
-                    .map(item => ({ concept: item.content.term, definition: item.content.definition }));
-
-                if (definitions.length === 0) throw new Error('Bu konu için yazılacaklar içeriği bulunamadı.');
-
-                renderContent({ conceptDefinitions: definitions, notes: [] }, container);
-
-            } catch (activityError) {
-                 throw new Error('Bu konu için yazılacaklar içeriği bulunamadı.');
-            }
-        } else {
-            const data = await response.json();
-            renderContent(data, container);
-        }
-
-        if (loadingText) loadingText.style.display = 'none';
-
-    } catch (error) {
-        console.error('İçerik yüklenirken hata:', error);
-        if (loadingText) loadingText.textContent = 'İçerikler Yüklenemedi. Lütfen tekrar deneyin.';
-    }
+    loadContent(topicId);
 });
 
-function renderContent(data, container) {
+// BASE_PATH'i dinamik olarak al
+const scriptPath = document.currentScript.src;
+const BASE_PATH = new URL('.', scriptPath).pathname.replace(/curriculum\/$/, 'curriculum');
+
+
+async function loadContent(topicId) {
+    try {
+        const response = await fetch(`${BASE_PATH}/yazilacaklar/${topicId}.json`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        renderContent(data);
+    } catch (error) {
+        console.error('Yazılacaklar içeriği yüklenemedi:', error);
+        displayError('İçerik Yüklenemedi', 'Bu konu için "Yazılacaklar" içeriği bulunamadı veya yüklenirken bir hata oluştu.');
+    }
+}
+
+function displayError(title, message) {
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.innerHTML = `
+            <div class="error-container">
+                <h2>${title}</h2>
+                <p>${message}</p>
+                <a href="index.html" class="back-link">Ana Sayfaya Dön</a>
+            </div>
+        `;
+    }
+}
+
+function renderContent(data) {
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) return;
+
     let html = '';
 
     if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
-        html += '<h2 class="category-title">Kavramlar ve Tanımları</h2>';
-        html += '<div class="grid concepts">';
+        html += '<h2>Kavramlar ve Tanımları</h2>';
+        html += '<div class="definitions-grid">';
         data.conceptDefinitions.forEach(item => {
             html += `
                 <div class="card">
@@ -66,21 +62,17 @@ function renderContent(data, container) {
     }
 
     if (data.notes && data.notes.length > 0) {
-        html += '<h2 class="category-title">Önemli Notlar</h2>';
-        html += '<div class="grid notes">';
+        html += '<h2>Önemli Notlar</h2>';
+        html += '<div class="notes-list">';
         data.notes.forEach(note => {
-            html += `
-                <div class="card note-card">
-                    <p>${note}</p>
-                </div>
-            `;
+            html += `<div class="note-item">${note}</div>`;
         });
         html += '</div>';
     }
-    
-    if (!html) {
-        html = '<p class="loading-text">Bu konu için gösterilecek içerik bulunamadı.</p>';
-    }
 
-    container.innerHTML = html;
+    if (html === '') {
+        displayError('İçerik Bulunamadı', 'Bu konu için "Yazılacaklar" içeriği bulunmuyor.');
+    } else {
+        mainContent.innerHTML = html;
+    }
 }

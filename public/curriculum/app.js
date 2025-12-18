@@ -1,95 +1,135 @@
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const mainContent = document.getElementById('main-content');
-    const loadingText = document.querySelector('.loading-text');
-
-    try {
-        const response = await fetch('/curriculum/manifest.json');
-        if (!response.ok) {
-            throw new Error(`Manifest dosyası yüklenemedi: ${response.statusText}`);
-        }
-        const manifest = await response.json();
-
-        if (loadingText) loadingText.style.display = 'none';
-        
-        manifest.courseGroups.forEach(group => {
-            const groupEl = document.createElement('div');
-            groupEl.className = 'course-group';
-            
-            const groupTitle = document.createElement('h2');
-            groupTitle.textContent = group.title;
-            groupEl.appendChild(groupTitle);
-
-            const coursesContainer = document.createElement('div');
-            coursesContainer.className = 'courses-container';
-            groupEl.appendChild(coursesContainer);
-
-            group.courses.forEach(course => {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'course-card';
-                courseCard.innerHTML = `<h3>${course.title}</h3><p>${course.className || 'Genel'}</p>`;
-                courseCard.addEventListener('click', () => renderCourseDetails(course.file, mainContent));
-                coursesContainer.appendChild(courseCard);
-            });
-            mainContent.appendChild(groupEl);
-        });
-
-    } catch (error) {
-        console.error('Hata:', error);
-        if (loadingText) loadingText.textContent = 'İçerikler Yüklenemedi. Lütfen tekrar deneyin.';
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    loadManifest();
 });
 
-async function renderCourseDetails(courseFile, container) {
-    container.innerHTML = '<p class="loading-text">Ders içeriği yükleniyor...</p>';
+// BASE_PATH'i dinamik olarak al
+const scriptPath = document.currentScript.src;
+const BASE_PATH = new URL('.', scriptPath).pathname.replace(/curriculum\/$/, 'curriculum');
+
+
+async function loadManifest() {
     try {
-        const response = await fetch(`/curriculum/${courseFile}`);
-        const course = await response.json();
+        const response = await fetch(`${BASE_PATH}/manifest.json`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const manifest = await response.json();
+        renderCourseGroups(manifest.courseGroups);
+    } catch (error) {
+        console.error('Veri manifestosu yüklenemedi:', error);
+        displayError('İçerikler Yüklenemedi', 'Veri dosyaları yüklenirken bir sorun oluştu. Lütfen sayfanın doğru bir şekilde sunulduğundan emin olun.');
+    }
+}
 
-        let detailsHtml = `
-            <button id="back-to-courses" class="back-button">&larr; Geri</button>
-            <div class="course-detail-header">
-                <h1>${course.title}</h1>
-                <p>${course.className || 'Genel'}</p>
+function displayError(title, message) {
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.innerHTML = `
+            <div class="error-container">
+                <h2>${title}</h2>
+                <p>${message}</p>
             </div>
-            <div class="units-container">
         `;
+    }
+}
 
-        course.units.forEach(unit => {
-            detailsHtml += `
-                <div class="unit-card">
-                    <h2>${unit.title}</h2>
-                    <div class="topics-list">
+function renderCourseGroups(courseGroups) {
+    const mainContent = document.getElementById('main-content');
+    if (!mainContent) return;
+
+    mainContent.innerHTML = ''; // Önceki içeriği temizle
+
+    if (!courseGroups || courseGroups.length === 0) {
+        mainContent.innerHTML = '<p class="loading-text">Gösterilecek ders bulunmuyor.</p>';
+        return;
+    }
+
+    courseGroups.forEach(group => {
+        const groupSection = document.createElement('section');
+        groupSection.className = 'course-group';
+        
+        const groupTitle = document.createElement('h2');
+        groupTitle.textContent = group.title;
+        groupSection.appendChild(groupTitle);
+
+        const courseList = document.createElement('div');
+        courseList.className = 'course-list';
+        groupSection.appendChild(courseList);
+
+        group.courses.forEach(course => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.innerHTML = `
+                <div class="course-card-header">
+                    <h3>${course.title}</h3>
+                    ${course.className ? `<span class="class-badge">${course.className}</span>` : ''}
+                </div>
+                <div class="unit-list"></div>
             `;
+            courseList.appendChild(courseCard);
+
+            courseCard.querySelector('.course-card-header').addEventListener('click', async () => {
+                const unitList = courseCard.querySelector('.unit-list');
+                if (!unitList || unitList.innerHTML !== '') {
+                    unitList.innerHTML = ''; // Zaten açıksa kapat
+                    courseCard.classList.remove('open');
+                    return;
+                }
+                courseCard.classList.add('open');
+                unitList.innerHTML = '<div class="loading-spinner"></div>';
+                try {
+                    const response = await fetch(`${BASE_PATH}/${course.file}`);
+                    const courseDetails = await response.json();
+                    renderUnits(unitList, courseDetails);
+                } catch (e) {
+                    unitList.innerHTML = '<p>Üniteler yüklenemedi.</p>';
+                }
+            });
+        });
+
+        mainContent.appendChild(groupSection);
+    });
+}
+
+
+function renderUnits(container, course) {
+    container.innerHTML = '';
+    if (!course.units || course.units.length === 0) {
+        container.innerHTML = '<p class="empty-text">Bu derse henüz ünite eklenmemiş.</p>';
+        return;
+    }
+
+    course.units.forEach(unit => {
+        const unitElement = document.createElement('div');
+        unitElement.className = 'unit-item';
+        
+        let unitHTML = `
+            <div class="unit-header">
+                <h4>${unit.title}</h4>
+        `;
+        if (unit.htmlContent) {
+            unitHTML += `<a href="ozetler.html?courseId=${course.id}&unitId=${unit.id}" class="unit-summary-link" onclick="event.stopPropagation()">Ünite Özeti</a>`;
+        }
+        unitHTML += `</div><div class="topic-list">`;
+        
+        if (unit.topics && unit.topics.length > 0) {
             unit.topics.forEach(topic => {
-                 const params = `courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`;
-                
-                const yazilacaklarLink = `<a href="yazilacaklar.html?${params}" class="topic-link yazilacaklar">Notlar</a>`;
-                const oyunlarLink = `<a href="oyun.html?${params}&gamePath=kelime-avi" class="topic-link oyunlar">Oyunlar</a>`;
-                
-                detailsHtml += `
+                unitHTML += `
                     <div class="topic-item">
                         <span>${topic.title}</span>
                         <div class="topic-links">
-                            ${yazilacaklarLink}
-                            ${oyunlarLink}
+                            <a href="yazilacaklar.html?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}" class="topic-link yazilacaklar">Notlar</a>
+                            <a href="oyun.html?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}" class="topic-link oyun">Oyunlar</a>
                         </div>
                     </div>
                 `;
             });
-            detailsHtml += '</div></div>';
-        });
+        } else {
+            unitHTML += '<p class="empty-text">Bu ünitede konu bulunmuyor.</p>';
+        }
 
-        detailsHtml += '</div>';
-        container.innerHTML = detailsHtml;
-        
-        document.getElementById('back-to-courses').addEventListener('click', () => {
-             container.innerHTML = '<p class="loading-text">Yükleniyor...</p>';
-             // Re-initialize the main view
-             document.dispatchEvent(new Event('DOMContentLoaded'));
-        });
-
-    } catch (error) {
-        container.innerHTML = '<p class="loading-text">Ders detayı yüklenemedi.</p>';
-    }
+        unitHTML += '</div>';
+        unitElement.innerHTML = unitHTML;
+        container.appendChild(unitElement);
+    });
 }
