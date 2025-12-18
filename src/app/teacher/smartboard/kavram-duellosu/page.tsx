@@ -1,11 +1,9 @@
 
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { SmartboardKavramDuellosuClientPage } from "./client-page";
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { SmartboardKavramDuellosuClientPage } from './client-page';
 
-export default async function KavramDuellosuSetupPage() {
-    const settings = await getGameSettings();
-    // Re-use bireysel settings for now as they are similar, can be customized later
-    return <SmartboardKavramDuellosuClientPage gameConfig={settings.teacherDuello} />;
+export default function KavramDuellosuSetupPage() {
+    // This component will likely have game settings passed as props in the future
+    return <SmartboardKavramDuellosuClientPage gameConfig={{}} />;
 }
