@@ -1,117 +1,128 @@
 document.addEventListener('DOMContentLoaded', () => {
-    loadAndDisplayCourses();
-});
+    const content = document.getElementById('content');
+    const loading = document.getElementById('loading');
+    let manifestData = null; // Store manifest data globally within this scope
 
-const mainContent = document.getElementById('main-content');
+    const showLoading = () => {
+        if (loading) loading.style.display = 'flex';
+        if (content) content.innerHTML = '';
+    };
 
-async function loadAndDisplayCourses() {
-    if (!mainContent) return;
-    mainContent.innerHTML = '<div class="loader"></div>';
+    const hideLoading = () => {
+        if (loading) loading.style.display = 'none';
+    };
 
-    try {
-        // YOL DÜZELTMESİ: /curriculum/ eklendi
-        const response = await fetch('/curriculum/manifest.json');
-        if (!response.ok) throw new Error('Manifest file not found.');
-        const manifest = await response.json();
-
-        if (!manifest.courseGroups || manifest.courseGroups.length === 0) {
-            throw new Error('No course groups found in manifest.');
-        }
-
-        let contentHtml = '';
-        for (const group of manifest.courseGroups) {
-            contentHtml += `<div class="course-group"><h2>${group.title}</h2><div class="course-grid">`;
-            for (const courseInfo of group.courses) {
-                // YOL DÜZELTMESİ: /curriculum/ eklendi
-                try {
-                    const courseRes = await fetch(`/curriculum/${courseInfo.file}`);
-                    if (!courseRes.ok) continue; // Skip if a course file is missing
-                    const course = await courseRes.json();
-                    contentHtml += createCourseCard(course);
-                } catch (e) {
-                    console.error(`Could not load course ${courseInfo.file}`, e);
-                }
-            }
-            contentHtml += `</div></div>`;
-        }
-        mainContent.innerHTML = contentHtml;
-        addAccordionListeners();
-    } catch (error) {
-        console.error('Error loading or parsing curriculum:', error);
-        mainContent.innerHTML = `
-            <div class="error-container">
-                <h2>İçerik Yüklenemedi</h2>
-                <p>Veri dosyaları yüklenirken bir sorun oluştu. Lütfen sayfanın doğru bir şekilde sunulduğundan emin olun.</p>
-            </div>`;
-    }
-}
-
-function createCourseCard(course) {
-    let unitsHtml = '<div class="accordion-content"><div class="unit-list">';
-    if (course.units && course.units.length > 0) {
-        course.units.forEach(unit => {
-            unitsHtml += `
-                <div class="unit-item">
-                    <h4 class="unit-title">${unit.title}</h4>
-                    <div class="topic-list">
-                        ${unit.topics.map(topic => createTopicLink(topic, course.id, unit.id)).join('')}
-                    </div>
+    const showError = (message) => {
+        hideLoading();
+        if (content) {
+            content.innerHTML = `
+                <div class="error-message">
+                    <h2>İçerik Yüklenemedi</h2>
+                    <p>${message}</p>
+                    <button onclick="window.location.reload()">Yeniden Dene</button>
                 </div>
             `;
-        });
-    } else {
-        unitsHtml += '<p class="no-content">Bu ders için ünite bulunmuyor.</p>';
-    }
-    unitsHtml += '</div></div>';
+        }
+    };
 
-    return `
-        <div class="course-card accordion-item">
-            <button class="accordion-button">
-                <span class="course-title">${course.title}</span>
-                <span class="course-class">${course.className || 'Genel'}</span>
-                <span class="chevron"></span>
-            </button>
-            ${unitsHtml}
-        </div>
-    `;
-}
-
-function createTopicLink(topic, courseId, unitId) {
-    // YOL DÜZELTMESİ: /curriculum/ eklendi
-    const yazilacaklarUrl = `/curriculum/yazilacaklar.html?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`;
-    // YOL DÜZELTMESİ: /curriculum/ eklendi
-    const oyunlarUrl = `/curriculum/oyun.html?courseId=${courseId}&unitId=${unitId}&topicId=${topic.id}`;
-    
-    return `
-        <div class="topic-item">
-            <span>${topic.title}</span>
-            <div class="topic-links">
-                <a href="${oyunlarUrl}" class="topic-link games">OYUNLAR</a>
-                <a href="${yazilacaklarUrl}" class="topic-link notes">NOTLAR</a>
+    const renderCourseGroups = (courseGroups) => {
+        if (!content) return;
+        content.innerHTML = `
+            <div class="header">
+                <h1>📚 Dersler ve Konular</h1>
+                <p>Oynamak veya incelemek için bir konu seçin.</p>
             </div>
-        </div>
-    `;
-}
+            ${courseGroups.map(group => `
+                <div class="course-group">
+                    <h2>${group.title}</h2>
+                    <div class="course-list">
+                        ${group.courses.map(course => `
+                            <div class="course-card" data-course-file="${course.file}" data-course-id="${course.id}">
+                                <h3>${course.title}</h3>
+                                <p>${course.className || 'Genel'}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
+        `;
 
-function addAccordionListeners() {
-    const accordionItems = document.querySelectorAll('.accordion-button');
-    accordionItems.forEach(button => {
-        button.addEventListener('click', () => {
-            const content = button.nextElementSibling;
-            const item = button.parentElement;
-
-            if (item.classList.contains('active')) {
-                item.classList.remove('active');
-                content.style.maxHeight = null;
-            } else {
-                // Close other items
-                // accordionItems.forEach(otherButton => {
-                //     otherButton.parentElement.classList.remove('active');
-                //     otherButton.nextElementSibling.style.maxHeight = null;
-                // });
-                item.classList.add('active');
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
+        document.querySelectorAll('.course-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const courseFile = card.dataset.courseFile;
+                const courseId = card.dataset.courseId;
+                if (courseFile && courseId) {
+                    renderCourseDetail(courseFile, courseId);
+                }
+            });
         });
-    });
-}
+    };
+    
+    const renderCourseDetail = (courseFile, courseId) => {
+        showLoading();
+        fetch(`/curriculum/${courseFile}`)
+            .then(response => {
+                if (!response.ok) throw new Error(`Ders dosyası yüklenemedi: ${courseFile}`);
+                return response.json();
+            })
+            .then(courseData => {
+                hideLoading();
+                if (!content) return;
+                content.innerHTML = `
+                    <div class="header">
+                        <button id="back-to-main" class="back-button">‹ Tüm Dersler</button>
+                        <h1>${courseData.title}</h1>
+                    </div>
+                    <div class="unit-list">
+                        ${courseData.units.map(unit => `
+                            <div class="unit-card">
+                                <h3>${unit.title}</h3>
+                                <div class="topic-list">
+                                    ${unit.topics.map(topic => {
+                                        const yazilacaklarUrl = `/curriculum/yazilacaklar.html?courseId=${courseId}&unitId=${unit.id}&topicId=${topic.id}`;
+                                        const oyunlarUrl = `/curriculum/oyun.html?courseId=${courseId}&unitId=${unit.id}&topicId=${topic.id}`;
+                                        
+                                        return `
+                                            <div class="topic-item">
+                                                <span>${topic.title}</span>
+                                                <div class="topic-actions">
+                                                    <a href="${yazilacaklarUrl}" class="action-btn yazilacaklar">Notlar</a>
+                                                    <a href="${oyunlarUrl}" class="action-btn oyunlar">Oyunlar</a>
+                                                </div>
+                                            </div>
+                                        `
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('back-to-main').addEventListener('click', () => {
+                    renderCourseGroups(manifestData.courseGroups);
+                });
+            })
+            .catch(error => {
+                console.error('Ders detayı yüklenirken hata:', error);
+                showError('Seçilen dersin detayları yüklenemedi. Lütfen tekrar deneyin.');
+            });
+    };
+
+    // Main execution
+    showLoading();
+    fetch('/curriculum/manifest.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Manifest dosyası bulunamadı. Statik site verilerinin doğru oluşturulduğundan emin olun.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            hideLoading();
+            manifestData = data; // Store for later use (back button)
+            renderCourseGroups(data.courseGroups);
+        })
+        .catch(error => {
+            console.error('Ana veri yüklenirken hata:', error);
+            showError(error.message);
+        });
+});
