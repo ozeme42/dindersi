@@ -20,11 +20,9 @@ export const deleteUserFlow = ai.defineFlow(
   },
   async ({ uid }) => {
     try {
-      // 1. Delete user from Firebase Authentication
       const auth = getAdminAuth();
       await auth.deleteUser(uid);
 
-      // 2. Delete user data from Firestore
       const db = getAdminDb();
       const userDocRef = db.collection('users').doc(uid);
       await userDocRef.delete();
