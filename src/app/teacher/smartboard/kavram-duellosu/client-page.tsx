@@ -1,15 +1,17 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Users, BrainCircuit } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Users, BrainCircuit, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { useAuth } from "@/context/auth-context";
 import { SelectionGrid } from "@/components/selection-grid";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +24,8 @@ const steps = [
   { id: 5, name: "Onay", icon: <Check className="h-5 w-5" /> },
 ];
 
-export function SmartboardKavramDuellosuClientPage() {
+export function SmartboardKavramDuellosuClientPage({ gameConfig }: { gameConfig: any }) {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
@@ -127,14 +130,17 @@ export function SmartboardKavramDuellosuClientPage() {
   const getGameUrl = () => {
     const params = new URLSearchParams({
         courseId: selection.courseId,
+        courseName: selection.courseName,
         unitId: selection.unitId,
+        unitName: selection.unitName,
         topicId: selection.topicId,
+        topicName: selection.topicName,
     });
     return `/teacher/smartboard/kavram-duellosu/oyun?${params.toString()}`;
   }
   
   const renderContent = () => {
-    if (isLoading && currentStep > 0) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-fuchsia-500"/></div>
+    if (isLoading && currentStep > 0) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     
     const loadingProp = isDataLoading;
 
