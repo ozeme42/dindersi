@@ -1,4 +1,6 @@
 
+'use server';
+
 import 'dotenv/config';
 import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
@@ -26,13 +28,15 @@ function initializeAdminApp() {
             credential: cert(serviceAccount)
         }, 'admin' + Date.now()); // Use a unique name to avoid conflicts in dev environments
         return adminApp;
-    } catch (e) {
+    } catch (e: any) {
         console.error("Firebase Admin SDK initialization error:", e);
         // Try to get the default app if a uniquely named one fails, which can happen in some environments
         try {
-            adminApp = getApp('admin');
+            adminApp = getApp('admin'); // Try to get default app as a fallback
             return adminApp;
         } catch (getAppError) {
+            // Both initialization and getting the default app failed.
+            console.error("Could not get default Firebase admin app either.", getAppError);
             return null; // Initialization failed
         }
     }
@@ -54,5 +58,3 @@ export function getAdminApp(): App {
 // This defers the call to getAdminApp() until the function is actually executed.
 export const getAdminAuth = () => getAuth(getAdminApp());
 export const getAdminDb = () => getFirestore(getAdminApp());
-
-    
