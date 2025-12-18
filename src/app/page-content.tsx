@@ -9,7 +9,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Image as ImageIcon, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Globe
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -236,15 +236,26 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
              </main>
 
             <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12 space-y-6">
-                 <a 
-                    href="https://dosya.co/ug6tf9joqc7i/Değerler_Oyunu.apk.html" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
-                >
-                    <Smartphone />
-                    Android Uygulamasını İndir
-                </a>
+                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                     <a 
+                        href="/curriculum/index.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
+                    >
+                        <Globe />
+                        Statik Siteyi Keşfet
+                    </a>
+                     <a 
+                        href="https://dosya.co/ug6tf9joqc7i/Değerler_Oyunu.apk.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
+                    >
+                        <Smartphone />
+                        Android Uygulamasını İndir
+                    </a>
+                 </div>
                 <p className="text-slate-500 text-xs font-bold tracking-[0.2em] uppercase">Eğlenerek Öğrenmenin Adresi</p>
             </footer>
         </div>
@@ -273,12 +284,12 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     };
 
     useEffect(() => {
-        if (user.role === 'student') {
+        if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
             router.replace('/student');
         }
     }, [user, router]);
     
-    if (user.role === 'student') {
+    if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-slate-950">
                 <div className="flex flex-col items-center gap-6 text-center">
@@ -470,6 +481,10 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
                 <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
             </div>
         );
+    }
+    
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        return <LoggedOutPage classGroups={classGroups || []} />;
     }
     
     return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
