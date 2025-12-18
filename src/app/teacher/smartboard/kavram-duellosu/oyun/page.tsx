@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
 import Link from "next/link";
-import { getKavramDuellosuQuestions } from '@/app/teacher/smartboard/kavram-duellosu/actions';
-import type { KavramDuellosuQuestion } from '@/app/teacher/smartboard/kavram-duellosu/actions';
+import { getKavramDuellosuQuestions } from '../actions';
+import type { KavramDuellosuQuestion } from '../actions';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -16,12 +16,7 @@ import { playSound } from "@/lib/audio-service";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { QuestionDialog } from "@/components/question-dialog";
 import { Loader2 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import type { Question } from "@/lib/types";
 
 type Team = { id: number; name: string; color: string; score: number; };
 
@@ -46,9 +41,7 @@ function DuelGameComponent() {
     const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
     const [winner, setWinner] = useState<Team | 'draw' | null>(null);
 
-    const questionTimer = 0; // Bu oyunda zamanlayıcı yok
-
-    const pullStrength = 15; // Sabit çekme gücü
+    const pullStrength = 15;
 
     useEffect(() => {
         const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -71,10 +64,9 @@ function DuelGameComponent() {
             if (questionResult.error) throw new Error(questionResult.error);
             if (!questionResult.questions || questionResult.questions.length === 0) throw new Error("Bu konu için soru bulunamadı.");
             
-            // Format questions for QuestionDialog
             const formattedQuestions = questionResult.questions.map(q => ({
                 ...q,
-                id: q.a, // Use answer as a temporary ID
+                id: q.a,
                 text: q.q,
                 type: 'Çoktan Seçmeli' as const,
                 difficulty: 'Orta' as const,
@@ -127,7 +119,7 @@ function DuelGameComponent() {
         }
     };
     
-    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500"/></div>
+    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500"/></div>;
     if (error) return (
         <div className="flex h-screen items-center justify-center bg-slate-950">
             <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-900 text-red-200">
@@ -146,7 +138,6 @@ function DuelGameComponent() {
                 <div className="fixed inset-0 pointer-events-none z-0">
                     <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-red-600/10 rounded-full blur-[150px]" />
                     <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[150px]" />
-                    <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
                 </div>
 
                 <Card className="w-full max-w-2xl bg-slate-900/80 backdrop-blur-xl border-white/10 shadow-2xl relative z-10 overflow-hidden">
@@ -159,7 +150,6 @@ function DuelGameComponent() {
                              </div>
                              Düello Bitti!
                         </CardTitle>
-                        <CardDescription className="text-slate-400 text-lg">Mücadele sona erdi.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-8 text-center">
                         <div className="flex flex-col items-center gap-2">
@@ -167,11 +157,8 @@ function DuelGameComponent() {
                                 <p className="text-3xl font-black text-slate-300">BERABERE!</p>
                             ) : winner ? (
                                 <>
-                                    <p className="text-lg text-slate-300 font-medium uppercase tracking-widest">KAZANAN SAVAŞÇI</p>
-                                    <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{winner?.name}</p>
-                                    <div className="px-6 py-2 bg-yellow-500/10 rounded-full border border-yellow-500/30 text-yellow-400 font-bold text-xl mt-2">
-                                        Zafer!
-                                    </div>
+                                    <p className="text-lg text-slate-300 font-medium uppercase tracking-widest">KAZANAN TAKIM</p>
+                                    <p className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 drop-shadow-sm">{winner.name}</p>
                                 </>
                             ) : <p className="text-slate-400">Sonuçlar hesaplanıyor...</p>}
                         </div>
@@ -192,13 +179,11 @@ function DuelGameComponent() {
     return (
         <div className={cn("flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-red-500/30 font-sans", isFullscreen ? "" : "p-4 md:p-6")}>
             
-            {/* Arka Plan */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[150px]" />
             </div>
 
-            {/* Üst Bar */}
             <header className={cn("flex-shrink-0 flex items-center justify-between z-20 mb-6 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-2 shadow-lg", isFullscreen && "rounded-none border-x-0 border-t-0 mb-0")}>
                  <div className="flex items-center gap-4">
                     <div className="p-2.5 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl shadow-lg"><BrainCircuit className="h-6 w-6 text-white"/></div>
@@ -214,36 +199,22 @@ function DuelGameComponent() {
                 </div>
             </header>
 
-            {/* Ana İçerik */}
             <main className="flex-1 flex flex-col gap-6 overflow-hidden relative z-10 h-full">
                 
-                {/* 1. ÜST: SAVAŞ ALANI (TUG OF WAR) */}
                 {teams && (
                     <div className="flex-shrink-0 flex flex-col gap-6 justify-center min-h-[250px] relative">
                         <div className="flex justify-between items-center w-full px-4 md:px-12 relative z-10">
-                            {/* Oyuncu 1 (Mavi) */}
-                             <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activeTeamId === teams[0].id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95")}>
-                                <div className={cn("p-1 rounded-full", activeTeamId === teams[0].id ? "bg-blue-500 animate-pulse" : "bg-slate-700")}>
-                                    <Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900">
-                                        <AvatarFallback className="bg-blue-600 text-white font-black text-2xl">{teams[0].name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                </div>
+                            <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activeTeamId === teams[0].id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95")}>
                                 <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activeTeamId === teams[0].id ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-400")}>{teams[0].name}</div>
                             </div>
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                                 <div className="w-16 h-16 bg-slate-950 border-4 border-white/10 rounded-full flex items-center justify-center shadow-2xl"><span className="font-black text-2xl text-slate-500 italic">VS</span></div>
                             </div>
                              <div className={cn("flex flex-col items-center gap-2 transition-all duration-300 transform", activeTeamId === teams[1].id ? "scale-110 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]" : "opacity-70 scale-95")}>
-                                <div className={cn("p-1 rounded-full", activeTeamId === teams[1].id ? "bg-red-500 animate-pulse" : "bg-slate-700")}>
-                                    <Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900">
-                                        <AvatarFallback className="bg-red-600 text-white font-black text-2xl">{teams[1].name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                </div>
                                 <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activeTeamId === teams[1].id ? "bg-red-600 text-white" : "bg-slate-800 text-slate-400")}>{teams[1].name}</div>
                             </div>
                         </div>
 
-                        {/* Halat */}
                         <div className="w-full px-8 relative">
                              <div className="h-8 w-full bg-slate-800 rounded-full overflow-hidden border-4 border-slate-700 shadow-inner relative">
                                  <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-white/20 -translate-x-1/2" />
@@ -269,37 +240,51 @@ function DuelGameComponent() {
                     </div>
                 )}
                 
-                {/* 2. ALT: SORU PANELİ */}
-                 <div className="flex-1 min-h-0 px-2 pb-2">
-                     <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2rem] p-4 shadow-inner overflow-hidden flex flex-col">
-                        <div className="flex items-center justify-between mb-4 shrink-0">
-                             <div className="text-slate-400 font-bold uppercase tracking-widest text-sm">
-                                Sıra: <span className={cn(activeTeamId === teams[0].id ? "text-blue-400" : "text-red-400")}>{teams.find(t => t.id === activeTeamId)?.name}</span>
+                <div className="flex-1 min-h-0 px-2 pb-2">
+                     <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-6 shadow-inner overflow-hidden flex flex-col">
+                        <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                            <div className={cn(
+                                "grid gap-3",
+                                isFullscreen ? "grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
+                            )}>
+                                {questions.map((q, i) => {
+                                    const questionNumber = i + 1;
+                                    const isAnswered = answeredQuestions.includes(questionNumber);
+                                    
+                                    return (
+                                        <button
+                                            key={i}
+                                            disabled={isAnswered}
+                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
+                                            className={cn(
+                                                "aspect-square rounded-xl flex items-center justify-center text-2xl md:text-3xl font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
+                                                isAnswered 
+                                                    ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" 
+                                                    : "bg-slate-700 hover:bg-slate-600 border-slate-900 text-white shadow-lg"
+                                            )}
+                                        >
+                                            {!isAnswered && <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                                            {isAnswered ? <Check className="h-8 w-8 opacity-20" /> : <span className="drop-shadow-md z-10">{questionNumber}</span>}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
-                        {/* SORU GRİDİ KALDIRILDI */}
-                        <div className="flex-1 flex flex-col items-center justify-center gap-8">
-                             <Button onClick={() => setOpenedQuestion({ number: answeredQuestions.length + 1, question: questions[answeredQuestions.length] })} disabled={!activeTeamId} className="w-96 h-32 text-2xl font-bold bg-gradient-to-br from-slate-700 to-slate-800 hover:from-slate-600 border-b-8 border-slate-900 rounded-3xl">
-                                YENİ SORU GETİR
-                            </Button>
-                        </div>
                      </div>
-                 </div>
+                </div>
 
             </main>
 
-            {/* Modal */}
             {openedQuestion && (
                 <QuestionDialog
                     isFullscreen={isFullscreen}
                     isOpen={!!openedQuestion}
                     onClose={() => setOpenedQuestion(null)}
                     questionData={openedQuestion}
-                    onAnswer={(qNum, isCorrect) => handleAnswerQuestion(qNum, isCorrect, isCorrect ? pullStrength : -pullStrength)}
-                    timerDuration={questionTimer}
-                    pointsConfig={pointsConfig}
-                    penaltyConfig={penaltyConfig}
-                    pullStrengthConfig={pullStrengthConfig}
+                    onAnswer={(qNum, isCorrect) => handleAnswerQuestion(qNum, isCorrect)}
+                    timerDuration={0}
+                    pointsConfig={{ 'default': {points: 1}}} // Puan yerine çekme gücü
+                    penaltyConfig={{}}
                 />
             )}
         </div>
@@ -309,4 +294,3 @@ function DuelGameComponent() {
 export default function SmartboardKavramDuellosuOyunPage() {
     return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}><DuelGameComponent /></Suspense>
 }
-```
