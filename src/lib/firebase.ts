@@ -1,13 +1,13 @@
 import { initializeApp, getApps, getApp, FirebaseApp, setLogLevel } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // <-- EKLENDİ
+import { getStorage } from "firebase/storage";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
   authDomain: "tamuyum.firebaseapp.com",
   projectId: "tamuyum",
-  storageBucket: "tamuyum.appspot.com", 
+  storageBucket: "tamuyum.appspot.com",
   messagingSenderId: "912689470856",
   appId: "1:912689470856:web:42898bb6fdc9c4dfa22e3d"
 };
@@ -29,7 +29,7 @@ if (!getApps().length) {
 
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app); // <-- Storage burada başlatılmalı
+const storage = getStorage(app);
 
 // Offline persistence (Sadece tarayıcıda çalışır)
 if (typeof window !== 'undefined') {

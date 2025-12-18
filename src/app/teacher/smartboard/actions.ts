@@ -1,7 +1,7 @@
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, doc, writeBatch, getDocs, query, where, increment, serverTimestamp } from "firebase/firestore";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { collection, doc, writeBatch, serverTimestamp, increment } from "firebase-admin/firestore";
 
 type ScoreUpdate = {
     userId: string;
@@ -15,7 +15,8 @@ export async function updateMultipleStudentScores(scoreUpdates: ScoreUpdate[]): 
         return { success: true }; 
     }
 
-    const batch = writeBatch(db);
+    const db = getAdminDb();
+    const batch = db.batch();
     const scoreEventsRef = collection(db, 'scoreEvents');
 
     scoreUpdates.forEach(update => {

@@ -1,7 +1,7 @@
 
 'use server';
 
-import { getAdminApp, getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { collection, writeBatch, serverTimestamp, updateDoc, setDoc, doc } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";

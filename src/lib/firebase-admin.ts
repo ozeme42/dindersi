@@ -20,12 +20,12 @@ function initializeAdminApp() {
             const serviceAccount = JSON.parse(serviceAccountString);
             adminApp = initializeApp({
                 credential: cert(serviceAccount)
-            }, 'adminApp-' + Date.now());
+            }, 'adminApp-' + Date.now()); // Unique name to avoid conflicts
             return adminApp;
         } catch (e: any) {
             console.error("Firebase Admin SDK initialization error:", e.message);
-            try {
-                // Fallback to get default app if it exists (useful in some environments)
+             try {
+                // Fallback to get default app if it exists
                 adminApp = getApp();
                 return adminApp;
             } catch (getAppError) {
@@ -34,36 +34,37 @@ function initializeAdminApp() {
             }
         }
     } else {
-        if (typeof window === 'undefined') { // Only log on the server
+        // Only log on the server-side, not during client-side bundling
+        if (typeof window === 'undefined') {
             console.warn('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Admin SDK will not be initialized.');
         }
         return null;
     }
 }
 
-// Lazy initialization getters
+// Lazy initialization getters. This ensures Admin SDK is only initialized when a function needs it.
+export function getAdminApp(): App {
+    if (!adminApp) {
+        initializeAdminApp();
+    }
+    // This error will now only be thrown at runtime if the SDK truly fails to initialize,
+    // for example, due to invalid credentials.
+    if (!adminApp) {
+        throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
+    }
+    return adminApp;
+}
+
 export function getAdminAuth(): Auth {
     if (!adminAuth) {
-        const app = getAdminApp();
-        adminAuth = getAuth(app);
+        adminAuth = getAuth(getAdminApp());
     }
     return adminAuth;
 }
 
 export function getAdminDb(): Firestore {
     if (!adminDb) {
-        const app = getAdminApp();
-        adminDb = getFirestore(app);
+        adminDb = getFirestore(getAdminApp());
     }
     return adminDb;
-}
-
-export function getAdminApp(): App {
-    if (!adminApp) {
-        initializeAdminApp();
-    }
-    if (!adminApp) {
-        throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
-    }
-    return adminApp;
 }
