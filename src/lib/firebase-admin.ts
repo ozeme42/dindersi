@@ -47,5 +47,3 @@ export function getAdminApp(): App {
 // This prevents top-level execution during build.
 export const getAdminAuth = () => getAuth(getAdminApp());
 export const getAdminDb = () => getFirestore(getAdminApp());
-// For backward compatibility in case some files still use it directly
-export const adminDb = getFirestore(getAdminApp());

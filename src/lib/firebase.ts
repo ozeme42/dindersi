@@ -7,8 +7,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyCcMLHz5eLpV10YMXFkNSCVxYhxR6WxyBs",
   authDomain: "tamuyum.firebaseapp.com",
   projectId: "tamuyum",
-  // DÜZELTME: Burası 'appspot.com' değil, hata loglarındaki adres olmalı
-  storageBucket: "tamuyum.firebasestorage.app", 
+  storageBucket: "tamuyum.appspot.com", 
   messagingSenderId: "912689470856",
   appId: "1:912689470856:web:42898bb6fdc9c4dfa22e3d"
 };

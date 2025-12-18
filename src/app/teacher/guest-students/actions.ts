@@ -7,8 +7,6 @@ import type { UserProfile } from "@/lib/types";
 import { getAuth } from 'firebase-admin/auth';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
-const db = getFirestore(getAdminApp());
-
 // This is a simplified version of student creation that does NOT create an auth user.
 // It only creates a document in Firestore.
 export async function addGuestStudent(displayName: string, className: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
@@ -18,6 +16,7 @@ export async function addGuestStudent(displayName: string, className: string): P
     }
 
     try {
+        const db = getFirestore(getAdminApp());
         const docRef = doc(collection(db, "users"));
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
@@ -52,6 +51,7 @@ export async function bulkAddGuestStudents(names: string[], className: string): 
     }
     
     try {
+        const db = getFirestore(getAdminApp());
         const batch = writeBatch(db);
         const usersCollection = collection(db, "users");
 
@@ -85,6 +85,7 @@ export async function updateStudentClass(studentId: string, newClassName: string
     }
 
     try {
+        const db = getFirestore(getAdminApp());
         const studentRef = doc(db, 'users', studentId);
         await updateDoc(studentRef, {
             class: newClassName

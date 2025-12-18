@@ -2,15 +2,14 @@
 'use server';
 
 import { getAdminApp } from "@/lib/firebase-admin";
-import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc, Timestamp } from "firebase-admin/firestore";
+import { getAuth } from 'firebase-admin/auth';
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
 
-const db = getFirestore(getAdminApp());
-
 export async function getAllUsers(): Promise<UserProfile[]> {
+    const db = getFirestore(getAdminApp());
     const usersSnapshot = await db.collection('users').get();
     return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
 }
@@ -20,6 +19,7 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
     }
     try {
+        const db = getFirestore(getAdminApp());
         // Delete from Authentication
         const auth = getAuth(getAdminApp());
         await auth.deleteUser(userId);
@@ -43,6 +43,7 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
     }
 
     try {
+        const db = getFirestore(getAdminApp());
         const auth = getAuth(getAdminApp());
         const { uid, email, displayName, password } = user;
         const firestoreData: any = {
@@ -73,6 +74,7 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
 
 export async function resetAllGeneralScores(): Promise<{success: boolean, error?: string}> {
     try {
+        const db = getFirestore(getAdminApp());
         const usersSnapshot = await db.collection('users').where('role', '==', 'student').get();
         if (usersSnapshot.empty) {
             return { success: true };
@@ -94,6 +96,7 @@ export async function resetAllGeneralScores(): Promise<{success: boolean, error?
 
 
 export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar') {
+    const db = getFirestore(getAdminApp());
     switch (dataType) {
         case 'users':
             return await getAllUsers();
@@ -163,6 +166,7 @@ async function ensureDir(dirPath: string) {
 
 export async function exportDataForStaticSite() {
     try {
+        const db = getFirestore(getAdminApp());
         const publicDir = path.join(process.cwd(), 'public');
         const curriculumDir = path.join(publicDir, 'curriculum');
         
