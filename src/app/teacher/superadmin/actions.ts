@@ -256,5 +256,3 @@ export async function exportDataForStaticSite() {
         return { success: false, error: "Static site data could not be generated: " + error.message };
     }
 }
-
-    
