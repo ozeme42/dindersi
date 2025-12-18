@@ -1,24 +1,138 @@
-
 body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #0f172a; /* slate-900 */
+    color: #e2e8f0; /* slate-200 */
+    margin: 0;
+    padding: 2rem;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+h1, h2, h3 {
+    color: #f8fafc; /* slate-50 */
+    font-weight: 800;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(100, 116, 139, 0.5);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid #334155; /* slate-700 */
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(100, 116, 139, 0.8);
+.course-group > h2 {
+    font-size: 1.8rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #94a3b8; /* slate-400 */
+}
+
+.course-accordion, .unit-accordion {
+    border: 1px solid #334155; /* slate-700 */
+    background-color: #1e293b; /* slate-800 */
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.accordion-trigger {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 1.25rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #cbd5e0; /* slate-300 */
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.accordion-trigger:hover {
+    background-color: #334155; /* slate-700 */
+}
+
+.accordion-content {
+    padding: 0 1.25rem 1.25rem;
+    background-color: #0f172a; /* slate-900 */
+}
+
+.topic-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.75rem;
+}
+
+.topic-item a {
+    display: block;
+    background-color: #1e293b;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: #cbd5e0;
+    font-weight: 500;
+    border: 1px solid #334155;
+    transition: all 0.2s;
+}
+
+.topic-item a:hover {
+    background-color: #334155;
+    border-color: #4f46e5; /* indigo-600 */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+}
+
+/* Oyun Sayfası Stilleri */
+#game-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+#game-title {
+    font-size: 2.5rem;
+    color: #818cf8; /* indigo-400 */
+}
+#topic-name {
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+#loading, #error-container {
+    text-align: center;
+    padding: 3rem;
+    background-color: #1e293b;
+    border-radius: 1rem;
+}
+#loading p {
+    font-size: 1.25rem;
+    color: #cbd5e0;
+}
+#error-text {
+    color: #f87171; /* red-400 */
+    font-weight: bold;
+}
+
+/* --- Hangman --- */
+.draw-anim {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw 1s ease-out forwards;
+}
+
+@keyframes draw {
+    to {
+        stroke-dashoffset: 0;
+    }
 }
