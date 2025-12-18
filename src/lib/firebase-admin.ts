@@ -6,44 +6,59 @@ import { getAuth, Auth } from 'firebase-admin/auth';
 
 let adminApp: App | null = null;
 
-function initializeAdminApp(): App {
+function initializeAdminApp(): App | null {
     if (adminApp) {
         return adminApp;
     }
 
     const apps = getApps();
-    if (apps.length > 0) {
-        adminApp = apps[0];
+    const adminApps = apps.filter(app => app.name.startsWith('admin'));
+
+    if (adminApps.length > 0) {
+        adminApp = adminApps[0];
         return adminApp;
     }
     
     const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
     
+    // During build, this variable might be missing. We shouldn't throw an error here,
+    // as it would crash the build process. We'll only fail at runtime if an SDK
+    // function is actually called without proper initialization.
     if (!serviceAccountString) {
-        // This will only be thrown at RUNTIME if the variable is missing, not during build.
-        throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set.');
+        console.warn('FIREBASE_SERVICE_ACCOUNT env var not set. Admin SDK calls will fail at runtime.');
+        return null;
     }
   
     try {
         const serviceAccount = JSON.parse(serviceAccountString);
         adminApp = initializeApp({
             credential: cert(serviceAccount)
-        }, 'admin'); // Give the app a unique name
+        }, `admin-${Date.now()}`); // Give each instance a unique name
     } catch (e: any) {
-        // This will now only be thrown at runtime if the SDK truly fails to initialize,
-        // for example, due to invalid credentials.
-        throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
+        console.error("Firebase Admin SDK initialization failed:", e);
+        return null;
     }
     
     return adminApp;
 }
 
+function getAdminApp(): App {
+    const app = initializeAdminApp();
+    // This will now only be thrown at runtime if the SDK truly fails to initialize,
+    // for example, due to invalid credentials.
+    if (!app) {
+        throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
+    }
+    return app;
+}
+
+
 // These are now functions that ensure the app is initialized before getting the service.
 // This defers the call to initializeAdminApp() until the function is actually executed.
 export function getAdminAuth(): Auth {
-    return getAuth(initializeAdminApp());
+    return getAuth(getAdminApp());
 }
 
 export function getAdminDb(): Firestore {
-    return getFirestore(initializeAdminApp());
+    return getFirestore(getAdminApp());
 }
