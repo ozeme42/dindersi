@@ -1,7 +1,7 @@
 
 'use server';
 
-import { getAdminApp, getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
