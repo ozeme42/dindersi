@@ -2,13 +2,13 @@
 
 'use server';
 
-import { adminApp } from "@/lib/firebase-admin";
+import { getAdminApp } from "@/lib/firebase-admin";
 import { getAuth } from 'firebase-admin/auth';
-import { getFirestore, doc, setDoc, serverTimestamp, writeBatch, increment, collection } from "firebase-admin/firestore";
+import { getFirestore, doc, setDoc, serverTimestamp, writeBatch, collection } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
-const db = getFirestore(adminApp);
+const db = getFirestore(getAdminApp());
 
 export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdAt' | 'score'> & { password?: string }): Promise<{ success: boolean; error?: string; user?: UserProfile }> {
     const finalDisplayName = data.displayName.trim();
@@ -20,7 +20,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
     }
 
     try {
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
@@ -48,8 +48,6 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             displayName: finalDisplayName,
         });
         
-        const user = userRecord;
-
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
             email: finalEmail,
@@ -59,11 +57,11 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             createdAt: serverTimestamp(),
         };
 
-        await db.collection("users").doc(user.uid).set(newUserProfile);
+        await db.collection("users").doc(userRecord.uid).set(newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
-            uid: user.uid,
+            uid: userRecord.uid,
             createdAt: new Date().toISOString(),
         };
         
@@ -85,7 +83,7 @@ export async function addStudentToClass(displayName: string, className: string):
     const password = "123456"; // Default password
 
     try {
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
@@ -175,17 +173,21 @@ export async function addManualScore(studentId: string, points: number, reason: 
     if (!studentId || !reason.trim() || !Number.isInteger(points)) {
         return { success: false, error: "Eksik veya geçersiz bilgi." };
     }
+    
+    // This is a client-side action file now, it should use the client SDK
+    const clientDb = require('@/lib/firebase').db; 
+    const { doc: clientDoc, increment: clientIncrement, writeBatch: clientWriteBatch, collection: clientCollection, serverTimestamp: clientServerTimestamp } = require('firebase/firestore');
 
     try {
-        const batch = db.batch();
-        const userRef = db.doc(`users/${studentId}`);
-        batch.update(userRef, { score: increment(points) });
+        const batch = clientWriteBatch(clientDb);
+        const userRef = clientDoc(clientDb, 'users', studentId);
+        batch.update(userRef, { score: clientIncrement(points) });
 
-        const eventRef = db.collection('scoreEvents').doc();
+        const eventRef = clientDoc(clientCollection(clientDb, 'scoreEvents'));
         batch.set(eventRef, {
             userId: studentId,
             points: points,
-            timestamp: serverTimestamp(),
+            timestamp: clientServerTimestamp(),
             gameType: 'Manuel Puan',
             context: reason,
         });
@@ -204,7 +206,7 @@ export async function deleteStudent(userId: string): Promise<{ success: boolean;
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
     }
     try {
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
         await auth.deleteUser(userId);
         await db.collection('users').doc(userId).delete();
         return { success: true };

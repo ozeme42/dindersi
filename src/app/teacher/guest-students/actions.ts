@@ -1,12 +1,13 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, doc, setDoc, serverTimestamp, writeBatch, updateDoc } from "firebase/firestore";
+import { getAdminApp } from "@/lib/firebase-admin";
+import { getFirestore, doc, collection, writeBatch, serverTimestamp, updateDoc } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
-import { adminApp } from "@/lib/firebase-admin";
 import { getAuth } from 'firebase-admin/auth';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
+
+const db = getFirestore(getAdminApp());
 
 // This is a simplified version of student creation that does NOT create an auth user.
 // It only creates a document in Firestore.
@@ -106,7 +107,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
     }
 
     try {
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
 
         const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
         let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
@@ -134,7 +135,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             displayName: finalDisplayName,
         });
         
-        const firestore = getFirestore(adminApp);
+        const firestore = getFirestore(getAdminApp());
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,

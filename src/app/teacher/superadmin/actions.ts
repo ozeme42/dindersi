@@ -2,14 +2,14 @@
 
 'use server';
 
-import { adminApp } from "@/lib/firebase-admin";
+import { getAdminApp } from "@/lib/firebase-admin";
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore, collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc, Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
 import path from 'path';
 
-const db = getFirestore(adminApp);
+const db = getFirestore(getAdminApp());
 
 export async function getAllUsers(): Promise<UserProfile[]> {
     const usersSnapshot = await db.collection('users').get();
@@ -22,7 +22,7 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
     }
     try {
         // Delete from Authentication
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
         await auth.deleteUser(userId);
 
         // Delete from Firestore
@@ -44,7 +44,7 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
     }
 
     try {
-        const auth = getAuth(adminApp);
+        const auth = getAuth(getAdminApp());
         const { uid, email, displayName, password } = user;
         const firestoreData: any = {
             displayName: user.displayName,
@@ -69,6 +69,27 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
     } catch (error: any) {
         console.error("Error updating user:", error);
         return { success: false, error: "Kullanıcı güncellenirken bir hata oluştu: " + error.message };
+    }
+}
+
+export async function resetAllGeneralScores(): Promise<{success: boolean, error?: string}> {
+    try {
+        const usersSnapshot = await db.collection('users').where('role', '==', 'student').get();
+        if (usersSnapshot.empty) {
+            return { success: true };
+        }
+        
+        const batch = db.batch();
+        usersSnapshot.docs.forEach(doc => {
+            batch.update(doc.ref, { score: 0 });
+        });
+        
+        await batch.commit();
+        return { success: true };
+        
+    } catch (error: any) {
+        console.error("Error resetting all scores:", error);
+        return { success: false, error: "Puanlar sıfırlanırken bir hata oluştu." };
     }
 }
 

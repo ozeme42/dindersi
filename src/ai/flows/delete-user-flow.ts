@@ -5,10 +5,10 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { getAuth } from 'firebase-admin/auth';
-import { doc, deleteDoc, getFirestore } from 'firebase/firestore';
-import { adminApp } from '@/lib/firebase-admin';
+import { doc, deleteDoc } from 'firebase-admin/firestore';
+import { getAdminApp, adminDb } from '@/lib/firebase-admin';
 
-const db = getFirestore(adminApp);
+const db = adminDb;
 
 export const deleteUserFlow = ai.defineFlow(
   {
@@ -24,7 +24,7 @@ export const deleteUserFlow = ai.defineFlow(
   async ({ uid }) => {
     try {
       // 1. Delete user from Firebase Authentication
-      const auth = getAuth(adminApp);
+      const auth = getAuth(getAdminApp());
       await auth.deleteUser(uid);
 
       // 2. Delete user data from Firestore

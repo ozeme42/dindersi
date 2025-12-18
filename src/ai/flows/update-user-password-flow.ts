@@ -4,7 +4,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { getAuth } from 'firebase-admin/auth';
-import { adminApp } from '@/lib/firebase-admin';
+import { getAdminApp } from '@/lib/firebase-admin';
 
 export const updateUserPassword = ai.defineFlow(
   {
@@ -20,7 +20,7 @@ export const updateUserPassword = ai.defineFlow(
   },
   async ({ uid, password }) => {
     try {
-      const auth = getAuth(adminApp);
+      const auth = getAuth(getAdminApp());
       await auth.updateUser(uid, {
         password: password,
       });

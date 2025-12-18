@@ -1,50 +1,43 @@
 
+'use server';
 
 import 'dotenv/config';
 import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore'; // Import getFirestore
+import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 let adminApp: App;
 
-try {
-  adminApp = getApp('admin');
-} catch (e) {
-  const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-    : undefined;
+// The adminApp is now initialized lazily, only when getAdminApp is called for the first time.
+function initializeAdminApp() {
+    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
+        ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+        : undefined;
 
-  if (!serviceAccount) {
-    throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Cannot initialize Firebase Admin SDK.');
-  }
+    if (!serviceAccount) {
+        // In a build environment, this might not be available, and that's okay
+        // if admin-dependent functions are not called during build.
+        // We throw an error only if it's explicitly used without config.
+        throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set.');
+    }
 
-  adminApp = initializeApp({
-    credential: cert(serviceAccount)
-  }, 'admin');
+    adminApp = initializeApp({
+        credential: cert(serviceAccount)
+    }, 'admin');
 }
 
-// Ensure Firestore is initialized
-getFirestore(adminApp);
-
-
-export { adminApp };
 
 export function getAdminApp(): App {
     try {
+        // Try to get the already initialized app
         return getApp('admin');
     } catch (e) {
-        const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-            ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-            : undefined;
-
-        if (!serviceAccount) {
-            throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Cannot initialize Firebase Admin SDK.');
-        }
-
-        const app = initializeApp({
-            credential: cert(serviceAccount)
-        }, `admin_${Date.now()}`); // Use a unique name to avoid conflicts in dev
-        
-        getFirestore(app);
-        return app;
+        // If it fails, it means the app isn't initialized yet, so initialize it.
+        initializeAdminApp();
+        return getApp('admin');
     }
 }
+
+// You can also export specific services for convenience
+export const adminAuth = getAuth(getAdminApp());
+export const adminDb = getFirestore(getAdminApp());
