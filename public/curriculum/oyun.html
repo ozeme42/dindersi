@@ -4,14 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Değerler Oyunu - Oyun Alanı</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Değerler Oyunu - Etkinlik</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Poppins:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans">
-    <div id="game-container" class="min-h-screen flex flex-col items-center justify-center p-4">
-        <!-- Oyun içeriği buraya dinamik olarak eklenecek -->
+<body>
+    <div id="loading-screen" class="loading-active">
+        <div class="loader"></div>
+        <p>İçerikler Yükleniyor...</p>
     </div>
+
+    <header class="game-header">
+        <a href="index.html" class="back-button">&larr; Geri Dön</a>
+        <div>
+            <h1 id="game-title">Oyun Yükleniyor...</h1>
+            <p id="game-subtitle"></p>
+        </div>
+        <div id="game-hud"></div>
+    </header>
+
+    <main id="game-container" class="game-container">
+        <!-- Oyun içeriği buraya dinamik olarak eklenecek -->
+    </main>
+
     <script src="oyun.js"></script>
 </body>
 </html>

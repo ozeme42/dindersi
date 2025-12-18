@@ -1,61 +1,73 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    const loadingScreen = document.getElementById('loading-screen');
+    const titleEl = document.getElementById('topic-title');
+    const container = document.getElementById('content-container');
+
     const params = new URLSearchParams(window.location.search);
     const topicId = params.get('topicId');
     const topicName = params.get('topicName');
 
-    const titleEl = document.getElementById('title');
-    const kavramlarContentEl = document.getElementById('kavramlar-content');
-    const notlarContentEl = document.getElementById('notlar-content');
-    const loadingEl = document.getElementById('loading');
+    if (titleEl) titleEl.textContent = topicName || 'Yazılacaklar';
 
-    if (titleEl) {
-        titleEl.textContent = topicName || 'Yazılacaklar';
-    }
-
-    if (!topicId || !kavramlarContentEl || !notlarContentEl || !loadingEl) {
-        if (kavramlarContentEl) kavramlarContentEl.innerHTML = '<p class="error">Gerekli bilgiler eksik.</p>';
-        if (loadingEl) loadingEl.style.display = 'none';
+    if (!topicId) {
+        showError("Konu bilgisi bulunamadı.");
         return;
     }
 
-    const fetchContent = async () => {
-        try {
-            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-            if (!res.ok) {
-                 throw new Error('İçerik dosyası bulunamadı. Lütfen yöneticinizle iletişime geçin.');
+    fetch(`/curriculum/yazilacaklar/${topicId}.json`)
+        .then(res => {
+            if (res.ok) {
+                return res.json();
             }
-            const data = await res.json();
+            // 404 gibi durumlarda boş bir obje döndürerek hatayı yakala
+            if (res.status === 404) {
+                return {};
+            }
+            return Promise.reject('Veri dosyası yüklenemedi.');
+        })
+        .then(data => {
+            if ((!data.conceptDefinitions || data.conceptDefinitions.length === 0) && (!data.notes || data.notes.length === 0)) {
+                showError("Bu konu için 'Yazılacaklar' içeriği bulunamadı.");
+                return;
+            }
 
-            // Kavramlar ve Tanımlar
+            let html = '';
+
+            // Kavramlar Bölümü
             if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
-                kavramlarContentEl.innerHTML = data.conceptDefinitions.map((item, index) => `
-                    <div class="card">
-                        <h3>${index + 1}. ${item.concept}</h3>
-                        <p>${item.definition}</p>
-                    </div>
-                `).join('');
-            } else {
-                kavramlarContentEl.innerHTML = '<p class="info">Bu konu için tanımlanmış kavram bulunmuyor.</p>';
+                html += '<div class="yazilacaklar-section">';
+                html += '<h2>Kavramlar ve Tanımları</h2>';
+                html += '<div class="definitions-grid">';
+                data.conceptDefinitions.forEach(item => {
+                    html += `
+                        <div class="card definition-card">
+                            <h3>${item.concept}</h3>
+                            <p>${item.definition}</p>
+                        </div>
+                    `;
+                });
+                html += '</div></div>';
             }
 
-            // Önemli Notlar
+            // Notlar Bölümü
             if (data.notes && data.notes.length > 0) {
-                notlarContentEl.innerHTML = data.notes.map((note, index) => `
-                    <div class="card">
-                        <p>${note}</p>
-                    </div>
-                `).join('');
-            } else {
-                notlarContentEl.innerHTML = '<p class="info">Bu konu için eklenmiş not bulunmuyor.</p>';
+                html += '<div class="yazilacaklar-section">';
+                html += '<h2>Önemli Notlar</h2>';
+                html += '<ul class="notes-list">';
+                data.notes.forEach(note => {
+                    html += `<li class="card note-card">${note}</li>`;
+                });
+                html += '</ul></div>';
             }
 
-        } catch (error) {
-            kavramlarContentEl.innerHTML = `<p class="error">Hata: ${error.message}</p>`;
-        } finally {
-            loadingEl.style.display = 'none';
-        }
-    };
+            if (container) container.innerHTML = html;
+            if (loadingScreen) loadingScreen.classList.remove('loading-active');
+        })
+        .catch(error => showError(error.toString()));
 
-    fetchContent();
+    function showError(message) {
+        if (container) container.innerHTML = `<div class="error-message">${message}</div>`;
+        if (loadingScreen) loadingScreen.classList.remove('loading-active');
+    }
 });
