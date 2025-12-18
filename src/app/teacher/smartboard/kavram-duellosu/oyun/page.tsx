@@ -17,7 +17,7 @@ import { QuestionDialog } from "@/components/question-dialog";
 import { Loader2 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
+import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
 import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -359,9 +359,10 @@ function DuelGameComponent() {
                                         <button
                                             key={i}
                                             disabled={isAnswered || !activePlayer}
-                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q as Question })}
+                                            onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
                                             className={cn(
                                                 "aspect-square rounded-xl flex items-center justify-center text-2xl font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
+                                                isFullscreen ? "text-3xl" : "text-xl",
                                                 isAnswered 
                                                     ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" 
                                                     : "bg-gradient-to-br from-slate-700 to-slate-800 border-slate-900 text-white shadow-lg hover:-translate-y-1 hover:border-b-[6px] hover:shadow-cyan-500/20"
@@ -384,7 +385,7 @@ function DuelGameComponent() {
                 <QuestionDialog
                     isFullscreen={isFullscreen}
                     isOpen={!!openedQuestion}
-                    onClose={() => { setOpenedQuestion(null); setActivePlayer(prev => prev?.id === duelists?.p1.id ? duelists?.p2 : duelists?.p1 || null); }}
+                    onClose={() => setOpenedQuestion(null)}
                     questionData={openedQuestion}
                     onAnswer={handleAnswerQuestion}
                     timerDuration={questionTimer}
@@ -400,4 +401,3 @@ function DuelGameComponent() {
 export default function SmartboardDuelloOyunPage() {
     return <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}><DuelGameComponent /></Suspense>
 }
-```
