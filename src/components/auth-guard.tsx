@@ -17,6 +17,11 @@ export function AuthGuard({ children, role }: AuthGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
+    // If in static build, bypass all auth logic.
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        return;
+    }
+    
     if (loading) {
       return; // Still waiting for user state to be determined.
     }
@@ -47,6 +52,10 @@ export function AuthGuard({ children, role }: AuthGuardProps) {
     }
   }, [user, loading, role, router]);
 
+  // For static build, if we are here, we can render children immediately.
+  if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+      return <>{children}</>;
+  }
 
   const requiredRoles = Array.isArray(role) ? role : [role];
 

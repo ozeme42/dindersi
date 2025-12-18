@@ -13,6 +13,11 @@ type ErrorReportPayload = {
 };
 
 export async function submitErrorReport(payload: ErrorReportPayload): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+      console.log("Static mode: Error report submitted (simulated).", payload);
+      return { success: true };
+    }
+    
     if (!payload.message || !payload.userId) {
         return { success: false, error: 'Eksik bilgi.' };
     }

@@ -9,7 +9,7 @@ export default function RegisterPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to home page immediately
+    // In static mode, always redirect home. In dynamic mode, this page is disabled.
     router.replace('/');
   }, [router]);
 

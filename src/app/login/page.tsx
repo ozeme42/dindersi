@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,6 +34,13 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [loginAttemptFailed, setLoginAttemptFailed] = useState(false);
+
+  // If in static mode, redirect to home immediately.
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+      router.replace('/');
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,6 +106,14 @@ export default function LoginPage() {
         setIsLoading(false);
     }
   };
+  
+  if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+      return (
+        <div className="flex h-screen items-center justify-center bg-slate-950">
+            <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
+        </div>
+      )
+  }
 
   return (
     <div className="min-h-screen bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black flex items-center justify-center p-4 font-sans text-white">

@@ -12,9 +12,63 @@ export type EnrichedCourse = Omit<Course, 'units'> & {
     })[]
 };
 
+const isStaticBuild = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
+
+async function fetchStaticCurriculum(): Promise<EnrichedCourse[]> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/manifest.json`);
+    if (!res.ok) {
+        throw new Error("Failed to fetch static curriculum manifest.");
+    }
+    const manifest = await res.json();
+    
+    const coursePromises = manifest.courseGroups.flatMap((group: any) => group.courses.map(async (courseInfo: any) => {
+        const courseRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/${courseInfo.file}`);
+        if (!courseRes.ok) return null;
+        return courseRes.json();
+    }));
+
+    const courses = (await Promise.all(coursePromises)).filter(Boolean);
+    return courses as EnrichedCourse[];
+}
+
 export async function getCurriculumForSelection(userId: string, dataType: 'games' | 'yazilacaklar' | 'ozetler'): Promise<EnrichedCourse[]> {
     noStore();
     try {
+        if (isStaticBuild) {
+            let allCourses = await fetchStaticCurriculum();
+            
+            const enrichedCourses: EnrichedCourse[] = await Promise.all(allCourses.map(async (course) => {
+                const enrichedUnits = await Promise.all((course.units || []).map(async (unit) => {
+                    const topicsWithContent = await Promise.all(unit.topics.map(async (topic) => {
+                         if (!(topic.isPublished ?? true)) return null;
+
+                        if (dataType === 'yazilacaklar') {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/yazilacaklar/${topic.id}.json`);
+                            return res.ok ? topic : null;
+                        }
+                        if (dataType === 'ozetler') {
+                            return topic.htmlContent ? topic : null;
+                        }
+                        return topic; // For games, include all published topics
+                    }));
+                    
+                    const filteredTopics = topicsWithContent.filter(Boolean) as Topic[];
+                    if (filteredTopics.length > 0) {
+                        return { ...unit, topics: filteredTopics };
+                    }
+                    return null;
+                }));
+                const filteredUnits = enrichedUnits.filter(Boolean) as EnrichedCourse['units'];
+                if (filteredUnits.length > 0) {
+                    return { ...course, units: filteredUnits };
+                }
+                return null;
+            }));
+
+            return enrichedCourses.filter(Boolean) as EnrichedCourse[];
+        }
+
+        // --- DYNAMIC (FIRESTORE) LOGIC ---
         const userDoc = await getDoc(doc(db, "users", userId));
         if (!userDoc.exists()) {
             console.error("No user found with ID:", userId);
@@ -44,14 +98,14 @@ export async function getCurriculumForSelection(userId: string, dataType: 'games
 
             for (const unitDoc of unitsSnapshot.docs) {
                 const unitData = unitDoc.data() as Unit;
-                if (!(unitData.isPublished ?? true)) continue; // Skip unpublished units
+                if (!(unitData.isPublished ?? true)) continue;
 
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
                 
                 const topicsWithContent = topicsSnapshot.docs
                     .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic))
                     .filter(topicData => {
-                        if (!(topicData.isPublished ?? true)) return false; // Skip unpublished topics
+                        if (!(topicData.isPublished ?? true)) return false;
 
                         if (dataType === 'yazilacaklar') {
                             return (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
@@ -59,7 +113,7 @@ export async function getCurriculumForSelection(userId: string, dataType: 'games
                         if (dataType === 'ozetler') {
                             return !!topicData.htmlContent;
                         }
-                        return true; // For games, include all published topics
+                        return true; 
                     });
 
 

@@ -55,32 +55,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+            // In static mode, simulate a teacher user to grant access
+            setUser({
+                uid: 'static_teacher',
+                displayName: 'Öğretmen (Statik)',
+                email: 'teacher@static.com',
+                role: 'teacher',
+                // Add any other necessary fields with default values
+            } as AuthUser);
+            setLoading(false);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
             if (firebaseUser) {
                 const userDocRef = doc(db, 'users', firebaseUser.uid);
-                // Use onSnapshot for real-time updates
                 const unsubFromDoc = onSnapshot(userDocRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const firestoreData = docSnap.data();
-                        // Serialize Timestamps to prevent Next.js hydration errors
                         const serializedData = serializeFirestoreTimestamps(firestoreData);
                         
                         setUser({
                             ...firebaseUser,
                             ...serializedData,
-                            uid: firebaseUser.uid, // ensure uid from auth is used
+                            uid: firebaseUser.uid,
                         } as AuthUser);
                     } else {
-                        // If Firestore doc doesn't exist, they are authenticated but have no profile data.
                         setUser(firebaseUser as AuthUser);
                     }
                     setLoading(false);
                 }, (error) => {
                     console.error("Error fetching user document with onSnapshot:", error);
-                    setUser(firebaseUser as AuthUser); // Fallback to auth data
+                    setUser(firebaseUser as AuthUser);
                     setLoading(false);
                 });
-                // Return the unsubscribe function for the snapshot listener
                 return () => unsubFromDoc();
             } else {
                 setUser(null);
@@ -88,7 +97,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
         });
 
-        // Return the unsubscribe function for the auth state listener
         return () => unsubscribe();
     }, []);
 
