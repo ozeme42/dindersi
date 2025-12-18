@@ -4,38 +4,48 @@ import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
-let adminApp: App;
+let adminApp: App | null = null;
 
-// The adminApp is now initialized lazily, only when getAdminApp is called for the first time.
 function initializeAdminApp() {
+    if (adminApp) {
+        return adminApp;
+    }
+
     const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
         ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
         : undefined;
 
     if (!serviceAccount) {
-        // In a build environment, this might not be available, and that's okay
-        // if admin-dependent functions are not called during build.
-        // We throw an error only if it's explicitly used without config.
-        throw new Error('FIREBASE_SERVICE_ACCOUNT environment variable is not set.');
+        // Log a warning during build but don't throw, as it might not be an issue
+        // if admin functions are only called at runtime.
+        console.warn('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Admin SDK will not be initialized.');
+        return null;
     }
 
-    adminApp = initializeApp({
-        credential: cert(serviceAccount)
-    }, 'admin');
+    try {
+        // Try to get an existing app first, otherwise initialize.
+        adminApp = getApp('admin');
+    } catch (e) {
+        adminApp = initializeApp({
+            credential: cert(serviceAccount)
+        }, 'admin');
+    }
+    return adminApp;
 }
-
 
 export function getAdminApp(): App {
-    try {
-        // Try to get the already initialized app
-        return getApp('admin');
-    } catch (e) {
-        // If it fails, it means the app isn't initialized yet, so initialize it.
+    if (!adminApp) {
         initializeAdminApp();
-        return getApp('admin');
     }
+    if (!adminApp) {
+        throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
+    }
+    return adminApp;
 }
 
-// You can also export specific services for convenience
-export const adminAuth = getAuth(getAdminApp());
+// Export functions that return the initialized services
+// This prevents top-level execution during build.
+export const getAdminAuth = () => getAuth(getAdminApp());
+export const getAdminDb = () => getFirestore(getAdminApp());
+// For backward compatibility in case some files still use it directly
 export const adminDb = getFirestore(getAdminApp());

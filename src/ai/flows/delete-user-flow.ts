@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileoverview A Genkit flow for securely deleting a Firebase user.
@@ -5,10 +6,10 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { getAuth } from 'firebase-admin/auth';
-import { doc, deleteDoc } from 'firebase-admin/firestore';
-import { getAdminApp, adminDb } from '@/lib/firebase-admin';
+import { doc, deleteDoc } from 'firebase/firestore';
+import { getAdminApp, getAdminDb } from '@/lib/firebase-admin';
 
-const db = adminDb;
+const db = getAdminDb();
 
 export const deleteUserFlow = ai.defineFlow(
   {
