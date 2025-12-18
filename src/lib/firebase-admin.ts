@@ -11,26 +11,31 @@ function initializeAdminApp() {
         return adminApp;
     }
 
-    const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
-        ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-        : undefined;
+    // This check will only run on the server, not during the build process.
+    const serviceAccountString = process.env.FIREBASE_SERVICE_ACCOUNT;
 
-    if (!serviceAccount) {
-        // Log a warning during build but don't throw, as it might not be an issue
-        // if admin functions are only called at runtime.
+    if (!serviceAccountString) {
+        // Log a warning if the env var is missing at runtime.
         console.warn('FIREBASE_SERVICE_ACCOUNT environment variable is not set. Admin SDK will not be initialized.');
         return null;
     }
 
     try {
-        // Try to get an existing app first, otherwise initialize.
-        adminApp = getApp('admin');
-    } catch (e) {
+        const serviceAccount = JSON.parse(serviceAccountString);
         adminApp = initializeApp({
             credential: cert(serviceAccount)
-        }, 'admin');
+        }, 'admin' + Date.now()); // Use a unique name to avoid conflicts in dev environments
+        return adminApp;
+    } catch (e) {
+        console.error("Firebase Admin SDK initialization error:", e);
+        // Try to get the default app if a uniquely named one fails, which can happen in some environments
+        try {
+            adminApp = getApp('admin');
+            return adminApp;
+        } catch (getAppError) {
+            return null; // Initialization failed
+        }
     }
-    return adminApp;
 }
 
 export function getAdminApp(): App {
@@ -38,12 +43,16 @@ export function getAdminApp(): App {
         initializeAdminApp();
     }
     if (!adminApp) {
+        // This error will now only be thrown at runtime if the SDK truly fails to initialize,
+        // for example, due to invalid credentials.
         throw new Error("Firebase Admin SDK could not be initialized. Check server logs for details.");
     }
     return adminApp;
 }
 
-// Export functions that return the initialized services
-// This prevents top-level execution during build.
+// Export functions that return the initialized services.
+// This defers the call to getAdminApp() until the function is actually executed.
 export const getAdminAuth = () => getAuth(getAdminApp());
 export const getAdminDb = () => getFirestore(getAdminApp());
+
+    

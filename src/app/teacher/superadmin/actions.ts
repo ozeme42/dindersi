@@ -2,7 +2,7 @@
 'use server';
 
 import { getAdminApp } from "@/lib/firebase-admin";
-import { getFirestore, collection, getDocs, query, orderBy, where, doc, getDoc, deleteDoc, updateDoc, Timestamp } from "firebase-admin/firestore";
+import { getFirestore, Timestamp } from "firebase-admin/firestore";
 import { getAuth } from 'firebase-admin/auth';
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
@@ -19,16 +19,11 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
     }
     try {
-        const db = getFirestore(getAdminApp());
-        // Delete from Authentication
         const auth = getAuth(getAdminApp());
         await auth.deleteUser(userId);
 
-        // Delete from Firestore
+        const db = getFirestore(getAdminApp());
         await db.collection('users').doc(userId).delete();
-
-        // Note: Subcollections are not deleted automatically. This requires a Cloud Function for a full cleanup.
-        // For this app's purpose, this is sufficient.
 
         return { success: true };
     } catch (error: any) {
@@ -53,14 +48,12 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
             score: user.score,
         };
 
-        // Update Authentication
         const authUpdatePayload: any = { email, displayName };
         if (password) {
             authUpdatePayload.password = password;
         }
         await auth.updateUser(uid, authUpdatePayload);
 
-        // Update Firestore
         const userRef = db.collection('users').doc(uid);
         await userRef.update(firestoreData);
         
@@ -263,3 +256,5 @@ export async function exportDataForStaticSite() {
         return { success: false, error: "Static site data could not be generated: " + error.message };
     }
 }
+
+    
