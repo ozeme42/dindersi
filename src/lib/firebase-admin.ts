@@ -1,5 +1,4 @@
 
-'use server';
 
 import 'dotenv/config';
 import { initializeApp, getApp, cert, App } from 'firebase-admin/app';
