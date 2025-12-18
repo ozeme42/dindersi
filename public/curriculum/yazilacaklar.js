@@ -1,65 +1,61 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const topicId = params.get('topicId');
     const topicName = params.get('topicName');
 
-    document.getElementById('topic-title').textContent = topicName || 'Yazılacaklar';
+    const titleEl = document.getElementById('title');
+    const kavramlarContentEl = document.getElementById('kavramlar-content');
+    const notlarContentEl = document.getElementById('notlar-content');
+    const loadingEl = document.getElementById('loading');
 
-    if (topicId) {
-        loadContentForTopic(topicId);
-    } else {
-        document.getElementById('content-container').innerHTML = '<p>İçerik görmek için bir konu seçmelisiniz.</p>';
+    if (titleEl) {
+        titleEl.textContent = topicName || 'Yazılacaklar';
     }
-});
 
-async function loadContentForTopic(topicId) {
-    const contentContainer = document.getElementById('content-container');
-    contentContainer.innerHTML = '<div class="loader"></div>';
+    if (!topicId || !kavramlarContentEl || !notlarContentEl || !loadingEl) {
+        if (kavramlarContentEl) kavramlarContentEl.innerHTML = '<p class="error">Gerekli bilgiler eksik.</p>';
+        if (loadingEl) loadingEl.style.display = 'none';
+        return;
+    }
 
-    try {
-        // YOL DÜZELTMESİ: /curriculum/ eklendi
-        const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-        if (!res.ok) {
-            throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
-        }
-        const data = await res.json();
-        
-        let html = '';
-        if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
-            html += '<h2>Kavramlar ve Tanımları</h2>';
-            html += '<div class="grid concepts-grid">';
-            data.conceptDefinitions.forEach(item => {
-                html += `
+    const fetchContent = async () => {
+        try {
+            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+            if (!res.ok) {
+                 throw new Error('İçerik dosyası bulunamadı. Lütfen yöneticinizle iletişime geçin.');
+            }
+            const data = await res.json();
+
+            // Kavramlar ve Tanımlar
+            if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
+                kavramlarContentEl.innerHTML = data.conceptDefinitions.map((item, index) => `
                     <div class="card">
-                        <h3>${item.concept}</h3>
+                        <h3>${index + 1}. ${item.concept}</h3>
                         <p>${item.definition}</p>
                     </div>
-                `;
-            });
-            html += '</div>';
-        }
+                `).join('');
+            } else {
+                kavramlarContentEl.innerHTML = '<p class="info">Bu konu için tanımlanmış kavram bulunmuyor.</p>';
+            }
 
-        if (data.notes && data.notes.length > 0) {
-            html += '<h2 class="notes-title">Önemli Notlar</h2>';
-            html += '<div class="grid notes-grid">';
-            data.notes.forEach(note => {
-                html += `
-                    <div class="card note-card">
+            // Önemli Notlar
+            if (data.notes && data.notes.length > 0) {
+                notlarContentEl.innerHTML = data.notes.map((note, index) => `
+                    <div class="card">
                         <p>${note}</p>
                     </div>
-                `;
-            });
-            html += '</div>';
-        }
+                `).join('');
+            } else {
+                notlarContentEl.innerHTML = '<p class="info">Bu konu için eklenmiş not bulunmuyor.</p>';
+            }
 
-        if (html === '') {
-            contentContainer.innerHTML = '<p>Bu konu için "Yazılacaklar" içeriği bulunmuyor.</p>';
-        } else {
-            contentContainer.innerHTML = html;
+        } catch (error) {
+            kavramlarContentEl.innerHTML = `<p class="error">Hata: ${error.message}</p>`;
+        } finally {
+            loadingEl.style.display = 'none';
         }
+    };
 
-    } catch (error) {
-        console.error("Error loading content:", error);
-        contentContainer.innerHTML = `<p class="error-message">${error.message}</p>`;
-    }
-}
+    fetchContent();
+});
