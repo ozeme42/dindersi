@@ -1,129 +1,95 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const content = document.getElementById('content');
-    const loading = document.getElementById('loading');
-    let manifestData = null;
 
-    const showLoading = () => {
-        if (loading) loading.style.display = 'flex';
-        if (content) content.innerHTML = '';
-    };
+document.addEventListener('DOMContentLoaded', async () => {
+    const mainContent = document.getElementById('main-content');
+    const loadingText = document.querySelector('.loading-text');
 
-    const hideLoading = () => {
-        if (loading) loading.style.display = 'none';
-    };
-
-    const showError = (message) => {
-        hideLoading();
-        if (content) {
-            content.innerHTML = `
-                <div class="text-center p-10 bg-red-900/20 rounded-xl border border-red-500/50">
-                    <h2 class="text-xl font-bold text-red-400 mb-2">İçerik Yüklenemedi</h2>
-                    <p class="text-slate-300 mb-4">${message}</p>
-                    <button onclick="window.location.reload()" class="px-4 py-2 bg-red-600 rounded hover:bg-red-700 transition">Yeniden Dene</button>
-                </div>
-            `;
+    try {
+        const response = await fetch('/curriculum/manifest.json');
+        if (!response.ok) {
+            throw new Error(`Manifest dosyası yüklenemedi: ${response.statusText}`);
         }
-    };
+        const manifest = await response.json();
 
-    const renderCourseGroups = (courseGroups) => {
-        if (!content) return;
-        content.innerHTML = `
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold text-white mb-2">📚 Dersler ve Konular</h2>
-                <p class="text-slate-400">İncelemek istediğiniz dersi seçin.</p>
+        if (loadingText) loadingText.style.display = 'none';
+        
+        manifest.courseGroups.forEach(group => {
+            const groupEl = document.createElement('div');
+            groupEl.className = 'course-group';
+            
+            const groupTitle = document.createElement('h2');
+            groupTitle.textContent = group.title;
+            groupEl.appendChild(groupTitle);
+
+            const coursesContainer = document.createElement('div');
+            coursesContainer.className = 'courses-container';
+            groupEl.appendChild(coursesContainer);
+
+            group.courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = `<h3>${course.title}</h3><p>${course.className || 'Genel'}</p>`;
+                courseCard.addEventListener('click', () => renderCourseDetails(course.file, mainContent));
+                coursesContainer.appendChild(courseCard);
+            });
+            mainContent.appendChild(groupEl);
+        });
+
+    } catch (error) {
+        console.error('Hata:', error);
+        if (loadingText) loadingText.textContent = 'İçerikler Yüklenemedi. Lütfen tekrar deneyin.';
+    }
+});
+
+async function renderCourseDetails(courseFile, container) {
+    container.innerHTML = '<p class="loading-text">Ders içeriği yükleniyor...</p>';
+    try {
+        const response = await fetch(`/curriculum/${courseFile}`);
+        const course = await response.json();
+
+        let detailsHtml = `
+            <button id="back-to-courses" class="back-button">&larr; Geri</button>
+            <div class="course-detail-header">
+                <h1>${course.title}</h1>
+                <p>${course.className || 'Genel'}</p>
             </div>
-            ${courseGroups.map(group => `
-                <div class="mb-10">
-                    <h3 class="text-xl font-semibold text-cyan-400 mb-4 border-l-4 border-cyan-500 pl-3">${group.title}</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        ${group.courses.map(course => `
-                            <div class="course-card cursor-pointer bg-slate-800 hover:bg-slate-700 p-6 rounded-xl border border-white/5 transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/10" 
-                                 data-course-file="${course.file}" 
-                                 data-course-id="${course.id}">
-                                <h4 class="text-lg font-bold text-white mb-1">${course.title}</h4>
-                                <p class="text-sm text-slate-400">${course.className || 'Genel'}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('')}
+            <div class="units-container">
         `;
 
-        document.querySelectorAll('.course-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const courseFile = card.dataset.courseFile;
-                const courseId = card.dataset.courseId;
-                if (courseFile && courseId) {
-                    renderCourseDetail(courseFile, courseId);
-                }
-            });
-        });
-    };
-    
-    const renderCourseDetail = (courseFile, courseId) => {
-        showLoading();
-        // NOT: Eğer dosyalar "curriculum" klasöründeyse başa "/curriculum/" ekleyin.
-        fetch(`${courseFile}`) 
-            .then(response => {
-                if (!response.ok) throw new Error(`Ders dosyası yüklenemedi: ${courseFile}`);
-                return response.json();
-            })
-            .then(courseData => {
-                hideLoading();
-                if (!content) return;
-                content.innerHTML = `
-                    <div class="mb-6">
-                        <button id="back-to-main" class="text-cyan-400 hover:text-cyan-300 mb-4 flex items-center gap-2">
-                            <span>←</span> Tüm Dersler
-                        </button>
-                        <h1 class="text-3xl font-bold text-white">${courseData.title}</h1>
-                    </div>
-                    <div class="space-y-6">
-                        ${courseData.units.map(unit => `
-                            <div class="bg-slate-800/50 rounded-xl p-6 border border-white/5">
-                                <h3 class="text-xl font-bold text-purple-400 mb-4">Ünite: ${unit.title}</h3>
-                                <div class="space-y-3">
-                                    ${unit.topics.map(topic => `
-                                        <div class="flex items-center justify-between bg-slate-900 p-4 rounded-lg border border-white/5 hover:border-white/20 transition">
-                                            <span class="font-medium text-slate-200">${topic.title}</span>
-                                            <div class="flex gap-2">
-                                                <button class="px-3 py-1 bg-blue-600/20 text-blue-400 text-sm rounded hover:bg-blue-600/40 transition">Notlar</button>
-                                                <button class="px-3 py-1 bg-green-600/20 text-green-400 text-sm rounded hover:bg-green-600/40 transition">Oyunlar</button>
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `).join('')}
+        course.units.forEach(unit => {
+            detailsHtml += `
+                <div class="unit-card">
+                    <h2>${unit.title}</h2>
+                    <div class="topics-list">
+            `;
+            unit.topics.forEach(topic => {
+                 const params = `courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`;
+                
+                const yazilacaklarLink = `<a href="yazilacaklar.html?${params}" class="topic-link yazilacaklar">Notlar</a>`;
+                const oyunlarLink = `<a href="oyun.html?${params}&gamePath=kelime-avi" class="topic-link oyunlar">Oyunlar</a>`;
+                
+                detailsHtml += `
+                    <div class="topic-item">
+                        <span>${topic.title}</span>
+                        <div class="topic-links">
+                            ${yazilacaklarLink}
+                            ${oyunlarLink}
+                        </div>
                     </div>
                 `;
-                document.getElementById('back-to-main').addEventListener('click', () => {
-                    renderCourseGroups(manifestData.courseGroups);
-                });
-            })
-            .catch(error => {
-                console.error('Ders detayı yüklenirken hata:', error);
-                showError('Ders detayı bulunamadı. JSON dosyası eksik olabilir.');
             });
-    };
-
-    // Başlangıç
-    showLoading();
-    // NOT: Dosya adı manifest.json olarak arıyor.
-    fetch('manifest.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('manifest.json dosyası bulunamadı.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            hideLoading();
-            manifestData = data;
-            renderCourseGroups(data.courseGroups);
-        })
-        .catch(error => {
-            console.error('Hata:', error);
-            showError(error.message);
+            detailsHtml += '</div></div>';
         });
-});
+
+        detailsHtml += '</div>';
+        container.innerHTML = detailsHtml;
+        
+        document.getElementById('back-to-courses').addEventListener('click', () => {
+             container.innerHTML = '<p class="loading-text">Yükleniyor...</p>';
+             // Re-initialize the main view
+             document.dispatchEvent(new Event('DOMContentLoaded'));
+        });
+
+    } catch (error) {
+        container.innerHTML = '<p class="loading-text">Ders detayı yüklenemedi.</p>';
+    }
+}
