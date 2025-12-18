@@ -100,4 +100,6 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
              const url = error.message.match(urlRegex)?.[0] || '#';
              return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için <a href="${url}" target="_blank" rel="noopener noreferrer" class="underline font-bold">bu linke tıklayarak</a> gerekli indeksi oluşturun.` };
         }
-        return { success: false, error: 'Ödev detayları alınırken bir hata
+        return { success: false, error: 'Ödev detayları alınırken bir hata oluştu.' };
+    }
+}
