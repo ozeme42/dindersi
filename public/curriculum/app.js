@@ -1,155 +1,126 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    const mainContent = document.getElementById('mainContent');
+    const mainContent = document.getElementById('main-content');
     const loadingDiv = document.getElementById('loading');
-    const errorDiv = document.getElementById('error');
+    const errorDiv = document.getElementById('error-message');
 
     function showError(message) {
         if (loadingDiv) loadingDiv.style.display = 'none';
         if (errorDiv) {
-            errorDiv.textContent = `Bir Hata Oluştu: ${message}`;
+            errorDiv.textContent = `Hata: ${message}`;
             errorDiv.style.display = 'block';
         }
-        if (mainContent) mainContent.style.display = 'none';
+        console.error(message);
     }
 
-    function renderCourseGroups(groups) {
-        if (!mainContent) return;
-        mainContent.innerHTML = ''; // Clear previous content
+    function createLink(href, text, isSpecial = false) {
+        const a = document.createElement('a');
+        a.href = href;
+        a.className = `block p-4 rounded-lg transition-all ${isSpecial ? 'bg-yellow-500/10 text-yellow-300 border border-yellow-600 hover:bg-yellow-500/20' : 'bg-slate-700/50 text-slate-200 border border-slate-600 hover:bg-slate-700'}`;
+        a.innerHTML = `<span class="font-bold">${text}</span>`;
+        return a;
+    }
 
-        if (!groups || groups.length === 0) {
-            mainContent.innerHTML = '<p class="text-center text-gray-400">Gösterilecek ders grubu bulunmuyor.</p>';
+    function renderCourseGroups(data) {
+        if (!data.courseGroups || !Array.isArray(data.courseGroups)) {
+            showError('Manifest dosyasında "courseGroups" dizisi bulunamadı.');
             return;
         }
 
-        groups.forEach(group => {
-            const groupEl = document.createElement('div');
-            groupEl.className = 'course-group';
-            const groupTitle = document.createElement('h2');
-            groupTitle.textContent = group.name;
-            groupEl.appendChild(groupTitle);
-            
-            const coursesList = document.createElement('div');
-            coursesList.className = 'courses-list';
-
-            if (group.courses && group.courses.length > 0) {
-                group.courses.forEach(course => {
-                    const courseEl = document.createElement('div');
-                    courseEl.className = 'course-item';
-                    courseEl.textContent = course.title;
-                    courseEl.onclick = () => fetchCourseDetails(course.file, group.name);
-                    coursesList.appendChild(courseEl);
-                });
-            } else {
-                coursesList.innerHTML = '<p class="text-gray-500">Bu grupta ders bulunmuyor.</p>';
-            }
-            groupEl.appendChild(coursesList);
-            mainContent.appendChild(groupEl);
-        });
-
         if (loadingDiv) loadingDiv.style.display = 'none';
-        mainContent.style.display = 'block';
-    }
+        if (mainContent) mainContent.innerHTML = '';
 
-    function renderCourseDetails(courseData, groupName) {
-        if (!mainContent) return;
-        mainContent.innerHTML = '';
-        
-        const backButton = document.createElement('button');
-        backButton.textContent = '‹ Tüm Derslere Geri Dön';
-        backButton.className = 'back-button';
-        backButton.onclick = () => fetchManifest();
-        mainContent.appendChild(backButton);
+        data.courseGroups.forEach(group => {
+            if (!group.courses || group.courses.length === 0) return;
 
-        const courseTitle = document.createElement('h2');
-        courseTitle.textContent = courseData.title;
-        courseTitle.className = 'course-group'; // Reuse style
-        mainContent.appendChild(courseTitle);
-        
-        const unitsContainer = document.createElement('div');
-        mainContent.appendChild(unitsContainer);
+            const groupContainer = document.createElement('div');
+            groupContainer.className = 'mb-8';
 
-        courseData.units.forEach(unit => {
-            const unitAccordion = document.createElement('details');
-            unitAccordion.className = 'unit-accordion';
-            const summary = document.createElement('summary');
-            summary.textContent = unit.title;
-            unitAccordion.appendChild(summary);
+            const groupTitle = document.createElement('h2');
+            groupTitle.className = 'text-2xl font-bold mb-4 text-cyan-400 border-b-2 border-cyan-400/30 pb-2';
+            groupTitle.textContent = group.name;
+            groupContainer.appendChild(groupTitle);
 
-            const topicsList = document.createElement('ul');
-            topicsList.className = 'topics-list';
-            
-            // Ünite Özeti Linki
-            if (unit.hasUnitOzet) {
-                const unizOzetItem = document.createElement('li');
-                unizOzetItem.className = 'topic-item ozet-link';
-                unizOzetItem.innerHTML = `<a href="ozet.html?courseId=${courseData.id}&unitId=${unit.id}"><span>${unit.title} (Ünite Özeti)</span></a>`;
-                topicsList.appendChild(unizOzetItem);
-            }
+            const courseList = document.createElement('div');
+            courseList.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
 
-            unit.topics.forEach(topic => {
-                const topicItem = document.createElement('li');
-                topicItem.className = 'topic-item';
-                topicItem.innerHTML = `
-                    <div class="topic-title">${topic.title}</div>
-                    <div class="topic-links">
-                       ${topic.hasOzet ? `<a href="ozet.html?courseId=${courseData.id}&unitId=${unit.id}&topicId=${topic.id}">Özet</a>` : ''}
-                       ${topic.hasYazilacaklar ? `<a href="yazilacaklar.html?courseId=${courseData.id}&unitId=${unit.id}&topicId=${topic.id}">Notlar</a>` : ''}
-                       <a href="oyun.html?courseId=${courseData.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(courseData.title)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}">Oyun</a>
-                    </div>
-                `;
-                topicsList.appendChild(topicItem);
+            group.courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'bg-slate-800 rounded-xl p-4 flex flex-col';
+
+                const courseTitle = document.createElement('h3');
+                courseTitle.className = 'text-lg font-bold text-white mb-3';
+                courseTitle.textContent = course.title;
+                courseCard.appendChild(courseTitle);
+
+                const unitList = document.createElement('div');
+                unitList.className = 'space-y-2 flex-grow';
+
+                course.units.forEach(unit => {
+                    const unitContainer = document.createElement('div');
+                    
+                    const unitTitle = document.createElement('p');
+                    unitTitle.className = 'font-semibold text-slate-300 text-sm mb-2';
+                    unitTitle.textContent = unit.title;
+                    unitContainer.appendChild(unitTitle);
+
+                    const topicLinks = document.createElement('div');
+                    topicLinks.className = 'pl-4 border-l-2 border-slate-700 space-y-2';
+
+                    if (unit.hasUnitOzet) {
+                        const link = createLink(`ozetler.html?courseId=${course.id}&unitId=${unit.id}`, 'Ünite Özeti', true);
+                        topicLinks.appendChild(link);
+                    }
+
+                    unit.topics.forEach(topic => {
+                        const topicContainer = document.createElement('div');
+                        
+                        const topicP = document.createElement('p');
+                        topicP.className = 'font-medium text-slate-400';
+                        topicP.textContent = topic.title;
+                        topicContainer.appendChild(topicP);
+
+                        const linksContainer = document.createElement('div');
+                        linksContainer.className = 'flex gap-2 mt-1';
+                        if (topic.hasYazilacaklar) {
+                            linksContainer.appendChild(createLink(`yazilacaklar.html?topicId=${topic.id}`, 'Notlar'));
+                        }
+                        if (topic.hasOzet) {
+                             linksContainer.appendChild(createLink(`ozetler.html?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}`, 'Özet'));
+                        }
+                        // Oyun linki, en az bir içerik varsa eklenir
+                        if (topic.hasYazilacaklar || topic.hasOzet) {
+                             linksContainer.appendChild(createLink(`oyun.html?topicId=${topic.id}`, 'Oyunlar'));
+                        }
+                        topicContainer.appendChild(linksContainer);
+
+                        topicLinks.appendChild(topicContainer);
+                    });
+                    unitContainer.appendChild(topicLinks);
+                    unitList.appendChild(unitContainer);
+                });
+
+                courseCard.appendChild(unitList);
+                courseList.appendChild(courseCard);
             });
 
-            unitAccordion.appendChild(topicsList);
-            unitsContainer.appendChild(unitAccordion);
+            groupContainer.appendChild(courseList);
+            mainContent.appendChild(groupContainer);
         });
     }
 
-    function fetchCourseDetails(courseFile, groupName) {
-        if (loadingDiv) loadingDiv.style.display = 'block';
-        if (mainContent) mainContent.style.display = 'none';
-
-        fetch(`/curriculum/${courseFile}`)
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.json();
-            })
-            .then(data => {
-                renderCourseDetails(data, groupName);
-                if (loadingDiv) loadingDiv.style.display = 'none';
-                if (mainContent) mainContent.style.display = 'block';
-            })
-            .catch(error => {
-                console.error("Ders detayı alınamadı:", error);
-                showError("Seçilen dersin detayları yüklenemedi.");
-            });
-    }
-    
-    function fetchManifest() {
-        if (loadingDiv) loadingDiv.style.display = 'block';
-        if (errorDiv) errorDiv.style.display = 'none';
-        if (mainContent) mainContent.style.display = 'none';
-        
-        fetch('/curriculum/manifest.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Manifest dosyası bulunamadı: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.courseGroups) {
-                    renderCourseGroups(data.courseGroups);
-                } else {
-                    throw new Error("Manifest dosyasının yapısı geçersiz.");
-                }
-            })
-            .catch(error => {
-                console.error("Veri yükleme hatası:", error);
-                showError("Veri dosyaları yüklenirken bir sorun oluştu. Lütfen sayfanın doğru bir şekilde sunulduğundan emin olun.");
-            });
-    }
-
-    fetchManifest();
+    // Use a relative path, which is the most robust method.
+    fetch('manifest.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            renderCourseGroups(data);
+        })
+        .catch(error => {
+            showError(`Manifest dosyası yüklenemedi: ${error.message}`);
+        });
 });

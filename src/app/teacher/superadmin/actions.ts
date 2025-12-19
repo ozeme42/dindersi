@@ -195,9 +195,14 @@ export async function exportDataForStaticSite() {
                         const topicData = topicDoc.data() as Topic;
                         const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
                         const hasOzet = !!topicData.htmlContent;
-                        return { id: topicDoc.id, title: topicData.title, hasYazilacaklar, hasOzet };
-                    });
+                        // Sadece en az bir içeriği olan konuları dahil et
+                        if (hasYazilacaklar || hasOzet) {
+                            return { id: topicDoc.id, title: topicData.title, hasYazilacaklar, hasOzet };
+                        }
+                        return null;
+                    }).filter(Boolean);
 
+                // Ünite özeti varsa VEYA içinde en az bir konu varsa üniteyi ekle
                 if (topics.length > 0 || unitData.htmlContent) {
                      units.push({
                         id: unitDoc.id,
@@ -209,14 +214,11 @@ export async function exportDataForStaticSite() {
             }
             
             if (units.length > 0) {
-                const courseFileName = `${course.id}.json`;
                 courseGroups[className].push({
+                    id: course.id,
                     title: course.title,
-                    file: courseFileName
+                    units: units
                 });
-                
-                const courseContent = { id: course.id, title: course.title, units };
-                await fs.writeFile(path.join(curriculumDir, courseFileName), JSON.stringify(courseContent, null, 2));
             }
         }
         
@@ -250,7 +252,10 @@ export async function exportDataForStaticSite() {
 
         for (const topicDoc of yazilacaklarTopicsSnapshot.docs) {
             const data = topicDoc.data() as Topic;
-            await fs.writeFile(path.join(curriculumDir, 'yazilacaklar', `${topicDoc.id}.json`), JSON.stringify(data.writingContent, null, 2));
+            // Ensure writingContent is not undefined before writing
+            if (data.writingContent) {
+                await fs.writeFile(path.join(curriculumDir, 'yazilacaklar', `${topicDoc.id}.json`), JSON.stringify(data.writingContent, null, 2));
+            }
         }
 
         return { success: true, message: "Static site data has been successfully generated." };
