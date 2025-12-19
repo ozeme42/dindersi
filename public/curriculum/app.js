@@ -1,167 +1,139 @@
-// Gerekli DOM elementlerini seçme
-const mainContent = document.getElementById('main-content');
-const loadingScreen = document.getElementById('loading-screen');
-const errorScreen = document.getElementById('error-screen');
-const errorMessage = document.getElementById('error-message');
 
-// Oyun türlerini tanımlama (oyun.js'deki anahtarlarla eşleşmeli)
-const activityTypes = [
-    { key: 'kelime-avi', label: 'Kelime Avı' },
-    { key: 'adam-asmaca', label: 'Adam Asmaca' },
-];
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.getElementById('main-content');
+    const loadingIndicator = document.getElementById('loading-indicator');
 
-function showLoading(message) {
-    if (loadingScreen) loadingScreen.style.display = 'flex';
-    if (mainContent) mainContent.style.display = 'none';
-    if (errorScreen) errorScreen.style.display = 'none';
-    const loadingMessage = document.getElementById('loading-message');
-    if (loadingMessage) loadingMessage.textContent = message;
-}
+    // Verileri çek ve sayfayı oluştur
+    fetchData();
 
-function showError(message) {
-    if (loadingScreen) loadingScreen.style.display = 'none';
-    if (mainContent) mainContent.style.display = 'none';
-    if (errorScreen) errorScreen.style.display = 'flex';
-    if (errorMessage) errorMessage.textContent = message;
-}
+    async function fetchData() {
+        if (!mainContent || !loadingIndicator) return;
 
-function showContent() {
-    if (loadingScreen) loadingScreen.style.display = 'none';
-    if (mainContent) mainContent.style.display = 'block';
-    if (errorScreen) errorScreen.style.display = 'none';
-}
+        try {
+            // DÜZELTME: Manifest dosyasını her zaman kök dizinden aramak için mutlak yol kullanıldı.
+            const manifestResponse = await fetch('/curriculum/manifest.json');
+            if (!manifestResponse.ok) {
+                throw new Error(`Manifest dosyası yüklenemedi: ${manifestResponse.statusText}`);
+            }
+            const manifest = await manifestResponse.json();
+            
+            // Yükleme göstergesini gizle ve içeriği göster
+            loadingIndicator.style.display = 'none';
+            mainContent.style.display = 'block';
 
-// Ana veri yükleme ve render etme fonksiyonu
-async function initialize() {
-    showLoading('İçerikler Yükleniyor...');
-    try {
-        const response = await fetch('/curriculum/manifest.json');
-        if (!response.ok) {
-            throw new Error('Ana veri dosyası (manifest.json) bulunamadı.');
+            renderCourseGroups(manifest.courseGroups);
+
+        } catch (error) {
+            console.error('Veri yükleme hatası:', error);
+            if (mainContent) {
+                mainContent.innerHTML = `
+                    <div class="error-container">
+                        <h2>İçerikler Yüklenemedi</h2>
+                        <p>Veri dosyaları yüklenirken bir sorun oluştu. Lütfen sayfanın doğru bir şekilde sunulduğundan emin olun.</p>
+                        <p class="error-details">${error.message}</p>
+                    </div>
+                `;
+                 loadingIndicator.style.display = 'none';
+                 mainContent.style.display = 'block';
+            }
         }
-        const manifest = await response.json();
-
-        renderCourseGroups(manifest.courseGroups);
-        showContent();
-    } catch (error) {
-        console.error('Initialization error:', error);
-        showError('Veri dosyaları yüklenirken bir sorun oluştu. Lütfen sayfanın doğru bir şekilde sunulduğundan emin olun.');
     }
-}
 
-// Ders gruplarını render etme
-function renderCourseGroups(courseGroups) {
-    if (!mainContent || !courseGroups) return;
-    mainContent.innerHTML = ''; // Önceki içeriği temizle
+    function renderCourseGroups(courseGroups) {
+        if (!mainContent) return;
+        mainContent.innerHTML = ''; // Önceki içeriği temizle
 
-    courseGroups.forEach(group => {
-        const groupEl = document.createElement('div');
-        groupEl.className = 'course-group';
-        
-        const titleEl = document.createElement('h2');
-        titleEl.textContent = group.title;
-        groupEl.appendChild(titleEl);
+        courseGroups.forEach(group => {
+            const groupElement = document.createElement('div');
+            groupElement.className = 'course-group';
+            
+            const groupTitle = document.createElement('h2');
+            groupTitle.textContent = group.title;
+            groupElement.appendChild(groupTitle);
+            
+            const coursesContainer = document.createElement('div');
+            coursesContainer.className = 'courses-container';
+            groupElement.appendChild(coursesContainer);
 
-        const coursesListEl = document.createElement('div');
-        coursesListEl.className = 'courses-list';
-        group.courses.forEach(course => {
-            const courseEl = document.createElement('div');
-            courseEl.className = 'course-item';
-            courseEl.textContent = `${course.className}: ${course.title}`;
-            courseEl.addEventListener('click', () => fetchAndRenderCourseDetails(course, groupEl));
-            coursesListEl.appendChild(courseEl);
-        });
-
-        groupEl.appendChild(coursesListEl);
-        mainContent.appendChild(groupEl);
-    });
-}
-
-// Seçilen dersin detaylarını (üniteler ve konular) yükleme ve render etme
-async function fetchAndRenderCourseDetails(courseInfo, groupEl) {
-    // Diğer açık detayları kapat
-    document.querySelectorAll('.course-details').forEach(el => el.remove());
-    
-    showLoading(`"${courseInfo.title}" dersi yükleniyor...`);
-    try {
-        const response = await fetch(`/curriculum/${courseInfo.file}`);
-        if (!response.ok) {
-            throw new Error(`Ders dosyası (${courseInfo.file}) bulunamadı.`);
-        }
-        const courseDetails = await response.json();
-        
-        const detailsContainer = document.createElement('div');
-        detailsContainer.className = 'course-details';
-
-        if (courseDetails.units && courseDetails.units.length > 0) {
-            courseDetails.units.forEach(unit => {
-                const unitEl = document.createElement('div');
-                unitEl.className = 'unit-item';
-                
-                const unitTitle = document.createElement('h3');
-                unitTitle.textContent = unit.title;
-                unitEl.appendChild(unitTitle);
-
-                const topicsList = document.createElement('ul');
-                topicsList.className = 'topics-list';
-                
-                if (unit.topics && unit.topics.length > 0) {
-                    unit.topics.forEach(topic => {
-                        const topicItem = document.createElement('li');
-                        topicItem.className = 'topic-item';
-                        
-                        const topicTitle = document.createElement('span');
-                        topicTitle.textContent = topic.title;
-                        topicItem.appendChild(topicTitle);
-
-                        const linksContainer = document.createElement('div');
-                        linksContainer.className = 'topic-links';
-
-                        // Yazılacaklar linki
-                        const yazilacaklarLink = document.createElement('a');
-                        yazilacaklarLink.href = `yazilacaklar.html?topicId=${topic.id}&topicName=${encodeURIComponent(topic.title)}`;
-                        yazilacaklarLink.textContent = 'Notlar';
-                        yazilacaklarLink.className = 'topic-link notes';
-                        linksContainer.appendChild(yazilacaklarLink);
-                        
-                        // Oyun linkleri
-                        activityTypes.forEach(game => {
-                            const gameLink = document.createElement('a');
-                            const urlParams = new URLSearchParams({
-                                game: game.key,
-                                topicId: topic.id,
-                                topicName: topic.title,
-                                courseName: courseInfo.title,
-                                unitName: unit.title
-                            });
-                            gameLink.href = `oyun.html?${urlParams.toString()}`;
-                            gameLink.textContent = game.label;
-                            gameLink.className = 'topic-link game';
-                            linksContainer.appendChild(gameLink);
-                        });
-
-                        topicItem.appendChild(linksContainer);
-                        topicsList.appendChild(topicItem);
-                    });
-                } else {
-                     topicsList.innerHTML = '<li>Bu ünite için konu bulunmuyor.</li>';
-                }
-                
-                unitEl.appendChild(topicsList);
-                detailsContainer.appendChild(unitEl);
+            group.courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = `
+                    <div class="course-card-header">
+                        <h3>${course.title}</h3>
+                        ${course.className ? `<span>${course.className}</span>` : ''}
+                    </div>
+                `;
+                courseCard.onclick = () => loadAndDisplayUnits(course, courseCard);
+                coursesContainer.appendChild(courseCard);
             });
-        } else {
-            detailsContainer.innerHTML = '<p>Bu ders için ünite bulunmuyor.</p>';
+
+            mainContent.appendChild(groupElement);
+        });
+    }
+
+    async function loadAndDisplayUnits(course, courseCardElement) {
+        // Zaten açılmışsa tekrar yükleme
+        if (courseCardElement.querySelector('.units-container')) {
+            const container = courseCardElement.querySelector('.units-container');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+            return;
         }
 
-        groupEl.appendChild(detailsContainer);
-        showContent();
+        const loadingUnits = document.createElement('div');
+        loadingUnits.textContent = 'Üniteler yükleniyor...';
+        courseCardElement.appendChild(loadingUnits);
 
-    } catch (error) {
-        console.error('Error fetching course details:', error);
-        showError(error.message);
+        try {
+            const courseResponse = await fetch(`/curriculum/${course.file}`);
+            if (!courseResponse.ok) throw new Error('Ders detayı yüklenemedi.');
+            const courseDetails = await courseResponse.json();
+            
+            loadingUnits.remove();
+
+            const unitsContainer = document.createElement('div');
+            unitsContainer.className = 'units-container';
+            
+            if (courseDetails.units && courseDetails.units.length > 0) {
+                 courseDetails.units.forEach(unit => {
+                    const unitElement = document.createElement('div');
+                    unitElement.className = 'unit-item';
+                    unitElement.innerHTML = `<h4>${unit.title}</h4>`;
+
+                    if (unit.topics && unit.topics.length > 0) {
+                        const topicsList = document.createElement('ul');
+                        unit.topics.forEach(topic => {
+                             const topicItem = document.createElement('li');
+                             
+                             const hasYazilacaklar = topic.hasYazilacaklarContent;
+                             const hasOzet = topic.hasOzetContent;
+
+                             let linksHTML = `
+                                <span class="topic-title">${topic.title}</span>
+                                <div class="topic-links">
+                                    <a href="oyun.html?game=adam-asmaca&topicId=${topic.id}&topicName=${encodeURIComponent(topic.title)}" class="game-link adam-asmaca" onclick="event.stopPropagation()">Adam Asmaca</a>
+                                    <a href="oyun.html?game=kelime-avi&topicId=${topic.id}&topicName=${encodeURIComponent(topic.title)}" class="game-link kelime-avi" onclick="event.stopPropagation()">Kelime Avı</a>
+                                    ${hasYazilacaklar ? `<a href="yazilacaklar.html?topicId=${topic.id}" class="game-link yazilacaklar" onclick="event.stopPropagation()">Notlar</a>` : ''}
+                                    ${hasOzet ? `<a href="ozetler.html?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}" class="game-link ozetler" onclick="event.stopPropagation()">Özet</a>` : ''}
+                                </div>
+                             `;
+                             topicItem.innerHTML = linksHTML;
+                             topicsList.appendChild(topicItem);
+                        });
+                        unitElement.appendChild(topicsList);
+                    } else {
+                        unitElement.innerHTML += '<p>Bu ünite için konu bulunmuyor.</p>';
+                    }
+                    unitsContainer.appendChild(unitElement);
+                });
+            } else {
+                 unitsContainer.innerHTML = '<p>Bu ders için ünite bulunmuyor.</p>';
+            }
+             courseCardElement.appendChild(unitsContainer);
+
+        } catch (error) {
+            console.error('Ünite ve konu verileri çekilirken hata:', error);
+            loadingUnits.textContent = 'Üniteler yüklenemedi.';
+        }
     }
-}
-
-// Sayfa yüklendiğinde başlat
-document.addEventListener('DOMContentLoaded', initialize);
+});
