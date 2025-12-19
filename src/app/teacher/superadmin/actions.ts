@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
@@ -167,48 +168,77 @@ export async function exportDataForStaticSite() {
         await ensureDir(path.join(curriculumDir, 'activities'));
         await ensureDir(path.join(curriculumDir, 'yazilacaklar'));
 
-        // 1. Export Curriculum Structure
-        const coursesQuery = db.collection("courses");
-        const coursesSnapshot = await coursesQuery.get();
-        const manifest = { courseGroups: [] as any[] };
-        
-        const courseGroups: { [key: string]: any[] } = {};
+        // 1. Fetch all curriculum data in parallel
+        const [coursesSnap, classesSnap] = await Promise.all([
+            db.collection("courses").get(),
+            db.collection("classes").orderBy('name').get()
+        ]);
 
-        for (const courseDoc of coursesSnapshot.docs) {
-            const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
+        const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+        const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+
+        // 2. Build the manifest structure
+        const manifest = { courseGroups: [] as any[] };
+        const courseGroups: { [className: string]: any[] } = {};
+
+        for (const course of allCourses) {
+            // Skip courses that are not published
+            if (course.isPublished === false) continue;
             
-            const unitsSnapshot = await db.collection(`courses/${courseDoc.id}/units`).orderBy("title").get();
+            const className = allClasses.find(c => c.id === course.classId)?.name || 'Genel';
+            if (!courseGroups[className]) {
+                courseGroups[className] = [];
+            }
+
+            const unitsSnapshot = await db.collection(`courses/${course.id}/units`).orderBy("title").get();
             const units = [];
             for (const unitDoc of unitsSnapshot.docs) {
-                const unitData = { id: unitDoc.id, title: unitDoc.data().title } as Partial<Unit>;
-                const topicsSnapshot = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
-                unitData.topics = topicsSnapshot.docs.map(topicDoc => {
-                    const topicData = topicDoc.data();
-                    return { id: topicDoc.id, title: topicData.title, htmlContent: !!topicData.htmlContent };
-                });
-                units.push(unitData);
+                const unitData = unitDoc.data() as Unit;
+                // Skip unpublished units
+                if (unitData.isPublished === false) continue;
+
+                const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
+                const topics = topicsSnapshot.docs
+                    .map(topicDoc => {
+                        const topicData = topicDoc.data() as Topic;
+                        if (topicData.isPublished === false) return null;
+                        
+                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        const hasOzet = !!topicData.htmlContent;
+                        // For games, assume all topics are relevant for now.
+                        // For a more specific check, you'd need to query activities/questions collections here.
+                        return { id: topicDoc.id, title: topicDoc.data().title, hasYazilacaklar, hasOzet };
+                    })
+                    .filter(Boolean); // Remove nulls (unpublished topics)
+
+                // Only add unit if it has topics
+                if (topics.length > 0 || unitData.htmlContent) {
+                     units.push({
+                        id: unitDoc.id,
+                        title: unitDoc.data().title,
+                        topics: topics,
+                        hasUnitOzet: !!unitData.htmlContent
+                    });
+                }
             }
             
-            const courseContent = { ...courseData, units };
-            const courseFilePath = `${courseData.id}.json`;
-            await fs.writeFile(path.join(curriculumDir, courseFilePath), JSON.stringify(courseContent, null, 2));
-
-            const groupTitle = courseData.title.toUpperCase() === 'DKAB' ? 'Din Kültürü ve Ahlak Bilgisi' : courseData.title.toUpperCase() === 'SİYER' ? 'Peygamberimizin Hayatı (Siyer)' : courseData.title;
-            if (!courseGroups[groupTitle]) {
-                courseGroups[groupTitle] = [];
+            // Only add course if it has units with content
+            if (units.length > 0) {
+                 courseGroups[className].push({
+                    id: course.id,
+                    title: course.title,
+                    units: units
+                });
             }
-            courseGroups[groupTitle].push({
-                id: courseData.id,
-                title: courseData.title,
-                className: courseData.className,
-                file: courseFilePath
-            });
         }
         
-        manifest.courseGroups = Object.entries(courseGroups).map(([title, courses]) => ({ title, courses }));
+        manifest.courseGroups = Object.entries(courseGroups)
+            .map(([name, courses]) => ({ name, courses }))
+            .sort((a,b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
+
         await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
-        // 2. Export Questions, ActivityItems, Yazilacaklar grouped by topicId
+        // 3. Export Questions, ActivityItems, Yazilacaklar grouped by topicId
         const [questionsSnapshot, activityItemsSnapshot, topicsSnapshot] = await Promise.all([
             db.collection("questions").get(),
             db.collection("activityItems").get(),
