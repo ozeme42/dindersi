@@ -1,138 +1,335 @@
+/* --- Genel Stiller --- */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #0f172a; /* slate-900 */
-    color: #e2e8f0; /* slate-200 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #111827; /* Koyu gri */
+    color: #f3f4f6; /* Açık gri */
     margin: 0;
-    padding: 2rem;
+    padding: 20px;
+    line-height: 1.6;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
-h1, h2, h3 {
-    color: #f8fafc; /* slate-50 */
-    font-weight: 800;
-}
-
-h1 {
-    font-size: 2.5rem;
-    border-bottom: 2px solid #334155; /* slate-700 */
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
+/* --- Yükleniyor & Hata Ekranı --- */
+.status-container {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    height: 80vh;
+    text-align: center;
+}
+.status-container h2 {
+    font-size: 2rem;
+    color: #93c5fd; /* Açık mavi */
+}
+.error-box {
+    background-color: #372528;
+    border: 1px solid #ef4444;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 600px;
+}
+.error-box h2 {
+    color: #f87171;
+}
+.error-box pre {
+    background-color: #1f2937;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: left;
+    color: #d1d5db;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+}
+
+
+/* --- Ana Sayfa (app.js) --- */
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #a5b4fc; /* İndigo */
+    text-shadow: 0 0 15px rgba(165, 180, 252, 0.4);
+}
+
+.course-group {
+    margin-bottom: 3rem;
+}
+
+.class-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #93c5fd; /* Açık mavi */
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.course-item {
+    background-color: #1f2937; /* Gri */
+    border-radius: 12px;
+    border: 1px solid #374151;
+    transition: all 0.2s ease-in-out;
+}
+.course-item[open] {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+}
+
+.course-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    list-style: none; /* Safari'deki ok işaretini kaldırır */
+}
+.course-title::-webkit-details-marker {
+  display: none;
+}
+
+.unit-list {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
 }
 
-.course-group > h2 {
-    font-size: 1.8rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    color: #94a3b8; /* slate-400 */
+.unit-item {
+     background-color: #374151; /* Daha koyu gri */
+     border-radius: 10px;
+     border: 1px solid #4b5563;
+}
+.unit-item[open] {
+     border-color: #60a5fa;
 }
 
-.course-accordion, .unit-accordion {
-    border: 1px solid #334155; /* slate-700 */
-    background-color: #1e293b; /* slate-800 */
-    border-radius: 0.75rem;
-    margin-bottom: 1rem;
-    overflow: hidden;
-}
-
-.accordion-trigger {
-    background-color: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
-    padding: 1.25rem;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #cbd5e0; /* slate-300 */
+.unit-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s;
+    list-style: none;
 }
-
-.accordion-trigger:hover {
-    background-color: #334155; /* slate-700 */
-}
-
-.accordion-content {
-    padding: 0 1.25rem 1.25rem;
-    background-color: #0f172a; /* slate-900 */
+.unit-title::-webkit-details-marker {
+  display: none;
 }
 
 .topic-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #111827;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
-.topic-item a {
-    display: block;
-    background-color: #1e293b;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    color: #cbd5e0;
+.topic-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f2937;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #374151;
+}
+
+.topic-title {
     font-weight: 500;
-    border: 1px solid #334155;
+}
+
+.topic-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.topic-link {
+    text-decoration: none;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
     transition: all 0.2s;
 }
+.yazilacaklar-link { background-color: #059669; }
+.yazilacaklar-link:hover { background-color: #047857; }
+.ozet-link { background-color: #d97706; }
+.ozet-link:hover { background-color: #b45309; }
+.game-link { background-color: #4f46e5; }
+.game-link:hover { background-color: #4338ca; }
 
-.topic-item a:hover {
-    background-color: #334155;
-    border-color: #4f46e5; /* indigo-600 */
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
-}
 
-/* Oyun Sayfası Stilleri */
-#game-header {
+/* --- Oyun Sayfası (oyun.js) --- */
+.game-header {
     text-align: center;
     margin-bottom: 2rem;
+    border-bottom: 1px solid #374151;
+    padding-bottom: 1rem;
 }
-#game-title {
-    font-size: 2.5rem;
-    color: #818cf8; /* indigo-400 */
+.game-header h2 {
+    font-size: 2rem;
+    margin: 0;
 }
-#topic-name {
-    font-size: 1rem;
-    color: #94a3b8;
+.game-header p {
+    color: #9ca3af;
+    margin: 0;
 }
 
-#loading, #error-container {
+.placeholder-message {
     text-align: center;
+    font-size: 1.2rem;
+    color: #6b7280;
     padding: 3rem;
-    background-color: #1e293b;
-    border-radius: 1rem;
+    border: 2px dashed #374151;
+    border-radius: 12px;
 }
-#loading p {
-    font-size: 1.25rem;
-    color: #cbd5e0;
+
+/* --- Adam Asmaca Stilleri --- */
+.hangman-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
-#error-text {
-    color: #f87171; /* red-400 */
+
+.hangman-scaffold {
+    width: 250px;
+    height: 300px;
+}
+
+.hangman-scaffold svg {
+    width: 100%;
+    height: 100%;
+}
+
+.scaffold-part {
+    stroke: #6b7280;
+    stroke-width: 4;
+}
+
+.hangman-part {
+    stroke: #f87171; /* Kırmızı */
+    stroke-width: 4;
+    display: none;
+}
+
+.hangman-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 500px;
+}
+
+.hint {
+    font-style: italic;
+    color: #9ca3af;
+    background: #1f2937;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.word-display {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.letter-box {
+    width: 40px;
+    height: 50px;
+    border-bottom: 3px solid #60a5fa; /* Mavi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
     font-weight: bold;
+    color: white;
 }
 
-/* --- Hangman --- */
-.draw-anim {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
-    animation: draw 1s ease-out forwards;
+.letter-box.space {
+    width: 20px;
+    border-bottom: none;
 }
 
-@keyframes draw {
-    to {
-        stroke-dashoffset: 0;
-    }
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 450px;
+}
+
+.keyboard button {
+    height: 45px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #374151;
+    border: none;
+    border-bottom: 3px solid #1f2937;
+    color: white;
+    border-radius: 6px;
+    transition: all 0.1s ease;
+}
+
+.keyboard button:hover:not(:disabled) {
+    background-color: #4b5563;
+}
+
+.keyboard button:active:not(:disabled) {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+}
+
+.keyboard button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.keyboard button.correct {
+    background-color: #10b981; /* Zümrüt */
+    border-color: #059669;
+}
+
+.keyboard button.incorrect {
+    background-color: #ef4444; /* Kırmızı */
+    border-color: #dc2626;
+}
+
+.game-over-message {
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+}
+.game-over-message.won { background-color: #10b98120; border: 1px solid #10b981; }
+.game-over-message.lost { background-color: #ef444420; border: 1px solid #ef4444; }
+.game-over-message p { margin: 0; font-size: 1.2rem; }
+.game-over-message .correct-word { font-weight: bold; font-size: 2rem; color: #facc15; margin: 0.5rem 0; }
+#next-hangman-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    color: white;
 }
