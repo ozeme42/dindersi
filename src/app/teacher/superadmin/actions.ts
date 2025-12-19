@@ -176,54 +176,70 @@ export async function exportDataForStaticSite() {
         const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
 
-        const courseGroups: { [className: string]: any[] } = {};
+        const courseGroups: { name: string, courses: any[] }[] = [];
 
-        for (const course of allCourses) {
-            const className = allClasses.find(c => c.id === course.classId)?.name || 'Genel';
-            if (!courseGroups[className]) {
-                courseGroups[className] = [];
-            }
+        for (const cls of allClasses) {
+            const classGroup = {
+                name: cls.name,
+                courses: [] as any[]
+            };
 
-            const unitsSnapshot = await db.collection(`courses/${course.id}/units`).where('isPublished', '==', true).orderBy("title").get();
-            const units = [];
-            for (const unitDoc of unitsSnapshot.docs) {
-                const unitData = unitDoc.data() as Unit;
+            const coursesForClass = allCourses.filter(course => course.classId === cls.id);
+
+            for (const course of coursesForClass) {
+                const unitsSnapshot = await db.collection(`courses/${course.id}/units`).where('isPublished', '==', true).orderBy("title").get();
+                const units = [];
+                for (const unitDoc of unitsSnapshot.docs) {
+                    const unitData = unitDoc.data() as Unit;
+                    
+                    const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).where('isPublished', '==', true).orderBy("title").get();
+                    const topics = topicsSnapshot.docs
+                        .map(topicDoc => {
+                            const topicData = topicDoc.data() as Topic;
+                            const hasYazilacaklar = !!topicData.writingContent && (topicData.writingContent.notes.length > 0 || topicData.writingContent.conceptDefinitions.length > 0);
+                            const hasOzet = !!topicData.htmlContent;
+                            
+                            if (hasYazilacaklar || hasOzet) {
+                                return { id: topicDoc.id, title: topicData.title, hasYazilacaklar, hasOzet };
+                            }
+                            return null;
+                        }).filter(Boolean);
+
+                    if (topics.length > 0 || unitData.htmlContent) {
+                         units.push({
+                            id: unitDoc.id,
+                            title: unitData.title,
+                            topics: topics,
+                            hasUnitOzet: !!unitData.htmlContent
+                        });
+                    }
+                }
                 
-                const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).where('isPublished', '==', true).orderBy("title").get();
-                const topics = topicsSnapshot.docs
-                    .map(topicDoc => {
-                        const topicData = topicDoc.data() as Topic;
-                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                        const hasOzet = !!topicData.htmlContent;
-                        // Sadece en az bir içeriği olan konuları dahil et
-                        if (hasYazilacaklar || hasOzet) {
-                            return { id: topicDoc.id, title: topicData.title, hasYazilacaklar, hasOzet };
-                        }
-                        return null;
-                    }).filter(Boolean);
-
-                // Ünite özeti varsa VEYA içinde en az bir konu varsa üniteyi ekle
-                if (topics.length > 0 || unitData.htmlContent) {
-                     units.push({
-                        id: unitDoc.id,
-                        title: unitData.title,
-                        topics: topics,
-                        hasUnitOzet: !!unitData.htmlContent
+                if (units.length > 0) {
+                    classGroup.courses.push({
+                        id: course.id,
+                        title: course.title,
+                        units: units
                     });
                 }
             }
-            
-            if (units.length > 0) {
-                courseGroups[className].push({
-                    id: course.id,
-                    title: course.title,
-                    units: units
-                });
+             if (classGroup.courses.length > 0) {
+                courseGroups.push(classGroup);
             }
         }
         
+        // Add "Genel" courses to every class group for simplicity, or handle separately
+        const generalCourses = allCourses.filter(course => !course.classId);
+        if (generalCourses.length > 0) {
+             courseGroups.push({
+                name: "Genel",
+                courses: generalCourses.map(c => ({...c, units:[]})) // units will be populated below
+            });
+        }
+        
+        // This is a simplified manifest structure
         const manifest = {
-            courseGroups: Object.entries(courseGroups).map(([name, courses]) => ({ name, courses }))
+            courseGroups: courseGroups
         };
 
         await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
@@ -239,8 +255,11 @@ export async function exportDataForStaticSite() {
             const itemsByTopic: { [key: string]: any[] } = {};
             snapshot.forEach(doc => {
                 const data = doc.data();
-                if (!itemsByTopic[data.topicId]) itemsByTopic[data.topicId] = [];
-                itemsByTopic[data.topicId].push({ id: doc.id, ...data });
+                const topicId = data.topicId;
+                if(topicId) {
+                    if (!itemsByTopic[topicId]) itemsByTopic[topicId] = [];
+                    itemsByTopic[topicId].push({ id: doc.id, ...data });
+                }
             });
             for (const topicId in itemsByTopic) {
                 await fs.writeFile(path.join(curriculumDir, folder, `${topicId}.json`), JSON.stringify(itemsByTopic[topicId], null, 2));
@@ -252,7 +271,6 @@ export async function exportDataForStaticSite() {
 
         for (const topicDoc of yazilacaklarTopicsSnapshot.docs) {
             const data = topicDoc.data() as Topic;
-            // Ensure writingContent is not undefined before writing
             if (data.writingContent) {
                 await fs.writeFile(path.join(curriculumDir, 'yazilacaklar', `${topicDoc.id}.json`), JSON.stringify(data.writingContent, null, 2));
             }

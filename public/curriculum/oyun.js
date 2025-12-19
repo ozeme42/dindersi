@@ -1,231 +1,137 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    const mainContent = document.getElementById('main-content');
+
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const topicId = params.get('topicId');
+    const gameTypeParam = params.get('game'); // Use 'game' parameter
+    const container = document.getElementById('game-container');
     const loadingDiv = document.getElementById('loading');
-    const errorDiv = document.getElementById('error-container');
-    const gameTitleH2 = document.getElementById('game-title');
-    const topicInfoSpan = document.getElementById('topic-info');
+    const errorDiv = document.getElementById('error');
 
-    const showLoading = (message) => {
-        if (loadingDiv) {
-            loadingDiv.style.display = 'flex';
-            loadingDiv.querySelector('p').textContent = message;
-        }
-        if (mainContent) mainContent.style.display = 'none';
-        if (errorDiv) errorDiv.style.display = 'none';
-    };
+    if (!container || !loadingDiv || !errorDiv) {
+        console.error("Gerekli HTML elemanları bulunamadı: #game-container, #loading, #error");
+        return;
+    }
 
-    const showError = (message) => {
-        if (errorDiv) {
-            errorDiv.style.display = 'flex';
-            errorDiv.querySelector('p').textContent = message;
-        }
-        if (loadingDiv) loadingDiv.style.display = 'none';
-        if (mainContent) mainContent.style.display = 'none';
-    };
-
-    const showContent = () => {
-        if (mainContent) mainContent.style.display = 'block';
-        if (loadingDiv) loadingDiv.style.display = 'none';
-        if (errorDiv) errorDiv.style.display = 'none';
-    };
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const gameType = urlParams.get('game');
-    const topicId = urlParams.get('topicId');
-    const courseName = urlParams.get('courseName');
-    const unitName = urlParams.get('unitName');
-    const topicName = urlParams.get('topicName');
-
-    if (gameTitleH2) gameTitleH2.textContent = gameType === 'kelime-avi' ? 'Kelime Avı' : 'Adam Asmaca';
-    if (topicInfoSpan) topicInfoSpan.textContent = `${courseName} > ${unitName} > ${topicName}`;
-
-    if (!gameType || !topicId) {
+    if (!topicId || !gameTypeParam) {
         showError("Oyun türü veya konu bilgisi eksik.");
         return;
     }
 
-    // Abstracted data fetching
-    async function fetchDataForGame(dataType) {
-        showLoading('Oyun verileri yükleniyor...');
+    function showError(message) {
+        loadingDiv.style.display = 'none';
+        errorDiv.innerHTML = `<p>${message}</p>`;
+        errorDiv.style.display = 'block';
+    }
+
+    function showLoading(message) {
+        errorDiv.style.display = 'none';
+        loadingDiv.innerHTML = `<div class="loader"></div><p>${message}</p>`;
+        loadingDiv.style.display = 'flex';
+    }
+
+    showLoading("Oyun verileri yükleniyor...");
+    
+    // --- OYUN MANTIKLARI ---
+
+    // Adam Asmaca Oyunu
+    async function startHangman() {
         try {
-            const response = await fetch(`/curriculum/${dataType}/${topicId}.json`);
-            if (!response.ok) {
-                throw new Error(`Veri dosyası bulunamadı: ${response.statusText}`);
+            const res = await fetch(`activities/${topicId}.json`);
+            if (!res.ok) throw new Error('Veri dosyası bulunamadı.');
+            const items = await res.json();
+            const definitions = items.filter(item => 
+                item.type === 'definition' &&
+                item.content && item.content.term && item.content.definition &&
+                !item.content.term.includes(' ') && item.content.term.length >= 4 && item.content.term.length <= 12
+            );
+            if (definitions.length === 0) throw new Error('Bu konu için Adam Asmaca uygun veri bulunamadı.');
+
+            const wordData = definitions[Math.floor(Math.random() * definitions.length)].content;
+            const word = wordData.term.toLocaleUpperCase('tr-TR');
+            const hint = wordData.definition;
+            
+            let mistakes = 0;
+            const guessedLetters = new Set();
+            
+            container.innerHTML = `
+                <h2>Adam Asmaca</h2>
+                <div id="hangman-drawing"></div>
+                <div id="word-display" class="word-display"></div>
+                <p id="hint" class="hint">${hint}</p>
+                <div id="keyboard" class="keyboard"></div>
+            `;
+            
+            const wordDisplay = document.getElementById('word-display');
+            const keyboardDiv = document.getElementById('keyboard');
+            
+            function renderWord() {
+                wordDisplay.innerHTML = word.split('').map(letter => 
+                    `<span class="letter">${guessedLetters.has(letter) ? letter : '_'}</span>`
+                ).join('');
             }
-            return await response.json();
-        } catch (error) {
-            console.error('Veri yüklenirken hata:', error);
-            showError(`Oyun verileri yüklenemedi. Lütfen bu konu için "${dataType}" verilerinin oluşturulduğundan emin olun.`);
-            return null;
+            
+            function checkWin() {
+                return word.split('').every(letter => guessedLetters.has(letter));
+            }
+            
+            function handleGuess(letter) {
+                if (guessedLetters.has(letter) || mistakes >= 6 || checkWin()) return;
+                
+                guessedLetters.add(letter);
+                const button = document.querySelector(`button[data-letter="${letter}"]`);
+                if (word.includes(letter)) {
+                    button.classList.add('correct');
+                } else {
+                    button.classList.add('incorrect');
+                    mistakes++;
+                    updateHangmanDrawing();
+                }
+                renderWord();
+                checkGameState();
+            }
+
+            function updateHangmanDrawing() {
+                // Burada CSS ile adamı çizen sınıfları ekleyebilirsiniz.
+                // Örneğin: document.getElementById('hangman-drawing').className = `mistakes-${mistakes}`;
+            }
+
+            function checkGameState() {
+                if (checkWin()) {
+                    keyboardDiv.innerHTML = `<p class="win">Kazandın! 🎉</p>`;
+                } else if (mistakes >= 6) {
+                    keyboardDiv.innerHTML = `<p class="lose">Kaybettin! Doğru kelime: ${word}</p>`;
+                    // Reveal the word
+                    guessedLetters.add(...word.split(''));
+                    renderWord();
+                }
+            }
+
+            'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ'.split('').forEach(letter => {
+                const button = document.createElement('button');
+                button.textContent = letter;
+                button.dataset.letter = letter;
+                button.addEventListener('click', () => handleGuess(letter));
+                keyboardDiv.appendChild(button);
+            });
+            
+            renderWord();
+            loadingDiv.style.display = 'none';
+        } catch (err) {
+            showError(err.message);
         }
     }
 
-    // --- Adam Asmaca Mantığı ---
-    const initHangman = (questions) => {
-        const gameContainer = document.getElementById('game-container');
-        if (!gameContainer) return;
-
-        let currentQuestionIndex = 0;
-        let mistakes = 0;
-        let guessedLetters = new Set();
-        
-        function setupQuestion() {
-            const question = questions[currentQuestionIndex];
-            if (!question) {
-                gameContainer.innerHTML = '<div class="game-end"><h2>Tebrikler!</h2><p>Tüm kelimeleri buldunuz.</p></div>';
-                return;
-            }
-
-            mistakes = 0;
-            guessedLetters.clear();
-            const word = question.correctAnswer.toUpperCase();
-            
-            gameContainer.innerHTML = `
-                <div class="hangman-container">
-                    <div class="hangman-scaffold">
-                        <svg viewBox="0 0 100 120">
-                            <line x1="10" y1="110" x2="90" y2="110" class="scaffold-part" />
-                            <line x1="30" y1="110" x2="30" y2="10" class="scaffold-part" />
-                            <line x1="30" y1="10" x2="70" y2="10" class="scaffold-part" />
-                            <line x1="70" y1="10" x2="70" y2="20" class="scaffold-part" />
-                            <circle cx="70" cy="30" r="10" class="hangman-part body-part-1" />
-                            <line x1="70" y1="40" x2="70" y2="70" class="hangman-part body-part-2" />
-                            <line x1="70" y1="50" x2="60" y2="60" class="hangman-part body-part-3" />
-                            <line x1="70" y1="50" x2="80" y2="60" class="hangman-part body-part-4" />
-                            <line x1="70" y1="70" x2="60" y2="90" class="hangman-part body-part-5" />
-                            <line x1="70" y1="70" x2="80" y2="90" class="hangman-part body-part-6" />
-                        </svg>
-                    </div>
-                    <div class="hangman-ui">
-                        <p class="hint">İpucu: ${question.definition}</p>
-                        <div class="word-display"></div>
-                        <div class="keyboard"></div>
-                    </div>
-                </div>
-            `;
-
-            const wordDisplay = gameContainer.querySelector('.word-display');
-            word.split('').forEach(letter => {
-                const letterEl = document.createElement('div');
-                letterEl.classList.add('letter-box');
-                if (letter === ' ') {
-                    letterEl.classList.add('space');
-                }
-                wordDisplay.appendChild(letterEl);
-            });
-
-            const keyboard = gameContainer.querySelector('.keyboard');
-            'ABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZ'.split('').forEach(key => {
-                const keyEl = document.createElement('button');
-                keyEl.textContent = key;
-                keyEl.addEventListener('click', () => handleGuess(key));
-                keyboard.appendChild(keyEl);
-            });
-            
-            updateWordDisplay();
-        }
-
-        function updateWordDisplay() {
-            const word = questions[currentQuestionIndex].correctAnswer.toUpperCase();
-            const wordDisplay = gameContainer.querySelector('.word-display');
-            const letterBoxes = wordDisplay.querySelectorAll('.letter-box');
-            let allGuessed = true;
-
-            word.split('').forEach((letter, index) => {
-                if (guessedLetters.has(letter) || letter === ' ') {
-                    letterBoxes[index].textContent = letter;
-                } else {
-                    letterBoxes[index].textContent = '';
-                    allGuessed = false;
-                }
-            });
-
-            if (allGuessed) {
-                endGame(true);
-            }
-        }
-        
-        function handleGuess(letter) {
-            const keyEl = Array.from(gameContainer.querySelectorAll('.keyboard button')).find(btn => btn.textContent === letter);
-            if (guessedLetters.has(letter) || keyEl.disabled) return;
-
-            guessedLetters.add(letter);
-            keyEl.disabled = true;
-            
-            const word = questions[currentQuestionIndex].correctAnswer.toUpperCase();
-            if (word.includes(letter)) {
-                keyEl.classList.add('correct');
-                updateWordDisplay();
-            } else {
-                keyEl.classList.add('incorrect');
-                mistakes++;
-                updateHangmanFigure();
-            }
-        }
-
-        function updateHangmanFigure() {
-            const parts = gameContainer.querySelectorAll('.hangman-part');
-            for(let i = 0; i < mistakes; i++){
-                if(parts[i]) parts[i].style.display = 'block';
-            }
-            if (mistakes >= parts.length) {
-                endGame(false);
-            }
-        }
-
-        function endGame(won) {
-            const word = questions[currentQuestionIndex].correctAnswer.toUpperCase();
-            const keyboard = gameContainer.querySelector('.keyboard');
-            keyboard.innerHTML = `
-                <div class="game-over-message ${won ? 'won' : 'lost'}">
-                    <p>${won ? 'Tebrikler, bildiniz!' : 'Kaybettiniz! Doğru kelime:'}</p>
-                    <p class="correct-word">${word}</p>
-                    <button id="next-hangman-btn">Sıradaki Kelime</button>
-                </div>
-            `;
-            gameContainer.querySelector('#next-hangman-btn').addEventListener('click', () => {
-                currentQuestionIndex++;
-                setupQuestion();
-            });
-        }
-        
-        setupQuestion();
-    };
+    // Kelime Avı Oyunu
+    async function startWordSearch() {
+        showError("Kelime Avı oyunu henüz bu statik sürümde hazır değil.");
+    }
     
-    // --- Kelime Avı Mantığı ---
-    const initWordSearch = (words) => {
-        // Kelime Avı kodu buraya... (Bu kısım önceki örneklerdeki gibi detaylandırılabilir)
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.innerHTML = `<p class="placeholder-message">Kelime Avı oyunu yakında burada olacak!</p>`;
-    };
-
-    // --- ANA MANTIK ---
-    if (gameType === 'adam-asmaca') {
-        const data = await fetchDataForGame('activities');
-        if (data) {
-            const questions = data.filter(item => item.type === 'definition').map(item => ({
-                correctAnswer: item.content.term,
-                definition: item.content.definition
-            }));
-            if (questions.length === 0) {
-                showError('Bu konu için Adam Asmaca oyununa uygun "tanım" verisi bulunamadı.');
-                return;
-            }
-            showContent();
-            initHangman(questions);
-        }
-    } else if (gameType === 'kelime-avi') {
-        const data = await fetchDataForGame('activities');
-        if (data) {
-             const words = data.filter(item => item.type === 'concept').map(item => item.content.text);
-             if (words.length < 3) {
-                 showError('Bu konu için Kelime Avı oyununa uygun en az 3 "kavram" verisi bulunmalıdır.');
-                 return;
-             }
-            showContent();
-            initWordSearch(words);
-        }
+    // Yönlendirme
+    if (gameTypeParam === 'adam-asmaca') {
+        startHangman();
+    } else if (gameTypeParam === 'kelime-avi') {
+        startWordSearch();
     } else {
-        showError(`"${gameType}" adlı oyun henüz hazır değil.`);
+        showError(`Bilinmeyen oyun türü: "${gameTypeParam}"`);
     }
 });
