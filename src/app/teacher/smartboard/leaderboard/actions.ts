@@ -81,7 +81,12 @@ export async function getSmartboardLeaderboard(params: {
         const studentsQuery = query(collection(db, 'users'), where(documentId(), 'in', chunk));
         const studentsSnapshot = await getDocs(studentsQuery);
         studentsSnapshot.forEach(docSnap => {
-            studentProfiles.push({ uid: docSnap.id, ...docSnap.data() } as UserProfile);
+            const data = docSnap.data();
+            studentProfiles.push({
+                 uid: docSnap.id, 
+                 ...data,
+                 createdAt: (data.createdAt as Timestamp)?.toDate().toISOString() || null
+            } as UserProfile);
         });
     }
 

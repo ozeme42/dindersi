@@ -11,7 +11,14 @@ import path from 'path';
 export async function getAllUsers(): Promise<UserProfile[]> {
     const db = getAdminDb();
     const usersSnapshot = await db.collection('users').get();
-    return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))));
+    return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            uid: doc.id, 
+            ...data,
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : null
+        } as UserProfile
+    })));
 }
 
 export async function deleteUserFromFirestore(userId: string): Promise<{ success: boolean; error?: string }> {

@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -57,7 +58,7 @@ export async function getScoreEvents(params: {
                 ...data,
                 id: doc.id,
                 userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
-                timestamp: (data.timestamp as Timestamp).toDate(),
+                timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
             } as EnrichedScoreEvent;
         });
         
@@ -81,20 +82,17 @@ export async function getScoreEvents(params: {
         const paginatedEvents = events.slice(0, itemsPerPage);
         
         const lastVisibleDoc = snapshot.docs.length > itemsPerPage ? snapshot.docs[itemsPerPage - 1] : (snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null);
+        
+        const lastVisibleTimestamp = lastVisibleDoc ? lastVisibleDoc.data().timestamp as Timestamp : null;
 
-        const lastVisible = lastVisibleDoc ? {
-            _seconds: (lastVisibleDoc.data().timestamp as Timestamp).seconds,
-            _nanoseconds: (lastVisibleDoc.data().timestamp as Timestamp).nanoseconds
+        const lastVisible = lastVisibleTimestamp ? {
+            _seconds: lastVisibleTimestamp.seconds,
+            _nanoseconds: lastVisibleTimestamp.nanoseconds
         } : null;
 
-        const serializableEvents = paginatedEvents.map(event => ({
-            ...event,
-            timestamp: new Date(event.timestamp).toISOString(),
-        }));
-        
         return { 
             success: true, 
-            data: JSON.parse(JSON.stringify(serializableEvents)),
+            data: JSON.parse(JSON.stringify(paginatedEvents)),
             lastVisible
         };
 

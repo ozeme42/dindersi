@@ -3,7 +3,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, getDoc, documentId, orderBy, Timestamp } from "firebase/firestore";
 import type { Assignment, UserProfile, ScoreEvent } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -33,9 +33,9 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
         const assignment: Assignment = { 
             id: assignmentSnap.id, 
             ...assignmentData,
-            createdAt: (assignmentData.createdAt as any)?.toDate().toISOString(),
-            startDate: assignmentData.startDate ? (assignmentData.startDate as any).toDate().toISOString() : undefined,
-            dueDate: assignmentData.dueDate ? (assignmentData.dueDate as any).toDate().toISOString() : undefined,
+            createdAt: (assignmentData.createdAt as Timestamp)?.toDate().toISOString(),
+            startDate: assignmentData.startDate ? (assignmentData.startDate as Timestamp).toDate().toISOString() : undefined,
+            dueDate: assignmentData.dueDate ? (assignmentData.dueDate as Timestamp).toDate().toISOString() : undefined,
         } as Assignment;
 
         let studentIds: string[] = [];
@@ -76,7 +76,12 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
             
             const scoreEventsSnapshot = await getDocs(scoreEventsQuery);
             scoreEventsSnapshot.forEach(doc => {
-                const event = { id: doc.id, ...doc.data() } as ScoreEvent;
+                const eventData = doc.data();
+                const event = { 
+                    id: doc.id, 
+                    ...eventData,
+                    timestamp: (eventData.timestamp as Timestamp)?.toDate().toISOString()
+                } as ScoreEvent;
                 eventsByStudent.set(event.userId, event);
             });
             
@@ -85,7 +90,7 @@ export async function getAssignmentDetails(assignmentId: string): Promise<{ succ
                 const event = eventsByStudent.get(student.uid) || null;
                 return {
                     student: student,
-                    scoreEvent: event ? {...event, timestamp: (event.timestamp as any).toDate().toISOString()} : null,
+                    scoreEvent: event
                 };
             }); // Keep all students, even those who haven't attempted.
             studentProgress.push(...progressChunk);

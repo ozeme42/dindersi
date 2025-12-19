@@ -100,11 +100,12 @@ export type AnagramCard = { definition: string; scrambledWord: string; correctAn
 export type AnagramFlashcardStep = { type: 'anagramFlashcard'; title: string; cards: AnagramCard[]; };
 export type SentenceScrambleStep = { type: 'sentenceScramble'; title: string; scrambledSentence: string; correctSentence: string; };
 export type VisualStep = { type: 'visual'; title: string; imageUrl: string; prompt?: string; };
-export type AccordionStep = { type: 'accordion'; title: string; items: { title: string; content: string; }[]; };
+export type AccordionStep = { type: 'accordion'; title: string; items: { id: string, title: string; content: string; }[]; };
 export type IframeStep = { type: 'iframe'; title: string; url: string; };
 export type ActivityLinkStep = { type: 'activityLink'; title: string; activityType: string; activityLabel: string; };
 export type HtmlSlideStep = { type: 'htmlSlide'; title: string; htmlContent: string; };
 export type VideoStep = { type: 'video'; title: string; url: string; description?: string; };
+export type AnagramGameStep = { type: 'anagramGame'; title: string; cards: AnagramCard[] };
 
 
 export type ConceptMapData = {
@@ -136,6 +137,7 @@ export type LessonStep =
   | ConceptMapStep
   | HtmlSlideStep
   | ConceptExplanationStep
+  | AnagramGameStep
   | VideoStep;
 
 export type CategorizationGameData = {
@@ -191,6 +193,8 @@ export type Unit = {
     createdAt?: any;
     htmlContent?: string; // YENİ EKLENDİ
     isPublished?: boolean;
+    steps?: LessonStep[];
+    sourceText?: string;
 };
 
 export type Course = {
@@ -224,6 +228,7 @@ export type Question = {
     isTrue?: boolean;
     classId?: string;
     className?: string;
+    createdAt?: any;
 };
 
 // Represents a class in the school

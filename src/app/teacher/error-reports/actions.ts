@@ -27,7 +27,7 @@ export async function getErrorReports(): Promise<{ success: boolean; data?: Erro
                     { 
                         sender: 'student', 
                         message: data.message, 
-                        createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString() 
+                        createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : new Date().toISOString() 
                     },
                      // Include legacy response if it exists
                     ...(data.response ? [{ 
@@ -42,7 +42,7 @@ export async function getErrorReports(): Promise<{ success: boolean; data?: Erro
             return {
                 id: doc.id,
                 ...data,
-                createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+                createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
                 conversation: conversation,
             } as ErrorReport;
         });
@@ -68,8 +68,15 @@ export async function addResponseToReport(reportId: string, status: ErrorReport[
             }
 
             const currentData = reportDoc.data();
+            const createdAtDate = currentData.createdAt instanceof Timestamp ? currentData.createdAt.toDate() : new Date();
+
             // Start with the original message if conversation is missing
-            const baseMessage = { sender: 'student' as const, message: currentData.message, createdAt: currentData.createdAt?.toDate().toISOString() };
+            const baseMessage = { 
+                sender: 'student' as const, 
+                message: currentData.message, 
+                createdAt: createdAtDate.toISOString() 
+            };
+            
             const currentConversation = currentData.conversation && Array.isArray(currentData.conversation) && currentData.conversation.length > 0 
                 ? currentData.conversation
                 : [baseMessage];

@@ -29,7 +29,7 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
         const serializableProfile = {
             ...profileData,
             uid: studentSnap.id,
-            createdAt: profileData.createdAt?.toDate ? profileData.createdAt.toDate().toISOString() : null,
+            createdAt: (profileData.createdAt as Timestamp)?.toDate()?.toISOString() || null,
         } as UserProfile;
         
         // Fetch recent activity
@@ -46,7 +46,7 @@ export async function getStudentDetails(studentId: string): Promise<{ data?: Stu
             return {
                 ...data,
                 id: doc.id,
-                timestamp: data.timestamp?.toDate().toISOString(),
+                timestamp: (data.timestamp as Timestamp)?.toDate().toISOString(),
             } as ScoreEvent;
         });
         

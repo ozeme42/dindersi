@@ -3,21 +3,21 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 
 export function getAdminApp() {
-  // 1. Zaten başlatılmışsa onu kullan
   if (getApps().length > 0) {
     return getApp();
   }
 
-  // 2. .env.local verilerini al
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
 
   if (!projectId || !clientEmail || !privateKeyRaw) {
-    throw new Error("❌ Firebase Admin başlatılamadı: .env.local dosyasında eksik bilgiler var.");
+    console.error("Firebase Admin initialization failed: Missing environment variables.");
+    // In a serverless environment, sometimes retrying helps if envs are slow to load.
+    // However, throwing an error is generally safer to prevent undefined behavior.
+    throw new Error("Firebase Admin initialization failed: Missing .env.local variables.");
   }
 
-  // 3. Private key içindeki \n karakterlerini düzelt
   const privateKey = privateKeyRaw.replace(/\\n/g, '\n');
 
   const serviceAccount: ServiceAccount = {
@@ -26,13 +26,11 @@ export function getAdminApp() {
     privateKey,
   };
 
-  // 4. Uygulamayı başlat
   return initializeApp({
     credential: cert(serviceAccount),
   });
 }
 
-// --- Helper Fonksiyonlar (Action dosyaları bunları kullanır) ---
 
 export function getAdminDb() {
   return getFirestore(getAdminApp());
