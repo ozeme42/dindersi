@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const mainContainer = document.getElementById('main-container');
     const loadingIndicator = document.getElementById('loading');
@@ -11,21 +10,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const params = new URLSearchParams(window.location.search);
     const topicId = params.get('topicId');
-    const topicName = params.get('topicName');
+    const topicName = params.get('topicName'); // URL'den ismi de alalım
 
     if (!topicId) {
         showError("İçerik bulunamadı: Konu bilgisi eksik.");
         return;
     }
     
-    document.title = topicName || "Yazılacaklar";
-    const titleElement = document.getElementById('page-title');
-    if(titleElement) titleElement.textContent = topicName || "Yazılacaklar";
+    // Başlığı güncelle
+    if(topicName) {
+        document.title = topicName;
+        const titleElement = document.getElementById('page-title');
+        if(titleElement) titleElement.textContent = topicName;
+    }
 
-    fetch(`/curriculum/yazilacaklar/${topicId}.json`)
+    // DİKKAT: Klasör yapısına göre path'i ayarlıyoruz
+    fetch(`curriculum/yazilacaklar/${topicId}.json`)
         .then(response => {
              if (!response.ok) {
-                if (response.status === 404) throw new Error("Bu konu için 'Yazılacaklar' içeriği bulunamadı.");
+                if (response.status === 404) throw new Error("Bu konu için henüz not girişi yapılmamıştır.");
                 throw new Error("İçerik yüklenirken bir ağ hatası oluştu.");
             }
             return response.json();
@@ -41,34 +44,37 @@ document.addEventListener('DOMContentLoaded', () => {
         
     function renderContent(data) {
         if (!data || (!data.conceptDefinitions?.length && !data.notes?.length)) {
-             showError("Bu konu için 'Yazılacaklar' içeriği bulunmuyor.");
+             showError("Bu konu için içerik boş görünüyor.");
              return;
         }
 
-        const conceptsSection = document.createElement('div');
-        conceptsSection.className = 'content-section';
-        const conceptsTitle = document.createElement('h2');
-        conceptsTitle.textContent = 'Kavramlar ve Tanımları';
-        conceptsSection.appendChild(conceptsTitle);
-
+        // 1. Kavramlar Bölümü
         if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
+            const conceptsSection = document.createElement('div');
+            conceptsSection.className = 'content-section';
+            
+            const conceptsTitle = document.createElement('h2');
+            conceptsTitle.textContent = 'Kavramlar ve Tanımları';
+            conceptsSection.appendChild(conceptsTitle);
+
             data.conceptDefinitions.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `<strong>${item.concept}:</strong> ${item.definition}`;
                 conceptsSection.appendChild(div);
             });
-        } else {
-            conceptsSection.innerHTML += '<p class="no-content-message">Bu konu için kavram bulunmuyor.</p>';
+            mainContainer.appendChild(conceptsSection);
         }
 
-        const notesSection = document.createElement('div');
-        notesSection.className = 'content-section';
-        const notesTitle = document.createElement('h2');
-        notesTitle.textContent = 'Önemli Notlar';
-        notesSection.appendChild(notesTitle);
-        
+        // 2. Notlar Bölümü
         if (data.notes && data.notes.length > 0) {
+            const notesSection = document.createElement('div');
+            notesSection.className = 'content-section';
+            
+            const notesTitle = document.createElement('h2');
+            notesTitle.textContent = 'Önemli Notlar';
+            notesSection.appendChild(notesTitle);
+            
             const list = document.createElement('ul');
             data.notes.forEach(note => {
                 const listItem = document.createElement('li');
@@ -77,20 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 list.appendChild(listItem);
             });
             notesSection.appendChild(list);
-        } else {
-            notesSection.innerHTML += '<p class="no-content-message">Bu konu için not bulunmuyor.</p>';
+            mainContainer.appendChild(notesSection);
         }
-
-        mainContainer.appendChild(conceptsSection);
-        mainContainer.appendChild(notesSection);
     }
     
      function showError(message) {
-        errorContainer.textContent = message;
+        errorContainer.innerHTML = `⚠️ ${message}`;
         errorContainer.style.display = 'block';
         loadingIndicator.style.display = 'none';
         mainContainer.style.display = 'none';
     }
 });
-
-    

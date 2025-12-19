@@ -63,7 +63,7 @@ export default function SuperAdminPage() {
     try {
       const result = await exportDataForStaticSite();
       if (result.success) {
-        toast({ title: "Başarılı", description: "Statik site verileri başarıyla oluşturuldu ve 'public/curriculum' klasörüne kaydedildi." });
+        toast({ title: "Başarılı", description: result.message });
       } else {
         throw new Error(result.error);
       }
@@ -114,7 +114,7 @@ export default function SuperAdminPage() {
                  <CardHeader>
                     <CardTitle>Statik Site Yönetimi</CardTitle>
                     <CardDescription>
-                        Veritabanındaki tüm güncel verileri, statik sitenin kullanabileceği JSON dosyalarına dönüştürün. Bu işlem, `public/curriculum` klasöründeki dosyaları günceller.
+                        Veritabanındaki tüm güncel verileri, statik sitenin kullanabileceği tek bir `data.json` dosyasına dönüştürün. Bu işlem, `public/curriculum` klasöründeki dosyayı günceller.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

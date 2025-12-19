@@ -1,61 +1,25 @@
-
 document.addEventListener('DOMContentLoaded', () => {
-    const gameContainer = document.getElementById('game-container');
-    const loadingIndicator = document.getElementById('loading');
-    const errorContainer = document.getElementById('error-container');
-
-    if (!gameContainer || !loadingIndicator || !errorContainer) {
-        console.error("Gerekli HTML elementleri bulunamadı!");
-        return;
-    }
+    const topicTitleEl = document.getElementById('topic-title');
+    const gameList = document.getElementById('game-list');
     
-    const params = new URLSearchParams(window.location.search);
-    const topicId = params.get('topicId');
-
-    if (!topicId) {
-        showError("Oyun başlatılamadı: Konu bilgisi eksik.");
-        return;
-    }
+    // URL'den başlığı al
+    const urlParams = new URLSearchParams(window.location.search);
+    const title = urlParams.get('title');
     
-    // Basit bir oyun mantığı: Şimdilik sadece soru listesi gösterelim
-    fetch(`/curriculum/questions/${topicId}.json`)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) throw new Error("Bu konu için soru bulunamadı.");
-                throw new Error("Sorular yüklenirken bir ağ hatası oluştu.");
-            }
-            return response.json();
-        })
-        .then(questions => {
-            loadingIndicator.style.display = 'none';
-            if (questions.length === 0) {
-                showError("Bu konu için hiç soru bulunmuyor.");
-                return;
-            }
-            renderQuestions(questions);
-        })
-        .catch(error => {
-            console.error("Oyun verisi yüklenirken hata:", error);
-            showError(error.message);
-        });
+    if (title) topicTitleEl.textContent = decodeURIComponent(title);
+    else topicTitleEl.textContent = "Genel Oyun Alanı";
 
-    function renderQuestions(questions) {
-        gameContainer.innerHTML = '<h2>Bu Konudaki Sorular:</h2>';
-        const list = document.createElement('ul');
-        questions.forEach(q => {
-            const listItem = document.createElement('li');
-            listItem.textContent = q.text;
-            list.appendChild(listItem);
-        });
-        gameContainer.appendChild(list);
-    }
-    
-    function showError(message) {
-        errorContainer.textContent = message;
-        errorContainer.style.display = 'block';
-        loadingIndicator.style.display = 'none';
-        gameContainer.style.display = 'none';
-    }
+    // Örnek oyun kartları
+    const games = [
+        { name: "Bilgi Yarışması", color: "from-blue-500 to-indigo-600", icon: "❓" },
+        { name: "Kelime Avı", color: "from-green-500 to-emerald-600", icon: "🔍" },
+        { name: "Eşleştirme", color: "from-purple-500 to-pink-600", icon: "🧩" }
+    ];
+
+    gameList.innerHTML = games.map(g => `
+        <div class="bg-slate-800 rounded-xl overflow-hidden border border-white/10 hover:border-white/30 transition hover:scale-105 cursor-pointer" onclick="alert('${g.name} yakında eklenecek!')">
+            <div class="h-32 bg-gradient-to-r ${g.color} flex items-center justify-center text-4xl">${g.icon}</div>
+            <div class="p-6"><h3 class="text-xl font-bold text-white">${g.name}</h3><button class="mt-4 w-full py-2 bg-slate-700 rounded text-sm">Oyna</button></div>
+        </div>
+    `).join('');
 });
-
-    

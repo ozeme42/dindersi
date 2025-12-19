@@ -2,7 +2,7 @@
 
 'use server';
 
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
@@ -171,20 +171,50 @@ export async function exportDataForStaticSite() {
         const curriculumDir = path.join(publicDir, 'curriculum');
         
         await ensureDir(curriculumDir);
-        await ensureDir(path.join(curriculumDir, 'questions'));
-        await ensureDir(path.join(curriculumDir, 'activities'));
-        await ensureDir(path.join(curriculumDir, 'yazilacaklar'));
-
-        // TEST: Generate a very simple manifest file
-        const manifest = {
-            "message": "Manifest dosyası başarıyla okundu"
-        };
-        await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
         
-        return { success: true, message: "Static site test manifest has been generated." };
+        // 1. Fetch all data
+        const [classesSnap, coursesSnap, questionsSnap, activitiesSnap] = await Promise.all([
+            db.collection('classes').get(),
+            db.collection('courses').get(),
+            db.collection('questions').get(),
+            db.collection('activityItems').get()
+        ]);
+        
+        const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const courses = [];
+        for (const courseDoc of coursesSnap.docs) {
+            const courseData = { id: courseDoc.id, ...courseDoc.data() };
+            const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).get();
+            const units = [];
+            for (const unitDoc of unitsSnap.docs) {
+                const unitData = { id: unitDoc.id, ...unitDoc.data() };
+                const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get();
+                const topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }));
+                units.push({ ...unitData, topics });
+            }
+            courses.push({ ...courseData, units });
+        }
+        
+        const questions = questionsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const activities = activitiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // 2. Create a single JSON object
+        const staticData = {
+            classes,
+            courses,
+            questions,
+            activities,
+            lastUpdated: new Date().toISOString(),
+        };
+
+        // 3. Write to a single file
+        await fs.writeFile(path.join(curriculumDir, 'data.json'), JSON.stringify(staticData, null, 2));
+        
+        return { success: true, message: "Tüm veriler 'public/curriculum/data.json' dosyasına başarıyla yazıldı." };
 
     } catch (error: any) {
         console.error("Error exporting data for static site:", error);
-        return { success: false, error: "Static site data could not be generated: " + error.message };
+        return { success: false, error: "Statik site verileri oluşturulamadı: " + error.message };
     }
 }
