@@ -1,102 +1,77 @@
-// Gerekli DOM elementlerini seçme
-const contentEl = document.getElementById('content');
-const loadingEl = document.getElementById('loading-screen');
-const errorEl = document.getElementById('error-screen');
-const errorMessageEl = document.getElementById('error-message');
-const topicTitleEl = document.getElementById('topic-title');
+document.addEventListener('DOMContentLoaded', () => {
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const contentContainer = document.getElementById('content');
+    const topicTitleEl = document.getElementById('topic-title');
 
+    if (!loadingIndicator || !contentContainer || !topicTitleEl) {
+        console.error("Gerekli HTML elementleri bulunamadı.");
+        document.body.innerHTML = '<p class="error-message">Sayfa yapılandırma hatası.</p>';
+        return;
+    }
 
-function showLoading(message) {
-    if (loadingEl) loadingEl.style.display = 'flex';
-    if (contentEl) contentEl.style.display = 'none';
-    if (errorEl) errorEl.style.display = 'none';
-    const loadingMessageEl = document.getElementById('loading-message');
-    if (loadingMessageEl) loadingMessageEl.textContent = message;
-}
-
-function showError(message) {
-    if (loadingEl) loadingEl.style.display = 'none';
-    if (contentEl) contentEl.style.display = 'none';
-    if (errorEl) errorEl.style.display = 'flex';
-    if (errorMessageEl) errorMessageEl.textContent = message;
-}
-
-function showContent() {
-    if (loadingEl) loadingEl.style.display = 'none';
-    if (contentEl) contentEl.style.display = 'block';
-    if (errorEl) errorEl.style.display = 'none';
-}
-
-
-async function loadYazilacaklar() {
-    showLoading('İçerik Yükleniyor...');
     const params = new URLSearchParams(window.location.search);
     const topicId = params.get('topicId');
     const topicName = params.get('topicName');
 
-    if (topicTitleEl) {
-        topicTitleEl.textContent = topicName || 'Yazılacaklar';
-    }
-
-    if (!topicId) {
-        showError("Konu bilgisi bulunamadı.");
+    if (!topicId || !topicName) {
+        contentContainer.innerHTML = '<p class="error-message">Konu bilgisi eksik.</p>';
+        loadingIndicator.style.display = 'none';
+        contentContainer.style.display = 'block';
         return;
     }
 
-    try {
-        const response = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-        if (!response.ok) {
-            throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı veya yüklenemedi.');
+    topicTitleEl.textContent = decodeURIComponent(topicName);
+    
+    const dataUrl = `yazilacaklar/${topicId}.json`;
+
+    fetch(dataUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Yazılacaklar verisi bulunamadı.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            renderContent(data);
+            loadingIndicator.style.display = 'none';
+            contentContainer.style.display = 'block';
+        })
+        .catch(error => {
+            contentContainer.innerHTML = `<p class="error-message">${error.message}</p>`;
+            loadingIndicator.style.display = 'none';
+            contentContainer.style.display = 'block';
+        });
+
+    function renderContent(data) {
+        let html = '';
+
+        if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
+            html += '<h2>Kavramlar ve Tanımları</h2>';
+            data.conceptDefinitions.forEach(item => {
+                html += `
+                    <div class="card">
+                        <h3>${item.concept}</h3>
+                        <p>${item.definition}</p>
+                    </div>
+                `;
+            });
         }
-        const data = await response.json();
-        
-        renderContent(data);
-        showContent();
 
-    } catch (error) {
-        console.error('Error loading content:', error);
-        showError(error.message);
+        if (data.notes && data.notes.length > 0) {
+            html += '<h2>Önemli Notlar</h2>';
+            data.notes.forEach(note => {
+                html += `
+                    <div class="card">
+                        <p>${note}</p>
+                    </div>
+                `;
+            });
+        }
+
+        if (html === '') {
+            html = '<p class="error-message">Bu konu için gösterilecek içerik bulunamadı.</p>';
+        }
+
+        contentContainer.innerHTML = html;
     }
-}
-
-function renderContent(data) {
-    if (!contentEl) return;
-    contentEl.innerHTML = ''; // Clear previous content
-
-    const kavramlarContainer = document.createElement('div');
-    kavramlarContainer.id = 'kavramlar';
-    kavramlarContainer.innerHTML = '<h2>Kavramlar ve Tanımları</h2>';
-
-    if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
-        data.conceptDefinitions.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'item';
-            div.innerHTML = `<h3>${item.concept}</h3><p>${item.definition}</p>`;
-            kavramlarContainer.appendChild(div);
-        });
-    } else {
-        kavramlarContainer.innerHTML += '<p class="empty-message">Bu konu için kavram ve tanım bulunmuyor.</p>';
-    }
-
-    const notlarContainer = document.createElement('div');
-    notlarContainer.id = 'notlar';
-    notlarContainer.innerHTML = '<h2>Önemli Notlar</h2>';
-
-    if (data.notes && data.notes.length > 0) {
-        const ul = document.createElement('ul');
-        data.notes.forEach(note => {
-            const li = document.createElement('li');
-            li.innerHTML = note; // Notların HTML içerebileceğini varsayıyoruz
-            ul.appendChild(li);
-        });
-        notlarContainer.appendChild(ul);
-    } else {
-        notlarContainer.innerHTML += '<p class="empty-message">Bu konu için önemli not bulunmuyor.</p>';
-    }
-
-    contentEl.appendChild(kavramlarContainer);
-    contentEl.appendChild(notlarContainer);
-}
-
-
-document.addEventListener('DOMContentLoaded', loadYazilacaklar);
+});
