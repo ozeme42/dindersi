@@ -3,6 +3,7 @@
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
+import { getAdminAuth } from "firebase-admin/auth";
 import { Timestamp } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
 import { promises as fs } from 'fs';
@@ -181,6 +182,7 @@ export async function exportDataForStaticSite() {
         ]);
         
         const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const classMap = new Map(classes.map(c => [c.id, c.name]));
         
         const courses = [];
         for (const courseDoc of coursesSnap.docs) {
@@ -193,7 +195,8 @@ export async function exportDataForStaticSite() {
                 const topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }));
                 units.push({ ...unitData, topics });
             }
-            courses.push({ ...courseData, units });
+            // Add className directly to the course object
+            courses.push({ ...courseData, className: classMap.get(courseData.classId) || 'Genel', units });
         }
         
         const questions = questionsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -201,7 +204,6 @@ export async function exportDataForStaticSite() {
 
         // 2. Create a single JSON object
         const staticData = {
-            classes,
             courses,
             questions,
             activities,
