@@ -1,80 +1,96 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const topicId = params.get('topicId');
-    const container = document.getElementById('content-container');
-    const loadingDiv = document.getElementById('loading');
-    const errorDiv = document.getElementById('error');
-
-    if (!container || !loadingDiv || !errorDiv) {
-        console.error("Gerekli HTML elementleri bulunamadı.");
+    const mainContainer = document.getElementById('main-container');
+    const loadingIndicator = document.getElementById('loading');
+    const errorContainer = document.getElementById('error-container');
+    
+    if (!mainContainer || !loadingIndicator || !errorContainer) {
+        console.error("Gerekli HTML elementleri bulunamadı!");
         return;
     }
 
+    const params = new URLSearchParams(window.location.search);
+    const topicId = params.get('topicId');
+    const topicName = params.get('topicName');
+
     if (!topicId) {
-        showError("Konu bilgisi eksik.");
+        showError("İçerik bulunamadı: Konu bilgisi eksik.");
         return;
     }
     
-    function showError(message) {
-        loadingDiv.style.display = 'none';
-        errorDiv.innerHTML = `<p>${message}</p>`;
-        errorDiv.style.display = 'block';
-    }
+    document.title = topicName || "Yazılacaklar";
+    const titleElement = document.getElementById('page-title');
+    if(titleElement) titleElement.textContent = topicName || "Yazılacaklar";
 
-    showLoading("İçerik yükleniyor...");
-
-    fetch(`yazilacaklar/${topicId}.json`)
+    fetch(`/curriculum/yazilacaklar/${topicId}.json`)
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`Veri dosyası bulunamadı (HTTP ${response.status}).`);
+             if (!response.ok) {
+                if (response.status === 404) throw new Error("Bu konu için 'Yazılacaklar' içeriği bulunamadı.");
+                throw new Error("İçerik yüklenirken bir ağ hatası oluştu.");
             }
             return response.json();
         })
         .then(data => {
-            loadingDiv.style.display = 'none';
+            loadingIndicator.style.display = 'none';
             renderContent(data);
         })
         .catch(error => {
             console.error("Yazılacaklar verisi yüklenirken hata:", error);
-            showError(`İçerik yüklenemedi: ${error.message}`);
+            showError(error.message);
         });
-
+        
     function renderContent(data) {
-        let html = '';
+        if (!data || (!data.conceptDefinitions?.length && !data.notes?.length)) {
+             showError("Bu konu için 'Yazılacaklar' içeriği bulunmuyor.");
+             return;
+        }
+
+        const conceptsSection = document.createElement('div');
+        conceptsSection.className = 'content-section';
+        const conceptsTitle = document.createElement('h2');
+        conceptsTitle.textContent = 'Kavramlar ve Tanımları';
+        conceptsSection.appendChild(conceptsTitle);
 
         if (data.conceptDefinitions && data.conceptDefinitions.length > 0) {
-            html += '<section class="content-section">';
-            html += '<h2>Kavramlar ve Tanımları</h2>';
-            html += '<dl class="definitions-list">';
             data.conceptDefinitions.forEach(item => {
-                html += `<dt>${item.concept}</dt><dd>${item.definition}</dd>`;
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `<strong>${item.concept}:</strong> ${item.definition}`;
+                conceptsSection.appendChild(div);
             });
-            html += '</dl>';
-            html += '</section>';
-        }
-
-        if (data.notes && data.notes.length > 0) {
-            html += '<section class="content-section">';
-            html += '<h2>Önemli Notlar</h2>';
-            html += '<ul class="notes-list">';
-            data.notes.forEach(note => {
-                html += `<li>${note}</li>`;
-            });
-            html += '</ul>';
-            html += '</section>';
-        }
-
-        if (html === '') {
-            container.innerHTML = '<p>Bu konu için yazılacaklar içeriği bulunmuyor.</p>';
         } else {
-            container.innerHTML = html;
+            conceptsSection.innerHTML += '<p class="no-content-message">Bu konu için kavram bulunmuyor.</p>';
         }
+
+        const notesSection = document.createElement('div');
+        notesSection.className = 'content-section';
+        const notesTitle = document.createElement('h2');
+        notesTitle.textContent = 'Önemli Notlar';
+        notesSection.appendChild(notesTitle);
+        
+        if (data.notes && data.notes.length > 0) {
+            const list = document.createElement('ul');
+            data.notes.forEach(note => {
+                const listItem = document.createElement('li');
+                listItem.className = 'item';
+                listItem.textContent = note;
+                list.appendChild(listItem);
+            });
+            notesSection.appendChild(list);
+        } else {
+            notesSection.innerHTML += '<p class="no-content-message">Bu konu için not bulunmuyor.</p>';
+        }
+
+        mainContainer.appendChild(conceptsSection);
+        mainContainer.appendChild(notesSection);
     }
     
-    function showLoading(message) {
-        errorDiv.style.display = 'none';
-        loadingDiv.innerHTML = `<div class="loader"></div><p>${message}</p>`;
-        loadingDiv.style.display = 'flex';
+     function showError(message) {
+        errorContainer.textContent = message;
+        errorContainer.style.display = 'block';
+        loadingIndicator.style.display = 'none';
+        mainContainer.style.display = 'none';
     }
 });
+
+    
