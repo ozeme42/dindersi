@@ -168,115 +168,89 @@ export async function exportDataForStaticSite() {
         await ensureDir(path.join(curriculumDir, 'activities'));
         await ensureDir(path.join(curriculumDir, 'yazilacaklar'));
 
-        // 1. Fetch all curriculum data in parallel
         const [coursesSnap, classesSnap] = await Promise.all([
-            db.collection("courses").get(),
+            db.collection("courses").where('isPublished', '==', true).get(),
             db.collection("classes").orderBy('name').get()
         ]);
 
         const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
 
-        // 2. Build the manifest structure
-        const manifest = { courseGroups: [] as any[] };
         const courseGroups: { [className: string]: any[] } = {};
 
         for (const course of allCourses) {
-            // Skip courses that are not published
-            if (course.isPublished === false) continue;
-            
             const className = allClasses.find(c => c.id === course.classId)?.name || 'Genel';
             if (!courseGroups[className]) {
                 courseGroups[className] = [];
             }
 
-            const unitsSnapshot = await db.collection(`courses/${course.id}/units`).orderBy("title").get();
+            const unitsSnapshot = await db.collection(`courses/${course.id}/units`).where('isPublished', '==', true).orderBy("title").get();
             const units = [];
             for (const unitDoc of unitsSnapshot.docs) {
                 const unitData = unitDoc.data() as Unit;
-                // Skip unpublished units
-                if (unitData.isPublished === false) continue;
-
-                const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
+                
+                const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).where('isPublished', '==', true).orderBy("title").get();
                 const topics = topicsSnapshot.docs
                     .map(topicDoc => {
                         const topicData = topicDoc.data() as Topic;
-                        if (topicData.isPublished === false) return null;
-                        
                         const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
                         const hasOzet = !!topicData.htmlContent;
-                        // For games, assume all topics are relevant for now.
-                        // For a more specific check, you'd need to query activities/questions collections here.
-                        return { id: topicDoc.id, title: topicDoc.data().title, hasYazilacaklar, hasOzet };
-                    })
-                    .filter(Boolean); // Remove nulls (unpublished topics)
+                        return { id: topicDoc.id, title: topicData.title, hasYazilacaklar, hasOzet };
+                    });
 
-                // Only add unit if it has topics
                 if (topics.length > 0 || unitData.htmlContent) {
                      units.push({
                         id: unitDoc.id,
-                        title: unitDoc.data().title,
+                        title: unitData.title,
                         topics: topics,
                         hasUnitOzet: !!unitData.htmlContent
                     });
                 }
             }
             
-            // Only add course if it has units with content
             if (units.length > 0) {
-                 courseGroups[className].push({
-                    id: course.id,
+                const courseFileName = `${course.id}.json`;
+                courseGroups[className].push({
                     title: course.title,
-                    units: units
+                    file: courseFileName
                 });
+                
+                const courseContent = { id: course.id, title: course.title, units };
+                await fs.writeFile(path.join(curriculumDir, courseFileName), JSON.stringify(courseContent, null, 2));
             }
         }
         
-        manifest.courseGroups = Object.entries(courseGroups)
-            .map(([name, courses]) => ({ name, courses }))
-            .sort((a,b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
+        const manifest = {
+            courseGroups: Object.entries(courseGroups).map(([name, courses]) => ({ name, courses }))
+        };
 
         await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
-
-        // 3. Export Questions, ActivityItems, Yazilacaklar grouped by topicId
-        const [questionsSnapshot, activityItemsSnapshot, topicsSnapshot] = await Promise.all([
+        
+        // Export Questions, ActivityItems, Yazilacaklar
+        const [questionsSnapshot, activityItemsSnapshot, yazilacaklarTopicsSnapshot] = await Promise.all([
             db.collection("questions").get(),
             db.collection("activityItems").get(),
             db.collectionGroup('topics').where("writingContent", "!=", null).get()
         ]);
-
-        const questionsByTopic: { [key: string]: any[] } = {};
-        questionsSnapshot.forEach(doc => {
-            const data = doc.data();
-            if (!questionsByTopic[data.topicId]) questionsByTopic[data.topicId] = [];
-            questionsByTopic[data.topicId].push({ id: doc.id, ...data });
-        });
-
-        const activityItemsByTopic: { [key: string]: any[] } = {};
-        activityItemsSnapshot.forEach(doc => {
-            const data = doc.data();
-            if (!activityItemsByTopic[data.topicId]) activityItemsByTopic[data.topicId] = [];
-            activityItemsByTopic[data.topicId].push({ id: doc.id, ...data });
-        });
         
-        const yazilacaklarByTopic: { [key: string]: any } = {};
-        for(const topicDoc of topicsSnapshot.docs) {
-             const data = topicDoc.data() as Topic;
-             if (data.writingContent) {
-                 yazilacaklarByTopic[topicDoc.id] = data.writingContent;
-             }
-        }
-        
-        for (const topicId in questionsByTopic) {
-            await fs.writeFile(path.join(curriculumDir, 'questions', `${topicId}.json`), JSON.stringify(questionsByTopic[topicId], null, 2));
-        }
+        const groupAndSave = async (snapshot: FirebaseFirestore.QuerySnapshot, folder: string) => {
+            const itemsByTopic: { [key: string]: any[] } = {};
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (!itemsByTopic[data.topicId]) itemsByTopic[data.topicId] = [];
+                itemsByTopic[data.topicId].push({ id: doc.id, ...data });
+            });
+            for (const topicId in itemsByTopic) {
+                await fs.writeFile(path.join(curriculumDir, folder, `${topicId}.json`), JSON.stringify(itemsByTopic[topicId], null, 2));
+            }
+        };
 
-        for (const topicId in activityItemsByTopic) {
-            await fs.writeFile(path.join(curriculumDir, 'activities', `${topicId}.json`), JSON.stringify(activityItemsByTopic[topicId], null, 2));
-        }
-        
-        for (const topicId in yazilacaklarByTopic) {
-             await fs.writeFile(path.join(curriculumDir, 'yazilacaklar', `${topicId}.json`), JSON.stringify(yazilacaklarByTopic[topicId], null, 2));
+        await groupAndSave(questionsSnapshot, 'questions');
+        await groupAndSave(activityItemsSnapshot, 'activities');
+
+        for (const topicDoc of yazilacaklarTopicsSnapshot.docs) {
+            const data = topicDoc.data() as Topic;
+            await fs.writeFile(path.join(curriculumDir, 'yazilacaklar', `${topicDoc.id}.json`), JSON.stringify(data.writingContent, null, 2));
         }
 
         return { success: true, message: "Static site data has been successfully generated." };
