@@ -187,27 +187,31 @@ export async function exportDataForStaticSite() {
         const courses = [];
         for (const courseDoc of coursesSnap.docs) {
              const courseDataRaw = courseDoc.data();
-             if (courseDataRaw.isPublished === false) continue; // Skip unpublished courses
+             // This is the line that's removed:
+             // if (courseDataRaw.isPublished === false) continue;
 
             const courseData = { id: courseDoc.id, ...courseDataRaw };
             const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).get();
             const units = [];
             for (const unitDoc of unitsSnap.docs) {
                 const unitDataRaw = unitDoc.data();
-                if (unitDataRaw.isPublished === false) continue; // Skip unpublished units
+                // This is the line that's removed:
+                // if (unitDataRaw.isPublished === false) continue; 
 
                 const unitData = { id: unitDoc.id, ...unitDataRaw };
                 const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get();
                 const topics = topicsSnap.docs
                     .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }))
-                    .filter(topic => topic.isPublished !== false); // Skip unpublished topics
+                    // This filter is also removed:
+                    // .filter(topic => topic.isPublished !== false); 
 
+                // We only add units if they have topics
                 if (topics.length > 0) {
                     units.push({ ...unitData, topics });
                 }
             }
+             // We only add courses if they have units
              if (units.length > 0) {
-                // Add className directly to the course object
                 courses.push({ ...courseData, className: classMap.get(courseData.classId) || 'Genel', units });
             }
         }
