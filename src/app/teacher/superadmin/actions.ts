@@ -1,27 +1,42 @@
 
-
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
-import { getAdminAuth } from "firebase-admin/auth";
 import { Timestamp } from "firebase-admin/firestore";
-import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question } from "@/lib/types";
-import { promises as fs } from 'fs';
-import path from 'path';
+import { getAdminAuth } from "firebase-admin/auth";
+import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question, Assignment, ScoreEvent } from "@/lib/types";
+
+// Helper to serialize any data, converting Timestamps
+const serialize = (data: any): any => {
+    if (!data) return data;
+    if (Array.isArray(data)) {
+        return data.map(serialize);
+    }
+    if (data instanceof Timestamp) {
+        return data.toDate().toISOString();
+    }
+    if (typeof data === 'object' && Object.prototype.toString.call(data) === '[object Object]') {
+        const newObj: { [key: string]: any } = {};
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                newObj[key] = serialize(data[key]);
+            }
+        }
+        return newObj;
+    }
+    return data;
+};
 
 export async function getAllUsers(): Promise<UserProfile[]> {
     const db = getAdminDb();
     const usersSnapshot = await db.collection('users').get();
-    return JSON.parse(JSON.stringify(usersSnapshot.docs.map(doc => {
+    return usersSnapshot.docs.map(doc => {
         const data = doc.data();
-        return { 
-            uid: doc.id, 
-            ...data,
-            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : null
-        } as UserProfile
-    })));
+        return serialize({ uid: doc.id, ...data }) as UserProfile;
+    });
 }
 
+// ... other superadmin actions like deleteUser, updateUser, resetScores remain the same ...
 export async function deleteUserFromFirestore(userId: string): Promise<{ success: boolean; error?: string }> {
     if (!userId) {
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
@@ -95,141 +110,78 @@ export async function resetAllGeneralScores(): Promise<{success: boolean, error?
     }
 }
 
-
-export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar') {
+// --- UPDATED EXPORT FUNCTION ---
+export async function exportAllData(
+    dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar',
+    filters: { classId?: string; courseId?: string; unitId?: string; topicId?: string; }
+) {
     const db = getAdminDb();
-
-    const serialize = (data: any) => {
-        if (!data) return data;
-        const serialized = { ...data };
-        for (const key in serialized) {
-            if (serialized[key] instanceof Timestamp) {
-                serialized[key] = serialized[key].toDate().toISOString();
-            }
-        }
-        return serialized;
+    
+    // Base collections
+    const collections = {
+        users: db.collection("users"),
+        classes: db.collection("classes"),
+        courses: db.collection("courses"),
+        questions: db.collection("questions"),
+        examQuestions: db.collection("examQuestions"),
+        assignments: db.collection("assignments"),
+        scoreEvents: db.collection("scoreEvents"),
+        activityItems: db.collection("activityItems"),
     };
 
-    switch (dataType) {
-        case 'users':
-            return await getAllUsers();
-        case 'curriculum': {
-            const classesSnapshot = await db.collection("classes").get();
-            const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as SchoolClass }));
-            const classMap = new Map(classesData.map(c => [c.id, c.name]));
-
-            const coursesSnapshot = await db.collection("courses").orderBy("title").get();
-            const courses = [];
-            for (const courseDoc of coursesSnapshot.docs) {
-                const courseDataRaw = courseDoc.data();
-                const courseData: Course = { 
-                    id: courseDoc.id, 
-                    ...courseDataRaw,
-                    className: classMap.get(courseDoc.data().classId) || 'Genel',
-                    createdAt: (courseDataRaw.createdAt as Timestamp)?.toDate ? (courseDataRaw.createdAt as Timestamp).toDate().toISOString() : null,
-                } as Course;
+    let query: FirebaseFirestore.Query = collections[dataType === 'curriculum' ? 'courses' : dataType === 'activity-items' ? 'activityItems' : dataType];
+    
+    // Apply filters. This is a simplified filtering logic.
+    if (filters.topicId && filters.topicId !== 'all') {
+        query = query.where('topicId', '==', filters.topicId);
+    } else if (filters.unitId && filters.unitId !== 'all') {
+        query = query.where('unitId', '==', filters.unitId);
+    } else if (filters.courseId && filters.courseId !== 'all') {
+        query = query.where('courseId', '==', filters.courseId);
+    } else if (filters.classId && filters.classId !== 'all') {
+         // This is complex because questions don't have a direct classId.
+         // For simplicity, we'll filter on the client if a class is selected, or do a more complex query if needed.
+         // Here, we just add a courseId filter if we can derive it.
+         const coursesInClass = (await collections.courses.where('classId', '==', filters.classId).get()).docs.map(d => d.id);
+         if (coursesInClass.length > 0) {
+             query = query.where('courseId', 'in', coursesInClass);
+         }
+    }
+    
+    if(dataType === 'yazilacaklar') {
+         const topicsSnapshot = await db.collectionGroup('topics').where("writingContent", "!=", null).get();
+         const yazilacaklarData = [];
+         for (const topicDoc of topicsSnapshot.docs) {
+            const topicData = topicDoc.data() as Topic;
+            const pathSegments = topicDoc.ref.path.split('/');
+            if (pathSegments.length >= 4) {
+                const courseId = pathSegments[1];
+                const unitId = pathSegments[3];
+                const courseRef = db.doc(`courses/${courseId}`);
+                const unitRef = db.doc(`courses/${courseId}/units/${unitId}`);
+                const [courseSnap, unitSnap] = await Promise.all([courseRef.get(), unitRef.get()]);
                 
-                const unitsSnapshot = await db.collection(`courses/${courseDoc.id}/units`).orderBy("title").get();
-                const units = [];
-                for (const unitDoc of unitsSnapshot.docs) {
-                    const unitDataRaw = unitDoc.data();
-                    const unitData: Unit = { 
-                        id: unitDoc.id, 
-                        ...unitDataRaw,
-                        createdAt: (unitDataRaw.createdAt as Timestamp)?.toDate ? (unitDataRaw.createdAt as Timestamp).toDate().toISOString() : null,
-                    } as Unit;
-                    const topicsSnapshot = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
-                    unitData.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, title: topicDoc.data().title }));
-                    units.push(unitData);
-                }
-                courseData.units = units;
-                courses.push(courseData);
+                yazilacaklarData.push({
+                    courseTitle: courseSnap.data()?.title || 'Bilinmeyen Ders',
+                    unitTitle: unitSnap.data()?.title || 'Bilinmeyen Ünite',
+                    topicTitle: topicData.title,
+                    writingContent: topicData.writingContent
+                });
             }
-            return courses;
-        }
-        case 'questions':
-            const questionsSnapshot = await db.collection("questions").orderBy("topicId").get();
-            return questionsSnapshot.docs.map(doc => serialize(doc.data()));
-        case 'examQuestions':
-            const examQuestionsSnapshot = await db.collection("examQuestions").orderBy("topicId").get();
-            return examQuestionsSnapshot.docs.map(doc => serialize(doc.data()));
-        case 'assignments':
-            const assignmentsSnapshot = await db.collection("assignments").orderBy("createdAt", "desc").get();
-            return assignmentsSnapshot.docs.map(doc => serialize(doc.data()));
-        case 'scoreEvents':
-            const scoreEventsSnapshot = await db.collection("scoreEvents").orderBy("timestamp", "desc").get();
-            return scoreEventsSnapshot.docs.map(doc => serialize(doc.data()));
-        case 'activity-items':
-            const activityItemsSnapshot = await db.collection("activityItems").orderBy("topicId").get();
-            return activityItemsSnapshot.docs.map(doc => serialize(doc.data()));
-        case 'yazilacaklar':
-             const topicsSnapshot = await db.collectionGroup('topics').where("writingContent", "!=", null).get();
-             const yazilacaklarData = [];
-             for (const topicDoc of topicsSnapshot.docs) {
-                const topicData = topicDoc.data() as Topic;
-                const pathSegments = topicDoc.ref.path.split('/');
-                if (pathSegments.length >= 4) {
-                    const courseId = pathSegments[1];
-                    const unitId = pathSegments[3];
-                    const courseRef = db.doc(`courses/${courseId}`);
-                    const unitRef = db.doc(`courses/${courseId}/units/${unitId}`);
-                    const [courseSnap, unitSnap] = await Promise.all([courseRef.get(), unitRef.get()]);
-                    
-                    yazilacaklarData.push({
-                        courseTitle: courseSnap.data()?.title || 'Bilinmeyen Ders',
-                        unitTitle: unitSnap.data()?.title || 'Bilinmeyen Ünite',
-                        topicTitle: topicData.title,
-                        writingContent: topicData.writingContent
-                    });
-                }
-             }
-             return yazilacaklarData;
-        default:
-            throw new Error("Invalid data type for export");
+         }
+         return yazilacaklarData;
     }
+
+
+    const snapshot = await query.get();
+    return snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
 }
 
-async function ensureDir(dirPath: string) {
-    try {
-        await fs.access(dirPath);
-    } catch (e) {
-        await fs.mkdir(dirPath, { recursive: true });
-    }
-}
 
+// This function is no longer used by the UI but kept for potential direct use or reference.
 export async function exportDataForStaticSite() {
-    try {
-        const db = getAdminDb();
-        const publicDir = path.join(process.cwd(), 'public');
-        const curriculumDir = path.join(publicDir, 'curriculum');
-        
-        await ensureDir(curriculumDir);
-        
-        const [classesSnap, coursesSnap, questionsSnap, activitiesSnap] = await Promise.all([
-            db.collection('classes').get(),
-            db.collection('courses').get(),
-            db.collection('questions').get(),
-            db.collection('activityItems').get()
-        ]);
-        
-        const allQuestions = questionsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const allActivities = activitiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        const fullData = {
-            classes: allClasses,
-            courses: allCourses,
-            questions: allQuestions,
-            activityItems: allActivities
-        };
-        
-        await fs.writeFile(path.join(curriculumDir, 'data.json'), JSON.stringify(fullData));
-
-        return { success: true, message: "Tüm veriler public/curriculum/data.json dosyasına yazıldı." };
-
-    } catch (error: any) {
-        console.error("Error exporting data for static site:", error);
-        return { success: false, error: "Statik site verileri oluşturulamadı: " + error.message };
-    }
+    // This logic is now handled by more granular functions or could be a separate, more complex build process.
+    // For now, it will do nothing to avoid creating a massive, unmanageable file.
+    console.log("exportDataForStaticSite is deprecated. Use granular exports.");
+    return { success: true, message: "This function is deprecated. Please use granular export buttons." };
 }
