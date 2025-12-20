@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -32,6 +32,18 @@ const colorClasses = [
     'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
 ];
 
+// Helper to serialize Firestore Timestamps
+const serializeTimestamp = (timestamp: any): string | null => {
+    if (timestamp instanceof Timestamp) {
+        return timestamp.toDate().toISOString();
+    }
+    if (timestamp && typeof timestamp.toDate === 'function') {
+        return timestamp.toDate().toISOString();
+    }
+    return null;
+};
+
+
 export default function DersAkisiPage() {
     const router = useRouter();
     const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
@@ -43,29 +55,43 @@ export default function DersAkisiPage() {
         const fetchCurriculum = async () => {
             setIsLoading(true);
             try {
+                const classesQuery = query(
+                    collection(db, 'classes'),
+                    orderBy('createdAt', 'asc')
+                );
                 const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
-                    getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
-                    getDocs(query(collection(db, 'courses'))),
-                    getDocs(query(collection(db, 'questions'))), 
+                    getDocs(classesQuery),
+                    getDocs(collection(db, 'courses')),
+                    getDocs(collection(db, 'questions')), 
                 ]);
                 
                 const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
+
                 const allCourses = allCoursesSnapshot.docs.map(
-                    (doc) => ({ id: doc.id, ...doc.data() } as Course)
+                    (doc) => {
+                        const data = doc.data();
+                        return { 
+                            id: doc.id, 
+                            ...data,
+                            createdAt: serializeTimestamp(data.createdAt) 
+                        } as Course;
+                    }
                 );
+
                 const enrichedClasses: EnrichedClass[] = [];
 
                 for (const classDoc of classesSnapshot.docs) {
                     const classData = {
                         id: classDoc.id,
                         ...classDoc.data(),
+                        createdAt: serializeTimestamp(classDoc.data().createdAt)
                     } as SchoolClass;
                     const enrichedClass: EnrichedClass = { ...classData, courses: [] };
 
                     const classCourses = allCourses.filter(
                         (course) => course.classId === classDoc.id
                     );
-
+                    
                     for (const courseData of classCourses) {
                         const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
 
@@ -138,12 +164,13 @@ export default function DersAkisiPage() {
                             id: 'general',
                             name: 'Genel',
                             courses: generalCourses,
-                            createdAt: new Date()
+                            createdAt: new Date().toISOString()
                         } as EnrichedClass);
                      }
                 }
+                
+                setCurriculum(JSON.parse(JSON.stringify(enrichedClasses)));
 
-                setCurriculum(enrichedClasses);
             } catch (error) {
                 console.error('Error fetching curriculum: ', error);
             } finally {

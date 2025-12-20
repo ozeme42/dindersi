@@ -7,6 +7,7 @@ export type UserProfile = {
     email: string;
     role: 'student' | 'teacher' | 'superadmin' | 'guest';
     class?: string; // e.g. "5/A" or "Yaz Okulu Havuzu"
+    studentNumber?: string; // Add student number
     score?: number;
     avatar?: string;
     createdAt?: any; // To accommodate Firestore's ServerTimestamp or a string
