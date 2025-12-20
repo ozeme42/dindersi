@@ -96,8 +96,20 @@ export async function resetAllGeneralScores(): Promise<{success: boolean, error?
 }
 
 
-export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar') {
+export async function exportAllData(dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar') {
     const db = getAdminDb();
+
+    const serialize = (data: any) => {
+        if (!data) return data;
+        const serialized = { ...data };
+        for (const key in serialized) {
+            if (serialized[key] instanceof Timestamp) {
+                serialized[key] = serialized[key].toDate().toISOString();
+            }
+        }
+        return serialized;
+    };
+
     switch (dataType) {
         case 'users':
             return await getAllUsers();
@@ -137,16 +149,19 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
         }
         case 'questions':
             const questionsSnapshot = await db.collection("questions").orderBy("topicId").get();
-            return questionsSnapshot.docs.map(doc => {
-                const { id, classId, className, courseId, unitId, createdAt, ...rest } = doc.data();
-                return rest;
-            });
+            return questionsSnapshot.docs.map(doc => serialize(doc.data()));
+        case 'examQuestions':
+            const examQuestionsSnapshot = await db.collection("examQuestions").orderBy("topicId").get();
+            return examQuestionsSnapshot.docs.map(doc => serialize(doc.data()));
+        case 'assignments':
+            const assignmentsSnapshot = await db.collection("assignments").orderBy("createdAt", "desc").get();
+            return assignmentsSnapshot.docs.map(doc => serialize(doc.data()));
+        case 'scoreEvents':
+            const scoreEventsSnapshot = await db.collection("scoreEvents").orderBy("timestamp", "desc").get();
+            return scoreEventsSnapshot.docs.map(doc => serialize(doc.data()));
         case 'activity-items':
             const activityItemsSnapshot = await db.collection("activityItems").orderBy("topicId").get();
-            return activityItemsSnapshot.docs.map(doc => {
-                 const { id, courseId, unitId, createdAt, ...rest } = doc.data();
-                 return rest;
-            });
+            return activityItemsSnapshot.docs.map(doc => serialize(doc.data()));
         case 'yazilacaklar':
              const topicsSnapshot = await db.collectionGroup('topics').where("writingContent", "!=", null).get();
              const yazilacaklarData = [];
@@ -187,15 +202,8 @@ export async function exportDataForStaticSite() {
         const db = getAdminDb();
         const publicDir = path.join(process.cwd(), 'public');
         const curriculumDir = path.join(publicDir, 'curriculum');
-        const questionsDir = path.join(curriculumDir, 'questions');
-        const activitiesDir = path.join(curriculumDir, 'activities');
-        const yazilacaklarDir = path.join(curriculumDir, 'yazilacaklar');
         
-        await Promise.all([
-            ensureDir(questionsDir),
-            ensureDir(activitiesDir),
-            ensureDir(yazilacaklarDir)
-        ]);
+        await ensureDir(curriculumDir);
         
         const [classesSnap, coursesSnap, questionsSnap, activitiesSnap] = await Promise.all([
             db.collection('classes').get(),
@@ -203,71 +211,22 @@ export async function exportDataForStaticSite() {
             db.collection('questions').get(),
             db.collection('activityItems').get()
         ]);
-
+        
         const allQuestions = questionsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const allActivities = activitiesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allCourses = coursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const allClasses = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        const classMap = new Map(classesSnap.docs.map(doc => [doc.id, doc.data().name]));
-
-        const courseGroups: { name: string; courses: any[] }[] = classesSnap.docs.map(doc => ({
-            name: doc.data().name,
-            courses: [],
-        }));
-
-        for (const courseDoc of coursesSnap.docs) {
-            const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-            
-            const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).orderBy('title').get();
-            const units = [];
-
-            for (const unitDoc of unitsSnap.docs) {
-                const unitData = unitDoc.data() as Unit;
-                
-                const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy('title').get();
-                const topics = [];
-                for (const topicDoc of topicsSnap.docs) {
-                    const topicData = topicDoc.data() as Topic;
-                    
-                    const topicId = topicDoc.id;
-                    const topicQuestions = allQuestions.filter(q => q.topicId === topicId);
-                    const topicActivities = allActivities.filter(a => a.topicId === topicId);
-                    
-                    if (topicQuestions.length > 0) {
-                        await fs.writeFile(path.join(questionsDir, `${topicId}.json`), JSON.stringify(topicQuestions));
-                    }
-                    if (topicActivities.length > 0) {
-                        await fs.writeFile(path.join(activitiesDir, `${topicId}.json`), JSON.stringify(topicActivities));
-                    }
-                    if (topicData.writingContent && ((topicData.writingContent.notes || []).length > 0 || (topicData.writingContent.conceptDefinitions || []).length > 0)) {
-                        await fs.writeFile(path.join(yazilacaklarDir, `${topicId}.json`), JSON.stringify(topicData.writingContent));
-                    }
-                    
-                    topics.push({ id: topicId, title: topicData.title });
-                }
-                 if(topics.length > 0) {
-                    units.push({ id: unitDoc.id, title: unitData.title, topics, htmlContent: unitData.htmlContent || null });
-                }
-            }
-
-            if (units.length > 0) {
-                 const enrichedCourse = { ...courseData, units };
-                 const group = courseGroups.find(g => g.name === classMap.get(courseData.classId));
-                 if (group) {
-                     group.courses.push(enrichedCourse);
-                 } else {
-                     let generalGroup = courseGroups.find(g => g.name === 'Genel');
-                     if (!generalGroup) {
-                         generalGroup = { name: 'Genel', courses: [] };
-                         courseGroups.push(generalGroup);
-                     }
-                     generalGroup.courses.push(enrichedCourse);
-                 }
-            }
-        }
+        const fullData = {
+            classes: allClasses,
+            courses: allCourses,
+            questions: allQuestions,
+            activityItems: allActivities
+        };
         
-        await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify({ courseGroups }));
+        await fs.writeFile(path.join(curriculumDir, 'data.json'), JSON.stringify(fullData));
 
-        return { success: true, message: "Statik site verileri başarıyla oluşturuldu." };
+        return { success: true, message: "Tüm veriler public/curriculum/data.json dosyasına yazıldı." };
 
     } catch (error: any) {
         console.error("Error exporting data for static site:", error);

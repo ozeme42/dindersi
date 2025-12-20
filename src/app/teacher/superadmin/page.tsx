@@ -3,7 +3,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { User, Download, HardDriveDownload, AlertTriangle, Loader2, Building, Book, FileQuestion, List, FileJson, Server } from "lucide-react";
+import { User, Download, HardDriveDownload, AlertTriangle, Loader2, Building, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield } from "lucide-react";
 import { getAllUsers, exportAllData, exportDataForStaticSite } from "./actions";
 import type { UserProfile } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function SuperAdminPage() {
     fetchAllData();
   }, [toast]);
 
-  const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'activity-items' | 'yazilacaklar', filename: string) => {
+  const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar', filename: string) => {
     setIsDownloading(dataType);
     try {
       const data = await exportAllData(dataType);
@@ -79,6 +79,9 @@ export default function SuperAdminPage() {
     { type: 'users', title: "Tüm Kullanıcılar", icon: <User className="mr-2 h-4 w-4"/>, filename: "users.json" },
     { type: 'curriculum', title: "Ders Müfredatı", icon: <Book className="mr-2 h-4 w-4"/>, filename: "curriculum.json" },
     { type: 'questions', title: "Soru Bankası", icon: <FileQuestion className="mr-2 h-4 w-4"/>, filename: "questions.json" },
+    { type: 'examQuestions', title: "Deneme Soruları", icon: <Shield className="mr-2 h-4 w-4"/>, filename: "exam_questions.json" },
+    { type: 'assignments', title: "Ödevler", icon: <ClipboardList className="mr-2 h-4 w-4"/>, filename: "assignments.json" },
+    { type: 'scoreEvents', title: "Puan Hareketleri", icon: <DollarSign className="mr-2 h-4 w-4"/>, filename: "score_events.json" },
     { type: 'activity-items', title: "Etkinlik Verileri", icon: <List className="mr-2 h-4 w-4"/>, filename: "activity-items.json" },
     { type: 'yazilacaklar', title: "Yazılacaklar", icon: <FileJson className="mr-2 h-4 w-4"/>, filename: "yazilacaklar.json" },
   ];
