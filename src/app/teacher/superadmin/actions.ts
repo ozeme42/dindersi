@@ -186,7 +186,7 @@ export async function exportAllData(
                 .filter(doc => relevantCourseIds.includes(doc.id))
                 .flatMap(courseDoc => 
                     unitsSnap.docs
-                    .filter(unitDoc => relevantUnitIds.includes(unitDoc.id) && unitDoc.ref.path.startsWith(courseDoc.ref.path))
+                    .filter(unitDoc => relevantUnitIds.includes(unitDoc.ref.parent.parent?.id === courseDoc.id && relevantUnitIds.includes(unitDoc.id)))
                     .map(unitDoc => unitDoc.ref.collection('topics').get())
             );
             relevantTopicIds = (await Promise.all(topicPromises)).flatMap(snap => snap.docs.map(doc => doc.id));
@@ -206,7 +206,6 @@ export async function exportAllData(
         
         // If IDs are provided, filter by them. Otherwise, fetch all if no filters are set.
         if (ids.length > 0) {
-            // Firestore 'in' queries are limited to 30 items per query.
             const chunks: string[][] = [];
             for (let i = 0; i < ids.length; i += 30) {
                 chunks.push(ids.slice(i, i + 30));
@@ -216,7 +215,6 @@ export async function exportAllData(
             return snapshots.flatMap(snap => snap.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() }))));
         }
         
-        // No IDs mean either fetch all (no filters) or the hierarchy was empty.
         const snapshot = await query.get();
         return snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
     };
@@ -225,7 +223,7 @@ export async function exportAllData(
     switch (dataType) {
         case 'users':
             return (await getAllUsers()).map(user => {
-                delete (user as any).uid; // Remove uid from final output
+                delete (user as any).uid; 
                 return user;
             });
             
@@ -245,13 +243,13 @@ export async function exportAllData(
                     const topics = topicsSnap.docs
                         .filter(doc => relevantTopicIds.length === 0 || relevantTopicIds.includes(doc.id))
                         .map(topicDoc => {
-                            const { id, createdAt, isPublished, ...rest } = serialize({ id: topicDoc.id, ...topicDoc.data() });
+                            const { id, createdAt, isPublished, sourceText, htmlContent, steps, writingContent, ...rest } = serialize({ id: topicDoc.id, ...topicDoc.data() });
                             return rest;
                         });
-                    const { id, createdAt, isPublished, ...unitRest } = serialize({ id: unitDoc.id, ...unitDoc.data() });
+                    const { id, createdAt, isPublished, sourceText, htmlContent, steps, ...unitRest } = serialize({ id: unitDoc.id, ...unitDoc.data() });
                     return { ...unitRest, topics };
                 }));
-                const { id, classId, createdAt, isPublished, ...courseRest } = course;
+                const { id, classId, createdAt, isPublished, isTeacherOnly, isSummerSchool, ...courseRest } = course;
                 return { ...courseRest, className, units };
             }));
             return curriculumData;
@@ -456,4 +454,3 @@ export async function exportDataForStaticSite() {
     
     return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }
-
