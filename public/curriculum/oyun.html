@@ -5,21 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oyunlar - Değerler Eğitimi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #loading {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 50; flex-direction: column; gap: 1rem;
+        }
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
     <header class="bg-slate-950/80 backdrop-blur-md border-b border-white/10 p-6 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">OYUN ALANI</h1>
-            <button onclick="history.back()" class="text-slate-400 hover:text-white transition text-sm flex items-center gap-1"><span>←</span> Geri Dön</button>
+            <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
+                OYUN ALANI
+            </h1>
+            <button onclick="history.back()" class="text-slate-400 hover:text-white transition text-sm flex items-center gap-1">
+                <span>←</span> Geri Dön
+            </button>
         </div>
     </header>
+
     <main class="max-w-5xl mx-auto p-6 w-full flex-grow">
+        
         <div class="mb-10 text-center">
-            <h2 id="topic-title" class="text-4xl font-bold text-white mb-2">...</h2>
+            <h2 id="topic-title" class="text-4xl font-bold text-white mb-2">Yükleniyor...</h2>
             <p class="text-slate-400">Bu konu için aktif oyunlar:</p>
         </div>
+
         <div id="game-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
     </main>
+
+    <div id="loading">
+        <svg class="animate-spin h-12 w-12 text-cyan-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="text-white font-medium animate-pulse">Oyunlar Hazırlanıyor...</p>
+    </div>
+
+    <script src="database.js"></script>
     <script src="oyun.js"></script>
+
 </body>
 </html>

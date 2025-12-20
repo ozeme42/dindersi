@@ -1,140 +1,124 @@
+// app.js - Güncellenmiş Versiyon
 document.addEventListener('DOMContentLoaded', () => {
-    const mainContent = document.getElementById('main-content');
-    const loadingMessage = document.getElementById('loading-message');
+    const content = document.getElementById('content');
+    const loading = document.getElementById('loading');
 
-    if (!mainContent || !loadingMessage) {
-        console.error('Gerekli HTML elemanları bulunamadı.');
-        return;
-    }
+    // Veriyi yükleme fonksiyonu (Artık fetch yok, direkt değişkenden alıyor)
+    const initApp = () => {
+        if (typeof TUM_VERILER === 'undefined') {
+            showError('Veri dosyası (database.js) yüklenemedi!');
+            return;
+        }
 
-    fetch('data.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            loadingMessage.style.display = 'none';
-            renderContent(data, mainContent);
-        })
-        .catch(error => {
-            loadingMessage.innerHTML = `
-                <div class="error-container">
-                    <h2>Bir Hata Oluştu</h2>
-                    <p>Veriler yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin.</p>
-                    <pre>${error.message}</pre>
+        try {
+            // Veriyi uygulamanın beklediği formata çeviriyoruz
+            const formattedData = transformData(TUM_VERILER);
+            hideLoading();
+            renderCourseGroups(formattedData);
+        } catch (error) {
+            console.error(error);
+            showError('Veri işlenirken hata oluştu: ' + error.message);
+        }
+    };
+
+    // data.json yapısını uygulamanın beklediği yapıya çeviren fonksiyon
+    const transformData = (db) => {
+        // Sınıfları (classes) gez ve onlara ait dersleri (courses) bul
+        return db.classes.map(cls => {
+            const classCourses = db.courses.filter(c => c.classId === cls.id);
+            
+            return {
+                name: cls.name + ". Sınıf", // Örn: "5. Sınıf"
+                courses: classCourses.map(course => ({
+                    id: course.id,
+                    name: course.title, // Örn: "DKAB"
+                    units: course.units.map(unit => ({
+                        name: unit.title,
+                        topics: unit.topics.map(topic => ({
+                            id: topic.id,
+                            name: topic.title,
+                            // Yazılacaklar ve Oyunlar butonları için linkler
+                            links: {
+                                notes: `yazilacaklar.html?topicId=${topic.id}&topicName=${encodeURIComponent(topic.title)}`,
+                                games: `oyun.html?topicId=${topic.id}&topicName=${encodeURIComponent(topic.title)}`
+                            }
+                        }))
+                    }))
+                }))
+            };
+        });
+    };
+
+    const showLoading = () => {
+        if (loading) loading.style.display = 'flex';
+        if (content) content.innerHTML = '';
+    };
+
+    const hideLoading = () => {
+        if (loading) loading.style.display = 'none';
+    };
+
+    const showError = (message) => {
+        hideLoading();
+        if (content) {
+            content.innerHTML = `
+                <div class="text-center p-10 bg-red-900/20 rounded-xl border border-red-500/50">
+                    <h2 class="text-xl font-bold text-red-400 mb-2">Hata</h2>
+                    <p class="text-slate-300 mb-4">${message}</p>
                 </div>
             `;
-            console.error('Error fetching or processing data:', error);
-        });
-});
-
-function renderContent(data, container) {
-    if (!data || !data.courses || !container) {
-        container.innerHTML = '<p>İçerik bulunamadı.</p>';
-        return;
-    }
-
-    // Dersleri sınıf adına göre gruplandır
-    const coursesByClass = {};
-    data.courses.forEach(course => {
-        // Her kursun içinde sınıf adı zaten mevcut (actions.ts'de eklenmişti)
-        const className = course.className || 'Genel';
-        if (!coursesByClass[className]) {
-            coursesByClass[className] = [];
         }
-        coursesByClass[className].push(course);
-    });
+    };
 
-    const sortedClassNames = Object.keys(coursesByClass).sort((a, b) => {
-        // "Genel" kategorisini sona atmak için özel sıralama
-        if (a === 'Genel') return 1;
-        if (b === 'Genel') return -1;
-        // Diğerlerini sayısal/alfabetik olarak sırala
-        return a.localeCompare(b, 'tr', { numeric: true });
-    });
-
-    let contentHtml = '';
-
-    sortedClassNames.forEach(className => {
-        const courses = coursesByClass[className];
+    const renderCourseGroups = (courseGroups) => {
+        if (!content) return;
         
-        contentHtml += `
-            <div class="class-group">
-                <h2 class="class-title">${className}. Sınıf Dersleri</h2>
-                <div class="courses-grid">
-        `;
+        // Eğer hiç ders yoksa
+        if(courseGroups.length === 0) {
+            content.innerHTML = '<p class="text-center text-slate-400">Görüntülenecek içerik bulunamadı.</p>';
+            return;
+        }
 
-        courses.forEach(course => {
-            contentHtml += `
-                <div class="course-card">
-                    <h3>${course.title}</h3>
-                    <div class="units-list">
-            `;
-            if (course.units && course.units.length > 0) {
-                 course.units.forEach(unit => {
-                     contentHtml += `
-                        <div class="unit-item">
-                            <h4>${unit.title}</h4>
-                            <div class="topics-list">
-                     `;
-                     if (unit.topics && unit.topics.length > 0) {
-                         unit.topics.forEach(topic => {
-                             contentHtml += createLink(course, unit, topic);
-                         });
-                     } else {
-                         contentHtml += `<p class="no-content">Bu ünitede konu bulunmuyor.</p>`;
-                     }
-                     contentHtml += `</div></div>`;
-                 });
-            } else {
-                contentHtml += `<p class="no-content">Bu derste ünite bulunmuyor.</p>`;
-            }
-           
-            contentHtml += `</div></div>`;
-        });
-
-        contentHtml += `</div></div>`;
-    });
-
-    container.innerHTML = contentHtml;
-}
-
-function createLink(course, unit, topic) {
-    if (!topic) return '';
-
-    const hasYazilacaklar = (topic.writingContent?.notes?.length > 0) || (topic.writingContent?.conceptDefinitions?.length > 0);
-    const hasOzet = !!topic.htmlContent;
-    const hasActivities = topic.steps?.some(step => step.type === 'activityLink');
-    const hasAnyContent = hasYazilacaklar || hasOzet || hasActivities;
-
-    if (!hasAnyContent) {
-        return `
-            <div class="topic-item disabled">
-                <span>${topic.title}</span>
-                <span class="no-content-badge">İçerik Yok</span>
+        content.innerHTML = `
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-white mb-2">📚 Dersler ve Konular</h2>
+                <p class="text-slate-400">İncelemek istediğiniz dersi seçin.</p>
             </div>
+            ${courseGroups.map(group => `
+                <div class="mb-12">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-6 border-b border-white/10 pb-2">${group.name}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${group.courses.map(course => `
+                            <div class="bg-slate-800/50 rounded-xl p-6 border border-white/5 hover:border-cyan-500/30 transition hover:bg-slate-800 group">
+                                <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                                    <span class="text-2xl">📖</span> ${course.name}
+                                </h4>
+                                <div class="space-y-4">
+                                    ${course.units.map(unit => `
+                                        <div class="pl-4 border-l-2 border-white/10">
+                                            <h5 class="text-sm font-semibold text-slate-400 mb-2 uppercase tracking-wider">${unit.name}</h5>
+                                            <ul class="space-y-2">
+                                                ${unit.topics.map(topic => `
+                                                    <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/50 p-2 rounded hover:bg-slate-900 transition">
+                                                        <span class="text-slate-200 text-sm font-medium truncate" title="${topic.name}">${topic.name}</span>
+                                                        <div class="flex gap-2 shrink-0">
+                                                            <a href="${topic.links.notes}" class="px-2 py-1 bg-blue-600/20 text-blue-400 text-xs rounded hover:bg-blue-600/40 transition">Notlar</a>
+                                                            <a href="${topic.links.games}" class="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded hover:bg-green-600/40 transition">Oyunlar</a>
+                                                        </div>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('')}
         `;
-    }
+    };
 
-    const params = new URLSearchParams({
-        courseId: course.id,
-        courseName: course.title,
-        unitId: unit.id,
-        unitName: unit.title,
-        topicId: topic.id,
-        topicName: topic.title,
-    });
-
-    return `
-        <div class="topic-item">
-            <span>${topic.title}</span>
-            <div class="topic-links">
-                ${hasActivities ? `<a href="oyun.html?${params.toString()}" class="topic-button games">Oyunlar</a>` : ''}
-                ${hasYazilacaklar ? `<a href="yazilacaklar.html?${params.toString()}" class="topic-button notes">Yazılacaklar</a>` : ''}
-                ${hasOzet ? `<a href="ozet.html?${params.toString()}" class="topic-button summary">Özet</a>` : ''}
-            </div>
-        </div>
-    `;
-}
+    // Başlat
+    initApp();
+});

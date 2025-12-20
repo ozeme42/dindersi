@@ -1,82 +1,132 @@
-document.addEventListener('DOMContentLoaded', async () => {
+// oyun.js - YEREL VERİ TABANI VERSİYONU
+document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
-    const topicId = params.get('topicId');
-    const courseName = params.get('courseName');
-    const topicName = params.get('topicName');
+    const topicId = params.get('topicId'); 
+    const urlTitle = params.get('topicName'); 
 
-    const titleElement = document.getElementById('title');
-    const gameListElement = document.getElementById('game-list');
-    const loadingMessage = document.getElementById('loading-message');
+    const titleEl = document.getElementById('topic-title');
+    const gameListEl = document.getElementById('game-list');
+    const loading = document.getElementById('loading');
 
-    if (titleElement) {
-        titleElement.textContent = `${courseName} - ${topicName}`;
-    }
+    // Başlığı ayarla
+    if(titleEl && urlTitle) titleEl.textContent = decodeURIComponent(urlTitle);
 
-    if (!gameListElement || !loadingMessage) {
-        console.error("Gerekli HTML elementleri bulunamadı.");
-        if (loadingMessage) loadingMessage.textContent = 'Sayfa yapısı hatalı.';
+    const hideLoading = () => { if(loading) loading.style.display = 'none'; };
+
+    // Veri Kontrolü
+    if (!topicId || typeof window.TUM_VERILER === 'undefined') {
+        gameListEl.innerHTML = '<p class="text-red-400 col-span-3 text-center">Konu bulunamadı veya veri yüklenemedi.</p>';
+        hideLoading();
         return;
     }
 
-    if (!topicId) {
-        loadingMessage.textContent = 'Konu bilgisi bulunamadı.';
-        return;
-    }
+    loadGamesForTopic(topicId);
 
-    const activityTypes = [
-        { href: '/oyunlar/milyoner-yarismasi', label: 'Kim 1000 Puan İster?' },
-        { href: '/oyunlar/yazi-tura', label: 'Yazı Tura' },
-        { href: '/oyunlar/kavram-yarismasi', label: 'Kavram Yarışması' },
-        { href: '/oyunlar/kelime-avi', label: 'Kelime Avı' },
-        { href: '/oyunlar/kutu-ac', label: 'Kutu Aç' },
-        { href: '/oyunlar/kavram-avi', label: 'Kavram Avı' },
-        { href: '/oyunlar/eslestirme', label: 'Eşleştirme' },
-        { href: '/oyunlar/cumle-olusturma', label: 'Cümle Ustası' },
-        { href: '/oyunlar/adam-asmaca', label: 'Adam Asmaca' },
-        { href: '/oyunlar/hafiza-kartlari', label: 'Hafıza Kartları' },
-        { href: '/oyunlar/hedefi-vur', label: 'Hedefi Vur' },
-        { href: '/oyunlar/bil-bakalim', label: 'Bil Bakalım' },
-        { href: '/oyunlar/dogru-yanlis-zinciri', label: 'D/Y Zinciri' },
-        { href: '/oyunlar/acik-uclu-cevapla', label: 'Açık Uçlu' },
-        { href: '/oyunlar/ilim-hazinesi', label: 'İlim Hazinesi' },
-        { href: '/oyunlar/labirent', label: 'Labirent' },
-        { href: '/oyunlar/soru-coz', label: 'Soru Çöz' },
-        { href: '/oyunlar/tornado', label: 'Tornado' },
-    ];
+    function loadGamesForTopic(id) {
+        try {
+            // Veri Tabanından İlgili Verileri Çekelim
+            const db = window.TUM_VERILER;
+            
+            let topicQuestions = [];
+            let topicActivities = [];
 
-    try {
-        const response = await fetch('data.json');
-        if (!response.ok) {
-            throw new Error('Veri dosyası bulunamadı.');
-        }
-        const data = await response.json();
+            // 1. Soruları Bul (questions dizisi varsa)
+            if (db.questions) {
+                topicQuestions = db.questions.filter(q => q.topicId === id);
+            }
 
-        const questionsForTopic = data.questions.filter((q) => q.topicId === topicId);
-        const activitiesForTopic = data.activities.filter((a) => a.topicId === topicId);
+            // 2. Aktiviteleri Bul (Ders ağacının içinde 'steps' veya 'activities' altında olabilir)
+            if (db.courses) {
+                db.courses.forEach(course => {
+                    if (course.units) {
+                        course.units.forEach(unit => {
+                            if (unit.topics) {
+                                const foundTopic = unit.topics.find(t => t.id === id);
+                                if (foundTopic && foundTopic.steps) {
+                                    // Sadece oyun tipi olan adımları al
+                                    const games = foundTopic.steps.filter(step => 
+                                        ['anagramGame', 'matching', 'quiz', 'ordering', 'wordHunt'].includes(step.type) ||
+                                        (step.activityType && step.activityType !== 'text')
+                                    );
+                                    topicActivities = [...topicActivities, ...games];
+                                }
+                            }
+                        });
+                    }
+                });
+            }
 
-        let gameLinksHtml = '';
+            // 3. HTML Oluştur
+            let gamesHtml = '';
 
-        if (questionsForTopic.length > 0 || activitiesForTopic.length > 0) {
-            activityTypes.forEach(activity => {
-                const url = new URL(activity.href, window.location.origin);
-                url.search = params.toString(); // Copy params from current URL
-                url.pathname = url.pathname.replace('/oyunlar', '/oyunlar') + '/oyun'; // Ensure it points to the game itself
-                
-                gameLinksHtml += `
-                    <a href="${url.toString()}" class="game-link">
-                        ${activity.label}
-                    </a>
-                `;
+            // a) Test/Quiz varsa kart oluştur
+            if (topicQuestions.length > 0) {
+                gamesHtml += createGameCard({
+                    name: 'Konu Testi',
+                    desc: `${topicQuestions.length} Soruluk Test`,
+                    icon: '📝',
+                    color: 'from-blue-500 to-cyan-500',
+                    onclick: `alert('Test Başlatılıyor...\\n(Bu özellik için test motoru kodları eklenmelidir)')`
+                });
+            }
+
+            // b) Diğer oyunları ekle
+            topicActivities.forEach((act, index) => {
+                let name = act.title || 'Etkinlik';
+                let icon = '🎮';
+                let color = 'from-purple-500 to-pink-500';
+                let desc = 'İnteraktif Alıştırma';
+
+                // Türe göre ikon ve renk değiştir
+                if(act.type === 'anagramGame') { name = 'Kelime Bulmaca'; icon = 'abc'; desc = 'Harfleri düzenle'; }
+                if(act.type === 'matching') { name = 'Eşleştirme'; icon = '⇄'; color = 'from-green-500 to-emerald-500'; desc = 'Kavramları eşleştir'; }
+                if(act.type === 'ordering') { name = 'Sıralama'; icon = 'kB'; color = 'from-orange-500 to-red-500'; desc = 'Doğru sıraya diz'; }
+
+                gamesHtml += createGameCard({
+                    name: name,
+                    desc: desc,
+                    icon: icon,
+                    color: color,
+                    onclick: `alert('${name} yükleniyor...\\n(Oyun motoru entegrasyonu gereklidir)')`
+                });
             });
-        } else {
-            gameLinksHtml = '<p>Bu konu için uygun oyun verisi bulunamadı.</p>';
+
+            // c) Eğer hiç oyun yoksa
+            if (gamesHtml === '') {
+                gameListEl.innerHTML = `
+                    <div class="col-span-1 sm:col-span-3 text-center py-12 bg-slate-800/30 rounded-xl border border-white/5">
+                        <div class="text-4xl mb-4">Empty</div>
+                        <p class="text-slate-400">Bu konu için henüz oyun eklenmemiş.</p>
+                        <button onclick="history.back()" class="mt-4 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-sm transition">Geri Dön</button>
+                    </div>`;
+            } else {
+                gameListEl.innerHTML = gamesHtml;
+            }
+
+            hideLoading();
+
+        } catch (error) {
+            console.error(error);
+            gameListEl.innerHTML = `<p class="text-red-500 col-span-3 text-center">Hata: ${error.message}</p>`;
+            hideLoading();
         }
+    }
 
-        gameListElement.innerHTML = gameLinksHtml;
-        loadingMessage.style.display = 'none';
-
-    } catch (error) {
-        console.error("Oyun listesi yüklenirken hata:", error);
-        loadingMessage.textContent = 'Oyunlar yüklenemedi.';
+    function createGameCard(game) {
+        return `
+            <div onclick="${game.onclick}" 
+                 class="group cursor-pointer relative overflow-hidden bg-slate-800 rounded-2xl p-6 border border-white/5 hover:border-white/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10">
+                <div class="absolute inset-0 bg-gradient-to-br ${game.color} opacity-0 group-hover:opacity-10 transition duration-500"></div>
+                <div class="relative z-10 flex flex-col items-center text-center gap-4">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${game.color} flex items-center justify-center text-3xl shadow-lg text-white">
+                        ${game.icon}
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-1 group-hover:text-cyan-400 transition">${game.name}</h3>
+                        <p class="text-sm text-slate-400">${game.desc}</p>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 });

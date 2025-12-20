@@ -186,17 +186,30 @@ export async function exportDataForStaticSite() {
         
         const courses = [];
         for (const courseDoc of coursesSnap.docs) {
-            const courseData = { id: courseDoc.id, ...courseDoc.data() };
+             const courseDataRaw = courseDoc.data();
+             if (courseDataRaw.isPublished === false) continue; // Skip unpublished courses
+
+            const courseData = { id: courseDoc.id, ...courseDataRaw };
             const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).get();
             const units = [];
             for (const unitDoc of unitsSnap.docs) {
-                const unitData = { id: unitDoc.id, ...unitDoc.data() };
+                const unitDataRaw = unitDoc.data();
+                if (unitDataRaw.isPublished === false) continue; // Skip unpublished units
+
+                const unitData = { id: unitDoc.id, ...unitDataRaw };
                 const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get();
-                const topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }));
-                units.push({ ...unitData, topics });
+                const topics = topicsSnap.docs
+                    .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }))
+                    .filter(topic => topic.isPublished !== false); // Skip unpublished topics
+
+                if (topics.length > 0) {
+                    units.push({ ...unitData, topics });
+                }
             }
-            // Add className directly to the course object
-            courses.push({ ...courseData, className: classMap.get(courseData.classId) || 'Genel', units });
+             if (units.length > 0) {
+                // Add className directly to the course object
+                courses.push({ ...courseData, className: classMap.get(courseData.classId) || 'Genel', units });
+            }
         }
         
         const questions = questionsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
