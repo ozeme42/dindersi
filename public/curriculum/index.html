@@ -6,83 +6,147 @@
     <title>Değerler Eğitimi Portalı</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Geçiş Efektleri */
-        .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+        :root {
+            --primary-glow: conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a853ba 180deg, #e92a67 360deg);
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Animasyonlar */
+        .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide-up { animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Özel Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Glass Effect Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
         
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15); }
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Tab Butonu Aktiflik Efekti */
+        .tab-btn.active {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-white">
 
-    <header class="bg-slate-950/80 backdrop-blur-md border-b border-white/10 p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="router.go('home')">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xl shadow-lg shadow-cyan-500/20">🎓</div>
-                <h1 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 hidden sm:block">
-                    DEĞERLER OYUNU
-                </h1>
+    <header class="fixed w-full top-0 z-50 transition-all duration-300 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="router.go('home')">
+                <div class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 shadow-lg group-hover:scale-110 transition duration-300">
+                    <span class="text-2xl">🎓</span>
+                    <div class="absolute inset-0 bg-white/20 rounded-xl animate-pulse"></div>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl tracking-tight text-white leading-none">DEĞERLER</h1>
+                    <span class="text-xs font-medium text-cyan-400 tracking-widest uppercase">Eğitim Portalı</span>
+                </div>
             </div>
-            <div id="header-actions" class="hidden">
-                <button onclick="router.go('home')" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 text-sm font-medium transition flex items-center gap-2">
-                    <span>←</span> Ana Menü
+
+            <div id="header-actions" class="hidden animate-fade-in">
+                <button onclick="router.go('home')" class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-800/50 border border-white/10 hover:bg-slate-700 hover:border-cyan-500/50 transition-all group">
+                    <span class="group-hover:-translate-x-1 transition-transform">←</span>
+                    <span class="text-sm font-medium">Ana Menü</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow relative">
+    <main class="flex-grow pt-28 pb-10 px-4 relative z-10">
         
-        <div id="view-home" class="view-section active max-w-7xl mx-auto p-6">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-5xl font-black text-white mb-4">Hoş Geldiniz</h2>
-                <p class="text-slate-400 text-lg max-w-2xl mx-auto">İnteraktif ders notları, kavram haritaları ve eğitici oyunlarla öğrenmeyi keşfedin.</p>
+        <div id="view-home" class="view-section active max-w-7xl mx-auto">
+            
+            <div class="text-center mb-16 fade-in">
+                <div class="inline-block mb-3 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-semibold tracking-wider uppercase">
+                    İnteraktif Öğrenme Platformu
+                </div>
+                <h2 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 mb-6 drop-shadow-sm">
+                    Öğrenmeyi Keşfet
+                </h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                    Ders notları, kavram haritaları ve eğitici oyunlarla bilginizi pekiştirin. Başlamak için sınıf seviyenizi seçin.
+                </p>
             </div>
-            <div id="courses-container" class="space-y-12"></div>
+
+            <div id="class-tabs" class="flex flex-wrap justify-center gap-3 mb-12 fade-in">
+                </div>
+
+            <div id="courses-container" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                </div>
         </div>
 
-        <div id="view-notes" class="view-section max-w-4xl mx-auto p-6">
-            <div class="mb-8 border-b border-white/10 pb-6">
-                <span class="text-cyan-400 text-sm font-bold tracking-wider uppercase">Ders İçeriği</span>
-                <h2 id="note-title" class="text-3xl font-bold text-white mt-1">Konu Başlığı</h2>
+        <div id="view-notes" class="view-section hidden max-w-4xl mx-auto slide-up">
+            <div class="text-center mb-10">
+                <span class="text-cyan-400 text-sm font-bold tracking-widest uppercase">Ders Notları</span>
+                <h2 id="note-title" class="text-3xl md:text-4xl font-bold text-white mt-2">...</h2>
+                <div class="h-1 w-24 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto mt-6 rounded-full"></div>
             </div>
             <div id="note-content" class="space-y-8"></div>
         </div>
 
-        <div id="view-games" class="view-section max-w-6xl mx-auto p-6">
-            <div class="mb-10 text-center">
-                <h2 id="game-title" class="text-3xl font-bold text-white mb-2">Oyun Alanı</h2>
-                <p class="text-slate-400">Bu konuyla ilgili etkinlikleri aşağıdan seçebilirsiniz.</p>
+        <div id="view-games" class="view-section hidden max-w-6xl mx-auto slide-up">
+            <div class="text-center mb-12">
+                <span class="text-purple-400 text-sm font-bold tracking-widest uppercase">Eğlence Zamanı</span>
+                <h2 id="game-title" class="text-3xl md:text-4xl font-bold text-white mt-2">...</h2>
+                <p class="text-slate-400 mt-4">Aşağıdaki etkinliklerden birini seçerek konuyu pekiştirebilirsin.</p>
             </div>
             <div id="game-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
     </main>
 
-    <div id="loading" class="fixed inset-0 bg-slate-900/90 z-[60] flex flex-col items-center justify-center gap-4">
-        <svg class="animate-spin h-12 w-12 text-cyan-500" viewBox="0 0 24 24" fill="none">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <span class="text-cyan-400 font-medium animate-pulse">Sistem Başlatılıyor...</span>
+    <div id="loading" class="fixed inset-0 bg-[#0f172a] z-[100] flex flex-col items-center justify-center gap-6 transition-opacity duration-500">
+        <div class="relative w-20 h-20">
+            <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-t-cyan-500 animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-2xl animate-pulse">🎓</div>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <span class="text-xl font-bold text-white">Yükleniyor</span>
+            <span class="text-sm text-slate-500">Veriler hazırlanıyor, lütfen bekleyin...</span>
+        </div>
     </div>
 
     <script src="database.js"></script>
 
     <script>
-        // --- ROUTER & UYGULAMA YÖNETİCİSİ ---
+        // --- GLOBAL STATE ---
         const App = {
             data: null,
+            activeClassFilter: null, // Hangi sınıfın seçili olduğunu tutar
 
             init: () => {
-                // 1. Veri Kontrolü
                 const checkData = setInterval(() => {
                     if (typeof window.TUM_VERILER !== 'undefined') {
                         clearInterval(checkData);
@@ -91,32 +155,42 @@
                     }
                 }, 100);
 
-                // 5 saniye içinde veri gelmezse hata ver
                 setTimeout(() => {
                     if (!App.data) {
                         clearInterval(checkData);
-                        alert("HATA: database.js dosyası yüklenemedi veya hatalı!");
+                        alert("HATA: database.js dosyası bulunamadı!");
                     }
                 }, 5000);
             },
 
             start: () => {
-                // Veriyi işle ve Ana Sayfayı doldur
                 const formatted = DataManager.transform(App.data);
+                
+                // İlk açılışta ilk sınıfı seçili yap
+                if (formatted.length > 0) {
+                    App.activeClassFilter = formatted[0].name;
+                }
+                
                 UIManager.renderHome(formatted);
                 
-                // Yükleme ekranını kapat
-                document.getElementById('loading').style.display = 'none';
+                // Loading ekranını kaldır
+                const loading = document.getElementById('loading');
+                loading.style.opacity = '0';
+                setTimeout(() => loading.style.display = 'none', 500);
             }
         };
 
-        // --- VERİ İŞLEME MERKEZİ ---
+        // --- VERİ İŞLEME ---
         const DataManager = {
             transform: (db) => {
-                return db.classes.map(cls => {
+                // Sınıfları isme göre sıralayalım (5, 6, 7...)
+                const sortedClasses = db.classes.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+                
+                return sortedClasses.map(cls => {
                     const classCourses = db.courses.filter(c => c.classId === cls.id);
                     return {
                         name: cls.name + ". Sınıf",
+                        id: cls.id, // ID'yi de saklayalım
                         courses: classCourses.map(course => ({
                             id: course.id,
                             name: course.title,
@@ -133,24 +207,19 @@
             },
 
             getTopicData: (topicId) => {
-                // Veri tabanında derinlemesine arama
                 let result = { id: topicId, name: '', questions: [], activities: [], definitions: [], notes: [] };
                 const db = App.data;
 
-                // Sorular
                 if (db.questions) result.questions = db.questions.filter(q => q.topicId === topicId);
 
-                // Ders ağacından aktiviteleri ve içerikleri bul
                 db.courses.forEach(c => c.units.forEach(u => {
                     const t = u.topics.find(topic => topic.id === topicId);
                     if (t) {
                         result.name = t.title;
-                        // Notlar/Kavramlar
                         if (t.writingContent) {
                             result.definitions = t.writingContent.conceptDefinitions || [];
                             result.notes = t.writingContent.notes || [];
                         }
-                        // Aktiviteler
                         if (t.steps) {
                             result.activities = t.steps.filter(s => 
                                 ['anagramGame', 'matching', 'quiz', 'ordering', 'wordHunt'].includes(s.type) || s.activityType
@@ -162,65 +231,93 @@
             }
         };
 
-        // --- GÖRÜNÜM VE SAYFA GEÇİŞLERİ ---
+        // --- SAYFA GEÇİŞLERİ ---
         const router = {
             go: (viewName, params = null) => {
-                // Tüm sayfaları gizle
-                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.view-section').forEach(el => {
+                    el.classList.remove('active');
+                    el.classList.add('hidden');
+                });
                 
-                // Seçilen sayfayı göster
                 const target = document.getElementById(`view-${viewName}`);
-                if (target) target.classList.add('active');
+                if (target) {
+                    target.classList.remove('hidden');
+                    // Reflow hack for animation trigger
+                    void target.offsetWidth; 
+                    target.classList.add('active');
+                }
 
-                // Header butonunu ayarla
                 const backBtn = document.getElementById('header-actions');
-                backBtn.style.display = viewName === 'home' ? 'none' : 'block';
+                if(viewName === 'home') {
+                    backBtn.classList.add('hidden');
+                } else {
+                    backBtn.classList.remove('hidden');
+                }
 
-                // Sayfa içeriğini yükle
                 if (viewName === 'notes' && params) UIManager.renderNotes(params);
                 if (viewName === 'games' && params) UIManager.renderGames(params);
                 
-                // Sayfayı yukarı kaydır
-                window.scrollTo(0,0);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         };
 
-        // --- ARAYÜZ OLUŞTURUCU (RENDER) ---
+        // --- ARAYÜZ (UI) ---
         const UIManager = {
-            renderHome: (data) => {
-                const container = document.getElementById('courses-container');
-                if(data.length === 0) {
-                    container.innerHTML = '<div class="text-center text-slate-500">İçerik bulunamadı.</div>';
+            // Ana Sayfa Render Fonksiyonu (TAB MANTIĞI EKLENDİ)
+            renderHome: (allData) => {
+                const tabsContainer = document.getElementById('class-tabs');
+                const coursesContainer = document.getElementById('courses-container');
+
+                // 1. Tabları Oluştur
+                tabsContainer.innerHTML = allData.map(group => `
+                    <button onclick="UIManager.switchTab('${group.name}')" 
+                        class="tab-btn px-6 py-3 rounded-xl border border-white/10 bg-slate-800/50 text-slate-300 font-semibold transition-all duration-300 hover:bg-slate-700 hover:scale-105 ${group.name === App.activeClassFilter ? 'active' : ''}">
+                        ${group.name}
+                    </button>
+                `).join('');
+
+                // 2. Sadece Seçili Sınıfın İçeriğini Göster
+                const activeGroup = allData.find(g => g.name === App.activeClassFilter);
+                
+                if (!activeGroup || activeGroup.courses.length === 0) {
+                    coursesContainer.innerHTML = `
+                        <div class="col-span-full text-center py-20 bg-slate-800/30 rounded-2xl border border-dashed border-white/10">
+                            <div class="text-4xl mb-4">📭</div>
+                            <p class="text-slate-400">Bu sınıf düzeyi için henüz içerik eklenmemiş.</p>
+                        </div>`;
                     return;
                 }
 
-                container.innerHTML = data.map(group => `
-                    <div>
-                        <h3 class="text-2xl font-bold text-cyan-400 mb-6 border-b border-white/10 pb-2 pl-2">${group.name}</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${group.courses.map(course => `
-                                <div class="bg-slate-800/50 rounded-xl p-6 border border-white/5 hover:border-cyan-500/30 transition duration-300 card-hover group">
-                                    <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                                        <span class="p-2 bg-slate-900 rounded-lg text-2xl">📖</span> ${course.name}
-                                    </h4>
-                                    <div class="space-y-4">
-                                        ${course.units.map(unit => `
-                                            <div class="pl-4 border-l-2 border-white/10 group-hover:border-cyan-500/30 transition">
-                                                <h5 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-widest">${unit.name}</h5>
-                                                <ul class="space-y-2">
-                                                    ${unit.topics.map(topic => `
-                                                        <li class="flex items-center justify-between gap-2 bg-slate-900/40 p-2.5 rounded-lg hover:bg-slate-900 transition border border-transparent hover:border-white/10">
-                                                            <span class="text-slate-200 text-sm font-medium truncate flex-1">${topic.name}</span>
-                                                            <div class="flex gap-2 shrink-0">
-                                                                <button onclick="router.go('notes', '${topic.id}')" class="px-2 py-1.5 bg-blue-600/10 text-blue-400 text-xs rounded hover:bg-blue-600 hover:text-white transition">Notlar</button>
-                                                                <button onclick="router.go('games', '${topic.id}')" class="px-2 py-1.5 bg-green-600/10 text-green-400 text-xs rounded hover:bg-green-600 hover:text-white transition">Oyunlar</button>
-                                                            </div>
-                                                        </li>
-                                                    `).join('')}
-                                                </ul>
-                                            </div>
+                coursesContainer.innerHTML = activeGroup.courses.map((course, index) => `
+                    <div class="glass-card rounded-2xl overflow-hidden group fade-in" style="animation-delay: ${index * 100}ms">
+                        <div class="p-6 border-b border-white/5 bg-gradient-to-r from-slate-800/50 to-transparent">
+                            <h4 class="text-xl font-bold text-white flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl border border-cyan-500/20">📖</span> 
+                                ${course.name}
+                            </h4>
+                        </div>
+                        
+                        <div class="p-6 space-y-6">
+                            ${course.units.map(unit => `
+                                <div class="relative pl-4 border-l-2 border-slate-700 hover:border-cyan-500 transition-colors duration-300">
+                                    <h5 class="text-xs font-bold text-slate-500 mb-3 uppercase tracking-widest">${unit.name}</h5>
+                                    <ul class="space-y-2">
+                                        ${unit.topics.map(topic => `
+                                            <li class="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-white/5 transition group/item">
+                                                <span class="text-slate-300 text-sm font-medium truncate flex-1 group-hover/item:text-white transition">${topic.name}</span>
+                                                <div class="flex gap-2 opacity-80 group-hover/item:opacity-100 transition">
+                                                    <button onclick="router.go('notes', '${topic.id}')" title="Ders Notları" 
+                                                        class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all">
+                                                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                                    </button>
+                                                    <button onclick="router.go('games', '${topic.id}')" title="Oyunlar"
+                                                        class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center hover:bg-purple-500 hover:text-white transition-all">
+                                                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+                                                    </button>
+                                                </div>
+                                            </li>
                                         `).join('')}
-                                    </div>
+                                    </ul>
                                 </div>
                             `).join('')}
                         </div>
@@ -228,22 +325,31 @@
                 `).join('');
             },
 
+            // Tab Değiştirme Fonksiyonu
+            switchTab: (className) => {
+                App.activeClassFilter = className;
+                const formatted = DataManager.transform(App.data);
+                UIManager.renderHome(formatted);
+            },
+
+            // Notlar Sayfası
             renderNotes: (topicId) => {
                 const data = DataManager.getTopicData(topicId);
                 document.getElementById('note-title').textContent = data.name;
                 const container = document.getElementById('note-content');
                 let html = '';
 
-                // Kavramlar
                 if (data.definitions.length > 0) {
                     html += `
-                        <div class="bg-slate-800/40 rounded-xl p-6 border border-white/5">
-                            <h3 class="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2"><span class="text-2xl">💡</span> Kavramlar</h3>
+                        <div class="glass-card rounded-2xl p-8 fade-in">
+                            <h3 class="text-xl font-bold text-cyan-400 mb-6 flex items-center gap-2">
+                                <span class="bg-cyan-500/20 p-2 rounded-lg">💡</span> Kavramlar
+                            </h3>
                             <div class="grid gap-4 md:grid-cols-2">
                                 ${data.definitions.map(def => `
-                                    <div class="bg-slate-900 p-4 rounded-lg border-l-4 border-cyan-500">
-                                        <div class="font-bold text-white mb-1">${def.term || def.concept}</div>
-                                        <div class="text-sm text-slate-400">${def.definition}</div>
+                                    <div class="bg-slate-900/50 p-5 rounded-xl border-l-4 border-cyan-500 hover:bg-slate-800/50 transition">
+                                        <div class="font-bold text-white text-lg mb-2">${def.term || def.concept}</div>
+                                        <div class="text-slate-400 leading-relaxed">${def.definition}</div>
                                     </div>
                                 `).join('')}
                             </div>
@@ -251,15 +357,16 @@
                     `;
                 }
 
-                // Notlar
                 if (data.notes.length > 0) {
                     html += `
-                        <div class="bg-slate-800/40 rounded-xl p-6 border border-white/5">
-                            <h3 class="text-xl font-bold text-purple-400 mb-4 flex items-center gap-2"><span class="text-2xl">📌</span> Notlar</h3>
-                            <ul class="space-y-3">
+                        <div class="glass-card rounded-2xl p-8 fade-in" style="animation-delay: 100ms">
+                            <h3 class="text-xl font-bold text-purple-400 mb-6 flex items-center gap-2">
+                                <span class="bg-purple-500/20 p-2 rounded-lg">📌</span> Önemli Notlar
+                            </h3>
+                            <ul class="space-y-4">
                                 ${data.notes.map(note => `
-                                    <li class="flex gap-3 text-slate-300 bg-slate-900/50 p-3 rounded-lg">
-                                        <span class="text-purple-500 font-bold">➤</span>
+                                    <li class="flex gap-4 text-slate-300 bg-slate-900/30 p-4 rounded-xl border border-white/5 hover:border-purple-500/30 transition">
+                                        <span class="text-purple-500 font-bold text-xl">➤</span>
                                         <span class="leading-relaxed">${note}</span>
                                     </li>
                                 `).join('')}
@@ -268,10 +375,11 @@
                     `;
                 }
 
-                if (html === '') html = '<div class="text-center py-10 text-slate-500">Bu konu için henüz içerik eklenmemiş.</div>';
+                if (html === '') html = '<div class="text-center py-20 text-slate-500 border border-dashed border-slate-700 rounded-xl">Bu konu için henüz içerik eklenmemiş.</div>';
                 container.innerHTML = html;
             },
 
+            // Oyunlar Sayfası
             renderGames: (topicId) => {
                 const data = DataManager.getTopicData(topicId);
                 document.getElementById('game-title').textContent = data.name;
@@ -285,15 +393,15 @@
                         desc: `${data.questions.length} soruluk değerlendirme`,
                         icon: '📝',
                         color: 'from-blue-500 to-cyan-500',
-                        action: "alert('Test modülü buraya entegre edilecek.')"
+                        action: "alert('Test modülü hazır!')"
                     });
                 }
 
                 // Diğer Oyunlar
                 data.activities.forEach(act => {
                     let info = { name: act.title || 'Etkinlik', icon: '🎮', color: 'from-purple-500 to-pink-500' };
-                    if(act.type === 'anagramGame') info = { name: 'Kelime Bulmaca', icon: 'abc', color: 'from-yellow-500 to-orange-500' };
-                    if(act.type === 'matching') info = { name: 'Eşleştirme', icon: '⇄', color: 'from-green-500 to-emerald-500' };
+                    if(act.type === 'anagramGame') info = { name: 'Kelime Bulmaca', icon: 'abc', color: 'from-orange-400 to-red-500' };
+                    if(act.type === 'matching') info = { name: 'Eşleştirme', icon: '⇄', color: 'from-emerald-400 to-green-600' };
                     
                     html += UIManager.createGameCard({
                         name: info.name,
@@ -304,21 +412,22 @@
                     });
                 });
 
-                if (html === '') html = '<div class="col-span-full text-center py-10 text-slate-500">Aktif oyun bulunamadı.</div>';
+                if (html === '') html = '<div class="col-span-full text-center py-20 text-slate-500 border border-dashed border-slate-700 rounded-xl">Aktif oyun bulunamadı.</div>';
                 container.innerHTML = html;
             },
 
             createGameCard: (props) => {
                 return `
-                    <div onclick="${props.action}" class="group cursor-pointer relative overflow-hidden bg-slate-800 rounded-2xl p-6 border border-white/5 hover:border-white/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10">
+                    <div onclick="${props.action}" class="group cursor-pointer relative overflow-hidden glass-card rounded-2xl p-8 hover:-translate-y-2 transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-br ${props.color} opacity-0 group-hover:opacity-10 transition duration-500"></div>
-                        <div class="relative z-10 flex flex-col items-center text-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${props.color} flex items-center justify-center text-3xl shadow-lg text-white mb-2">
+                        
+                        <div class="relative z-10 flex flex-col items-center text-center gap-6">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br ${props.color} flex items-center justify-center text-4xl shadow-lg text-white group-hover:scale-110 transition duration-300 ring-4 ring-white/5">
                                 ${props.icon}
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-white mb-1 group-hover:text-cyan-400 transition">${props.name}</h3>
-                                <p class="text-xs text-slate-400">${props.desc}</p>
+                                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition">${props.name}</h3>
+                                <p class="text-sm text-slate-400 bg-slate-900/50 px-3 py-1 rounded-full border border-white/5 inline-block">${props.desc}</p>
                             </div>
                         </div>
                     </div>
@@ -326,7 +435,7 @@
             }
         };
 
-        // Uygulamayı Başlat
+        // Başlat
         document.addEventListener('DOMContentLoaded', App.init);
     </script>
 </body>

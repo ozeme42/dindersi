@@ -186,31 +186,21 @@ export async function exportDataForStaticSite() {
         
         const courses = [];
         for (const courseDoc of coursesSnap.docs) {
-             const courseDataRaw = courseDoc.data();
-             // This is the line that's removed:
-             // if (courseDataRaw.isPublished === false) continue;
-
+            const courseDataRaw = courseDoc.data();
             const courseData = { id: courseDoc.id, ...courseDataRaw };
             const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).get();
             const units = [];
             for (const unitDoc of unitsSnap.docs) {
                 const unitDataRaw = unitDoc.data();
-                // This is the line that's removed:
-                // if (unitDataRaw.isPublished === false) continue; 
-
                 const unitData = { id: unitDoc.id, ...unitDataRaw };
                 const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get();
                 const topics = topicsSnap.docs
-                    .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }))
-                    // This filter is also removed:
-                    // .filter(topic => topic.isPublished !== false); 
+                    .map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() }));
 
-                // We only add units if they have topics
                 if (topics.length > 0) {
                     units.push({ ...unitData, topics });
                 }
             }
-             // We only add courses if they have units
              if (units.length > 0) {
                 courses.push({ ...courseData, className: classMap.get(courseData.classId) || 'Genel', units });
             }
@@ -228,7 +218,7 @@ export async function exportDataForStaticSite() {
         };
 
         // 3. Write to a single file
-        await fs.writeFile(path.join(curriculumDir, 'data.json'), JSON.stringify(staticData, null, 2));
+        await fs.writeFile(path.join(curriculumDir, 'data.json'), JSON.stringify(staticData));
         
         return { success: true, message: "Tüm veriler 'public/curriculum/data.json' dosyasına başarıyla yazıldı." };
 

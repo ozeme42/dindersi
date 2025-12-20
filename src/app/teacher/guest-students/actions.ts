@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -93,71 +94,5 @@ export async function updateStudentClass(studentId: string, newClassName: string
     } catch (error: any) {
         console.error("Error updating student class:", error);
         return { success: false, error: "Öğrenci sınıfı güncellenirken bir hata oluştu." };
-    }
-}
-
-
-export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdAt' | 'score'> & { password?: string }): Promise<{ success: boolean; error?: string; user?: UserProfile }> {
-    const finalDisplayName = data.displayName.trim();
-    if (!finalDisplayName) {
-        return { success: false, error: "Öğrenci adı boş olamaz." };
-    }
-    if (!data.password || data.password.length < 6) {
-        return { success: false, error: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır." };
-    }
-
-    try {
-        const auth = getAdminAuth();
-
-        const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
-        let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
-        let attempts = 0;
-        
-        while (true) {
-            try {
-                await auth.getUserByEmail(finalEmail);
-                attempts++;
-                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-                 if (attempts > 100) {
-                    throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
-                }
-            } catch (error: any) {
-                if (error.code === 'auth/user-not-found') {
-                    break; // Email is available
-                }
-                throw error; // Other errors
-            }
-        }
-        
-        const userRecord = await auth.createUser({
-            email: finalEmail,
-            password: data.password,
-            displayName: finalDisplayName,
-        });
-        
-        const firestore = getAdminDb();
-        
-        const newUserProfile: Omit<UserProfile, 'uid'> = {
-            displayName: finalDisplayName,
-            email: finalEmail,
-            role: data.role || 'student',
-            class: data.class,
-            score: 0,
-            createdAt: serverTimestamp(),
-        };
-
-        await firestore.collection("users").doc(userRecord.uid).set(newUserProfile);
-        
-        const serializableNewUser: UserProfile = {
-            ...newUserProfile,
-            uid: userRecord.uid,
-            createdAt: new Date().toISOString(),
-        };
-        
-        return { success: true, user: serializableNewUser };
-
-    } catch (error: any) {
-        console.error("Error creating new student:", error);
-        return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
     }
 }

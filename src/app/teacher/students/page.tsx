@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -386,7 +387,7 @@ export default function StudentManagementPage() {
   
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-      
+        
        {/* Arka Plan */}
        <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
@@ -394,18 +395,13 @@ export default function StudentManagementPage() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-        
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/5 pb-8">
-             <div>
-                <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
-                    <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
-                        <UserCheck className="h-8 w-8 text-indigo-400" />
-                    </div>
-                    Öğrenci Yönetimi
-                </h1>
-                <p className="text-slate-400 mt-2 font-medium">Sınıf, öğrenci ve puan işlemlerini buradan yönetin.</p>
-             </div>
+        <div className="flex items-center justify-between border-b border-white/10 pb-8">
+             <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
+                <div className="p-2 bg-indigo-500/20 rounded-xl border border-indigo-500/30">
+                    <UserCog className="h-8 w-8 text-indigo-400" />
+                </div>
+                Öğrenci Yönetimi
+            </h1>
         </div>
 
         <Tabs defaultValue="list" className="space-y-6">
@@ -533,7 +529,7 @@ export default function StudentManagementPage() {
                                 />
                             </div>
                             <Button type="submit" size="lg" onClick={handleBulkAdd} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedClass || !activeBranch || activeBranch === 'all'}>
-                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Upload className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
+                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                             </Button>
                           </TabsContent>
                       </div>
