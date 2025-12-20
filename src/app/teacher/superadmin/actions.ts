@@ -109,16 +109,23 @@ export async function exportAllData(dataType: 'users' | 'curriculum' | 'question
             const coursesSnapshot = await db.collection("courses").orderBy("title").get();
             const courses = [];
             for (const courseDoc of coursesSnapshot.docs) {
-                const courseData = { 
+                const courseDataRaw = courseDoc.data();
+                const courseData: Course = { 
                     id: courseDoc.id, 
-                    ...courseDoc.data(),
-                    className: classMap.get(courseDoc.data().classId) || 'Genel' 
+                    ...courseDataRaw,
+                    className: classMap.get(courseDoc.data().classId) || 'Genel',
+                    createdAt: (courseDataRaw.createdAt as Timestamp)?.toDate ? (courseDataRaw.createdAt as Timestamp).toDate().toISOString() : null,
                 } as Course;
                 
                 const unitsSnapshot = await db.collection(`courses/${courseDoc.id}/units`).orderBy("title").get();
                 const units = [];
                 for (const unitDoc of unitsSnapshot.docs) {
-                    const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
+                    const unitDataRaw = unitDoc.data();
+                    const unitData: Unit = { 
+                        id: unitDoc.id, 
+                        ...unitDataRaw,
+                        createdAt: (unitDataRaw.createdAt as Timestamp)?.toDate ? (unitDataRaw.createdAt as Timestamp).toDate().toISOString() : null,
+                    } as Unit;
                     const topicsSnapshot = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy("title").get();
                     unitData.topics = topicsSnapshot.docs.map(topicDoc => ({ id: topicDoc.id, title: topicDoc.data().title }));
                     units.push(unitData);
@@ -206,25 +213,21 @@ export async function exportDataForStaticSite() {
             name: doc.data().name,
             courses: [],
         }));
-        const generalCourses: any[] = [];
-        
+
         for (const courseDoc of coursesSnap.docs) {
             const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-            if (courseData.isPublished === false) continue;
             
             const unitsSnap = await db.collection(`courses/${courseDoc.id}/units`).orderBy('title').get();
             const units = [];
 
             for (const unitDoc of unitsSnap.docs) {
                 const unitData = unitDoc.data() as Unit;
-                if (unitData.isPublished === false) continue;
-
+                
                 const topicsSnap = await db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).orderBy('title').get();
                 const topics = [];
                 for (const topicDoc of topicsSnap.docs) {
                     const topicData = topicDoc.data() as Topic;
-                    if (topicData.isPublished === false) continue;
-
+                    
                     const topicId = topicDoc.id;
                     const topicQuestions = allQuestions.filter(q => q.topicId === topicId);
                     const topicActivities = allActivities.filter(a => a.topicId === topicId);
@@ -235,32 +238,31 @@ export async function exportDataForStaticSite() {
                     if (topicActivities.length > 0) {
                         await fs.writeFile(path.join(activitiesDir, `${topicId}.json`), JSON.stringify(topicActivities));
                     }
-                    if (topicData.writingContent && (topicData.writingContent.notes.length > 0 || topicData.writingContent.conceptDefinitions.length > 0)) {
+                    if (topicData.writingContent && ((topicData.writingContent.notes || []).length > 0 || (topicData.writingContent.conceptDefinitions || []).length > 0)) {
                         await fs.writeFile(path.join(yazilacaklarDir, `${topicId}.json`), JSON.stringify(topicData.writingContent));
                     }
                     
                     topics.push({ id: topicId, title: topicData.title });
                 }
                  if(topics.length > 0) {
-                    units.push({ id: unitDoc.id, title: unitData.title, topics });
+                    units.push({ id: unitDoc.id, title: unitData.title, topics, htmlContent: unitData.htmlContent || null });
                 }
             }
 
             if (units.length > 0) {
                  const enrichedCourse = { ...courseData, units };
-                 if (courseData.classId) {
-                    const group = courseGroups.find(g => g.name === classMap.get(courseData.classId));
-                    if (group) group.courses.push(enrichedCourse);
+                 const group = courseGroups.find(g => g.name === classMap.get(courseData.classId));
+                 if (group) {
+                     group.courses.push(enrichedCourse);
                  } else {
-                    generalCourses.push(enrichedCourse);
+                     let generalGroup = courseGroups.find(g => g.name === 'Genel');
+                     if (!generalGroup) {
+                         generalGroup = { name: 'Genel', courses: [] };
+                         courseGroups.push(generalGroup);
+                     }
+                     generalGroup.courses.push(enrichedCourse);
                  }
             }
-        }
-
-        if (generalCourses.length > 0) {
-             courseGroups.forEach(group => {
-                group.courses.push(...generalCourses);
-            });
         }
         
         await fs.writeFile(path.join(curriculumDir, 'manifest.json'), JSON.stringify({ courseGroups }));
