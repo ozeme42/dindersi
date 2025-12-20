@@ -153,38 +153,43 @@ export async function exportAllData(
          }
          return yazilacaklarData;
     }
-
+    
     const collectionKey = dataType === 'curriculum' ? 'courses' : dataType === 'activity-items' ? 'activityItems' : dataType;
     let query: FirebaseFirestore.Query = collections[collectionKey];
     
-    // Apply filters.
+    // Apply filters hierarchically
     if (filters.topicId && filters.topicId !== 'all') {
         query = query.where('topicId', '==', filters.topicId);
     } else if (filters.unitId && filters.unitId !== 'all') {
         query = query.where('unitId', '==', filters.unitId);
     } else if (filters.courseId && filters.courseId !== 'all') {
+        // If exporting curriculum, just fetch the single course
+        if(dataType === 'curriculum') {
+             const docSnap = await collections.courses.doc(filters.courseId).get();
+             return docSnap.exists() ? [serialize({ id: docSnap.id, ...docSnap.data() })] : [];
+        }
         query = query.where('courseId', '==', filters.courseId);
     } else if (filters.classId && filters.classId !== 'all') {
-         // This is complex because questions don't have a direct classId.
-         // We need to fetch courses for the class first.
          const coursesInClassQuery = collections.courses.where('classId', '==', filters.classId);
          const coursesInClassSnapshot = await coursesInClassQuery.get();
          const coursesInClassIds = coursesInClassSnapshot.docs.map(d => d.id);
          
          if (coursesInClassIds.length > 0) {
             if (dataType === 'curriculum') {
-                // If we are exporting curriculum, we already have the filtered courses.
-                // We'll handle this by fetching all and filtering in-memory for this specific case.
-                const allCoursesSnapshot = await collections.courses.get();
-                const allCourses = allCoursesSnapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
-                const classCourses = allCourses.filter(c => coursesInClassIds.includes(c.id));
-                return classCourses;
-            } else if ('courseId' in (await query.limit(1).get()).docs[0]?.data() || dataType === 'courses') {
-                // If the target collection has courseId, we can filter.
+                const allCoursesSnapshot = await collections.courses.where('id', 'in', coursesInClassIds).get();
+                const classCourses = allCoursesSnapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+                // Fetch classes to get className
+                const classDoc = await collections.classes.doc(filters.classId).get();
+                const className = classDoc.exists() ? classDoc.data()?.name : 'Bilinmeyen Sınıf';
+                return classCourses.map(c => ({...c, className}));
+            }
+            // For other data types that have 'courseId'
+            const hasCourseId = ['questions', 'examQuestions', 'activity-items'].includes(dataType);
+            if(hasCourseId) {
                 query = query.where('courseId', 'in', coursesInClassIds);
             }
+            // For users, assignments, scoreEvents, the logic would be more complex and might need separate handling
          } else {
-             // No courses found for this class, so the result will be empty.
              return [];
          }
     }
@@ -290,5 +295,7 @@ export async function exportDataForStaticSite() {
     
     return { success: true, message: "Statik site verileri oluşturma görevi tetiklendi." };
 }
+
+    
 
     
