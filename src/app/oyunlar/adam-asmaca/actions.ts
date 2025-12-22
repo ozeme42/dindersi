@@ -69,51 +69,10 @@ export async function submitAdamAsmacaScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        console.log("Static mode: Score submission is disabled.");
-        return { success: true };
+    // This function will not use the database as per the new requirement.
+    // It can be left empty or log the action if needed for debugging.
+    if (process.env.NODE_ENV === 'development') {
+        console.log(`[Static Mode] Score submission for Adam Asmaca:`, { userId, score, context });
     }
-    if (!userId || score <= 0) return { success: true };
-    
-    // Lazy-load server-only imports
-    const { db } = await import('@/lib/firebase');
-    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
-
-    try {
-        const attemptsQuery = query(
-            collection(db, 'scoreEvents'),
-            where('userId', '==', userId),
-            where('gameType', '==', 'Adam Asmaca'),
-            where('context', '==', context)
-        );
-        
-        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        
-        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
-            return { 
-                success: false, 
-                error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
-            };
-        }
-
-        const batch = writeBatch(db);
-        const userRef = doc(db, 'users', userId);
-        batch.update(userRef, { score: increment(score) });
-        const eventRef = doc(collection(db, 'scoreEvents'));
-        batch.set(eventRef, {
-            userId: userId,
-            points: score,
-            timestamp: serverTimestamp(),
-            gameType: 'Adam Asmaca',
-            context: context,
-            metadata: { platform: 'web', version: '2.0' }
-        });
-
-        await batch.commit();
-
-        return { success: true };
-    } catch (error: any) {
-        console.error("Server Action Error (submitAdamAsmacaScoreAction):", error);
-        return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
-    }
+    return { success: true };
 }
