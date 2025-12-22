@@ -1,4 +1,4 @@
-// oyunlar.js - KAVRAM YARIŞMASI (ÜST YERLEŞİM + 2 HAK)
+// oyunlar.js - KAVRAM YARIŞMASI (KIRMIZI İŞARET DÜZELTİLDİ)
 
 window.GameEngine = {};
 
@@ -14,6 +14,7 @@ window.GameEngine.state = {
     currentItem: null, // Şu an sorulan
     currentOptions: [], // Ekranda görünen 8 seçenek
     mistakes: 0, // Anlık sorudaki hata sayısı
+    wrongAnswers: [], // Yanlış bilinen şıkların listesi (YENİ)
     
     isRoundOver: false,
     
@@ -89,7 +90,7 @@ window.GameEngine.showWinScreen = function() {
 };
 
 // ==========================================
-// 4. KAVRAM YARIŞMASI (ÜST YERLEŞİM + 2 HAK)
+// 4. KAVRAM YARIŞMASI
 // ==========================================
 window.GameEngine.startQuiz = function(definitions) {
     const stage = document.getElementById('game-stage');
@@ -99,15 +100,13 @@ window.GameEngine.startQuiz = function(definitions) {
         return;
     }
 
-    // 1. Öğrenilecek Kavramlar
     const activeBatch = definitions.map((def, index) => ({
         id: index,
         term: def.term || def.concept,
         definition: def.definition,
-        level: 0 // 3 olunca biter
+        level: 0
     }));
 
-    // 2. Yanlış Şık Havuzu
     let pool = window.GameEngine.collectAllConcepts();
     const activeTerms = activeBatch.map(a => a.term);
     pool = pool.filter(t => !activeTerms.includes(t));
@@ -123,7 +122,6 @@ window.GameEngine.startQuiz = function(definitions) {
 window.GameEngine.loadQuizLevel = function() {
     const state = window.GameEngine.state;
     
-    // Tamamlanmamışları bul
     const pendingItems = state.activeBatch.filter(item => item.level < 3);
 
     if (pendingItems.length === 0) {
@@ -131,11 +129,9 @@ window.GameEngine.loadQuizLevel = function() {
         return;
     }
 
-    // Soru seç
     const currentItem = pendingItems[Math.floor(Math.random() * pendingItems.length)];
     state.currentItem = currentItem;
 
-    // Şıkları oluştur
     let distractors = [];
     const localDistractors = state.activeBatch.filter(i => i.id !== currentItem.id).map(i => i.term);
     distractors.push(...localDistractors);
@@ -148,10 +144,11 @@ window.GameEngine.loadQuizLevel = function() {
     const options = [currentItem.term, ...distractors.sort(() => 0.5 - Math.random()).slice(0, 7)];
     state.currentOptions = options.sort(() => 0.5 - Math.random());
 
-    // Tur Ayarları
+    // Tur Sıfırlama
     state.isRoundOver = false;
     state.timeLeft = 20;
-    state.mistakes = 0; // Hata sayacını sıfırla
+    state.mistakes = 0;
+    state.wrongAnswers = []; // Her soruda yanlışları sıfırla
 
     if(state.timer) clearInterval(state.timer);
     window.GameEngine.renderQuiz();
@@ -176,15 +173,39 @@ window.GameEngine.renderQuiz = function() {
     const completedCount = state.activeBatch.filter(i => i.level >= 3).length;
     const totalCount = state.activeBatch.length;
     
-    // Can Göstergesi (2 Hak)
+    // Can Göstergesi
     const livesLeft = 2 - state.mistakes;
     let hearts = '';
     for(let i=0; i<2; i++) {
         hearts += i < livesLeft ? '❤️' : '🖤';
     }
 
-    // --- HTML YAPISI (ÜST YERLEŞİM İÇİN DÜZENLENDİ) ---
-    // justify-center yerine justify-start kullanıldı ve üstten boşluk verildi.
+    // Seçenekleri oluştururken "yanlış" durumunu kontrol et
+    const optionsHTML = state.currentOptions.map(optTerm => {
+        const isWrong = state.wrongAnswers.includes(optTerm);
+        let btnClass = "quiz-opt relative overflow-hidden border-2 rounded-xl text-sm md:text-lg font-bold transition-all h-20 md:h-24 flex items-center justify-center px-2 text-center leading-tight shadow-lg ";
+        let disabledAttr = "";
+
+        if (isWrong) {
+            // Yanlış bilinen şık: Kırmızı ve Pasif
+            btnClass += "bg-red-600 border-red-500 opacity-50 cursor-not-allowed";
+            disabledAttr = "disabled";
+        } else {
+            // Normal şık
+            btnClass += "bg-slate-800 hover:bg-slate-700 border-white/10 text-white hover:scale-[1.02] hover:shadow-lg active:scale-95";
+        }
+
+        // Tırnak işaretlerini güvenli hale getir
+        const safeTerm = optTerm.replace(/'/g, "\\'");
+
+        return `
+            <button onclick="window.GameEngine.handleQuizAnswer(this, '${safeTerm}')" 
+                class="${btnClass}" ${disabledAttr}>
+                ${optTerm}
+            </button>
+        `;
+    }).join('');
+
     stage.innerHTML = `
         <div class="w-full max-w-6xl flex flex-col h-full fade-in justify-start pt-6 md:pt-10 px-4">
             
@@ -224,12 +245,7 @@ window.GameEngine.renderQuiz = function() {
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mx-auto">
-                ${state.currentOptions.map(optTerm => `
-                    <button onclick="window.GameEngine.handleQuizAnswer(this, '${optTerm.replace(/'/g, "\\'")}')" 
-                        class="quiz-opt relative overflow-hidden bg-slate-800 hover:bg-slate-700 border-2 border-white/10 text-white py-4 rounded-xl text-sm md:text-lg font-bold transition-all hover:scale-[1.02] hover:shadow-lg active:scale-95 shadow-lg h-20 md:h-24 flex items-center justify-center px-2 text-center leading-tight">
-                        ${optTerm}
-                    </button>
-                `).join('')}
+                ${optionsHTML}
             </div>
         </div>
     `;
@@ -247,13 +263,16 @@ window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
         clearInterval(state.timer);
         state.isRoundOver = true;
 
+        // Tüm butonları güncelle
         const buttons = document.querySelectorAll('.quiz-opt');
         buttons.forEach(b => {
             b.disabled = true;
             if (b.innerText.trim() === currentItem.term) {
                 b.classList.remove('bg-slate-800', 'border-white/10');
                 b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'scale-105', 'z-10');
-            } else { b.classList.add('opacity-30'); }
+            } else if (!state.wrongAnswers.includes(b.innerText.trim())) {
+                b.classList.add('opacity-30'); // Diğerlerini sönükleştir
+            }
         });
 
         currentItem.level++;
@@ -269,27 +288,21 @@ window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
     // --- YANLIŞ CEVAP ---
     else {
         state.mistakes++;
+        state.wrongAnswers.push(answer); // Yanlış bilineni kaydet
+        
         if(navigator.vibrate) navigator.vibrate(200);
-
-        // Butonu kırmızı yap
-        if(btn) {
-            btn.disabled = true;
-            btn.classList.remove('bg-slate-800', 'border-white/10');
-            btn.classList.add('bg-red-600', 'border-red-500', 'opacity-50', 'shake');
-        }
 
         // HAK KONTROLÜ
         if (state.mistakes < 2 && !isTimeUp) {
-            // Uyarı Göster
-            const warning = document.getElementById('quiz-warning');
-            if(warning) {
-                warning.style.opacity = '1';
-                warning.style.top = '-40px'; 
-            }
-            // Can simgesini güncelle (Hızlıca tekrar render ederek veya DOM ile)
-            window.GameEngine.renderQuiz(); // En temizi tekrar render etmek (hızlıdır)
+            // Canı azalt ve kırmızı butonu göster (Ekranı yeniden çizerek)
+            window.GameEngine.renderQuiz();
             
-            // 1.5 sn sonra uyarıyı kaldır
+            // Uyarıyı göster
+            setTimeout(() => {
+                const w = document.getElementById('quiz-warning');
+                if(w) { w.style.opacity = '1'; w.style.top = '-40px'; }
+            }, 50); // Render sonrası hemen göster
+
             setTimeout(() => {
                 const w = document.getElementById('quiz-warning');
                 if(w) w.style.opacity = '0';
@@ -299,14 +312,20 @@ window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
             // KAYBETTİ
             clearInterval(state.timer);
             state.isRoundOver = true;
+            
+            // Son kez render et (kırmızı kalsın diye)
+            window.GameEngine.renderQuiz();
 
+            // Doğruyu göster
             const buttons = document.querySelectorAll('.quiz-opt');
             buttons.forEach(b => {
                 b.disabled = true;
                 if (b.innerText.trim() === currentItem.term) {
                     b.classList.remove('bg-slate-800', 'border-white/10');
                     b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'animate-pulse');
-                } else { b.classList.add('opacity-30'); }
+                } else if (!state.wrongAnswers.includes(b.innerText.trim())) {
+                    b.classList.add('opacity-30');
+                }
             });
 
             setTimeout(() => window.GameEngine.showResult('error', isTimeUp ? 'SÜRE BİTTİ' : 'BİLEMEDİN', `Doğru Cevap: ${currentItem.term}`, () => window.GameEngine.loadQuizLevel()), 1000);
@@ -394,8 +413,8 @@ window.GameEngine.startMatching = function(definitions) {
     const subset = definitions.slice(0, 6); 
     state.totalMatches = subset.length;
     subset.forEach((item, index) => {
-        leftList.push({ id: index, text: item.definition }); // Tanım Sola
-        rightList.push({ id: index, text: item.term || item.concept }); // Kavram Sağa
+        leftList.push({ id: index, text: item.definition }); 
+        rightList.push({ id: index, text: item.term || item.concept }); 
     });
     leftList.sort(() => 0.5 - Math.random());
     rightList.sort(() => 0.5 - Math.random());
