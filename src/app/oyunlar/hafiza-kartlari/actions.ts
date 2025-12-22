@@ -17,6 +17,8 @@ import {
   getDocs, 
   getCountFromServer,
 } from 'firebase/firestore';
+import fs from 'fs/promises';
+import path from 'path';
 
 
 export type MatchingPair = {
@@ -35,35 +37,37 @@ export async function getHafizaKartlariAction(
             return { error: "Hafıza Kartları oynamak için belirli bir konu seçmelisiniz.", pairs: null };
         }
         
-        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
 
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const allItems: ActivityItem[] = JSON.parse(fileContent);
+            
+            const validItems = allItems.filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+
+            if (validItems.length < 4) {
+                return { error: "Hafıza Kartları oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
             }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
+
+            const selectedItems = validItems.sort(() => 0.5 - Math.random());
+
+            const gamePairs: MatchingPair[] = [];
+            selectedItems.forEach((item, index) => {
+                const pairId = `pair-${index}`;
+                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.content.term!, pairId });
+                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
+            });
+
+            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
+
+            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
+            }
+            throw fileError;
         }
-        
-        const allItems: ActivityItem[] = await res.json();
-        
-        const validItems = allItems.filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
-
-        if (validItems.length < 4) {
-            return { error: "Hafıza Kartları oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
-        }
-
-        const selectedItems = validItems.sort(() => 0.5 - Math.random());
-
-        const gamePairs: MatchingPair[] = [];
-        selectedItems.forEach((item, index) => {
-            const pairId = `pair-${index}`;
-            gamePairs.push({ id: `term-${index}`, type: 'term', content: item.content.term!, pairId });
-            gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
-        });
-
-        const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-
-        return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getHafizaKartlariAction):", error);

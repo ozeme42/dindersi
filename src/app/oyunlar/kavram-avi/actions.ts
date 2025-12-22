@@ -3,8 +3,20 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Anagram } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
+import { db } from "@/lib/firebase";
+import { 
+  collection, 
+  query, 
+  where, 
+  getCountFromServer, 
+  writeBatch, 
+  doc, 
+  serverTimestamp, 
+  increment 
+} from 'firebase/firestore';
 
-const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getConceptHuntAction({ 
     topicId
@@ -17,45 +29,46 @@ export async function getConceptHuntAction({
             return { error: "Kavram Avı oynamak için belirli bir konu seçmelisiniz.", questions: null };
         }
 
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
-            }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
-        }
-        
-        const allItems: ActivityItem[] = await res.json();
-        
-        const validItems = allItems.filter(item => 
-            item.type === 'definition' &&
-            item.content?.term && 
-            item.content?.definition &&
-            item.content.term.trim().length > 2 &&
-            !item.content.term.includes(' ')
-        );
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const allItems: ActivityItem[] = JSON.parse(fileContent);
+            
+            const validItems = allItems.filter(item => 
+                item.type === 'definition' &&
+                item.content?.term && 
+                item.content?.definition &&
+                item.content.term.trim().length > 2 &&
+                !item.content.term.includes(' ')
+            );
 
-        if (validItems.length < 1) {
-            return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
-        }
-        
-        for (let i = validItems.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
-        }
-        
-        const anagramQuestions: Anagram[] = validItems.map(item => {
-            const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
-            return {
-                definition: item.content.definition!,
-                scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
-                correctAnswer: correctAnswer,
+            if (validItems.length < 1) {
+                return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
             }
-        });
+            
+            for (let i = validItems.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
+            }
+            
+            const anagramQuestions: Anagram[] = validItems.map(item => {
+                const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
+                return {
+                    definition: item.content.definition!,
+                    scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
+                    correctAnswer: correctAnswer,
+                }
+            });
 
-        return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
+            return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
+            }
+            throw fileError;
+        }
 
     } catch (error: any) {
         console.error("Server Action Error (getConceptHuntAction):", error);
@@ -68,16 +81,10 @@ export async function submitConceptHuntScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        console.log("Static mode: Score submission is disabled.");
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
-    if (!userId || score <= 0) return { success: true };
     
-    // Lazy-load server-only imports
-    const { db } = await import('@/lib/firebase');
-    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
-
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
@@ -88,7 +95,7 @@ export async function submitConceptHuntScoreAction(
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         
-        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+        if (attemptsSnapshot.data().count >= 10) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 

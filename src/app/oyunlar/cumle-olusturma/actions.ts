@@ -17,6 +17,8 @@ import {
   getDocs, 
   getCountFromServer,
 } from 'firebase/firestore';
+import fs from 'fs/promises';
+import path from 'path';
 
 
 export type ScrambledSentenceData = {
@@ -32,35 +34,38 @@ export async function getCumleOlusturmaAction(
              return { error: "Cümle Oluşturma oynamak için belirli bir konu seçmelisiniz.", data: null };
         }
         
-        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
-
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
-            }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
-        }
-
-        const staticItems: ActivityItem[] = await res.json();
-        const allSentences = staticItems.filter(item => item.type === 'sentence' && item.content?.text)
-            .map(item => item.content.text!)
-            .filter(text => text.trim().length > 0 && text.trim().split(' ').length > 2);
-
-        if (allSentences.length < 1) {
-            return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
-        }
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
-        // Fisher-Yates Shuffle
-        for (let i = allSentences.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const staticItems: ActivityItem[] = JSON.parse(fileContent);
+
+            const allSentences = staticItems.filter(item => item.type === 'sentence' && item.content?.text)
+                .map(item => item.content.text!)
+                .filter(text => text.trim().length > 0 && text.trim().split(' ').length > 2);
+
+            if (allSentences.length < 1) {
+                return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
+            }
+            
+            // Fisher-Yates Shuffle
+            for (let i = allSentences.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
+            }
+
+            const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
+                correctSentence: sentence.trim(),
+            }));
+
+            return { data: JSON.parse(JSON.stringify(gameData)) };
+
+        } catch (fileError: any) {
+             if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+            }
+            throw fileError;
         }
-
-        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
-            correctSentence: sentence.trim(),
-        }));
-
-        return { data: JSON.parse(JSON.stringify(gameData)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getCumleOlusturmaAction):", error);

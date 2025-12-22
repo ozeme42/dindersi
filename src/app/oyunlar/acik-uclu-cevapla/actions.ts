@@ -3,8 +3,21 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
+import { db } from "@/lib/firebase";
+import { 
+  collection, 
+  query, 
+  where, 
+  getCountFromServer, 
+  writeBatch, 
+  doc, 
+  serverTimestamp, 
+  increment 
+} from 'firebase/firestore';
 
-// Re-using the Question type for the output, as it fits the structure.
+
 export async function getAcikUcluCevaplaAction(
     { topicId }: { topicId?: string; }
 ): Promise<{ questions: Question[]; error?: string }> {
@@ -14,66 +27,52 @@ export async function getAcikUcluCevaplaAction(
              return { error: "Açık Uçlu Cevaplama oynamak için belirli bir konu seçmelisiniz.", questions: [] };
         }
         
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const staticItems: ActivityItem[] = JSON.parse(fileContent);
+            
+            const allDefinitions = staticItems
+                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+            if (allDefinitions.length < 1) {
+                return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
             }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
-        }
+            
+            const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
 
-        const staticItems: ActivityItem[] = await res.json();
-        
-        const allDefinitions = staticItems
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
-
-        if (allDefinitions.length < 1) {
-            return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
-        }
-        
-        // Shuffle and pick all definitions for the game
-        const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
-
-        const gameQuestions: Question[] = selectedDefinitions.map((item, index) => {
-            return {
-                id: `${topicId}-${index}`, // Temporary ID for client-side key
+            const gameQuestions: Question[] = selectedDefinitions.map((item, index) => ({
+                id: `${topicId}-${index}`,
                 text: item.content.definition!,
                 type: 'Açık Uçlu',
                 correctAnswer: item.content.term!,
-                difficulty: 'Orta', // Assign a default difficulty
+                difficulty: 'Orta',
                 courseId: item.courseId,
                 unitId: item.unitId,
                 topicId: item.topicId,
-                topic: '', // Not needed for this game type
-            };
-        });
+                topic: '', 
+            }));
 
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+            }
+            throw fileError;
+        }
     } catch (error: any) {
         console.error("Error getting Acik Uclu questions:", error);
         return { error: "Açık uçlu sorular alınırken bir hata oluştu.", questions: [] };
     }
 }
 
-
-// Puan kaydetme işlemleri veritabanı gerektirdiğinden bu kısım sadece dinamik modda çalışır.
-// Statik modda bu fonksiyonlar çağrılsa bile bir işlem yapmaz.
 export async function submitAcikUcluCevaplaScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        console.log("Static mode: Score submission is disabled.");
-        return { success: true };
-    }
-
-    if (!userId || score <= 0) {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
     
-    // Lazy-load server-only imports
-    const { db } = await import('@/lib/firebase');
-    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
-
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),

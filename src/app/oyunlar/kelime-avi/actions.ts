@@ -3,8 +3,20 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
+import { db } from "@/lib/firebase";
+import { 
+  collection, 
+  query, 
+  where, 
+  getCountFromServer, 
+  writeBatch, 
+  doc, 
+  serverTimestamp, 
+  increment 
+} from 'firebase/firestore';
 
-const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getKelimeAviAction(
     { topicId }: { topicId?: string; }
@@ -15,41 +27,42 @@ export async function getKelimeAviAction(
             return { error: "Kelime Avı oynamak için belirli bir konu seçmelisiniz.", concepts: null };
         }
 
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", concepts: null };
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const allItems: ActivityItem[] = JSON.parse(fileContent);
+            
+            const allConcepts = allItems
+                .filter(item => item.type === 'concept' || (item.type === 'definition' && item.content.term))
+                .map(item => item.content.text || item.content.term)
+                .filter((text): text is string => 
+                    typeof text === 'string' && 
+                    text.trim().length > 2 &&
+                    text.trim().length <= 12 &&
+                    !text.includes(' ')
+                )
+                .map(text => text.toLocaleUpperCase('tr-TR'));
+
+            const uniqueConcepts = [...new Set(allConcepts)];
+
+            if (uniqueConcepts.length < 5) {
+                return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
             }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
+            
+            for (let i = uniqueConcepts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
+            }
+
+            return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", concepts: null };
+            }
+            throw fileError;
         }
-
-        const allItems: ActivityItem[] = await res.json();
-        
-        const allConcepts = allItems
-            .filter(item => item.type === 'concept' || (item.type === 'definition' && item.content.term))
-            .map(item => item.content.text || item.content.term)
-            .filter((text): text is string => 
-                typeof text === 'string' && 
-                text.trim().length > 2 &&
-                text.trim().length <= 12 &&
-                !text.includes(' ')
-            )
-            .map(text => text.toLocaleUpperCase('tr-TR'));
-
-        const uniqueConcepts = [...new Set(allConcepts)];
-
-        if (uniqueConcepts.length < 5) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
-        }
-        
-        for (let i = uniqueConcepts.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
-        }
-
-        return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getKelimeAviAction):", error);
@@ -62,16 +75,10 @@ export async function submitKelimeAviScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        console.log("Static mode: Score submission is disabled.");
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
-    if (!userId || score <= 0) return { success: true };
     
-    // Lazy-load server-only imports
-    const { db } = await import('@/lib/firebase');
-    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
-
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
@@ -82,7 +89,7 @@ export async function submitKelimeAviScoreAction(
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
         
-        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+        if (attemptsSnapshot.data().count >= 10) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 

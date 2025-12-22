@@ -5,13 +5,23 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
+import { db } from "@/lib/firebase";
+import { 
+  doc, 
+  writeBatch, 
+  serverTimestamp, 
+  increment, 
+  collection, 
+  query, 
+  where, 
+  getCountFromServer 
+} from 'firebase/firestore';
+
 
 export type HangmanData = {
     word: string;
     hint: string;
 };
-
-const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getAdamAsmacaAction(
     { topicId }: { topicId?: string; }
@@ -72,10 +82,41 @@ export async function submitAdamAsmacaScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    // This function will not use the database as per the new requirement.
-    // It can be left empty or log the action if needed for debugging.
-    if (process.env.NODE_ENV === 'development') {
-        console.log(`[Static Mode] Score submission for Adam Asmaca:`, { userId, score, context });
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
+        return { success: true };
     }
-    return { success: true };
+    
+    try {
+        const attemptsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('gameType', '==', 'Adam Asmaca'),
+            where('context', '==', context)
+        );
+        const attemptsSnapshot = await getCountFromServer(attemptsQuery);
+        if (attemptsSnapshot.data().count >= 10) {
+            return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
+        }
+
+        const batch = writeBatch(db);
+        
+        const userRef = doc(db, 'users', userId);
+        batch.update(userRef, { score: increment(score) });
+
+        const eventRef = doc(collection(db, 'scoreEvents'));
+        batch.set(eventRef, {
+            userId: userId,
+            points: score,
+            timestamp: serverTimestamp(),
+            gameType: 'Adam Asmaca',
+            context: context,
+        });
+
+        await batch.commit();
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error submitting Adam Asmaca score:", error);
+        return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
+    }
 }
