@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from "react";
@@ -9,14 +8,13 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
 import { useAuth } from "@/context/auth-context";
 import { Gamepad2 } from 'lucide-react';
 
 // --- TİP TANIMLARI ---
 type Topic = { id: string; title: string; };
-type Unit = { id: string; title: string; topics: Topic[]; };
-type EnrichedCourse = { 
+type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean };
+type Course = { 
     id: string; 
     title: string; 
     className?: string; 
@@ -24,6 +22,7 @@ type EnrichedCourse = {
     color?: string;
     units: Unit[]; 
 };
+type ClassGroup = { name: string; courses: Course[] };
 
 const ICONS = [Book, Sparkles, Feather, LayoutGrid];
 
@@ -100,11 +99,12 @@ const SelectionCard = ({
     </button>
 );
 
+
 const steps = [
-  { id: 1, name: "Ders", icon: Book },
-  { id: 2, name: "Ünite", icon: Library },
-  { id: 3, name: "Konu", icon: ListTodo },
-  { id: 4, name: "Başlat", icon: Sparkles },
+  { id: 1, name: "Sınıf", icon: Users },
+  { id: 2, name: "Ders", icon: Book },
+  { id: 3, name: "Ünite", icon: Library },
+  { id: 4, name: "Konu", icon: ListTodo },
 ];
 
 type OyunKurulumProps = {
@@ -123,7 +123,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
-  const [allCourses, setAllCourses] = useState<EnrichedCourse[]>([]);
+  const [allClassGroups, setAllClassGroups] = useState<ClassGroup[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
 
@@ -132,6 +133,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const finalTargetPath = targetPath || 'oyunlar';
 
   const [selection, setSelection] = useState({
+    className: "",
     courseId: "",
     courseName: "",
     courseColor: "from-slate-700 to-slate-800", 
@@ -140,23 +142,47 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   });
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchManifest = async () => {
         setIsLoading(true);
-        const userIdForFetch = user?.uid || 'static_user';
-        const courseData = await getCurriculumForSelection(userIdForFetch, dataType);
-        const enrichedCourses = courseData.map((c, i) => ({
-            ...c,
-            icon: ICONS[i % ICONS.length],
-            color: getGradient(i)
-        }));
-        
-        setAllCourses(enrichedCourses);
-        setIsLoading(false);
-    };
-    fetchInitialData();
-  }, [user, dataType]);
+        try {
+            const res = await fetch('/curriculum/manifest.json');
+            if (!res.ok) {
+                throw new Error("Müfredat manifestosu yüklenemedi.");
+            }
+            const data = await res.json();
+            
+            const enrichedClassGroups = data.classGroups.map((group: any, groupIndex: number) => ({
+                ...group,
+                courses: group.courses.map((course: any, courseIndex: number) => ({
+                    ...course,
+                    icon: ICONS[courseIndex % ICONS.length],
+                    color: getGradient(courseIndex),
+                    className: group.name,
+                }))
+            }));
+            
+            setAllClassGroups(enrichedClassGroups);
 
-  const handleSelectCourse = (course: EnrichedCourse) => {
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchManifest();
+  }, []);
+
+  const handleSelectClass = (group: ClassGroup) => {
+    setSelection({ 
+        ...selection, 
+        className: group.name, 
+        courseId: '', courseName: '', unitId: '', unitName: '' 
+    });
+    setCourses(group.courses);
+    setCurrentStep(2);
+  };
+
+  const handleSelectCourse = (course: Course) => {
     setSelection({ 
         ...selection, 
         courseId: course.id, 
@@ -169,17 +195,19 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setTimeout(() => {
         setUnits(course.units || []);
         setIsLoading(false);
-        setCurrentStep(2);
+        setCurrentStep(3);
     }, 300);
   };
 
   const handleSelectUnit = (unitId: string, unitName: string) => {
     setSelection({ ...selection, unitId, unitName });
     
-    if (dataType === 'games' && unitId === 'all') {
+    const gamePathFromUrl = new URLSearchParams(window.location.search).get('gamePath') || finalGamePath;
+
+    if (dataType === 'games' && unitId === 'all' && gamePathFromUrl) {
         const params = new URLSearchParams({
             gameName: finalGameName,
-            gamePath: finalGamePath,
+            gamePath: gamePathFromUrl,
             courseId: selection.courseId,
             courseName: selection.courseName,
             unitId: 'all',
@@ -187,36 +215,35 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             topicId: 'all',
             topicName: 'Tüm Konular',
         });
-        router.push(`/oyunlar/${finalGamePath}/oyun?${params.toString()}`);
+        router.push(`/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`);
         return;
     }
     
      if (dataType === 'ozetler' && unitId !== 'all') {
-         const selectedCourse = allCourses.find(c => c.id === selection.courseId);
-         const selectedUnit = selectedCourse?.units.find(u => u.id === unitId);
-         if (selectedUnit && (selectedUnit as any).hasUnitOzet) {
+         const selectedUnit = units.find(u => u.id === unitId);
+         if (selectedUnit && selectedUnit.hasUnitOzet) {
             router.push(`/${finalTargetPath}/${unitId}`);
             return;
          }
     }
 
-
     setIsLoading(true);
     setTimeout(() => {
-        const selectedCourse = allCourses.find(c => c.id === selection.courseId);
-        const selectedUnit = selectedCourse?.units.find(u => u.id === unitId);
+        const selectedUnit = units.find(u => u.id === unitId);
         setTopics(selectedUnit?.topics || []);
         setIsLoading(false);
-        setCurrentStep(3);
+        setCurrentStep(4);
     }, 300);
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
       let url = '';
-      if (dataType === 'games') {
+      const gamePathFromUrl = new URLSearchParams(window.location.search).get('gamePath') || finalGamePath;
+      
+      if (dataType === 'games' && gamePathFromUrl) {
           const params = new URLSearchParams({
             gameName: finalGameName,
-            gamePath: finalGamePath,
+            gamePath: gamePathFromUrl,
             courseId: selection.courseId,
             courseName: selection.courseName,
             unitId: selection.unitId,
@@ -224,7 +251,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             topicId: topicId,
             topicName: topicName,
           });
-          url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+          url = `/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`;
       } else {
           url = `/${finalTargetPath}/${topicId}`;
       }
@@ -233,30 +260,63 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
 
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
-      else router.back();
+      else router.push(getBackUrl());
+  };
+  
+  const getBackUrl = () => {
+    if (targetPath.startsWith('student')) return '/student';
+    return '/';
+  };
+
+  const formatGroupName = (name: string) => {
+    if (!isNaN(parseInt(name))) {
+        return `${name}. Sınıf`;
+    }
+    return name;
   };
 
   const renderStepContent = () => {
-      if (isLoading) return <div className="flex flex-col items-center justify-center h-48 md:h-96 gap-4"><Loader2 className="h-10 w-10 md:h-20 md:w-20 text-cyan-400 animate-spin"/><p className="text-sm md:text-2xl font-bold text-cyan-200">İçerik Yükleniyor...</p></div>;
-
+      if (isLoading) {
+          return (
+              <div className="flex flex-col items-center justify-center h-48 md:h-96 gap-4">
+                  <Loader2 className="h-10 w-10 md:h-20 md:w-20 text-cyan-400 animate-spin"/>
+                  <p className="text-sm md:text-2xl font-bold text-cyan-200">İçerik Yükleniyor...</p>
+              </div>
+          );
+      }
+      
       switch(currentStep) {
           case 1:
             return (
                 <div className="grid grid-cols-1 gap-3 md:gap-6">
-                    {allCourses.length > 0 ? allCourses.map((course, idx) => (
+                    {allClassGroups.length > 0 ? allClassGroups.map((group, idx) => (
+                        <SelectionCard 
+                            key={group.name}
+                            title={formatGroupName(group.name)}
+                            icon={Users}
+                            color={getGradient(idx)}
+                            onClick={() => handleSelectClass(group)}
+                            delay={idx * 50}
+                        />
+                    )) : <p className="text-center text-slate-500 py-10">Müfredat içeriği bulunamadı.</p>}
+                </div>
+            );
+          case 2:
+            return (
+                <div className="grid grid-cols-1 gap-3 md:gap-6">
+                    {courses.map((course, idx) => (
                         <SelectionCard 
                             key={course.id}
                             title={course.title}
-                            subtitle={course.className}
                             icon={course.icon || Book}
                             color={course.color || getGradient(idx)}
                             onClick={() => handleSelectCourse(course)}
                             delay={idx * 50}
                         />
-                    )) : <p className="text-center text-slate-500 py-10">Bu bölüm için uygun ders bulunmuyor.</p>}
+                    ))}
                 </div>
             );
-          case 2:
+          case 3:
             return (
                 <div className="grid grid-cols-1 gap-3 md:gap-6">
                     {dataType === 'games' && (
@@ -281,7 +341,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     ))}
                 </div>
             );
-          case 3:
+          case 4:
             return (
                 <div className="grid grid-cols-1 gap-3 md:gap-6">
                     {dataType === 'games' && (
@@ -339,7 +399,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
-                {steps.slice(0, 3).map((step) => {
+                {steps.map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -357,7 +417,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
             <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
-                    <span className="md:hidden">{steps.find(s => s.id === currentStep)?.name} Seçimi</span>
+                    <span className="md:hidden">{steps.find(s => s.id === currentStep)?.name} Seç</span>
                     
                     <span className="hidden md:flex items-center gap-2">
                          {steps.find(s => s.id === currentStep)?.icon && (
@@ -370,7 +430,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                 </h2>
                 
                 <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                    {currentStep} / {steps.length}
+                    Adım {currentStep} / {steps.length}
                 </div>
             </div>
             <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
@@ -378,11 +438,16 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             </div>
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
-                    {currentStep === 1 && "Bir ders seçerek başla."}
-                    {currentStep === 2 && "İlgili üniteyi seç."}
-                    {currentStep === 3 && "Son olarak, bir konu seç."}
+                    {currentStep === 1 && "Bir sınıf seçerek başla."}
+                    {currentStep === 2 && "İlgili dersi seç."}
+                    {currentStep === 3 && "Bir ünite seç."}
+                    {currentStep === 4 && "Son olarak, bir konu seç."}
                 </span>
-                <div className="flex gap-1 md:gap-2 shrink-0"><div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div><div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div><div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div></div>
+                <div className="flex gap-1 md:gap-2 shrink-0">
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
+                </div>
             </div>
         </GlassCard>
 
