@@ -14,7 +14,6 @@ import {
   where, 
   getDocs, 
   getCountFromServer,
-  limit 
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
@@ -31,27 +30,37 @@ export async function getEslestirmeAction(
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
+             try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+                if (res.ok) {
+                    const staticItems: ActivityItem[] = await res.json();
+                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                }
+             } catch (e) {
+                 console.warn("Could not fetch static activity file, will try Firestore.", e);
+             }
         }
         
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
+        if (allItems.length === 0) {
+            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
+            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
+            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
+            
+            const querySnapshot = await getDocs(baseQuery);
+            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+        }
 
-        if (allItems.length < 4) {
+        const validItems = allItems.filter(item => item.content?.term && item.content?.definition);
+
+        if (validItems.length < 4) {
             return { error: "Eşleştirme oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
         }
 
-        // Shuffle and pick 8 pairs for the game
-        const selectedItems = allItems.sort(() => 0.5 - Math.random());
+        const selectedItems = validItems.sort(() => 0.5 - Math.random());
 
         const gamePairs: MatchingPair[] = [];
         selectedItems.forEach((item, index) => {
@@ -60,7 +69,6 @@ export async function getEslestirmeAction(
             gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
         });
 
-        // Shuffle the final array so terms and definitions are mixed
         const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
 
         return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };

@@ -31,45 +31,48 @@ export async function getAdamAsmacaAction(
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+                if (res.ok) {
+                    const staticItems: ActivityItem[] = await res.json();
+                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                }
+            } catch (e) {
+                console.warn("Could not fetch static activity file, will try Firestore.", e);
+            }
         }
+        
+        if (allItems.length === 0) {
+            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
+            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
+            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
 
-        const querySnapshot = await getDocs(baseQuery);
+            const querySnapshot = await getDocs(baseQuery);
+            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+        }
         
-        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem);
-        
-        // Türkçe karakterleri ve sadece harfleri içeren Regex
-        // Boşluk (space) karakterine izin vermiyoruz çünkü Adam Asmaca genelde tek kelime veya bitişik kelimelerle daha iyi çalışır.
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
 
-        const suitableItems = allDefinitions.filter(item => 
+        const suitableItems = allItems.filter(item => 
             item.content &&
             item.content.term && 
             item.content.definition &&
-            item.content.term.trim().length >= 4 && // En az 4 harf (Çok kısa kelimeler sıkıcı olur)
-            item.content.term.trim().length <= 14 && // En çok 14 harf (Mobil ekrana sığması için)
-            !item.content.term.includes(' ') && // Tek kelime olmalı
-            turkishAlphabetRegex.test(item.content.term.trim()) // Sadece harf içermeli (Rakam/Sembol yok)
+            item.content.term.trim().length >= 4 && 
+            item.content.term.trim().length <= 14 && 
+            !item.content.term.includes(' ') && 
+            turkishAlphabetRegex.test(item.content.term.trim())
         );
 
         if (suitableItems.length < 3) {
             return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı.", data: null };
         }
         
-        // Fisher-Yates Shuffle
-        const shuffled = [...suitableItems];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-
+        const shuffled = [...suitableItems].sort(() => 0.5 - Math.random());
+        
         const gameData: HangmanData[] = shuffled.map(item => ({
             word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
             hint: item.content.definition!,
@@ -91,7 +94,6 @@ export async function submitAdamAsmacaScoreAction(
     if (!userId || score <= 0) return { success: true };
     
     try {
-        // 1. Limit Kontrolü
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
@@ -108,14 +110,9 @@ export async function submitAdamAsmacaScoreAction(
             };
         }
 
-        // 2. Batch İşlemi
         const batch = writeBatch(db);
-        
-        // Kullanıcı puanını güncelle
         const userRef = doc(db, 'users', userId);
         batch.update(userRef, { score: increment(score) });
-
-        // Etkinlik kaydını oluştur
         const eventRef = doc(collection(db, 'scoreEvents'));
         batch.set(eventRef, {
             userId: userId,
@@ -123,10 +120,7 @@ export async function submitAdamAsmacaScoreAction(
             timestamp: serverTimestamp(),
             gameType: 'Adam Asmaca',
             context: context,
-            metadata: {
-                platform: 'web',
-                version: '2.0'
-            }
+            metadata: { platform: 'web', version: '2.0' }
         });
 
         await batch.commit();

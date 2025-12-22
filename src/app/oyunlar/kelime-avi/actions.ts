@@ -14,7 +14,6 @@ import {
   where, 
   getDocs, 
   getCountFromServer,
-  limit 
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
@@ -26,20 +25,32 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
+        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
+             try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+                if (res.ok) {
+                    const staticItems: ActivityItem[] = await res.json();
+                    allItems = staticItems.filter(item => item.type === 'concept').map(item => ({ id: item.id, content: item.content }));
+                }
+             } catch (e) {
+                 console.warn("Could not fetch static activity file, will try Firestore.", e);
+             }
+        }
+        
+        if (allItems.length === 0) {
+            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
+            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
+            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
+            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
+
+            const querySnapshot = await getDocs(baseQuery);
+            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
         }
 
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allConcepts = querySnapshot.docs
-            .map(doc => (doc.data() as ActivityItem).content?.text)
+        const allConcepts = allItems
+            .map(item => item.content?.text)
             .filter((text): text is string => 
                 typeof text === 'string' && 
                 text.trim().length > 2 &&
@@ -52,7 +63,6 @@ export async function getKelimeAviAction(
             return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
         }
         
-        // Fisher-Yates Shuffle
         for (let i = allConcepts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [allConcepts[i], allConcepts[j]] = [allConcepts[j], allConcepts[i]];

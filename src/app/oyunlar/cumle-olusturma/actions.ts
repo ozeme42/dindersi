@@ -18,26 +18,23 @@ import {
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 
-export type MatchingPair = {
-    id: string;
-    type: 'term' | 'definition';
-    content: string;
-    pairId: string;
+export type ScrambledSentenceData = {
+    correctSentence: string;
 };
 
-export async function getHafizaKartlariAction(
+export async function getCumleOlusturmaAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
+): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
         let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-
+        
         if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
              try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
                 if (res.ok) {
                     const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                    allItems = staticItems.filter(item => item.type === 'sentence').map(item => ({ id: item.id, content: item.content }));
                 }
              } catch (e) {
                  console.warn("Could not fetch static activity file, will try Firestore.", e);
@@ -45,41 +42,40 @@ export async function getHafizaKartlariAction(
         }
         
         if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'sentence'));
             if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
             else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
             else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
-            
+
             const querySnapshot = await getDocs(baseQuery);
             allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
         }
 
-        const validItems = allItems.filter(item => item.content?.term && item.content?.definition);
+        const allSentences = allItems.map(item => item.content?.text)
+            .filter((text): text is string => typeof text === 'string' && text.trim().length > 0 && text.trim().split(' ').length > 2);
 
-        if (validItems.length < 4) {
-            return { error: "Hafıza Kartları oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
+        if (allSentences.length < 1) {
+            return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
+        }
+        
+        for (let i = allSentences.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
         }
 
-        const selectedItems = validItems.sort(() => 0.5 - Math.random());
+        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
+            correctSentence: sentence.trim(),
+        }));
 
-        const gamePairs: MatchingPair[] = [];
-        selectedItems.forEach((item, index) => {
-            const pairId = `pair-${index}`;
-            gamePairs.push({ id: `term-${index}`, type: 'term', content: item.content.term!, pairId });
-            gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
-        });
-
-        const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-
-        return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
+        return { data: JSON.parse(JSON.stringify(gameData)) };
 
     } catch (error: any) {
-        console.error("Server Action Error (getHafizaKartlariAction):", error);
-        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", pairs: null };
+        console.error("Server Action Error (getCumleOlusturmaAction):", error);
+        return { error: "Oyun verileri alınırken teknik bir hata oluştu.", data: null };
     }
 }
 
-export async function submitHafizaKartlariScoreAction(
+export async function submitCumleOlusturmaScoreAction(
     userId: string | null, 
     score: number, 
     context: string
@@ -90,7 +86,7 @@ export async function submitHafizaKartlariScoreAction(
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Hafıza Kartları'),
+            where('gameType', '==', 'Cümle Oluşturma'),
             where('context', '==', context)
         );
         
@@ -113,7 +109,7 @@ export async function submitHafizaKartlariScoreAction(
             userId: userId,
             points: score,
             timestamp: serverTimestamp(),
-            gameType: 'Hafıza Kartları',
+            gameType: 'Cümle Oluşturma',
             context: context,
         });
 
@@ -121,7 +117,7 @@ export async function submitHafizaKartlariScoreAction(
 
         return { success: true };
     } catch (error: any) {
-        console.error("Server Action Error (submitHafizaKartlariScoreAction):", error);
+        console.error("Server Action Error (submitCumleOlusturmaScoreAction):", error);
         return { success: false, error: "Skor kaydedilirken sunucu hatası oluştu." };
     }
 }

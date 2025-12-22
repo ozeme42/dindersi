@@ -27,37 +27,53 @@ export async function getConceptHuntAction(
 ): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
+        
+        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
+             try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+                if (res.ok) {
+                    const staticItems: ActivityItem[] = await res.json();
+                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                }
+             } catch (e) {
+                 // Ignore fetch errors in static mode, fallback to firestore if available
+                 console.warn("Could not fetch static activity file, will try Firestore.", e);
+             }
+        }
+        
+        if (allItems.length === 0) { // If static fetch fails or not in static mode
+            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+            if (topicId && topicId !== 'all') {
+                baseQuery = query(baseQuery, where("topicId", "==", topicId));
+            } else if (unitId && unitId !== 'all') {
+                baseQuery = query(baseQuery, where("unitId", "==", unitId));
+            } else if (courseId && courseId !== 'all') {
+                baseQuery = query(baseQuery, where("courseId", "==", courseId));
+            }
+
+            const querySnapshot = await getDocs(baseQuery);
+            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
         }
 
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
-            .filter(item => 
-                item.content?.term && 
-                item.content?.definition &&
-                item.content.term.trim().length > 2 &&
-                !item.content.term.includes(' ')
-            );
+        const validItems = allItems.filter(item => 
+            item.content?.term && 
+            item.content?.definition &&
+            item.content.term.trim().length > 2 &&
+            !item.content.term.includes(' ')
+        );
 
-        if (allItems.length < 1) { // Changed from 3 to 1 to allow smaller topics
+        if (validItems.length < 1) {
             return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
         }
         
-        // Fisher-Yates Shuffle
-        for (let i = allItems.length - 1; i > 0; i--) {
+        for (let i = validItems.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+            [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
         }
         
-        const anagramQuestions: Anagram[] = allItems.map(item => {
+        const anagramQuestions: Anagram[] = validItems.map(item => {
             const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
             return {
                 definition: item.content.definition!,
