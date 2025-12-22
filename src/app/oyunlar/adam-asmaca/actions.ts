@@ -14,7 +14,8 @@ import {
   collection, 
   query, 
   where, 
-  getCountFromServer 
+  getCountFromServer,
+  getDocs
 } from 'firebase/firestore';
 
 
@@ -24,39 +25,39 @@ export type HangmanData = {
 };
 
 export async function getAdamAsmacaAction(
-    { topicId }: { topicId?: string; }
+    { courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string; }
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-            return { error: "Adam Asmaca oynamak için belirli bir konu seçmelisiniz.", data: null };
+        if (!topicId && !unitId && !courseId) {
+            return { error: "Adam Asmaca oynamak için bir ders, ünite veya konu seçmelisiniz.", data: null };
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        let allItems: ActivityItem[] = [];
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            allItems = JSON.parse(fileContent);
-        } catch (fileError: any) {
-             if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", data: null };
-            }
-            throw fileError;
+        let q = query(collection(db, "activityItems"), where("type", "==", "definition"));
+
+        if (topicId && topicId !== 'all') {
+            q = query(q, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            q = query(q, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            q = query(q, where("courseId", "==", courseId));
         }
+
+        const querySnapshot = await getDocs(q);
         
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
 
-        const suitableItems = allItems.filter(item => 
-            item.type === 'definition' &&
-            item.content &&
-            item.content.term && 
-            item.content.definition &&
-            item.content.term.trim().length >= 4 && 
-            item.content.term.trim().length <= 14 && 
-            !item.content.term.includes(' ') && 
-            turkishAlphabetRegex.test(item.content.term.trim())
-        );
+        const suitableItems = querySnapshot.docs
+            .map(doc => doc.data() as ActivityItem)
+            .filter(item => 
+                item.content &&
+                item.content.term && 
+                item.content.definition &&
+                item.content.term.trim().length >= 4 && 
+                item.content.term.trim().length <= 14 && 
+                !item.content.term.includes(' ') && 
+                turkishAlphabetRegex.test(item.content.term.trim())
+            );
 
         if (suitableItems.length < 3) {
             return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (4-14 harf, boşluksuz, en az 3 adet).", data: null };
