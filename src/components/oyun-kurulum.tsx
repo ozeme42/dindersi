@@ -4,10 +4,9 @@
 import React, { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users, Gamepad2
+    Sparkles, Loader2, Feather, LayoutGrid, Users, Gamepad2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 
@@ -37,7 +36,8 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
-// --- MOBİL İÇİN KULLANILAN KART BİLEŞENİ ---
+// --- UI COMPONENTS ---
+
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
         "backdrop-blur-xl bg-[#0f172a]/80 border-2 border-white/10 rounded-xl md:rounded-[2.5rem] shadow-2xl overflow-hidden relative transition-all duration-300",
@@ -66,28 +66,30 @@ const SelectionCard = ({
     <button 
         onClick={onClick}
         className={cn(
-            "group relative w-full overflow-hidden rounded-xl md:rounded-3xl p-[2px] transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl text-left animate-in slide-in-from-bottom-4 fade-in fill-mode-forwards",
+            "group relative w-full h-full overflow-hidden rounded-xl md:rounded-3xl p-[2px] transition-all duration-300 text-left",
+            "hover:scale-[1.01] hover:-translate-y-1 hover:shadow-2xl",
+            "animate-in slide-in-from-bottom-4 fade-in fill-mode-forwards"
         )}
         style={{ animationDelay: `${delay}ms` }}
     >
-        <div className={cn("absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity bg-gradient-to-br", color)}></div>
+        <div className={cn("absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br", color)}></div>
         
-        <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
+        <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex flex-row items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br",
+                "h-10 w-10 md:h-16 md:w-16 lg:h-20 lg:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
                 color
             )}>
-                <Icon className="h-5 w-5 md:h-10 md:w-10 text-white drop-shadow-md" />
+                <Icon className="h-5 w-5 md:h-8 md:w-8 lg:h-10 lg:w-10 drop-shadow-md" />
             </div>
             
-            <div className="flex-grow min-w-0 flex flex-col justify-center">
+            <div className="flex-grow min-w-0 flex flex-col justify-center w-full">
                 {subtitle && (
-                    <div className="inline-block self-start px-2 py-0.5 rounded-full bg-white/10 text-[9px] md:text-xs font-bold text-slate-300 uppercase tracking-wider mb-0.5 md:mb-2 border border-white/10">
+                    <div className="inline-block self-start px-2 py-0.5 rounded-full bg-white/10 text-[9px] md:text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-0.5 md:mb-2 border border-white/10">
                         {subtitle}
                     </div>
                 )}
-                <h3 className="font-bold text-white text-sm md:text-3xl leading-snug truncate group-hover:text-cyan-300 transition-colors pr-1">
+                <h3 className="font-bold text-white text-sm md:text-lg lg:text-2xl leading-snug line-clamp-2 group-hover:text-cyan-100 transition-colors">
                     {title}
                 </h3>
             </div>
@@ -224,7 +226,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
      if (dataType === 'ozetler' && unitId !== 'all') {
          const selectedUnit = units.find(u => u.id === unitId);
          if (selectedUnit && selectedUnit.hasUnitOzet) {
-            router.push(`/${finalTargetPath}/${selection.courseId}/${unitId}`);
+            const urlPath = isStatic ? `ozetler` : `student/ozetler`;
+            router.push(`/${urlPath}/${selection.courseId}/${unitId}`);
             return;
          }
     }
@@ -256,7 +259,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           });
           url = `/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`;
       } else {
-          url = `/${finalTargetPath}/${selection.courseId}/${selection.unitId}/${topicId}`;
+          const urlPath = isStatic ? `${dataType}` : `student/${dataType}`;
+          url = `/${urlPath}/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
       router.push(url);
   };
@@ -267,7 +271,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   };
   
   const getBackUrl = () => {
-    if (user?.role === 'student') return '/student';
+    if (targetPath.startsWith('student')) return '/student';
     if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
     return '/';
   };
@@ -278,6 +282,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     }
     return name;
   };
+
+  const gridClass = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5";
 
   const renderStepContent = () => {
       if (isLoading) {
@@ -292,7 +298,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       switch(currentStep) {
           case 1:
             return (
-                <div className="grid grid-cols-1 gap-3 md:gap-6">
+                <div className={gridClass}>
                     {allClassGroups.length > 0 ? allClassGroups.map((group, idx) => (
                         <SelectionCard 
                             key={group.name}
@@ -302,12 +308,12 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                             onClick={() => handleSelectClass(group)}
                             delay={idx * 50}
                         />
-                    )) : <p className="text-center text-slate-500 py-10">Müfredat içeriği bulunamadı.</p>}
+                    )) : <p className="col-span-full text-center text-slate-500 py-10">Müfredat içeriği bulunamadı.</p>}
                 </div>
             );
           case 2:
             return (
-                <div className="grid grid-cols-1 gap-3 md:gap-6">
+                <div className={gridClass}>
                     {courses.map((course, idx) => (
                         <SelectionCard 
                             key={course.id}
@@ -322,7 +328,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             );
           case 3:
             return (
-                <div className="grid grid-cols-1 gap-3 md:gap-6">
+                <div className={gridClass}>
                     {dataType === 'games' && (
                         <SelectionCard 
                             key="all-units"
@@ -347,7 +353,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             );
           case 4:
             return (
-                <div className="grid grid-cols-1 gap-3 md:gap-6">
+                <div className={gridClass}>
                     {dataType === 'games' && (
                          <SelectionCard 
                             key="all-topics"
@@ -458,3 +464,5 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
+
+    

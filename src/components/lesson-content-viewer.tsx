@@ -124,7 +124,7 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
 
 // --- ALT BİLEŞENLER ---
 
-// 1. VisualPlayer (GÜNCELLENMİŞ: Başlık Kaldırıldı)
+// 1. VisualPlayer
 function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualStep, isMaximized: boolean, onToggleMaximize: () => void }) {
     
     useEffect(() => {
@@ -170,8 +170,6 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
                     priority
                 />
             </div>
-            
-            {/* BAŞLIK KISMI KALDIRILDI */}
         </div>
     );
 }
@@ -623,8 +621,11 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     let globalCharIndex = 0;
 
     return (
-        <div className={cn("text-center space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full", isTeacher ? "max-w-full justify-start pt-10" : "max-w-5xl justify-center")}>
-            <div className="bg-slate-800/50 p-4 md:p-10 rounded-3xl border-2 border-white/10 backdrop-blur-md w-full max-w-5xl">
+        <div className={cn(
+            "space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full",
+            isTeacher ? "max-w-full justify-center" : "max-w-5xl justify-center"
+        )}>
+            <div className="bg-slate-800/50 p-4 md:p-10 rounded-3xl border-2 border-white/10 backdrop-blur-md w-full max-w-5xl text-center">
                  <p className={cn("font-bold italic text-cyan-100", isTeacher ? "text-4xl leading-snug" : "text-lg md:text-3xl")}>"{step.definition}"</p>
             </div>
              
@@ -646,7 +647,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                     className={cn(
                                         "rounded-lg md:rounded-xl flex items-center justify-center font-black cursor-pointer shadow-md transition-all border-b-2 md:border-b-4",
                                         // MOBIL: w-8 h-10 text-lg, DESKTOP: w-12 h-16 text-3xl
-                                        isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-16 md:w-12 md:text-3xl",
+                                        isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-16 md:w-12 md:text-3xl md:border-b-4 text-sm",
                                         letterObj 
                                             ? "bg-white text-slate-900 border-slate-300 active:translate-y-1 active:border-b-0"
                                             : "bg-white/5 border-white/10 text-white/20 border-dashed border-2"
@@ -674,7 +675,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                     colorClass,
                                     // MOBIL: h-12 w-10 text-xl, DESKTOP: h-16 w-14 text-3xl
                                     isTeacher ? "h-20 w-16 text-4xl rounded-2xl border-b-8" : "h-12 w-10 text-xl md:h-16 md:w-14 md:text-3xl md:border-b-8",
-                                    shakingLetterId === item.id && "animate-shake ring-4 ring-red-500 ring-opacity-50"
+                                    shakingLetterId === item.id && "animate-shake bg-red-600 border-red-800 hover:bg-red-600 !bg-none"
                                 )}
                             >
                                 {item.letter}
@@ -931,6 +932,137 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
     );
 }
 
+// 10. DrawingCanvas (YENİ: Çizim Katmanı Bileşeni)
+function DrawingCanvas() {
+    const isTeacher = useTeacherMode(); // ÖĞRETMEN KONTROLÜ
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [isPenMode, setIsPenMode] = useState(false);
+    const [color, setColor] = useState('#facc15'); // Varsayılan Sarı
+    const [isDrawing, setIsDrawing] = useState(false);
+    const lastPos = useRef<{ x: number, y: number } | null>(null);
+
+    // Canvas Boyutlandırma
+    useEffect(() => {
+        const handleResize = () => {
+            if (canvasRef.current) {
+                canvasRef.current.width = window.innerWidth;
+                canvasRef.current.height = window.innerHeight;
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // KAPATINCA SİLME İŞLEMİ
+    const clearCanvas = () => {
+        if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d');
+            ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        }
+    };
+
+    useEffect(() => {
+        if (!isPenMode) {
+            clearCanvas();
+        }
+    }, [isPenMode]);
+
+
+    // Çizim Fonksiyonları
+    const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!isPenMode) return;
+        const { x, y } = getCoords(e);
+        setIsDrawing(true);
+        lastPos.current = { x, y };
+    };
+
+    const draw = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!isDrawing || !isPenMode || !lastPos.current || !canvasRef.current) return;
+        e.preventDefault(); // Kaydırmayı engelle
+        const ctx = canvasRef.current.getContext('2d');
+        if (!ctx) return;
+
+        const { x, y } = getCoords(e);
+
+        ctx.beginPath();
+        ctx.moveTo(lastPos.current.x, lastPos.current.y);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+
+        lastPos.current = { x, y };
+    };
+
+    const stopDrawing = () => {
+        setIsDrawing(false);
+        lastPos.current = null;
+    };
+
+    const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
+        if ('touches' in e) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        } else {
+            return { x: (e as React.MouseEvent).clientX, y: (e as React.MouseEvent).clientY };
+        }
+    };
+
+    // EĞER ÖĞRETMEN DEĞİLSE HİÇBİR ŞEY GÖSTERME
+    if (!isTeacher) return null;
+
+    return (
+        <>
+            {/* CANVAS KATMANI */}
+            <canvas
+                ref={canvasRef}
+                className={cn(
+                    "fixed inset-0 z-[100] touch-none",
+                    isPenMode ? "pointer-events-auto cursor-crosshair" : "pointer-events-none"
+                )}
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                onMouseLeave={stopDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={stopDrawing}
+            />
+
+            {/* ARAÇ ÇUBUĞU (Sağ Alt) */}
+            <div className="fixed bottom-24 right-6 z-[101] flex flex-col items-end gap-3">
+                {isPenMode && (
+                    <div className="flex flex-col gap-2 bg-slate-800/90 p-3 rounded-full border border-slate-600 backdrop-blur animate-in slide-in-from-bottom-5 fade-in zoom-in">
+                        <button onClick={() => setColor('#facc15')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#facc15' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#facc15' }} />
+                        <button onClick={() => setColor('#ef4444')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#ef4444' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#ef4444' }} />
+                        <button onClick={() => setColor('#22c55e')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#22c55e' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#22c55e' }} />
+                        <button onClick={() => setColor('#3b82f6')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#3b82f6' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#3b82f6' }} />
+                        <button onClick={() => setColor('#ffffff')} className={cn("w-8 h-8 rounded-full border-2 border-slate-400 transition-transform hover:scale-110", color === '#ffffff' && "scale-125 ring-2 ring-slate-400")} style={{ backgroundColor: '#ffffff' }} />
+                        <div className="h-[1px] w-full bg-slate-500 my-1"></div>
+                        <button onClick={clearCanvas} className="w-8 h-8 flex items-center justify-center text-white hover:text-red-400 transition-colors" title="Temizle">
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                )}
+
+                <Button
+                    onClick={() => setIsPenMode(!isPenMode)}
+                    className={cn(
+                        "w-14 h-14 rounded-full shadow-2xl border-2 transition-all hover:scale-110 flex items-center justify-center",
+                        isPenMode 
+                            ? "bg-yellow-500 text-slate-900 border-white hover:bg-yellow-400" 
+                            : "bg-slate-700 text-slate-200 border-slate-500 hover:bg-slate-600"
+                    )}
+                >
+                    {isPenMode ? <X className="w-6 h-6" /> : <Feather className="w-6 h-6" />}
+                </Button>
+            </div>
+        </>
+    );
+}
+
 // --- ANA BİLEŞEN: StepContent ---
 
 export function StepContent({ 
@@ -970,9 +1102,14 @@ export function StepContent({
             case 'activityLink':
                 const activityStep = step as ActivityLinkStep;
                 const params = new URLSearchParams({
-                    courseId: courseId, unitId: unitId, topicId: topic.id,
-                    courseName: courseTitle, unitName: unitTitle, topicName: topic.title,
-                    embedded: 'true', autoStart: 'true'
+                    courseId: activityStep.courseId || courseId,
+                    unitId: activityStep.unitId || unitId,
+                    topicId: activityStep.topicId || topic.id,
+                    courseName: courseTitle,
+                    unitName: unitTitle,
+                    topicName: topic.title,
+                    embedded: 'true', 
+                    autoStart: 'true'
                 });
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
                 return (
@@ -1047,8 +1184,8 @@ export function StepContent({
                                         disabled={!!answer}
                                     >
                                             <span className={cn(
-                                                "flex shrink-0 items-center justify-center rounded-xl font-bold border", 
-                                                isTeacher ? "h-14 w-14 text-2xl mr-6" : "h-8 w-8 text-sm mr-4",
+                                                "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
+                                                isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
                                                 !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
@@ -1130,7 +1267,7 @@ export function StepContent({
                     </div>
                 );
             }
-            case 'anagram': return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer}/>;
+            case 'anagram': return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer} onCorrectAndNext={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
             
             // --- EKLENEN KISIM: Kelime Dahası (AnagramGamePlayer) ---
             case 'anagramGame': 
@@ -1194,6 +1331,17 @@ export function LessonContentViewer({
     // --- RESUME (KALINAN YERDEN DEVAM) ---
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+
+    const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
+    
+    useEffect(() => {
+        if (currentStep?.type === 'visual') {
+            setIsVisualMaximized(true);
+        } else if (isVisualMaximized) {
+            setIsVisualMaximized(false);
+        }
+    }, [currentStep]);
+
 
     useEffect(() => {
         if (topic) {
@@ -1269,7 +1417,6 @@ export function LessonContentViewer({
 
     useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
-    const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
      
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
@@ -1458,19 +1605,25 @@ export function LessonContentViewer({
         showContinueButton = revealedSentencesCount < totalItems;
     }
 
+    // GÜNCELLENEN KISIM: 
+    // isHtmlSlideStep de bu koşula eklendi.
     const showFloatingButton = isFullWidthStep && (
-        isHtmlSlideStep || 
-        (isActivityStep && isStepCompleted) || 
-        (currentStep?.type === 'visual' && isVisualMaximized)
+        (isActivityStep && (isStepCompleted || isTeacher)) || 
+        (currentStep?.type === 'visual' && isVisualMaximized) ||
+        isHtmlSlideStep
     );
+    
+    // GÜNCELLENEN KISIM: Öğrenci bir aktivitedeyse alt barı tamamen gizle
+    const isStudentInActivity = isActivityStep && !isTeacher;
 
-    // Yeni Özellik: "Immersive" (Sürükleyici) Adım Kontrolü
-    // Visual veya HTML slide ise ve öğretmen tam ekrandaysa, alt menüyü gizle (hover ile göster)
     const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
 
     return (
       <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
         
+        {/* YENİ: Çizim Katmanı */}
+        <DrawingCanvas />
+
         {showResumeDialog && (
             <div className="absolute inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
                 <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-white animate-in zoom-in-95">
@@ -1487,8 +1640,6 @@ export function LessonContentViewer({
         )}
 
         {/* --- İÇERİK ALANI --- */}
-        {/* Fullscreen ve Teacher modunda alt bar sabit olacağı için padding-bottom ekliyoruz. 
-            Ancak immersive modda (visual/html) padding gerekmez çünkü overlay olacak. */}
         <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
@@ -1525,93 +1676,98 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* --- ALT MENÜ VE KONTROLLER (GÜNCELLENMİŞ) --- */}
-        <div className={cn(
-            "flex-shrink-0 flex justify-between items-center z-30",
-            // ÖĞRETMEN MODU + FULLSCREEN İÇİN ÖZEL STİL: 
-            isTeacher && isFullscreen 
-                ? (isImmersiveStep 
-                    // Visual/HTML ise: Transparan, hover ile görünür, border yok.
-                    ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none"
-                    // Diğer adımlar (Test vs) ise: Sabit, koyu zemin, border var.
-                    : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10"
-                  )
-                : (isFullscreen 
-                    // Öğrenci Fullscreen -> Gizli (Hover)
-                    ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" 
-                    // Normal -> Sabit
-                    : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md"
-                  )
-        )}>
-             <div className="flex items-center gap-4 flex-1">
-                 <Button 
-                    variant="outline" 
-                    size={isTeacher && isFullscreen ? "lg" : "sm"}
-                    onClick={handlePrev} 
-                    disabled={currentStepIndex === 0} 
-                    className={cn(
-                        "border-white/10 hover:bg-white/5 text-slate-300 hover:text-white",
-                        isTeacher && isFullscreen && "text-lg font-bold border-2"
-                    )}
-                >
-                    <ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
-                    Geri
-                </Button>
-                
-                {/* İlerleme Çubuğu */}
-                <div className="hidden md:flex items-center gap-2">
-                    <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
-                    <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
-                </div>
-             </div>
-
-            <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
-
-            <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
-                
-                {/* --- GLOBAL "ADIMI ATLA" TUŞU (Sadece Öğretmen) --- */}
-                {isTeacher && (
+        {/* --- ALT MENÜ VE KONTROLLER (HOVER) --- */}
+        {/* GÜNCELLEME: Öğrenci bir aktivitede değilse bu bloğu göster */}
+        {!isStudentInActivity && (
+            <div className={cn(
+                "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300",
+                isFullWidthStep 
+                    ? "absolute bottom-0 left-0 right-0 h-16 px-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100" 
+                    : (isTeacher && isFullscreen 
+                        ? (isImmersiveStep 
+                            ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none"
+                            : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10"
+                        )
+                        : (isFullscreen 
+                            ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" 
+                            : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md"
+                        )
+                    )
+            )}>
+                <div className="flex items-center gap-4 flex-1">
                     <Button 
-                        variant="ghost" 
-                        size={isTeacher && isFullscreen ? "default" : "sm"}
-                        onClick={handleNext} 
+                        variant="outline" 
+                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        onClick={handlePrev} 
+                        disabled={currentStepIndex === 0} 
                         className={cn(
-                            "text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors",
-                            isTeacher && isFullscreen && "text-base font-semibold"
+                            "border-white/10 hover:bg-white/5 text-slate-300 hover:text-white",
+                            isTeacher && isFullscreen && "text-lg font-bold border-2"
                         )}
-                        title="Bu adımı zorla geç (Puan verilmez)"
                     >
-                        <FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> 
-                        Atla
+                        <ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                        Geri
                     </Button>
-                )}
+                    
+                    {/* İlerleme Çubuğu */}
+                    <div className="hidden md:flex items-center gap-2">
+                        <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
+                        <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
+                    </div>
+                </div>
 
-                <Button 
-                    size={isTeacher && isFullscreen ? "lg" : "sm"}
-                    onClick={handleContinueOrNext} 
-                    disabled={!isNextButtonEnabled} 
-                    className={cn(
-                        "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
-                        showContinueButton ? "px-6" : "px-4",
-                        isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
+                <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
+
+                <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
+                    
+                    {/* --- GLOBAL "ADIMI ATLA" TUŞU (Sadece Öğretmen) --- */}
+                    {isTeacher && (
+                        <Button 
+                            variant="ghost" 
+                            size={isTeacher && isFullscreen ? "default" : "sm"}
+                            onClick={handleNext} 
+                            className={cn(
+                                "text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors",
+                                isTeacher && isFullscreen && "text-base font-semibold"
+                            )}
+                            title="Bu adımı zorla geç (Puan verilmez)"
+                        >
+                            <FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> 
+                            Atla
+                        </Button>
                     )}
-                >
-                    {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
-                    <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
-                </Button>
+
+                    <Button 
+                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        onClick={handleContinueOrNext} 
+                        disabled={!isNextButtonEnabled}  // <-- isAnimating kaldırıldı
+                        className={cn(
+                            "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
+                            showContinueButton ? "px-6" : "px-4",
+                            isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
+                        )}
+                    >
+                        {/* isAnimating Loader kaldırıldı */}
+                        {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
+                        <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                    </Button>
+                </div>
             </div>
-        </div>
+        )}
 
         {showFloatingButton && (
             <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
                 <Button 
                     size="lg" 
-                    onClick={handleNext} 
+                    onClick={handleNext}
                     className={cn(
                         "text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all",
                         (isActivityStep && isStepCompleted) 
                             ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" 
-                            : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30" 
+                            : (isTeacher && isActivityStep
+                                ? "bg-amber-600 hover:bg-amber-500 border-amber-800/50 shadow-amber-900/30"
+                                : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30"
+                            )
                     )}
                 >
                     {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
