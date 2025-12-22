@@ -142,34 +142,37 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const fetchManifest = useCallback(async () => {
     setIsLoading(true);
     try {
-        // isStatic ise user bekleme, değilse bekle
-        if (!isStatic && !user) return; 
+      if (!isStatic && !user) {
+        // If not static and no user, don't fetch yet. Auth will redirect.
+        setIsLoading(false);
+        return;
+      }
+      
+      const res = await getCurriculumForSelection(dataType, isStatic, user?.uid);
+      if (res.error) throw new Error(res.error);
 
-        const res = await getCurriculumForSelection(dataType, isStatic, user?.uid);
-        if(res.error) throw new Error(res.error);
-
-        const enrichedClassGroups = (res.classGroups || []).map((group: any, groupIndex: number) => ({
-            ...group,
-            courses: group.courses.map((course: any, courseIndex: number) => ({
-                ...course,
-                icon: ICONS[courseIndex % ICONS.length],
-                color: getGradient(courseIndex),
-                className: group.name,
-            }))
-        }));
-        
-        setAllClassGroups(enrichedClassGroups);
+      const enrichedClassGroups = (res.classGroups || []).map((group: any, groupIndex: number) => ({
+          ...group,
+          courses: group.courses.map((course: any, courseIndex: number) => ({
+              ...course,
+              icon: ICONS[courseIndex % ICONS.length],
+              color: getGradient(courseIndex),
+              className: group.name,
+          }))
+      }));
+      
+      setAllClassGroups(enrichedClassGroups);
 
     } catch (error) {
-        console.error(error);
+      console.error(error);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
-}, [user, dataType, isStatic]);
+  }, [user, dataType, isStatic]);
 
-useEffect(() => {
-    fetchManifest();
-}, [fetchManifest]);
+  useEffect(() => {
+      fetchManifest();
+  }, [fetchManifest]);
 
   const handleSelectClass = (group: ClassGroup) => {
     setSelection({ 
@@ -269,15 +272,10 @@ useEffect(() => {
 
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
-      else router.push(getBackUrl());
   };
   
   const getBackUrl = () => {
-    if (!targetPath) {
-        if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
-        return '/student';
-    }
-    if (targetPath.startsWith('student')) return '/student';
+    if (targetPath && targetPath.startsWith('student')) return '/student';
     if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
     return '/';
   };
@@ -391,12 +389,9 @@ useEffect(() => {
     <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 md:pb-10 font-sans text-white">
         
         <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
-            <button 
-                onClick={handleBack}
-                className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
-            >
+            <Link href="/oyunlar" className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0">
                 <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
-            </button>
+            </Link>
             <div className="text-center mx-2 overflow-hidden flex-1">
                 <div className="flex items-center justify-center gap-2">
                     <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl"><PageIcon className="h-8 w-8 text-blue-400" /></div>
@@ -454,7 +449,7 @@ useEffect(() => {
             </div>
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
-                    {currentStep === 1 && "Bir ders seçerek başla."}
+                    {currentStep === 1 && "Bir sınıf seçerek başla."}
                     {currentStep === 2 && `${selection.className} için bir ders seç.`}
                     {currentStep === 3 && `${selection.courseName} dersi için bir ünite seç.`}
                     {currentStep === 4 && `${selection.unitName} ünitesi için bir konu seç.`}
