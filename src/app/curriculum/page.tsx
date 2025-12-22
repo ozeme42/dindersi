@@ -1,3 +1,4 @@
+
 // @/app/curriculum/page.tsx
 'use client';
 
@@ -8,7 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-type Topic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean };
+type Topic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean; hasUnitOzet?: boolean; };
 type Unit = { id: string; title: string; hasUnitOzet: boolean; topics: Topic[] };
 type Course = { id: string; title: string; units: Unit[] };
 type ClassGroup = { name: string; courses: Course[] };
@@ -116,7 +117,7 @@ export default function PublicCurriculumPage() {
                                                                 <ChevronRight className="h-4 w-4 text-slate-600 transition-transform duration-200 group-data-[state=open]/unit:rotate-90"/>
                                                                 <span className="flex-1 text-left">{unit.title}</span>
                                                                 {unit.hasUnitOzet && (
-                                                                    <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-6 px-2 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
+                                                                    <Link href={`/ozetler/${unit.id}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-6 px-2 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
                                                                         <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
                                                                     </Link>
                                                                 )}
@@ -128,12 +129,12 @@ export default function PublicCurriculumPage() {
                                                                     <p className="font-medium text-sm text-slate-300">{topic.title}</p>
                                                                     <div className="flex gap-2">
                                                                         {topic.hasYazilacaklarContent && (
-                                                                            <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}>
+                                                                            <Link href={`/yazilacaklar/${topic.id}`}>
                                                                                 <Button variant="secondary" size="sm" className="h-7 px-3 text-xs bg-sky-600 hover:bg-sky-500 text-white"><Columns className="mr-1.5 h-3 w-3"/> Notlar</Button>
                                                                             </Link>
                                                                         )}
                                                                         {topic.hasOzetContent && (
-                                                                             <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}>
+                                                                             <Link href={`/ozetler/${topic.id}`}>
                                                                                 <Button variant="secondary" size="sm" className="h-7 px-3 bg-purple-600 hover:bg-purple-500 text-white"><FileText className="mr-1.5 h-3 w-3"/> Özet</Button>
                                                                             </Link>
                                                                         )}

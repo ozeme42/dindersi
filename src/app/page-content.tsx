@@ -190,7 +190,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                                     <span>{unit.title}</span>
                                                                                 </AccordionTrigger>
                                                                                 {unit.hasUnitOzet && (
-                                                                                    <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()}>
+                                                                                    <Link href={`/ozetler/${unit.id}`} onClick={(e) => e.stopPropagation()}>
                                                                                         <Button variant="outline" size="sm" className="h-6 px-2 text-xs bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
                                                                                             <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
                                                                                         </Button>
@@ -208,12 +208,12 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                                         </div>
                                                                                         <div className="flex gap-2 self-end sm:self-center">
                                                                                             {topic.hasYazilacaklarContent && (
-                                                                                                <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
+                                                                                                <Link href={`/yazilacaklar/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <Columns className="h-3 w-3"/> Notlar
                                                                                                 </Link>
                                                                                             )}
                                                                                             {topic.hasOzetContent && (
-                                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
+                                                                                                <Link href={`/ozetler/${topic.id}`} className="flex items-center gap-1 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <BookOpen className="h-3 w-3"/> Özet
                                                                                                 </Link>
                                                                                             )}

@@ -43,11 +43,17 @@
         }
         .notes-cell:hover { background-color: rgba(30, 41, 59, 1); }
 
-        /* --- MASONRY (KAVRAMLAR) --- */
-        .masonry-grid { column-count: 1; column-gap: 1.5rem; }
-        @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
-        @media (min-width: 1280px) { .masonry-grid { column-count: 3; } }
-        .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
+        /* --- KAVRAMLAR IZGARA (GRID) DÜZENİ --- */
+        /* Değişiklik: Masonry yerine Standart Grid kullanıldı */
+        .concepts-grid { 
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        @media (min-width: 768px) { .concepts-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1280px) { .concepts-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1600px) { .concepts-grid { grid-template-columns: repeat(4, 1fr); } }
 
         /* --- NUMARALANDIRMA --- */
         .note-number {
@@ -130,7 +136,7 @@
             </div>
             
             <div id="class-tabs" class="flex flex-wrap justify-center gap-3 mb-10 fade-in"></div>
-            <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 fade-in"></div>
+            <div id="courses-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto fade-in"></div>
         </div>
 
         <div id="view-notes" class="view-section hidden w-full">
@@ -163,8 +169,8 @@
     </div>
 
     <script src="database.js"></script>
-    <script src="icerik.js?v=final3"></script>
-    <script src="oyunlar.js?v=final3"></script>
+    <script src="icerik.js?v=final5"></script>
+    <script src="oyunlar.js?v=final5"></script>
 
     <script>
         // --- FONT KONTROLÜ ---
@@ -303,14 +309,14 @@
                 document.getElementById('note-title').textContent = d.name;
                 let html = '';
                 
-                // 1. KAVRAMLAR (MASONRY)
+                // 1. KAVRAMLAR (GRID - SOLDAN SAĞA)
                 if(d.definitions.length) {
                     let counter = 0;
                     html += `
                     <div class="fade-in mb-12">
                         <h3 class="text-3xl font-black text-yellow-400 mb-8 flex items-center gap-4"><span class="bg-yellow-500/20 p-3 rounded-2xl">💡</span> Temel Kavramlar</h3>
-                        <div class="masonry-grid concepts-list">
-                            ${d.definitions.map(x => { counter++; return `<div class="concept-card glass-card p-8 rounded-3xl mb-8 break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500"><div class="concept-number">${counter}</div><h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4><p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p></div>`; }).join('')}
+                        <div class="concepts-grid">
+                            ${d.definitions.map(x => { counter++; return `<div class="concept-card glass-card p-8 rounded-3xl break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500"><div class="concept-number">${counter}</div><h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4><p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p></div>`; }).join('')}
                         </div>
                     </div>`;
                 }
@@ -348,49 +354,29 @@
             const defs = data.definitions;
             if (!defs || defs.length === 0) { alert("Bu oyun için veri eksik."); return; }
             
-            // EŞLEŞTİRME OYUNUNDA SÜTUNLARI DÜZENLE (TANIMLAR SOLA, KAVRAMLAR SAĞA)
+            // EŞLEŞTİRME ÖZEL
             if (type === 'matching') {
                 const stage = document.getElementById('game-stage');
                 if (!defs || defs.length < 2) { alert("En az 2 kavram gerekli."); return; }
                 const modal = document.getElementById('game-modal'); const title = document.getElementById('modal-game-title'); const score = document.getElementById('game-score');
                 modal.classList.remove('hidden'); score.textContent = "Puan: 0"; title.textContent = 'EŞLEŞTİRME';
                 
-                // --- MANUAL EŞLEŞTİRME OYUNU BAŞLATMA (ÖZEL) ---
-                window.GameEngine.state.score = 0;
-                window.GameEngine.state.selectedLeft = null;
-                window.GameEngine.state.selectedRight = null;
-                window.GameEngine.state.matchesFound = 0;
-                const subset = defs.slice(0, 6);
-                window.GameEngine.state.totalMatches = subset.length;
+                window.GameEngine.state.score = 0; window.GameEngine.state.selectedLeft = null; window.GameEngine.state.selectedRight = null; window.GameEngine.state.matchesFound = 0;
+                const subset = defs.slice(0, 6); window.GameEngine.state.totalMatches = subset.length;
                 let leftList = [], rightList = [];
-                
-                subset.forEach((item, index) => {
-                    // *** DEĞİŞİKLİK BURADA: SOLA TANIMLAR, SAĞA KAVRAMLAR ***
-                    leftList.push({ id: index, text: item.definition });
-                    rightList.push({ id: index, text: item.term || item.concept });
-                });
-                
-                leftList.sort(() => 0.5 - Math.random());
-                rightList.sort(() => 0.5 - Math.random());
+                subset.forEach((item, index) => { leftList.push({ id: index, text: item.definition }); rightList.push({ id: index, text: item.term || item.concept }); });
+                leftList.sort(() => 0.5 - Math.random()); rightList.sort(() => 0.5 - Math.random());
 
                 stage.innerHTML = `
                     <div class="w-full max-w-[1400px] fade-in">
                         <div class="match-container">
-                            <div class="match-col" id="col-left">
-                                <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">TANIMLAR</h4>
-                                ${leftList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'left')" data-id="${item.id}">${item.text}</div>`).join('')}
-                            </div>
-                            <div class="match-col" id="col-right">
-                                <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">KAVRAMLAR</h4>
-                                ${rightList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'right')" data-id="${item.id}">${item.text}</div>`).join('')}
-                            </div>
+                            <div class="match-col" id="col-left"><h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">TANIMLAR</h4>${leftList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'left')" data-id="${item.id}">${item.text}</div>`).join('')}</div>
+                            <div class="match-col" id="col-right"><h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">KAVRAMLAR</h4>${rightList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'right')" data-id="${item.id}">${item.text}</div>`).join('')}</div>
                         </div>
-                    </div>
-                `;
-                return; // Eşleştirme özel başlatıldı, çık.
+                    </div>`;
+                return;
             }
 
-            // Diğer oyunlar için normal akış
             const modal = document.getElementById('game-modal'); const title = document.getElementById('modal-game-title'); const score = document.getElementById('game-score');
             modal.classList.remove('hidden'); score.textContent = "Puan: 0";
             if (type === 'quiz') { title.textContent = 'KAVRAM YARIŞMASI'; GameEngine.startQuiz(defs); }
