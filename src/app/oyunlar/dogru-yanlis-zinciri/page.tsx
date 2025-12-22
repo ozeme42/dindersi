@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Link2, Loader2 } from 'lucide-react';
 
 function DogruYanlisZinciriPage() {
@@ -11,6 +11,7 @@ function DogruYanlisZinciriPage() {
             gameName="Doğru/Yanlış Zinciri"
             gameIcon={Link2}
             gamePath="dogru-yanlis-zinciri"
+            dataType="games"
         />
     );
 }

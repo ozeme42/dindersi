@@ -3,7 +3,7 @@
 
 import React, { Suspense } from 'react';
 import { BookOpen, Loader2 } from 'lucide-react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 
 
 function OzetlerPage() {

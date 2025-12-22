@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Puzzle, Loader2 } from 'lucide-react';
 
 function EslestirmePage() {
@@ -11,6 +11,7 @@ function EslestirmePage() {
             gameName="Eşleştirme"
             gameIcon={Puzzle}
             gamePath="eslestirme"
+            dataType="games"
         />
     );
 }

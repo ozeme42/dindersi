@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 
 function KavramYarismasiPage() {
@@ -11,6 +11,7 @@ function KavramYarismasiPage() {
             gameName="Kavram Yarışması"
             gameIcon={BrainCircuit}
             gamePath="kavram-yarismasi"
+            dataType="games"
         />
     );
 }

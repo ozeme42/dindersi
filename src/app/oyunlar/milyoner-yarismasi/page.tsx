@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Trophy, Loader2 } from 'lucide-react';
 
 function MilyonerPage() {
@@ -11,6 +11,7 @@ function MilyonerPage() {
             gameName="Kim 1000 Puan İster?"
             gameIcon={Trophy}
             gamePath="milyoner-yarismasi"
+            dataType="games"
         />
     );
 }

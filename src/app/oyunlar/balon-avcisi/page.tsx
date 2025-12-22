@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Target, Loader2 } from 'lucide-react';
 
 function BalonAvcisiPage() {
@@ -11,6 +11,7 @@ function BalonAvcisiPage() {
             gameName="Balon Avcısı"
             gameIcon={Target}
             gamePath="balon-avcisi"
+            dataType="games"
         />
     );
 }

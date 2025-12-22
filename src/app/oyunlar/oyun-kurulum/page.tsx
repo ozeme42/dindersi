@@ -4,7 +4,7 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { Gamepad2 } from 'lucide-react';
-import OyunKurulum from './SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 
 
 function OyunKurulumWrapper() {

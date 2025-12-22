@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Shuffle, Loader2 } from 'lucide-react';
 
 function CumleOlusturmaPage() {
@@ -11,6 +11,7 @@ function CumleOlusturmaPage() {
             gameName="Cümle Oluşturma"
             gameIcon={Shuffle}
             gamePath="cumle-olusturma"
+            dataType="games"
         />
     );
 }

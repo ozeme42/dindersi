@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Footprints, Loader2 } from 'lucide-react';
 
 function DogruYolKosucusuPage() {
@@ -11,6 +11,7 @@ function DogruYolKosucusuPage() {
             gameName="Doğru Yol Koşucusu"
             gameIcon={Footprints}
             gamePath="dogru-yol-kosucusu"
+            dataType="games"
         />
     );
 }

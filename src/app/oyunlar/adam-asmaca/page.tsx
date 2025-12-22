@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Skull, Loader2 } from 'lucide-react';
 
 function AdamAsmacaPage() {
@@ -11,6 +11,7 @@ function AdamAsmacaPage() {
             gameName="Adam Asmaca"
             gameIcon={Skull}
             gamePath="adam-asmaca"
+            dataType="games"
         />
     );
 }

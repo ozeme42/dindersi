@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { MousePointerClick, Loader2 } from 'lucide-react';
 
 function HedefiVurPage() {
@@ -11,6 +11,7 @@ function HedefiVurPage() {
             gameName="Hedefi Vur"
             gameIcon={MousePointerClick}
             gamePath="hedefi-vur"
+            dataType="games"
         />
     );
 }

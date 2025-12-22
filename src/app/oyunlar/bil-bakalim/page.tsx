@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Lightbulb, Loader2 } from 'lucide-react';
 
 function BilBakalimPage() {
@@ -11,6 +11,7 @@ function BilBakalimPage() {
             gameName="Bil Bakalım"
             gameIcon={Lightbulb}
             gamePath="bil-bakalim"
+            dataType="games"
         />
     );
 }

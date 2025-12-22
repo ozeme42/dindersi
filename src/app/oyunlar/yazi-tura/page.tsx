@@ -2,7 +2,7 @@
 "use client";
 
 import React, { Suspense } from 'react';
-import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Coins, Loader2 } from 'lucide-react';
 
 function YaziTuraPage() {
@@ -11,6 +11,7 @@ function YaziTuraPage() {
             gameName="Yazı Tura"
             gameIcon={Coins}
             gamePath="yazi-tura"
+            dataType="games"
         />
     );
 }
