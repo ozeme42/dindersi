@@ -1,14 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-    Loader2
-} from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import { getPublicCurriculum } from './actions/getPublicCurriculum';
-import type { PublicClass } from './actions/getPublicCurriculum';
-import { PageContent } from './page-content';
-
+import { PageContent, type PublicClass } from './page-content';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -16,16 +11,20 @@ export default function Home() {
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch data only if user is not logged in.
-    // If user is logged in, PageContent will handle redirection or teacher dashboard.
-    if (!user && !loading) {
-      getPublicCurriculum()
+    // If user is logged in, teacher dashboard will be shown, no need to fetch public curriculum
+    if (loading) {
+      return;
+    }
+    if (!user) {
+      setDataLoading(true);
+      fetch('/curriculum/manifest.json')
+        .then(res => res.json())
         .then(data => {
-          setClassGroups(data.classGroups);
+          setClassGroups(data.classGroups || []);
           setDataLoading(false);
         })
         .catch(err => {
-          console.error("Failed to fetch public curriculum:", err);
+          console.error("Failed to fetch public curriculum manifest:", err);
           setDataLoading(false);
         });
     } else {
@@ -33,11 +32,11 @@ export default function Home() {
     }
   }, [user, loading]);
 
-  const viewLoading = loading || dataLoading;
+  const viewLoading = loading || (dataLoading && !user);
 
   if (viewLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#2b1055]">
+      <div className="flex h-screen items-center justify-center bg-slate-950">
         <Loader2 className="h-12 w-12 animate-spin text-white" />
       </div>
     );

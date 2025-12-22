@@ -17,8 +17,6 @@ import Link from 'next/link';
 
 // --- UTILS ---
 import { cn } from '@/lib/utils';
-import type { PublicClass } from './actions/getPublicCurriculum';
-
 // --- UI COMPONENTS ---
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -37,6 +35,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
+
+type PublicTopic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean };
+type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOzet: boolean };
+type PublicCourse = { id: string; title: string; units: PublicUnit[] };
+export type PublicClass = { name: string; courses: PublicCourse[] };
+
 
 // --- GAME THEME COMPONENTS ---
 const GameButton = ({ children, className, variant = 'primary', href, target, ...props }: any) => {
@@ -206,12 +210,12 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                                             <span className="font-medium text-slate-300 text-sm group-hover/topic:text-white">{topic.title}</span>
                                                                                         </div>
                                                                                         <div className="flex gap-2 self-end sm:self-center">
-                                                                                            {(topic as any).hasYazilacaklarContent && (
+                                                                                            {topic.hasYazilacaklarContent && (
                                                                                                 <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <Columns className="h-3 w-3"/> Yazılacaklar
                                                                                                 </Link>
                                                                                             )}
-                                                                                            {(topic as any).hasOzetContent && (
+                                                                                            {topic.hasOzetContent && (
                                                                                                 <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
                                                                                                     <BookOpen className="h-3 w-3"/> Özet
                                                                                                 </Link>
