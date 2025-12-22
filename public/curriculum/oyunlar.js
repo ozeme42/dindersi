@@ -1,4 +1,4 @@
-// oyunlar.js - TAM ÖĞRENME MODU (8 SEÇENEK, 3 TEKRAR)
+// oyunlar.js - KAVRAM YARIŞMASI (ÜST YERLEŞİM + 2 HAK)
 
 window.GameEngine = {};
 
@@ -8,11 +8,12 @@ window.GameEngine.state = {
     timer: null,
     timeLeft: 20,
     
-    // Tam Öğrenme Değişkenleri
-    activeBatch: [], // Öğrenilecek 8 kavram
-    distractorPool: [], // Yanlış şık havuzu (Diğer konulardan)
+    // Quiz Değişkenleri
+    activeBatch: [], // Öğrenilecekler
+    distractorPool: [], // Yanlış şık havuzu
     currentItem: null, // Şu an sorulan
     currentOptions: [], // Ekranda görünen 8 seçenek
+    mistakes: 0, // Anlık sorudaki hata sayısı
     
     isRoundOver: false,
     
@@ -21,7 +22,7 @@ window.GameEngine.state = {
     currentWord: "", currentSlot: 0, guessed: [], qIndex: 0, questions: []
 };
 
-// --- YARDIMCI: TÜM SİSTEMDEKİ KAVRAMLARI TOPLA (Yanlış Şık İçin) ---
+// --- YARDIMCI: TÜM KAVRAMLARI TOPLA ---
 window.GameEngine.collectAllConcepts = function() {
     let pool = [];
     if (window.App && window.App.data && window.App.data.courses) {
@@ -37,20 +38,18 @@ window.GameEngine.collectAllConcepts = function() {
             });
         });
     }
-    // Tekrarları temizle
     return [...new Set(pool)];
 };
 
-// --- ORTAK FONKSİYONLAR ---
+// --- ORTAK ---
 window.GameEngine.updateScoreUI = function() {
     const el = document.getElementById('game-score');
     if (el) el.textContent = "PUAN: " + window.GameEngine.state.score;
 };
 
-// Ara Sonuç Ekranı
+// Sonuç Ekranı
 window.GameEngine.showResult = function(type, title, message, onNext) {
     const stage = document.getElementById('game-stage');
-    
     const bgClass = type === 'success' ? 'bg-emerald-900/95' : 'bg-red-900/95';
     const icon = type === 'success' ? '⭐' : '❌';
 
@@ -59,29 +58,16 @@ window.GameEngine.showResult = function(type, title, message, onNext) {
             <div class="text-8xl mb-4 pop-in">${icon}</div>
             <h2 class="text-4xl font-black text-white mb-2 text-center">${title}</h2>
             <p class="text-xl text-white/90 mb-8 text-center font-medium px-4">${message}</p>
-            
             <button id="next-btn" class="px-10 py-4 bg-white text-slate-900 rounded-2xl text-xl font-bold shadow-xl transform hover:scale-105 transition flex items-center gap-2">
                 DEVAM ET ➜
             </button>
         </div>
     `;
-
     stage.insertAdjacentHTML('beforeend', resultHTML);
-
     const btn = document.getElementById('next-btn');
-    btn.focus(); 
-    btn.onclick = function() {
-        const overlay = document.getElementById('result-overlay');
-        if(overlay) overlay.remove();
-        onNext();
-    };
-    
-    document.onkeydown = function(e) {
-        if(e.key === "Enter") {
-            document.onkeydown = null;
-            btn.click();
-        }
-    }
+    btn.focus();
+    btn.onclick = function() { document.getElementById('result-overlay').remove(); onNext(); };
+    document.onkeydown = function(e) { if(e.key === "Enter") { document.onkeydown = null; btn.click(); } }
 };
 
 window.GameEngine.showWinScreen = function() {
@@ -92,7 +78,7 @@ window.GameEngine.showWinScreen = function() {
         <div class="text-center fade-in h-full flex flex-col items-center justify-center">
             <div class="text-9xl mb-6 animate-bounce">🎓</div>
             <h2 class="text-5xl font-black text-white mb-4">TEBRİKLER!</h2>
-            <p class="text-xl text-slate-300 mb-6">Bu konudaki tüm kavramları ustalıkla öğrendin.</p>
+            <p class="text-xl text-slate-300 mb-6">Tüm kavramları başarıyla tamamladın.</p>
             <div class="text-5xl font-bold text-yellow-400 mt-2 bg-slate-800 px-8 py-4 rounded-3xl border border-yellow-500/30">
                 TOPLAM PUAN: ${window.GameEngine.state.score}
             </div>
@@ -103,31 +89,29 @@ window.GameEngine.showWinScreen = function() {
 };
 
 // ==========================================
-// 4. KAVRAM YARIŞMASI (DİNAMİK HAVUZLU)
+// 4. KAVRAM YARIŞMASI (ÜST YERLEŞİM + 2 HAK)
 // ==========================================
 window.GameEngine.startQuiz = function(definitions) {
     const stage = document.getElementById('game-stage');
     
     if (!definitions || definitions.length === 0) {
-        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Bu konuda oyun verisi yok.</p></div>';
+        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Veri yok.</p></div>';
         return;
     }
 
-    // 1. Aktif Konu Kavramları (Öğrenilecekler)
+    // 1. Öğrenilecek Kavramlar
     const activeBatch = definitions.map((def, index) => ({
         id: index,
         term: def.term || def.concept,
         definition: def.definition,
-        level: 0 // Hedef: 3 kez bilmek
+        level: 0 // 3 olunca biter
     }));
 
-    // 2. Çeldirici Havuzunu Doldur (Diğer konulardan da al)
+    // 2. Yanlış Şık Havuzu
     let pool = window.GameEngine.collectAllConcepts();
-    // Kendi kavramlarını havuzdan çıkar (kendisiyle çakışmasın)
     const activeTerms = activeBatch.map(a => a.term);
     pool = pool.filter(t => !activeTerms.includes(t));
 
-    // State Ayarla
     const state = window.GameEngine.state;
     state.score = 0;
     state.activeBatch = activeBatch;
@@ -139,63 +123,47 @@ window.GameEngine.startQuiz = function(definitions) {
 window.GameEngine.loadQuizLevel = function() {
     const state = window.GameEngine.state;
     
-    // 1. Henüz tamamlanmamış (Seviyesi < 3) olanları bul
+    // Tamamlanmamışları bul
     const pendingItems = state.activeBatch.filter(item => item.level < 3);
 
-    // Hepsi bittiyse oyun biter
     if (pendingItems.length === 0) {
         window.GameEngine.showWinScreen();
         return;
     }
 
-    // 2. Rastgele bir soru seç
+    // Soru seç
     const currentItem = pendingItems[Math.floor(Math.random() * pendingItems.length)];
     state.currentItem = currentItem;
 
-    // 3. Seçenekleri Oluştur (1 Doğru + 7 Yanlış)
+    // Şıkları oluştur
     let distractors = [];
-    
-    // A) Kendi konusundaki diğer kavramlar (Öncelikli)
-    const localDistractors = state.activeBatch
-        .filter(i => i.id !== currentItem.id)
-        .map(i => i.term);
+    const localDistractors = state.activeBatch.filter(i => i.id !== currentItem.id).map(i => i.term);
     distractors.push(...localDistractors);
 
-    // B) Yetmezse genel havuzdan tamamla
-    if (distractors.length < 7) {
+    if (distractors.length < 7 && state.distractorPool.length > 0) {
         const needed = 7 - distractors.length;
-        // Havuz boşsa (tek konu varsa) sadece kendi içindekilerle devam et
-        if (state.distractorPool.length > 0) {
-             const extra = state.distractorPool.sort(() => 0.5 - Math.random()).slice(0, needed);
-             distractors.push(...extra);
-        }
+        distractors.push(...state.distractorPool.sort(() => 0.5 - Math.random()).slice(0, needed));
     }
-
-    // C) Tam 7 tane seç
-    distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 7);
     
-    // Şıkları karıştır
-    const options = [currentItem.term, ...distractors].sort(() => 0.5 - Math.random());
-    state.currentOptions = options;
+    const options = [currentItem.term, ...distractors.sort(() => 0.5 - Math.random()).slice(0, 7)];
+    state.currentOptions = options.sort(() => 0.5 - Math.random());
 
+    // Tur Ayarları
     state.isRoundOver = false;
     state.timeLeft = 20;
+    state.mistakes = 0; // Hata sayacını sıfırla
 
     if(state.timer) clearInterval(state.timer);
-    
     window.GameEngine.renderQuiz();
 
-    // Zamanlayıcı
     state.timer = setInterval(() => {
         if (state.isRoundOver) return;
         state.timeLeft--;
-        
         const bar = document.getElementById('timer-bar');
         if(bar) bar.style.width = `${(state.timeLeft / 20) * 100}%`;
-
         if (state.timeLeft <= 0) {
             clearInterval(state.timer);
-            window.GameEngine.handleQuizAnswer(null, null, true); // Süre bitti
+            window.GameEngine.handleQuizAnswer(null, null, true);
         }
     }, 1000);
 };
@@ -205,46 +173,57 @@ window.GameEngine.renderQuiz = function() {
     const currentItem = state.currentItem;
     const stage = document.getElementById('game-stage');
 
-    // İlerleme Bilgisi
     const completedCount = state.activeBatch.filter(i => i.level >= 3).length;
     const totalCount = state.activeBatch.length;
-
-    // Seviye Yıldızları
-    let starsHTML = '';
-    for(let i=0; i<3; i++) {
-        starsHTML += i < currentItem.level 
-            ? '<span class="text-yellow-400 text-2xl drop-shadow-md">★</span>' 
-            : '<span class="text-slate-700 text-2xl">☆</span>';
+    
+    // Can Göstergesi (2 Hak)
+    const livesLeft = 2 - state.mistakes;
+    let hearts = '';
+    for(let i=0; i<2; i++) {
+        hearts += i < livesLeft ? '❤️' : '🖤';
     }
 
+    // --- HTML YAPISI (ÜST YERLEŞİM İÇİN DÜZENLENDİ) ---
+    // justify-center yerine justify-start kullanıldı ve üstten boşluk verildi.
     stage.innerHTML = `
-        <div class="w-full max-w-6xl flex flex-col h-full fade-in pb-4">
+        <div class="w-full max-w-6xl flex flex-col h-full fade-in justify-start pt-6 md:pt-10 px-4">
             
-            <div class="flex justify-between items-center px-6 py-3 bg-slate-800/50 rounded-xl border border-white/5 mb-4">
+            <div class="flex justify-between items-center px-6 py-4 bg-slate-800/80 rounded-2xl border border-white/10 mb-6 shadow-xl">
                 <div class="flex flex-col">
-                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">GENEL İLERLEME</span>
-                    <span class="text-green-400 font-bold text-lg">${completedCount} / ${totalCount} Kavram</span>
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">İLERLEME</span>
+                    <span class="text-green-400 font-bold text-lg">${completedCount} / ${totalCount}</span>
                 </div>
+                
+                <div class="flex flex-col items-center">
+                     <div class="text-2xl tracking-widest">${hearts}</div>
+                     <span class="text-[10px] text-slate-500 font-bold mt-1">KALAN HAK</span>
+                </div>
+
                 <div class="flex flex-col items-end">
                     <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">BU KAVRAM</span>
-                    <div class="flex gap-1">${starsHTML}</div>
+                    <span class="text-yellow-400 font-bold text-lg">Seviye ${currentItem.level}/3</span>
                 </div>
             </div>
 
-            <div class="flex-grow flex flex-col items-center justify-center relative gap-6 mb-6">
-                <div class="w-full max-w-2xl h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div id="timer-bar" class="h-full bg-yellow-400 transition-all duration-1000 linear" style="width: 100%"></div>
+            <div class="w-full max-w-4xl mx-auto mb-8 relative group">
+                <div id="quiz-warning" class="absolute -top-14 left-1/2 -translate-x-1/2 bg-red-500 text-white px-6 py-2 rounded-full font-bold shadow-lg opacity-0 transition-all duration-300 pointer-events-none z-20">
+                    ⚠️ Yanlış! 1 Hakkın Kaldı
                 </div>
-                <div class="w-full max-w-3xl bg-gradient-to-b from-slate-800 to-slate-900 p-8 rounded-3xl border border-white/10 shadow-2xl text-center relative overflow-hidden group">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
+
+                <div class="w-full h-2 bg-slate-800 rounded-t-2xl overflow-hidden">
+                    <div id="timer-bar" class="h-full bg-gradient-to-r from-yellow-400 to-orange-500 transition-all duration-1000 linear" style="width: 100%"></div>
+                </div>
+                
+                <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-8 md:p-12 rounded-b-3xl rounded-tr-3xl border border-white/10 shadow-2xl text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
                     <h3 class="text-xl md:text-3xl font-bold text-white leading-relaxed select-none">
                         "${currentItem.definition}"
                     </h3>
-                    <p class="text-slate-500 text-xs mt-4 font-bold tracking-widest uppercase">BU TANIM HANGİ KAVRAMA AİT?</p>
+                    <p class="text-slate-500 text-xs mt-6 font-bold tracking-widest uppercase opacity-70">BU TANIM HANGİ KAVRAMA AİT?</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mx-auto">
                 ${state.currentOptions.map(optTerm => `
                     <button onclick="window.GameEngine.handleQuizAnswer(this, '${optTerm.replace(/'/g, "\\'")}')" 
                         class="quiz-opt relative overflow-hidden bg-slate-800 hover:bg-slate-700 border-2 border-white/10 text-white py-4 rounded-xl text-sm md:text-lg font-bold transition-all hover:scale-[1.02] hover:shadow-lg active:scale-95 shadow-lg h-20 md:h-24 flex items-center justify-center px-2 text-center leading-tight">
@@ -259,50 +238,79 @@ window.GameEngine.renderQuiz = function() {
 window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
     const state = window.GameEngine.state;
     if (state.isRoundOver) return;
-    
-    clearInterval(state.timer);
-    state.isRoundOver = true;
 
     const currentItem = state.currentItem;
     const isCorrect = !isTimeUp && (answer === currentItem.term);
 
-    // Görsel Geri Bildirim
-    const buttons = document.querySelectorAll('.quiz-opt');
-    buttons.forEach(b => {
-        b.disabled = true;
-        // Doğru şıkkı bul ve yeşil yap
-        if (b.innerText.trim() === currentItem.term) {
-            b.classList.remove('bg-slate-800', 'border-white/10');
-            b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'scale-105', 'z-10');
-        } else {
-            b.classList.add('opacity-30');
-        }
-        
-        // Yanlış tıklanan
-        if (!isCorrect && !isTimeUp && b === btn) {
-            b.classList.remove('opacity-30');
-            b.classList.add('bg-red-600', 'border-red-500', 'opacity-100', 'shake');
-        }
-    });
-
+    // --- DOĞRU CEVAP ---
     if (isCorrect) {
+        clearInterval(state.timer);
+        state.isRoundOver = true;
+
+        const buttons = document.querySelectorAll('.quiz-opt');
+        buttons.forEach(b => {
+            b.disabled = true;
+            if (b.innerText.trim() === currentItem.term) {
+                b.classList.remove('bg-slate-800', 'border-white/10');
+                b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'scale-105', 'z-10');
+            } else { b.classList.add('opacity-30'); }
+        });
+
         currentItem.level++;
-        state.score += 20;
+        state.score += (state.mistakes === 0 ? 20 : 10);
         
         let msgTitle = "DOĞRU!";
         let msgSub = `${currentItem.level}/3 Tamamlandı`;
-        
-        if (currentItem.level >= 3) {
-            msgTitle = "USTALAŞTIN! ⭐";
-            state.score += 50; 
-        }
+        if (currentItem.level >= 3) { msgTitle = "USTALAŞTIN! ⭐"; state.score += 50; }
         
         window.GameEngine.updateScoreUI();
         setTimeout(() => window.GameEngine.showResult('success', msgTitle, msgSub, () => window.GameEngine.loadQuizLevel()), 800);
-
-    } else {
+    } 
+    // --- YANLIŞ CEVAP ---
+    else {
+        state.mistakes++;
         if(navigator.vibrate) navigator.vibrate(200);
-        setTimeout(() => window.GameEngine.showResult('error', isTimeUp ? 'SÜRE BİTTİ' : 'YANLIŞ', `Doğru Cevap: ${currentItem.term}`, () => window.GameEngine.loadQuizLevel()), 1000);
+
+        // Butonu kırmızı yap
+        if(btn) {
+            btn.disabled = true;
+            btn.classList.remove('bg-slate-800', 'border-white/10');
+            btn.classList.add('bg-red-600', 'border-red-500', 'opacity-50', 'shake');
+        }
+
+        // HAK KONTROLÜ
+        if (state.mistakes < 2 && !isTimeUp) {
+            // Uyarı Göster
+            const warning = document.getElementById('quiz-warning');
+            if(warning) {
+                warning.style.opacity = '1';
+                warning.style.top = '-40px'; 
+            }
+            // Can simgesini güncelle (Hızlıca tekrar render ederek veya DOM ile)
+            window.GameEngine.renderQuiz(); // En temizi tekrar render etmek (hızlıdır)
+            
+            // 1.5 sn sonra uyarıyı kaldır
+            setTimeout(() => {
+                const w = document.getElementById('quiz-warning');
+                if(w) w.style.opacity = '0';
+            }, 1500);
+
+        } else {
+            // KAYBETTİ
+            clearInterval(state.timer);
+            state.isRoundOver = true;
+
+            const buttons = document.querySelectorAll('.quiz-opt');
+            buttons.forEach(b => {
+                b.disabled = true;
+                if (b.innerText.trim() === currentItem.term) {
+                    b.classList.remove('bg-slate-800', 'border-white/10');
+                    b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'animate-pulse');
+                } else { b.classList.add('opacity-30'); }
+            });
+
+            setTimeout(() => window.GameEngine.showResult('error', isTimeUp ? 'SÜRE BİTTİ' : 'BİLEMEDİN', `Doğru Cevap: ${currentItem.term}`, () => window.GameEngine.loadQuizLevel()), 1000);
+        }
     }
 };
 
@@ -329,8 +337,8 @@ window.GameEngine.loadAnagramLevel = function() {
     const letters = targetWord.split('').sort(() => 0.5 - Math.random());
 
     stage.innerHTML = `
-        <div class="w-full max-w-4xl flex flex-col items-center gap-8 fade-in relative">
-            <div id="feedback-msg" class="absolute -top-16 bg-red-500 text-white px-6 py-2 rounded-full font-bold shadow-lg opacity-0 transition-opacity duration-300">⚠️ Yanlış Harf!</div>
+        <div class="w-full max-w-4xl flex flex-col items-center gap-8 fade-in relative justify-center h-full">
+            <div id="feedback-msg" class="absolute top-10 bg-red-500 text-white px-6 py-2 rounded-full font-bold shadow-lg opacity-0 transition-opacity duration-300">⚠️ Yanlış Harf!</div>
             <div class="w-full bg-slate-800/80 p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl text-center relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500"></div>
                 <span class="text-cyan-400 font-bold text-xs mb-2 block">SORU ${state.qIndex + 1} / ${state.questions.length}</span>
@@ -386,21 +394,22 @@ window.GameEngine.startMatching = function(definitions) {
     const subset = definitions.slice(0, 6); 
     state.totalMatches = subset.length;
     subset.forEach((item, index) => {
-        leftList.push({ id: index, text: item.term || item.concept });
-        rightList.push({ id: index, text: item.definition });
+        leftList.push({ id: index, text: item.definition }); // Tanım Sola
+        rightList.push({ id: index, text: item.term || item.concept }); // Kavram Sağa
     });
     leftList.sort(() => 0.5 - Math.random());
     rightList.sort(() => 0.5 - Math.random());
 
     stage.innerHTML = `
-        <div class="w-full max-w-6xl fade-in">
-            <h3 class="text-center text-slate-400 mb-4 text-sm uppercase tracking-widest">Kavramı Tanımıyla Eşleştir</h3>
+        <div class="w-full max-w-[1400px] fade-in justify-start pt-10">
             <div class="match-container">
                 <div class="match-col" id="col-left">
+                    <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">TANIMLAR</h4>
                     ${leftList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'left')" data-id="${item.id}">${item.text}</div>`).join('')}
                 </div>
                 <div class="match-col" id="col-right">
-                    ${rightList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'right')" data-id="${item.id}"><span class="text-xs md:text-sm line-clamp-3">${item.text}</span></div>`).join('')}
+                    <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">KAVRAMLAR</h4>
+                    ${rightList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'right')" data-id="${item.id}">${item.text}</div>`).join('')}
                 </div>
             </div>
         </div>
@@ -488,7 +497,7 @@ window.GameEngine.renderHangman = function() {
     }).join('');
 
     stage.innerHTML = `
-        <div class="w-full max-w-6xl fade-in flex flex-col gap-6">
+        <div class="w-full max-w-6xl fade-in flex flex-col gap-6 justify-center h-full">
             <div class="flex justify-between w-full px-4 text-slate-400 font-mono text-sm bg-slate-800/50 p-2 rounded-lg">
                 <span>SORU: <span class="text-white">${state.qIndex+1}</span> / ${state.questions.length}</span>
                 <span>HATA: <span class="text-red-400 text-lg font-bold">${state.mistakes}</span> / ${maxMistakes}</span>

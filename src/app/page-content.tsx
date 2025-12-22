@@ -9,7 +9,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Image as ImageIcon, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Globe
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Globe, Library, FileText
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -212,7 +212,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                                         <div className="flex gap-2 self-end sm:self-center">
                                                                                             {topic.hasYazilacaklarContent && (
                                                                                                 <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`} className="flex items-center gap-1 bg-sky-900/50 hover:bg-sky-600 border border-sky-700 hover:border-sky-500 text-sky-200 hover:text-white text-[10px] font-bold py-1 px-2 rounded transition-colors">
-                                                                                                    <Columns className="h-3 w-3"/> Yazılacaklar
+                                                                                                    <Columns className="h-3 w-3"/> Notlar
                                                                                                 </Link>
                                                                                             )}
                                                                                             {topic.hasOzetContent && (

@@ -23,31 +23,25 @@
             overflow-x: hidden;
         }
 
-        /* --- TABLO GÖRÜNÜMÜ (NOTLAR İÇİN) --- */
+        /* --- TABLO GÖRÜNÜMÜ (NOTLAR) --- */
         .notes-table {
             display: grid;
             grid-template-columns: 1fr;
-            background-color: rgba(71, 85, 105, 0.5); /* Çizgi Rengi */
-            gap: 1px; /* Çizgi Kalınlığı */
+            background-color: rgba(71, 85, 105, 0.5);
+            gap: 1px;
             border: 1px solid rgba(71, 85, 105, 0.5);
             border-radius: 16px;
             overflow: hidden;
         }
-        @media (min-width: 768px) { 
-            .notes-table { grid-template-columns: 1fr 1fr; } 
-        }
+        @media (min-width: 768px) { .notes-table { grid-template-columns: 1fr 1fr; } }
         
         .notes-cell {
-            background-color: rgba(30, 41, 59, 0.8); /* Hücre Rengi */
+            background-color: rgba(30, 41, 59, 0.8);
             padding: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
+            display: flex; align-items: flex-start; gap: 1rem;
             transition: all 0.2s;
         }
-        .notes-cell:hover {
-            background-color: rgba(30, 41, 59, 1);
-        }
+        .notes-cell:hover { background-color: rgba(30, 41, 59, 1); }
 
         /* --- MASONRY (KAVRAMLAR) --- */
         .masonry-grid { column-count: 1; column-gap: 1.5rem; }
@@ -57,25 +51,16 @@
 
         /* --- NUMARALANDIRMA --- */
         .note-number {
-            min-width: 2rem;
-            height: 2rem;
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.9rem;
-            border: 1px solid rgba(96, 165, 250, 0.3);
+            min-width: 2rem; height: 2rem;
+            background: rgba(59, 130, 246, 0.2); color: #60a5fa;
+            border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.9rem; border: 1px solid rgba(96, 165, 250, 0.3);
         }
-
         .concept-number {
             position: absolute; top: -10px; right: -10px; width: 2.5rem; height: 2.5rem;
             background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 12px;
             display: flex; align-items: center; justify-content: center; font-weight: 900;
-            font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); z-index: 10;
-            transform: rotate(5deg);
+            font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); z-index: 10; transform: rotate(5deg);
         }
 
         /* --- UI & OYUN --- */
@@ -84,19 +69,29 @@
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Oyun Slotları */
+        /* Eşleştirme */
+        .match-container { display: flex; gap: 20px; width: 100%; max-width: 1400px; justify-content: center; padding: 10px; }
+        .match-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        
+        .match-item { 
+            background: #1e293b; border: 2px solid #334155; padding: 1.5rem; border-radius: 16px; 
+            cursor: pointer; min-height: 5rem; font-weight: 600; font-size: 1.1rem; 
+            display: flex; align-items: center; justify-content: center; text-align: center; 
+            transition: all 0.2s; position: relative;
+        }
+        .match-item:hover { transform: translateY(-3px); border-color: #64748b; }
+        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); box-shadow: 0 0 20px rgba(59,130,246,0.4); z-index: 10; }
+        .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; opacity: 0.6; background: #059669 !important; border-color: #34d399 !important; }
+        
+        /* Renkler */
+        .m-color-0 { background: #059669 !important; }
+        .quiz-opt { transition: all 0.2s; }
         .game-slot { width: 3.5rem; height: 4rem; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
         .letter-btn { width: 4rem; height: 4rem; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; border: 1px solid white; transition: all 0.1s; }
         .letter-btn:active { top: 6px; box-shadow: none; transform: translateY(6px); }
         .letter-btn.used { opacity: 0; pointer-events: none; transform: scale(0); }
-        .c-1 { background: #f59e0b; } .c-2 { background: #3b82f6; } .c-3 { background: #ec4899; } .c-4 { background: #8b5cf6; } .c-5 { background: #10b981; }
         .shake { animation: shake 0.4s; } @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .quiz-opt { transition: all 0.2s; }
-        .match-item { background: #1e293b; border: 2px solid #334155; padding: 1.2rem; border-radius: 16px; cursor: pointer; min-height: 6rem; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; text-align: center; transition: all 0.2s; }
-        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); }
-        .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; opacity: 0.8; }
-        .m-color-0 { background: #059669 !important; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -119,9 +114,7 @@
 
     <div id="floating-controls" class="fixed top-4 right-4 z-[60] hidden flex-col gap-2 items-end animate-in fade-in slide-in-from-top-4">
         <div class="flex items-center gap-2 bg-slate-900/90 backdrop-blur-md p-1.5 rounded-full border border-white/10 shadow-2xl">
-            <button onclick="router.go('home')" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition transform hover:scale-110" title="Ana Menü">
-                🏠
-            </button>
+            <button onclick="router.go('home')" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition transform hover:scale-110" title="Ana Menü">🏠</button>
             <div class="w-px h-4 bg-white/20"></div>
             <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition text-xs font-bold">A-</button>
             <button onclick="changeFontSize(1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-white hover:text-cyan-400 transition text-sm font-bold">A+</button>
@@ -170,8 +163,8 @@
     </div>
 
     <script src="database.js"></script>
-    <script src="icerik.js?v=final2"></script>
-    <script src="oyunlar.js?v=final2"></script>
+    <script src="icerik.js?v=final3"></script>
+    <script src="oyunlar.js?v=final3"></script>
 
     <script>
         // --- FONT KONTROLÜ ---
@@ -262,21 +255,18 @@
                 document.getElementById(`view-${view}`).classList.remove('hidden');
                 document.getElementById(`view-${view}`).classList.add('active');
                 
-                // HEADER GİZLE/GÖSTER MANTIĞI
                 const mainHeader = document.getElementById('main-header');
                 const floatControls = document.getElementById('floating-controls');
                 const mainContainer = document.getElementById('main-container');
 
                 if (view === 'home') {
                     mainHeader.style.transform = 'translateY(0)';
-                    floatControls.classList.add('hidden');
-                    floatControls.classList.remove('flex');
-                    mainContainer.style.paddingTop = '7rem'; // Header payı
+                    floatControls.classList.add('hidden'); floatControls.classList.remove('flex');
+                    mainContainer.style.paddingTop = '7rem';
                 } else {
                     mainHeader.style.transform = 'translateY(-100%)';
-                    floatControls.classList.remove('hidden');
-                    floatControls.classList.add('flex');
-                    mainContainer.style.paddingTop = '2rem'; // Daha az boşluk
+                    floatControls.classList.remove('hidden'); floatControls.classList.add('flex');
+                    mainContainer.style.paddingTop = '2rem';
                 }
 
                 if (view === 'notes') UIManager.renderNotes(params);
@@ -313,7 +303,7 @@
                 document.getElementById('note-title').textContent = d.name;
                 let html = '';
                 
-                // 1. KAVRAMLAR (ÜSTTE)
+                // 1. KAVRAMLAR (MASONRY)
                 if(d.definitions.length) {
                     let counter = 0;
                     html += `
@@ -325,7 +315,7 @@
                     </div>`;
                 }
 
-                // 2. ÖNEMLİ BİLGİLER (TABLO GÖRÜNÜMÜ - ALTTA)
+                // 2. ÖNEMLİ BİLGİLER (TABLO)
                 if(d.notes.length) {
                     let counter = 0;
                     html += `
@@ -357,11 +347,54 @@
             const data = DataManager.getTopicData(App.currentGameTopicId);
             const defs = data.definitions;
             if (!defs || defs.length === 0) { alert("Bu oyun için veri eksik."); return; }
+            
+            // EŞLEŞTİRME OYUNUNDA SÜTUNLARI DÜZENLE (TANIMLAR SOLA, KAVRAMLAR SAĞA)
+            if (type === 'matching') {
+                const stage = document.getElementById('game-stage');
+                if (!defs || defs.length < 2) { alert("En az 2 kavram gerekli."); return; }
+                const modal = document.getElementById('game-modal'); const title = document.getElementById('modal-game-title'); const score = document.getElementById('game-score');
+                modal.classList.remove('hidden'); score.textContent = "Puan: 0"; title.textContent = 'EŞLEŞTİRME';
+                
+                // --- MANUAL EŞLEŞTİRME OYUNU BAŞLATMA (ÖZEL) ---
+                window.GameEngine.state.score = 0;
+                window.GameEngine.state.selectedLeft = null;
+                window.GameEngine.state.selectedRight = null;
+                window.GameEngine.state.matchesFound = 0;
+                const subset = defs.slice(0, 6);
+                window.GameEngine.state.totalMatches = subset.length;
+                let leftList = [], rightList = [];
+                
+                subset.forEach((item, index) => {
+                    // *** DEĞİŞİKLİK BURADA: SOLA TANIMLAR, SAĞA KAVRAMLAR ***
+                    leftList.push({ id: index, text: item.definition });
+                    rightList.push({ id: index, text: item.term || item.concept });
+                });
+                
+                leftList.sort(() => 0.5 - Math.random());
+                rightList.sort(() => 0.5 - Math.random());
+
+                stage.innerHTML = `
+                    <div class="w-full max-w-[1400px] fade-in">
+                        <div class="match-container">
+                            <div class="match-col" id="col-left">
+                                <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">TANIMLAR</h4>
+                                ${leftList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'left')" data-id="${item.id}">${item.text}</div>`).join('')}
+                            </div>
+                            <div class="match-col" id="col-right">
+                                <h4 class="text-center text-slate-400 font-bold mb-4 tracking-widest uppercase text-sm">KAVRAMLAR</h4>
+                                ${rightList.map(item => `<div class="match-item pop-in" onclick="window.GameEngine.handleMatchClick(this, '${item.id}', 'right')" data-id="${item.id}">${item.text}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return; // Eşleştirme özel başlatıldı, çık.
+            }
+
+            // Diğer oyunlar için normal akış
             const modal = document.getElementById('game-modal'); const title = document.getElementById('modal-game-title'); const score = document.getElementById('game-score');
             modal.classList.remove('hidden'); score.textContent = "Puan: 0";
             if (type === 'quiz') { title.textContent = 'KAVRAM YARIŞMASI'; GameEngine.startQuiz(defs); }
             else if (type === 'anagram') { title.textContent = 'KELİME BULMACA'; GameEngine.startAnagram(defs); }
-            else if (type === 'matching') { title.textContent = 'EŞLEŞTİRME'; GameEngine.startMatching(defs); }
             else if (type === 'hangman') { title.textContent = 'ADAM ASMACA'; GameEngine.startHangman(defs); }
         };
 
