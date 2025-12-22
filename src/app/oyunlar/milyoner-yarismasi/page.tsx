@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Trophy, Loader2 } from 'lucide-react';
 
 function MilyonerPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Kim 1000 Puan İster?"
             gameIcon={Trophy}
             gamePath="milyoner-yarismasi"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

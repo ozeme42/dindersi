@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Wind, Loader2 } from 'lucide-react';
 
 function TornadoPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Tornado"
             gameIcon={Wind}
             gamePath="tornado"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

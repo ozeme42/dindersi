@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Link2, Loader2 } from 'lucide-react';
 
 function DogruYanlisZinciriPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Doğru/Yanlış Zinciri"
             gameIcon={Link2}
             gamePath="dogru-yanlis-zinciri"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { MousePointerClick, Loader2 } from 'lucide-react';
 
 function HedefiVurPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Hedefi Vur"
             gameIcon={MousePointerClick}
             gamePath="hedefi-vur"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

@@ -4,11 +4,11 @@
 import React, { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users
+    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { Gamepad2 } from 'lucide-react';
 
@@ -76,7 +76,7 @@ const SelectionCard = ({
         <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner bg-gradient-to-br",
+                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br",
                 color
             )}>
                 <Icon className="h-5 w-5 md:h-10 md:w-10 text-white drop-shadow-md" />
@@ -115,9 +115,10 @@ type OyunKurulumProps = {
     gameIcon?: React.ElementType;
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
+    isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -215,6 +216,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             unitName: 'Tüm Üniteler',
             topicId: 'all',
             topicName: 'Tüm Konular',
+            isStatic: String(isStatic),
         });
         router.push(`/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`);
         return;
@@ -251,6 +253,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             unitName: selection.unitName,
             topicId: topicId,
             topicName: topicName,
+            isStatic: String(isStatic),
           });
           url = `/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`;
       } else {
@@ -265,8 +268,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   };
   
   const getBackUrl = () => {
-    if (targetPath === 'student') return '/student';
-    if (targetPath === 'teacher') return '/teacher/smartboard';
+    if (user?.role === 'student') return '/student';
+    if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
     return '/oyunlar';
   };
 
@@ -456,5 +459,3 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
-
-    

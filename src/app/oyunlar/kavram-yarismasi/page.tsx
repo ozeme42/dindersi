@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 
 function KavramYarismasiPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Kavram Yarışması"
             gameIcon={BrainCircuit}
             gamePath="kavram-yarismasi"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

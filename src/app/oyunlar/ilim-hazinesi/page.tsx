@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { BookOpen, Loader2 } from 'lucide-react';
 
 function IlimHazinesiPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum
             gameName="İlim Hazinesi"
             gameIcon={BookOpen}
             gamePath="ilim-hazinesi"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

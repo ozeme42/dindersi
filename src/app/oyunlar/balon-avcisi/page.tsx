@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Target, Loader2 } from 'lucide-react';
 
 function BalonAvcisiPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Balon Avcısı"
             gameIcon={Target}
             gamePath="balon-avcisi"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

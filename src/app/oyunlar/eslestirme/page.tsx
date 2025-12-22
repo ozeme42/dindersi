@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Puzzle, Loader2 } from 'lucide-react';
 
 function EslestirmePage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Eşleştirme"
             gameIcon={Puzzle}
             gamePath="eslestirme"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

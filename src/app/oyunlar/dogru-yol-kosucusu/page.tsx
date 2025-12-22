@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Footprints, Loader2 } from 'lucide-react';
 
 function DogruYolKosucusuPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Doğru Yol Koşucusu"
             gameIcon={Footprints}
             gamePath="dogru-yol-kosucusu"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

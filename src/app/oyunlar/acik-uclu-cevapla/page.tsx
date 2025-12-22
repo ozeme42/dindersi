@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Pencil, Loader2 } from 'lucide-react';
 
 function AcikUcluCevaplaPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Açık Uçlu Cevapla"
             gameIcon={Pencil}
             gamePath="acik-uclu-cevapla"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

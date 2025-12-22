@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Shuffle, Loader2 } from 'lucide-react';
 
 function CumleOlusturmaPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Cümle Oluşturma"
             gameIcon={Shuffle}
             gamePath="cumle-olusturma"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

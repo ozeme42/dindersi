@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Crosshair, Loader2 } from 'lucide-react';
 
 function KavramAviPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Kavram Avı"
             gameIcon={Crosshair}
             gamePath="kavram-avi"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

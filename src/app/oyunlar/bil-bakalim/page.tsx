@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Lightbulb, Loader2 } from 'lucide-react';
 
 function BilBakalimPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Bil Bakalım"
             gameIcon={Lightbulb}
             gamePath="bil-bakalim"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }

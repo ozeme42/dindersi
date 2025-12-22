@@ -6,12 +6,14 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Milestone, Loader2 } from 'lucide-react';
 
 function LabirentPage() {
+    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Labirent"
             gameIcon={Milestone}
             gamePath="labirent"
             dataType="games"
+            isStatic={isStatic}
         />
     );
 }
