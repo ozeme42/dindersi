@@ -122,6 +122,9 @@ export async function exportAllData(
         let relevantCourseIds: string[] = [];
         let relevantUnitIds: string[] = [];
         let relevantTopicIds: string[] = [];
+        
+        const coursesSnap = await db.collection('courses').get();
+        const unitsSnap = await db.collectionGroup('units').get();
 
         if (courseId && courseId !== 'all') {
             relevantCourseIds.push(courseId);
@@ -133,24 +136,25 @@ export async function exportAllData(
         if (unitId && unitId !== 'all') {
             relevantUnitIds.push(unitId);
         } else if (relevantCourseIds.length > 0) {
-            const unitPromises = relevantCourseIds.map(cId => db.collection(`courses/${cId}/units`).get());
-            relevantUnitIds = (await Promise.all(unitPromises)).flatMap(snap => snap.docs.map(doc => doc.id));
+            relevantUnitIds = unitsSnap.docs
+                .filter(doc => relevantCourseIds.includes(doc.ref.parent.parent!.id))
+                .map(doc => doc.id);
         }
 
         if (topicId && topicId !== 'all') {
-            relevantTopicIds.push(topicId);
+            relevantTopicIds = [topicId];
         } else if (relevantUnitIds.length > 0) {
             const topicPromises = (await Promise.all(
                 coursesSnap.docs.filter(doc => relevantCourseIds.length === 0 || relevantCourseIds.includes(doc.id))
                     .flatMap(courseDoc => 
-                        unitSnaps.docs
+                        unitsSnap.docs
                             .filter(unitDoc => unitDoc.ref.path.startsWith(`courses/${courseDoc.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(unitDoc.id)))
                             .map(unitDoc => db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get())
                     )
             )).flatMap(snap => snap.docs.map(doc => doc.id));
             relevantTopicIds = topicPromises;
         }
-
+        
         return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
     };
 
@@ -198,34 +202,8 @@ export async function exportAllData(
         return newItem;
     };
     
-    const { relevantCourseIds, relevantUnitIds, relevantTopicIds } = await getRelevantIds();
-
-    const fetchCollectionByFilter = async (collectionName: string, field: string, ids: string[]) => {
-        if (ids.length === 0 && (topicId || unitId || courseId || classId)) {
-            return [];
-        }
-        
-        let allItems: any[] = [];
-        let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.collection(collectionName);
-        
-        if (ids.length > 0) {
-            const chunks: string[][] = [];
-            for (let i = 0; i < ids.length; i += 30) {
-                chunks.push(ids.slice(i, i + 30));
-            }
-            for (const chunk of chunks) {
-                const snapshot = await query.where(field, 'in', chunk).get();
-                const items = snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
-                allItems.push(...items);
-            }
-        } else {
-            const snapshot = await query.get();
-            allItems = snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
-        }
-        return allItems;
-    };
-    
     if (dataType === 'yazilacaklar') {
+        const { relevantTopicIds } = await getRelevantIds();
         const yazilacaklarData: any[] = [];
         const topicsToProcess = topicsSnap.docs.filter(doc => relevantTopicIds.length === 0 || relevantTopicIds.includes(doc.id));
         
@@ -263,6 +241,33 @@ export async function exportAllData(
         }
         return serialize(yazilacaklarData);
     }
+    
+    const { relevantCourseIds, relevantUnitIds, relevantTopicIds } = await getRelevantIds();
+
+    const fetchCollectionByFilter = async (collectionName: string, field: string, ids: string[]) => {
+        if (ids.length === 0 && (topicId || unitId || courseId || classId)) {
+            return [];
+        }
+        
+        let allItems: any[] = [];
+        let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.collection(collectionName);
+        
+        if (ids.length > 0) {
+            const chunks: string[][] = [];
+            for (let i = 0; i < ids.length; i += 30) {
+                chunks.push(ids.slice(i, i + 30));
+            }
+            for (const chunk of chunks) {
+                const snapshot = await query.where(field, 'in', chunk).get();
+                const items = snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
+                allItems.push(...items);
+            }
+        } else {
+            const snapshot = await query.get();
+            allItems = snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
+        }
+        return allItems;
+    };
 
 
     switch (dataType) {
