@@ -144,12 +144,14 @@ export async function exportAllData(
                     relevantCourseIds.push(doc.id);
                 }
             });
+        } else {
+             coursesSnap.forEach(doc => relevantCourseIds.push(doc.id));
         }
 
         if (unitId && unitId !== 'all') {
             relevantUnitIds.push(unitId);
         } else if (relevantCourseIds.length > 0) {
-             const unitPromises = relevantCourseIds.map(cId => db.collection('courses').doc(cId).collection('units').get());
+            const unitPromises = relevantCourseIds.map(cId => db.collection('courses').doc(cId).collection('units').get());
             const unitSnapshots = await Promise.all(unitPromises);
             relevantUnitIds = unitSnapshots.flatMap(snap => snap.docs.map(doc => doc.id));
         }
@@ -157,22 +159,22 @@ export async function exportAllData(
         if (topicId && topicId !== 'all') {
             relevantTopicIds = [topicId];
         } else if (relevantUnitIds.length > 0) {
-            const topicPromises = relevantUnitIds.map(uId => {
-                const unitDoc = unitsSnap.docs.find(d => d.id === uId);
-                const path = unitDoc?.ref.parent.parent?.path;
-                if (!path) return Promise.resolve({ docs: [] });
-                return db.collection(path).doc(uId).collection('topics').get();
-            });
+             const topicPromises = unitsSnap.docs
+                .filter(doc => relevantUnitIds.includes(doc.id))
+                .map(unitDoc => unitDoc.ref.collection('topics').get());
+
             const topicSnaps = await Promise.all(topicPromises);
             relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         } else if (relevantCourseIds.length > 0) {
-             const courseUnitIdsPromises = relevantCourseIds.map(cId => db.collection('courses').doc(cId).collection('units').get());
-             const courseUnitSnaps = await Promise.all(courseUnitIdsPromises);
-             const topicPromises = courseUnitSnaps.flatMap(unitSnap => 
-                unitSnap.docs.map(unitDoc => unitDoc.ref.collection('topics').get())
-             );
-             const topicSnaps = await Promise.all(topicPromises);
-             relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
+            const topicPromises = (await Promise.all(
+                relevantCourseIds.map(courseId => db.collection(`courses/${courseId}/units`).get())
+            )).flatMap(unitSnaps => 
+                unitSnaps.docs.map(unitDoc => 
+                    unitDoc.ref.collection('topics').get()
+                )
+            );
+            const topicSnaps = await Promise.all(topicPromises);
+            relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
         
         return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
@@ -519,41 +521,35 @@ export async function exportDataForStaticSite() {
     const exportCollectionRef = db.collection('__static_export');
     
     // Clear old data first by chunking deletes
-    const deleteSnapshot = await exportCollectionRef.limit(500).get();
-    let deleteBatch = db.batch();
-    let deleteCount = 0;
-    while(deleteSnapshot.docs.length > 0) {
-        for (const doc of deleteSnapshot.docs) {
-            deleteBatch.delete(doc.ref);
-            deleteCount++;
-            if (deleteCount === 500) {
-                await deleteBatch.commit();
-                deleteBatch = db.batch();
-                deleteCount = 0;
-            }
+    const CHUNK_SIZE_DELETE = 500;
+    async function deleteCollection(collectionRef: FirebaseFirestore.CollectionReference, batchSize: number) {
+        let query = collectionRef.limit(batchSize);
+        let snapshot = await query.get();
+        
+        while (snapshot.size > 0) {
+            const batch = db.batch();
+            snapshot.docs.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            await batch.commit();
+            snapshot = await query.get();
         }
-        if (deleteCount > 0) {
-            await deleteBatch.commit();
-            deleteBatch = db.batch();
-            deleteCount = 0;
-        }
-        // Fetch the next batch of documents to delete
-        const nextDeleteSnapshot = await exportCollectionRef.limit(500).get();
-        if (nextDeleteSnapshot.docs.length === 0) break;
     }
+    
+    await deleteCollection(exportCollectionRef, CHUNK_SIZE_DELETE);
 
 
     // Write new data in chunks
     let writeBatch = db.batch();
     let writeCount = 0;
-    const CHUNK_SIZE = 300; // More conservative chunk size
+    const CHUNK_SIZE_WRITE = 300; // More conservative chunk size
 
     for (const fileData of allDocsToWrite) {
         const docRef = db.collection('__static_export').doc();
         writeBatch.set(docRef, fileData);
         writeCount++;
 
-        if (writeCount === CHUNK_SIZE) {
+        if (writeCount === CHUNK_SIZE_WRITE) {
             await writeBatch.commit();
             writeBatch = db.batch();
             writeCount = 0;
@@ -567,5 +563,3 @@ export async function exportDataForStaticSite() {
     
     return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }
-
-```
