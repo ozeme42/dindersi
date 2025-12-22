@@ -388,7 +388,7 @@ export async function exportManifestAndContent() {
     const db = getAdminDb();
     const exportPath = path.join(process.cwd(), 'public', 'curriculum');
     const allDocsToWrite: { path: string, content: string }[] = [];
-    const CHUNK_SIZE = 300;
+    const CHUNK_SIZE = 100;
 
     try {
         await fs.mkdir(exportPath, { recursive: true });
@@ -406,7 +406,7 @@ export async function exportManifestAndContent() {
 
         const getClassGroups = async (isGeneral: boolean) => {
             const sourceClasses = isGeneral 
-                ? [{ id: 'general', name: 'Genel' }] 
+                ? [{ id: 'general', name: 'Genel', data: () => ({ name: 'Genel', isPublished: true }) }] 
                 : manifestClassesSnap.docs;
 
             return (await Promise.all(sourceClasses.map(async (classDoc) => {
@@ -427,9 +427,9 @@ export async function exportManifestAndContent() {
                         
                         const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
                             const topicData = topicDoc.data() as Topic;
-                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0;
+                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
-                        }) || !defsSnap.empty;
+                        });
 
                         return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
                     }));
@@ -497,9 +497,10 @@ export async function exportActivityData() {
     const db = getAdminDb();
     const exportPath = path.join(process.cwd(), 'public', 'curriculum', 'activities');
     const allDocsToWrite: { path: string, content: string }[] = [];
-    const CHUNK_SIZE = 300;
+    const CHUNK_SIZE = 100;
 
     try {
+        await fs.rm(exportPath, { recursive: true, force: true });
         await fs.mkdir(exportPath, { recursive: true });
 
         const activitiesSnapshot = await db.collection('activityItems').get();
@@ -530,33 +531,3 @@ export async function exportActivityData() {
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
-
-```
-- src/components/ui/textarea.tsx:
-```tsx
-import * as React from "react"
-
-import { cn } from "@/lib/utils"
-
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <textarea
-        className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Textarea.displayName = "Textarea"
-
-export { Textarea }
-
-```
