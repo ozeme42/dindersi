@@ -1,6 +1,8 @@
 
 'use server';
 
+import { unstable_noStore as noStore } from 'next/cache';
+import type { ActivityItem } from '@/lib/types';
 import { db } from "@/lib/firebase";
 import { 
   doc, 
@@ -15,8 +17,7 @@ import {
   getDocs, 
   getCountFromServer,
 } from 'firebase/firestore';
-import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
+
 
 export type MatchingPair = {
     id: string;
@@ -26,35 +27,26 @@ export type MatchingPair = {
 };
 
 export async function getHafizaKartlariAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-
-        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
-             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
-                }
-             } catch (e) {
-                 console.warn("Could not fetch static activity file, will try Firestore.", e);
-             }
+        if (!topicId || topicId === 'all') {
+            return { error: "Hafıza Kartları oynamak için belirli bir konu seçmelisiniz.", pairs: null };
         }
         
-        if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
-            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
-            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
-            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
-            
-            const querySnapshot = await getDocs(baseQuery);
-            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
-        }
+        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
 
-        const validItems = allItems.filter(item => item.content?.term && item.content?.definition);
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
+            }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
+        }
+        
+        const allItems: ActivityItem[] = await res.json();
+        
+        const validItems = allItems.filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
         if (validItems.length < 4) {
             return { error: "Hafıza Kartları oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
@@ -84,7 +76,9 @@ export async function submitHafizaKartlariScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) return { success: true };
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
+        return { success: true };
+    }
     
     try {
         const attemptsQuery = query(

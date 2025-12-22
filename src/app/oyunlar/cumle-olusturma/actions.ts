@@ -1,6 +1,8 @@
 
 'use server';
 
+import { unstable_noStore as noStore } from 'next/cache';
+import type { ActivityItem } from '@/lib/types';
 import { db } from "@/lib/firebase";
 import { 
   doc, 
@@ -15,49 +17,40 @@ import {
   getDocs, 
   getCountFromServer,
 } from 'firebase/firestore';
-import { unstable_noStore as noStore } from 'next/cache';
-import type { ActivityItem } from '@/lib/types';
+
 
 export type ScrambledSentenceData = {
     correctSentence: string;
 };
 
 export async function getCumleOlusturmaAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-        
-        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
-             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'sentence').map(item => ({ id: item.id, content: item.content }));
-                }
-             } catch (e) {
-                 console.warn("Could not fetch static activity file, will try Firestore.", e);
-             }
+        if (!topicId || topicId === 'all') {
+             return { error: "Cümle Oluşturma oynamak için belirli bir konu seçmelisiniz.", data: null };
         }
         
-        if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'sentence'));
-            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
-            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
-            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
 
-            const querySnapshot = await getDocs(baseQuery);
-            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+            }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
 
-        const allSentences = allItems.map(item => item.content?.text)
-            .filter((text): text is string => typeof text === 'string' && text.trim().length > 0 && text.trim().split(' ').length > 2);
+        const staticItems: ActivityItem[] = await res.json();
+        const allSentences = staticItems.filter(item => item.type === 'sentence' && item.content?.text)
+            .map(item => item.content.text!)
+            .filter(text => text.trim().length > 0 && text.trim().split(' ').length > 2);
 
         if (allSentences.length < 1) {
             return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
         }
         
+        // Fisher-Yates Shuffle
         for (let i = allSentences.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
@@ -80,7 +73,9 @@ export async function submitCumleOlusturmaScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) return { success: true };
+     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
+        return { success: true };
+    }
     
     try {
         const attemptsQuery = query(
