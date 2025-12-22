@@ -4,9 +4,12 @@
 import React, { Suspense } from 'react';
 import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Crosshair, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 function KavramAviPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
+    const searchParams = useSearchParams();
+    const isStatic = searchParams.get('isStatic') === 'true';
+
     return (
         <OyunKurulum 
             gameName="Kavram Avı"

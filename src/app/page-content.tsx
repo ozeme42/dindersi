@@ -32,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
+import { OyunKurulum } from '@/components/oyun-kurulum';
 
 type PublicTopic = { id: string; title: string; hasYazilacaklarContent: boolean; hasOzetContent: boolean };
 type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOzet: boolean };
@@ -233,7 +234,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 {popularGames.map((game) => {
                                     const Icon = game.icon;
                                     return (
-                                    <Link key={game.href} href={game.href} className="group">
+                                    <Link key={game.href} href={`${game.href}?isStatic=true`} className="group">
                                         <div className="relative overflow-hidden rounded-xl p-4 h-28 flex flex-col items-center justify-center text-center transition-all duration-300 border bg-gradient-to-br from-slate-800 to-slate-900 border-white/10 hover:border-rose-500/50 hover:bg-slate-800/50 hover:scale-105 shadow-lg hover:shadow-rose-500/20">
                                             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <Icon className="h-8 w-8 mb-2 text-rose-400 transition-colors group-hover:text-rose-300"/>
@@ -255,16 +256,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
             <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12 space-y-6">
                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                     <a 
-                        href="/curriculum/index.html" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-xl border border-white/10 shadow-lg transition-transform hover:scale-105"
-                    >
-                        <Globe />
-                        Statik Siteyi Keşfet
-                    </a>
-                     <a 
+                    <a 
                         href="https://dosya.co/ug6tf9joqc7i/Değerler_Oyunu.apk.html" 
                         target="_blank" 
                         rel="noopener noreferrer"

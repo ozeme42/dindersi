@@ -21,28 +21,42 @@ import type { ActivityItem, Anagram } from '@/lib/types';
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
-// Renamed from getKavramAviAction to getConceptHuntAction
-export async function getConceptHuntAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
-): Promise<{ questions: Anagram[] | null; error?: string }> {
+export async function getConceptHuntAction({ 
+    courseId, 
+    unitId, 
+    topicId,
+    isStatic 
+}: { 
+    courseId?: string; 
+    unitId?: string; 
+    topicId?: string; 
+    isStatic?: boolean;
+}): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
         let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
         
-        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
+        if (isStatic && topicId && topicId !== 'all') {
              try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+                // IMPORTANT: We need to construct the absolute URL for server-side fetch
+                const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+                const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+                
                 if (res.ok) {
                     const staticItems: ActivityItem[] = await res.json();
                     allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                } else if (res.status === 404) {
+                    // This is not a critical error, we can fallback to firestore
+                     console.warn(`Static activity file not found for topic ${topicId}, falling back to Firestore.`);
+                } else {
+                     throw new Error(`Failed to fetch static data: ${res.statusText}`);
                 }
              } catch (e) {
-                 // Ignore fetch errors in static mode, fallback to firestore if available
                  console.warn("Could not fetch static activity file, will try Firestore.", e);
              }
         }
         
-        if (allItems.length === 0) { // If static fetch fails or not in static mode
+        if (allItems.length === 0) { // Fallback to Firestore if static fetch fails or not in static mode
             let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
 
             if (topicId && topicId !== 'all') {
@@ -90,7 +104,6 @@ export async function getConceptHuntAction(
     }
 }
 
-// Renamed from submitKavramAviScoreAction to submitConceptHuntScoreAction
 export async function submitConceptHuntScoreAction(
     userId: string | null, 
     score: number, 

@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 // --- RENK PALETİ ---
 const LETTER_COLORS = [
@@ -90,6 +91,7 @@ function ConceptHuntGame() {
     const [gameShake, setGameShake] = useState(false);
 
     const gameContext = useMemo(() => `Kavram Avı - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`, [searchParams]);
+    const isStatic = searchParams.get('isStatic') === 'true';
 
     // Seviye Hazırlama
     const setupLevel = useCallback((question: Anagram) => {
@@ -98,7 +100,7 @@ function ConceptHuntGame() {
             id: index,
             colorClass: LETTER_COLORS[index % LETTER_COLORS.length]
         }));
-        setPoolLetters(letters); // Karışık halini API'den alıyoruz zaten
+        setPoolLetters(letters);
         setUserAnswer([]);
         setIsCorrect(false);
         setShakeId(null);
@@ -112,6 +114,7 @@ function ConceptHuntGame() {
                 courseId: searchParams.get('courseId') || undefined,
                 unitId: searchParams.get('unitId') || undefined,
                 topicId: searchParams.get('topicId') || undefined,
+                isStatic: searchParams.get('isStatic') === 'true'
             };
             const result = await getConceptHuntAction(params);
             if (result.error) {
@@ -186,7 +189,7 @@ function ConceptHuntGame() {
 
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (!user || score === 0 || isSaving) {
+        if (!user || score === 0 || isSaving || isStatic) {
             router.push('/oyunlar/kavram-avi');
             return;
         }
@@ -227,37 +230,7 @@ function ConceptHuntGame() {
     }
 
     if (gameState === 'finished') {
-        return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
-                <GameBackground />
-                <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
-                    <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-teal-500/20 rounded-full blur-2xl animate-pulse" />
-                        <Trophy className="w-32 h-32 text-teal-400 mx-auto drop-shadow-[0_0_15px_rgba(45,212,191,0.5)]" />
-                    </div>
-                    <div>
-                        <h1 className="text-4xl lg:text-5xl font-black text-white mb-2 tracking-tight">KAVRAM USTASI!</h1>
-                        <p className="text-slate-400 text-lg">Toplam Skorun</p>
-                    </div>
-                    <div className="bg-slate-900/50 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-                        <div className="text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-500">
-                            {score}
-                        </div>
-                    </div>
-                    <div className="space-y-3">
-                        <Button 
-                            onClick={handleSaveAndExit} 
-                            size="lg" 
-                            disabled={isSaving}
-                            className="w-full h-16 text-xl font-bold rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 shadow-xl shadow-teal-500/20 transition-all hover:scale-105"
-                        >
-                            {isSaving ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <Save className="mr-3 h-6 w-6" />}
-                            PUANI KAYDET VE ÇIK
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        );
+        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} onRestart={() => window.location.reload()} backUrl="/oyunlar/kavram-avi" />;
     }
 
     return (
@@ -291,7 +264,7 @@ function ConceptHuntGame() {
                                     className={cn(
                                         "w-10 h-12 lg:w-14 lg:h-16 rounded-xl border-2 flex items-center justify-center text-2xl lg:text-4xl font-black transition-all duration-300 select-none",
                                         letterObj 
-                                            ? cn("bg-slate-800 border-teal-500 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.3)] animate-in zoom-in-50", isCorrect && "bg-green-500/20 border-green-500 text-green-400")
+                                            ? cn("bg-slate-800 border-teal-500 text-teal-400 shadow-[0_0_15px_rgba(45,212,191,0.3)] animate-in zoom-in-50 cursor-pointer")
                                             : "bg-white/5 border-white/10 text-transparent"
                                     )}
                                 >
@@ -347,4 +320,3 @@ export default function ConceptHuntPage() {
         </Suspense>
     );
 }
-

@@ -4,13 +4,12 @@
 import React, { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users
+    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users, Gamepad2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { Gamepad2 } from 'lucide-react';
 
 // --- TİP TANIMLARI ---
 type Topic = { id: string; title: string; };
@@ -270,7 +269,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const getBackUrl = () => {
     if (user?.role === 'student') return '/student';
     if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
-    return '/oyunlar';
+    return '/';
   };
 
   const formatGroupName = (name: string) => {
