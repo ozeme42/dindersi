@@ -23,50 +23,62 @@
             overflow-x: hidden;
         }
 
-        /* --- TABLO GÖRÜNÜMÜ (NOTLAR) --- */
-        .notes-table {
+        /* --- YENİ NOT TASARIMI: BİLGİ KARTLARI --- */
+        .notes-grid {
             display: grid;
             grid-template-columns: 1fr;
-            background-color: rgba(71, 85, 105, 0.5);
-            gap: 1px;
-            border: 1px solid rgba(71, 85, 105, 0.5);
-            border-radius: 16px;
-            overflow: hidden;
+            gap: 1.5rem; /* Kartlar arası boşluk */
         }
-        @media (min-width: 768px) { .notes-table { grid-template-columns: 1fr 1fr; } }
-        
-        .notes-cell {
-            background-color: rgba(30, 41, 59, 0.8);
-            padding: 1.5rem;
-            display: flex; align-items: flex-start; gap: 1rem;
-            transition: all 0.2s;
-        }
-        .notes-cell:hover { background-color: rgba(30, 41, 59, 1); }
+        @media (min-width: 768px) { .notes-grid { grid-template-columns: 1fr 1fr; } }
 
-        /* --- KAVRAMLAR IZGARA (GRID) DÜZENİ --- */
-        /* Değişiklik: Masonry yerine Standart Grid kullanıldı */
+        .note-card {
+            background: rgba(30, 41, 59, 0.4); /* Hafif şeffaf koyu zemin */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 5px solid #a855f7; /* Sol tarafta mor vurgu */
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-card:hover {
+            transform: translateY(-3px); /* Üzerine gelince hafif kalkar */
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .note-number {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(168, 85, 247, 0.15); /* Mor arka plan */
+            color: #d8b4fe; /* Açık mor yazı */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 2px solid rgba(168, 85, 247, 0.2);
+        }
+
+        /* --- KAVRAMLAR (GRID) --- */
         .concepts-grid { 
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            align-items: start;
+            display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start;
         }
         @media (min-width: 768px) { .concepts-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1280px) { .concepts-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1600px) { .concepts-grid { grid-template-columns: repeat(4, 1fr); } }
+        .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
 
-        /* --- NUMARALANDIRMA --- */
-        .note-number {
-            min-width: 2rem; height: 2rem;
-            background: rgba(59, 130, 246, 0.2); color: #60a5fa;
-            border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 0.9rem; border: 1px solid rgba(96, 165, 250, 0.3);
-        }
         .concept-number {
-            position: absolute; top: -10px; right: -10px; width: 2.5rem; height: 2.5rem;
-            background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 12px;
+            position: absolute; top: -12px; right: -10px; width: 2.8rem; height: 2.8rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 14px;
             display: flex; align-items: center; justify-content: center; font-weight: 900;
-            font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); z-index: 10; transform: rotate(5deg);
+            font-size: 1.3rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); z-index: 10;
+            transform: rotate(10deg); border: 2px solid rgba(255,255,255,0.1);
         }
 
         /* --- UI & OYUN --- */
@@ -78,26 +90,19 @@
         /* Eşleştirme */
         .match-container { display: flex; gap: 20px; width: 100%; max-width: 1400px; justify-content: center; padding: 10px; }
         .match-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-        
-        .match-item { 
-            background: #1e293b; border: 2px solid #334155; padding: 1.5rem; border-radius: 16px; 
-            cursor: pointer; min-height: 5rem; font-weight: 600; font-size: 1.1rem; 
-            display: flex; align-items: center; justify-content: center; text-align: center; 
-            transition: all 0.2s; position: relative;
-        }
+        .match-item { background: #1e293b; border: 2px solid #334155; padding: 1.5rem; border-radius: 16px; cursor: pointer; min-height: 5rem; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; text-align: center; transition: all 0.2s; position: relative; }
         .match-item:hover { transform: translateY(-3px); border-color: #64748b; }
         .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); box-shadow: 0 0 20px rgba(59,130,246,0.4); z-index: 10; }
         .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; opacity: 0.6; background: #059669 !important; border-color: #34d399 !important; }
         
-        /* Renkler */
-        .m-color-0 { background: #059669 !important; }
-        .quiz-opt { transition: all 0.2s; }
         .game-slot { width: 3.5rem; height: 4rem; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
         .letter-btn { width: 4rem; height: 4rem; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; border: 1px solid white; transition: all 0.1s; }
         .letter-btn:active { top: 6px; box-shadow: none; transform: translateY(6px); }
         .letter-btn.used { opacity: 0; pointer-events: none; transform: scale(0); }
         .shake { animation: shake 0.4s; } @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .quiz-opt { transition: all 0.2s; }
+        .m-color-0 { background: #059669 !important; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -169,8 +174,8 @@
     </div>
 
     <script src="database.js"></script>
-    <script src="icerik.js?v=final5"></script>
-    <script src="oyunlar.js?v=final5"></script>
+    <script src="icerik.js?v=final6"></script>
+    <script src="oyunlar.js?v=final6"></script>
 
     <script>
         // --- FONT KONTROLÜ ---
@@ -289,14 +294,14 @@
                 const group = data.find(g => g.name === App.activeClassFilter);
                 if(!group || group.courses.length === 0) { list.innerHTML = '<div class="text-center w-full py-20 text-slate-500 text-xl">İçerik bulunamadı.</div>'; return; }
                 list.innerHTML = group.courses.map((c, i) => `
-                    <div class="glass-card rounded-3xl overflow-hidden fade-in flex flex-col h-full" style="animation-delay:${i*50}ms">
-                        <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-white/5 font-black text-xl flex items-center gap-3"><span class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-2xl">📘</span> ${c.name}</div>
-                        <div class="p-4 space-y-3 flex-grow">
+                    <div class="glass-card rounded-3xl overflow-hidden fade-in flex flex-col h-full hover:border-white/20 transition duration-300" style="animation-delay:${i*50}ms">
+                        <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-white/5 font-black text-2xl flex items-center gap-4"><span class="w-14 h-14 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-3xl shadow-lg">📘</span> ${c.name}</div>
+                        <div class="p-5 space-y-4 flex-grow">
                             ${c.units.map(u => `
-                                <div class="group border border-white/5 rounded-2xl bg-slate-900/30 overflow-hidden hover:border-cyan-500/30 transition">
-                                    <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left p-4 font-bold text-slate-300 hover:text-white flex justify-between items-center text-lg"><span class="uppercase tracking-wide">${u.name}</span> <span class="text-cyan-500 opacity-50 group-hover:opacity-100 transition">▼</span></button>
+                                <div class="group border border-white/5 rounded-2xl bg-slate-900/30 overflow-hidden hover:border-cyan-500/30 transition shadow-sm">
+                                    <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left p-5 font-bold text-slate-300 hover:text-white flex justify-between items-center text-lg"><span class="uppercase tracking-wide">${u.name}</span> <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500/20 transition">▼</span></button>
                                     <div class="hidden bg-slate-950/50 border-t border-white/5">
-                                        ${u.topics.map(t => `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 pl-6 hover:bg-white/5 transition gap-3 border-b border-white/5 last:border-none"><span class="text-lg font-medium text-slate-200 cursor-pointer hover:text-cyan-400 transition" onclick="${t.url ? `window.open('${t.url}')` : ''}">${t.name} ${t.url?'🔗':''}</span><div class="flex gap-2 shrink-0"><button onclick="router.go('notes', '${t.id}')" class="px-5 py-2 bg-blue-600/20 text-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">Notlar</button><button onclick="router.go('games', '${t.id}')" class="px-5 py-2 bg-purple-600/20 text-purple-300 rounded-lg text-sm font-bold hover:bg-purple-600 hover:text-white transition">Oyun</button></div></div>`).join('')}
+                                        ${u.topics.map(t => `<div class="flex flex-col md:flex-row items-start md:items-center justify-between p-5 pl-7 hover:bg-white/5 transition gap-4 border-b border-white/5 last:border-none"><span class="text-lg font-medium text-slate-200 cursor-pointer hover:text-cyan-400 transition leading-snug flex-grow" onclick="${t.url ? `window.open('${t.url}')` : ''}">${t.name} ${t.url?'🔗':''}</span><div class="flex gap-3 shrink-0 w-full md:w-auto justify-end"><button onclick="router.go('notes', '${t.id}')" class="flex-1 md:flex-none px-6 py-2.5 bg-blue-600/20 text-blue-300 rounded-xl text-sm font-bold hover:bg-blue-600 hover:text-white transition border border-blue-600/20">Notlar</button><button onclick="router.go('games', '${t.id}')" class="flex-1 md:flex-none px-6 py-2.5 bg-purple-600/20 text-purple-300 rounded-xl text-sm font-bold hover:bg-purple-600 hover:text-white transition border border-purple-600/20">Oyun</button></div></div>`).join('')}
                                     </div>
                                 </div>
                             `).join('')}
@@ -309,26 +314,26 @@
                 document.getElementById('note-title').textContent = d.name;
                 let html = '';
                 
-                // 1. KAVRAMLAR (GRID - SOLDAN SAĞA)
+                // 1. KAVRAMLAR (GRID - DÜZENLENDİ)
                 if(d.definitions.length) {
                     let counter = 0;
                     html += `
                     <div class="fade-in mb-12">
                         <h3 class="text-3xl font-black text-yellow-400 mb-8 flex items-center gap-4"><span class="bg-yellow-500/20 p-3 rounded-2xl">💡</span> Temel Kavramlar</h3>
                         <div class="concepts-grid">
-                            ${d.definitions.map(x => { counter++; return `<div class="concept-card glass-card p-8 rounded-3xl break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500"><div class="concept-number">${counter}</div><h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4><p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p></div>`; }).join('')}
+                            ${d.definitions.map(x => { counter++; return `<div class="concept-card glass-card p-8 rounded-3xl break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500 relative"><div class="concept-number">${counter}</div><h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4><p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p></div>`; }).join('')}
                         </div>
                     </div>`;
                 }
 
-                // 2. ÖNEMLİ BİLGİLER (TABLO)
+                // 2. ÖNEMLİ BİLGİLER (KART GÖRÜNÜMÜ)
                 if(d.notes.length) {
                     let counter = 0;
                     html += `
                     <div class="fade-in">
                         <h3 class="text-3xl font-black text-purple-400 mb-8 flex items-center gap-4"><span class="bg-purple-500/20 p-3 rounded-2xl">📌</span> Önemli Bilgiler</h3>
-                        <div class="notes-table">
-                            ${d.notes.map(n => { counter++; return `<div class="notes-cell"><div class="note-number shrink-0">${counter}</div><p class="text-xl text-slate-200 leading-relaxed">${n}</p></div>`; }).join('')}
+                        <div class="notes-grid">
+                            ${d.notes.map(n => { counter++; return `<div class="note-card"><div class="note-number shrink-0">${counter}</div><p class="text-xl text-slate-200 leading-relaxed">${n}</p></div>`; }).join('')}
                         </div>
                     </div>`;
                 }

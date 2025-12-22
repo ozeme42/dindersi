@@ -10,8 +10,8 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 
 async function getContent(slug: string[]): Promise<{ title: string, htmlContent: string } | null> {
-    if (!slug || slug.length < 2) return null;
-    const contentId = slug.length > 2 ? slug[2] : slug[1];
+    if (!slug || slug.length === 0) return null;
+    const contentId = slug[slug.length - 1]; // Use the last segment of the slug as the ID
     
     try {
         const res = await fetch(`/curriculum/ozetler/${contentId}.html`);

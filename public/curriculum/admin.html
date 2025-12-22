@@ -3,123 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Süper Admin Paneli</title>
+    <title>İçerik Yöneticisi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: #cbd5e1; font-family: sans-serif; }
-        .input-dark { background: #1e293b; border: 1px solid #334155; color: white; padding: 0.5rem; border-radius: 0.5rem; width: 100%; }
-        .input-dark:focus { outline: none; border-color: #06b6d4; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        
+        body { background-color: #0f172a; color: #cbd5e1; font-family: 'Outfit', sans-serif; }
+        
+        /* Modern Input Stili */
+        .input-dark { 
+            background: #1e293b; 
+            border: 1px solid #334155; 
+            color: white; 
+            padding: 0.75rem; 
+            border-radius: 0.75rem; 
+            width: 100%; 
+            transition: all 0.2s;
+        }
+        .input-dark:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        .modal-overlay { background-color: rgba(0,0,0,0.8); }
+        
+        .modal-overlay { background-color: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
     </style>
 </head>
-<body class="h-screen flex flex-col relative">
+<body class="h-screen flex flex-col relative overflow-hidden">
 
-    <header class="bg-slate-900 border-b border-white/10 p-4 flex justify-between items-center sticky top-0 z-40">
+    <header class="bg-slate-900/90 backdrop-blur border-b border-white/10 h-16 flex justify-between items-center px-6 sticky top-0 z-40">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center text-xl font-bold text-white">⚙️</div>
-            <h1 class="text-xl font-bold text-white hidden sm:block">İçerik ve Bağlantı Yöneticisi</h1>
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-xl font-bold text-white shadow-lg">⚙️</div>
+            <h1 class="text-lg font-bold text-white tracking-wide hidden sm:block">İÇERİK YÖNETİCİSİ</h1>
         </div>
         <div class="flex gap-3">
-            <button onclick="toggleBulkModal()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-medium transition flex items-center gap-2">
+            <button onclick="toggleBulkModal()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-purple-900/30">
                 ⚡ Toplu Ekle
             </button>
-            <button onclick="downloadFile()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded shadow-lg shadow-green-900/20 transition flex items-center gap-2">
-                💾 İndir (icerik.js)
+            <button onclick="downloadFile()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm shadow-lg shadow-emerald-900/30 transition flex items-center gap-2">
+                💾 Kaydet & İndir
             </button>
-            <a href="index.html" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm transition flex items-center">Siteye Dön</a>
+            <a href="index.html" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-sm transition flex items-center border border-white/5">
+                Siteyi Gör ➜
+            </a>
         </div>
     </header>
 
     <div class="flex flex-grow overflow-hidden">
         
-        <div class="w-1/3 min-w-[250px] border-r border-white/10 flex flex-col bg-slate-950/50">
-            <div class="p-4 border-b border-white/10">
-                <input type="text" id="searchBox" placeholder="Başlıklarda ara..." onkeyup="renderList()" class="input-dark mb-2">
-                <button onclick="addNewTopic()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded font-medium transition">+ Yeni Konu Ekle</button>
+        <div class="w-1/3 min-w-[300px] border-r border-white/10 flex flex-col bg-slate-950">
+            <div class="p-4 border-b border-white/10 bg-slate-900/50">
+                <input type="text" id="searchBox" placeholder="Konu Ara..." onkeyup="renderList()" class="input-dark mb-3 text-sm">
+                <button onclick="addNewTopic()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold text-sm transition shadow-lg shadow-blue-900/20">+ Yeni Konu Oluştur</button>
             </div>
-            <div id="topic-list" class="flex-grow overflow-y-auto p-2 space-y-2">
-                </div>
-            <div class="p-2 text-center text-xs text-slate-500 border-t border-white/5">
-                Toplam <span id="total-count">0</span> kayıt
+            <div id="topic-list" class="flex-grow overflow-y-auto p-3 space-y-2"></div>
+            <div class="p-3 text-center text-xs text-slate-500 border-t border-white/5 bg-slate-900">
+                Toplam <span id="total-count" class="text-white font-bold">0</span> kayıt bulundu
             </div>
         </div>
 
         <div class="w-2/3 flex flex-col bg-slate-900 relative">
             <div id="edit-area" class="flex-grow overflow-y-auto p-8 hidden">
                 
-                <div class="bg-slate-800 p-6 rounded-xl border border-white/5 mb-6">
-                    <h2 class="text-xl font-bold text-cyan-400 mb-4">📍 Genel Bilgiler</h2>
-                    <div class="grid grid-cols-2 gap-4">
+                <div class="bg-slate-800/50 p-6 rounded-2xl border border-white/5 mb-6 shadow-xl">
+                    <h2 class="text-lg font-bold text-cyan-400 mb-4 flex items-center gap-2">
+                        <span class="bg-cyan-500/10 p-1.5 rounded text-xl">📍</span> Konu Bilgileri
+                    </h2>
+                    <div class="grid grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Ders Adı (Örn: DKAB)</label>
-                            <input type="text" id="inp-course" class="input-dark" onchange="updateCurrentData()">
+                            <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Ders Adı</label>
+                            <input type="text" id="inp-course" class="input-dark" placeholder="Örn: DKAB" onchange="updateCurrentData()">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-400 mb-1">Ünite Başlığı</label>
-                            <input type="text" id="inp-unit" class="input-dark" onchange="updateCurrentData()">
+                            <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Ünite Başlığı</label>
+                            <input type="text" id="inp-unit" class="input-dark" placeholder="Örn: 1. Ünite" onchange="updateCurrentData()">
                         </div>
                         <div class="col-span-2">
-                            <label class="block text-xs text-slate-400 mb-1">Konu Başlığı (Tam Eşleşmeli)</label>
-                            <input type="text" id="inp-topic" class="input-dark" onchange="updateCurrentData()">
+                            <label class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Konu Başlığı (Tam Eşleşmeli)</label>
+                            <input type="text" id="inp-topic" class="input-dark font-bold text-white" placeholder="Örn: Namazın Önemi" onchange="updateCurrentData()">
+                        </div>
+                        <div class="col-span-2 bg-slate-900/50 p-4 rounded-xl border border-blue-500/20">
+                            <label class="block text-xs font-bold text-blue-400 mb-1.5 uppercase tracking-wider flex justify-between">
+                                <span>🔗 Özel Sayfa Bağlantısı (Opsiyonel)</span>
+                                <span class="text-[10px] normal-case opacity-70">Bu konuya tıklandığında açılacak HTML dosyası</span>
+                            </label>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-500 text-sm">Dosya:</span>
+                                <input type="text" id="inp-url" class="input-dark font-mono text-sm text-blue-300 border-blue-500/30 focus:border-blue-500" placeholder="ornek: namaz.html" onchange="updateCurrentData()">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-blue-500/30 p-6 rounded-xl mb-6 shadow-lg shadow-blue-900/10">
-                    <h2 class="text-xl font-bold text-blue-400 mb-2">🔗 Dosya / Sayfa Bağlantısı</h2>
-                    <p class="text-xs text-slate-400 mb-3">Eğer bu konuya tıklandığında özel bir HTML sayfasının açılmasını istiyorsanız dosya adını yazın. Boş bırakırsanız link çalışmaz.</p>
-                    <div class="flex gap-2 items-center">
-                        <span class="text-slate-500">Dosya Adı:</span>
-                        <input type="text" id="inp-url" class="input-dark border-blue-500/50 text-blue-300 font-mono" placeholder="ornek: namaz-konusu.html" onchange="updateCurrentData()">
-                    </div>
-                </div>
-
-                <div class="bg-slate-800 p-6 rounded-xl border border-white/5 mb-6">
+                <div class="bg-slate-800/50 p-6 rounded-2xl border border-white/5 mb-6 shadow-xl">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-yellow-400">💡 Kavramlar</h2>
-                        <button onclick="addConcept()" class="text-xs bg-slate-700 px-2 py-1 rounded hover:bg-slate-600">+ Ekle</button>
+                        <h2 class="text-lg font-bold text-yellow-400 flex items-center gap-2">
+                            <span class="bg-yellow-500/10 p-1.5 rounded text-xl">💡</span> Kavramlar
+                        </h2>
+                        <button onclick="addConcept()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg transition font-bold">+ Yeni Kavram</button>
                     </div>
                     <div id="concepts-container" class="space-y-3"></div>
                 </div>
 
-                <div class="bg-slate-800 p-6 rounded-xl border border-white/5 mb-6">
+                <div class="bg-slate-800/50 p-6 rounded-2xl border border-white/5 mb-6 shadow-xl">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-purple-400">📌 Notlar</h2>
-                        <button onclick="addNote()" class="text-xs bg-slate-700 px-2 py-1 rounded hover:bg-slate-600">+ Ekle</button>
+                        <h2 class="text-lg font-bold text-purple-400 flex items-center gap-2">
+                            <span class="bg-purple-500/10 p-1.5 rounded text-xl">📌</span> Önemli Notlar
+                        </h2>
+                        <button onclick="addNote()" class="text-xs bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-lg transition font-bold">+ Yeni Not</button>
                     </div>
                     <div id="notes-container" class="space-y-3"></div>
                 </div>
 
-                <div class="text-right pb-10">
-                    <button onclick="deleteTopic()" class="text-red-400 text-sm hover:text-red-300 underline">Bu Konuyu Tamamen Sil</button>
+                <div class="text-right pb-10 pt-4 border-t border-white/5">
+                    <button onclick="deleteTopic()" class="text-red-400 text-sm hover:text-red-300 hover:underline flex items-center justify-end gap-1 ml-auto">
+                        🗑️ Bu Konuyu Sil
+                    </button>
                 </div>
 
             </div>
             
-            <div id="empty-state" class="flex-grow flex flex-col items-center justify-center text-slate-500">
-                <div class="text-6xl mb-4">👈</div>
-                <p>Düzenlemek için soldan bir konu seçin veya yeni ekleyin.</p>
+            <div id="empty-state" class="flex-grow flex flex-col items-center justify-center text-slate-500 p-10 text-center">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-4xl mb-4 shadow-inner">👈</div>
+                <h3 class="text-xl font-bold text-slate-300 mb-2">Konu Seçilmedi</h3>
+                <p class="max-w-xs mx-auto">Düzenlemek için soldaki listeden bir konu seçin veya yeni bir konu oluşturun.</p>
             </div>
         </div>
     </div>
 
     <div id="bulk-modal" class="fixed inset-0 z-50 hidden">
-        <div class="modal-overlay absolute inset-0" onclick="toggleBulkModal()"></div>
+        <div class="modal-overlay absolute inset-0 transition-opacity" onclick="toggleBulkModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl border border-white/10 flex flex-col max-h-[90vh]">
-                <div class="p-4 border-b border-white/10 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-white">Toplu Veri Ekle (JSON)</h3>
-                    <button onclick="toggleBulkModal()" class="text-slate-400 hover:text-white">✕</button>
+            <div class="bg-slate-900 w-full max-w-3xl rounded-2xl shadow-2xl border border-white/10 flex flex-col max-h-[85vh] transform transition-all scale-100">
+                <div class="p-5 border-b border-white/10 flex justify-between items-center bg-slate-800 rounded-t-2xl">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">⚡ Toplu Veri Ekleme (JSON)</h3>
+                    <button onclick="toggleBulkModal()" class="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-white transition">✕</button>
                 </div>
-                <div class="p-4 flex-grow flex flex-col">
-                    <textarea id="bulk-input" class="w-full h-64 bg-slate-950 text-slate-300 p-4 rounded-lg font-mono text-xs border border-white/10 resize-none focus:outline-none focus:border-purple-500" placeholder="[...]"></textarea>
+                <div class="p-0 flex-grow flex flex-col relative">
+                    <textarea id="bulk-input" class="w-full h-full bg-slate-950 text-slate-300 p-5 font-mono text-xs border-none resize-none focus:outline-none leading-relaxed" placeholder='[ {"courseName": "...", "unitName": "...", ...} ]'></textarea>
                 </div>
-                <div class="p-4 border-t border-white/10 flex justify-end gap-3 bg-slate-900/50 rounded-b-2xl">
-                    <button onclick="toggleBulkModal()" class="px-4 py-2 text-slate-300 hover:text-white">İptal</button>
-                    <button onclick="saveBulkData()" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded font-bold">Sisteme Dahil Et</button>
+                <div class="p-5 border-t border-white/10 flex justify-end gap-3 bg-slate-800 rounded-b-2xl">
+                    <button onclick="toggleBulkModal()" class="px-5 py-2.5 text-slate-400 hover:text-white font-medium transition">İptal</button>
+                    <button onclick="saveBulkData()" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold shadow-lg shadow-purple-900/30 transition">Verileri İçeri Aktar</button>
                 </div>
             </div>
         </div>
@@ -131,29 +157,44 @@
         let contents = [];
         let selectedIndex = -1;
 
+        // Sayfa Yüklendiğinde
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof window.EK_ICERIKLER !== 'undefined') contents = window.EK_ICERIKLER;
+            if (typeof window.EK_ICERIKLER !== 'undefined') {
+                contents = window.EK_ICERIKLER;
+            } else {
+                contents = []; // Boşsa başlat
+            }
             renderList();
         });
 
+        // Listeyi Çiz
         function renderList() {
             const listContainer = document.getElementById('topic-list');
             const search = document.getElementById('searchBox').value.toLowerCase();
             const countLabel = document.getElementById('total-count');
+            
             listContainer.innerHTML = '';
             let count = 0;
 
             contents.forEach((item, index) => {
-                const text = `${item.courseTitle} - ${item.topicTitle}`.toLowerCase();
+                // Güvenli İsim Kontrolü
+                const cName = item.courseName || item.courseTitle || "Ders Yok";
+                const tName = item.topicName || item.topicTitle || "Konu Yok";
+                
+                const text = `${cName} - ${tName}`.toLowerCase();
+                
                 if (text.includes(search)) {
                     count++;
                     const btn = document.createElement('div');
-                    btn.className = `p-3 rounded cursor-pointer border border-transparent transition ${selectedIndex === index ? 'bg-cyan-600 text-white' : 'hover:bg-slate-800 text-slate-300'}`;
+                    const isActive = selectedIndex === index;
+                    
+                    btn.className = `p-3 rounded-xl cursor-pointer border transition group relative overflow-hidden ${isActive ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/30' : 'bg-slate-900 border-white/5 hover:bg-slate-800 hover:border-white/10 text-slate-300'}`;
+                    
                     btn.innerHTML = `
-                        <div class="font-bold text-sm truncate">${item.topicTitle}</div>
-                        <div class="flex justify-between items-center mt-1">
-                            <span class="text-xs opacity-70 truncate">${item.courseTitle}</span>
-                            ${item.url ? '<span class="text-[10px] bg-blue-500/20 text-blue-300 px-1 rounded">Link Var</span>' : ''}
+                        <div class="font-bold text-sm truncate relative z-10">${tName}</div>
+                        <div class="flex justify-between items-center mt-1.5 relative z-10">
+                            <span class="text-xs font-medium px-2 py-0.5 rounded ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-500 group-hover:text-slate-400'} truncate max-w-[120px]">${cName}</span>
+                            ${item.url ? '<span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">LINK</span>' : ''}
                         </div>
                     `;
                     btn.onclick = () => selectTopic(index);
@@ -163,96 +204,124 @@
             countLabel.textContent = count;
         }
 
+        // Konu Seç
         function selectTopic(index) {
             selectedIndex = index;
-            renderList();
+            renderList(); // Aktif rengi güncelle
+            
             const item = contents[index];
             document.getElementById('empty-state').classList.add('hidden');
             document.getElementById('edit-area').classList.remove('hidden');
 
-            document.getElementById('inp-course').value = item.courseTitle || '';
-            document.getElementById('inp-unit').value = item.unitTitle || '';
-            document.getElementById('inp-topic').value = item.topicTitle || '';
-            document.getElementById('inp-url').value = item.url || ''; // YENİ: URL Yükle
+            // Formu Doldur (Eski/Yeni İsim Desteği)
+            document.getElementById('inp-course').value = item.courseName || item.courseTitle || '';
+            document.getElementById('inp-unit').value = item.unitName || item.unitTitle || '';
+            document.getElementById('inp-topic').value = item.topicName || item.topicTitle || '';
+            document.getElementById('inp-url').value = item.url || '';
 
             renderConcepts();
             renderNotes();
         }
 
+        // Verileri Güncelle
+        function updateCurrentData() {
+            if (selectedIndex === -1) return;
+            const item = contents[selectedIndex];
+            
+            // Hem yeni hem eski formatı güncelle (Garanti olsun)
+            const cName = document.getElementById('inp-course').value;
+            const uName = document.getElementById('inp-unit').value;
+            const tName = document.getElementById('inp-topic').value;
+            
+            item.courseName = cName; item.courseTitle = cName;
+            item.unitName = uName; item.unitTitle = uName;
+            item.topicName = tName; item.topicTitle = tName;
+            
+            item.url = document.getElementById('inp-url').value;
+            
+            renderList();
+        }
+
+        // Kavramlar
         function renderConcepts() {
             const container = document.getElementById('concepts-container');
-            if(!contents[selectedIndex].writingContent) contents[selectedIndex].writingContent = {};
-            if(!contents[selectedIndex].writingContent.conceptDefinitions) contents[selectedIndex].writingContent.conceptDefinitions = [];
-            const list = contents[selectedIndex].writingContent.conceptDefinitions;
+            const item = contents[selectedIndex];
+            
+            if(!item.writingContent) item.writingContent = {};
+            if(!item.writingContent.conceptDefinitions) item.writingContent.conceptDefinitions = [];
+            
+            const list = item.writingContent.conceptDefinitions;
             container.innerHTML = '';
 
             list.forEach((c, i) => {
                 container.innerHTML += `
-                    <div class="flex gap-2 items-start bg-slate-900 p-2 rounded border border-white/5">
+                    <div class="flex gap-3 items-start bg-slate-900 p-3 rounded-xl border border-white/5 hover:border-white/10 transition group">
+                        <div class="flex flex-col items-center justify-center pt-2">
+                            <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center text-xs font-bold border border-white/5">${i+1}</span>
+                        </div>
                         <div class="flex-grow grid grid-cols-1 gap-2">
-                            <input type="text" placeholder="Kavram" class="input-dark text-sm font-bold text-yellow-400" 
+                            <input type="text" placeholder="Kavram Adı" class="input-dark text-sm font-bold text-yellow-400 bg-slate-950 border-transparent focus:bg-slate-900" 
                                 value="${c.term || c.concept || ''}" onchange="updateConcept(${i}, 'concept', this.value)">
-                            <textarea placeholder="Tanımı" rows="2" class="input-dark text-sm text-slate-300" 
+                            <textarea placeholder="Tanımı..." rows="2" class="input-dark text-sm text-slate-300 bg-slate-950 border-transparent focus:bg-slate-900 resize-none" 
                                 onchange="updateConcept(${i}, 'definition', this.value)">${c.definition || ''}</textarea>
                         </div>
-                        <button onclick="removeConcept(${i})" class="text-red-500 hover:text-red-400 p-1">🗑️</button>
+                        <button onclick="removeConcept(${i})" class="text-slate-600 hover:text-red-500 p-2 opacity-0 group-hover:opacity-100 transition">✕</button>
                     </div>
                 `;
             });
         }
 
+        function updateConcept(subIndex, key, val) {
+            const list = contents[selectedIndex].writingContent.conceptDefinitions;
+            if (key === 'concept') {
+                list[subIndex].term = val;
+                list[subIndex].concept = val;
+            } else {
+                list[subIndex].definition = val;
+            }
+        }
+
+        // Notlar
         function renderNotes() {
             const container = document.getElementById('notes-container');
-            if(!contents[selectedIndex].writingContent) contents[selectedIndex].writingContent = {};
-            if(!contents[selectedIndex].writingContent.notes) contents[selectedIndex].writingContent.notes = [];
-            const list = contents[selectedIndex].writingContent.notes;
+            const item = contents[selectedIndex];
+            
+            if(!item.writingContent) item.writingContent = {};
+            if(!item.writingContent.notes) item.writingContent.notes = [];
+            
+            const list = item.writingContent.notes;
             container.innerHTML = '';
 
             list.forEach((n, i) => {
                 container.innerHTML += `
-                    <div class="flex gap-2 items-start">
-                        <textarea rows="2" class="input-dark text-slate-300" onchange="updateNote(${i}, this.value)">${n}</textarea>
-                        <button onclick="removeNote(${i})" class="text-red-500 hover:text-red-400 p-1 mt-2">🗑️</button>
+                    <div class="flex gap-3 items-start group">
+                        <span class="text-purple-500 mt-3 text-lg">•</span>
+                        <textarea rows="2" class="input-dark text-slate-300 bg-slate-900/50 focus:bg-slate-900 border-white/5 resize-none leading-relaxed" onchange="updateNote(${i}, this.value)">${n}</textarea>
+                        <button onclick="removeNote(${i})" class="text-slate-600 hover:text-red-500 p-2 mt-1 opacity-0 group-hover:opacity-100 transition">✕</button>
                     </div>
                 `;
             });
-        }
-
-        function updateCurrentData() {
-            if (selectedIndex === -1) return;
-            contents[selectedIndex].courseTitle = document.getElementById('inp-course').value;
-            contents[selectedIndex].unitTitle = document.getElementById('inp-unit').value;
-            contents[selectedIndex].topicTitle = document.getElementById('inp-topic').value;
-            contents[selectedIndex].url = document.getElementById('inp-url').value; // YENİ: URL Kaydet
-            renderList();
-        }
-
-        function updateConcept(subIndex, key, val) {
-            if (key === 'concept') {
-                contents[selectedIndex].writingContent.conceptDefinitions[subIndex].term = val;
-                contents[selectedIndex].writingContent.conceptDefinitions[subIndex].concept = val;
-            } else {
-                contents[selectedIndex].writingContent.conceptDefinitions[subIndex].definition = val;
-            }
         }
 
         function updateNote(subIndex, val) {
             contents[selectedIndex].writingContent.notes[subIndex] = val;
         }
 
+        // Ekle / Sil Fonksiyonları
         function addNewTopic() {
             contents.unshift({
-                courseTitle: "Yeni Ders",
-                unitTitle: "Yeni Ünite",
-                topicTitle: "Konu Başlığı",
+                courseName: "Yeni Ders", courseTitle: "Yeni Ders",
+                unitName: "Yeni Ünite", unitTitle: "Yeni Ünite",
+                topicName: "Yeni Konu", topicTitle: "Yeni Konu",
                 url: "",
                 writingContent: { notes: [], conceptDefinitions: [] }
             });
-            selectTopic(0);
+            renderList(); // Önce listeyi çiz
+            selectTopic(0); // Sonra seç (DOM oluşmuş olur)
         }
 
         function deleteTopic() {
-            if(!confirm('Silmek istediğine emin misin?')) return;
+            if(!confirm('Bu konuyu silmek istediğine emin misin?')) return;
             contents.splice(selectedIndex, 1);
             selectedIndex = -1;
             document.getElementById('edit-area').classList.add('hidden');
@@ -277,6 +346,7 @@
             renderNotes();
         }
 
+        // JSON İşlemleri
         function toggleBulkModal() {
             const modal = document.getElementById('bulk-modal');
             modal.classList.toggle('hidden');
@@ -292,13 +362,25 @@
             try {
                 let newData = JSON.parse(inputVal);
                 if (!Array.isArray(newData)) newData = [newData];
+                
+                // Verileri Uyumlulaştır
+                newData = newData.map(item => ({
+                    ...item,
+                    courseName: item.courseName || item.courseTitle || "",
+                    courseTitle: item.courseName || item.courseTitle || "",
+                    topicName: item.topicName || item.topicTitle || "",
+                    topicTitle: item.topicName || item.topicTitle || "",
+                    unitName: item.unitName || item.unitTitle || "",
+                    unitTitle: item.unitName || item.unitTitle || ""
+                }));
+
                 contents = [...newData, ...contents];
                 renderList();
                 toggleBulkModal();
-                alert(`${newData.length} adet yeni içerik eklendi!`);
+                alert(`${newData.length} kayıt başarıyla eklendi!`);
                 selectTopic(0);
             } catch (error) {
-                alert("Hata: Geçersiz JSON formatı.");
+                alert("Hata: Geçersiz JSON formatı! Lütfen kontrol edin.");
             }
         }
 
