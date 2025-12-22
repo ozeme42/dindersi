@@ -6,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Image as ImageIcon, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Globe, Library, FileText, ChevronRight, ArrowRight, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, Target
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Library, FileText, ChevronRight, ArrowRight, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, Target
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -145,9 +145,9 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 </div>
 
                  {/* Content Groups */}
-                <div className="space-y-12 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                     {(!classGroups || classGroups.length === 0) ? (
-                        <div className="text-center py-10 bg-slate-900/50 backdrop-blur-md border border-dashed border-white/10 rounded-3xl">
+                        <div className="text-center py-10 bg-slate-900/50 backdrop-blur-md border border-dashed border-white/10 rounded-3xl md:col-span-2">
                             <p className="text-xl text-slate-400">Görüntülenecek ders içeriği bulunamadı.</p>
                         </div>
                     ) : classGroups.map((group, groupIndex) => (
@@ -222,7 +222,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     ))}
                     
                     {/* OYUNLAR BÖLÜMÜ */}
-                    <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+                    <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden md:col-span-2">
                         <h2 className={cn(
                             "px-8 py-6 text-3xl font-black text-white bg-gradient-to-r from-rose-500 to-pink-600 flex items-center gap-3"
                         )}>
