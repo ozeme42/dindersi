@@ -23,50 +23,50 @@ import path from 'path';
 
 
 export async function getBilBakalimAction(
-    { topicId }: { topicId?: string; }
+    { courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string; }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-            return { error: "Lütfen oynamak için belirli bir konu seçin.", questions: [] };
+        if (!topicId && !unitId && !courseId) {
+             return { error: "Lütfen oynamak için bir ders, ünite veya konu seçin.", questions: [] };
+        }
+
+        let q = query(collection(db, "activityItems"), where("type", "==", "definition"));
+
+        if (topicId && topicId !== 'all') {
+            q = query(q, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            q = query(q, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            q = query(q, where("courseId", "==", courseId));
+        }
+
+        const querySnapshot = await getDocs(q);
+        
+        const allDefinitions = querySnapshot.docs
+            .map(doc => doc.data() as ActivityItem)
+            .filter(item => item.content?.term && item.content?.definition)
+            .map(item => ({ id: item.id, content: item.content }));
+
+        if (allDefinitions.length < 3) {
+            return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
         }
         
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const staticItems: ActivityItem[] = JSON.parse(fileContent);
-            
-            const allDefinitions = staticItems
-                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition)
-                .map(item => ({ id: item.id, content: item.content }));
+        const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => {
+            return {
+                id: `${item.id}-${index}`,
+                text: item.content.definition!,
+                type: 'Bil Bakalım',
+                correctAnswer: item.content.term!,
+                difficulty: 'Orta',
+            };
+        });
 
-            if (allDefinitions.length < 3) {
-                return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
-            }
-            
-            const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => {
-                return {
-                    id: `${item.id}-${index}`,
-                    text: item.content.definition!,
-                    type: 'Bil Bakalım',
-                    correctAnswer: item.content.term!,
-                    difficulty: 'Orta',
-                };
-            });
-
-            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için 'Bil Bakalım' oyun verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", questions: [] };
-            }
-            throw fileError; // Re-throw other file errors
-        }
+        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
 
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
-        return { error: "Oyun için sorular alınırken bir hata oluştu. Dosya formatı veya erişim sorunu olabilir.", questions: [] };
+        return { error: "Oyun için sorular alınırken bir hata oluştu.", questions: [] };
     }
 }
 
