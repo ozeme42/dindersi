@@ -489,7 +489,7 @@ const ManagementButton = ({ href, title, icon, colorClass, onClick }: { href?: s
     return <button className="block group h-full w-full" onClick={onClick}>{content}</button>;
 };
 
-export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
+export default function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     const { user, loading } = useAuth();
     
     if (loading) {
