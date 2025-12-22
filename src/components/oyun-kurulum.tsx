@@ -1,9 +1,10 @@
+
 'use client';
 
 import React, { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight
+    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -75,7 +76,7 @@ const SelectionCard = ({
         <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br",
+                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner bg-gradient-to-br",
                 color
             )}>
                 <Icon className="h-5 w-5 md:h-10 md:w-10 text-white drop-shadow-md" />
@@ -222,7 +223,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
      if (dataType === 'ozetler' && unitId !== 'all') {
          const selectedUnit = units.find(u => u.id === unitId);
          if (selectedUnit && selectedUnit.hasUnitOzet) {
-            router.push(`/${finalTargetPath}/${unitId}`);
+            router.push(`/${finalTargetPath}/${selection.courseId}/${unitId}`);
             return;
          }
     }
@@ -253,7 +254,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           });
           url = `/oyunlar/${gamePathFromUrl}/oyun?${params.toString()}`;
       } else {
-          url = `/${finalTargetPath}/${topicId}`;
+          url = `/${finalTargetPath}/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
       router.push(url);
   };
@@ -264,8 +265,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   };
   
   const getBackUrl = () => {
-    if (targetPath.startsWith('student')) return '/student';
-    return '/';
+    if (targetPath === 'student') return '/student';
+    if (targetPath === 'teacher') return '/teacher/smartboard';
+    return '/oyunlar';
   };
 
   const formatGroupName = (name: string) => {
@@ -454,3 +456,5 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
+
+    
