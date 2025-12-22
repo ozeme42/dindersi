@@ -13,7 +13,6 @@ import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, getDoc } from "firebase/firestore";
 import type { Course, UserProfile, SchoolClass, QuestionBankStats } from "@/lib/types";
-import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
 
@@ -30,7 +29,7 @@ function HardestWorkersToday() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => {
+        getLiveLeaderboard('daily').then(data => {
             setDailyTop(data.slice(0, 3));
         }).finally(() => {
             setIsLoading(false);
@@ -144,21 +143,19 @@ export default function StudentDashboard() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   
-  // State for stats
   const [stats, setStats] = useState({
       score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
-      totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
+  const getAllUsers = async (): Promise<UserProfile[]> => {
+      const usersSnapshot = await getDocs(query(collection(db, "users"), where("role", "in", ["student", "guest"])));
+      return usersSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+  };
+  
   useEffect(() => {
     async function fetchData() {
       if (!user?.uid) {
@@ -169,24 +166,20 @@ export default function StudentDashboard() {
       setIsLoading(true);
       
       try {
-        // Paralel Veri Çekme (Performans için kritik)
         const [allUsersSnapshot, examsSnapshot] = await Promise.all([
           getAllUsers(),
           getStudentExams(user.uid),
         ]);
         
-        // --- Sınav İstatistikleri ---
         if (examsSnapshot.success && examsSnapshot.data) {
             const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
             const solved = examsSnapshot.data.length - pending;
             setExamStats({ pending, solved });
         }
 
-        // --- Sıralama Hesaplamaları (Basitleştirilmiş) ---
         const allStudents = allUsersSnapshot;
         const userScore = user.score || 0;
         
-        // Genel Sıralama
         const sortedAllStudents = [...allStudents].sort((a,b) => (b.score || 0) - (a.score || 0));
         const generalRank = sortedAllStudents.findIndex(s => s.uid === user.uid) + 1;
 
@@ -197,26 +190,18 @@ export default function StudentDashboard() {
             const gradeName = user.class.split(' - ')[0];
             const branchName = user.class;
 
-            // Sınıf (Örn: 5. Sınıflar) Sıralaması
             const studentsInGrade = allStudents.filter(s => s.class?.startsWith(gradeName));
-            classRank = studentsInGrade.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            classRank = studentsInGrade.length > 0 ? studentsInGrade.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1 : 0;
 
-            // Şube (Örn: 5-A) Sıralaması
             const studentsInBranch = allStudents.filter(s => s.class === branchName);
-            branchRank = studentsInBranch.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
+            branchRank = studentsInBranch.length > 0 ? studentsInBranch.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1 : 0;
         }
 
         setStats({
             score: userScore,
-            completedTopics: 0, 
-            totalTopics: 0,     
-            coursesStarted: 0,
-            coursesCompleted: 0,
-            totalCourses: 0, // This part is complex, removing for now
             generalRank,
             classRank,
             branchRank,
-            questionBankProgress: 0, 
         });
 
       } catch (error) {
@@ -226,15 +211,7 @@ export default function StudentDashboard() {
       }
     }
     
-    // Simulate static build for now
-    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        if(user) {
-            setStats(prev => ({...prev, score: user.score || 0}));
-        }
-        setIsLoading(false);
-    } else {
-        fetchData();
-    }
+    fetchData();
 
   }, [user]);
   
@@ -249,15 +226,12 @@ export default function StudentDashboard() {
     );
   }
 
-  // Seviye Hesaplama
   const level = Math.floor(stats.score / 1000) + 1;
-  const nextLevelScore = level * 1000;
   const progressToNextLevel = ((stats.score % 1000) / 1000) * 100;
   
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
       
-      {/* Arka Plan Efektleri */}
       <div className="fixed inset-0 pointer-events-none z-0">
          <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[150px]" />
          <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" />
@@ -265,16 +239,12 @@ export default function StudentDashboard() {
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
           
-           {/* Profil Kartı */}
            <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
-                {/* Kart Arka Planı */}
                 <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-50 z-0"></div>
                 
-                {/* İçerik */}
                 <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
                     
-                    {/* Avatar ve Seviye */}
                     <div className="relative shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
                              <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800">
@@ -287,7 +257,6 @@ export default function StudentDashboard() {
                         </div>
                     </div>
 
-                    {/* İsim ve İstatistikler */}
                     <div className="flex-1 text-center md:text-left w-full">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                             <div>
@@ -295,12 +264,9 @@ export default function StudentDashboard() {
                                 <div className="flex items-center justify-center md:justify-start gap-2 mt-2 text-slate-300 font-medium">
                                     <Backpack className="h-4 w-4 text-indigo-400" />
                                     <span>{user?.class || 'Sınıfsız Gezgin'}</span>
-                                    <span className="mx-2">•</span>
-                                    <span className="text-indigo-300">{stats.totalCourses} Ders</span>
                                 </div>
                             </div>
                             
-                            {/* Puan Kutusu */}
                             <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[200px]">
                                 <div className="p-3 bg-amber-500/20 rounded-xl border border-amber-500/30">
                                     <Star className="h-6 w-6 text-amber-400 fill-amber-400 animate-pulse" />
@@ -312,11 +278,10 @@ export default function StudentDashboard() {
                             </div>
                         </div>
 
-                        {/* Seviye İlerleme Çubuğu */}
                         <div className="mt-6">
                             <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide">
-                                <span>İlerleme</span>
-                                <span>{Math.floor(progressToNextLevel)}% <span className="text-slate-600">/ 100%</span></span>
+                                <span>Seviye İlerlemesi</span>
+                                <span>{Math.floor(progressToNextLevel)}%</span>
                             </div>
                             <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative">
                                 <div 
@@ -332,72 +297,6 @@ export default function StudentDashboard() {
                 </div>
            </div>
           
-          {/* Ana Kartlar Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               {/* Soru Bankası (Macera Haritası) */}
-              <Link href="/student/soru-bankasi" className="group block h-full">
-                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-sky-500/20">
-                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                     <div className="absolute top-0 right-0 p-32 bg-sky-500/20 rounded-full blur-[80px] pointer-events-none"></div>
-
-                     <div className="relative z-10 p-8 flex flex-col h-full">
-                         <div className="flex justify-between items-start mb-6">
-                             <div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30 backdrop-blur-md">
-                                 <Map className="h-8 w-8 text-sky-300" />
-                             </div>
-                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-sky-200">
-                                 DERSLER VE SORU BANKASI
-                             </div>
-                         </div>
-                         
-                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Macera <br/><span className="text-sky-400">Haritası</span></h2>
-                         <p className="text-sky-100/70 font-medium mb-8">Derslerini seç, soruları çöz ve haritada ilerle.</p>
-                         
-                         <div className="mt-auto flex items-center gap-2 text-white font-bold text-lg group-hover:gap-4 transition-all">
-                             Hemen Başla <ArrowRight className="h-5 w-5" />
-                         </div>
-                     </div>
-                 </div>
-              </Link>
-            
-              {/* Liderlik Tablosu (Şöhret Salonu) */}
-              <Link href="/leaderboard" className="group block h-full">
-                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-amber-500/20">
-                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                     <div className="absolute bottom-0 left-0 p-32 bg-amber-500/20 rounded-full blur-[80px] pointer-events-none"></div>
-
-                     <div className="relative z-10 p-8 flex flex-col h-full">
-                         <div className="flex justify-between items-start mb-6">
-                             <div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30 backdrop-blur-md">
-                                 <Trophy className="h-8 w-8 text-amber-300" />
-                             </div>
-                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-amber-200">
-                                 LİDERLİK
-                             </div>
-                         </div>
-                         
-                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Şöhret <br/><span className="text-amber-400">Salonu</span></h2>
-                         
-                         <div className="mt-auto grid grid-cols-3 gap-3">
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.generalRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Genel</span>
-                              </div>
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.classRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Sınıf</span>
-                              </div>
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.branchRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Şube</span>
-                              </div>
-                         </div>
-                     </div>
-                 </div>
-              </Link>
-          </div>
-
-          {/* Aksiyon Butonları (Grid) */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                <DashboardCardButton 
                    href="/oyunlar" 

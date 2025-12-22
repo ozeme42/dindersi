@@ -10,6 +10,7 @@ import {
   Pencil, ClipboardCheck, Coins, BrainCircuit, Milestone, Package, Wind, BookOpen, Star, Footprints, Target
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
 
 // Renk Haritası (Gradient ve Gölgeler için)
 const colorMap: Record<string, string> = {
@@ -67,6 +68,10 @@ const GameBackground = () => (
 export const dynamic = 'force-dynamic';
 
 export default function StudentActivitiesPage() {
+  const { user } = useAuth();
+  
+  const backUrl = user ? (user.role === 'teacher' || user.role === 'superadmin' ? '/teacher' : '/student') : '/';
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden flex flex-col">
         <GameBackground />
@@ -87,7 +92,7 @@ export default function StudentActivitiesPage() {
                 </div>
                 
                 <Button asChild variant="ghost" className="bg-slate-900/50 hover:bg-slate-800 border border-white/10 text-slate-300 rounded-xl h-12 px-6">
-                    <Link href="/student"><ArrowLeft className="mr-2 h-5 w-5"/> Panele Dön</Link>
+                    <Link href={backUrl}><ArrowLeft className="mr-2 h-5 w-5"/> Panele Dön</Link>
                 </Button>
             </div>
 
@@ -98,7 +103,7 @@ export default function StudentActivitiesPage() {
                     const styleClass = colorMap[activity.color] || colorMap['slate'];
 
                     return (
-                        <Link key={activity.href} href={activity.href} className="group block h-full">
+                        <Link key={activity.href} href={`${activity.href}?gameName=${encodeURIComponent(activity.label)}&gamePath=${activity.href.substring(8)}`} className="group block h-full">
                             <div className={cn(
                                 "relative overflow-hidden rounded-2xl p-4 h-28 sm:h-36 flex flex-col items-center justify-center gap-2 text-center transition-all duration-300 border bg-gradient-to-br shadow-lg",
                                 styleClass,
