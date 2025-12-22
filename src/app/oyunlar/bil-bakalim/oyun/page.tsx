@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
@@ -82,6 +81,8 @@ function BilBakalimGame() {
 
     const gameContext = `Bil Bakalım - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
     const backUrl = '/oyunlar/bil-bakalim';
+    const isStatic = searchParams.get('isStatic') === 'true';
+
 
     // Veri Çekme
     const fetchGameData = useCallback(async () => {
@@ -90,6 +91,7 @@ function BilBakalimGame() {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
+            isStatic: isStatic,
         };
         const result = await getBilBakalimAction(params);
         
@@ -104,7 +106,7 @@ function BilBakalimGame() {
             setAllTerms(terms);
             setGameState('playing');
         }
-    }, [searchParams]);
+    }, [searchParams, isStatic]);
 
     useEffect(() => {
         fetchGameData();
@@ -161,7 +163,7 @@ function BilBakalimGame() {
 
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (!user || score <= 0 || isSaving || isScoreSaved) {
+        if (!user || score <= 0 || isSaving || isScoreSaved || isStatic) {
             router.push(backUrl);
             return;
         }

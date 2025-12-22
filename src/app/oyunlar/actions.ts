@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -21,29 +20,40 @@ import type { ActivityItem, Question } from '@/lib/types';
 
 
 export async function getBilBakalimAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { courseId, unitId, topicId, isStatic }: { courseId?: string; unitId?: string; topicId?: string; isStatic?: boolean; }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'));
+        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
 
-        const conditions = [];
-        if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
+        if (isStatic && topicId && topicId !== 'all') {
+            try {
+                const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+                const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+                if (res.ok) {
+                    const staticItems: ActivityItem[] = await res.json();
+                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+                } else if (res.status !== 404) {
+                    throw new Error(`Static data for topic ${topicId} failed to load.`);
+                }
+            } catch (e) {
+                console.warn("Could not fetch static activity file for Bil Bakalım, will try Firestore.", e);
+            }
         }
         
-        conditions.push(where('type', '==', 'definition'));
-
-        const finalQuery = query(baseQuery, ...conditions);
-        const definitionsSnapshot = await getDocs(finalQuery);
+        if (allItems.length === 0) {
+            let baseQuery = query(collection(db, 'activityItems'));
+            const conditions = [];
+            if (topicId && topicId !== 'all') conditions.push(where("topicId", "==", topicId));
+            else if (unitId && unitId !== 'all') conditions.push(where("unitId", "==", unitId));
+            else if (courseId && courseId !== 'all') conditions.push(where("courseId", "==", courseId));
+            conditions.push(where('type', '==', 'definition'));
+            const finalQuery = query(baseQuery, ...conditions);
+            const definitionsSnapshot = await getDocs(finalQuery);
+            allItems = definitionsSnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+        }
         
-        const allDefinitions = definitionsSnapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
+        const allDefinitions = allItems.filter(item => item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 3) {
             return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
@@ -51,14 +61,11 @@ export async function getBilBakalimAction(
         
         const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => {
             return {
-                id: `${item.courseId}-${item.unitId}-${item.topicId}-${index}`,
+                id: `${item.id}-${index}`,
                 text: item.content.definition!,
-                type: 'Bil Bakalım', // Custom type for this game
+                type: 'Bil Bakalım',
                 correctAnswer: item.content.term!,
                 difficulty: 'Orta',
-                courseId: item.courseId,
-                unitId: item.unitId,
-                topicId: item.topicId,
             };
         });
 
