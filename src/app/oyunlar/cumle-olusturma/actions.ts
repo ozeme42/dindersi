@@ -15,8 +15,6 @@ import {
   getCountFromServer,
   getDocs
 } from 'firebase/firestore';
-import fs from 'fs/promises';
-import path from 'path';
 
 
 export type ScrambledSentenceData = {

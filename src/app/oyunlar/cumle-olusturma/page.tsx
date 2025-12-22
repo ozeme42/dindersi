@@ -12,6 +12,7 @@ function CumleOlusturmaPage() {
             gameIcon={Shuffle}
             gamePath="cumle-olusturma"
             dataType="games"
+            isStatic={true}
         />
     );
 }
