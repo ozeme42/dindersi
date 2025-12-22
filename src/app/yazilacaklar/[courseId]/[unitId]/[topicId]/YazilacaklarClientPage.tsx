@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-function YazilacaklarDisplayPage() {
+export function YazilacaklarClientPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
 
