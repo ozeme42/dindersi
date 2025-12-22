@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { Suspense } from 'react';
@@ -12,6 +11,7 @@ function DogruYanlisZinciriPage() {
             gameIcon={Link2}
             gamePath="dogru-yanlis-zinciri"
             dataType="games"
+            isStatic={true}
         />
     );
 }
