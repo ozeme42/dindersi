@@ -1,0 +1,491 @@
+[
+  {
+    "id": "0e3blBRiqwUapRTFiZxB",
+    "type": "concept",
+    "content": {
+      "text": "Ahiret",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "topicTitle": "1.Görülen ve Görülemeyen Varlıklar",
+    "sourceText": "",
+    "createdAt": "2025-07-29T04:40:55.186Z"
+  },
+  {
+    "id": "4DL0J4HfHOYtnjbP04mA",
+    "type": "definition",
+    "content": {
+      "term": "Âlem",
+      "definition": "Allah dışındaki, akıl ve duyularla bilinebilen veya düşünülebilen tüm varlıklar."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "5fHY9SR3IoWqSbnvMc3h",
+    "type": "definition",
+    "content": {
+      "term": "Şeytan",
+      "definition": "İnsanı saptırmaya çalışan ruhani varlık. Hz. Âdem'e secde etmeyi reddetmiş, kıyamete kadar yaşama izni almıştır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "6vBHkJzwLpv4jVy6fvoJ",
+    "type": "concept",
+    "content": {
+      "text": "Melek"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "7B90WNfR82ZiWeTQIlO1",
+    "type": "definition",
+    "content": {
+      "text": "",
+      "term": "Ahiret",
+      "definition": "Ölümden sonraki sonsuz yaşam, dünya hayatının son bulmasından sonra başlayacak olan ebedi hayat.",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "topicTitle": "1.Görülen ve Görülemeyen Varlıklar",
+    "sourceText": "",
+    "createdAt": "2025-07-29T04:39:32.256Z"
+  },
+  {
+    "id": "8Kb65NDkYXggjLOQtN6r",
+    "type": "concept",
+    "content": {
+      "text": "Gayb"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "8VPsdPHYHg0ccyrJeuIK",
+    "type": "sentence",
+    "content": {
+      "text": "İnsanların ve cinlerin yaratılış amacı kulluktur."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "APQ54a1u2POVGlCSjQk5",
+    "type": "sentence",
+    "content": {
+      "text": "Cinler, ateşten yaratılmış, duyularla görülmeyen varlıklardır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "ARjDWkkY11WTn1QVuxcO",
+    "type": "definition",
+    "content": {
+      "term": "Gayb",
+      "definition": "Akıl ve duyularla bilgi edinilemeyen, duyuların ötesindeki varlık alanı."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "CB7BOSGGDDfWF28fWLBe",
+    "type": "concept",
+    "content": {
+      "text": "Şeytan"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "DeFGDM3IyIdtLrtn6cJa",
+    "type": "sentence",
+    "content": {
+      "text": "Cinler, gaybı bilmezler ve gelecekten haber veremezler."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "FnhrZrojtImBYMRTqgsn",
+    "type": "concept",
+    "content": {
+      "text": "Âlem"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "J5Tdn3eJu8QE85yMbrrk",
+    "type": "sentence",
+    "content": {
+      "text": "Şeytan, insanı saptırmaya çalışan bir ruhani varlıktır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "Jb3KWL3qe4euUSTsrmPK",
+    "type": "sentence",
+    "content": {
+      "text": "Korunma yolları ile cin ve şeytanın şerrinden uzak durulur."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "KQOvJByFa3jPfPmGd3Zy",
+    "type": "concept",
+    "content": {
+      "text": "Cin"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "KSUY4VNbQPrmexXnhF1w",
+    "type": "sentence",
+    "content": {
+      "text": "Gayb, duyularla algılanamayan sır dolu bir alandır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "KUYfAQH01OmdyKvUzHcQ",
+    "type": "definition",
+    "content": {
+      "term": "Kulluk",
+      "definition": "Cin ve insanların Allah'a ibadet etme ve emirlerine uyma amacı."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "PshNOtKJlwsOQolJikT4",
+    "type": "sentence",
+    "content": {
+      "text": "Şeytan, Hz. Âdem'e secde etmeyi reddetmiştir."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "RhPmgalhNQ7WEgM5sRD6",
+    "type": "definition",
+    "content": {
+      "term": "Cin",
+      "definition": "Duyularla idrak edilemeyen, ateşten yaratılmış, ilahi emirlere tabi ruhani varlık. Gaybı bilmezler ve Allah izni olmadan zarar veremezler."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "U2VJfsoTQBM3EeR2xcy8",
+    "type": "sentence",
+    "content": {
+      "text": "Ayet el-Kürsi, Felak ve Nâs sureleri korunma yollarındandır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "UbAKhlwn9zlmD3cnGvrY",
+    "type": "sentence",
+    "content": {
+      "text": "Ahiret, dünya hayatından sonraki sonsuz yaşamdır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "ZpMac35nKvq0fIjeuMOR",
+    "type": "sentence",
+    "content": {
+      "text": "Varlık hem görünen hem de görülmeyen her şeyi kapsar."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "hEGHFaclMYkpiTZmjtax",
+    "type": "definition",
+    "content": {
+      "term": "Varlık",
+      "definition": "Duyularla algılanan veya algılanamayan her şey."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "k1klFXIBkBXm2AahtDqn",
+    "type": "categorization",
+    "content": {
+      "title": "Görülen ve Görülmeyen Varlıklar",
+      "categories": [
+        "Görülen Varlıklar",
+        "Görülmeyen Varlıklar"
+      ],
+      "items": [
+        {
+          "text": "Lamba",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Melek",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Soğuk",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Sevinç",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Gardırop",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Dergi",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Tablo",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Cin",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Rüzgâr",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "İnsan",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Şeytan",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Ağaç",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Ses",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Koku",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Kitap",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Düşünce",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Su",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Ruh",
+          "category": "Görülmeyen Varlıklar"
+        },
+        {
+          "text": "Güneş",
+          "category": "Görülen Varlıklar"
+        },
+        {
+          "text": "Gayb",
+          "category": "Görülmeyen Varlıklar"
+        }
+      ]
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:42:41.762Z"
+  },
+  {
+    "id": "lIQuyFVsZ8Xt8giFhcB9",
+    "type": "sentence",
+    "content": {
+      "text": "Âlem, Allah dışındaki tüm varlıkları ifade eder."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "m2N1HtSKWWRi50PPP3yn",
+    "type": "concept",
+    "content": {
+      "text": "Kulluk"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "nZSnCQDDLyrIbbhSVWi9",
+    "type": "sentence",
+    "content": {
+      "text": "Yüce Allah'ın izni olmadan cinler kimseye zarar veremez."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "oXK1l9gEEn5tLIb8btoX",
+    "type": "definition",
+    "content": {
+      "term": "Yüce Allah",
+      "definition": "Tüm varlıkları yaratan tek Yaratıcı."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  },
+  {
+    "id": "pD8vMWdBxfT41J9Y2jJy",
+    "type": "sentence",
+    "content": {
+      "text": "Tüm varlıkları Yüce Allah yaratmıştır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "qXXDChZ7ZZMXX9jnNV01",
+    "type": "concept",
+    "content": {
+      "text": "Varlık",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "topicTitle": "1.Görülen ve Görülemeyen Varlıklar",
+    "sourceText": "oru-Yorum\nGayb ve âlem kavramları arasında nasıl bir fark vardır? Yorumlayınız.\nGÖRÜLEN VE GÖRÜLEMEYEN VARLIKLAR Beş duyu organıyla algılanan her şey varlık kapsamına girmektedir. Ancak hiçbir duyu organının algılayamadığı varlıklar da bulunmaktadır. Bütün bunları Yüce Allah yaratmıştır. Allah’ın (cc)* dışında, akıl ve duyu organlarıyla bilinebilen veya varlığı düşünülebilen bütün varlıklar âlem olarak adlandırılır.1 Bir şeyin varlığına inanmak için onun mutlaka duyularla algılanması şart değildir. Beş duyu organının algılayamadığı melek, cin, şeytan gibi varlıkların olduğu insanlara ayet ve hadislerle bildirilmiştir. Akıl ve duyular yoluyla hakkında bilgi edinilemeyen varlık alanı gayb olarak tanımlanmaktadır.2 Bu nedenle duyuların algısı dışında kalan varlıklar gayb alanına girer. Duyularla idrak edilemeyen ve insanlar gibi ilahi emirlere uymakla yükümlü tutulan varlık türüne cin denir.3 Cinler, ateşten yaratılmışlardır. Gaybı bilmezler ve gelecekten insanlara haber veremezler. Cin suresinde dile getirildiği gibi inanan ve inanmayanları vardır. Onlar da insanlar gibi iman etmek ve ilahi emirlere uymakla yükümlüdürler.4 Bu konuda Allah Teala şöyle buyurmuştur: “Ben cinleri ve insanları ancak bana kulluk etsinler diye yarattım.” (Zâriyât suresi, 56. ayet.)\nGörsel 1.1\nÂlem, görülen ve görülemeyen tüm varlıkları kapsamaktadır.\n* Cellecelalüh: O’nun şanı yücedir. 14İnsanlar arasında cinlerden korkulması gerektiğine dair yaygın bir inanış vardır. Bu durum, inananları dinin yasakladığı yollara götürmemelidir. Çünkü cinler, Allah’ın (cc) izni olmadıkça kimseye zarar veremezler. Her işte olduğu gibi bu konuda da Allah Resulü’nün (sav)**\nyolunu takip etmek en doğru davranış olacaktır. Hz. Peygamber’in bu varlıklardan korunmak amacıyla Ayet el-Kürsi olarak adlandırılan Bakara suresinin 255. ayeti ile Felak ve Nâs surelerini okuduğu bilinmektedir.5 Bunun yanında cinlerle bağ kurduklarını söyleyip gaybdan haber verme, hastaları tedavi etme gibi iddialarla ortaya çıkan insanların tuzağına düşmemeliyiz. Bu konuda yine Hz. Peygamber’den öğrendiğimiz dualar ve tedbirlerle Allah’a (cc) sığınmalıyız.6\nİnsana sık sık rahatsızlık verip onu saptırmaya çalışan ruhani varlığa şeytan denir.7 Yüce Allah, Hz. Âdem’i yaratınca meleklere ona secde etmelerini emretmiş, bütün melekler bu emre uymuştur. Şeytan ise “Ben ondan daha hayırlıyım, çünkü beni ateşten onu ise çamurdan yarattın.” (Araf suresi, 12. ayet.) diyerek Hz. Âdem’e secde etmemiştir. Bunun üzerine Allah Teala, “Öyle ise oradan çık, çünkü artık kovuldun.” (Hicr suresi, 34. ayet.) buyurarak onu rahmetinden uzaklaştırmıştır. Şeytan, Allah’tan (cc) insanların dirilecekleri güne kadar yaşama izni istemiş, bu isteği de kendisine verilmiştir.8\nAra Değerlendirme 1\nAşağıda verilen tablodaki kutucuklarda, görülebilen ve görülemeyen varlıkların isimleri verilmiştir. Kutucuklardaki numaraları kullanarak soruları cevaplayınız. Aynı kutucuğu birden fazla soru için kullanabilirsiniz.\n1 4 7 Lamba Melek Soğuk 2 5 8 Sevinç Gardırop Dergi 3 6 9 Tablo Cin Rüzgâr\n1. 2. 3.\nKutucuklardan hangilerinde görülebilen varlıkların isimleri vardır? Kutucuklardan hangilerinde görülemeyen varlıkların isimleri vardır?\nKutucuklardan hangilerinde gözle görülemediği hâlde diğer duyu organlarıyla hissedilebilen varlıkların isimleri vardır?",
+    "createdAt": "2025-09-16T17:59:49.704Z"
+  },
+  {
+    "id": "tsWJIsj4BGtFXofSRV16",
+    "type": "sentence",
+    "content": {
+      "text": "Gaybdan haber verme iddiaları doğru değildir, bunlara inanılmamalıdır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "xMfrfSbioWuT3QBrPcrd",
+    "type": "sentence",
+    "content": {
+      "text": "Melekler, Allah'ın emrindeki ruhani varlıklardır."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:49:10.743Z"
+  },
+  {
+    "id": "xRb9JbNDUyKFrh5n3hl2",
+    "type": "concept",
+    "content": {
+      "text": "Yüce Allah"
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:37:37.536Z"
+  },
+  {
+    "id": "xbHQUhKctnjfwrC8V9Hy",
+    "type": "definition",
+    "content": {
+      "term": "Melek",
+      "definition": "Duyularla algılanamayan, ayet ve hadislerle bildirilen ruhani varlık."
+    },
+    "courseId": "134DwgMfh8VYogm3gDyh",
+    "unitId": "UxthoHWEf7GS47946uOO",
+    "topicId": "Ukyvqbloj0GtGTMJy69q",
+    "createdAt": "2025-07-29T04:33:45.327Z"
+  }
+]

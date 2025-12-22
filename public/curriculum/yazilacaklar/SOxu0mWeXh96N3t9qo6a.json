@@ -1,0 +1,83 @@
+{
+  "notes": [
+    "Hz. Peygamber Medine'ye hicret etti ve Ebu Eyyüb el-Ensârî'nin evine yerleşti; Yesrib şehri \"Medinetü'l-Münevvere\" adını aldı.",
+    "Medine'de Mescid-i Nebevî inşa edildi ve Hz. Peygamber bizzat yapımında çalıştı.",
+    "Ensar ve Muhacir arasında \"kardeşlik\" (Muâhât) ilan edildi; bu, toplumsal dayanışmanın önemli bir örneğiydi.",
+    "Hz. Peygamber, Medine Sözleşmesi ile şehirdeki tüm topluluklarla barış ve hukuki düzenlemeler sağladı ve devlet başkanı olarak tanındı.",
+    "Namaz vakitlerini duyurmak için ezan uygulaması başlatıldı ve kıble Mescid-i Aksa'dan Kâbe'ye (Mescid-i Haram) çevrildi.",
+    "Hz. Peygamber'in bizzat katıldığı seferlere \"gazve\", komutan gönderdiği seferlere \"seriye\" denildi; Bedir, Uhud ve Hendek önemli gazvelerdendir.",
+    "Hudeybiye Antlaşması ile Mekkeliler İslam devletini resmen tanıdı ve Hicretin 8. yılında (630) Mekke fethedilerek Kâbe putlardan temizlendi.",
+    "Hz. Peygamber, son haccını (Veda Haccı) yaparak Veda Hutbesi'ni okudu ve dinin tamamlandığına dair ayetler nazil oldu.",
+    "Hicretin 10. yılında (632) Hz. Peygamber Medine'de vefat etti ve kabri (Ravza-i Mutahhara) Mescid-i Nebevî içinde yer almaktadır."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Hudeybiye Antlaşması",
+      "definition": "Müşrikler ile yapılan barış anlaşması"
+    },
+    {
+      "concept": "Ezan",
+      "definition": "Namaz vakitlerini Müslümanlara bildirmek için Bilal-i Habeşi'nin ilk kez okuduğu, ilahi çağrıdır."
+    },
+    {
+      "concept": "Kıble",
+      "definition": "Müslümanların namaz kılarken yöneldiği, başlangıçta Mescid-i Aksa olup sonradan Kâbe'ye çevrilen yön."
+    },
+    {
+      "concept": "Ebu Eyyüb el-Ensârî",
+      "definition": "Peygamberimizi evinde misafir eden sahabi"
+    },
+    {
+      "concept": "Muhacir",
+      "definition": "İnançları uğruna Mekke'den Medine'ye göç eden, mal ve yurtlarını terk etmiş Müslümanlardır."
+    },
+    {
+      "concept": "Hendek Savaşı",
+      "definition": "Üçüncü savaş"
+    },
+    {
+      "concept": "Muâhât",
+      "definition": "Peygamberimizin Mekkeli ve Medineli Müslümanlar arasında kurduğu, mallarını ve hayatlarını paylaşmaya dayalı güçlü kardeşlik sistemidir."
+    },
+    {
+      "concept": "Mescid-i Nebi",
+      "definition": "Peygamberimizin devesinin çöktüğü yere inşa edilen, günümüzde kabrinin de bulunduğu kutsal ibadet yeridir."
+    },
+    {
+      "concept": "Ensar",
+      "definition": "Medine'de Peygamberimiz ve Mekke'den gelen Müslümanları ağırlayan ve onlara yardım eden yerli halka verilen isimdir."
+    },
+    {
+      "concept": "Bila-i Habeşi",
+      "definition": "İlk müezzin"
+    },
+    {
+      "concept": "Medine Sözleşmesi",
+      "definition": "Peygamberimizin şehirdeki tüm inanç gruplarıyla sosyal dayanışmayı ve barışı temin etmek için imzaladığı ilk anayasal belgedir."
+    },
+    {
+      "concept": "Gazve",
+      "definition": "Hz. Peygamber'in bizzat komuta ederek katıldığı askeri seferlere verilen isimdir."
+    },
+    {
+      "concept": "Uhud Savaşı",
+      "definition": "İkinci savaş"
+    },
+    {
+      "concept": "Bedir Savaşı",
+      "definition": "İlk savaş"
+    },
+    {
+      "concept": "Ravza-i Mutahhara",
+      "definition": "Tertemiz gül bahçesi"
+    },
+    {
+      "concept": "Veda Hutbesi",
+      "definition": "Peygamberimizin son haccında Arafat'ta verdiği ve insan hakları prensiplerini içeren tarihi konuşmasıdır."
+    },
+    {
+      "concept": "Medine",
+      "definition": "Peygamberimizin hicretinden sonra Yesrib şehrine verilen ve \"aydınlanmış şehir\" anlamına gelen isimdir."
+    }
+  ]
+}

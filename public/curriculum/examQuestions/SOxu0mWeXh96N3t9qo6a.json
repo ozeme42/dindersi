@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "0ENAqIkkqLXE2g6PPSYF",
+    "text": "Medine’de kıblenin Mescid-i Aksa’dan Kâbe’ye (Mescid-i Harâm) döndürülmesi emri hangi ayetle bildirilmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Tâhâ suresi, 132. ayet",
+      "Tevbe suresi, 108. ayet",
+      "Bakara suresi, 144. ayet",
+      "Hicr suresi, 94. ayet"
+    ],
+    "correctAnswer": "Bakara suresi, 144. ayet",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "0PDEpSeRnackddqdeWJ8",
+    "text": "İkinci Akabe Biatı’nda, Müslüman olmamasına rağmen Hz. Peygamber’in (sav) yanında kabilenin büyüğü olarak bulunarak ona destek olan kişi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ebu Cehil",
+      "Varaka b. Nevfel",
+      "Amcası Abbas b. Abdülmuttalib",
+      "Ebu Talib"
+    ],
+    "correctAnswer": "Amcası Abbas b. Abdülmuttalib",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "1R9pAfACUfCADhNMEUFb",
+    "text": "Hz. Peygamber (sav) Medine’ye ulaştığında devesinin çöktüğü boş arsaya ne inşa edilmesine karar vermiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Bir kütüphane",
+      "Bir Pazar yeri",
+      "Mescid-i Nebi",
+      "Bir eğitim merkezi"
+    ],
+    "correctAnswer": "Mescid-i Nebi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "46cjXytNbARMWTOAqT84",
+    "text": "Hicretin altıncı yılında Mekke’yi ziyaret etmek isteyen Müslümanlara izin verilmemesi üzerine, müşriklerle yapılan ve on yıl boyunca savaş yapılmamasını içeren antlaşmanın adı nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Akabe Biatı",
+      "Veda Antlaşması",
+      "Hudeybiye Antlaşması",
+      "Medine Sözleşmesi"
+    ],
+    "correctAnswer": "Hudeybiye Antlaşması",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "5mBvr6Pni3fCQjbwnDDb",
+    "text": "Hz. Peygamber’in (sav) kabrinin bulunduğu yere günümüzde ne ad verilmektedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Mescid-i Kıbleteyn",
+      "Kuba Mescidi",
+      "Ravza-i Mutahhara",
+      "Hira Mağarası"
+    ],
+    "correctAnswer": "Ravza-i Mutahhara",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "6UCSpAhijpIKFEG08fJC",
+    "text": "Hz. Peygamber’in (sav) bizzat ordunun başında yer aldığı seferlere ne ad verilir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Seriye",
+      "Biat",
+      "Hicret",
+      "Gazve"
+    ],
+    "correctAnswer": "Gazve",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "6haDJbvMo3odvY2vKFRK",
+    "text": "Birinci Akabe Biatı’na katılan Yesribli altı kişi hangi kabileye mensuptu ve bu biat ne zaman gerçekleşmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Evs kabilesi, peygamberliğin 10. yılı",
+      "Kureyş kabilesi, Hicret’ten bir yıl sonra",
+      "Hazreç kabilesi, peygamberliğin 11. yılı",
+      "Adiyy kabilesi, Hüzün Yılı"
+    ],
+    "correctAnswer": "Hazreç kabilesi, peygamberliğin 11. yılı",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "88qqbpHWpRCFLzuA3S5B",
+    "text": "Hicret yolculuğu sırasında Hz. Ebu Bekir’in endişe etmesi üzerine Hz. Peygamber’in (sav) ona söylediği ve Kur’an-ı Kerim’de de geçen teselli edici söz nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "\"Ona Allah yardım etmiştir.\"",
+      "\"Allah, şükredenleri mükâfatlandıracaktır.\"",
+      "\"Allah’a hiçbir zarar veremez.\"",
+      "\"Üzülme çünkü Allah bizimle beraberdir.\""
+    ],
+    "correctAnswer": "\"Üzülme çünkü Allah bizimle beraberdir.\"",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "8Z0RkW0944Ov450TsdsA",
+    "text": "Miraç olayı sırasında Müslümanların sıkıntılarının sona ereceği müjdesini taşıyan ve indirilen Kur’an ayetleri hangi surenin son iki ayetidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Âl-i İmrân suresi",
+      "İsrâ suresi",
+      "Bakara suresi",
+      "Fetih suresi"
+    ],
+    "correctAnswer": "Bakara suresi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "93WyYOhAuQfwegiQ84II",
+    "text": "Hz. Peygamber (sav), Medine’de şehirdeki tüm müşrik ve Yahudilerle birlik sağlayan bir sözleşme imzalamıştır. Bu sözleşmenin temel amacı nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Yeni bir anayasa hazırlamak",
+      "Yahudileri ve müşrikleri İslam’a davet etmek",
+      "Sosyal dayanışmayı sağlamak ve hukuki/mali/askeri düzenlemeleri hayata geçirmek",
+      "Sadece Müslümanların haklarını korumak"
+    ],
+    "correctAnswer": "Sosyal dayanışmayı sağlamak ve hukuki/mali/askeri düzenlemeleri hayata geçirmek",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "9X8ojavmvVvQ0FutdAQh",
+    "text": "Hz. Peygamber’in (sav) bir gece Kâbe’den (Mescid-i Haram) Kudüs’teki Mescid-i Aksa’ya götürülmesi olayına ne ad verilir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Teheccüd",
+      "Hicret",
+      "Biat",
+      "İsra"
+    ],
+    "correctAnswer": "İsra",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "9mC3GOYj7WpQhw4SQnud",
+    "text": "Hz. Peygamber’in (sav) hicret esnasında, gece bekleyen müşrikleri yanıltmak için yatağına yatırdığı ve sabahında Mekke'deki emanetleri sahiplerine dağıtmakla görevlendirdiği kişi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Ebu Bekir’in oğlu Abdullah",
+      "Zeyd b. Hârise",
+      "Hz. Ali",
+      "Ammar b. Yâsir"
+    ],
+    "correctAnswer": "Hz. Ali",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "9ySn2YQQEbwfRXPY3ZOI",
+    "text": "Miraç Gecesi’nde Hz. Peygamber’e (sav) vahyedilen ve İslam’ın temel direklerinden olan ibadet hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Zekât",
+      "Oruç",
+      "Hac",
+      "Beş vakit namaz"
+    ],
+    "correctAnswer": "Beş vakit namaz",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "A15Ls9rulq3UIGnAYHKs",
+    "text": "Hz. Peygamber (sav) Medine’ye hicretin ardından, yurtlarından vazgeçen muhacirlerin yeni duruma uyumunu kolaylaştırmak için ensar ile aralarında hangi uygulamayı başlatmıştır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ticari ortaklıklar kurma",
+      "Ortak tarım yapma",
+      "Kardeş ilan etme (İman kardeşliği)",
+      "Ortak siyasi meclis kurma"
+    ],
+    "correctAnswer": "Kardeş ilan etme (İman kardeşliği)",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "DVy3E6X1xq9Rd0exXgvj",
+    "text": "Mekkeli müşriklerin, İslam’ın yayılışının engel olunamaz bir hâl alacağından endişelenerek Hz. Peygamber’i (sav) öldürmek için yaptıkları planlama hangi olay üzerine gerçekleşmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Hamza’nın Müslüman olması",
+      "Kâbe’nin tamiri",
+      "Müslümanların Yesrib’e hicret etmeye başlaması",
+      "Taif’e yapılan yolculuk"
+    ],
+    "correctAnswer": "Müslümanların Yesrib’e hicret etmeye başlaması",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "DaO2uRCrsmINjG6MydzT",
+    "text": "\"Söz verme amacıyla el sıkma, başkasının söylediklerini kabul edip onun emirlerine itaat etme\" anlamına gelen kavram nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Tefekkür",
+      "Hicret",
+      "Davet",
+      "Biat"
+    ],
+    "correctAnswer": "Biat",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "EDfEGFGAUHEAntPMMjSJ",
+    "text": "Hz. Peygamber’in (sav) Kuba’da inşa ettiği mescitten Kur’an-ı Kerim’de, “İlk günden takva üzerine kurulan mescit” ifadesiyle bahsedilmesi hangi surededir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Bakara suresi",
+      "İsrâ suresi",
+      "Tevbe suresi",
+      "Nûr suresi"
+    ],
+    "correctAnswer": "Tevbe suresi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "GeFLixubpRgBAhrSBlTD",
+    "text": "Hz. Peygamber (sav) ve Hz. Ebu Bekir’e hicret yolculuğunda kılavuzluk eden kişi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Amir b. Füheyre",
+      "Sürâka b. Mâlik",
+      "Abdullah b. Uraykıt",
+      "Mus’ab b. Umeyr"
+    ],
+    "correctAnswer": "Abdullah b. Uraykıt",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "HtKMH0dTQOBFC8MidZak",
+    "text": "Hz. Peygamber’e (sav) ve Mekke’den göç eden Müslümanlara yardımcı olan Medineli Müslümanlara ne ad verilir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ensar",
+      "Mücahit",
+      "Fâruk",
+      "Sıddîk"
+    ],
+    "correctAnswer": "Ensar",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "IFXs9TQ8xMxgA4dTe3aM",
+    "text": "Hz. Peygamber’in (sav) hayatında ilk ve son kez gerçekleştirdiği hac görevi sırasında Arafat’ta yaptığı, insan haklarının temel özelliklerini taşıyan tarihî konuşmasına ne ad verilmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Akabe Hutbesi",
+      "Mekke Hutbesi",
+      "Tevhit Çağrısı",
+      "Veda Hutbesi"
+    ],
+    "correctAnswer": "Veda Hutbesi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "Iq81H0BLE68PWwDrExkH",
+    "text": "Hz. Peygamber (sav) Selemeoğulları Mescidi’nde namaz kılarken, gelen bir vahiyle namazda Mescid-i Aksa’dan Kâbe’ye yönelerek tamamlamıştır. Bu olayın gerçekleştiği mescidin günümüzdeki adı nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Kuba Mescidi",
+      "Mescid-i Nebi",
+      "Mescid-i Kıbleteyn (İki Kıbleli Mescit)",
+      "Mescid-i Haram"
+    ],
+    "correctAnswer": "Mescid-i Kıbleteyn (İki Kıbleli Mescit)",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "MSPeBJ7OjGEfR4Vc1sX9",
+    "text": "İkinci Akabe Biatı’nın en önemli sonucu nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Mescid-i Nebi’nin inşa edilmesi",
+      "Mekkelilerin Müslümanlara uyguladığı ambargonun kalkması",
+      "Medine’ye hicretin temelinin atılması",
+      "İlk cuma namazının kılınması"
+    ],
+    "correctAnswer": "Medine’ye hicretin temelinin atılması",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "MmiiLHtsfAxH9P5P0432",
+    "text": "Hz. Peygamber (sav) ve beraberindekiler, sekiz günlük bir yolculuktan sonra Yesrib yakınlarındaki ilk olarak nereye ulaşmışlardır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Medine (Yesrib) şehir merkezine",
+      "Akabe’ye",
+      "Kuba’ya",
+      "Taif’e"
+    ],
+    "correctAnswer": "Kuba’ya",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "Mz1XogUjHxDTEpH5YRA1",
+    "text": "Hz. Peygamber (sav) Medine’ye doğru ilerlerken, yol üzerindeki Ranuna Vadisi’nde kıldırdığı ibadet hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Bayram Namazı",
+      "İlk cuma namazı",
+      "Teheccüd Namazı",
+      "Cenaze Namazı"
+    ],
+    "correctAnswer": "İlk cuma namazı",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "NIUvvW2ivWq70ISCKNdE",
+    "text": "Hz. Peygamber (sav) Hicret yolculuğu sırasında nerede kısa bir süre misafir olmuş ve buradayken \"İlk günden takva üzerine kurulan mescit\"i inşa etmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ranuna Vadisi",
+      "Sevr Mağarası",
+      "Kuba",
+      "Mescid-i Aksa"
+    ],
+    "correctAnswer": "Kuba",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "Oc4iawnIFkehZnSpcuuO",
+    "text": "İsra ve Miraç olayının gerçekleşmesi, Müslümanlar açısından nasıl bir sonuç doğurmuştur?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hemen Yesrib’e hicret başlamıştır.",
+      "Kâbe’ye karşı namaz kılınması farz kılınmıştır.",
+      "Peygamberlerine olan imanlarının sınandığı bir olaya dönüşmüştür.",
+      "Müşrikler İslam’a karşı tepkilerini azaltmışlardır."
+    ],
+    "correctAnswer": "Peygamberlerine olan imanlarının sınandığı bir olaya dönüşmüştür.",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "PgeZGRvZOIRKwDHxlTVN",
+    "text": "Veda Hutbesi’nin yapıldığı gün hangi ayet nazil olmuş ve bu durum Hz. Peygamber’in görevinin sonuna geldiğine işaret etmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Nûr suresi, 30-31. ayetler",
+      "Mâide suresi, 3. ayet",
+      "Tevbe suresi, 108. ayet",
+      "Müddessir suresi, 1-5. ayetler"
+    ],
+    "correctAnswer": "Mâide suresi, 3. ayet",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "QdpkXXD9VdwZ8ZaQc2fa",
+    "text": "Mekkeli müşrikler Hz. Peygamber'i (sav) Mekke'de tebliğden vazgeçirmek için \"Bir yıl biz senin ibadet ettiğine ibadet edelim, bir yıl da sen bizim putlarımıza tap.\" teklifinde bulunduğunda, bu teklife cevap olarak inen ve net bir tavır sergileyen sure hangisidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Müddessir suresi",
+      "Tebbet suresi",
+      "Kâfirûn suresi",
+      "Alak suresi"
+    ],
+    "correctAnswer": "Kâfirûn suresi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "Rv2EwzesiTHvMwF9CiZB",
+    "text": "Müşriklerin Hudeybiye Antlaşması’nın maddelerini ihlal etmesi üzerine, 630 yılı Ramazan ayında kimse zarar görmeden Müslümanlar tarafından fethedilen şehir neresidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Kudüs",
+      "Taif",
+      "Mekke",
+      "Hayber"
+    ],
+    "correctAnswer": "Mekke",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "VcwTA2pnvlBDVc9Z8Hde",
+    "text": "Hicret yolculuğu sırasında Sevr Mağarası’nda üç gün boyunca gizlenen Hz. Peygamber (sav) ve Hz. Ebu Bekir’e Mekke’de olup biten haberleri kim getirmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Esma (Hz. Ebu Bekir’in kızı)",
+      "Abdullah (Hz. Ebu Bekir’in oğlu)",
+      "Amir b. Füheyre (Hz. Ebu Bekir’in kölesi)",
+      "Abdullah b. Uraykıt (Kılavuz)"
+    ],
+    "correctAnswer": "Abdullah (Hz. Ebu Bekir’in oğlu)",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "WHJvXlpV8BnwO8uLxGlk",
+    "text": "Hz. Peygamber’in (sav) sahabe arasından komutan tayin ettiği seferlere ne ad verilir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Gazve",
+      "Cihad",
+      "Seriye",
+      "Umre"
+    ],
+    "correctAnswer": "Seriye",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "WzOCQ6hM4W3s4ERJ7Y9O",
+    "text": "Birinci Akabe Biatı’nda Yesribliler, aşağıdakilerden hangisi için Hz. Peygamber’e söz **vermemişlerdir**?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hırsızlık yapmamak",
+      "Allah’a hiçbir şeyi ortak koşmamak",
+      "Çocukları öldürmemek",
+      "Hicret ettiğinde onu canları pahasına korumak"
+    ],
+    "correctAnswer": "Hicret ettiğinde onu canları pahasına korumak",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "Z6TdS7JgZVeZYMINziQh",
+    "text": "Hz. Peygamber’i (sav) yakalamak için peşine düşen ve atı kumlara saplanınca takip ettiği kişinin farklı biri olduğunu sezerek geri dönen kişi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ebu Cehil",
+      "Ümeyye b. Halef",
+      "Sürâka b. Mâlik",
+      "Amr b. Âs"
+    ],
+    "correctAnswer": "Sürâka b. Mâlik",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "bmyxxgaWIDI5oWmxwW1A",
+    "text": "İkinci Akabe Biatı’nda Medineli Müslümanlar (Ensar), Hz. Peygamber’e (sav) hicret ettiğinde kendisini hangi konuda koruyacaklarına dair söz vermişlerdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Sadece ticari işlerinde destek olacaklarına",
+      "Kendi canlarını, çocuklarını, kadınlarını ve mallarını korudukları gibi koruyacaklarına",
+      "Ticari anlaşmalarında daima onu hakem kabul edeceklerine",
+      "Mekke’deki tüm kabilelerle savaşacaklarına"
+    ],
+    "correctAnswer": "Kendi canlarını, çocuklarını, kadınlarını ve mallarını korudukları gibi koruyacaklarına",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "cWdanu6jDK5wDEC3mWpk",
+    "text": "Hz. Peygamber (sav) Medine’ye hicret izni verdiğinde, zenginliği nedeniyle müşriklerin engel olmak istediği ve malını bırakarak hicret eden sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Mus’ab b. Umeyr",
+      "Hz. Osman",
+      "Suheyb b. Sinan",
+      "Habbâb b. Eret"
+    ],
+    "correctAnswer": "Suheyb b. Sinan",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "fMhbqFplZaI8zqAdiBuU",
+    "text": "Hudeybiye Antlaşması’nın en önemli sonucu nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Müslümanların Mekke’ye girmesi kesin olarak yasaklanmıştır.",
+      "Medineli Müslümanlar Mekke’ye göç etmeye başlamıştır.",
+      "Mekkeliler Müslümanlara uyguladığı ambargoyu kaldırmıştır.",
+      "Müşrikler, İslam devletini resmen kabul etmiş oluyordu."
+    ],
+    "correctAnswer": "Müşrikler, İslam devletini resmen kabul etmiş oluyordu.",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "hAKijndmUs6XmnvJnkka",
+    "text": "Hz. Peygamber (sav) ve Hz. Ebu Bekir, hicret yolculuğunda kendilerini takip edecek müşrikleri yanıltmak amacıyla Yesrib’in aksi yönüne doğru ilerlemişler ve nerede üç gün boyunca gizlenmişlerdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hira Mağarası",
+      "Kuba Mescidi",
+      "Mescid-i Aksa",
+      "Sevr Mağarası"
+    ],
+    "correctAnswer": "Sevr Mağarası",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "hfl5WMIPlrOQpRHvHbVq",
+    "text": "Sahabilerin namaz vakti mescitte aynı anda hazır bulunmaları zor olduğu için, vakitlerin duyurulması amacıyla ezanın okunmasına karar verilmiştir. Rüya görerek ezanın nasıl okunması gerektiğini öğrenen sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Ömer",
+      "Bilal Habeşi",
+      "Hz. Ebu Bekir",
+      "Abdullah b. Zeyd"
+    ],
+    "correctAnswer": "Abdullah b. Zeyd",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "hzAs4PyCbFlLRCPfJCQN",
+    "text": "Mekke’den Medine’ye göç eden Müslümanlara ne ad verilir ve bu göçün temel sebebi nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Ensar, daha iyi bir eğitim almak",
+      "Ashabıbedir, yeni ticaret yolları bulmak",
+      "Muhacir, inançlarını özgürce yaşamak",
+      "Zimmi, savaştan kaçınmak"
+    ],
+    "correctAnswer": "Muhacir, inançlarını özgürce yaşamak",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "kmOu0pA0zVH6CuHHTP6v",
+    "text": "İsra ve Miraç olayı, Hz. Peygamber’in (sav) yaşadığı derin üzüntülerin (Hüzün Yılı) ardından teselli bulması amacıyla gerçekleşmiştir. Bu olay Hicret’ten ne kadar süre önce ve hangi ayda gerçekleşmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Altı ay önce, Ramazan ayında",
+      "İki buçuk yıl önce, Şevval ayında",
+      "Bir buçuk yıl önce, Recep ayında",
+      "Bir yıl önce, Şaban ayında"
+    ],
+    "correctAnswer": "Bir buçuk yıl önce, Recep ayında",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "mhwQsh0AWkPsLSXscXkA",
+    "text": "Birinci Akabe Biatı’ndan sonra Hz. Peygamber (sav), Yesrib’de İslam’ı tebliğ etmesi ve öğretmesi için ilk öğretmen olarak kimi görevlendirmiştir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Zeyd b. Hârise",
+      "Hz. Hamza",
+      "Hz. Ali",
+      "Mus’ab b. Umeyr"
+    ],
+    "correctAnswer": "Mus’ab b. Umeyr",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "n3MzTl2S38WZCLvp0NWX",
+    "text": "Mus’ab b. Umeyr’in (ra) tebliğ gayretleri sonucunda, Birinci Akabe Biatı’ndan bir yıl sonra (peygamberliğin 12. yılında) gerçekleşen İkinci Akabe Biatı’na kaç Medineli Müslüman katılmıştır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "12 kişi",
+      "60 kişi",
+      "75 kişi (ikisi kadın)",
+      "82 kişi"
+    ],
+    "correctAnswer": "75 kişi (ikisi kadın)",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "nLrrksv8i2EJEX0InQuD",
+    "text": "Hz. Peygamber’in (sav) gelişiyle Yesrib şehrinin anılmaya başlandığı ve \"Nurlu Şehir\" anlamına gelen isim nedir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Mescid-i Aksa",
+      "Mescid-i Haram",
+      "Dârü’l-erkam",
+      "Medinetü’l-Münevvere"
+    ],
+    "correctAnswer": "Medinetü’l-Münevvere",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "sQ1GRjLr3XV0CQVBjvdt",
+    "text": "Hz. Peygamber’in (sav) vefat haberiyle sarsılan müminlere hitaben \"Bilin ki aranızdan kim Muhammed’e kulluk ediyorsa o ölmüştür. Ama kim de Allah’a kulluk ediyorsa Allah diridir asla ölmez.\" sözlerini söyleyen sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Ali",
+      "Hz. Ömer",
+      "Hz. Ebu Bekir",
+      "Hz. Osman"
+    ],
+    "correctAnswer": "Hz. Ebu Bekir",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "tntT5tATfaOf3raT96aH",
+    "text": "Hz. Peygamber (sav) Medine’ye ulaştığında devesinin çöktüğü arsanın en yakınındaki eve misafir olmuştur. Bu şerefe nail olan sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Osman",
+      "Hz. Hamza",
+      "Ebu Eyyüb el-Ensârî",
+      "Mus’ab b. Umeyr"
+    ],
+    "correctAnswer": "Ebu Eyyüb el-Ensârî",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "wn0NUBQGlZWi0KtIbUId",
+    "text": "Hz. Peygamber (sav) Mekke’de davet için bulunduğu sırada, daha sonra Medine adını alacak olan Yesrib şehrinden altı kişilik bir grupla nerede karşılaşmıştır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hira Mağarası’nda",
+      "Safâ Tepesi’nde",
+      "Mescid-i Aksa’da",
+      "Akabe denilen yerde"
+    ],
+    "correctAnswer": "Akabe denilen yerde",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "x6eHWGjwa58xl0QHXCUc",
+    "text": "Ezanın sözlerinin, sesi güzel olduğu için kendisine öğretilmesi buyurulan ve Hz. Peygamber’in ilk müezzini olan sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Bilal Habeşi",
+      "Mus’ab b. Umeyr",
+      "Ammar b. Yâsir",
+      "Habbâb b. Eret"
+    ],
+    "correctAnswer": "Bilal Habeşi",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "ytSo30iQY1cXPldWgDIX",
+    "text": "Hz. Peygamber’in (sav) Mescid-i Aksa’dan göklere yükseltilmesi olayına ne ad verilir ve bu olayın gerçekleştiği yer günümüzde hangi şehirde bulunmaktadır?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "İsra, Mekke",
+      "Tevhit, Taif",
+      "Miraç, Kudüs",
+      "İnziva, Medine"
+    ],
+    "correctAnswer": "Miraç, Kudüs",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "zPjopDooMH96Mw0iKVwy",
+    "text": "Hz. Peygamber (sav), hicret emrini aldıktan sonra beraberce yolculuk yapacakları kişiye bu haberi söylemiş ve onun bu habere çok sevindiği belirtilmiştir. Bu sahabi kimdir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Hz. Ömer",
+      "Zeyd b. Hârise",
+      "Hz. Ebu Bekir",
+      "Hz. Ali"
+    ],
+    "correctAnswer": "Hz. Ebu Bekir",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  },
+  {
+    "id": "zm1NWAVXIkR6AeinN6m0",
+    "text": "Hz. Peygamber’in (sav) “Evimle minberimin arası, cennet bahçelerinden bir bahçedir...” sözüyle önemine dikkat çektiği yer neresidir?",
+    "type": "Çoktan Seçmeli",
+    "difficulty": "Orta",
+    "options": [
+      "Kâbe",
+      "Mescid-i Aksa",
+      "Kuba Mescidi",
+      "Mescid-i Nebi (Ravza-i Mutahhara)"
+    ],
+    "correctAnswer": "Mescid-i Nebi (Ravza-i Mutahhara)",
+    "classId": "Lebb8imNfFDlLpakVVgp",
+    "className": "7",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "C0M499utiLGh647x2cnp",
+    "topicId": "SOxu0mWeXh96N3t9qo6a",
+    "topicName": "3. Peygamberimizin Medine Yılları",
+    "topic": "3. Peygamberimizin Medine Yılları"
+  }
+]

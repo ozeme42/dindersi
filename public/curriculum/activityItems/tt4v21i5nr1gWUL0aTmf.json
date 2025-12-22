@@ -1,0 +1,216 @@
+[
+  {
+    "id": "381wFe9f6vvPnJlCw3qA",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z",
+    "content": {
+      "definition": "Can, mal ve namus gibi değerlerin koruma altında olması",
+      "term": "Dokunulmazlık"
+    }
+  },
+  {
+    "id": "3QgYRa7T4YpRtsuhmAE5",
+    "type": "concept",
+    "content": {
+      "text": "Namus"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "5I6v1AOXLg7oALUryK7L",
+    "type": "concept",
+    "content": {
+      "text": "Peygamber"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "98jUJBzBjxFJV6sBM0sA",
+    "type": "sentence",
+    "content": {
+      "text": "Her canın yaşama hakkı vardır."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "AbCLdnKazI9MlwVwQFvN",
+    "type": "sentence",
+    "content": {
+      "text": "Peygamber mesajı tüm insanlığa yöneliktir."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "DJShjgLYvqzGGyWwzbwL",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z",
+    "content": {
+      "term": "Can",
+      "definition": "Her insanın sahip olduğu yaşama hakkı"
+    }
+  },
+  {
+    "id": "HKi0iTfDiMxDFjpHRsbh",
+    "type": "sentence",
+    "content": {
+      "text": "Malın helal yoldan kazanılması gerekir."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "J6XpwvlJ7PuYGPHDJfCu",
+    "type": "concept",
+    "content": {
+      "text": "Mal"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "JivW5PJlm2Qy0OD2WZNw",
+    "type": "concept",
+    "content": {
+      "text": "Dokunulmazlık"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "JpPKBoSer0IJeR2vtgMO",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z",
+    "content": {
+      "term": "Namus",
+      "definition": "İffetli olmak ve kendine ait olmayana göz dikmemek"
+    }
+  },
+  {
+    "id": "KrM5s9FrkvfolaxECIAy",
+    "type": "concept",
+    "content": {
+      "text": "Akıl"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "buZzIELs7tRLs0C0n7j2",
+    "type": "concept",
+    "content": {
+      "text": "İslam"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "dNCUTThauZXJGM7wcCza",
+    "type": "sentence",
+    "content": {
+      "text": "Namus ve iffet korunmalıdır."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "dcrTY5ZIok9oYgZHQWfX",
+    "type": "sentence",
+    "content": {
+      "text": "İnsan onuru İslam'da çok değerlidir."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "fPOlTvSoeQcfbCqNy0ty",
+    "type": "concept",
+    "content": {
+      "text": "Can"
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "lPYSVwN0zwL2qJFAG19h",
+    "type": "sentence",
+    "content": {
+      "text": "Akıl en büyük nimettir."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "o3zbeaLsRbBdxbB1NAjK",
+    "type": "sentence",
+    "content": {
+      "text": "İnanç özgürlüğü esastır, zorlama yoktur."
+    },
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z"
+  },
+  {
+    "id": "rm2kYHggFcI0b6OKilBf",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z",
+    "content": {
+      "definition": "Helal yoldan kazanılan kişisel varlıklar",
+      "term": "Mal"
+    }
+  },
+  {
+    "id": "s2CDMcEXsWDaZBBJ5YfT",
+    "type": "definition",
+    "courseId": "XboyC5jGWhYxh8RHYtrC",
+    "unitId": "PqkYDI0IbvELcbK6ooNX",
+    "topicId": "tt4v21i5nr1gWUL0aTmf",
+    "createdAt": "2025-12-10T05:32:22.986Z",
+    "content": {
+      "term": "Akıl",
+      "definition": "İnsana verilen en büyük nimetlerden biri"
+    }
+  }
+]
