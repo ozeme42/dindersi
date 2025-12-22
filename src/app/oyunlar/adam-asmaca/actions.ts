@@ -3,6 +3,8 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
 
 export type HangmanData = {
     word: string;
@@ -20,17 +22,18 @@ export async function getAdamAsmacaAction(
             return { error: "Adam Asmaca oynamak için belirli bir konu seçmelisiniz.", data: null };
         }
 
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+        let allItems: ActivityItem[] = [];
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            allItems = JSON.parse(fileContent);
+        } catch (fileError: any) {
+             if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", data: null };
             }
-            throw new Error(`Static data for topic ${topicId} failed to load.`);
+            throw fileError;
         }
-        
-        const allItems: ActivityItem[] = await res.json();
         
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
 
@@ -46,7 +49,7 @@ export async function getAdamAsmacaAction(
         );
 
         if (suitableItems.length < 3) {
-            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı.", data: null };
+            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (4-14 harf, boşluksuz, en az 3 adet).", data: null };
         }
         
         const shuffled = [...suitableItems].sort(() => 0.5 - Math.random());
