@@ -71,10 +71,10 @@ const SelectionCard = ({
         <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex flex-row items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-20 md:w-20 lg:h-24 lg:w-24 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
+                "h-10 w-10 md:h-14 md:w-14 lg:h-20 lg:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
                 color
             )}>
-                <Icon className="h-5 w-5 md:h-10 md:w-10 lg:h-12 lg:w-12 drop-shadow-md" />
+                <Icon className="h-5 w-5 md:h-8 md:w-8 lg:h-12 lg:w-12 drop-shadow-md" />
             </div>
             
             <div className="flex-grow min-w-0 flex flex-col justify-center w-full">
@@ -83,7 +83,7 @@ const SelectionCard = ({
                         {subtitle}
                     </div>
                 )}
-                <h3 className="font-bold text-white text-sm md:text-lg lg:text-2xl leading-snug line-clamp-2 group-hover:text-cyan-100 transition-colors">
+                <h3 className="font-bold text-white text-sm md:text-lg lg:text-2xl leading-snug line-clamp-2 group-hover:text-cyan-100 transition-colors pr-1">
                     {title}
                 </h3>
             </div>
@@ -139,33 +139,37 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     unitName: "",
   });
 
-  useEffect(() => {
-    const fetchManifest = async () => {
-        setIsLoading(true);
-        try {
-            const res = await getCurriculumForSelection(dataType, isStatic, user?.uid);
-            if(res.error) throw new Error(res.error);
+  const fetchManifest = useCallback(async () => {
+    setIsLoading(true);
+    try {
+        // isStatic ise user bekleme, değilse bekle
+        if (!isStatic && !user) return; 
 
-            const enrichedClassGroups = (res.classGroups || []).map((group: any, groupIndex: number) => ({
-                ...group,
-                courses: group.courses.map((course: any, courseIndex: number) => ({
-                    ...course,
-                    icon: ICONS[courseIndex % ICONS.length],
-                    color: getGradient(courseIndex),
-                    className: group.name,
-                }))
-            }));
-            
-            setAllClassGroups(enrichedClassGroups);
+        const res = await getCurriculumForSelection(dataType, isStatic, user?.uid);
+        if(res.error) throw new Error(res.error);
 
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        const enrichedClassGroups = (res.classGroups || []).map((group: any, groupIndex: number) => ({
+            ...group,
+            courses: group.courses.map((course: any, courseIndex: number) => ({
+                ...course,
+                icon: ICONS[courseIndex % ICONS.length],
+                color: getGradient(courseIndex),
+                className: group.name,
+            }))
+        }));
+        
+        setAllClassGroups(enrichedClassGroups);
+
+    } catch (error) {
+        console.error(error);
+    } finally {
+        setIsLoading(false);
+    }
+}, [user, dataType, isStatic]);
+
+useEffect(() => {
     fetchManifest();
-  }, [user, dataType, isStatic]);
+}, [fetchManifest]);
 
   const handleSelectClass = (group: ClassGroup) => {
     setSelection({ 
@@ -269,7 +273,11 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   };
   
   const getBackUrl = () => {
-    if (targetPath && targetPath.startsWith('student')) return '/student';
+    if (!targetPath) {
+        if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
+        return '/student';
+    }
+    if (targetPath.startsWith('student')) return '/student';
     if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
     return '/';
   };
@@ -281,7 +289,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     return name;
   };
 
-  const gridClass = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-5";
+  const gridClass = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5";
 
   const renderStepContent = () => {
       if (isLoading) {
@@ -446,7 +454,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             </div>
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
-                    {currentStep === 1 && "Bir sınıf seçerek başla."}
+                    {currentStep === 1 && "Bir ders seçerek başla."}
                     {currentStep === 2 && `${selection.className} için bir ders seç.`}
                     {currentStep === 3 && `${selection.courseName} dersi için bir ünite seç.`}
                     {currentStep === 4 && `${selection.unitName} ünitesi için bir konu seç.`}
