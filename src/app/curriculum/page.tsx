@@ -116,10 +116,8 @@ export default function PublicCurriculumPage() {
                                                                 <ChevronRight className="h-4 w-4 text-slate-600 transition-transform duration-200 group-data-[state=open]/unit:rotate-90"/>
                                                                 <span className="flex-1 text-left">{unit.title}</span>
                                                                 {unit.hasUnitOzet && (
-                                                                    <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()}>
-                                                                        <Button variant="outline" size="sm" className="h-6 px-2 text-xs bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
-                                                                            <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
-                                                                        </Button>
+                                                                    <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-6 px-2 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
+                                                                        <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
                                                                     </Link>
                                                                 )}
                                                              </div>
