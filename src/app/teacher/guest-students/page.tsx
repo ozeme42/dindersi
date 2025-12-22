@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -15,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -35,7 +36,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteUserFromFirestore, resetAllGeneralScores, getAllUsers } from '@/app/teacher/superadmin/actions';
-import { addGuestStudent, bulkAddGuestStudents, updateStudentClass, createNewStudent } from "./actions";
+import { addGuestStudent, bulkAddGuestStudents, updateStudentClass } from "./actions";
 
 
 // Types
@@ -249,7 +250,7 @@ export default function GuestStudentManagementPage() {
 
     const result = data.uid
       ? await updateUser(dataToSave as UserProfile)
-      : await createNewStudent(dataToSave as any);
+      : await addGuestStudent(data.displayName, fullClassName || '');
       
     if (result.success) {
       toast({ title: "Başarılı", description: `Kullanıcı ${data.uid ? 'güncellendi' : 'oluşturuldu'}.` });
@@ -324,7 +325,7 @@ export default function GuestStudentManagementPage() {
   const filteredStudents = useMemo(() => {
     let list = allStudents;
     
-    if (selectedClass) {
+    if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
              list = list.filter(s => s.class?.startsWith(selectedClass.name));
         } else {
@@ -363,14 +364,14 @@ export default function GuestStudentManagementPage() {
             </h1>
         </div>
 
-        <Tabs defaultValue="list">
+        <Tabs defaultValue="list" className="space-y-6">
             <div className="bg-slate-900/40 p-1.5 rounded-xl border border-white/10 inline-flex">
                 <TabsList className="bg-transparent border-0 p-0 h-auto gap-2">
                     <TabsTrigger value="list" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
-                        Sanal Öğrenci Listesi
+                        <Users className="mr-2 h-4 w-4"/> Sanal Öğrenci Listesi
                     </TabsTrigger>
                     <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
-                        Yeni Öğrenci Ekle
+                        <UserPlus className="mr-2 h-4 w-4"/> Yeni Ekle
                     </TabsTrigger>
                 </TabsList>
             </div>
@@ -379,7 +380,7 @@ export default function GuestStudentManagementPage() {
              <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                 <CardHeader className="border-b border-white/5 pb-4">
                     <CardTitle className="text-xl text-white">Sanal Öğrenci Filtresi</CardTitle>
-                    <CardDescription className="text-slate-400">Akıllı tahta yarışmalarında kullanılacak sanal öğrencileri görüntüleyin ve yönetin.</CardDescription>
+                    <CardDescription className="text-slate-400 text-sm">Akıllı tahta yarışmalarında kullanılacak sanal öğrencileri görüntüleyin ve yönetin.</CardDescription>
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                         <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                             <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
@@ -407,13 +408,16 @@ export default function GuestStudentManagementPage() {
           <TabsContent value="add" className="outline-none space-y-6">
               <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                 <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
-                    <CardTitle className="text-2xl text-white flex items-center gap-2">
-                        <UserPlus className="h-6 w-6 text-emerald-400" /> Yeni Sanal Öğrenci Ekle
-                    </CardTitle>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="p-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
+                            <UserPlus className="h-6 w-6 text-emerald-400" />
+                        </div>
+                        <CardTitle className="text-2xl text-white">Yeni Sanal Öğrenci Ekle</CardTitle>
+                    </div>
                     <CardDescription className="text-slate-400 text-base">Oluşturulan öğrenciler seçtiğiniz sınıf ve şubeye atanacaktır. Şifre, sistem tarafından rastgele atanır.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8">
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="space-y-1">
                             <Label className="text-slate-300 text-xs">Sınıf</Label>
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
@@ -436,7 +440,7 @@ export default function GuestStudentManagementPage() {
                     <Tabs defaultValue="single" className="w-full">
                       <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex">
                         <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
-                        <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Ekle</TabsTrigger>
+                        <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
                       </TabsList>
                       
                       <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
@@ -468,7 +472,7 @@ export default function GuestStudentManagementPage() {
                                 />
                             </div>
                             <Button type="submit" size="lg" onClick={handleBulkAdd} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedClass || activeBranch === 'all'}>
-                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Toplu Ekle
+                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                             </Button>
                           </TabsContent>
                       </div>

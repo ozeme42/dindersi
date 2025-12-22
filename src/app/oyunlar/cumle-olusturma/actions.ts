@@ -6,15 +6,12 @@ import type { ActivityItem } from '@/lib/types';
 import { db } from "@/lib/firebase";
 import { 
   doc, 
-  updateDoc, 
+  writeBatch, 
+  serverTimestamp, 
   increment, 
   collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
   query, 
   where, 
-  getDocs, 
   getCountFromServer,
 } from 'firebase/firestore';
 import fs from 'fs/promises';
