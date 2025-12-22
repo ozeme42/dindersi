@@ -4,9 +4,13 @@
 import React, { Suspense } from 'react';
 import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Lightbulb, Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 function BilBakalimPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
+    // FIX: Read isStatic directly from URL search params instead of relying on process.env
+    const searchParams = useSearchParams();
+    const isStatic = searchParams.get('isStatic') === 'true';
+
     return (
         <OyunKurulum 
             gameName="Bil Bakalım"
