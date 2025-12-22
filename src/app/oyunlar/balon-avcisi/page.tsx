@@ -12,6 +12,7 @@ function BalonAvcisiPage() {
             gameIcon={Target}
             gamePath="balon-avcisi"
             dataType="games"
+            isStatic={true}
         />
     );
 }
