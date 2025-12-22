@@ -149,31 +149,30 @@ export async function exportAllData(
         if (unitId && unitId !== 'all') {
             relevantUnitIds.push(unitId);
         } else if (relevantCourseIds.length > 0) {
-            unitsSnap.forEach(doc => {
-                if (relevantCourseIds.includes(doc.ref.parent.parent!.id)) {
-                    relevantUnitIds.push(doc.id);
-                }
-            });
+             const unitPromises = relevantCourseIds.map(cId => db.collection('courses').doc(cId).collection('units').get());
+            const unitSnapshots = await Promise.all(unitPromises);
+            relevantUnitIds = unitSnapshots.flatMap(snap => snap.docs.map(doc => doc.id));
         }
 
         if (topicId && topicId !== 'all') {
             relevantTopicIds = [topicId];
         } else if (relevantUnitIds.length > 0) {
-            topicsSnap.forEach(doc => {
-                if (relevantUnitIds.includes(doc.ref.parent.parent!.id)) {
-                    relevantTopicIds.push(doc.id);
-                }
+            const topicPromises = relevantUnitIds.map(uId => {
+                const unitDoc = unitsSnap.docs.find(d => d.id === uId);
+                const path = unitDoc?.ref.parent.parent?.path;
+                if (!path) return Promise.resolve({ docs: [] });
+                return db.collection(path).doc(uId).collection('topics').get();
             });
+            const topicSnaps = await Promise.all(topicPromises);
+            relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         } else if (relevantCourseIds.length > 0) {
-            const courseUnitIds: string[] = unitsSnap.docs
-                .filter(doc => relevantCourseIds.includes(doc.ref.parent.parent!.id))
-                .map(doc => doc.id);
-            
-            topicsSnap.forEach(doc => {
-                if (courseUnitIds.includes(doc.ref.parent.parent!.id)) {
-                     relevantTopicIds.push(doc.id);
-                }
-            });
+             const courseUnitIdsPromises = relevantCourseIds.map(cId => db.collection('courses').doc(cId).collection('units').get());
+             const courseUnitSnaps = await Promise.all(courseUnitIdsPromises);
+             const topicPromises = courseUnitSnaps.flatMap(unitSnap => 
+                unitSnap.docs.map(unitDoc => unitDoc.ref.collection('topics').get())
+             );
+             const topicSnaps = await Promise.all(topicPromises);
+             relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
         
         return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
@@ -290,6 +289,7 @@ export async function exportAllData(
             return usersSnapshot.docs.map(userDoc => {
                 const user = serialize({ uid: userDoc.id, ...userDoc.data() });
                 delete user.uid;
+                delete user.createdAt;
                 return user;
             });
             
@@ -301,19 +301,17 @@ export async function exportAllData(
             const curriculumData = await Promise.all(coursesToExport.map(async (course: any) => {
                 const className = classesMap.get(course.classId) || 'Genel';
                 
-                const filteredUnits = unitsSnap.docs
+                const units = unitsSnap.docs
                     .filter(doc => doc.ref.path.startsWith(`courses/${course.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(doc.id)))
-                    .map(doc => ({id: doc.id, ...doc.data() as Unit}));
+                    .map(doc => {
+                        const unitData = {id: doc.id, ...doc.data() as Unit};
+                        const topics = topicsSnap.docs
+                            .filter(topicDoc => topicDoc.ref.path.startsWith(`courses/${course.id}/units/${unitData.id}/`) && (relevantTopicIds.length === 0 || relevantTopicIds.includes(topicDoc.id)))
+                            .map(topicDoc => ({ title: topicDoc.data().title }));
+                        
+                        return { title: unitData.title, topics };
+                    });
                     
-                const units = await Promise.all(filteredUnits.map(async unitDoc => {
-                    const filteredTopics = topicsSnap.docs
-                        .filter(doc => doc.ref.path.startsWith(`courses/${course.id}/units/${unitDoc.id}/`) && (relevantTopicIds.length === 0 || relevantTopicIds.includes(doc.id)))
-                        .map(topicDoc => {
-                             return { title: topicDoc.data().title };
-                        });
-                    return { title: unitDoc.title, topics: filteredTopics };
-                }));
-                
                 return { title: course.title, className, units };
             }));
             return curriculumData;
@@ -520,26 +518,35 @@ export async function exportDataForStaticSite() {
     // 4. Batch write all files to the export collection, now with chunking
     const exportCollectionRef = db.collection('__static_export');
     
-    // Clear old data first. This can be a large batch itself.
-    const oldFiles = await exportCollectionRef.limit(500).get();
+    // Clear old data first by chunking deletes
+    const deleteSnapshot = await exportCollectionRef.limit(500).get();
     let deleteBatch = db.batch();
     let deleteCount = 0;
-    for (const doc of oldFiles.docs) {
-        deleteBatch.delete(doc.ref);
-        deleteCount++;
-        if (deleteCount === 500) {
+    while(deleteSnapshot.docs.length > 0) {
+        for (const doc of deleteSnapshot.docs) {
+            deleteBatch.delete(doc.ref);
+            deleteCount++;
+            if (deleteCount === 500) {
+                await deleteBatch.commit();
+                deleteBatch = db.batch();
+                deleteCount = 0;
+            }
+        }
+        if (deleteCount > 0) {
             await deleteBatch.commit();
             deleteBatch = db.batch();
             deleteCount = 0;
         }
+        // Fetch the next batch of documents to delete
+        const nextDeleteSnapshot = await exportCollectionRef.limit(500).get();
+        if (nextDeleteSnapshot.docs.length === 0) break;
     }
-    if (deleteCount > 0) await deleteBatch.commit();
 
 
     // Write new data in chunks
     let writeBatch = db.batch();
     let writeCount = 0;
-    const CHUNK_SIZE = 400; // Firestore batch limit is 500, use a safe number
+    const CHUNK_SIZE = 300; // More conservative chunk size
 
     for (const fileData of allDocsToWrite) {
         const docRef = db.collection('__static_export').doc();
@@ -560,3 +567,5 @@ export async function exportDataForStaticSite() {
     
     return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }
+
+```
