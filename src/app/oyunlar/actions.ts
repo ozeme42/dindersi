@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -18,6 +17,8 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
 
 
 export async function getBilBakalimAction(
@@ -29,36 +30,39 @@ export async function getBilBakalimAction(
             return { error: "Lütfen oynamak için belirli bir konu seçin.", questions: [] };
         }
         
-        const res = await fetch(`${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const staticItems: ActivityItem[] = JSON.parse(fileContent);
+            
+            const allDefinitions = staticItems
+                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition)
+                .map(item => ({ id: item.id, content: item.content }));
 
-        if (!res.ok) {
-            if (res.status === 404) {
-                 return { error: "Bu konu için 'Bil Bakalım' oyun verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", questions: [] };
+            if (allDefinitions.length < 3) {
+                return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
             }
-            throw new Error(`Veri dosyası yüklenemedi: ${res.statusText}`);
+            
+            const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => {
+                return {
+                    id: `${item.id}-${index}`,
+                    text: item.content.definition!,
+                    type: 'Bil Bakalım',
+                    correctAnswer: item.content.term!,
+                    difficulty: 'Orta',
+                };
+            });
+
+            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için 'Bil Bakalım' oyun verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", questions: [] };
+            }
+            throw fileError; // Re-throw other file errors
         }
 
-        const staticItems: ActivityItem[] = await res.json();
-        
-        const allDefinitions = staticItems
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition)
-            .map(item => ({ id: item.id, content: item.content }));
-
-        if (allDefinitions.length < 3) {
-            return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
-        }
-        
-        const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => {
-            return {
-                id: `${item.id}-${index}`,
-                text: item.content.definition!,
-                type: 'Bil Bakalım',
-                correctAnswer: item.content.term!,
-                difficulty: 'Orta',
-            };
-        });
-
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
         return { error: "Oyun için sorular alınırken bir hata oluştu. Dosya formatı veya erişim sorunu olabilir.", questions: [] };
