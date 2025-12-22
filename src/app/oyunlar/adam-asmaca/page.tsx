@@ -6,14 +6,13 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Skull, Loader2 } from 'lucide-react';
 
 function AdamAsmacaPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Adam Asmaca"
             gameIcon={Skull}
             gamePath="adam-asmaca"
             dataType="games"
-            isStatic={isStatic}
+            isStatic={true}
         />
     );
 }
