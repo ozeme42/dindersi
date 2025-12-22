@@ -65,7 +65,7 @@ export async function updateUser(user: UserProfile): Promise<{ success: boolean;
 
     try {
         const db = getAdminDb();
-        const auth = getAuth();
+        const auth = getAdminAuth();
         const { uid, email, displayName, password } = user;
         const firestoreData: any = {
             displayName: user.displayName,
@@ -380,104 +380,72 @@ export async function exportAllData(
     }
 }
 
-export async function exportDataForStaticSite(filters: { classId?: string | null; courseId?: string | null; unitId?: string | null; topicId?: string | null; }) {
+/**
+ * Stage 1: Exports manifest.json and HTML content for `ozetler` and `yazilacaklar`.
+ * This is a relatively light operation.
+ */
+export async function exportManifestAndContent() {
     const db = getAdminDb();
-    const allDocsToWrite: { path: string, content: string }[] = [];
     const exportPath = path.join(process.cwd(), 'public', 'curriculum');
-    const CHUNK_SIZE = 100;
+    const allDocsToWrite: { path: string, content: string }[] = [];
+    const CHUNK_SIZE = 300;
 
     try {
-        const addFileToWrite = (filePath: string, content: any) => {
+        await fs.mkdir(exportPath, { recursive: true });
+        
+        const addFile = (filePath: string, content: any) => {
             allDocsToWrite.push({
                 path: path.join(exportPath, filePath),
-                content: JSON.stringify(content)
+                content: JSON.stringify(content, null, 2)
             });
         };
 
-        if (!filters.classId && !filters.courseId && !filters.unitId && !filters.topicId) {
-            try {
-                const existingFiles = await fs.readdir(exportPath);
-                for (let i = 0; i < existingFiles.length; i += 300) {
-                    const chunk = existingFiles.slice(i, i + 300);
-                    const deletePromises = chunk.map(file => fs.unlink(path.join(exportPath, file)).catch(e => console.warn(`Could not delete ${file}, it may have already been removed.`)));
-                    await Promise.all(deletePromises);
-                }
-            } catch (e: any) {
-                if (e.code !== 'ENOENT') console.warn("Could not clear curriculum directory, it might not exist yet.");
-            }
-        }
-        
-        await fs.mkdir(exportPath, { recursive: true });
-        
-        // --- 1. Manifest Oluşturma ---
         const manifestClassesSnap = await db.collection("classes").orderBy('createdAt', 'asc').get();
         const manifestCoursesSnap = await db.collection("courses").get();
         const allCoursesForManifest = manifestCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as Course }));
 
-        let classGroups = await Promise.all(manifestClassesSnap.docs.map(async (classDoc) => {
-            const classData = classDoc.data() as SchoolClass;
-            if (classData.isPublished === false) return null;
-            
-            const coursesInClass = allCoursesForManifest.filter(c => c.classId === classDoc.id && (c.isPublished ?? true));
-            if (coursesInClass.length === 0) return null;
+        const getClassGroups = async (isGeneral: boolean) => {
+            const sourceClasses = isGeneral 
+                ? [{ id: 'general', name: 'Genel' }] 
+                : manifestClassesSnap.docs;
 
-            const courses = await Promise.all(coursesInClass.map(async (course) => {
-                const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').get();
-                const units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-                    const unitData = unitDoc.data() as Unit;
-                    if (!(unitData.isPublished ?? true)) return null;
-                    
-                    const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').get();
-                    
-                    const defsSnap = await db.collection('activityItems').where('unitId', '==', unitDoc.id).where('type', '==', 'definition').limit(1).get();
+            return (await Promise.all(sourceClasses.map(async (classDoc) => {
+                const classData = classDoc.data() as SchoolClass;
+                if (!isGeneral && classData.isPublished === false) return null;
+                
+                const coursesInClass = allCoursesForManifest.filter(c => (isGeneral ? !c.classId : c.classId === classDoc.id) && (c.isPublished ?? true));
+                if (coursesInClass.length === 0) return null;
 
-                    const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
-                        const topicData = topicDoc.data() as Topic;
-                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                        return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
-                    }) || !defsSnap.empty;
+                const courses = await Promise.all(coursesInClass.map(async (course) => {
+                    const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
+                    const units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
+                        const unitData = unitDoc.data() as Unit;
+                        if (!(unitData.isPublished ?? true)) return null;
 
-                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
+                        const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
+                        const defsSnap = await db.collection('activityItems').where('unitId', '==', unitDoc.id).where('type', '==', 'definition').limit(1).get();
+                        
+                        const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
+                            const topicData = topicDoc.data() as Topic;
+                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0;
+                            return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
+                        }) || !defsSnap.empty;
+
+                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
+                    }));
+
+                    const validUnits = units.filter(Boolean);
+                    return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
                 }));
 
-                const validUnits = units.filter(Boolean);
-                return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
-            }));
-
-            const validCourses = courses.filter(Boolean);
-            return validCourses.length > 0 ? { name: classData.name, courses: validCourses } : null;
-        }));
+                const validCourses = courses.filter(Boolean);
+                return validCourses.length > 0 ? { name: classData.name, courses: validCourses } : null;
+            }))).filter(Boolean);
+        };
         
-        // Add "Genel" courses
-        const generalCoursesData = allCoursesForManifest.filter(c => !c.classId && (c.isPublished ?? true));
-        if (generalCoursesData.length > 0) {
-             const courses = await Promise.all(generalCoursesData.map(async (course) => {
-                const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').get();
-                 const units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
-                    const unitData = unitDoc.data() as Unit;
-                    if (!(unitData.isPublished ?? true)) return null;
-                    
-                    const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').get();
-                    const defsSnap = await db.collection('activityItems').where('unitId', '==', unitDoc.id).where('type', '==', 'definition').limit(1).get();
-
-                    const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
-                        const topicData = topicDoc.data() as Topic;
-                         const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                        return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
-                    }) || !defsSnap.empty;
-
-                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
-                }));
-                 const validUnits = units.filter(Boolean);
-                return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
-             }));
-             const validGeneralCourses = courses.filter(Boolean);
-             if (validGeneralCourses.length > 0) {
-                 classGroups.push({ name: "Genel", courses: validGeneralCourses as any });
-             }
-        }
-        
-        let finalClassGroups = classGroups.filter(Boolean) as any[];
+        const classGroups = await getClassGroups(false);
+        const generalGroup = await getClassGroups(true);
+        let finalClassGroups = [...classGroups, ...generalGroup] as any[];
 
         for (let group of finalClassGroups) {
             for (let course of group.courses) {
@@ -489,8 +457,7 @@ export async function exportDataForStaticSite(filters: { classId?: string | null
                         if (!(topicData.isPublished ?? true)) return null;
 
                         const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').limit(1).get();
-
-                        const hasYazilacaklarContent = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0 || !defsSnap.empty;
+                        const hasYazilacaklarContent = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
                         const hasOzetContent = !!topicData.htmlContent;
                         
                         if (hasOzetContent || hasYazilacaklarContent) {
@@ -508,10 +475,33 @@ export async function exportDataForStaticSite(filters: { classId?: string | null
         }
         
         finalClassGroups = finalClassGroups.filter(g => g.courses.length > 0);
+        addFile('manifest.json', { classGroups: finalClassGroups });
 
-        addFileToWrite('manifest.json', { classGroups: finalClassGroups });
+        for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
+            const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
+            await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
+        }
         
-        // --- 2. Topic-specific Data Files ---
+        return { success: true, message: `Manifesto ve ${allDocsToWrite.length - 1} içerik dosyası başarıyla oluşturuldu.` };
+
+    } catch (e: any) {
+        console.error("Error exporting manifest:", e);
+        return { success: false, error: "Manifest ve içerik oluşturulurken bir hata oluştu: " + e.message };
+    }
+}
+
+/**
+ * Stage 2: Exports activityItems for games. This can be a heavy operation.
+ */
+export async function exportActivityData() {
+    const db = getAdminDb();
+    const exportPath = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+    const allDocsToWrite: { path: string, content: string }[] = [];
+    const CHUNK_SIZE = 300;
+
+    try {
+        await fs.mkdir(exportPath, { recursive: true });
+
         const activitiesSnapshot = await db.collection('activityItems').get();
         const activitiesByTopic: { [key: string]: any[] } = {};
         activitiesSnapshot.docs.forEach((doc) => {
@@ -522,23 +512,51 @@ export async function exportDataForStaticSite(filters: { classId?: string | null
             }
         });
         
-        for (const tId in activitiesByTopic) {
-             addFileToWrite(`activities/${tId}.json`, activitiesByTopic[tId]);
+        for (const topicId in activitiesByTopic) {
+            allDocsToWrite.push({
+                path: path.join(exportPath, `${topicId}.json`),
+                content: JSON.stringify(activitiesByTopic[topicId])
+            });
         }
         
-        // --- 3. Yazma İşlemi (Parçalar Halinde) ---
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
-            const writePromises = chunk.map(file => fs.writeFile(file.path, file.content));
-            await Promise.all(writePromises);
+            await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
         }
         
-        return { success: true, message: `${allDocsToWrite.length} dosya başarıyla oluşturuldu.` };
-
+        return { success: true, message: `${allDocsToWrite.length} konu için oyun verisi başarıyla oluşturuldu.` };
     } catch (e: any) {
-        console.error("Error exporting static site data:", e);
-        return { success: false, error: "Statik site verileri oluşturulurken bir hata oluştu: " + e.message };
+        console.error("Error exporting activity data:", e);
+        return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
 
+```
+- src/components/ui/textarea.tsx:
+```tsx
+import * as React from "react"
 
+import { cn } from "@/lib/utils"
+
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={cn(
+          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Textarea.displayName = "Textarea"
+
+export { Textarea }
+
+```

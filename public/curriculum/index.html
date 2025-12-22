@@ -8,10 +8,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
-        /* Kök Font Ayarı (Varsayılan 16px) */
-        html {
-            font-size: 16px; 
-        }
+        /* Dinamik Font Kökü */
+        html { font-size: 16px; }
 
         body { 
             font-family: 'Outfit', sans-serif; 
@@ -25,114 +23,85 @@
             overflow-x: hidden;
         }
 
-        /* --- MASONRY (DUVAR) DÜZENİ - KAVRAMLAR İÇİN --- */
-        .masonry-grid {
-            column-count: 1;
-            column-gap: 1.5rem;
+        /* --- TABLO GÖRÜNÜMÜ (NOTLAR İÇİN) --- */
+        .notes-table {
+            display: grid;
+            grid-template-columns: 1fr;
+            background-color: rgba(71, 85, 105, 0.5); /* Çizgi Rengi */
+            gap: 1px; /* Çizgi Kalınlığı */
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            border-radius: 16px;
+            overflow: hidden;
         }
+        @media (min-width: 768px) { 
+            .notes-table { grid-template-columns: 1fr 1fr; } 
+        }
+        
+        .notes-cell {
+            background-color: rgba(30, 41, 59, 0.8); /* Hücre Rengi */
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.2s;
+        }
+        .notes-cell:hover {
+            background-color: rgba(30, 41, 59, 1);
+        }
+
+        /* --- MASONRY (KAVRAMLAR) --- */
+        .masonry-grid { column-count: 1; column-gap: 1.5rem; }
         @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
         @media (min-width: 1280px) { .masonry-grid { column-count: 3; } }
-        @media (min-width: 1600px) { .masonry-grid { column-count: 4; } }
-
         .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
 
-        /* --- NUMARALANDIRMA SİSTEMİ --- */
-        .notes-list { counter-reset: note-counter; }
-        .note-item { position: relative; padding-left: 3.5rem; }
-        .note-item::before {
-            counter-increment: note-counter;
-            content: counter(note-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 2.2rem;
-            height: 2.2rem;
-            background: rgba(139, 92, 246, 0.2); /* Mor tonlu numara */
-            color: #c4b5fd;
-            border-radius: 50%;
+        /* --- NUMARALANDIRMA --- */
+        .note-number {
+            min-width: 2rem;
+            height: 2rem;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1rem;
-            border: 2px solid rgba(139, 92, 246, 0.4);
-            box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+            font-size: 0.9rem;
+            border: 1px solid rgba(96, 165, 250, 0.3);
         }
 
-        .concepts-list { counter-reset: concept-counter; }
-        .concept-card { position: relative; }
         .concept-number {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
-            z-index: 10;
+            position: absolute; top: -10px; right: -10px; width: 2.5rem; height: 2.5rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-weight: 900;
+            font-size: 1.2rem; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); z-index: 10;
             transform: rotate(5deg);
         }
 
-        /* --- UI BİLEŞENLERİ --- */
-        .glass-card { 
-            background: rgba(30, 41, 59, 0.6); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-        .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(30, 41, 59, 0.8);
-        }
-
-        .hero-title {
-            background: linear-gradient(to right, #22d3ee, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-        /* Animasyonlar */
+        /* --- UI & OYUN --- */
+        .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
+        .hero-title { background: linear-gradient(to right, #22d3ee, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Oyun Slotları */
         .game-slot { width: 3.5rem; height: 4rem; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
-        
         .letter-btn { width: 4rem; height: 4rem; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; border: 1px solid white; transition: all 0.1s; }
         .letter-btn:active { top: 6px; box-shadow: none; transform: translateY(6px); }
         .letter-btn.used { opacity: 0; pointer-events: none; transform: scale(0); }
         .c-1 { background: #f59e0b; } .c-2 { background: #3b82f6; } .c-3 { background: #ec4899; } .c-4 { background: #8b5cf6; } .c-5 { background: #10b981; }
-        
-        .shake { animation: shake 0.4s; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        /* Eşleştirme */
+        .shake { animation: shake 0.4s; } @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .quiz-opt { transition: all 0.2s; }
         .match-item { background: #1e293b; border: 2px solid #334155; padding: 1.2rem; border-radius: 16px; cursor: pointer; min-height: 6rem; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; text-align: center; transition: all 0.2s; }
-        .match-item:hover { transform: translateY(-3px); border-color: #64748b; }
-        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); box-shadow: 0 0 20px rgba(59,130,246,0.4); }
+        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); }
         .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; opacity: 0.8; }
         .m-color-0 { background: #059669 !important; }
-        
-        .quiz-opt { transition: all 0.2s; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-lg border-b border-white/10 h-20 flex items-center justify-between px-6 md:px-10 shadow-2xl">
+    <header id="main-header" class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-lg border-b border-white/10 h-20 flex items-center justify-between px-6 md:px-10 shadow-2xl transition-transform duration-300">
         <div class="flex items-center gap-3 cursor-pointer group" onclick="location.reload()">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition">🎓</div>
             <div>
@@ -140,21 +109,26 @@
                 <span class="text-cyan-400 text-xs md:text-sm font-bold tracking-widest uppercase">Eğitim Portalı</span>
             </div>
         </div>
-
-        <div class="flex items-center gap-4">
-            <div class="flex items-center bg-slate-800/80 rounded-full border border-white/10 p-1">
-                <button onclick="changeFontSize(-1)" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition text-lg" title="Küçült">A-</button>
-                <div class="w-px h-5 bg-white/10"></div>
-                <button onclick="changeFontSize(1)" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-white hover:text-cyan-400 transition font-bold text-lg" title="Büyüt">A+</button>
-            </div>
-
-            <button id="home-btn" onclick="router.go('home')" class="hidden bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-blue-500/30 transition transform hover:scale-105 flex items-center gap-2">
-                <span>🏠</span> <span class="hidden md:inline">Ana Menü</span>
-            </button>
+        
+        <div class="flex items-center bg-slate-800/80 rounded-full border border-white/10 p-1">
+            <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition">A-</button>
+            <div class="w-px h-4 bg-white/10"></div>
+            <button onclick="changeFontSize(1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-white hover:text-cyan-400 transition font-bold">A+</button>
         </div>
     </header>
 
-    <main class="flex-grow pt-28 pb-16 px-4 md:px-8 w-full max-w-[1800px] mx-auto">
+    <div id="floating-controls" class="fixed top-4 right-4 z-[60] hidden flex-col gap-2 items-end animate-in fade-in slide-in-from-top-4">
+        <div class="flex items-center gap-2 bg-slate-900/90 backdrop-blur-md p-1.5 rounded-full border border-white/10 shadow-2xl">
+            <button onclick="router.go('home')" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg transition transform hover:scale-110" title="Ana Menü">
+                🏠
+            </button>
+            <div class="w-px h-4 bg-white/20"></div>
+            <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition text-xs font-bold">A-</button>
+            <button onclick="changeFontSize(1)" class="w-8 h-8 rounded-full hover:bg-white/10 text-white hover:text-cyan-400 transition text-sm font-bold">A+</button>
+        </div>
+    </div>
+
+    <main class="flex-grow pt-28 pb-16 px-4 md:px-8 w-full max-w-[1800px] mx-auto transition-all duration-300" id="main-container">
         
         <div id="view-home" class="view-section active w-full">
             <div class="text-center mb-12 fade-in">
@@ -168,10 +142,9 @@
 
         <div id="view-notes" class="view-section hidden w-full">
             <div class="text-center mb-10 fade-in">
-                <h2 id="note-title" class="text-4xl md:text-6xl font-black text-white mb-2 tracking-tight">Konu Başlığı</h2>
+                <h2 id="note-title" class="text-4xl md:text-6xl font-black text-white mb-2 tracking-tight">...</h2>
                 <div class="h-1.5 w-32 bg-gradient-to-r from-cyan-500 to-blue-500 mx-auto rounded-full"></div>
             </div>
-            
             <div id="note-content" class="w-full"></div>
         </div>
 
@@ -183,38 +156,34 @@
     </main>
 
     <div id="game-modal" class="fixed inset-0 z-[100] hidden bg-slate-950 flex flex-col animate-in fade-in duration-300">
-        <div class="h-24 bg-slate-900 flex items-center justify-between px-8 shadow-2xl border-b border-white/5">
-            <button onclick="closeGameModal()" class="w-14 h-14 bg-red-500/10 text-red-500 hover:bg-red-600 hover:text-white transition rounded-full font-bold text-2xl flex items-center justify-center">✕</button>
-            <h3 id="modal-game-title" class="font-black text-3xl text-white tracking-widest uppercase">OYUN</h3>
-            <div id="game-score" class="px-8 py-3 bg-green-600 rounded-full font-bold text-white text-xl shadow-[0_0_20px_rgba(22,163,74,0.5)]">PUAN: 0</div>
+        <div class="h-20 bg-slate-900 flex items-center justify-between px-6 shadow-2xl border-b border-white/5">
+            <button onclick="closeGameModal()" class="w-12 h-12 bg-red-500/10 text-red-500 hover:bg-red-600 hover:text-white transition rounded-full font-bold text-2xl flex items-center justify-center">✕</button>
+            <h3 id="modal-game-title" class="font-black text-2xl text-white tracking-widest uppercase">OYUN</h3>
+            <div id="game-score" class="px-6 py-2 bg-green-600 rounded-full font-bold text-white text-lg shadow-[0_0_15px_rgba(22,163,74,0.5)]">PUAN: 0</div>
         </div>
-        <div id="game-stage" class="flex-grow relative overflow-y-auto flex flex-col items-center justify-center p-4 bg-slate-950 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950"></div>
+        <div id="game-stage" class="flex-grow relative overflow-y-auto flex flex-col items-center justify-center p-4 bg-slate-950"></div>
     </div>
 
     <div id="loading" class="fixed inset-0 bg-slate-950 z-[200] flex flex-col items-center justify-center">
-        <div class="relative">
-            <div class="w-20 h-20 border-4 border-slate-800 border-t-cyan-500 rounded-full animate-spin"></div>
-            <div class="absolute inset-0 flex items-center justify-center text-3xl">🎓</div>
-        </div>
-        <p class="text-cyan-500 mt-4 font-bold animate-pulse text-lg">Yükleniyor...</p>
+        <div class="w-16 h-16 border-4 border-slate-800 border-t-cyan-500 rounded-full animate-spin"></div>
+        <p class="text-cyan-500 mt-4 font-bold animate-pulse">Yükleniyor...</p>
     </div>
 
     <script src="database.js"></script>
-    <script src="icerik.js?v=final"></script>
-    <script src="oyunlar.js?v=final"></script>
+    <script src="icerik.js?v=final2"></script>
+    <script src="oyunlar.js?v=final2"></script>
 
     <script>
-        // --- FONT KONTROLÜ (GELİŞMİŞ) ---
+        // --- FONT KONTROLÜ ---
         let currentFontSize = 16;
         function changeFontSize(amount) {
-            currentFontSize += amount * 2; // Daha hızlı büyüsün
+            currentFontSize += amount * 2;
             if(currentFontSize < 12) currentFontSize = 12;
             if(currentFontSize > 32) currentFontSize = 32;
-            // Tüm sayfanın temel fontunu değiştiriyoruz (rem birimi buna bağlı)
             document.documentElement.style.fontSize = currentFontSize + 'px';
         }
 
-        // --- UYGULAMA MANTIĞI ---
+        // --- UYGULAMA ---
         const App = {
             data: null, activeClassFilter: null, currentGameTopicId: null,
             init: () => {
@@ -224,7 +193,6 @@
                     if (typeof window.TUM_VERILER !== 'undefined') {
                         clearInterval(checkData);
                         let mainData = window.TUM_VERILER;
-                        // İÇERİĞİ ZORLA BİRLEŞTİR
                         if (typeof window.EK_ICERIKLER !== 'undefined') {
                             mainData = DataManager.mergeContent(mainData, window.EK_ICERIKLER);
                         }
@@ -232,9 +200,7 @@
                         App.start();
                     }
                     if (attempts > 50) { 
-                        clearInterval(checkData);
-                        alert("Veri tabanı yüklenemedi! Dosyaları kontrol edin.");
-                        document.getElementById('loading').style.display = 'none';
+                        clearInterval(checkData); alert("Veri hatası!"); document.getElementById('loading').style.display = 'none';
                     }
                 }, 100);
             },
@@ -244,51 +210,30 @@
                     if (formatted.length > 0) App.activeClassFilter = formatted[0].name;
                     UIManager.renderHome(formatted);
                     document.getElementById('loading').style.display = 'none';
-                } catch (e) {
-                    console.error(e);
-                    alert("Başlatma hatası: " + e.message);
-                }
+                } catch (e) { alert(e.message); }
             }
         };
 
         const DataManager = {
-            // GELİŞMİŞ VERİ BİRLEŞTİRME
             mergeContent: (db, ext) => {
                 const clean = s => s ? s.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '') : '';
                 ext.forEach(item => {
                     const cls = db.classes.find(x => clean(x.name) === clean(item.className));
                     if (!cls) return;
-
                     let c = db.courses.find(x => x.classId === cls.id && clean(x.title || x.name) === clean(item.courseName || item.courseTitle));
                     if(c) {
                         let u = c.units.find(x => {
-                            const dbU = clean(x.title || x.name);
-                            const extU = clean(item.unitName || item.unitTitle);
+                            const dbU = clean(x.title || x.name); const extU = clean(item.unitName || item.unitTitle);
                             return dbU.includes(extU) || extU.includes(dbU);
                         });
-
                         if(u) {
                             if (!u.topics) u.topics = [];
                             let t = u.topics.find(x => {
-                                const dbT = clean(x.title || x.name);
-                                const extT = clean(item.topicName || item.topicTitle);
+                                const dbT = clean(x.title || x.name); const extT = clean(item.topicName || item.topicTitle);
                                 return dbT.includes(extT) || extT.includes(dbT);
                             });
-
-                            if(t) { 
-                                t.writingContent = item.writingContent; 
-                                t.customUrl = item.url; 
-                            } else {
-                                // EŞLEŞMEZSE YENİ EKLE
-                                u.topics.push({
-                                    id: "auto-" + Math.random().toString(36).substr(2, 9),
-                                    title: item.topicName || item.topicTitle,
-                                    name: item.topicName || item.topicTitle,
-                                    writingContent: item.writingContent,
-                                    customUrl: item.url,
-                                    order: 999
-                                });
-                            }
+                            if(t) { t.writingContent = item.writingContent; t.customUrl = item.url; } 
+                            else { u.topics.push({ id: "auto-" + Math.random().toString(36).substr(2, 9), title: item.topicName || item.topicTitle, name: item.topicName || item.topicTitle, writingContent: item.writingContent, customUrl: item.url, order: 999 }); }
                         }
                     }
                 });
@@ -299,33 +244,13 @@
                 let classes = DataManager.sortItems([...db.classes]);
                 return classes.map(cls => {
                     let courses = DataManager.sortItems(db.courses.filter(c => c.classId === cls.id));
-                    return {
-                        name: cls.name + ". Sınıf",
-                        courses: courses.map(c => ({
-                            name: c.title || c.name,
-                            units: DataManager.sortItems([...c.units]).map(u => ({
-                                name: u.title || u.name,
-                                topics: DataManager.sortItems([...(u.topics || [])]).map(t => ({
-                                    id: t.id, name: t.title || t.name, url: t.customUrl
-                                }))
-                            }))
-                        }))
-                    };
+                    return { name: cls.name + ". Sınıf", courses: courses.map(c => ({ name: c.title || c.name, units: DataManager.sortItems([...c.units]).map(u => ({ name: u.title || u.name, topics: DataManager.sortItems([...(u.topics || [])]).map(t => ({ id: t.id, name: t.title || t.name, url: t.customUrl })) })) })) };
                 });
             },
             getTopicData: (id) => {
                 let res = { id, name:'', definitions:[], notes:[] };
                 App.data.courses.forEach(c => c.units.forEach(u => {
-                    if(u.topics) {
-                        const t = u.topics.find(x => x.id === id);
-                        if(t) {
-                            res.name = t.title || t.name;
-                            if(t.writingContent) {
-                                res.definitions = t.writingContent.conceptDefinitions || [];
-                                res.notes = t.writingContent.notes || [];
-                            }
-                        }
-                    }
+                    if(u.topics) { const t = u.topics.find(x => x.id === id); if(t) { res.name = t.title || t.name; if(t.writingContent) { res.definitions = t.writingContent.conceptDefinitions || []; res.notes = t.writingContent.notes || []; } } }
                 }));
                 return res;
             }
@@ -337,8 +262,22 @@
                 document.getElementById(`view-${view}`).classList.remove('hidden');
                 document.getElementById(`view-${view}`).classList.add('active');
                 
-                const btn = document.getElementById('home-btn');
-                view === 'home' ? btn.classList.add('hidden') : btn.classList.remove('hidden');
+                // HEADER GİZLE/GÖSTER MANTIĞI
+                const mainHeader = document.getElementById('main-header');
+                const floatControls = document.getElementById('floating-controls');
+                const mainContainer = document.getElementById('main-container');
+
+                if (view === 'home') {
+                    mainHeader.style.transform = 'translateY(0)';
+                    floatControls.classList.add('hidden');
+                    floatControls.classList.remove('flex');
+                    mainContainer.style.paddingTop = '7rem'; // Header payı
+                } else {
+                    mainHeader.style.transform = 'translateY(-100%)';
+                    floatControls.classList.remove('hidden');
+                    floatControls.classList.add('flex');
+                    mainContainer.style.paddingTop = '2rem'; // Daha az boşluk
+                }
 
                 if (view === 'notes') UIManager.renderNotes(params);
                 if (view === 'games') { App.currentGameTopicId = params; UIManager.renderGames(params); }
@@ -350,177 +289,83 @@
             renderHome: (data) => {
                 const tabs = document.getElementById('class-tabs');
                 const list = document.getElementById('courses-container');
-                
-                tabs.innerHTML = data.map(g => `
-                    <button onclick="UIManager.switchTab('${g.name}')" 
-                        class="px-8 py-4 rounded-2xl border border-white/10 font-bold text-lg transition transform hover:scale-105 shadow-xl ${g.name === App.activeClassFilter ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-none scale-105' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'}">
-                        ${g.name}
-                    </button>
-                `).join('');
-                
+                tabs.innerHTML = data.map(g => `<button onclick="UIManager.switchTab('${g.name}')" class="px-8 py-4 rounded-2xl border border-white/10 font-bold text-lg transition transform hover:scale-105 shadow-xl ${g.name === App.activeClassFilter ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-none scale-105' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'}">${g.name}</button>`).join('');
                 const group = data.find(g => g.name === App.activeClassFilter);
                 if(!group || group.courses.length === 0) { list.innerHTML = '<div class="text-center w-full py-20 text-slate-500 text-xl">İçerik bulunamadı.</div>'; return; }
-
                 list.innerHTML = group.courses.map((c, i) => `
                     <div class="glass-card rounded-3xl overflow-hidden fade-in flex flex-col h-full" style="animation-delay:${i*50}ms">
-                        <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-white/5 font-black text-xl flex items-center gap-3">
-                            <span class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-2xl">📘</span> 
-                            ${c.name}
-                        </div>
+                        <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-white/5 font-black text-xl flex items-center gap-3"><span class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-2xl">📘</span> ${c.name}</div>
                         <div class="p-4 space-y-3 flex-grow">
                             ${c.units.map(u => `
                                 <div class="group border border-white/5 rounded-2xl bg-slate-900/30 overflow-hidden hover:border-cyan-500/30 transition">
-                                    <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left p-4 font-bold text-slate-300 hover:text-white flex justify-between items-center text-lg">
-                                        <span class="uppercase tracking-wide">${u.name}</span> 
-                                        <span class="text-cyan-500 opacity-50 group-hover:opacity-100 transition">▼</span>
-                                    </button>
+                                    <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="w-full text-left p-4 font-bold text-slate-300 hover:text-white flex justify-between items-center text-lg"><span class="uppercase tracking-wide">${u.name}</span> <span class="text-cyan-500 opacity-50 group-hover:opacity-100 transition">▼</span></button>
                                     <div class="hidden bg-slate-950/50 border-t border-white/5">
-                                        ${u.topics.map(t => `
-                                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 pl-6 hover:bg-white/5 transition gap-3 border-b border-white/5 last:border-none">
-                                                <span class="text-lg font-medium text-slate-200 cursor-pointer hover:text-cyan-400 transition" onclick="${t.url ? `window.open('${t.url}')` : ''}">${t.name} ${t.url?'🔗':''}</span>
-                                                <div class="flex gap-2 shrink-0">
-                                                    <button onclick="router.go('notes', '${t.id}')" class="px-5 py-2 bg-blue-600/20 text-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">Notlar</button>
-                                                    <button onclick="router.go('games', '${t.id}')" class="px-5 py-2 bg-purple-600/20 text-purple-300 rounded-lg text-sm font-bold hover:bg-purple-600 hover:text-white transition">Oyun</button>
-                                                </div>
-                                            </div>
-                                        `).join('')}
+                                        ${u.topics.map(t => `<div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 pl-6 hover:bg-white/5 transition gap-3 border-b border-white/5 last:border-none"><span class="text-lg font-medium text-slate-200 cursor-pointer hover:text-cyan-400 transition" onclick="${t.url ? `window.open('${t.url}')` : ''}">${t.name} ${t.url?'🔗':''}</span><div class="flex gap-2 shrink-0"><button onclick="router.go('notes', '${t.id}')" class="px-5 py-2 bg-blue-600/20 text-blue-300 rounded-lg text-sm font-bold hover:bg-blue-600 hover:text-white transition">Notlar</button><button onclick="router.go('games', '${t.id}')" class="px-5 py-2 bg-purple-600/20 text-purple-300 rounded-lg text-sm font-bold hover:bg-purple-600 hover:text-white transition">Oyun</button></div></div>`).join('')}
                                     </div>
                                 </div>
                             `).join('')}
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             },
-            
             switchTab: (name) => { App.activeClassFilter = name; UIManager.renderHome(DataManager.transform(App.data)); },
-            
             renderNotes: (id) => {
                 const d = DataManager.getTopicData(id);
                 document.getElementById('note-title').textContent = d.name;
-                
                 let html = '';
                 
-                // 1. KAVRAMLAR (ÜSTTE - MASONRY GRID)
+                // 1. KAVRAMLAR (ÜSTTE)
                 if(d.definitions.length) {
                     let counter = 0;
                     html += `
                     <div class="fade-in mb-12">
-                        <h3 class="text-3xl font-black text-yellow-400 mb-8 flex items-center gap-4">
-                            <span class="bg-yellow-500/20 p-3 rounded-2xl">💡</span> Temel Kavramlar
-                        </h3>
-                        
+                        <h3 class="text-3xl font-black text-yellow-400 mb-8 flex items-center gap-4"><span class="bg-yellow-500/20 p-3 rounded-2xl">💡</span> Temel Kavramlar</h3>
                         <div class="masonry-grid concepts-list">
-                            ${d.definitions.map(x => {
-                                counter++;
-                                return `
-                                <div class="concept-card glass-card p-8 rounded-3xl mb-8 break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500">
-                                    <div class="concept-number">${counter}</div>
-                                    <h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4>
-                                    <p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p>
-                                </div>
-                                `;
-                            }).join('')}
+                            ${d.definitions.map(x => { counter++; return `<div class="concept-card glass-card p-8 rounded-3xl mb-8 break-inside-avoid hover:bg-slate-800/80 transition duration-300 border-l-4 border-yellow-500"><div class="concept-number">${counter}</div><h4 class="text-2xl font-bold text-white mb-3 pr-8">${x.term || x.concept}</h4><p class="text-slate-300 text-lg leading-relaxed">${x.definition}</p></div>`; }).join('')}
                         </div>
                     </div>`;
                 }
 
-                // 2. ÖNEMLİ BİLGİLER (ALTTA - 2 SÜTUNLU GRID)
+                // 2. ÖNEMLİ BİLGİLER (TABLO GÖRÜNÜMÜ - ALTTA)
                 if(d.notes.length) {
+                    let counter = 0;
                     html += `
                     <div class="fade-in">
-                        <h3 class="text-3xl font-black text-purple-400 mb-8 flex items-center gap-4">
-                            <span class="bg-purple-500/20 p-3 rounded-2xl">📌</span> Önemli Bilgiler
-                        </h3>
-                        <div class="glass-card p-10 rounded-3xl border-l-4 border-purple-500">
-                            <ol class="notes-list grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                                ${d.notes.map(n => `<li class="note-item text-xl text-slate-200 leading-relaxed">${n}</li>`).join('')}
-                            </ol>
+                        <h3 class="text-3xl font-black text-purple-400 mb-8 flex items-center gap-4"><span class="bg-purple-500/20 p-3 rounded-2xl">📌</span> Önemli Bilgiler</h3>
+                        <div class="notes-table">
+                            ${d.notes.map(n => { counter++; return `<div class="notes-cell"><div class="note-number shrink-0">${counter}</div><p class="text-xl text-slate-200 leading-relaxed">${n}</p></div>`; }).join('')}
                         </div>
                     </div>`;
                 }
 
-                if(!html) html = `
-                    <div class="flex flex-col items-center justify-center py-32 opacity-50 border-2 border-dashed border-slate-700 rounded-3xl">
-                        <div class="text-8xl mb-6">📭</div>
-                        <p class="text-3xl font-bold">Bu konu için henüz içerik eklenmemiş.</p>
-                    </div>`;
-                
+                if(!html) html = `<div class="flex flex-col items-center justify-center py-32 opacity-50 border-2 border-dashed border-slate-700 rounded-3xl"><div class="text-8xl mb-6">📭</div><p class="text-3xl font-bold">Bu konu için henüz içerik eklenmemiş.</p></div>`;
                 document.getElementById('note-content').innerHTML = html;
             },
-            
             renderGames: (id) => {
                 const d = DataManager.getTopicData(id);
                 document.getElementById('game-title').textContent = d.name;
                 document.getElementById('game-list').innerHTML = `
-                    <div onclick="openGame('quiz')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-emerald-500/30 hover:border-emerald-500 group shadow-lg hover:shadow-emerald-500/20">
-                        <div class="w-28 h-28 rounded-full bg-emerald-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">⚡</div>
-                        <h3 class="font-black text-3xl text-white mb-3">Kavram Yarışması</h3>
-                        <p class="text-slate-400 text-lg">Süreli ve puanlı bilgi yarışması ile kendini sına.</p>
-                        <button class="mt-8 px-8 py-3 bg-emerald-600 text-white rounded-full font-bold text-base hover:bg-emerald-500 transition">OYNA</button>
-                    </div>
-
-                    <div onclick="openGame('anagram')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-orange-500/30 hover:border-orange-500 group shadow-lg hover:shadow-orange-500/20">
-                        <div class="w-28 h-28 rounded-full bg-orange-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">🔤</div>
-                        <h3 class="font-black text-3xl text-white mb-3">Kelime Bulmaca</h3>
-                        <p class="text-slate-400 text-lg">Karışık harflerden doğru kavramı bulmaya çalış.</p>
-                        <button class="mt-8 px-8 py-3 bg-orange-600 text-white rounded-full font-bold text-base hover:bg-orange-500 transition">OYNA</button>
-                    </div>
-
-                    <div onclick="openGame('matching')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-blue-500/30 hover:border-blue-500 group shadow-lg hover:shadow-blue-500/20">
-                        <div class="w-28 h-28 rounded-full bg-blue-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">🧩</div>
-                        <h3 class="font-black text-3xl text-white mb-3">Eşleştirme</h3>
-                        <p class="text-slate-400 text-lg">Kavramları tanımlarıyla doğru bir şekilde eşleştir.</p>
-                        <button class="mt-8 px-8 py-3 bg-blue-600 text-white rounded-full font-bold text-base hover:bg-blue-500 transition">OYNA</button>
-                    </div>
-
-                    <div onclick="openGame('hangman')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-purple-500/30 hover:border-purple-500 group shadow-lg hover:shadow-purple-500/20">
-                        <div class="w-28 h-28 rounded-full bg-purple-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">😵</div>
-                        <h3 class="font-black text-3xl text-white mb-3">Adam Asmaca</h3>
-                        <p class="text-slate-400 text-lg">Harf tahmin ederek gizli kelimeyi bul.</p>
-                        <button class="mt-8 px-8 py-3 bg-purple-600 text-white rounded-full font-bold text-base hover:bg-purple-500 transition">OYNA</button>
-                    </div>
+                    <div onclick="openGame('quiz')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-emerald-500/30 hover:border-emerald-500 group shadow-lg hover:shadow-emerald-500/20"><div class="w-28 h-28 rounded-full bg-emerald-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">⚡</div><h3 class="font-black text-3xl text-white mb-3">Kavram Yarışması</h3><p class="text-slate-400 text-lg">Süreli ve puanlı bilgi yarışması.</p><button class="mt-8 px-8 py-3 bg-emerald-600 text-white rounded-full font-bold text-base hover:bg-emerald-500 transition">OYNA</button></div>
+                    <div onclick="openGame('anagram')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-orange-500/30 hover:border-orange-500 group shadow-lg hover:shadow-orange-500/20"><div class="w-28 h-28 rounded-full bg-orange-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">🔤</div><h3 class="font-black text-3xl text-white mb-3">Kelime Bulmaca</h3><p class="text-slate-400 text-lg">Karışık harflerden doğru kavramı bul.</p><button class="mt-8 px-8 py-3 bg-orange-600 text-white rounded-full font-bold text-base hover:bg-orange-500 transition">OYNA</button></div>
+                    <div onclick="openGame('matching')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-blue-500/30 hover:border-blue-500 group shadow-lg hover:shadow-blue-500/20"><div class="w-28 h-28 rounded-full bg-blue-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">🧩</div><h3 class="font-black text-3xl text-white mb-3">Eşleştirme</h3><p class="text-slate-400 text-lg">Kavramları eşleştir.</p><button class="mt-8 px-8 py-3 bg-blue-600 text-white rounded-full font-bold text-base hover:bg-blue-500 transition">OYNA</button></div>
+                    <div onclick="openGame('hangman')" class="glass-card p-10 rounded-3xl flex flex-col items-center text-center cursor-pointer hover:bg-slate-800 transition duration-300 border border-purple-500/30 hover:border-purple-500 group shadow-lg hover:shadow-purple-500/20"><div class="w-28 h-28 rounded-full bg-purple-500/10 flex items-center justify-center text-6xl mb-8 group-hover:scale-110 transition">😵</div><h3 class="font-black text-3xl text-white mb-3">Adam Asmaca</h3><p class="text-slate-400 text-lg">Harf tahmin ederek gizli kelimeyi bul.</p><button class="mt-8 px-8 py-3 bg-purple-600 text-white rounded-full font-bold text-base hover:bg-purple-500 transition">OYNA</button></div>
                 `;
             }
         };
 
         window.openGame = (type) => {
-            if (typeof GameEngine === 'undefined') { alert("Oyun motoru yüklenemedi! (oyunlar.js)"); return; }
-            
+            if (typeof GameEngine === 'undefined') { alert("Oyun motoru yüklenemedi!"); return; }
             const data = DataManager.getTopicData(App.currentGameTopicId);
             const defs = data.definitions;
-
-            if (!defs || defs.length === 0) {
-                alert("Bu oyun için veri (kavram) eksik.");
-                return;
-            }
-
-            const modal = document.getElementById('game-modal');
-            const title = document.getElementById('modal-game-title');
-            const score = document.getElementById('game-score');
-            
-            modal.classList.remove('hidden');
-            score.textContent = "Puan: 0";
-
-            if (type === 'quiz') {
-                title.textContent = 'KAVRAM YARIŞMASI';
-                GameEngine.startQuiz(defs);
-            } else if (type === 'anagram') {
-                title.textContent = 'KELİME BULMACA';
-                GameEngine.startAnagram(defs);
-            } else if (type === 'matching') {
-                title.textContent = 'EŞLEŞTİRME';
-                GameEngine.startMatching(defs);
-            } else if (type === 'hangman') {
-                title.textContent = 'ADAM ASMACA';
-                GameEngine.startHangman(defs);
-            }
+            if (!defs || defs.length === 0) { alert("Bu oyun için veri eksik."); return; }
+            const modal = document.getElementById('game-modal'); const title = document.getElementById('modal-game-title'); const score = document.getElementById('game-score');
+            modal.classList.remove('hidden'); score.textContent = "Puan: 0";
+            if (type === 'quiz') { title.textContent = 'KAVRAM YARIŞMASI'; GameEngine.startQuiz(defs); }
+            else if (type === 'anagram') { title.textContent = 'KELİME BULMACA'; GameEngine.startAnagram(defs); }
+            else if (type === 'matching') { title.textContent = 'EŞLEŞTİRME'; GameEngine.startMatching(defs); }
+            else if (type === 'hangman') { title.textContent = 'ADAM ASMACA'; GameEngine.startHangman(defs); }
         };
 
-        window.closeGameModal = () => {
-            document.getElementById('game-modal').classList.add('hidden');
-            document.getElementById('game-stage').innerHTML = '';
-        };
-
+        window.closeGameModal = () => { document.getElementById('game-modal').classList.add('hidden'); document.getElementById('game-stage').innerHTML = ''; };
         document.addEventListener('DOMContentLoaded', App.init);
     </script>
 </body>
