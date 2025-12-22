@@ -64,7 +64,7 @@ function OzetDisplayPage() {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const backUrl = `/curriculum`;
+    const backUrl = `/`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {

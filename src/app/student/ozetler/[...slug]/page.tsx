@@ -19,7 +19,7 @@ function OzetDisplayPage() {
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     
-    const backUrl = `/student/ozetler`;
+    const backUrl = `/student`;
 
     useEffect(() => {
         if (!slug || slug.length === 0) {
