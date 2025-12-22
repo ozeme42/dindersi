@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -113,7 +112,7 @@ export default function SuperAdminPage() {
   const handleExportStaticData = async () => {
     setIsExportingStatic(true);
     try {
-      const result = await exportDataForStaticSite();
+      const result = await exportDataForStaticSite(filters);
       if (result.success) {
         toast({ title: "Başarılı", description: result.message });
       } else {
@@ -207,7 +206,7 @@ export default function SuperAdminPage() {
                  <CardHeader>
                     <CardTitle className="text-white">Statik Site Yönetimi</CardTitle>
                     <CardDescription className="text-slate-400">
-                        Veritabanındaki tüm güncel verileri, statik sitenin kullanabileceği ayrı dosyalara dönüştürün. Bu işlem, `public/curriculum` klasöründeki dosyaları günceller.
+                        Veritabanındaki güncel verileri, statik sitenin kullanabileceği ayrı dosyalara dönüştürün. Bu işlem, `public/curriculum` klasöründeki dosyaları günceller.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

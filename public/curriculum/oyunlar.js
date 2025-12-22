@@ -1,4 +1,4 @@
-// oyunlar.js - GELİŞMİŞ OYUN MOTORU (DİNAMİK HAVUZLU)
+// oyunlar.js - TAM ÖĞRENME MODU (8 SEÇENEK, 3 TEKRAR)
 
 window.GameEngine = {};
 
@@ -8,9 +8,9 @@ window.GameEngine.state = {
     timer: null,
     timeLeft: 20,
     
-    // Quiz Değişkenleri
-    activeBatch: [], // O anki konunun kavramları (Öğrenilecekler)
-    distractorPool: [], // Çeldirici havuzu (Tüm diğer kavramlar)
+    // Tam Öğrenme Değişkenleri
+    activeBatch: [], // Öğrenilecek 8 kavram
+    distractorPool: [], // Yanlış şık havuzu (Diğer konulardan)
     currentItem: null, // Şu an sorulan
     currentOptions: [], // Ekranda görünen 8 seçenek
     
@@ -21,8 +21,7 @@ window.GameEngine.state = {
     currentWord: "", currentSlot: 0, guessed: [], qIndex: 0, questions: []
 };
 
-// --- YARDIMCI: TÜM KAVRAMLARI TOPLA ---
-// Çeldirici (yanlış şık) bulmak için diğer konulardaki tüm kavramları da bilmemiz lazım.
+// --- YARDIMCI: TÜM SİSTEMDEKİ KAVRAMLARI TOPLA (Yanlış Şık İçin) ---
 window.GameEngine.collectAllConcepts = function() {
     let pool = [];
     if (window.App && window.App.data && window.App.data.courses) {
@@ -38,7 +37,7 @@ window.GameEngine.collectAllConcepts = function() {
             });
         });
     }
-    // Tekrar edenleri temizle
+    // Tekrarları temizle
     return [...new Set(pool)];
 };
 
@@ -48,9 +47,10 @@ window.GameEngine.updateScoreUI = function() {
     if (el) el.textContent = "PUAN: " + window.GameEngine.state.score;
 };
 
-// Sonuç Ekranı
+// Ara Sonuç Ekranı
 window.GameEngine.showResult = function(type, title, message, onNext) {
     const stage = document.getElementById('game-stage');
+    
     const bgClass = type === 'success' ? 'bg-emerald-900/95' : 'bg-red-900/95';
     const icon = type === 'success' ? '⭐' : '❌';
 
@@ -59,20 +59,28 @@ window.GameEngine.showResult = function(type, title, message, onNext) {
             <div class="text-8xl mb-4 pop-in">${icon}</div>
             <h2 class="text-4xl font-black text-white mb-2 text-center">${title}</h2>
             <p class="text-xl text-white/90 mb-8 text-center font-medium px-4">${message}</p>
+            
             <button id="next-btn" class="px-10 py-4 bg-white text-slate-900 rounded-2xl text-xl font-bold shadow-xl transform hover:scale-105 transition flex items-center gap-2">
                 DEVAM ET ➜
             </button>
         </div>
     `;
+
     stage.insertAdjacentHTML('beforeend', resultHTML);
+
     const btn = document.getElementById('next-btn');
     btn.focus(); 
     btn.onclick = function() {
-        document.getElementById('result-overlay').remove();
+        const overlay = document.getElementById('result-overlay');
+        if(overlay) overlay.remove();
         onNext();
     };
+    
     document.onkeydown = function(e) {
-        if(e.key === "Enter") { document.onkeydown = null; btn.click(); }
+        if(e.key === "Enter") {
+            document.onkeydown = null;
+            btn.click();
+        }
     }
 };
 
@@ -100,34 +108,30 @@ window.GameEngine.showWinScreen = function() {
 window.GameEngine.startQuiz = function(definitions) {
     const stage = document.getElementById('game-stage');
     
-    // En az 1 kavram olmalı (8 seçenek için diğerleri havuzdan gelecek)
     if (!definitions || definitions.length === 0) {
-        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Bu konuda hiç kavram yok.</p></div>';
+        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Bu konuda oyun verisi yok.</p></div>';
         return;
     }
 
-    // 1. Aktif Konunun Kavramlarını Hazırla
+    // 1. Aktif Konu Kavramları (Öğrenilecekler)
     const activeBatch = definitions.map((def, index) => ({
         id: index,
         term: def.term || def.concept,
         definition: def.definition,
-        level: 0 // Hedef: 3
+        level: 0 // Hedef: 3 kez bilmek
     }));
 
-    // 2. Çeldirici Havuzunu Hazırla (Tüm sistemden)
-    let distractorPool = window.GameEngine.collectAllConcepts();
-    // Aktif konudakileri havuzdan çıkar (kendisiyle çakışmasın)
+    // 2. Çeldirici Havuzunu Doldur (Diğer konulardan da al)
+    let pool = window.GameEngine.collectAllConcepts();
+    // Kendi kavramlarını havuzdan çıkar (kendisiyle çakışmasın)
     const activeTerms = activeBatch.map(a => a.term);
-    distractorPool = distractorPool.filter(t => !activeTerms.includes(t));
-
-    // Eğer havuz yetersizse (sistemde toplam kavram azsa), mecbur kendi içinden tekrar edecek
-    // Ama genelde EK_ICERIKLER dolu olduğu için yeterli olacaktır.
+    pool = pool.filter(t => !activeTerms.includes(t));
 
     // State Ayarla
     const state = window.GameEngine.state;
     state.score = 0;
     state.activeBatch = activeBatch;
-    state.distractorPool = distractorPool;
+    state.distractorPool = pool;
     
     window.GameEngine.loadQuizLevel();
 };
@@ -144,34 +148,33 @@ window.GameEngine.loadQuizLevel = function() {
         return;
     }
 
-    // 2. Rastgele bir soru seç (Target)
+    // 2. Rastgele bir soru seç
     const currentItem = pendingItems[Math.floor(Math.random() * pendingItems.length)];
     state.currentItem = currentItem;
 
     // 3. Seçenekleri Oluştur (1 Doğru + 7 Yanlış)
-    // Yanlışları önce kendi konusundan, yetmezse genel havuzdan tamamla
-    
     let distractors = [];
     
     // A) Kendi konusundaki diğer kavramlar (Öncelikli)
     const localDistractors = state.activeBatch
         .filter(i => i.id !== currentItem.id)
         .map(i => i.term);
-    
     distractors.push(...localDistractors);
 
-    // B) Eğer 7'ye tamamlanmadıysa, genel havuzdan rastgele ekle
+    // B) Yetmezse genel havuzdan tamamla
     if (distractors.length < 7) {
         const needed = 7 - distractors.length;
-        const extra = state.distractorPool.sort(() => 0.5 - Math.random()).slice(0, needed);
-        distractors.push(...extra);
+        // Havuz boşsa (tek konu varsa) sadece kendi içindekilerle devam et
+        if (state.distractorPool.length > 0) {
+             const extra = state.distractorPool.sort(() => 0.5 - Math.random()).slice(0, needed);
+             distractors.push(...extra);
+        }
     }
 
-    // C) Tam 7 tane seç (eğer fazlaysa kırp)
+    // C) Tam 7 tane seç
     distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 7);
     
-    // Doğru ve yanlışları birleştirip karıştır
-    // Seçenekler sadece METİN (String) olacak
+    // Şıkları karıştır
     const options = [currentItem.term, ...distractors].sort(() => 0.5 - Math.random());
     state.currentOptions = options;
 
@@ -202,9 +205,11 @@ window.GameEngine.renderQuiz = function() {
     const currentItem = state.currentItem;
     const stage = document.getElementById('game-stage');
 
+    // İlerleme Bilgisi
     const completedCount = state.activeBatch.filter(i => i.level >= 3).length;
     const totalCount = state.activeBatch.length;
 
+    // Seviye Yıldızları
     let starsHTML = '';
     for(let i=0; i<3; i++) {
         starsHTML += i < currentItem.level 
@@ -217,8 +222,8 @@ window.GameEngine.renderQuiz = function() {
             
             <div class="flex justify-between items-center px-6 py-3 bg-slate-800/50 rounded-xl border border-white/5 mb-4">
                 <div class="flex flex-col">
-                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">İLERLEME</span>
-                    <span class="text-green-400 font-bold text-lg">${completedCount} / ${totalCount}</span>
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">GENEL İLERLEME</span>
+                    <span class="text-green-400 font-bold text-lg">${completedCount} / ${totalCount} Kavram</span>
                 </div>
                 <div class="flex flex-col items-end">
                     <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">BU KAVRAM</span>
@@ -261,7 +266,7 @@ window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
     const currentItem = state.currentItem;
     const isCorrect = !isTimeUp && (answer === currentItem.term);
 
-    // Butonları Kilitle ve Renklendir
+    // Görsel Geri Bildirim
     const buttons = document.querySelectorAll('.quiz-opt');
     buttons.forEach(b => {
         b.disabled = true;
@@ -273,7 +278,7 @@ window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
             b.classList.add('opacity-30');
         }
         
-        // Eğer yanlış tıklanan buysa kırmızı yap
+        // Yanlış tıklanan
         if (!isCorrect && !isTimeUp && b === btn) {
             b.classList.remove('opacity-30');
             b.classList.add('bg-red-600', 'border-red-500', 'opacity-100', 'shake');

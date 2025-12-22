@@ -8,7 +8,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
-        /* --- GENEL AYARLAR --- */
+        /* --- GENEL --- */
         body { 
             font-family: 'Outfit', sans-serif; 
             background-color: #0f172a; 
@@ -17,11 +17,10 @@
                               radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
             background-attachment: fixed;
             color: white; 
-            user-select: none; 
-            -webkit-user-select: none; 
+            user-select: none; -webkit-user-select: none; 
         }
         
-        /* --- HATA KUTUSU (Seçilebilir Metin) --- */
+        /* --- HATA KUTUSU --- */
         #debug-console { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.95); z-index: 9999; padding: 20px; 
@@ -30,7 +29,7 @@
         }
         .debug-row { border-bottom: 1px solid #333; padding: 10px 0; font-size: 14px; }
 
-        /* --- ORTAK ANİMASYONLAR --- */
+        /* --- ORTAK ANİMASYON --- */
         .fade-in { animation: fadeIn 0.5s ease-out; }
         .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .shake { animation: shake 0.4s; border-color: #ef4444 !important; color: #ef4444 !important; }
@@ -39,13 +38,13 @@
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-        /* --- UI BİLEŞENLERİ --- */
+        /* --- UI --- */
         .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .accordion-content { display: grid; grid-template-rows: 0fr; transition: 0.3s; overflow: hidden; }
         .accordion-content.open { grid-template-rows: 1fr; }
         .tab-btn.active { background: linear-gradient(90deg, #06b6d4, #3b82f6); border: none; }
 
-        /* --- OYUN: KELİME BULMACA (ANAGRAM) --- */
+        /* --- OYUN ÖGELERİ --- */
         .game-slot { width: 50px; height: 60px; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; transition: 0.3s; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
         .letter-btn { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; top: 0; position: relative; border: 1px solid white; transition: 0.1s; }
@@ -53,31 +52,19 @@
         .letter-btn.used { transform: scale(0); opacity: 0; pointer-events: none; }
         .c-1 { background: #f59e0b; } .c-2 { background: #3b82f6; } .c-3 { background: #ec4899; } .c-4 { background: #8b5cf6; } .c-5 { background: #10b981; }
 
-        /* --- OYUN: EŞLEŞTİRME (SÜTUNLAR) --- */
+        /* --- EŞLEŞTİRME --- */
         .match-container { display: flex; gap: 20px; width: 100%; max-width: 1000px; justify-content: center; padding: 10px; }
         .match-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-        
-        .match-item {
-            background: #1e293b; border: 2px solid #334155; padding: 15px; border-radius: 12px; 
-            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; text-align: center;
-            min-height: 80px; font-weight: 600; font-size: 0.9rem; color: #cbd5e1; position: relative;
-        }
-        .match-item:active { transform: scale(0.98); }
-        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); z-index: 10; }
+        .match-item { background: #1e293b; border: 2px solid #334155; padding: 15px; border-radius: 12px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 80px; font-weight: 600; font-size: 0.9rem; color: #cbd5e1; position: relative; }
+        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); z-index: 10; }
         .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; font-weight: 800; opacity: 0.9; }
-
-        /* Eşleşme Renkleri */
         .m-color-0 { background: #059669 !important; border-color: #34d399 !important; }
         .m-color-1 { background: #7c3aed !important; border-color: #a78bfa !important; }
         .m-color-2 { background: #db2777 !important; border-color: #f472b6 !important; }
         .m-color-3 { background: #ea580c !important; border-color: #fb923c !important; }
         .m-color-4 { background: #0891b2 !important; border-color: #22d3ee !important; }
         .m-color-5 { background: #4f46e5 !important; border-color: #818cf8 !important; }
-
-        @media (max-width: 768px) {
-            .match-container { flex-direction: row; gap: 10px; }
-            .match-item { min-height: 60px; font-size: 0.75rem; padding: 10px; }
-        }
+        @media (max-width: 768px) { .match-container { flex-direction: row; gap: 10px; } .match-item { min-height: 60px; font-size: 0.75rem; padding: 10px; } }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -193,16 +180,36 @@
         };
 
         const DataManager = {
+            // İÇERİK BİRLEŞTİRME (GÜNCELLENMİŞ GARANTİ YÖNTEM)
             mergeContent: (db, ext) => {
-                const normalize = s => s ? s.toLowerCase().replace(/\s+/g,'') : '';
+                const normalize = s => s ? s.toLowerCase().replace(/\s+/g,'').replace(/i/g,'ı').replace(/ı/g,'i') : '';
+                
                 ext.forEach(item => {
-                    // DÜZELTME: icerik.js 'courseName', 'unitName', 'topicName' kullanıyor.
-                    const c = db.courses.find(x => normalize(x.title) === normalize(item.courseName));
+                    // DERS BULMA (Hem title hem name kontrolü)
+                    const c = db.courses.find(x => {
+                        const dbName = x.title || x.name || "";
+                        const extName = item.courseName || item.courseTitle || "";
+                        return normalize(dbName) === normalize(extName);
+                    });
+
                     if(c) {
-                        const u = c.units.find(x => normalize(x.title).includes(normalize(item.unitName)));
+                        // ÜNİTE BULMA
+                        const u = c.units.find(x => {
+                            const dbUnit = x.title || x.name || "";
+                            const extUnit = item.unitName || item.unitTitle || "";
+                            return normalize(dbUnit).includes(normalize(extUnit)) || normalize(extUnit).includes(normalize(dbUnit));
+                        });
+
                         if(u) {
-                            const t = u.topics.find(x => normalize(x.title) === normalize(item.topicName));
+                            // KONU BULMA
+                            const t = u.topics.find(x => {
+                                const dbTopic = x.title || x.name || "";
+                                const extTopic = item.topicName || item.topicTitle || "";
+                                return normalize(dbTopic) === normalize(extTopic);
+                            });
+
                             if(t) { 
+                                // Eşleşme Başarılı! Veriyi ekle.
                                 t.writingContent = item.writingContent; 
                                 t.customUrl = item.url; 
                             }
@@ -220,11 +227,13 @@
                     return {
                         name: cls.name + ". Sınıf",
                         courses: courses.map(c => ({
-                            name: c.title,
+                            name: c.title || c.name, // Garanti isim
                             units: DataManager.sortItems([...c.units]).map(u => ({
-                                name: u.title,
+                                name: u.title || u.name,
                                 topics: DataManager.sortItems([...u.topics]).map(t => ({
-                                    id: t.id, name: t.title, url: t.customUrl
+                                    id: t.id, 
+                                    name: t.title || t.name, 
+                                    url: t.customUrl
                                 }))
                             }))
                         }))
@@ -236,7 +245,7 @@
                 App.data.courses.forEach(c => c.units.forEach(u => {
                     const t = u.topics.find(x => x.id === id);
                     if(t) {
-                        res.name = t.title;
+                        res.name = t.title || t.name;
                         if(t.writingContent) {
                             res.definitions = t.writingContent.conceptDefinitions || [];
                             res.notes = t.writingContent.notes || [];

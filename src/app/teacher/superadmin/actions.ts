@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -135,58 +134,44 @@ export async function exportAllData(
         let relevantUnitIds: string[] = [];
         let relevantTopicIds: string[] = [];
     
-        const allCourseDocs = coursesSnap.docs;
-        const allUnitDocs = unitsSnap.docs;
-    
-        // Determine relevant courses first
+        // 1. Determine relevant courses
         if (courseId && courseId !== 'all') {
             relevantCourseIds = [courseId];
         } else if (classId && classId !== 'all') {
-            relevantCourseIds = allCourseDocs
+            relevantCourseIds = coursesSnap.docs
                 .filter(doc => doc.data().classId === classId)
                 .map(doc => doc.id);
         } else {
-            // No class or course filter, means all courses are relevant
-            relevantCourseIds = allCourseDocs.map(doc => doc.id);
+            relevantCourseIds = coursesSnap.docs.map(doc => doc.id);
         }
     
-        // Determine relevant units
+        // 2. Determine relevant units based on courses
         if (unitId && unitId !== 'all') {
             relevantUnitIds = [unitId];
         } else {
-             const courseUnitDocs = allUnitDocs.filter(doc => {
-                const parentPath = doc.ref.parent.parent?.path;
-                return parentPath && relevantCourseIds.includes(parentPath.split('/')[1]);
-            });
-            relevantUnitIds = courseUnitDocs.map(doc => doc.id);
+            const unitPromises = relevantCourseIds.map(cId => 
+                db.collection(`courses/${cId}/units`).get()
+            );
+            const unitSnaps = await Promise.all(unitPromises);
+            relevantUnitIds = unitSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
     
-        // Determine relevant topics
+        // 3. Determine relevant topics based on units
         if (topicId && topicId !== 'all') {
             relevantTopicIds = [topicId];
-        } else if (relevantUnitIds.length > 0) {
-             const topicPromises = relevantUnitIds.map(uId => 
-                db.collectionGroup('topics').where('__name__', '>', `courses/${courseId}/units/${uId}/topics/`).where('__name__', '<', `courses/${courseId}/units/${uId}/topics/~`).get()
+        } else {
+            const topicPromises = relevantUnitIds.map(uId => 
+                db.collectionGroup('topics').where('__name__', '>', `courses/${coursesMap.get(relevantCourseIds.find(cId => unitsSnap.docs.find(u => u.id === uId)?.ref.path.includes(cId)) || '') || ''}/units/${uId}/topics/`).where('__name__', '<', `courses/${coursesMap.get(relevantCourseIds.find(cId => unitsSnap.docs.find(u => u.id === uId)?.ref.path.includes(cId)) || '') || ''}/units/${uId}/topics/~`).get()
             );
-            const topicSnapsArray = await Promise.all(topicPromises);
-            relevantTopicIds = topicSnapsArray.flatMap(snap => snap.docs.map(doc => doc.id));
-        } else if (relevantCourseIds.length > 0) {
-            const courseUnitDocs = allUnitDocs.filter(doc => {
-                const parentPath = doc.ref.parent.parent?.path;
-                return parentPath && relevantCourseIds.includes(parentPath.split('/')[1]);
-            });
-            const topicPromises = courseUnitDocs.flatMap(unitDoc => 
-                unitDoc.ref.collection('topics').get()
-            );
-            const topicSnaps = await Promise.all(topicPromises);
+            const topicSnaps = (await Promise.all(topicPromises));
             relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
-    
+        
         return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
     };
 
     const addNamesToItem = (item: any) => {
-        const newItem = { ...item };
+        const newItem: any = { ...item };
         const course = coursesMap.get(item.courseId);
         
         if (course) {
@@ -287,7 +272,7 @@ export async function exportAllData(
 
     switch (dataType) {
         case 'users':
-            let usersQuery = db.collection('users');
+            let usersQuery: FirebaseFirestore.Query = db.collection('users');
             if (classId && classId !== 'all') {
                 const className = classesMap.get(classId);
                 usersQuery = usersQuery.where('class', '>=', className).where('class', '<', className + '\uf8ff');
@@ -300,23 +285,24 @@ export async function exportAllData(
             
        case 'curriculum': {
             const coursesToExport = coursesSnap.docs
-                .filter(doc => relevantCourseIds.length === 0 || relevantCourseIds.includes(doc.id))
-                .map(doc => ({ id: doc.id, ...doc.data() as Course }));
-
-            const curriculumData = await Promise.all(coursesToExport.map(async (course: any) => {
-                const className = classesMap.get(course.classId) || 'Genel';
+                .filter(doc => relevantCourseIds.length === 0 || relevantCourseIds.includes(doc.id));
+        
+            const curriculumData = await Promise.all(coursesToExport.map(async (courseDoc) => {
+                const course = courseDoc.data() as Course;
+                const className = classesMap.get(course.classId || '') || 'Genel';
                 
-                const units = (await Promise.all(unitsSnap.docs
-                    .filter(doc => doc.ref.path.startsWith(`courses/${course.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(doc.id)))
-                    .map(async (doc) => {
-                        const unitData = {id: doc.id, ...doc.data() as Unit};
-                        const topicsSnapshot = await db.collection(`courses/${course.id}/units/${unitData.id}/topics`).get();
-                        const topics = topicsSnapshot.docs
-                            .filter(topicDoc => (relevantTopicIds.length === 0 || relevantTopicIds.includes(topicDoc.id)))
-                            .map(topicDoc => ({ title: topicDoc.data().title }));
-                        
-                        return { title: unitData.title, topics };
-                    }))).filter(Boolean);
+                const unitsInCourse = unitsSnap.docs
+                    .filter(doc => doc.ref.path.startsWith(`courses/${courseDoc.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(doc.id)));
+
+                const units = unitsInCourse.map(unitDoc => {
+                    const unitData = unitDoc.data() as Unit;
+                    const topicsInUnit = topicsSnap.docs
+                        .filter(topicDoc => topicDoc.ref.path.startsWith(`courses/${courseDoc.id}/units/${unitDoc.id}/`) && (relevantTopicIds.length === 0 || relevantTopicIds.includes(topicDoc.id)));
+                    
+                    const topics = topicsInUnit.map(topicDoc => ({ title: topicDoc.data().title }));
+                    
+                    return { title: unitData.title, topics };
+                });
                     
                 return { title: course.title, className, units };
             }));
@@ -329,7 +315,7 @@ export async function exportAllData(
         case 'activity-items':
             return fetchCollectionByFilter('activityItems', 'topicId', relevantTopicIds);
         case 'assignments': {
-             let query = db.collection('assignments') as FirebaseFirestore.Query;
+             let query: FirebaseFirestore.Query = db.collection('assignments');
              if (classId && classId !== 'all') {
                  query = query.where('classId', '==', classId);
              }
@@ -337,13 +323,15 @@ export async function exportAllData(
              return snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
         }
         case 'scoreEvents': {
-            const allUsers = await getAllUsers();
-            const userMap = new Map(allUsers.map(u => [u.uid, { displayName: u.displayName, className: u.class?.split(' - ')[0] || '' }]));
+            const allUsersSnapshot = await db.collection('users').get();
+            const userMap = new Map(allUsersSnapshot.docs.map(u => [u.id, { displayName: u.data().displayName, className: u.data().class?.split(' - ')[0] || '' }]));
             
             let userIdsToFilter: string[] = [];
             if (classId && classId !== 'all') {
                 const className = classesMap.get(classId);
-                userIdsToFilter = allUsers.filter(u => u.class?.startsWith(className || '###')).map(u => u.uid);
+                userIdsToFilter = allUsersSnapshot.docs
+                    .filter(doc => doc.data().class?.startsWith(className || '###'))
+                    .map(doc => doc.id);
             }
 
             const eventsData = await fetchCollectionByFilter('scoreEvents', 'userId', userIdsToFilter); 
@@ -359,14 +347,30 @@ export async function exportAllData(
 }
 
 
-export async function exportDataForStaticSite() {
+export async function exportDataForStaticSite(filters: { classId?: string | null; courseId?: string | null; unitId?: string | null; topicId?: string | null; }) {
     const db = getAdminDb();
     const allDocsToWrite: { path: string, content: string }[] = [];
+    const { classId, courseId, unitId, topicId } = filters;
 
-    // 1. Export flat collections
-    const collectionsToExport = ['classes', 'courses', 'questions', 'examQuestions', 'activityItems'];
+    // Fetch relevant courses, units, and topics based on filters
+    let coursesToProcess: FirebaseFirestore.QueryDocumentSnapshot[];
+    if (courseId && courseId !== 'all') {
+        const doc = await db.collection('courses').doc(courseId).get();
+        coursesToProcess = doc.exists ? [doc] : [];
+    } else if (classId && classId !== 'all') {
+        const snapshot = await db.collection('courses').where('classId', '==', classId).get();
+        coursesToProcess = snapshot.docs;
+    } else {
+        const snapshot = await db.collection('courses').get();
+        coursesToProcess = snapshot.docs;
+    }
+
+    // 1. Export flat collections - filtered by courses
+    const courseIds = coursesToProcess.map(doc => doc.id);
+    const collectionsToExport = ['questions', 'examQuestions', 'activityItems'];
     for (const collectionName of collectionsToExport) {
-        const snapshot = await db.collection(collectionName).get();
+        if (courseIds.length === 0) continue;
+        const snapshot = await db.collection(collectionName).where('courseId', 'in', courseIds).get();
         const data = snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
         allDocsToWrite.push({
             path: `public/curriculum/${collectionName}.json`,
@@ -380,45 +384,62 @@ export async function exportDataForStaticSite() {
                     byTopic[item.topicId].push(item);
                 }
             });
-            for (const topicId in byTopic) {
+            for (const tId in byTopic) {
                 allDocsToWrite.push({
-                    path: `public/curriculum/${collectionName}/${topicId}.json`,
-                    content: JSON.stringify(byTopic[topicId], null, 2)
+                    path: `public/curriculum/${collectionName}/${tId}.json`,
+                    content: JSON.stringify(byTopic[tId], null, 2)
                 });
             }
         }
     }
+     allDocsToWrite.push({
+        path: `public/curriculum/courses.json`,
+        content: JSON.stringify(coursesToProcess.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
+    });
+
+    const classesSnapshot = await db.collection('classes').get();
+    allDocsToWrite.push({
+        path: `public/curriculum/classes.json`,
+        content: JSON.stringify(classesSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
+    });
+
 
     // 2. Export subcollections and specific content files
-    const coursesSnapshot = await db.collection("courses").get();
-    for (const courseDoc of coursesSnapshot.docs) {
-        const courseId = courseDoc.id;
-        const unitsSnapshot = await db.collection('courses').doc(courseId).collection('units').get();
+    for (const courseDoc of coursesToProcess) {
+        let unitsQuery = db.collection('courses').doc(courseDoc.id).collection('units');
+        if (unitId && unitId !== 'all') {
+            unitsQuery = unitsQuery.where('__name__', '==', unitId);
+        }
+        const unitsSnapshot = await unitsQuery.get();
         
         const unitDataForCourse = unitsSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data() as Unit}));
         if (unitDataForCourse.length > 0) {
             allDocsToWrite.push({
-                path: `public/curriculum/units/${courseId}.json`,
+                path: `public/curriculum/units/${courseDoc.id}.json`,
                 content: JSON.stringify(unitDataForCourse, null, 2)
             });
         }
         
         for (const unitDoc of unitsSnapshot.docs) {
             const unitData = unitDoc.data() as Unit;
-            const unitId = unitDoc.id;
 
             if(unitData.htmlContent) {
                 allDocsToWrite.push({
-                    path: `public/curriculum/ozetler/unit_${unitId}.json`,
+                    path: `public/curriculum/ozetler/unit_${unitDoc.id}.json`,
                     content: JSON.stringify({ title: unitData.title, htmlContent: unitData.htmlContent }, null, 2)
                 });
             }
+            
+            let topicsQuery = db.collection('courses').doc(courseDoc.id).collection('units').doc(unitDoc.id).collection('topics');
+            if (topicId && topicId !== 'all') {
+                 topicsQuery = topicsQuery.where('__name__', '==', topicId);
+            }
+            const topicsSnapshot = await topicsQuery.get();
 
-            const topicsSnapshot = await db.collection('courses').doc(courseId).collection('units').doc(unitId).collection('topics').get();
             const topics = topicsSnapshot.docs.map(d => serialize({id: d.id, ...d.data()}));
             if(topics.length > 0) {
                  allDocsToWrite.push({
-                    path: `public/curriculum/topics/${unitId}.json`,
+                    path: `public/curriculum/topics/${unitDoc.id}.json`,
                     content: JSON.stringify(topics, null, 2)
                 });
             }
@@ -454,11 +475,12 @@ export async function exportDataForStaticSite() {
         }
     }
     
-    // 3. Create a manifest file
-    const manifestSnapshot = await db.collection("classes").orderBy('createdAt', 'asc').get();
-    const allCoursesForManifest = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as Course }));
+    // 3. Create a manifest file - this should always fetch all data to build the complete manifest
+    const manifestClassesSnap = await db.collection("classes").orderBy('createdAt', 'asc').get();
+    const manifestCoursesSnap = await db.collection("courses").get();
+    const allCoursesForManifest = manifestCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as Course }));
 
-    const manifestCourseGroups = await Promise.all(manifestSnapshot.docs.map(async (classDoc) => {
+    const manifestCourseGroups = await Promise.all(manifestClassesSnap.docs.map(async (classDoc) => {
         const classData = classDoc.data() as SchoolClass;
         const coursesInClass = allCoursesForManifest.filter(c => c.classId === classDoc.id && (c.isPublished ?? true));
 
@@ -526,7 +548,7 @@ export async function exportDataForStaticSite() {
             });
             await deleteBatch.commit();
             
-            if (snapshot.size < batchSize) break; // Last batch
+            if (snapshot.size < batchSize) break;
             
             const lastVisible = snapshot.docs[snapshot.docs.length - 1];
             query = collectionRef.limit(batchSize).startAfter(lastVisible);
@@ -536,14 +558,13 @@ export async function exportDataForStaticSite() {
     
     await deleteCollection(exportCollectionRef, CHUNK_SIZE_DELETE);
 
-
     // Chunked write
     let writeBatch = db.batch();
     let writeCount = 0;
-    const CHUNK_SIZE_WRITE = 100; // More conservative chunk size
+    const CHUNK_SIZE_WRITE = 100;
 
     for (const fileData of allDocsToWrite) {
-        const docRef = db.collection('__static_export').doc();
+        const docRef = exportCollectionRef.doc();
         writeBatch.set(docRef, fileData);
         writeCount++;
 
