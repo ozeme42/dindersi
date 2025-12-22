@@ -29,6 +29,17 @@ function downloadJson(data: any, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+// Helper to slugify strings for filenames
+const slugify = (text: string) => {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Boşlukları - ile değiştir
+        .replace(/[^\w-]+/g, '')       // Alfanümerik olmayan karakterleri kaldır
+        .replace(/--+/g, '-')         // Birden fazla -'yi tek - yap
+        .replace(/^-+/, '')           // Başlangıçtaki -'leri kaldır
+        .replace(/-+$/, '');          // Sondaki -'leri kaldır
+};
+
+
 export default function SuperAdminPage() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,13 +100,26 @@ export default function SuperAdminPage() {
   const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar', baseFilename: string) => {
     setIsDownloading(dataType);
     
-    // Create a dynamic filename
-    let filenameParts = [baseFilename];
-    if (filters.topicId !== 'all') filenameParts.unshift(filters.topicId);
-    else if (filters.unitId !== 'all') filenameParts.unshift(filters.unitId);
-    else if (filters.courseId !== 'all') filenameParts.unshift(filters.courseId);
-    else if (filters.classId !== 'all') filenameParts.unshift(filters.classId);
+    // Create a dynamic filename based on filters
+    let filenameParts = [];
+    if (filters.classId && filters.classId !== 'all') {
+        const className = allClasses.find(c => c.id === filters.classId)?.name || filters.classId;
+        filenameParts.push(slugify(className));
+    }
+    if (filters.courseId && filters.courseId !== 'all') {
+        const courseName = allCourses.find(c => c.id === filters.courseId)?.title || filters.courseId;
+        filenameParts.push(slugify(courseName));
+    }
+    if (filters.unitId && filters.unitId !== 'all') {
+        const unitName = filteredUnits.find(u => u.id === filters.unitId)?.title || filters.unitId;
+        filenameParts.push(slugify(unitName));
+    }
+     if (filters.topicId && filters.topicId !== 'all') {
+        const topicName = filteredTopics.find(t => t.id === filters.topicId)?.title || filters.topicId;
+        filenameParts.push(slugify(topicName));
+    }
     
+    filenameParts.push(baseFilename);
     const filename = `${filenameParts.join('_')}.json`;
     
     try {

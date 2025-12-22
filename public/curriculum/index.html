@@ -8,7 +8,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
-        /* --- GENEL --- */
         body { 
             font-family: 'Outfit', sans-serif; 
             background-color: #0f172a; 
@@ -17,10 +16,10 @@
                               radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
             background-attachment: fixed;
             color: white; 
-            user-select: none; -webkit-user-select: none; 
+            user-select: none; 
+            -webkit-user-select: none; 
         }
         
-        /* --- HATA KUTUSU --- */
         #debug-console { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.95); z-index: 9999; padding: 20px; 
@@ -29,42 +28,23 @@
         }
         .debug-row { border-bottom: 1px solid #333; padding: 10px 0; font-size: 14px; }
 
-        /* --- ORTAK ANİMASYON --- */
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .shake { animation: shake 0.4s; border-color: #ef4444 !important; color: #ef4444 !important; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        /* --- UI --- */
         .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .accordion-content { display: grid; grid-template-rows: 0fr; transition: 0.3s; overflow: hidden; }
-        .accordion-content.open { grid-template-rows: 1fr; }
         .tab-btn.active { background: linear-gradient(90deg, #06b6d4, #3b82f6); border: none; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- OYUN ÖGELERİ --- */
+        /* OYUN STILLERI */
         .game-slot { width: 50px; height: 60px; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; transition: 0.3s; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
         .letter-btn { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; top: 0; position: relative; border: 1px solid white; transition: 0.1s; }
         .letter-btn:active { top: 6px; box-shadow: none; }
         .letter-btn.used { transform: scale(0); opacity: 0; pointer-events: none; }
         .c-1 { background: #f59e0b; } .c-2 { background: #3b82f6; } .c-3 { background: #ec4899; } .c-4 { background: #8b5cf6; } .c-5 { background: #10b981; }
+        .shake { animation: shake 0.4s; border-color: #ef4444 !important; color: #ef4444 !important; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-        /* --- EŞLEŞTİRME --- */
-        .match-container { display: flex; gap: 20px; width: 100%; max-width: 1000px; justify-content: center; padding: 10px; }
-        .match-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-        .match-item { background: #1e293b; border: 2px solid #334155; padding: 15px; border-radius: 12px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 80px; font-weight: 600; font-size: 0.9rem; color: #cbd5e1; position: relative; }
-        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); z-index: 10; }
-        .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; font-weight: 800; opacity: 0.9; }
-        .m-color-0 { background: #059669 !important; border-color: #34d399 !important; }
-        .m-color-1 { background: #7c3aed !important; border-color: #a78bfa !important; }
-        .m-color-2 { background: #db2777 !important; border-color: #f472b6 !important; }
-        .m-color-3 { background: #ea580c !important; border-color: #fb923c !important; }
-        .m-color-4 { background: #0891b2 !important; border-color: #22d3ee !important; }
-        .m-color-5 { background: #4f46e5 !important; border-color: #818cf8 !important; }
-        @media (max-width: 768px) { .match-container { flex-direction: row; gap: 10px; } .match-item { min-height: 60px; font-size: 0.75rem; padding: 10px; } }
+        .quiz-opt { transition: all 0.2s; }
+        .quiz-opt:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -74,7 +54,6 @@
             <h2 class="text-2xl font-bold text-white">⚠️ HATA RAPORU</h2>
             <button onclick="copyErrorText()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-bold text-sm">📋 Kopyala</button>
         </div>
-        <p style="color:#aaa; margin-bottom:20px;">Aşağıdaki hatayı kopyalayıp geliştiriciye gönderin:</p>
         <div id="debug-content" class="bg-gray-900 p-4 rounded border border-gray-700 select-text mb-4"></div>
         <button onclick="location.reload()" class="px-6 py-2 bg-gray-700 text-white border border-gray-500 rounded hover:bg-gray-600">Yeniden Dene</button>
     </div>
@@ -142,8 +121,8 @@
     </script>
 
     <script src="database.js"></script>
-    <script src="icerik.js"></script>
-    <script src="oyunlar.js"></script>
+    <script src="icerik.js?v=2"></script>
+    <script src="oyunlar.js?v=2"></script>
 
     <script>
         const App = {
@@ -163,7 +142,7 @@
                     }
                     if (attempts > 50) { 
                         clearInterval(checkData);
-                        throw new Error("database.js yüklenemedi! Dosya içeriğini kontrol edin.");
+                        throw new Error("database.js yüklenemedi!");
                     }
                 }, 100);
             },
@@ -180,38 +159,36 @@
         };
 
         const DataManager = {
-            // İÇERİK BİRLEŞTİRME (GÜNCELLENMİŞ GARANTİ YÖNTEM)
+            // GELİŞMİŞ EŞLEŞTİRME (Fuzzy Matching)
             mergeContent: (db, ext) => {
-                const normalize = s => s ? s.toLowerCase().replace(/\s+/g,'').replace(/i/g,'ı').replace(/ı/g,'i') : '';
+                // Temizleme fonksiyonu: Sayıları (1., 4. vb) ve boşlukları siler, küçük harfe çevirir
+                const clean = s => s ? s.toLowerCase().replace(/^\d+[\.\-\s]*/, '').replace(/\s+/g,'').replace(/i/g,'ı').replace(/ı/g,'i') : '';
                 
                 ext.forEach(item => {
-                    // DERS BULMA (Hem title hem name kontrolü)
-                    const c = db.courses.find(x => {
-                        const dbName = x.title || x.name || "";
-                        const extName = item.courseName || item.courseTitle || "";
-                        return normalize(dbName) === normalize(extName);
-                    });
-
+                    const c = db.courses.find(x => clean(x.title || x.name) === clean(item.courseName || item.courseTitle));
                     if(c) {
-                        // ÜNİTE BULMA
                         const u = c.units.find(x => {
-                            const dbUnit = x.title || x.name || "";
-                            const extUnit = item.unitName || item.unitTitle || "";
-                            return normalize(dbUnit).includes(normalize(extUnit)) || normalize(extUnit).includes(normalize(dbUnit));
+                            const dbU = clean(x.title || x.name);
+                            const extU = clean(item.unitName || item.unitTitle);
+                            return dbU.includes(extU) || extU.includes(dbU);
                         });
 
                         if(u) {
-                            // KONU BULMA
+                            if (!u.topics) u.topics = []; // Hata önleyici
+                            
+                            // Konu eşleştirme (Esnek)
                             const t = u.topics.find(x => {
-                                const dbTopic = x.title || x.name || "";
-                                const extTopic = item.topicName || item.topicTitle || "";
-                                return normalize(dbTopic) === normalize(extTopic);
+                                const dbT = clean(x.title || x.name);
+                                const extT = clean(item.topicName || item.topicTitle);
+                                return dbT.includes(extT) || extT.includes(dbT);
                             });
 
                             if(t) { 
-                                // Eşleşme Başarılı! Veriyi ekle.
                                 t.writingContent = item.writingContent; 
                                 t.customUrl = item.url; 
+                            } else {
+                                // Eğer konu database'de yoksa ama içerikte varsa, zorla ekle (Opsiyonel)
+                                // u.topics.push({ id: "custom-"+Math.random(), title: item.topicName, writingContent: item.writingContent });
                             }
                         }
                     }
@@ -220,17 +197,16 @@
             },
             sortItems: arr => arr ? arr.sort((a,b) => (a.order||0)-(b.order||0) || (a.name||a.title||'').localeCompare(b.name||b.title||'', undefined, {numeric:true})) : [],
             transform: db => {
-                if (!db.classes) throw new Error("database.js bozuk: 'classes' dizisi bulunamadı.");
                 let classes = DataManager.sortItems([...db.classes]);
                 return classes.map(cls => {
                     let courses = DataManager.sortItems(db.courses.filter(c => c.classId === cls.id));
                     return {
                         name: cls.name + ". Sınıf",
                         courses: courses.map(c => ({
-                            name: c.title || c.name, // Garanti isim
+                            name: c.title || c.name,
                             units: DataManager.sortItems([...c.units]).map(u => ({
                                 name: u.title || u.name,
-                                topics: DataManager.sortItems([...u.topics]).map(t => ({
+                                topics: DataManager.sortItems([...(u.topics || [])]).map(t => ({
                                     id: t.id, 
                                     name: t.title || t.name, 
                                     url: t.customUrl
@@ -243,12 +219,14 @@
             getTopicData: (id) => {
                 let res = { id, name:'', definitions:[], notes:[] };
                 App.data.courses.forEach(c => c.units.forEach(u => {
-                    const t = u.topics.find(x => x.id === id);
-                    if(t) {
-                        res.name = t.title || t.name;
-                        if(t.writingContent) {
-                            res.definitions = t.writingContent.conceptDefinitions || [];
-                            res.notes = t.writingContent.notes || [];
+                    if (u.topics) {
+                        const t = u.topics.find(x => x.id === id);
+                        if(t) {
+                            res.name = t.title || t.name;
+                            if(t.writingContent) {
+                                res.definitions = t.writingContent.conceptDefinitions || [];
+                                res.notes = t.writingContent.notes || [];
+                            }
                         }
                     }
                 }));
@@ -311,7 +289,7 @@
                 let html = '';
                 if(d.definitions.length) html += `<div class="glass-card p-6 rounded-2xl"><h3 class="text-xl font-bold text-yellow-400 mb-4">💡 Kavramlar</h3><div class="grid gap-3 md:grid-cols-2">${d.definitions.map(x => `<div class="bg-slate-800 p-3 rounded border-l-4 border-yellow-500 hover:bg-slate-700 transition"><strong>${x.term||x.concept}</strong>: ${x.definition}</div>`).join('')}</div></div>`;
                 if(d.notes.length) html += `<div class="glass-card p-6 rounded-2xl mt-4"><h3 class="text-xl font-bold text-purple-400 mb-4">📌 Notlar</h3><ul class="space-y-2">${d.notes.map(n => `<li class="flex gap-2 text-slate-300"><span class="text-purple-500 font-bold">➤</span>${n}</li>`).join('')}</ul></div>`;
-                if(!html) html = '<div class="text-center text-slate-500 py-10 border border-dashed border-slate-700 rounded-xl">Bu konu için henüz içerik eklenmemiş.</div>';
+                if(!html) html = '<div class="text-center text-slate-500 py-10 border border-dashed border-slate-700 rounded-xl">Bu konu için henüz içerik eklenmemiş.<br><span class="text-xs text-slate-600">(İçerik dosyası ile başlık eşleşmesi kontrol edilmeli)</span></div>';
                 document.getElementById('note-content').innerHTML = html;
             },
             renderGames: (id) => {
@@ -346,11 +324,9 @@
         window.openGame = (type) => {
             if (typeof GameEngine === 'undefined') { alert("Oyun motoru yüklenemedi! (oyunlar.js)"); return; }
             
-            // Veriyi al
             const data = DataManager.getTopicData(App.currentGameTopicId);
             const defs = data.definitions;
 
-            // Veri Kontrolü
             if (!defs || defs.length === 0) {
                 alert("Bu oyun için veri (kavram) eksik. Lütfen Admin panelinden ekleyin.");
                 return;
