@@ -117,47 +117,6 @@ export async function exportAllData(
     const db = getAdminDb();
     const { classId, courseId, unitId, topicId } = filters;
     
-    // --- HIERARCHICAL ID GATHERING ---
-    const getRelevantIds = async () => {
-        let relevantCourseIds: string[] = [];
-        let relevantUnitIds: string[] = [];
-        let relevantTopicIds: string[] = [];
-        
-        const coursesSnap = await db.collection('courses').get();
-        const unitsSnap = await db.collectionGroup('units').get();
-
-        if (courseId && courseId !== 'all') {
-            relevantCourseIds.push(courseId);
-        } else if (classId && classId !== 'all') {
-            const coursesInClassSnap = await db.collection('courses').where('classId', '==', classId).get();
-            relevantCourseIds = coursesInClassSnap.docs.map(doc => doc.id);
-        }
-
-        if (unitId && unitId !== 'all') {
-            relevantUnitIds.push(unitId);
-        } else if (relevantCourseIds.length > 0) {
-            relevantUnitIds = unitsSnap.docs
-                .filter(doc => relevantCourseIds.includes(doc.ref.parent.parent!.id))
-                .map(doc => doc.id);
-        }
-
-        if (topicId && topicId !== 'all') {
-            relevantTopicIds = [topicId];
-        } else if (relevantUnitIds.length > 0) {
-            const topicPromises = (await Promise.all(
-                coursesSnap.docs.filter(doc => relevantCourseIds.length === 0 || relevantCourseIds.includes(doc.id))
-                    .flatMap(courseDoc => 
-                        unitsSnap.docs
-                            .filter(unitDoc => unitDoc.ref.path.startsWith(`courses/${courseDoc.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(unitDoc.id)))
-                            .map(unitDoc => db.collection(`courses/${courseDoc.id}/units/${unitDoc.id}/topics`).get())
-                    )
-            )).flatMap(snap => snap.docs.map(doc => doc.id));
-            relevantTopicIds = topicPromises;
-        }
-        
-        return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
-    };
-
     // --- MAPPING DATA ---
     const [classesSnap, coursesSnap, unitsSnap, topicsSnap] = await Promise.all([
         db.collection('classes').get(),
@@ -170,6 +129,55 @@ export async function exportAllData(
     const coursesMap = new Map(coursesSnap.docs.map(doc => [doc.id, doc.data() as Course]));
     const unitsMap = new Map(unitsSnap.docs.map(doc => [doc.id, doc.data() as Unit]));
     const topicsMap = new Map(topicsSnap.docs.map(doc => [doc.id, doc.data() as Topic]));
+    
+    // --- HIERARCHICAL ID GATHERING ---
+    const getRelevantIds = async () => {
+        let relevantCourseIds: string[] = [];
+        let relevantUnitIds: string[] = [];
+        let relevantTopicIds: string[] = [];
+
+        if (courseId && courseId !== 'all') {
+            relevantCourseIds.push(courseId);
+        } else if (classId && classId !== 'all') {
+            coursesSnap.forEach(doc => {
+                if (doc.data().classId === classId) {
+                    relevantCourseIds.push(doc.id);
+                }
+            });
+        }
+
+        if (unitId && unitId !== 'all') {
+            relevantUnitIds.push(unitId);
+        } else if (relevantCourseIds.length > 0) {
+            unitsSnap.forEach(doc => {
+                if (relevantCourseIds.includes(doc.ref.parent.parent!.id)) {
+                    relevantUnitIds.push(doc.id);
+                }
+            });
+        }
+
+        if (topicId && topicId !== 'all') {
+            relevantTopicIds = [topicId];
+        } else if (relevantUnitIds.length > 0) {
+            topicsSnap.forEach(doc => {
+                if (relevantUnitIds.includes(doc.ref.parent.parent!.id)) {
+                    relevantTopicIds.push(doc.id);
+                }
+            });
+        } else if (relevantCourseIds.length > 0) {
+            const courseUnitIds: string[] = unitsSnap.docs
+                .filter(doc => relevantCourseIds.includes(doc.ref.parent.parent!.id))
+                .map(doc => doc.id);
+            
+            topicsSnap.forEach(doc => {
+                if (courseUnitIds.includes(doc.ref.parent.parent!.id)) {
+                     relevantTopicIds.push(doc.id);
+                }
+            });
+        }
+        
+        return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
+    };
 
     const addNamesToItem = (item: any) => {
         const newItem = { ...item };
@@ -288,23 +296,22 @@ export async function exportAllData(
         case 'curriculum': {
             const coursesToExport = coursesSnap.docs
                 .filter(doc => relevantCourseIds.length === 0 || relevantCourseIds.includes(doc.id))
-                .map(doc => serialize({ id: doc.id, ...doc.data() }));
+                .map(doc => ({ id: doc.id, ...doc.data() as Course }));
 
             const curriculumData = await Promise.all(coursesToExport.map(async (course: any) => {
                 const className = classesMap.get(course.classId) || 'Genel';
                 
-                const unitsSnap = await db.collection(`courses/${course.id}/units`).orderBy('title').get();
-                const units = await Promise.all(unitsSnap.docs
-                    .filter(doc => relevantUnitIds.length === 0 || relevantUnitIds.includes(doc.id))
-                    .map(async unitDoc => {
-                    const topicsSnap = await db.collection(`courses/${course.id}/units/${unitDoc.id}/topics`).orderBy('title').get();
-                    const topics = topicsSnap.docs
-                        .filter(doc => relevantTopicIds.length === 0 || relevantTopicIds.includes(doc.id))
+                const filteredUnits = unitsSnap.docs
+                    .filter(doc => doc.ref.path.startsWith(`courses/${course.id}/`) && (relevantUnitIds.length === 0 || relevantUnitIds.includes(doc.id)))
+                    .map(doc => ({id: doc.id, ...doc.data() as Unit}));
+                    
+                const units = await Promise.all(filteredUnits.map(async unitDoc => {
+                    const filteredTopics = topicsSnap.docs
+                        .filter(doc => doc.ref.path.startsWith(`courses/${course.id}/units/${unitDoc.id}/`) && (relevantTopicIds.length === 0 || relevantTopicIds.includes(doc.id)))
                         .map(topicDoc => {
                              return { title: topicDoc.data().title };
                         });
-                    
-                    return { title: unitDoc.data().title, topics };
+                    return { title: unitDoc.title, topics: filteredTopics };
                 }));
                 
                 return { title: course.title, className, units };
@@ -398,7 +405,7 @@ export async function exportDataForStaticSite() {
             const unitData = unitDoc.data() as Unit;
             const unitId = unitDoc.id;
 
-            // Export Ozet for Unit
+            // Export Ozet for Unit if content exists
             if(unitData.htmlContent) {
                 allDocsToWrite.push({
                     path: `public/curriculum/ozetler/unit_${unitId}.json`,
@@ -463,6 +470,7 @@ export async function exportDataForStaticSite() {
 
         const courseFiles = (await Promise.all(coursesInClass.map(async (course) => {
             const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
+            
             const units = (await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
                 const unitData = unitDoc.data() as Unit;
                 if (!(unitData.isPublished ?? true)) return null;
@@ -477,7 +485,8 @@ export async function exportDataForStaticSite() {
                     if (!(topicData.isPublished ?? true)) continue;
                     
                     const hasOzet = !!topicData.htmlContent;
-                    const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                    const yazilacaklarSnap = await db.collection('activityItems').where('topicId', '==', topicDoc.id).limit(1).get();
+                    const hasYazilacaklar = !yazilacaklarSnap.empty || (topicData.writingContent?.notes?.length || 0) > 0;
 
                     if(hasOzet || hasYazilacaklar) {
                         hasTopicContent = true;
@@ -508,20 +517,46 @@ export async function exportDataForStaticSite() {
     });
 
 
-    // 4. Batch write all files to the export collection
-    const exportBatch = db.batch();
+    // 4. Batch write all files to the export collection, now with chunking
     const exportCollectionRef = db.collection('__static_export');
     
-    // Clear old data first
-    const oldFiles = await exportCollectionRef.get();
-    oldFiles.forEach(doc => exportBatch.delete(doc.ref));
+    // Clear old data first. This can be a large batch itself.
+    const oldFiles = await exportCollectionRef.limit(500).get();
+    let deleteBatch = db.batch();
+    let deleteCount = 0;
+    for (const doc of oldFiles.docs) {
+        deleteBatch.delete(doc.ref);
+        deleteCount++;
+        if (deleteCount === 500) {
+            await deleteBatch.commit();
+            deleteBatch = db.batch();
+            deleteCount = 0;
+        }
+    }
+    if (deleteCount > 0) await deleteBatch.commit();
 
-    allDocsToWrite.forEach(fileData => {
+
+    // Write new data in chunks
+    let writeBatch = db.batch();
+    let writeCount = 0;
+    const CHUNK_SIZE = 400; // Firestore batch limit is 500, use a safe number
+
+    for (const fileData of allDocsToWrite) {
         const docRef = db.collection('__static_export').doc();
-        exportBatch.set(docRef, fileData);
-    });
+        writeBatch.set(docRef, fileData);
+        writeCount++;
 
-    await exportBatch.commit();
+        if (writeCount === CHUNK_SIZE) {
+            await writeBatch.commit();
+            writeBatch = db.batch();
+            writeCount = 0;
+        }
+    }
+
+    // Commit any remaining writes
+    if (writeCount > 0) {
+        await writeBatch.commit();
+    }
     
     return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }

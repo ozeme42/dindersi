@@ -1,4 +1,4 @@
-// oyunlar.js - 2 HAKLI KAVRAM YARIŞMASI
+// oyunlar.js - GELİŞMİŞ OYUN MOTORU (DİNAMİK HAVUZLU)
 
 window.GameEngine = {};
 
@@ -8,11 +8,11 @@ window.GameEngine.state = {
     timer: null,
     timeLeft: 20,
     
-    // Değişkenler
-    allItems: [], // Tüm kavram havuzu
+    // Quiz Değişkenleri
+    activeBatch: [], // O anki konunun kavramları (Öğrenilecekler)
+    distractorPool: [], // Çeldirici havuzu (Tüm diğer kavramlar)
     currentItem: null, // Şu an sorulan
-    currentOptions: [], // Şıklar
-    mistakes: 0, // O anki sorudaki hata sayısı
+    currentOptions: [], // Ekranda görünen 8 seçenek
     
     isRoundOver: false,
     
@@ -21,16 +21,36 @@ window.GameEngine.state = {
     currentWord: "", currentSlot: 0, guessed: [], qIndex: 0, questions: []
 };
 
-// --- ORTAK ---
+// --- YARDIMCI: TÜM KAVRAMLARI TOPLA ---
+// Çeldirici (yanlış şık) bulmak için diğer konulardaki tüm kavramları da bilmemiz lazım.
+window.GameEngine.collectAllConcepts = function() {
+    let pool = [];
+    if (window.App && window.App.data && window.App.data.courses) {
+        window.App.data.courses.forEach(c => {
+            c.units.forEach(u => {
+                u.topics.forEach(t => {
+                    if (t.writingContent && t.writingContent.conceptDefinitions) {
+                        t.writingContent.conceptDefinitions.forEach(def => {
+                            pool.push(def.term || def.concept);
+                        });
+                    }
+                });
+            });
+        });
+    }
+    // Tekrar edenleri temizle
+    return [...new Set(pool)];
+};
+
+// --- ORTAK FONKSİYONLAR ---
 window.GameEngine.updateScoreUI = function() {
     const el = document.getElementById('game-score');
     if (el) el.textContent = "PUAN: " + window.GameEngine.state.score;
 };
 
-// Ara Ekran (Sonuç)
+// Sonuç Ekranı
 window.GameEngine.showResult = function(type, title, message, onNext) {
     const stage = document.getElementById('game-stage');
-    
     const bgClass = type === 'success' ? 'bg-emerald-900/95' : 'bg-red-900/95';
     const icon = type === 'success' ? '⭐' : '❌';
 
@@ -39,28 +59,20 @@ window.GameEngine.showResult = function(type, title, message, onNext) {
             <div class="text-8xl mb-4 pop-in">${icon}</div>
             <h2 class="text-4xl font-black text-white mb-2 text-center">${title}</h2>
             <p class="text-xl text-white/90 mb-8 text-center font-medium px-4">${message}</p>
-            
             <button id="next-btn" class="px-10 py-4 bg-white text-slate-900 rounded-2xl text-xl font-bold shadow-xl transform hover:scale-105 transition flex items-center gap-2">
                 DEVAM ET ➜
             </button>
         </div>
     `;
-
     stage.insertAdjacentHTML('beforeend', resultHTML);
-
     const btn = document.getElementById('next-btn');
-    btn.focus();
+    btn.focus(); 
     btn.onclick = function() {
-        const overlay = document.getElementById('result-overlay');
-        if(overlay) overlay.remove();
+        document.getElementById('result-overlay').remove();
         onNext();
     };
-    
     document.onkeydown = function(e) {
-        if(e.key === "Enter") {
-            document.onkeydown = null;
-            btn.click();
-        }
+        if(e.key === "Enter") { document.onkeydown = null; btn.click(); }
     }
 };
 
@@ -72,7 +84,7 @@ window.GameEngine.showWinScreen = function() {
         <div class="text-center fade-in h-full flex flex-col items-center justify-center">
             <div class="text-9xl mb-6 animate-bounce">🎓</div>
             <h2 class="text-5xl font-black text-white mb-4">TEBRİKLER!</h2>
-            <p class="text-xl text-slate-300 mb-6">Tüm kavramları başarıyla tamamladın.</p>
+            <p class="text-xl text-slate-300 mb-6">Bu konudaki tüm kavramları ustalıkla öğrendin.</p>
             <div class="text-5xl font-bold text-yellow-400 mt-2 bg-slate-800 px-8 py-4 rounded-3xl border border-yellow-500/30">
                 TOPLAM PUAN: ${window.GameEngine.state.score}
             </div>
@@ -83,27 +95,39 @@ window.GameEngine.showWinScreen = function() {
 };
 
 // ==========================================
-// 4. KAVRAM YARIŞMASI (2 HAKLI)
+// 4. KAVRAM YARIŞMASI (DİNAMİK HAVUZLU)
 // ==========================================
 window.GameEngine.startQuiz = function(definitions) {
     const stage = document.getElementById('game-stage');
     
-    if (!definitions || definitions.length < 4) {
-        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Yarışma için en az 4 kavram gerekli.</p></div>';
+    // En az 1 kavram olmalı (8 seçenek için diğerleri havuzdan gelecek)
+    if (!definitions || definitions.length === 0) {
+        stage.innerHTML = '<div class="text-center text-slate-400 p-10"><div class="text-6xl mb-4">⚠️</div><p>Bu konuda hiç kavram yok.</p></div>';
         return;
     }
 
-    // Listeyi hazırla
-    const allItems = definitions.map((def, index) => ({
+    // 1. Aktif Konunun Kavramlarını Hazırla
+    const activeBatch = definitions.map((def, index) => ({
         id: index,
         term: def.term || def.concept,
         definition: def.definition,
-        level: 0 // 3 olunca tamamlanır
+        level: 0 // Hedef: 3
     }));
 
+    // 2. Çeldirici Havuzunu Hazırla (Tüm sistemden)
+    let distractorPool = window.GameEngine.collectAllConcepts();
+    // Aktif konudakileri havuzdan çıkar (kendisiyle çakışmasın)
+    const activeTerms = activeBatch.map(a => a.term);
+    distractorPool = distractorPool.filter(t => !activeTerms.includes(t));
+
+    // Eğer havuz yetersizse (sistemde toplam kavram azsa), mecbur kendi içinden tekrar edecek
+    // Ama genelde EK_ICERIKLER dolu olduğu için yeterli olacaktır.
+
+    // State Ayarla
     const state = window.GameEngine.state;
     state.score = 0;
-    state.allItems = allItems;
+    state.activeBatch = activeBatch;
+    state.distractorPool = distractorPool;
     
     window.GameEngine.loadQuizLevel();
 };
@@ -111,27 +135,48 @@ window.GameEngine.startQuiz = function(definitions) {
 window.GameEngine.loadQuizLevel = function() {
     const state = window.GameEngine.state;
     
-    // Tamamlanmamışları bul
-    const pendingItems = state.allItems.filter(item => item.level < 3);
+    // 1. Henüz tamamlanmamış (Seviyesi < 3) olanları bul
+    const pendingItems = state.activeBatch.filter(item => item.level < 3);
 
+    // Hepsi bittiyse oyun biter
     if (pendingItems.length === 0) {
         window.GameEngine.showWinScreen();
         return;
     }
 
-    // Rastgele soru seç
+    // 2. Rastgele bir soru seç (Target)
     const currentItem = pendingItems[Math.floor(Math.random() * pendingItems.length)];
     state.currentItem = currentItem;
 
-    // Şıkları oluştur (1 Doğru + 7 Yanlış)
-    const otherItems = state.allItems.filter(i => i.id !== currentItem.id);
-    const distractors = otherItems.sort(() => 0.5 - Math.random()).slice(0, 7);
-    const options = [currentItem, ...distractors].sort(() => 0.5 - Math.random());
+    // 3. Seçenekleri Oluştur (1 Doğru + 7 Yanlış)
+    // Yanlışları önce kendi konusundan, yetmezse genel havuzdan tamamla
+    
+    let distractors = [];
+    
+    // A) Kendi konusundaki diğer kavramlar (Öncelikli)
+    const localDistractors = state.activeBatch
+        .filter(i => i.id !== currentItem.id)
+        .map(i => i.term);
+    
+    distractors.push(...localDistractors);
+
+    // B) Eğer 7'ye tamamlanmadıysa, genel havuzdan rastgele ekle
+    if (distractors.length < 7) {
+        const needed = 7 - distractors.length;
+        const extra = state.distractorPool.sort(() => 0.5 - Math.random()).slice(0, needed);
+        distractors.push(...extra);
+    }
+
+    // C) Tam 7 tane seç (eğer fazlaysa kırp)
+    distractors = distractors.sort(() => 0.5 - Math.random()).slice(0, 7);
+    
+    // Doğru ve yanlışları birleştirip karıştır
+    // Seçenekler sadece METİN (String) olacak
+    const options = [currentItem.term, ...distractors].sort(() => 0.5 - Math.random());
     state.currentOptions = options;
 
     state.isRoundOver = false;
-    state.timeLeft = 20; 
-    state.mistakes = 0; // Hata sayacını sıfırla
+    state.timeLeft = 20;
 
     if(state.timer) clearInterval(state.timer);
     
@@ -157,46 +202,34 @@ window.GameEngine.renderQuiz = function() {
     const currentItem = state.currentItem;
     const stage = document.getElementById('game-stage');
 
-    // İlerleme ve Hak Göstergesi
-    const completedCount = state.allItems.filter(i => i.level >= 3).length;
-    const livesLeft = 2 - state.mistakes; // 2 Hak - Hatalar
-    
-    let hearts = '';
-    for(let i=0; i<2; i++) {
-        hearts += i < livesLeft ? '❤️' : '🖤';
+    const completedCount = state.activeBatch.filter(i => i.level >= 3).length;
+    const totalCount = state.activeBatch.length;
+
+    let starsHTML = '';
+    for(let i=0; i<3; i++) {
+        starsHTML += i < currentItem.level 
+            ? '<span class="text-yellow-400 text-2xl drop-shadow-md">★</span>' 
+            : '<span class="text-slate-700 text-2xl">☆</span>';
     }
 
     stage.innerHTML = `
         <div class="w-full max-w-6xl flex flex-col h-full fade-in pb-4">
             
             <div class="flex justify-between items-center px-6 py-3 bg-slate-800/50 rounded-xl border border-white/5 mb-4">
-                <div class="flex items-center gap-4">
-                    <div class="flex flex-col">
-                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">İLERLEME</span>
-                        <span class="text-green-400 font-bold text-lg">${completedCount} / ${state.allItems.length}</span>
-                    </div>
-                    <div class="w-px h-8 bg-white/10"></div>
-                    <div class="flex flex-col">
-                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">HAKKIN</span>
-                        <div class="text-xl flex gap-1">${hearts}</div>
-                    </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">İLERLEME</span>
+                    <span class="text-green-400 font-bold text-lg">${completedCount} / ${totalCount}</span>
                 </div>
                 <div class="flex flex-col items-end">
                     <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">BU KAVRAM</span>
-                    <span class="text-yellow-400 font-bold text-lg">Seviye ${currentItem.level}/3</span>
+                    <div class="flex gap-1">${starsHTML}</div>
                 </div>
             </div>
 
             <div class="flex-grow flex flex-col items-center justify-center relative gap-6 mb-6">
-                
-                <div id="quiz-warning" class="absolute -top-12 bg-red-500 text-white px-6 py-2 rounded-full font-bold shadow-lg opacity-0 transition-all duration-300 transform translate-y-4">
-                    ⚠️ Yanlış! 1 Hakkın Kaldı
-                </div>
-
                 <div class="w-full max-w-2xl h-2 bg-slate-800 rounded-full overflow-hidden">
                     <div id="timer-bar" class="h-full bg-yellow-400 transition-all duration-1000 linear" style="width: 100%"></div>
                 </div>
-
                 <div class="w-full max-w-3xl bg-gradient-to-b from-slate-800 to-slate-900 p-8 rounded-3xl border border-white/10 shadow-2xl text-center relative overflow-hidden group">
                     <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
                     <h3 class="text-xl md:text-3xl font-bold text-white leading-relaxed select-none">
@@ -207,10 +240,10 @@ window.GameEngine.renderQuiz = function() {
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
-                ${state.currentOptions.map(opt => `
-                    <button onclick="window.GameEngine.handleQuizAnswer(this, '${opt.term}')" 
-                        class="quiz-opt relative overflow-hidden bg-slate-800 hover:bg-slate-700 border-2 border-white/10 text-white py-4 rounded-xl text-sm md:text-lg font-bold transition-all hover:scale-[1.02] hover:shadow-lg active:scale-95 shadow-lg h-20 md:h-24 flex items-center justify-center px-2">
-                        ${opt.term}
+                ${state.currentOptions.map(optTerm => `
+                    <button onclick="window.GameEngine.handleQuizAnswer(this, '${optTerm.replace(/'/g, "\\'")}')" 
+                        class="quiz-opt relative overflow-hidden bg-slate-800 hover:bg-slate-700 border-2 border-white/10 text-white py-4 rounded-xl text-sm md:text-lg font-bold transition-all hover:scale-[1.02] hover:shadow-lg active:scale-95 shadow-lg h-20 md:h-24 flex items-center justify-center px-2 text-center leading-tight">
+                        ${optTerm}
                     </button>
                 `).join('')}
             </div>
@@ -221,122 +254,52 @@ window.GameEngine.renderQuiz = function() {
 window.GameEngine.handleQuizAnswer = function(btn, answer, isTimeUp = false) {
     const state = window.GameEngine.state;
     if (state.isRoundOver) return;
+    
+    clearInterval(state.timer);
+    state.isRoundOver = true;
 
     const currentItem = state.currentItem;
     const isCorrect = !isTimeUp && (answer === currentItem.term);
 
-    // --- DOĞRU CEVAP ---
+    // Butonları Kilitle ve Renklendir
+    const buttons = document.querySelectorAll('.quiz-opt');
+    buttons.forEach(b => {
+        b.disabled = true;
+        // Doğru şıkkı bul ve yeşil yap
+        if (b.innerText.trim() === currentItem.term) {
+            b.classList.remove('bg-slate-800', 'border-white/10');
+            b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'scale-105', 'z-10');
+        } else {
+            b.classList.add('opacity-30');
+        }
+        
+        // Eğer yanlış tıklanan buysa kırmızı yap
+        if (!isCorrect && !isTimeUp && b === btn) {
+            b.classList.remove('opacity-30');
+            b.classList.add('bg-red-600', 'border-red-500', 'opacity-100', 'shake');
+        }
+    });
+
     if (isCorrect) {
-        clearInterval(state.timer);
-        state.isRoundOver = true;
-
-        // Butonları kilitle ve renklendir
-        const buttons = document.querySelectorAll('.quiz-opt');
-        buttons.forEach(b => {
-            b.disabled = true;
-            if (b.innerText.trim() === currentItem.term) {
-                b.classList.remove('bg-slate-800', 'border-white/10');
-                b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'scale-105', 'z-10');
-            } else {
-                b.classList.add('opacity-30');
-            }
-        });
-
-        // Puan ve Seviye
         currentItem.level++;
-        let points = 20;
-        if (state.mistakes > 0) points = 10; // Hata yaptıysa az puan
-        state.score += points;
-
+        state.score += 20;
+        
         let msgTitle = "DOĞRU!";
         let msgSub = `${currentItem.level}/3 Tamamlandı`;
         
         if (currentItem.level >= 3) {
-            msgTitle = "KAVRAM TAMAMLANDI! ⭐";
+            msgTitle = "USTALAŞTIN! ⭐";
             state.score += 50; 
         }
         
         window.GameEngine.updateScoreUI();
-        
-        setTimeout(() => {
-            window.GameEngine.showResult('success', msgTitle, msgSub, () => {
-                window.GameEngine.loadQuizLevel();
-            });
-        }, 800);
+        setTimeout(() => window.GameEngine.showResult('success', msgTitle, msgSub, () => window.GameEngine.loadQuizLevel()), 800);
 
-    } 
-    // --- YANLIŞ CEVAP ---
-    else {
-        state.mistakes++;
-        
-        // Butonu kırmızı yap ve kilitle
-        if(btn) {
-            btn.disabled = true;
-            btn.classList.remove('bg-slate-800', 'border-white/10');
-            btn.classList.add('bg-red-600', 'border-red-500', 'opacity-50', 'shake');
-        }
-
+    } else {
         if(navigator.vibrate) navigator.vibrate(200);
-
-        // HAK KONTROLÜ
-        if (state.mistakes < 2 && !isTimeUp) {
-            // Hâlâ hak var -> Uyarı göster, oyunu durdurma
-            const warning = document.getElementById('quiz-warning');
-            if(warning) {
-                warning.style.opacity = '1';
-                warning.style.transform = 'translateY(0)';
-                // Canları güncelle (Kalp simgesini değiştir)
-                window.GameEngine.updateLivesUI();
-            }
-            
-            setTimeout(() => {
-                if(warning) {
-                    warning.style.opacity = '0';
-                    warning.style.transform = 'translateY(16px)';
-                }
-            }, 1500);
-
-        } else {
-            // Hak Bitti veya Süre Bitti -> Turu Bitir
-            clearInterval(state.timer);
-            state.isRoundOver = true;
-
-            // Doğruyu Göster
-            const buttons = document.querySelectorAll('.quiz-opt');
-            buttons.forEach(b => {
-                b.disabled = true;
-                if (b.innerText.trim() === currentItem.term) {
-                    b.classList.remove('bg-slate-800', 'border-white/10');
-                    b.classList.add('bg-green-600', 'border-green-400', 'opacity-100', 'animate-pulse');
-                } else {
-                    b.classList.add('opacity-30');
-                }
-            });
-
-            // Sonuç Ekranı
-            setTimeout(() => {
-                window.GameEngine.showResult('error', isTimeUp ? 'SÜRE BİTTİ' : 'BİLEMEDİN', `Doğru Cevap: ${currentItem.term}`, () => {
-                    window.GameEngine.loadQuizLevel();
-                });
-            }, 1000);
-        }
+        setTimeout(() => window.GameEngine.showResult('error', isTimeUp ? 'SÜRE BİTTİ' : 'YANLIŞ', `Doğru Cevap: ${currentItem.term}`, () => window.GameEngine.loadQuizLevel()), 1000);
     }
 };
-
-// Yardımcı: Sadece canları güncelle (Ekranı titretmemek için)
-window.GameEngine.updateLivesUI = function() {
-    const container = document.querySelector('.text-xl.flex.gap-1');
-    if(container) {
-        // İlk kalbi söndür
-        const hearts = container.children;
-        if(hearts.length > 0) {
-            hearts[0].textContent = '🖤';
-            hearts[0].classList.remove('text-red-500', 'animate-pulse');
-            hearts[0].classList.add('text-slate-700');
-        }
-    }
-};
-
 
 // ==========================================
 // 1. KELİME BULMACA (ANAGRAM)

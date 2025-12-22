@@ -196,12 +196,16 @@
             mergeContent: (db, ext) => {
                 const normalize = s => s ? s.toLowerCase().replace(/\s+/g,'') : '';
                 ext.forEach(item => {
-                    const c = db.courses.find(x => normalize(x.title) === normalize(item.courseTitle));
+                    // DÜZELTME: icerik.js 'courseName', 'unitName', 'topicName' kullanıyor.
+                    const c = db.courses.find(x => normalize(x.title) === normalize(item.courseName));
                     if(c) {
-                        const u = c.units.find(x => normalize(x.title).includes(normalize(item.unitTitle)));
+                        const u = c.units.find(x => normalize(x.title).includes(normalize(item.unitName)));
                         if(u) {
-                            const t = u.topics.find(x => normalize(x.title) === normalize(item.topicTitle));
-                            if(t) { t.writingContent = item.writingContent; t.customUrl = item.url; }
+                            const t = u.topics.find(x => normalize(x.title) === normalize(item.topicName));
+                            if(t) { 
+                                t.writingContent = item.writingContent; 
+                                t.customUrl = item.url; 
+                            }
                         }
                     }
                 });
