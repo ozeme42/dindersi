@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home } from "lucide-react";
-import { getAllUsers, exportAllData, exportDataForStaticSite } from "./actions";
+import { getAllUsers, exportAllData, exportManifestAndContent, exportActivityData } from "./actions";
 import type { UserProfile, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -31,12 +31,19 @@ function downloadJson(data: any, filename: string) {
 
 // Helper to slugify strings for filenames
 const slugify = (text: string) => {
+    if (!text) return '';
+    const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
+    const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+    const p = new RegExp(a.split('').join('|'), 'g')
+
     return text.toString().toLowerCase()
-        .replace(/\s+/g, '-')           // Boşlukları - ile değiştir
-        .replace(/[^\w-]+/g, '')       // Alfanümerik olmayan karakterleri kaldır
-        .replace(/--+/g, '-')         // Birden fazla -'yi tek - yap
-        .replace(/^-+/, '')           // Başlangıçtaki -'leri kaldır
-        .replace(/-+$/, '');          // Sondaki -'leri kaldır
+        .replace(/\s+/g, '-') // Replace spaces with -
+        .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+        .replace(/&/g, '-and-') // Replace & with 'and'
+        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+        .replace(/\-\-+/g, '-') // Replace multiple - with single -
+        .replace(/^-+/, '') // Trim - from start of text
+        .replace(/-+$/, '');          // Trim - from end of text
 };
 
 
@@ -45,6 +52,7 @@ export default function SuperAdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState<string | null>(null);
   const [isExportingStatic, setIsExportingStatic] = useState(false);
+  const [exportStep, setExportStep] = useState<string | null>(null);
   
   // New state for filters
   const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
@@ -133,21 +141,21 @@ export default function SuperAdminPage() {
     }
   };
   
-  const handleExportStaticData = async () => {
-    setIsExportingStatic(true);
-    try {
-      const result = await exportDataForStaticSite(filters);
-      if (result.success) {
-        toast({ title: "Başarılı", description: result.message });
-      } else {
-        throw new Error(result.error);
+  const handleExportStatic = async (step: 'manifest' | 'activities') => {
+      setExportStep(step);
+      try {
+          const result = step === 'manifest' ? await exportManifestAndContent() : await exportActivityData();
+          if (result.success) {
+              toast({ title: "Başarılı", description: result.message });
+          } else {
+              throw new Error(result.error);
+          }
+      } catch(e: any) {
+         console.error("Failed to export static data:", e);
+         toast({ title: "Dışa Aktarma Hatası", description: `Statik site verileri oluşturulurken bir hata oluştu: ${e.message}`, variant: "destructive" });
+      } finally {
+        setExportStep(null);
       }
-    } catch(e: any) {
-       console.error("Failed to export static data:", e);
-       toast({ title: "Dışa Aktarma Hatası", description: `Statik site verileri oluşturulurken bir hata oluştu: ${e.message}`, variant: "destructive" });
-    } finally {
-      setIsExportingStatic(false);
-    }
   }
 
   const dataSections = [
@@ -233,10 +241,14 @@ export default function SuperAdminPage() {
                         Veritabanındaki güncel verileri, statik sitenin kullanabileceği ayrı dosyalara dönüştürün. Bu işlem, `public/curriculum` klasöründeki dosyaları günceller.
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
-                     <Button onClick={handleExportStaticData} disabled={isExportingStatic} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
-                        {isExportingStatic ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
-                        Statik Site Verilerini Oluştur
+                <CardContent className="flex flex-col sm:flex-row gap-4">
+                    <Button onClick={() => handleExportStatic('manifest')} disabled={!!exportStep} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
+                        {exportStep === 'manifest' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
+                        Yapıyı ve İçeriği Oluştur
+                    </Button>
+                     <Button onClick={() => handleExportStatic('activities')} disabled={!!exportStep} className="bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-900/20">
+                        {exportStep === 'activities' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
+                        Oyun Verilerini Oluştur (Yavaş)
                     </Button>
                 </CardContent>
             </Card>
