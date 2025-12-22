@@ -7,17 +7,13 @@ import { Lightbulb, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 function BilBakalimPage() {
-    // FIX: Read isStatic directly from URL search params instead of relying on process.env
-    const searchParams = useSearchParams();
-    const isStatic = searchParams.get('isStatic') === 'true';
-
     return (
         <OyunKurulum 
             gameName="Bil Bakalım"
             gameIcon={Lightbulb}
             gamePath="bil-bakalim"
             dataType="games"
-            isStatic={isStatic}
+            isStatic={true}
         />
     );
 }

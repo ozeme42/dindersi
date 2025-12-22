@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -20,39 +21,25 @@ import type { ActivityItem, Question } from '@/lib/types';
 
 
 export async function getBilBakalimAction(
-    { courseId, unitId, topicId, isStatic }: { courseId?: string; unitId?: string; topicId?: string; isStatic?: boolean; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
         let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-
-        if (isStatic && topicId && topicId !== 'all') {
-            try {
-                const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-                const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
-                } else if (res.status !== 404) {
-                    throw new Error(`Static data for topic ${topicId} failed to load.`);
-                }
-            } catch (e) {
-                console.warn("Could not fetch static activity file for Bil Bakalım, will try Firestore.", e);
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        
+        if (topicId && topicId !== 'all') {
+            const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+            if (res.ok) {
+                const staticItems: ActivityItem[] = await res.json();
+                allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
+            } else if (res.status !== 404) {
+                // Throw an error if file exists but can't be read, but not for 404
+                throw new Error(`Static data for topic ${topicId} failed to load with status ${res.status}.`);
             }
         }
         
-        if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'));
-            const conditions = [];
-            if (topicId && topicId !== 'all') conditions.push(where("topicId", "==", topicId));
-            else if (unitId && unitId !== 'all') conditions.push(where("unitId", "==", unitId));
-            else if (courseId && courseId !== 'all') conditions.push(where("courseId", "==", courseId));
-            conditions.push(where('type', '==', 'definition'));
-            const finalQuery = query(baseQuery, ...conditions);
-            const definitionsSnapshot = await getDocs(finalQuery);
-            allItems = definitionsSnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
-        }
-        
+        // If allItems is still empty after trying to fetch, it means no data was found.
         const allDefinitions = allItems.filter(item => item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 3) {
@@ -121,23 +108,26 @@ export type ScrambledSentenceData = {
 };
 
 export async function getCumleOlusturmaAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'sentence'));
+        if (!topicId || topicId === 'all') {
+             return { error: "Cümle Oluşturma oynamak için belirli bir konu seçmelisiniz.", data: null };
+        }
+        
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+            }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
 
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allSentences = querySnapshot.docs.map(doc => (doc.data() as ActivityItem).content?.text)
+        const staticItems: ActivityItem[] = await res.json();
+        const allSentences = staticItems.map(item => item.content?.text)
             .filter((text): text is string => typeof text === 'string' && text.trim().length > 0 && text.trim().split(' ').length > 2);
 
         if (allSentences.length < 1) {
