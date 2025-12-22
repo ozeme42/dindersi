@@ -6,14 +6,13 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Layers, Loader2 } from 'lucide-react';
 
 function HafizaKartlariPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Hafıza Kartları"
             gameIcon={Layers}
             gamePath="hafiza-kartlari"
             dataType="games"
-            isStatic={isStatic}
+            isStatic={true}
         />
     );
 }

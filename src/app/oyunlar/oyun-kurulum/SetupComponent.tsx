@@ -1,3 +1,4 @@
+
 'use client';
 
 import { OyunKurulum } from '@/components/oyun-kurulum';

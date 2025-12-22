@@ -4,7 +4,6 @@
 import React, { Suspense } from 'react';
 import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Lightbulb, Loader2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 
 function BilBakalimPage() {
     return (

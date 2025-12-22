@@ -11,7 +11,7 @@ function OyunKurulumWrapper() {
     return (
         <OyunKurulum
             pageTitle="Oyun Kurulumu"
-            pageIcon={Gamepad2}
+            gameIcon={Gamepad2}
             targetPath="oyunlar"
             dataType="games"
         />

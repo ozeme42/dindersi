@@ -1,10 +1,10 @@
 
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    Sparkles, Loader2, Feather, LayoutGrid, Users, Gamepad2
+    Sparkles, Loader2, Gamepad2, Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -13,13 +13,12 @@ import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection, type EnrichedCourse } from '@/components/actions/get-curriculum-for-selection';
 
 // --- TİP TANIMLARI ---
-type Topic = { id: string; title: string; };
+type Topic = { id: string; title: string; hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; };
 type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean };
 type Course = EnrichedCourse;
 type ClassGroup = { name: string; courses: Course[] };
 
-const ICONS = [Book, Sparkles, Feather, LayoutGrid];
-
+const ICONS = [Book, Sparkles, Book, Gamepad2]; // Renamed icon
 const getGradient = (index: number) => {
     const gradients = [
         "from-blue-600 to-cyan-500",
@@ -72,10 +71,10 @@ const SelectionCard = ({
         <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex flex-row items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
+                "h-10 w-10 md:h-20 md:w-20 lg:h-24 lg:w-24 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
                 color
             )}>
-                <Icon className="h-5 w-5 md:h-10 md:w-10 drop-shadow-md" />
+                <Icon className="h-5 w-5 md:h-10 md:w-10 lg:h-12 lg:w-12 drop-shadow-md" />
             </div>
             
             <div className="flex-grow min-w-0 flex flex-col justify-center w-full">
@@ -97,6 +96,7 @@ const SelectionCard = ({
 );
 
 
+// --- MAIN PAGE COMPONENT ---
 const steps = [
   { id: 1, name: "Sınıf", icon: Users },
   { id: 2, name: "Ders", icon: Book },
@@ -228,8 +228,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setTimeout(() => {
         const selectedUnit = units.find(u => u.id === unitId);
         const availableTopics = (selectedUnit?.topics || []).filter(topic => {
-            if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
-            if (dataType === 'ozetler') return (topic as any).hasOzetContent;
+            if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
+            if (dataType === 'ozetler') return topic.hasOzetContent;
             return true;
         });
         setTopics(availableTopics);

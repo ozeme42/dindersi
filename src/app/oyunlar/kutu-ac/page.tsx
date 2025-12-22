@@ -6,14 +6,12 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Package, Loader2 } from 'lucide-react';
 
 function KutuAcPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Kutu Aç"
             gameIcon={Package}
             gamePath="kutu-ac"
             dataType="games"
-            isStatic={isStatic}
         />
     );
 }
