@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight
+    PartyPopper, Sparkles, Loader2, Feather, LayoutGrid, ChevronRight, Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -204,7 +204,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const handleSelectUnit = (unitId: string, unitName: string) => {
     setSelection({ ...selection, unitId, unitName });
     
-    const gamePathFromUrl = new URLSearchParams(window.location.search).get('gamePath') || finalGamePath;
+    const gamePathFromUrl = finalGamePath;
 
     if (dataType === 'games' && unitId === 'all' && gamePathFromUrl) {
         const params = new URLSearchParams({
@@ -241,7 +241,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
       let url = '';
-      const gamePathFromUrl = new URLSearchParams(window.location.search).get('gamePath') || finalGamePath;
+      const gamePathFromUrl = finalGamePath;
       
       if (dataType === 'games' && gamePathFromUrl) {
           const params = new URLSearchParams({
