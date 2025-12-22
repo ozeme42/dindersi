@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Âlem ve Gayb: Görünür ve Görünmez Boyutlar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9F9F9;
+            color: #4A4A4A;
+        }
+        .card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(132, 94, 194, 0.15);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(132, 94, 194, 0.2);
+        }
+        .main-header-bg {
+            background: linear-gradient(135deg, #845EC2, #D65DB1);
+        }
+        .accent-text { color: #845EC2; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="main-header-bg text-white text-center py-20 px-4 shadow-xl">
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">ÂLEMİN BOYUTLARI</h1>
+        <p class="text-lg md:text-xl text-purple-200 max-w-3xl mx-auto">Görülebilen ve Görülemeyen Varlık Alanlarına Derinlemesine Bir Bakış</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="tanimlar" class="my-16">
+            <div class="text-center mb-12 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold accent-text mb-4">Temel Kavramlar: Âlem ve Gayb</h2>
+                <p class="text-gray-600 text-lg">İslam inancına göre varlık, insan idrakini aşan geniş bir alanı kapsar. Bu alan, duyu organlarımızla algıladığımız dünyadan, sadece vahiy yoluyla bilgi edinebildiğimiz görünmez boyutlara kadar uzanır. Aşağıdaki kartlar, bu iki temel kavram arasındaki ayrımı netleştirmektedir.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card border-l-8 border-[#FF9671]">
+                    <h3 class="text-2xl font-bold mb-3 text-[#FF9671]">🌌 Âlem (Varlık Bütünlüğü)</h3>
+                    <p class="text-gray-700 font-semibold mb-2">Tanım:</p>
+                    <p class="text-gray-600">Allah'ın (c.c.) dışında, var olan her şeyin genel adıdır. Bu, görülen ve görülmeyen, bilinen ve bilinmeyen bütün varlıkları ve olayları kapsayan mutlak varlık alanıdır.</p>
+                    <p class="text-sm mt-3 font-semibold">Anahtar Özellik:</p>
+                    <p class="text-sm text-gray-500">Bütünleyici ve kuşatıcıdır.</p>
+                </div>
+                <div class="card border-l-8 border-[#845EC2]">
+                    <h3 class="text-2xl font-bold mb-3 text-[#845EC2]">👁️‍🗨️ Gayb (Görünmez Boyut)</h3>
+                    <p class="text-gray-700 font-semibold mb-2">Tanım:</p>
+                    <p class="text-gray-600">Akıl ve duyu organlarıyla hakkında bilgi edinilemeyen, varlığı sadece vahiy (ayet ve hadis) yoluyla bildirilen varlık alanıdır. Âlemin bir alt kümesidir.</p>
+                    <p class="text-sm mt-3 font-semibold">Örnekler:</p>
+                    <p class="text-sm text-gray-500">Melekler, Cinler, Şeytan, Ahiret.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="varlik-dagilimi" class="my-16">
+            <div class="text-center mb-12 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold accent-text mb-4">Varlıkların Algılanabilirlik Kategorileri</h2>
+                <p class="text-gray-600 text-lg">Varlıklar, beş duyu organımızla olan ilişkimize göre üç ana kategoriye ayrılabilir. Bu dairesel grafik, varlık alanının (Âlem) algısal bir dökümünü temsil etmektedir.</p>
+            </div>
+            <div class="card md:col-span-2">
+                <div class="chart-container">
+                    <canvas id="varlikDonutChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="gayb-varliklar" class="my-16">
+            <div class="text-center mb-12 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold accent-text mb-4">Gayb Alanındaki Kilit Varlıklar</h2>
+                <p class="text-gray-600 text-lg">Metinde özellikle vurgulanan, insanlarla etkileşimde olan ve sorumluluk taşıyan üç görünmez varlık türü ve temel özellikleri aşağıdadır.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="card border-t-8 border-[#D65DB1] text-center">
+                    <div class="text-5xl mb-4">😇</div>
+                    <h3 class="text-2xl font-bold text-[#D65DB1]">Melekler</h3>
+                    <p class="text-sm text-gray-500 mb-3">Nurdan yaratılmışlardır.</p>
+                    <p class="text-gray-700">İlahi emirlere harfiyen uyarlar, asla isyan etmezler. İnsanlara iyilikleri fısıldarlar ve görevleri Allah'a (c.c.) ibadet ve itaattir.</p>
+                </div>
+                <div class="card border-t-8 border-[#FF6F91] text-center">
+                    <div class="text-5xl mb-4">🔥</div>
+                    <h3 class="text-2xl font-bold text-[#FF6F91]">Cinler</h3>
+                    <p class="text-sm text-gray-500 mb-3">Ateşten yaratılmışlardır.</p>
+                    <p class="text-gray-700">İnsanlar gibi akıl sahibidirler ve ilahi emirlere uymakla yükümlüdürler. Gaybı bilmezler, aralarında inanan ve inanmayanlar bulunur.</p>
+                </div>
+                <div class="card border-t-8 border-[#FFC75F] text-center">
+                    <div class="text-5xl mb-4">😈</div>
+                    <h3 class="text-2xl font-bold text-[#FFC75F]">Şeytan (İblis)</h3>
+                    <p class="text-sm text-gray-500 mb-3">Ateşten yaratılmıştır.</p>
+                    <p class="text-gray-700">Kibirlenerek Hz. Âdem'e (a.s.) secde emrine karşı gelmiştir. Temel görevi, kıyamete kadar insanları doğru yoldan saptırmaya çalışmaktır.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="korunma" class="my-16">
+            <div class="text-center mb-12 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold accent-text mb-4">Manevi Korunma Yolu: Ayet el-Kürsi, Felak ve Nâs</h2>
+                <p class="text-gray-600 text-lg">Görülmeyen varlıkların şerrinden ve şeytanın saptırmasından korunmak için Hz. Peygamber'in (sav) tavsiye ettiği en etkili manevi kalkan dualardır. Bu dualar, korkuyu değil, Allah'a olan güveni temel alır.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card p-4 text-center bg-[#845EC2] text-white">
+                    <p class="text-xl font-bold">Ayet el-Kürsi</p>
+                    <p class="text-sm mt-1">Bakara, 255. Ayet</p>
+                </div>
+                <div class="card p-4 text-center bg-[#D65DB1] text-white">
+                    <p class="text-xl font-bold">Felak Suresi</p>
+                    <p class="text-sm mt-1">Sabahın Rabbine Sığınma</p>
+                </div>
+                <div class="card p-4 text-center bg-[#FF6F91] text-white">
+                    <p class="text-xl font-bold">Nâs Suresi</p>
+                    <p class="text-sm mt-1">İnsanların Rabbine Sığınma</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-8 mt-12">
+        <p class="text-sm text-gray-400 max-w-2xl mx-auto">Unutmayın: Cinler dahil hiçbir varlık, Allah'ın (c.c.) izni olmadan kimseye zarar veremez.</p>
+    </footer>
+
+    <script>
+        const wrapLabel = (label, maxLength = 16) => {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        };
+        
+        const defaultChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 20 } },
+                tooltip: {
+                    callbacks: { title: tooltipTitleCallback },
+                    backgroundColor: '#4B4A4A',
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 8
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const varlikCtx = document.getElementById('varlikDonutChart').getContext('2d');
+            
+            const labels = [
+                'Görülebilen Varlıklar (Duyusal)', 
+                'Hissedilebilen Varlıklar (Duyu Dışı)', 
+                'Gayb Varlıkları (Sadece Vahiy ile Bilinen)'
+            ];
+
+            const wrappedLabels = labels.map(label => wrapLabel(label));
+
+            new Chart(varlikCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: wrappedLabels,
+                    datasets: [{
+                        label: 'Varlık Alanlarının Algılanma Durumu',
+                        data: [60, 25, 15], 
+                        backgroundColor: [
+                            '#FFC75F', 
+                            '#FF9671', 
+                            '#845EC2' 
+                        ],
+                        hoverOffset: 15,
+                        borderWidth: 0 
+                    }]
+                },
+                options: {
+                    ...defaultChartOptions,
+                    cutout: '70%',
+                    plugins: {
+                        ...defaultChartOptions.plugins,
+                        tooltip: {
+                            ...defaultChartOptions.plugins.tooltip,
+                            callbacks: {
+                                title: tooltipTitleCallback,
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label = label.replace(/,/g, ' '); 
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += ': ' + context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

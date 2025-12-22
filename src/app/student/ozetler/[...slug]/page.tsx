@@ -1,25 +1,94 @@
+
 'use client';
 
-import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
+import { Suspense, useEffect, useState, useCallback, useRef } from 'react';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { Loader2, ArrowLeft, LayoutTemplate, AlertTriangle } from 'lucide-react';
+import type { Unit } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowLeft, LayoutTemplate } from 'lucide-react';
-import type { Topic } from '@/lib/types';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import Link from 'next/link';
+
+async function getStaticUnitOzet(unitId: string): Promise<{ title: string, htmlContent: string } | null> {
+    try {
+        const manifestRes = await fetch('/curriculum/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest not found');
+        const manifest = await manifestRes.json();
+        
+        let unitTitle = '';
+        manifest.classGroups.some((group: any) => 
+            group.courses.some((course: any) => 
+                course.units.some((unit: any) => {
+                    if(unit.id === unitId) {
+                        unitTitle = unit.title;
+                        return true;
+                    }
+                    return false;
+                })
+            )
+        );
+
+        if (!unitTitle) return null;
+
+        const res = await fetch(`/curriculum/ozetler/${unitId}.html`);
+        if (!res.ok) {
+            return null;
+        }
+        const htmlContent = await res.text();
+        return { title: unitTitle, htmlContent };
+    } catch (e) {
+        console.error("Error fetching static unit for ozet:", e);
+        return null;
+    }
+}
+
+async function getStaticTopicOzet(topicId: string): Promise<{ title: string, htmlContent: string } | null> {
+    try {
+        const manifestRes = await fetch('/curriculum/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest not found');
+        const manifest = await manifestRes.json();
+        
+        let topicTitle = '';
+        manifest.classGroups.some((group: any) => 
+            group.courses.some((course: any) => 
+                course.units.some((unit: any) => {
+                    const found = unit.topics.find((t: any) => t.id === topicId);
+                    if(found) {
+                        topicTitle = found.title;
+                        return true;
+                    }
+                    return false;
+                })
+            )
+        );
+
+        if (!topicTitle) return null;
+
+        const res = await fetch(`/curriculum/ozetler/${topicId}.html`);
+        if (!res.ok) {
+            return null;
+        }
+        const htmlContent = await res.text();
+        return { title: topicTitle, htmlContent };
+    } catch (e) {
+        console.error("Error fetching static topic for ozet:", e);
+        return null;
+    }
+}
+
 
 function OzetlerDisplayPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
     
-    const [topic, setTopic] = useState<Topic | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    
+    const backUrl = `/student/ozetler`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -29,57 +98,43 @@ function OzetlerDisplayPage() {
         return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
     }, []);
 
-    const fetchContent = useCallback(async () => {
-        if (!topicId || !courseId || !unitId) {
-            setError("Eksik bilgi: Gerekli konu detayları bulunamadı.");
-            setIsLoading(false);
-            return;
-        }
-        setIsLoading(true);
-        setError(null);
-        try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
-            
-            if (topicSnap.exists()) {
-                const topicData = topicSnap.data() as Topic;
-                if (topicData.htmlContent) {
-                    setTopic(topicData);
-                } else {
-                    setError('Bu konu için interaktif özet içeriği bulunamadı.');
-                }
-            } else {
-                 setError('Konu bulunamadı.');
-            }
-        } catch (e: any) {
-            setError('İçerik alınırken bir hata oluştu.');
-        } finally {
-            setIsLoading(false);
-        }
-    }, [topicId, courseId, unitId]);
-
     useEffect(() => {
+        const fetchContent = async () => {
+            setIsLoading(true);
+            let fetchedContent = null;
+            if (topicId) {
+                fetchedContent = await getStaticTopicOzet(topicId);
+            } else if(unitId) {
+                fetchedContent = await getStaticUnitOzet(unitId);
+            }
+
+            if (fetchedContent) {
+                setContent(fetchedContent);
+            } else {
+                setError("İçerik bulunamadı veya bu konu için interaktif özet içeriği yok.");
+            }
+            setIsLoading(false);
+        };
+
         fetchContent();
-    }, [fetchContent]);
-
-    const backUrl = `/student/ozetler`;
-
+    }, [topicId, unitId]);
+    
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center gap-4">
+            <div className="min-h-screen bg-slate-800 flex justify-center items-center">
                 <Loader2 className="h-12 w-12 animate-spin text-cyan-400"/>
-                <p className="text-slate-300 animate-pulse">Özet Yükleniyor...</p>
             </div>
         );
     }
     
-    if (error || !topic || !topic.htmlContent) {
+    if (error || !content || !content.htmlContent) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
-                    <p className="text-red-300 mb-6 font-medium text-lg">{error || "Bu konu için içerik bulunmuyor."}</p>
+                    <AlertTriangle className="h-12 w-12 text-red-300 mx-auto mb-4" />
+                    <p className="text-red-300 mb-6 font-medium text-lg">{error || "Bu içerik için interaktif özet içeriği bulunamadı."}</p>
                     <Button asChild className="bg-white text-slate-900 hover:bg-slate-200 border-0 w-full font-bold">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Özet Listesine Dön</Link>
+                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -90,12 +145,10 @@ function OzetlerDisplayPage() {
         <div 
             ref={mainContentRef} 
             className={cn(
-                // TEMA RENGİ AÇILDI: Slate-950 -> Slate-800 (Daha yumuşak gri)
                 "w-full min-h-screen bg-slate-800 flex flex-col relative overflow-hidden transition-all", 
                 !isFullscreen ? "pb-24 md:pb-8" : "pb-0"
             )}
         >
-             {/* Arka Plan Efektleri (Daha belirgin hale getirildi) */}
              {!isFullscreen && (
                 <div className="fixed inset-0 pointer-events-none z-0 opacity-50">
                     <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-cyan-400/20 rounded-full blur-[120px]" />
@@ -103,16 +156,12 @@ function OzetlerDisplayPage() {
                 </div>
             )}
 
-            {/* --- ÜST BAR (HEADER) --- */}
             <div className={cn(
-                // HEADER RENGİ AÇILDI: Slate-800 -> Slate-700
                 "sticky top-0 z-30 w-full border-b border-white/20 bg-slate-700/90 backdrop-blur-xl transition-all shadow-md",
                 !isFullscreen && "pt-4"
             )}>
                  <div className="container mx-auto px-4 pb-4">
                     <div className="flex items-center justify-between gap-4">
-                        
-                        {/* SOL: Geri Dön Butonu ve Başlık */}
                         <div className="flex items-center gap-3 overflow-hidden">
                             {!isFullscreen && (
                                 <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/50 transition-all">
@@ -122,16 +171,10 @@ function OzetlerDisplayPage() {
                                     </Link>
                                 </Button>
                             )}
-                            
-                            <div className="flex flex-col min-w-0">
-                                <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
-                                    {topic?.title || 'Özet'}
-                                </h1>
-                            </div>
+                            <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
+                                {content?.title || 'Özet'}
+                            </h1>
                         </div>
-
-                        {/* SAĞ: Tam Ekran Butonu */}
-                        {/* ÇÖZÜM: className prop'u çalışmıyorsa diye dışarıdan sarmalayıp zorla stil veriyoruz */}
                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
                              <FullscreenToggle elementRef={mainContentRef} />
                         </div>
@@ -139,7 +182,6 @@ function OzetlerDisplayPage() {
                  </div>
             </div>
             
-            {/* --- İÇERİK ALANI --- */}
             <div className={cn(
                 "flex-grow flex flex-col min-h-0 relative z-10 transition-all duration-300",
                 !isFullscreen ? "container mx-auto px-4 pt-6" : "p-0"
@@ -149,17 +191,14 @@ function OzetlerDisplayPage() {
                     !isFullscreen ? "h-[80vh] rounded-2xl border-4 border-slate-600/50 shadow-2xl overflow-hidden" : "h-full rounded-none"
                 )}>
                     
-                    {/* Tarayıcı/Pencere Süsü */}
                     {!isFullscreen && (
                         <div className="h-10 bg-slate-200 border-b border-slate-300 flex items-center px-4 gap-2 shrink-0">
-                            {/* Pencere Butonları */}
                             <div className="flex gap-2">
                                 <div className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-600/30 shadow-sm" />
                                 <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600/30 shadow-sm" />
                                 <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-600/30 shadow-sm" />
                             </div>
                             
-                            {/* Başlık */}
                             <div className="ml-4 flex-1 flex justify-center">
                                 <div className="bg-white border border-slate-300 rounded-lg px-6 py-1 text-xs text-slate-600 font-bold flex items-center gap-2 shadow-sm">
                                     <LayoutTemplate className="w-3.5 h-3.5 text-cyan-600" />
@@ -168,12 +207,10 @@ function OzetlerDisplayPage() {
                             </div>
                         </div>
                     )}
-
-                    {/* İframe (Özet İçeriği) */}
                     <iframe
-                        srcDoc={topic.htmlContent}
+                        srcDoc={content.htmlContent}
                         className="w-full flex-grow border-0 bg-white"
-                        title={topic.title}
+                        title={content.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
                 </div>
@@ -182,10 +219,11 @@ function OzetlerDisplayPage() {
     );
 }
 
+
 export default function Page() {
     return (
         <Suspense fallback={<div className="min-h-screen bg-slate-800 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>}>
             <OzetlerDisplayPage />
         </Suspense>
-    )
+    );
 }

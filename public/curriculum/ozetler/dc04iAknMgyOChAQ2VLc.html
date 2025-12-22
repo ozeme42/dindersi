@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haccın Yapılışı ve Aşamaları</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Sekme İçerik Yönetimi */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Timeline Çizgisi */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px;
+            width: 4px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+        
+        /* Özel Kaydırma Çubuğu Gizleme */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-emerald-200">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-emerald-900 to-teal-800 text-white py-12 px-4 relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 bg-white/10 px-4 py-1 rounded-full mb-4 border border-white/20">
+                <i data-lucide="calendar" size="16"></i>
+                <span class="text-sm font-medium">Zilhicce 9-13</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">HACCIN YAPILIŞI</h1>
+            <p class="text-emerald-100 text-lg max-w-2xl mx-auto">"Hac Arafat'tır." (Hadis-i Şerif)</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+        <div class="max-w-6xl mx-auto flex overflow-x-auto p-2 gap-2 md:gap-4 no-scrollbar justify-start md:justify-center">
+            <button onclick="openTab('yolculuk', this)" class="tab-btn active flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-emerald-600 text-white shadow-lg transform scale-105 transition-all whitespace-nowrap">
+                <i data-lucide="map"></i> Adım Adım Hac
+            </button>
+            <button onclick="openTab('ihram', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50 transition-all whitespace-nowrap">
+                <i data-lucide="shirt"></i> İhram & Yasaklar
+            </button>
+            <button onclick="openTab('kavramlar', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50 transition-all whitespace-nowrap">
+                <i data-lucide="book-open"></i> Tavaf & Say
+            </button>
+            <button onclick="openTab('hukuk', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-slate-100 text-slate-600 hover:bg-emerald-50 transition-all whitespace-nowrap">
+                <i data-lucide="scale"></i> Farz & Vacip
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8 min-h-[600px]">
+
+        <!-- TAB 1: ADIM ADIM HAC (TIMELINE) -->
+        <div id="yolculuk" class="tab-content active animate-fade-in-up">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800">Hac İbadetinin Sıralaması</h2>
+                <p class="text-slate-500">Mikat sınırından başlayıp Kabe'de son bulan manevi yolculuk.</p>
+            </div>
+
+            <div class="relative timeline-line pl-2 md:pl-4 space-y-8">
+                
+                <!-- Step 1 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-emerald-600 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-emerald-800">1. Mikat Sınırı & İhram</h3>
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-md font-bold">Başlangıç</span>
+                        </div>
+                        <p class="text-slate-600 mb-3">Hac niyeti edilir, ihrama girilir ve Telbiye getirilmeye başlanır.</p>
+                        <div class="bg-emerald-50 p-3 rounded-lg border-l-4 border-emerald-500 italic text-sm text-emerald-900">
+                            "Lebbeyk Allâhümme lebbeyk..." (Buyur Allah'ım buyur...)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-800">2. Kudüm Tavafı</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-md font-bold">Sünnet</span>
+                        </div>
+                        <p class="text-slate-600">Mekke'ye varınca yapılan ilk selamlama tavafıdır.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[10px] top-0 w-7 h-7 bg-red-600 rounded-full border-4 border-white shadow z-10 animate-pulse"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-red-500 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-red-700">3. Arafat Vakfesi</h3>
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-md font-bold">FARZ</span>
+                        </div>
+                        <div class="text-sm text-slate-500 mb-2 flex items-center gap-1"><i data-lucide="clock" size="14"></i> Zilhicce 9 (Arefe Günü) - Öğle/İkindi</div>
+                        <p class="text-slate-700">Haccın en önemli rüknüdür. "Hac Arafat'tır." Burada öğle ve ikindi namazı birleştirilir, dua edilir.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-orange-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-800">4. Müzdelife Vakfesi</h3>
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-md font-bold">Vacip</span>
+                        </div>
+                        <p class="text-slate-600 mb-2">Arefe akşamı yapılır. Akşam ve yatsı namazı birleştirilir. Şeytan taşlamak için taş toplanır.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-orange-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-800">5. Mina (Şeytan Taşlama)</h3>
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-md font-bold">Vacip</span>
+                        </div>
+                        <p class="text-slate-600">Bayram günlerinde cemrelere taş atılır. Kötülüğü reddetmeyi sembolize eder.</p>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-orange-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-800">6. Kurban & Tıraş</h3>
+                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-md font-bold">Vacip</span>
+                        </div>
+                        <p class="text-slate-600">Hedy kurbanı kesilir ve saç tıraşı olunarak İhramdan çıkılır.</p>
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[10px] top-0 w-7 h-7 bg-red-600 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-red-500 w-full hover:shadow-xl transition-shadow ml-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-red-700">7. Ziyaret Tavafı & Say</h3>
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-md font-bold">FARZ / VACİP</span>
+                        </div>
+                        <p class="text-slate-700">Haccın farz olan son tavafı yapılır. Ardından Safa ve Merve arasında Say (Vacip) yapılır.</p>
+                    </div>
+                </div>
+
+                 <!-- Step 8 -->
+                 <div class="relative flex items-start gap-6 group">
+                    <div class="absolute left-[14px] top-0 w-5 h-5 bg-blue-500 rounded-full border-4 border-white shadow z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 w-full hover:shadow-xl transition-shadow ml-8 opacity-75">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-slate-800">8. Veda Tavafı</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-md font-bold">Sünnet/Vacip</span>
+                        </div>
+                        <p class="text-slate-600">Mekke'den ayrılmadan önce yapılan son tavaftır.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: İHRAM VE YASAKLAR -->
+        <div id="ihram" class="tab-content animate-fade-in-up">
+            
+            <!-- Telbiye Kartı -->
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 mb-8 text-center relative overflow-hidden">
+                <i data-lucide="mic" class="absolute top-4 right-4 text-amber-200 opacity-50" width="64" height="64"></i>
+                <h3 class="text-xl font-bold text-amber-800 mb-2">Telbiye Duası</h3>
+                <p class="text-slate-600 text-sm mb-4">Hac ve Umrede okunan ortak dua (Söz)</p>
+                <div class="bg-white/60 p-4 rounded-xl backdrop-blur-sm">
+                    <p class="font-arabic text-2xl text-slate-800 mb-2">Lebbeyk Allâhümme lebbeyk...</p>
+                    <p class="text-slate-600 italic">"Buyur Allah’ım buyur! Emrindeyim buyur! Senin hiçbir ortağın yoktur..."</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Serbest Olanlar -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-emerald-500 overflow-hidden">
+                    <div class="bg-emerald-50 p-4 border-b border-emerald-100">
+                        <h3 class="font-bold text-emerald-800 flex items-center gap-2">
+                            <i data-lucide="check-circle"></i> İhramlıyken Yapılabilir
+                        </h3>
+                    </div>
+                    <ul class="p-6 space-y-4">
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-emerald-100 p-2 rounded-full"><i data-lucide="watch" size="18" class="text-emerald-600"></i></div>
+                            Kol saati, yüzük ve bilezik takmak
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-emerald-100 p-2 rounded-full"><i data-lucide="briefcase" size="18" class="text-emerald-600"></i></div>
+                            Kemer ve çanta kullanmak
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-emerald-100 p-2 rounded-full"><i data-lucide="smile" size="18" class="text-emerald-600"></i></div>
+                            Diş fırçalamak
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-emerald-100 p-2 rounded-full"><i data-lucide="droplet" size="18" class="text-emerald-600"></i></div>
+                            Parfümsüz sabun kullanmak
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Yasak Olanlar -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-red-500 overflow-hidden">
+                    <div class="bg-red-50 p-4 border-b border-red-100">
+                        <h3 class="font-bold text-red-800 flex items-center gap-2">
+                            <i data-lucide="x-circle"></i> İhram Yasakları
+                        </h3>
+                    </div>
+                    <ul class="p-6 space-y-4">
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-red-100 p-2 rounded-full"><i data-lucide="scissors" size="18" class="text-red-600"></i></div>
+                            Tırnak kesmek, tıraş olmak
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-red-100 p-2 rounded-full"><i data-lucide="flower" size="18" class="text-red-600"></i></div>
+                            Parfüm sürmek, kokulu sabun
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-red-100 p-2 rounded-full"><i data-lucide="sprout" size="18" class="text-red-600"></i></div>
+                            Bitkileri koparmak, hayvanları incitmek
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700">
+                            <div class="bg-red-100 p-2 rounded-full"><i data-lucide="message-square-off" size="18" class="text-red-600"></i></div>
+                            Kavga etmek, kötü söz söylemek
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: KAVRAMLAR (TAVAF & SAY) -->
+        <div id="kavramlar" class="tab-content animate-fade-in-up">
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- TAVAF KARTI -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 relative">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl font-bold">Kabe</div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="text-emerald-600"></i> Tavaf
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 font-bold text-emerald-700">7</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Şavt</h4>
+                                <p class="text-sm text-slate-600">Kabe'nin etrafında her bir dönüşe şavt denir. 7 şavt = 1 Tavaf eder.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-black rounded-full flex items-center justify-center shrink-0 border-2 border-slate-200">
+                                <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Hacerülesved</h4>
+                                <p class="text-sm text-slate-600">Tavafın başlangıç noktasıdır (Siyah Taş). Hz. İbrahim tarafından konulmuştur.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center shrink-0 text-blue-600">
+                                <i data-lucide="droplet"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Zemzem</h4>
+                                <p class="text-sm text-slate-600">Hacerülesved'in karşısından çıkan kutsal su.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SAY KARTI -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 relative">
+                    <div class="absolute top-0 right-0 bg-orange-600 text-white px-4 py-2 rounded-bl-2xl rounded-tr-2xl font-bold">Vacip</div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <i data-lucide="footprints" class="text-orange-600"></i> Say
+                    </h3>
+                    
+                    <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl mb-6">
+                        <div class="text-center">
+                            <div class="font-bold text-slate-800">Safa Tepesi</div>
+                            <div class="text-xs text-green-600 font-bold">Başlangıç</div>
+                        </div>
+                        <div class="flex-1 mx-4 h-1 bg-slate-300 relative">
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white border border-slate-300 px-2 py-0.5 rounded text-xs">
+                                4 Gidiş - 3 Dönüş
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-bold text-slate-800">Merve Tepesi</div>
+                            <div class="text-xs text-red-600 font-bold">Bitiş</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed">
+                        Safa ve Merve tepeleri arasında toplam 7 kez yürümektir. Ziyaret tavafından sonra yapılır.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 4: HUKUK (FARZ & VACİP) -->
+        <div id="hukuk" class="tab-content animate-fade-in-up">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-6 bg-slate-800 text-white text-center">
+                    <h2 class="text-2xl font-bold">Haccın Hükümleri</h2>
+                    <p class="text-slate-300 text-sm mt-2">İbadetin geçerli olması için bilinmesi gerekenler</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                    <!-- FARZLAR -->
+                    <div class="p-8 hover:bg-red-50/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="bg-red-100 p-3 rounded-lg text-red-600"><i data-lucide="alert-circle" size="24"></i></div>
+                            <h3 class="text-2xl font-bold text-red-700">Haccın Farzları</h3>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 italic">Bunlardan biri eksik olursa hac geçerli olmaz.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 font-semibold text-slate-700">
+                                <span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs">1</span>
+                                İhram (Şart)
+                            </li>
+                            <li class="flex items-center gap-3 font-semibold text-slate-700">
+                                <span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs">2</span>
+                                Arafat'ta Vakfe (Rükün)
+                            </li>
+                            <li class="flex items-center gap-3 font-semibold text-slate-700">
+                                <span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs">3</span>
+                                Ziyaret Tavafı (Rükün)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- VACİPLER -->
+                    <div class="p-8 hover:bg-orange-50/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="bg-orange-100 p-3 rounded-lg text-orange-600"><i data-lucide="check-square" size="24"></i></div>
+                            <h3 class="text-2xl font-bold text-orange-700">Haccın Vacipleri</h3>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4 italic">Eksikliğinde ceza (kurban) gerekir ama hac bozulmaz.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-slate-700"><i data-lucide="check" size="16" class="text-orange-500"></i> Say Yapmak</li>
+                            <li class="flex items-center gap-2 text-slate-700"><i data-lucide="check" size="16" class="text-orange-500"></i> Müzdelife Vakfesi</li>
+                            <li class="flex items-center gap-2 text-slate-700"><i data-lucide="check" size="16" class="text-orange-500"></i> Şeytan Taşlamak</li>
+                            <li class="flex items-center gap-2 text-slate-700"><i data-lucide="check" size="16" class="text-orange-500"></i> Kurban Kesmek & Tıraş</li>
+                            <li class="flex items-center gap-2 text-slate-700"><i data-lucide="check" size="16" class="text-orange-500"></i> Veda Tavafı</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-slate-400 text-sm mt-12 border-t border-slate-200">
+        <p>2. Ünite: Hac ve Kurban | Görsel 2.4, Grafik Bilgi 2.2, 2.3, 2.4 ve 2.5 referans alınmıştır.</p>
+    </footer>
+
+    <script>
+        // İkonları oluştur
+        lucide.createIcons();
+
+        function openTab(tabName, btnElement) {
+            // İçerikleri gizle
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            
+            // Buton stillerini sıfırla
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active", "bg-emerald-600", "text-white", "shadow-lg", "scale-105");
+                buttons[i].classList.add("bg-slate-100", "text-slate-600", "hover:bg-emerald-50");
+            }
+
+            // Seçileni aç ve stillendir
+            document.getElementById(tabName).classList.add("active");
+            
+            // Animasyon tekrarı için reflow
+            const activeContent = document.getElementById(tabName);
+            activeContent.classList.remove('animate-fade-in-up');
+            void activeContent.offsetWidth; 
+            activeContent.classList.add('animate-fade-in-up');
+
+            // Aktif buton stili
+            btnElement.classList.remove("bg-slate-100", "text-slate-600", "hover:bg-emerald-50");
+            btnElement.classList.add("active", "bg-emerald-600", "text-white", "shadow-lg", "scale-105");
+        }
+    </script>
+</body>
+</html>

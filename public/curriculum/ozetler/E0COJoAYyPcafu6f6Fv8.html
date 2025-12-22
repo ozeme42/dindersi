@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vahiy Dönemi Sıralama Etkinliği</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Ana Stil */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c1a2c; /* Deep Night Blue */
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        /* Olay kartları için genel stil */
+        .event-card {
+            background-color: #1a273b; 
+            padding: 24px;
+            border-radius: 16px; 
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-bottom: 5px solid; 
+            margin-bottom: 24px; 
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .event-card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            transform: translateY(-5px); 
+        }
+
+        /* Yıl Etiketi Stili */
+        .year-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: rgba(59, 130, 246, 0.9);
+            color: white;
+            padding: 4px 16px;
+            font-weight: 800;
+            font-size: 1.125rem;
+            border-bottom-left-radius: 16px;
+            z-index: 10;
+        }
+        
+        /* Renkler */
+        .color-initial { border-color: #FFD700; } 
+        .color-persecution { border-color: #EF4444; } 
+        .color-transition { border-color: #3B82F6; } 
+        .color-victory { border-color: #10B981; } 
+        .color-final { border-color: #F97316; } 
+
+        .text-initial { color: #FFD700; }
+        .text-persecution { color: #EF4444; }
+        .text-transition { color: #3B82F6; }
+        .text-victory { color: #10B981; }
+        .text-final { color: #F97316; }
+
+        /* Sıralama Etkinliği Listesi */
+        #sortable-list li {
+            background-color: #1f2a3e;
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #60a5fa;
+            cursor: grab; /* Sürükleme imleci */
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        #sortable-list li:hover {
+            background-color: #2c3a50;
+        }
+        
+        /* Sürükle-Bırak Stilleri */
+        .dragging {
+            opacity: 0.4;
+            border: 2px dashed #60a5fa;
+            background-color: #1a273b !important;
+            box-shadow: none;
+        }
+
+        /* Yeni Eklenen Görsel İpucu Stilleri */
+        .drag-over-above {
+            border-top: 5px solid #a855f7; /* Üstte mor çizgi */
+            margin-top: 0px;
+        }
+        .drag-over-below {
+            border-bottom: 5px solid #a855f7; /* Altta mor çizgi */
+            margin-bottom: 0px;
+        }
+
+        /* Yeni Sekme Stilleri */
+        .tab-button {
+            padding: 8px 16px; /* Daha küçük padding */
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #9ca3af; /* İnaktif renk */
+            border-bottom: 4px solid transparent; /* Sekme alt çizgisi */
+            margin-bottom: -1px; /* Alt çizgiyi nav border'ı üzerine oturtmak için */
+            font-size: 0.9rem; /* Küçültülmüş yazı boyutu */
+            background: none; /* Arka planı kaldır */
+            cursor: pointer;
+        }
+        .tab-button:hover {
+            color: #e2e8f0;
+        }
+        .active-tab {
+            color: #60a5fa; /* Aktif metin rengi */
+            border-color: #60a5fa; /* Mavi alt çizgi */
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight">
+            Hz. Muhammed (SAV) Risalet Dönemi
+        </h1>
+        <p class="text-xl text-gray-400 italic" id="subtitle-text">
+            İlk Vahiyden Veda Hutbesi'ne Önemli Olaylar
+        </p>
+    </header>
+
+    <!-- Navigation Tabs (SEKMELİ YAPI) -->
+    <nav class="max-w-5xl mx-auto mb-12 flex justify-center border-b border-gray-700 space-x-2 md:space-x-4">
+        <button id="listViewBtn" onclick="switchView('list-view')" class="tab-button">
+            OLAY LİSTESİ
+        </button>
+        <button id="activityViewBtn" onclick="switchView('activity-view')" class="tab-button">
+            SIRALAMA ETKİNLİĞİ
+        </button>
+        <!-- YENİ SEKMELER -->
+        <button id="firstsViewBtn" onclick="switchView('firsts-view')" class="tab-button">
+            İSLAM'IN İLKLERİ
+        </button>
+    </nav>
+    
+    <!-- 1. Olay Listesi Görünümü -->
+    <div id="list-view" class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-4">
+        
+        <!-- Olay 1: İLK VAHİY (610) -->
+        <div class="event-card color-initial">
+            <span class="year-label text-initial" style="background-color: #FFD700; color: #0c1a2c;">610</span>
+            <h3 class="text-xl font-extrabold text-initial mb-2 mt-4">İLK VAHİY: "OKU!"</h3>
+            <p class="text-gray-300">
+                Hz. Peygamber’in Hira Mağarası’nda aldığı ilk vahiy Alak suresinin ilk beş ayetidir. Bu emir ile İslam daveti başlamıştır.
+            </p>
+        </div>
+
+        <!-- Olay 2: HABEŞİSTAN'A HİCRET (615) -->
+        <div class="event-card color-victory">
+            <span class="year-label text-victory" style="background-color: #10B981; color: #0c1a2c;">615</span>
+            <h3 class="text-xl font-extrabold text-victory mb-2 mt-4">HABEŞİSTAN'A İLK HİCRET</h3>
+            <p class="text-gray-300">
+                Mekke’de müşriklerin yaptığı baskılar karşısında Müslümanların bir kısmının, adil hükümdar Necaşi'nin ülkesi olan Habeşistan’a yaptığı ilk hicrettir.
+            </p>
+        </div>
+
+        <!-- Olay 3: SOSYAL VE EKONOMİK BOYKOY (616-619) -->
+        <div class="event-card color-persecution">
+            <span class="year-label text-persecution" style="background-color: #EF4444; color: #0c1a2c;">616-619</span>
+            <h3 class="text-xl font-extrabold text-persecution mb-2 mt-4">SOSYAL VE EKONOMİK BOYKOY YILLARI</h3>
+            <p class="text-gray-300">
+                Mekkeli müşrikler, Müslümanlara ve Hz. Peygamber’in kabilesi olan Haşimoğulları’na karşı sosyal ve ekonomik kısıtlama uygulamışlardır.
+            </p>
+        </div>
+
+        <!-- Olay 4: HÜZÜN YILI (620) -->
+        <div class="event-card" style="border-bottom-color: #A855F7;">
+            <span class="year-label" style="background-color: #A855F7; color: #0c1a2c;">620</span>
+            <h3 class="text-xl font-extrabold" style="color: #A855F7;">HÜZÜN YILI (Amû'l-Hüzn)</h3>
+            <p class="text-gray-300">
+                Hz. Peygamber’e destek olan amcası Ebu Talib ve eşi Hz. Hatice’nin peş peşe vefat ettiği, büyük üzüntü duyduğu yıldır.
+            </p>
+        </div>
+
+        <!-- Olay 5: AKABE BİATİ (622) -->
+        <div class="event-card color-transition">
+            <span class="year-label text-transition" style="background-color: #3B82F6; color: #0c1a2c;">622</span>
+            <h3 class="text-xl font-extrabold text-transition mb-2 mt-4">AKABE BİATİ VE HİCRET KARARI</h3>
+            <p class="text-gray-300">
+                Hz. Peygamber, Medinelilerle (Ensar) ikinci defa görüşmüş ve bu görüşme neticesinde Medine’ye hicret kararı alınmıştır.
+            </p>
+        </div>
+        
+        <!-- Olay 6: MEDİNE'YE HİCRET (622) -->
+        <div class="event-card" style="border-bottom-color: #06B6D4;">
+            <span class="year-label" style="background-color: #06B6D4; color: #0c1a2c;">622</span>
+            <h3 class="text-xl font-extrabold" style="color: #06B6D4;">MEDİNE’YE HİCRET</h3>
+            <p class="text-gray-300">
+                Müslümanların Mekke'den Medine'ye göçü başlamıştır. Hz. Muhammed (SAV) ve Hz. Ebu Bekir farklı bir güzergâh kullanarak Medine’ye ulaşmışlardır.
+            </p>
+        </div>
+        
+        <!-- Olay 7: MEKKE’NİN FETHİ (630) -->
+        <div class="event-card color-victory">
+            <span class="year-label text-victory" style="background-color: #10B981; color: #0c1a2c;">630</span>
+            <h3 class="text-xl font-extrabold text-victory mb-2 mt-4">MEKKE’NİN FETHİ</h3>
+            <p class="text-gray-300">
+                Siyasi ve askerî olarak güçlenen Müslümanlar, kıblemiz Kâbe’nin bulunduğu şehri savaşmadan fethetmiş, genel af ilan edilmiştir.
+            </p>
+        </div>
+
+        <!-- Olay 8: VEDA HUTBESİ VE VEFAT (632) -->
+        <div class="event-card color-final">
+            <span class="year-label text-final" style="background-color: #F97316; color: #0c1a2c;">632</span>
+            <h3 class="text-xl font-extrabold text-final mb-2 mt-4">VEDA HUTBESİ VE VEFAT</h3>
+            <p class="text-gray-300">
+                Hz. Peygamber, ilk ve son haccında Veda Hutbesi’ni okumuş ve aynı yıl "En yüce dosta" diyerek Medine’de vefat etmiştir.
+            </p>
+        </div>
+    </div>
+
+    <!-- 2. Sıralama Etkinliği Görünümü -->
+    <div id="activity-view" class="max-w-4xl mx-auto px-4 hidden">
+        <p class="text-center text-xl text-yellow-400 font-bold mb-6">
+            Olayları kronolojik (tarih sırasına) göre **sürükleyip bırakarak** sıralayınız.
+        </p>
+
+        <ol id="sortable-list" class="list-none p-0 mb-8">
+            <!-- JS ile olaylar buraya eklenecek -->
+        </ol>
+
+        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <button onclick="checkOrder()" class="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-full shadow-xl transition duration-300 transform hover:scale-105">
+                Kontrol Et
+            </button>
+            <button onclick="resetActivity()" class="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-xl transition duration-300 transform hover:scale-105">
+                Yeniden Başlat
+            </button>
+        </div>
+
+        <div id="feedback" class="mt-8 text-center text-2xl font-bold rounded-lg p-4 transition-all duration-500"></div>
+
+    </div>
+
+    <!-- 3. İslam'ın İlkleri Görünümü (YENİ EKLENEN SEKMELER) -->
+    <div id="firsts-view" class="max-w-4xl mx-auto px-4 hidden">
+        <h2 class="text-3xl font-bold text-center text-yellow-400 mb-8">İslam Tarihinin Başlangıç Noktaları</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- 1. İLK VAHİY -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-yellow-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-yellow-300 mb-2">İLK VAHİY: "OKU!" (610)</h4>
+                <p class="text-gray-300">
+                    Hz. Muhammed’e **Hira Mağarası’nda** Cebrail (a.s.) aracılığıyla indirilen Alak suresinin ilk ayetleridir. Risaletin başlangıcıdır.
+                </p>
+            </div>
+
+            <!-- 2. İLK MÜSLÜMANLAR -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-blue-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-blue-300 mb-2">İLK MÜSLÜMANLAR (Sâbikûn-i Evvelûn)</h4>
+                <p class="text-gray-300">
+                    **Hz. Hatice**, hür erkeklerden **Hz. Ebu Bekir**, çocuklardan **Hz. Ali** ve azatlılardan **Zeyd b. Hârise** ilk Müslümanlardır.
+                </p>
+            </div>
+
+            <!-- 3. İSLAM'IN İLK OKULU -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-green-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-green-300 mb-2">İSLAM'IN İLK OKULU: DÂRÜ'L-ERKAM</h4>
+                <p class="text-gray-300">
+                    Gizli davet döneminde, Müslümanların toplanıp ibadet ve eğitim gördüğü, **Erkam b. Ebi'l-Erkam'ın evi**dir.
+                </p>
+            </div>
+
+            <!-- 4. İLK HİCRET -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-red-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-red-300 mb-2">İLK HİCRET: HABEŞİSTAN (615)</h4>
+                <p class="text-gray-300">
+                    Mekke'de artan baskılar nedeniyle bir grup Müslümanın, adil hükümdar Necaşi'nin yönettiği **Habeşistan'a sığınması**dır.
+                </p>
+            </div>
+
+            <!-- 5. İLK ÖĞRETMEN -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-indigo-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-indigo-300 mb-2">İLK ÖĞRETMEN: MUS'AB B. UMEYR</h4>
+                <p class="text-gray-300">
+                    **Birinci Akabe Biatı'ndan sonra** Medinelilere Kur'an öğretmek ve İslam'ı tebliğ etmek için görevlendirilen ilk öğretmendir.
+                </p>
+            </div>
+
+            <!-- 6. İLK MESCİD -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-teal-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-teal-300 mb-2">İLK MESCİD: MESCİD-İ KUBA</h4>
+                <p class="text-gray-300">
+                    Hz. Peygamber’in Medine'ye hicreti sırasında, şehir dışında durakladığı **Kuba'da inşa ettirdiği** ve İslam'ın ilk mescididir.
+                </p>
+            </div>
+
+            <!-- 7. İLK CUMA NAMAZI -->
+            <div class="p-6 bg-[#1f2a3e] rounded-xl border-l-4 border-pink-500 shadow-lg transition duration-300 hover:bg-[#2c3a50]">
+                <h4 class="text-xl font-extrabold text-pink-300 mb-2">İLK CUMA NAMAZI: RÂNÛNA VADİSİ</h4>
+                <p class="text-gray-300">
+                    Hz. Peygamber'in Medine'ye girişi sırasında, Rânûna vadisindeki Salim b. Avf kabilesinde kıldırdığı **İslam'ın ilk Cuma namazı**dır.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="text-center mt-20 pt-8 border-t border-[#1a273b]">
+        <p class="text-sm text-gray-500">Bu uygulama, olayların kronolojik sırasını pekiştirmenize yardımcı olmak amacıyla hazırlanmıştır.</p>
+    </footer>
+
+    <script>
+        const events = [
+            { id: 1, year: '610', name: "İLK VAHİY: 'OKU!'", description: "Hz. Peygamber’in Hira Mağarası’nda aldığı ilk vahiy (Alak 1-5)." },
+            { id: 2, year: '615', name: "HABEŞİSTAN'A İLK HİCRET", description: "Mekke’deki baskılar karşısında Müslümanların Habeşistan’a göçü." },
+            { id: 3, year: '616-619', name: "SOSYAL VE EKONOMİK BOYKOY YILLARI", description: "Mekkeli müşriklerin Müslümanlara uyguladığı kısıtlamalar." },
+            { id: 4, year: '620', name: "HÜZÜN YILI (Amû'l-Hüzn)", description: "Amcası Ebu Talib ve eşi Hz. Hatice’nin vefatı." },
+            { id: 5, year: '622', name: "AKABE BİATİ VE HİCRET KARARI", description: "Hz. Peygamber'in Medinelilerle ikinci görüşmesi ve hicret kararı." },
+            { id: 6, year: '622-Hicret', name: "MEDİNE’YE HİCRET", description: "Müslümanların Mekke'den Medine'ye göçü." },
+            { id: 7, year: '630', name: "MEKKE’NİN FETHİ", description: "Müslümanların Kâbe’nin bulunduğu şehri savaşmadan fethetmesi." },
+            { id: 8, year: '632', name: "VEDA HUTBESİ VE VEFAT", description: "Hz. Peygamber'in Veda Haccı ve aynı yıl Medine’de vefatı." }
+        ];
+
+        let currentOrder = [];
+        const sortableList = document.getElementById('sortable-list');
+        const feedbackDiv = document.getElementById('feedback');
+        const listBtn = document.getElementById('listViewBtn');
+        const activityBtn = document.getElementById('activityViewBtn');
+        const firstsViewBtn = document.getElementById('firstsViewBtn'); // Yeni buton
+        let draggedItemIndex = -1; 
+
+        // Fisher-Yates shuffle algoritması
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // --- Sürükle-Bırak Fonksiyonları ---
+
+        function dragStart(e) {
+            // Sürüklenen öğenin mevcut listedeki dizinini buluruz
+            const targetLi = e.target.closest('li');
+            if (!targetLi) return;
+
+            e.dataTransfer.effectAllowed = "move";
+            targetLi.classList.add('dragging');
+            draggedItemIndex = Array.from(sortableList.children).indexOf(targetLi);
+        }
+
+        function dragEnd(e) {
+            const targetLi = e.target.closest('li');
+            if (targetLi) {
+                targetLi.classList.remove('dragging');
+            }
+            draggedItemIndex = -1;
+            // Tüm drag-over (vurgu) sınıflarını temizle
+            Array.from(sortableList.children).forEach(item => item.classList.remove('drag-over-above', 'drag-over-below'));
+        }
+
+        function dragOver(e) {
+            e.preventDefault(); 
+            const target = e.target.closest('li');
+            if (!target || target.classList.contains('dragging')) return;
+
+            // Tüm vurgu sınıflarını temizle
+            Array.from(sortableList.children).forEach(item => item.classList.remove('drag-over-above', 'drag-over-below'));
+
+            const rect = target.getBoundingClientRect();
+            const center = (rect.top + rect.bottom) / 2;
+
+            if (e.clientY < center) {
+                // Üst yarıda sürükleniyor: Öğenin üstüne çizgi çek
+                target.classList.add('drag-over-above');
+            } else {
+                // Alt yarıda sürükleniyor: Öğenin altına çizgi çek
+                target.classList.add('drag-over-below');
+            }
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const dropTarget = e.target.closest('li');
+            if (!dropTarget || dropTarget.classList.contains('dragging') || draggedItemIndex === -1) return;
+
+            // 1. Hedef öğenin listedeki dizinini bul
+            let targetIndex = Array.from(sortableList.children).indexOf(dropTarget);
+
+            const rect = dropTarget.getBoundingClientRect();
+            const center = (rect.top + rect.bottom) / 2;
+            
+            let finalInsertIndex = targetIndex;
+
+            // 2. Bırakma konumuna göre nihai ekleme dizinini belirle
+            if (e.clientY > center) {
+                // Hedefin altına bırakılıyor, dizini 1 artır
+                finalInsertIndex += 1;
+            }
+            
+            // Eğer aynı yere veya hemen yanına bırakılıyorsa işlemi iptal et
+            if (draggedItemIndex === finalInsertIndex || draggedItemIndex + 1 === finalInsertIndex) {
+                renderSortableList(); 
+                return;
+            }
+
+            // 3. Öğeyi mevcut konumundan kaldır ve taşı
+            const itemToMove = currentOrder.splice(draggedItemIndex, 1)[0];
+            
+            // 4. Eğer öğeyi aşağı taşıdıysak (draggedIndex < finalInsertIndex), 
+            // array'den çıkarma işlemi ekleme noktasından önce olduğu için ekleme dizinini 1 azaltmalıyız.
+            if (draggedItemIndex < finalInsertIndex) {
+                finalInsertIndex -= 1;
+            }
+            
+            // 5. Öğeyi yeni konuma ekle
+            currentOrder.splice(finalInsertIndex, 0, itemToMove);
+
+            // 6. Listeyi yeniden render et
+            renderSortableList();
+        }
+
+        // --- Genel Etkinlik Fonksiyonları ---
+
+        // Etkinliği başlat/sıfırla
+        function resetActivity() {
+            // Olayları karıştır
+            currentOrder = shuffle([...events]);
+            renderSortableList();
+            feedbackDiv.textContent = "";
+            feedbackDiv.classList.remove('bg-green-700', 'bg-red-700');
+        }
+
+        // Sıralanabilir listeyi render et
+        function renderSortableList() {
+            sortableList.innerHTML = '';
+            currentOrder.forEach((event, index) => {
+                const li = document.createElement('li');
+                li.setAttribute('data-id', event.id);
+                li.setAttribute('draggable', 'true'); // Sürüklemeye izin ver
+
+                // Sürükle-bırak event listener'ları
+                li.addEventListener('dragstart', dragStart);
+                li.addEventListener('dragover', dragOver);
+                li.addEventListener('drop', drop);
+                li.addEventListener('dragend', dragEnd);
+
+                li.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="text-xl text-gray-400 font-extrabold w-8">${index + 1}.</span>
+                        <div>
+                            <p class="font-bold text-lg text-blue-300">${event.name}</p>
+                            <p class="text-sm text-gray-400">${event.description}</p>
+                        </div>
+                    </div>
+                `;
+                sortableList.appendChild(li);
+            });
+        }
+
+        // Sıralamayı kontrol etme
+        function checkOrder() {
+            const userOrderIds = currentOrder.map(e => e.id);
+            const correctOrderIds = events.map(e => e.id);
+
+            const isCorrect = userOrderIds.every((id, index) => id === correctOrderIds[index]);
+
+            feedbackDiv.classList.remove('bg-green-700', 'bg-red-700');
+
+            if (isCorrect) {
+                feedbackDiv.textContent = "Tebrikler! Sıralama DOĞRU. Mükemmel bir kronoloji bilgisine sahipsiniz!";
+                feedbackDiv.classList.add('bg-green-700');
+            } else {
+                feedbackDiv.textContent = "Sıralama YANLIŞ. Bazı olayların kronolojik sırasını kontrol ediniz ve tekrar deneyiniz.";
+                feedbackDiv.classList.add('bg-red-700');
+            }
+        }
+
+        // Görünüm değiştirme (Listeden Etkinliğe, Etkinlikten Listeye)
+        function switchView(viewId) {
+            // Tüm görünümleri gizle
+            document.getElementById('list-view').classList.add('hidden');
+            document.getElementById('activity-view').classList.add('hidden');
+            document.getElementById('firsts-view').classList.add('hidden');
+            
+            // Tüm butonlardan aktif sınıfı kaldır
+            listBtn.classList.remove('active-tab');
+            activityBtn.classList.remove('active-tab');
+            firstsViewBtn.classList.remove('active-tab');
+            
+            // Mevcut görünümü göster ve aktif butonu ayarla
+            document.getElementById(viewId).classList.remove('hidden');
+
+            if (viewId === 'list-view') {
+                listBtn.classList.add('active-tab');
+                document.getElementById('subtitle-text').textContent = "İlk Vahiyden Veda Hutbesi'ne Önemli Olaylar";
+            } else if (viewId === 'activity-view') {
+                activityBtn.classList.add('active-tab');
+                document.getElementById('subtitle-text').textContent = "Bilgi Pekiştirme Etkinliği";
+                resetActivity(); // Etkinlik görünümüne geçince listeyi karıştır
+            } else if (viewId === 'firsts-view') {
+                firstsViewBtn.classList.add('active-tab');
+                document.getElementById('subtitle-text').textContent = "İslamiyetin Başlangıç Adımları ve İlkleri";
+            }
+        }
+
+        // Başlangıçta olay listesini göster ve aktif sekme yap
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('list-view');
+        });
+    </script>
+</body>
+</html>

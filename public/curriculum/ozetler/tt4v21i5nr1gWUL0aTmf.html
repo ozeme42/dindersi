@@ -1,0 +1,235 @@
+import React, { useState } from 'react';
+import { Heart, BookOpen, Shield, Brain, Coins, Scroll, Quote, User, Info, ChevronDown, ChevronUp } from 'lucide-react';
+
+const ProtectionCard = ({ title, icon: Icon, mainText, verse, hadith, details, colorClass }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className={`bg-white rounded-xl shadow-lg border-t-4 ${colorClass} overflow-hidden transition-all duration-300 hover:shadow-xl`}>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className={`p-3 rounded-full ${colorClass.replace('border-', 'bg-').replace('-500', '-100')}`}>
+            <Icon className={`w-8 h-8 ${colorClass.replace('border-', 'text-')}`} />
+          </div>
+          <h3 className="text-xl font-bold text-gray-800 ml-4 flex-1">{title}</h3>
+        </div>
+        
+        <p className="text-gray-600 mb-4 text-sm leading-relaxed">{mainText}</p>
+
+        {verse && (
+          <div className="bg-emerald-50 p-4 rounded-lg border border-emerald-100 mb-3 relative">
+            <Quote className="w-4 h-4 text-emerald-300 absolute top-2 left-2" />
+            <p className="text-emerald-900 text-sm italic pl-4 font-serif">"{verse.text}"</p>
+            <p className="text-emerald-600 text-xs text-right mt-1 font-bold">{verse.source}</p>
+          </div>
+        )}
+
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full mt-2 flex items-center justify-center text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors"
+        >
+          {isOpen ? 'Daha Az Oku' : 'Detayları İncele'}
+          {isOpen ? <ChevronUp className="w-4 h-4 ml-1" /> : <ChevronDown className="w-4 h-4 ml-1" />}
+        </button>
+      </div>
+
+      {/* Expandable Content */}
+      <div className={`bg-gray-50 px-6 overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 py-4 border-t' : 'max-h-0 py-0'}`}>
+        {hadith && (
+          <div className="mb-3">
+             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Hadis-i Şerif</h4>
+             <p className="text-gray-700 text-sm italic border-l-2 border-gray-300 pl-3">"{hadith}"</p>
+          </div>
+        )}
+        <div className="space-y-2">
+          <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Önemli Noktalar</h4>
+          <ul className="text-sm text-gray-600 space-y-1">
+            {details.map((item, idx) => (
+              <li key={idx} className="flex items-start">
+                <span className="mr-2 text-emerald-500">•</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-emerald-100 selection:text-emerald-900">
+      
+      {/* Header Section */}
+      <header className="bg-gradient-to-r from-emerald-900 to-teal-800 text-white pb-20 pt-16 px-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          {/* Abstract Pattern Imitation */}
+          <div className="w-64 h-64 border-8 border-white rounded-full absolute -top-20 -left-20"></div>
+          <div className="w-96 h-96 border-8 border-white rounded-full absolute top-20 right-0"></div>
+        </div>
+
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <div className="inline-block bg-emerald-800 bg-opacity-50 backdrop-blur-sm px-4 py-1 rounded-full text-emerald-200 text-sm font-medium mb-4 border border-emerald-700">
+            2. Ünite: Peygamberimizin Evrensel Mesajları
+          </div>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 font-serif">
+            İnsanların Dokunulmazlıklarının Gözetilmesi
+          </h1>
+          <p className="text-xl md:text-2xl text-emerald-100 max-w-3xl mx-auto font-light leading-relaxed">
+            "Bugün sizin için dininizi kemale erdirdim, size nimetimi tamamladım..."
+            <span className="block text-sm mt-2 opacity-70">(Mâide suresi, 3. ayet)</span>
+          </p>
+        </div>
+      </header>
+
+      {/* Intro Text */}
+      <div className="max-w-4xl mx-auto -mt-10 px-4 relative z-20 mb-16">
+        <div className="bg-white p-8 rounded-xl shadow-xl border-b-4 border-amber-400">
+          <div className="flex flex-col md:flex-row gap-6 items-center">
+            <div className="md:w-1/4 flex justify-center">
+              <div className="bg-amber-100 p-4 rounded-full">
+                <User className="w-12 h-12 text-amber-600" />
+              </div>
+            </div>
+            <div className="md:w-3/4">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Evrensel Mesaj</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Peygamberimiz (sav), insanların hayat tarzı ve alışkanlıklarında İslam'a aykırı olanları Kur'an önderliğinde düzeltmiştir. Veda Hutbesi'ndeki <strong>"Ey İnsanlar!"</strong> hitabı, mesajın sadece Müslümanlara değil, tüm insanlığa yönelik olduğunu gösterir. Her insan Allah katında biricik ve özeldir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid - Zarurat-ı Hamse */}
+      <main className="max-w-7xl mx-auto px-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          {/* Canın Korunması */}
+          <ProtectionCard 
+            title="Canın Korunması"
+            icon={Heart}
+            colorClass="border-red-500"
+            mainText="İslam'da her insan; din, dil, ırk farkı gözetilmeksizin yaşama hakkına sahiptir. İnsan, yeryüzünün en şerefli varlığıdır."
+            verse={{
+              text: "Kim; bir insanı... öldürürse o sanki bütün insanları öldürmüştür. Her kim de birini yaşatırsa sanki bütün insanları yaşatmıştır...",
+              source: "Mâide suresi, 32. ayet"
+            }}
+            hadith="Kanlarınız, mallarınız, şeref ve namusunuz tıpkı bu beldenin, bu ayın ve bugünlerin mukaddes oluşu gibi dokunulmazdır."
+            details={[
+              "Veda Haccı'nda kan davaları kaldırılmıştır.",
+              "Yaşam hakkı kutsaldır.",
+              "Kuvvetlilerin zayıfları ezmesi engellenmiştir."
+            ]}
+          />
+
+          {/* Dinin Korunması */}
+          <ProtectionCard 
+            title="Dinin Korunması"
+            icon={BookOpen}
+            colorClass="border-blue-500"
+            mainText="İslam'da inanç hürriyeti esastır. Kimse dinini değiştirmeye zorlanamaz."
+            verse={{
+              text: "Dinde zorlama yoktur...",
+              source: "Bakara suresi, 256. ayet"
+            }}
+            hadith="Kim bir zimmiye haksızlık eder... kıyamet gününde o kişi beni karşısında bulacaktır."
+            details={[
+              "Medine Sözleşmesi ile inanç özgürlüğü tanınmıştır.",
+              "Necranlı Hristiyanların mescitte ibadetine izin verilmiştir.",
+              "Farklılıklara saygı esastır."
+            ]}
+          />
+
+          {/* Namusun Korunması (Nesil) */}
+          <ProtectionCard 
+            title="Namusun Korunması"
+            icon={Shield}
+            colorClass="border-purple-500"
+            mainText="İffetli olmak, mahremiyete saygı duymak ve nesli korumak İslam'ın temel amaçlarındandır."
+            verse={{
+              text: "...Gözlerini haramdan sakınsınlar!..",
+              source: "Nûr suresi, 30-31. ayetler"
+            }}
+            hadith="Cennete ilk girecek üç grup bana gösterildi: Şehit, iffetli ve kanaatkâr kimse..."
+            details={[
+              "İftira ve tecessüs (gizli halleri araştırma) yasaktır.",
+              "Evlerin mahremiyeti korunmuştur.",
+              "Aile yapısının korunması hedeflenmiştir."
+            ]}
+          />
+
+           {/* Aklın Korunması */}
+           <ProtectionCard 
+            title="Aklın Korunması"
+            icon={Brain}
+            colorClass="border-orange-500"
+            mainText="İnsana verilen en büyük nimet akıldır. Kur'an sürekli aklı kullanmayı teşvik eder."
+            details={[
+              "İçki, uyuşturucu ve kumar yasaklanmıştır.",
+              "Kin ve haset gibi manevi hastalıklardan uzak durulmalıdır.",
+              "Faydasız söz ve davranışlar aklı köreltir."
+            ]}
+          />
+
+          {/* Malın Korunması */}
+          <ProtectionCard 
+            title="Malın Korunması"
+            icon={Coins}
+            colorClass="border-yellow-500"
+            mainText="Kişinin helal yoldan kazandığı mal dokunulmazdır. Haksız kazanç yolları kapatılmıştır."
+            details={[
+              "Hırsızlık, gasp, rüşvet ve faiz yasaktır.",
+              "Çalışmak ibadet sayılmıştır.",
+              "Zekât ve sadaka ile sosyal denge sağlanır.",
+              "Hilfülfudul (Erdemliler Birliği) ile haksızlıklar önlenmiştir."
+            ]}
+          />
+
+          {/* Special Section: Okuma Kuşağı Summary */}
+          <div className="bg-slate-800 rounded-xl shadow-lg border-t-4 border-slate-600 overflow-hidden text-white flex flex-col justify-between">
+            <div className="p-6">
+               <div className="flex items-center mb-4">
+                  <Scroll className="w-8 h-8 text-slate-300" />
+                  <h3 className="text-xl font-bold ml-4">Bir Hadis, Bir Ders</h3>
+               </div>
+               <div className="space-y-4 text-sm text-slate-300 italic">
+                 <p>"Malımı zorla almak isteyen birine karşı ne yapabilirim?"</p>
+                 <div className="pl-4 border-l-2 border-slate-500">
+                    <p className="mb-2">Hz. Peygamber (sav) sırasıyla şunları tavsiye etmiştir:</p>
+                    <ol className="list-decimal pl-4 space-y-1 not-italic text-slate-200">
+                      <li>Ona Allah'ı hatırlat.</li>
+                      <li>Müslümanlardan yardım iste.</li>
+                      <li>Resmi görevlilerden yardım iste.</li>
+                      <li>Hiçbiri olmazsa malını koru; ölürsen şehit olursun.</li>
+                    </ol>
+                 </div>
+                 <p className="text-xs text-right opacity-50">(Nesâî, Muhârebe, 21)</p>
+               </div>
+            </div>
+            <div className="bg-slate-900 p-4 text-center">
+               <span className="text-xs font-bold text-slate-400 tracking-widest">MAL EMNİYETİ ESASTIR</span>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-100 border-t border-slate-200 py-12">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <Info className="w-8 h-8 text-slate-400 mx-auto mb-4" />
+          <p className="text-slate-600 mb-2">
+            Bu içerik, "İnsanların Dokunulmazlıklarının Gözetilmesi" ünitesi kapsamında hazırlanmıştır.
+          </p>
+          <p className="text-slate-400 text-sm">
+            Kaynaklar: Kur'an-ı Kerim, Kütüb-i Sitte (Buhârî, Müslim, Tirmizî, Ebu Dâvûd, Nesâî)
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;

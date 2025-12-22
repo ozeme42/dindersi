@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hac ve Kurban - İnfografik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@1,300;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-italic {
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+        }
+        
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Sekme İçerik Gizleme/Gösterme */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Aktif Buton Stili */
+        .tab-btn.active {
+            background-color: #059669; /* emerald-600 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: scale(1.05);
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-emerald-50 text-slate-800 selection:bg-emerald-200">
+
+    <!-- Header Section -->
+    <header class="bg-emerald-900 text-white py-12 px-4 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <circle cx="20" cy="20" r="2" fill="#fff" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#pattern)" />
+            </svg>
+        </div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">HAC VE KURBAN</h1>
+            <p class="text-emerald-200 text-xl font-light italic">"Hac, Müslümanları bir araya getirir."</p>
+            <div class="mt-8 inline-block bg-emerald-800/50 backdrop-blur-sm p-4 rounded-xl border border-emerald-700 max-w-2xl">
+                <p class="text-sm md:text-base leading-relaxed">
+                    <span class="font-bold text-amber-400">Hadis-i Şerif:</span> “İslam, beş esas üzerine kurulmuştur: Allah’tan başka ilah olmadığına ve Muhammed’in Allah’ın resulü olduğuna şahitlik etmek, namazı dosdoğru kılmak, zekât vermek, Kâbe’yi haccetmek ve ramazan orucunu tutmak.”
+                    <br/><span class="text-xs text-emerald-400 mt-2 block">(Müslim, İman, 21.)</span>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="sticky top-0 z-50 bg-white/90 backdrop-blur shadow-sm border-b border-emerald-100">
+        <div class="max-w-5xl mx-auto flex overflow-x-auto justify-center p-2 gap-2 md:gap-4 no-scrollbar">
+            <button onclick="openTab('sartlar', this)" class="tab-btn active flex items-center gap-2 px-4 py-3 rounded-full text-sm font-semibold bg-emerald-600 text-white shadow-md transform scale-105 whitespace-nowrap">
+                <i data-lucide="book-open" width="18"></i> Haccın Şartları
+            </button>
+            <button onclick="openTab('bireysel', this)" class="tab-btn flex items-center gap-2 px-4 py-3 rounded-full text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-emerald-100 whitespace-nowrap">
+                <i data-lucide="smile" width="18"></i> Bireysel Faydalar
+            </button>
+            <button onclick="openTab('toplumsal', this)" class="tab-btn flex items-center gap-2 px-4 py-3 rounded-full text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-emerald-100 whitespace-nowrap">
+                <i data-lucide="users" width="18"></i> Toplumsal Faydalar
+            </button>
+            <button onclick="openTab('malcolm', this)" class="tab-btn flex items-center gap-2 px-4 py-3 rounded-full text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-emerald-100 whitespace-nowrap">
+                <i data-lucide="globe" width="18"></i> Geçmişin İzinde
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8 space-y-12 min-h-[600px]">
+
+        <!-- SECTION: HACCIN ŞARTLARI -->
+        <div id="sartlar" class="tab-content active animate-fade-in-up">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4">Kimlere Farzdır?</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Müslümanların ömründe bir defa haccetmeleri farzdır. Ancak kişinin bu ibadeti yerine getirebilmesi için aşağıdaki 6 şartı taşıması gerekir.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="user" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Müslüman Olmak</h3>
+                    <p class="text-slate-500 text-sm">Hac ibadeti sadece Müslümanlara farzdır.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="brain" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Akıl ve Ergenlik</h3>
+                    <p class="text-slate-500 text-sm">Akıllı olmak ve ergenlik çağına girmiş bulunmak.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="wallet" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Maddi İmkan</h3>
+                    <p class="text-slate-500 text-sm">Belli derecede maddi imkâna sahip olmak.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="heart-pulse" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Sağlıklı Olmak</h3>
+                    <p class="text-slate-500 text-sm">Yolculuğa ve ibadete engel hastalığı bulunmamak.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="shield-check" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Yol Güvenliği</h3>
+                    <p class="text-slate-500 text-sm">Gidilecek yolun güvenli olması.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-emerald-500 hover:shadow-xl transition-shadow flex flex-col items-center text-center group">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="lock-open" width="40" height="40"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Özgür Olmak</h3>
+                    <p class="text-slate-500 text-sm">Kişinin hürriyetinin kısıtlanmamış olması.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: BİREYSEL FAYDALAR -->
+        <div id="bireysel" class="tab-content animate-fade-in-up">
+            <div class="bg-white rounded-3xl overflow-hidden shadow-xl flex flex-col md:flex-row mb-8">
+                <div class="md:w-1/3 bg-emerald-800 p-8 flex flex-col justify-center text-white">
+                    <h3 class="text-3xl font-bold mb-4">Manevi Bir Eğitim</h3>
+                    <p class="opacity-90">Hac yolculuğu, sadece bedenen yapılan bir yolculuk değil, ruhun olgunlaşma sürecidir.</p>
+                </div>
+                <div class="md:w-2/3 p-8 bg-white grid grid-cols-1 gap-6">
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-100 p-3 rounded-lg text-amber-600 flex-shrink-0 mt-1">
+                            <i data-lucide="smile"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-emerald-900">Tevhit Mücadelesini Hatırlamak</h4>
+                            <p class="text-slate-600 text-sm">Hz. Peygamber’in ve müminlerin yaşadıklarını hatırlar, o atmosferde olgunlaşır.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-100 p-3 rounded-lg text-amber-600 flex-shrink-0 mt-1">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-emerald-900">Sabır ve Tevekkül</h4>
+                            <p class="text-slate-600 text-sm">Sıkıntılar karşısında isyan etmek yerine Allah’a tevekkül etmeyi öğrenir.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-amber-100 p-3 rounded-lg text-amber-600 flex-shrink-0 mt-1">
+                            <i data-lucide="heart-pulse"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-emerald-900">Mahşer Bilinci</h4>
+                            <p class="text-slate-600 text-sm">İhram kıyafeti ve Arafat'taki bekleyiş, kişiye öldükten sonra dirilmeyi ve mahşer meydanını hatırlatır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border-l-8 border-amber-400 p-6 rounded-r-xl shadow-sm">
+                <h4 class="text-amber-800 font-bold text-lg mb-2 flex items-center gap-2">
+                    <i data-lucide="quote" width="20"></i>
+                    Müjde: Yeniden Doğuş
+                </h4>
+                <p class="italic text-slate-700 mb-2">
+                    “Kim Allah için hacceder de kötü söz ve davranışlardan ve Allah’a karşı gelmekten sakınırsa 
+                    <span class="font-bold text-emerald-700 bg-emerald-100 px-1 mx-1 rounded">annesinden doğduğu günkü gibi</span> 
+                    günahlarından arınmış olarak döner.”
+                </p>
+                <div class="text-right text-xs font-bold text-amber-700">(Buhari, Hac, 4.)</div>
+            </div>
+        </div>
+
+        <!-- SECTION: TOPLUMSAL FAYDALAR -->
+        <div id="toplumsal" class="tab-content animate-fade-in-up">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-emerald-900 mb-6">"Ben" Değil, "Biz" Olmak</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-xl shadow border border-slate-100">
+                            <h4 class="font-bold text-emerald-700 mb-2">Eşitlik ve Kardeşlik</h4>
+                            <p class="text-slate-600 text-sm">Makam, dil, ırk ve renk farkı gözetmeksizin herkes aynı ihram kıyafetiyle Allah’a yönelir. Bu durum mutlak eşitliği simgeler.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow border border-slate-100">
+                            <h4 class="font-bold text-emerald-700 mb-2">Kültürel Kaynaşma</h4>
+                            <p class="text-slate-600 text-sm">Dünyanın dört bir yanından gelen Müslümanlar tanışır, kültür alışverişinde bulunur ve birbirlerinin dertleriyle dertlenir.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow border border-slate-100">
+                            <h4 class="font-bold text-emerald-700 mb-2">Ahlaki Güzellik</h4>
+                            <p class="text-slate-600 text-sm">Hac; sabrı güçlendirir, incitmeme duygusunu geliştirir. Kibir ve gösteriş yerine alçak gönüllülük hakim olur.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-emerald-100 rounded-full aspect-square flex flex-col items-center justify-center p-8 text-center relative overflow-hidden shadow-inner">
+                    <div class="absolute inset-0 bg-emerald-600/10 rounded-full animate-pulse"></div>
+                    <i data-lucide="users" width="80" height="80" class="text-emerald-600 mb-4 relative z-10"></i>
+                    <h3 class="text-2xl font-bold text-emerald-800 relative z-10">Evrensel Birlik</h3>
+                    <p class="text-emerald-700 mt-2 text-sm relative z-10">Milyonlarca insan, tek bir amaç için, tek bir yöne...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: MALCOLM X -->
+        <div id="malcolm" class="tab-content animate-fade-in-up">
+             <div class="bg-slate-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                   <i data-lucide="quote" width="120" height="120"></i>
+                </div>
+                
+                <h2 class="text-3xl font-bold text-amber-400 mb-8 border-b border-slate-700 pb-4 inline-block">Geçmişin İzinde: Malcolm X</h2>
+                
+                <div class="flex flex-col md:flex-row gap-8">
+                  <div class="md:w-3/4">
+                    <p class="text-lg md:text-xl leading-relaxed serif-italic text-slate-300">
+                      “Hacca gitmek, görüş açımı alabildiğine genişletmiştir: Bu gezi, yeni bir anlayış üfledi benim ruhuma. Kutsal Belde’de geçirdiğim iki hafta içerisinde, Amerika’da geçirdiğim otuzdokuz yıl boyunca hiç rastlamadığım şeylere tanık oldum. <span class="text-white font-bold bg-emerald-900/80 px-1">Bütün ırkları, bütün renkleri tanıdım; hem de gerçek bir kardeşlik anlayışı içerisinde!</span> Tek bir yürek gibi çarpan! Tek bir beden gibi yaşayan! Tek bir varlık gibi ibadet eden!..”
+                    </p>
+                    <div class="mt-6 flex items-center gap-4">
+                       <div class="h-px w-12 bg-amber-500"></div>
+                       <span class="font-bold text-amber-400">Malcolm X (1925-1965)</span>
+                    </div>
+                  </div>
+                  
+                  <div class="md:w-1/4 flex items-center justify-center border-l border-slate-700 pl-4">
+                     <div class="text-center">
+                        <span class="block text-4xl font-bold text-emerald-500 mb-2">1964</span>
+                        <span class="text-sm text-slate-400">Yılında Hac Tecrübesi</span>
+                     </div>
+                  </div>
+                </div>
+             </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-20 py-8 text-center text-slate-500 text-sm border-t border-emerald-100 bg-white">
+        <p>Ünite 2: Hac ve Kurban | Grafik Bilgi 2.1 & Görsel 2.1 referans alınmıştır.</p>
+    </footer>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // Lucide ikonlarını oluştur
+        lucide.createIcons();
+
+        function openTab(tabName, btnElement) {
+            // 1. Tüm sekme içeriklerini gizle
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+
+            // 2. Tüm butonlardaki aktif stilini kaldır
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active", "bg-emerald-600", "text-white", "shadow-md", "transform", "scale-105");
+                buttons[i].classList.add("bg-slate-100", "text-slate-600", "hover:bg-emerald-100");
+            }
+
+            // 3. Seçilen içeriği göster
+            document.getElementById(tabName).classList.add("active");
+
+            // 4. Tıklanan butona aktif stili ekle
+            btnElement.classList.remove("bg-slate-100", "text-slate-600", "hover:bg-emerald-100");
+            btnElement.classList.add("active", "bg-emerald-600", "text-white", "shadow-md", "transform", "scale-105");
+            
+            // Animasyonu yeniden tetiklemek için ufak bir hile (opsiyonel)
+            const activeContent = document.getElementById(tabName);
+            activeContent.classList.remove('animate-fade-in-up');
+            void activeContent.offsetWidth; // trigger reflow
+            activeContent.classList.add('animate-fade-in-up');
+        }
+    </script>
+</body>
+</html>

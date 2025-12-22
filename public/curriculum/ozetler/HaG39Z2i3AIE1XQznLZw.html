@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Ünite: Oruç ve Kur'an Ayı Ramazan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+
+        /* --- GENEL AYARLAR (Ramazan Teması: Koyu Yeşil/Altın/Gece Mavisi) --- */
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(135deg, #064e3b 0%, #1e1b4b 100%);
+            font-family: 'Roboto', sans-serif;
+            color: #fff;
+            box-sizing: border-box;
+            height: 100vh; width: 100vw;
+            overflow: hidden; 
+        }
+
+        /* --- ANA KAPLAYICI --- */
+        #app-wrapper {
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        #app-container {
+            width: 1500px; height: 850px;
+            background: rgba(6, 78, 59, 0.95); /* Koyu Yeşil Opak */
+            border: 4px solid #fbbf24; /* Altın Çerçeve */
+            border-radius: 30px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            position: relative;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transform-origin: center center;
+            transition: transform 0.2s;
+        }
+
+        /* --- MENÜ EKRANI --- */
+        #menu-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 78, 59, 0.98);
+            z-index: 50;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-y: auto;
+        }
+        .menu-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: #fbbf24; margin-bottom: 40px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 25px; width: 90%; max-width: 1200px; }
+        .menu-btn {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid #fbbf24;
+            padding: 25px; border-radius: 20px; cursor: pointer;
+            transition: transform 0.2s, background 0.2s; text-align: left;
+            display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center;
+        }
+        .menu-btn:hover { transform: scale(1.03); background: rgba(251, 191, 36, 0.2); }
+        .menu-icon { font-size: 3rem; }
+        .menu-text h3 { margin: 0; font-size: 1.3rem; color: #fbbf24; }
+        .menu-text p { margin: 5px 0 0 0; color: #d1d5db; font-size: 0.9rem; }
+
+        /* --- ÜNİTE ARAYÜZÜ --- */
+        .header-bar {
+            height: 80px; border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: rgba(0,0,0,0.3); flex-shrink: 0;
+        }
+        .header-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #fbbf24; }
+        .home-btn { background: none; border: 1px solid #fbbf24; color: #fbbf24; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 1rem; }
+
+        .slide-content {
+            flex: 1; padding: 40px 50px; display: flex; gap: 40px;
+            overflow-y: auto; position: relative; animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .text-panel { flex: 1.4; padding-right: 20px; font-size: 1.1rem; line-height: 1.6; color: #e2e8f0; }
+        .text-panel h2 {
+            font-family: 'Playfair Display', serif; font-size: 2.2rem; color: #fff;
+            margin-top: 0; margin-bottom: 15px; border-bottom: 3px solid #fbbf24; display: inline-block;
+        }
+
+        .visual-panel {
+            flex: 0.6; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(255,255,255,0.03); border-radius: 20px; padding: 30px; border: 1px dashed rgba(251, 191, 36, 0.3);
+        }
+        .visual-icon { font-size: 7rem; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(251,191,36,0.4)); }
+        
+        .activity-btn {
+            background: linear-gradient(45deg, #fbbf24, #d97706); border: none; padding: 15px 30px;
+            font-size: 1.3rem; font-weight: bold; color: #0f172a; border-radius: 50px; cursor: pointer;
+            width: 100%; box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3); animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+        .controls-bar {
+            height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
+        }
+        .nav-btn {
+            background: transparent; border: 2px solid #fbbf24; color: #fbbf24; padding: 10px 30px;
+            font-size: 1.1rem; border-radius: 10px; cursor: pointer;
+        }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #777; color: #777; }
+
+        /* --- ÖZEL İÇERİK STİLLERİ --- */
+        .concept-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: rgba(255,255,255,0.05); }
+        .concept-table th { text-align: left; padding: 12px; color: #fbbf24; background: rgba(0,0,0,0.2); }
+        .concept-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        
+        .info-card { background: rgba(255, 255, 255, 0.05); border-left: 4px solid #fbbf24; padding: 15px; margin-bottom: 15px; border-radius: 0 10px 10px 0; }
+        .quote { font-style: italic; background: rgba(251, 191, 36, 0.1); padding: 15px; border-left: 4px solid #fbbf24; margin: 15px 0; color: #fcd34d; }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 2rem; color: #fbbf24; display: block; margin-bottom: 10px; direction: rtl; }
+
+        /* OYUN MODALI */
+        #activity-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(6, 78, 59, 0.98); z-index: 100; display: none;
+            flex-direction: column; align-items: center; padding: 40px; box-sizing: border-box;
+        }
+        .activity-header { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #fbbf24; margin-bottom: 20px; text-align: center; }
+        .close-activity { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
+        .game-area { width: 80%; height: 70%; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+        .feedback-msg { margin-top: 10px; font-size: 1.5rem; height: 30px; font-weight: bold; text-align: center; }
+        .success { color: #34d399; } .error { color: #f87171; }
+
+        /* OYUNLAR */
+        .match-container { display: flex; justify-content: space-between; width: 100%; gap: 30px; }
+        .match-col { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        .match-item { background: #065f46; padding: 15px; text-align: center; border-radius: 10px; cursor: pointer; border: 2px solid transparent; display: flex; align-items: center; justify-content: center; min-height: 50px; }
+        .match-item.selected { border-color: #fbbf24; background: #047857; }
+        .match-item.matched { background: #059669; opacity: 0.5; pointer-events: none; }
+        .match-item.wrong { background: #dc2626; animation: shake 0.4s; }
+        
+        .quiz-option { width: 90%; padding: 15px; margin: 10px; background: #065f46; border: 2px solid #34d399; border-radius: 10px; cursor: pointer; text-align: left; font-size: 1.1rem; }
+        
+        .sort-container { width: 80%; display: flex; flex-direction: column; gap: 10px; }
+        .sort-item { background: #065f46; padding: 15px; border-radius: 8px; border-left: 5px solid #fbbf24; cursor: pointer; }
+
+        .anagram-container { text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .anagram-slots { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+        .anagram-slot { width: 45px; height: 55px; border-bottom: 4px solid #fbbf24; font-size: 2rem; color: #fbbf24; display: flex; justify-content: center; align-items: center; }
+        .letter-pool { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .letter-btn { width: 55px; height: 55px; background: #065f46; color: #fff; border: 2px solid #34d399; border-radius: 10px; font-size: 1.5rem; cursor: pointer; }
+        .letter-btn.correct { opacity: 0; pointer-events: none; }
+        .letter-btn.wrong { background: #dc2626; animation: shake 0.4s; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+
+        /* MOBİL UYUMLULUK */
+        @media screen and (max-width: 1024px) {
+            body { overflow-y: auto; height: auto; }
+            #app-wrapper { display: block; height: auto; }
+            #app-container { width: 100%; height: auto; min-height: 100vh; border: none; border-radius: 0; transform: none !important; box-shadow: none; }
+            #menu-screen { position: relative; height: auto; min-height: 100vh; padding: 40px 20px; justify-content: flex-start; }
+            .menu-title { font-size: 2.5rem; margin-bottom: 30px; }
+            .menu-grid { grid-template-columns: 1fr; width: 100%; gap: 15px; }
+            .menu-btn { flex-direction: row; padding: 20px; text-align: left; }
+            .header-bar { padding: 10px 20px; flex-direction: column; height: auto; gap: 10px; }
+            .slide-content { flex-direction: column; padding: 20px; overflow: visible; }
+            .text-panel, .visual-panel { width: 100%; flex: none; padding-right: 0; }
+            .visual-panel { margin-top: 20px; }
+            .visual-icon { font-size: 4rem; }
+            #activity-overlay { position: fixed; height: 100%; padding: 10px; z-index: 9999; }
+            .game-area { width: 95%; height: 85%; padding: 10px; justify-content: flex-start; }
+            .match-container { flex-direction: column; gap: 10px; }
+            .match-item { font-size: 0.9rem; height: auto; padding: 10px; }
+            .quiz-option { width: 100%; }
+            .letter-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+            .anagram-slot { width: 30px; height: 40px; font-size: 1.5rem; }
+            .controls-bar { padding: 10px 20px; position: sticky; bottom: 0; background: #064e3b; z-index: 50; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-wrapper">
+    <div id="app-container">
+        <!-- MENÜ EKRANI -->
+        <div id="menu-screen">
+            <h1 class="menu-title">2. Ünite: Ramazan ve Oruç</h1>
+            <div class="menu-grid">
+                <div class="menu-btn" onclick="selectUnit(0)">
+                    <span class="menu-icon">🌙</span>
+                    <div class="menu-text"><h3>2.1 Ramazan, Oruç ve Kur'an</h3><p>Orucun anlamı, Kadir Gecesi ve önemi.</p></div>
+                </div>
+                <div class="menu-btn" onclick="selectUnit(1)">
+                    <span class="menu-icon">💡</span>
+                    <div class="menu-text"><h3>2.2 Ramazan ve Oruç Kavramları</h3><p>Sahur, İmsak, İftar, Teravih, Mukabele, Fitre.</p></div>
+                </div>
+                <div class="menu-btn" onclick="selectUnit(2)">
+                    <span class="menu-icon">⚠️</span>
+                    <div class="menu-text"><h3>2.3 Oruç Kuralları</h3><p>Dikkat edilecekler, Bozan/Bozmayan durumlar.</p></div>
+                </div>
+                <div class="menu-btn" onclick="selectUnit(3)">
+                    <span class="menu-icon">📚</span>
+                    <div class="menu-text"><h3>2.4 Oruç Çeşitleri</h3><p>Farz, Vacip ve Sünnet Oruçlar.</p></div>
+                </div>
+                <div class="menu-btn" onclick="selectUnit(4)">
+                    <span class="menu-icon">❤️</span>
+                    <div class="menu-text"><h3>2.5 Orucun Kazandırdıkları</h3><p>Bireysel ve toplumsal faydalar.</p></div>
+                </div>
+                <div class="menu-btn" onclick="selectUnit(5)">
+                    <span class="menu-icon">🤲</span>
+                    <div class="menu-text"><h3>2.6 Bir Dua: İftar Duası</h3><p>Anlamı ve önemi.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÜNİTE EKRANI -->
+        <div id="unit-screen" style="display:none; flex-direction:column; height:100%;">
+            <div class="header-bar">
+                <div style="display:flex; align-items:center; gap:15px; width:100%; justify-content:space-between;">
+                    <button class="home-btn" onclick="returnToMenu()">🏠 Menü</button>
+                    <div class="header-title" id="unit-title">Başlık</div>
+                    <div class="progress-indicator" style="font-size:0.9rem;">Sf <span id="current-page">1</span></div>
+                </div>
+            </div>
+
+            <div id="slide-container" class="slide-content"></div>
+
+            <div class="controls-bar">
+                <button id="prev-btn" class="nav-btn" onclick="prevSlide()">❮ Geri</button>
+                <button id="next-btn" class="nav-btn" onclick="nextSlide()">İleri ❯</button>
+            </div>
+        </div>
+
+        <!-- OYUN MODALI -->
+        <div id="activity-overlay">
+            <button class="close-activity" onclick="closeActivity()">✕</button>
+            <div class="activity-header" id="activity-title">Etkinlik</div>
+            <div class="game-area" id="game-board"></div>
+            <div class="feedback-msg" id="feedback"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* --- İÇERİK VERİSİ --- */
+    const units = [
+        // 2.1 RAMAZAN, ORUÇ VE KUR'AN
+        {
+            title: "2.1 Ramazan, Oruç ve Kur'an",
+            slides: [
+                {
+                    title: "Oruç Nedir?",
+                    content: `<p><strong>Oruç:</strong> Sözlükte "bir şeyden uzak durmak, kendini tutmak" demektir. Terim olarak; Allah rızası için tan yerinin ağarmasından (imsak) güneş batıncaya kadar (iftar) yeme, içme ve nefsi isteklerden uzak durmaktır.</p><p>İslam'ın beş şartından biridir. Hicri takvimin 9. ayı olan Ramazan'da tutulur.</p>`,
+                    icon: "🌙", activityType: "quiz", activityTitle: "Tanım Testi",
+                    activityData: [{q:"Oruç hangi vakitler arasında tutulur?", options:["İmsak - İftar", "Sabah - Öğle"], a:"İmsak - İftar"}, {q:"Ramazan hicri takvimin kaçıncı ayıdır?", options:["1.", "9."], a:"9."}]
+                },
+                {
+                    title: "Kadir Gecesi ve Kur'an",
+                    content: `<p>Ramazan ayına "Kur'an Ayı" denir çünkü Kur'an bu ayda indirilmeye başlanmıştır. İndirilmeye başlandığı geceye <strong>Kadir Gecesi</strong> denir.</p><div class="quote">"Şüphesiz, biz onu (Kur’an’ı) Kadir Gecesi’nde indirdik... Kadir Gecesi bin aydan daha hayırlıdır." (Kadir Suresi)</div><p>Hz. Muhammed (sav) bu gecenin ibadetle geçirilmesini tavsiye etmiştir.</p>`,
+                    icon: "✨", activityType: "quiz", activityTitle: "Bilgi Kontrolü",
+                    activityData: [{q:"Kur'an hangi gecede indirilmeye başlandı?", options:["Miraç", "Kadir"], a:"Kadir"}, {q:"Kadir Gecesi neyden daha hayırlıdır?", options:["Bin aydan", "Yüz yıldan"], a:"Bin aydan"}]
+                }
+            ]
+        },
+        // 2.2 KAVRAMLAR
+        {
+            title: "2.2 Ramazan ve Oruç Kavramları",
+            slides: [
+                {
+                    title: "Sahur, İmsak ve İftar",
+                    content: `<ul style="line-height:1.8;"><li><strong>SAHUR:</strong> Oruç tutmak için imsaktan önce yemek yenilen vakit. "Sahurda bereket vardır."</li><li><strong>İMSAK:</strong> Oruca başlama vakti (Tan yerinin ağarması). Sabah namazı vakti de girer.</li><li><strong>İFTAR:</strong> Orucu açma vakti (Akşam ezanı). İftar ettirmek sevaptır.</li></ul>`,
+                    icon: "🍽️", activityType: "matching", activityTitle: "Kavramları Eşleştir",
+                    activityData: [{term:"Sahur", def:"Oruç öncesi yemek vakti"}, {term:"İmsak", def:"Oruca başlama vakti"}, {term:"İftar", def:"Orucu açma vakti"}, {term:"İmsakiye", def:"Vakit çizelgesi"}]
+                },
+                {
+                    title: "Teravih, Mukabele ve Fitre",
+                    content: `<ul style="line-height:1.8;"><li><strong>TERAVİH:</strong> Ramazanda yatsıdan sonra kılınan 20 rekâtlık sünnet namaz.</li><li><strong>MUKABELE:</strong> Birinin Kur'an okuması, diğerlerinin takip etmesi (Hatim indirme geleneği).</li><li><strong>FİTRE (Fıtır Sadakası):</strong> Ramazanda verilmesi vacip olan sadaka. Bayram namazına kadar verilmelidir.</li></ul>`,
+                    icon: "🕌", activityType: "matching", activityTitle: "Kavramları Eşleştir 2",
+                    activityData: [{term:"Teravih", def:"Ramazan özel namazı"}, {term:"Mukabele", def:"Karşılıklı Kur'an okuma"}, {term:"Fitre", def:"Vacip sadaka"}, {term:"Hatim", def:"Kur'an'ı baştan sona okumak"}]
+                }
+            ]
+        },
+        // 2.3 ORUÇ KURALLARI
+        {
+            title: "2.3 Oruç Kuralları",
+            slides: [
+                {
+                    title: "Dikkat Edilmesi Gerekenler",
+                    content: `<p>Oruç sadece aç kalmak değildir. Kötü söz ve davranışlardan da uzak durulmalıdır. Niyet etmek şarttır ("Niyet ettim Allah rızası için...").</p><div class="info-card"><strong>Mazaretler:</strong> Hasta ve yolcular oruç tutmayabilir, sonra kaza ederler. İyileşemeyecek hastalar fidye verir.</div>`,
+                    icon: "⚠️", activityType: "none", activityTitle: "", activityData: null
+                },
+                {
+                    title: "Orucu Bozan ve Bozmayan Şeyler",
+                    content: `<p><strong>Bozanlar:</strong> Bilerek yemek-içmek, ilaç almak.</p><p><strong>Bozmayanlar:</strong> Unutarak yemek (hatırlayınca bırakılır), banyo yapmak, koku sürünmek, kan vermek.</p>`,
+                    icon: "🚫", activityType: "ordering", activityTitle: "Doğru Gruba Yerleştir (Zihinden)",
+                    activityData: ["Bilerek yemek yemek (Bozar)", "Unutarak su içmek (Bozmaz)", "İlaç içmek (Bozar)", "Banyo yapmak (Bozmaz)"]
+                }
+            ]
+        },
+        // 2.4 ORUÇ ÇEŞİTLERİ
+        {
+            title: "2.4 Oruç Çeşitleri",
+            slides: [
+                {
+                    title: "Oruç Türleri",
+                    content: `<table class="concept-table"><tr><th>TÜR</th><th>AÇIKLAMA</th></tr><tr><td><strong>FARZ</strong></td><td>Ramazan orucu, Kaza orucu, Kefaret orucu.</td></tr><tr><td><strong>VACİP</strong></td><td>Adak (Nezir) orucu. (Dilek gerçekleşince tutulan).</td></tr><tr><td><strong>SÜNNET</strong></td><td>Muharrem (Aşure), Şevval (6 gün) oruçları.</td></tr></table>`,
+                    icon: "📋", activityType: "matching", activityTitle: "Oruçları Sınıflandır",
+                    activityData: [{term:"Ramazan Orucu", def:"Farz"}, {term:"Adak Orucu", def:"Vacip"}, {term:"Muharrem Orucu", def:"Sünnet"}, {term:"Kaza Orucu", def:"Farz"}]
+                }
+            ]
+        },
+        // 2.5 KAZANDIRDIKLARI
+        {
+            title: "2.5 Orucun Kazandırdıkları",
+            slides: [
+                {
+                    title: "Bireysel ve Toplumsal Faydalar",
+                    content: `<p><strong>Bireysel:</strong> Sabrı öğretir, iradeyi güçlendirir, sağlığı korur ("Oruç tutun, sıhhat bulun"), şükrü artırır.</p><p><strong>Toplumsal:</strong> Yardımlaşmayı (Fitre/Zekat), paylaşmayı (İftar sofraları), empatiyi (Açların halinden anlama) geliştirir.</p>`,
+                    icon: "❤️", activityType: "anagram", activityTitle: "Değerleri Bul",
+                    activityData: [{scrambled:"SABIR", answer:"SABIR", hint:"Orucun yarısıdır"}, {scrambled:"EMPATİ", answer:"EMPATİ", hint:"Başkasını anlama"}, {scrambled:"SAĞLIK", answer:"SAĞLIK", hint:"Vücudun kazancı"}]
+                }
+            ]
+        },
+        // 2.6 İFTAR DUASI
+        {
+            title: "2.6 İftar Duası",
+            slides: [
+                {
+                    title: "İftar Duası ve Anlamı",
+                    content: `<div class="info-card"><span class="arabic-text">اَللّٰهُمَّ لَكَ صُمْتُ وَ بِكَ اٰمَنْتُ وَ عَلَيْكَ تَوَكَّلْتُ وَ عَلٰى رِزْقِكَ اَفْطَرْتُ</span></div><p><strong>Anlamı:</strong> "Allah'ım! Senin rızan için oruç tuttum, sana inandım, sana güvendim. Senin rızkınla orucumu açtım."</p><p>İftar vaktinde yapılan dualar geri çevrilmez.</p>`,
+                    icon: "🤲", activityType: "ordering", activityTitle: "Duayı Sırala",
+                    activityData: ["Allah'ım! Senin rızan için oruç tuttum.", "Sana inandım.", "Sana güvendim.", "Senin rızkınla orucumu açtım."]
+                }
+            ]
+        }
+    ];
+
+    /* --- DURUM YÖNETİMİ --- */
+    let currentUnitIdx = 0;
+    let currentSlideIdx = 0;
+    let currentData = null;
+    let selectedItem = null;
+    let anagramIndex = 0;
+    let currentAnagramState = { word:"", pos:0 };
+
+    /* --- GÖRÜNÜM KONTROLÜ --- */
+    function init() {
+        fitScreen();
+        window.addEventListener('resize', fitScreen);
+    }
+
+    function selectUnit(index) {
+        currentUnitIdx = index;
+        currentSlideIdx = 0;
+        document.getElementById('menu-screen').style.display = 'none';
+        document.getElementById('unit-screen').style.display = 'flex';
+        document.getElementById('unit-title').textContent = units[index].title;
+        renderSlide();
+    }
+
+    function returnToMenu() {
+        document.getElementById('unit-screen').style.display = 'none';
+        document.getElementById('menu-screen').style.display = 'flex';
+    }
+
+    function renderSlide() {
+        const slide = units[currentUnitIdx].slides[currentSlideIdx];
+        const container = document.getElementById('slide-container');
+        document.getElementById('current-page').innerText = currentSlideIdx + 1;
+        document.getElementById('prev-btn').disabled = currentSlideIdx === 0;
+        document.getElementById('next-btn').disabled = currentSlideIdx === units[currentUnitIdx].slides.length - 1;
+
+        let btnHtml = slide.activityType !== "none"
+            ? `<button class="activity-btn" onclick="openActivity()">🎮 ETKİNLİK BAŞLAT</button>` 
+            : `<div style="text-align:center; color:#fbbf24; font-size:1.2rem; margin-top:20px;">Öğrendiklerini Tekrar Et</div>`;
+
+        container.innerHTML = `
+            <div class="text-panel"><h2>${slide.title}</h2>${slide.content}</div>
+            <div class="visual-panel"><div class="visual-icon">${slide.icon}</div>${btnHtml}</div>
+        `;
+    }
+
+    function nextSlide() { if(currentSlideIdx < units[currentUnitIdx].slides.length-1) { currentSlideIdx++; renderSlide(); } }
+    function prevSlide() { if(currentSlideIdx > 0) { currentSlideIdx--; renderSlide(); } }
+
+    /* --- ETKİNLİK MOTORU --- */
+    function openActivity() {
+        const slide = units[currentUnitIdx].slides[currentSlideIdx];
+        const board = document.getElementById('game-board');
+        document.getElementById('activity-overlay').style.display = 'flex';
+        document.getElementById('activity-title').textContent = slide.activityTitle;
+        document.getElementById('feedback').textContent = "";
+        board.innerHTML = "";
+        currentData = slide.activityData;
+
+        if(slide.activityType === 'quiz') loadQuiz(board, currentData);
+        else if(slide.activityType === 'matching') loadMatching(board, currentData);
+        else if(slide.activityType === 'ordering') loadOrdering(board, currentData);
+        else if(slide.activityType === 'anagram') { anagramIndex=0; loadAnagram(board, currentData); }
+    }
+
+    function closeActivity() { document.getElementById('activity-overlay').style.display = 'none'; }
+
+    // 1. QUIZ
+    function loadQuiz(board, data) {
+        const show = (idx) => {
+            if(idx >= data.length) { board.innerHTML="<h2 class='success'>Harika! 🎉</h2>"; return; }
+            let q = data[idx];
+            board.innerHTML = `<h3 style="font-size:1.5rem; text-align:center;">${q.q}</h3><div id="opts" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>`;
+            q.options.forEach(opt => {
+                let btn = document.createElement("div"); btn.className = "quiz-option"; btn.textContent = opt;
+                btn.onclick = function() { 
+                    if(opt === q.a) { this.style.background="#059669"; setTimeout(()=>show(idx+1), 600); }
+                    else { this.style.background="#dc2626"; }
+                };
+                document.getElementById('opts').appendChild(btn);
+            });
+        };
+        show(0);
+    }
+
+    // 2. EŞLEŞTİRME
+    function loadMatching(board, data) {
+        board.innerHTML = `<div class="match-container"><div class="match-col" id="left"></div><div class="match-col" id="right"></div></div>`;
+        let leftCol = document.getElementById('left');
+        let rightCol = document.getElementById('right');
+        let rightItems = [...data].sort(() => Math.random() - 0.5);
+
+        data.forEach(item => {
+            let btn = document.createElement('div'); btn.className = 'match-item'; 
+            btn.textContent = item.term; btn.dataset.pair = item.def;
+            btn.onclick = () => {
+                document.querySelectorAll('#left .match-item').forEach(e=>e.classList.remove('selected'));
+                if(!btn.classList.contains('matched')) { btn.classList.add('selected'); selectedItem = btn; }
+            };
+            leftCol.appendChild(btn);
+        });
+
+        rightItems.forEach(item => {
+            let btn = document.createElement('div'); btn.className = 'match-item'; 
+            btn.textContent = item.def;
+            btn.onclick = () => {
+                if(!selectedItem) return;
+                if(selectedItem.dataset.pair === btn.textContent) {
+                    selectedItem.classList.add('matched'); selectedItem.classList.remove('selected');
+                    btn.classList.add('matched'); selectedItem = null;
+                    if(document.querySelectorAll('#left .matched').length === data.length) document.getElementById('feedback').innerHTML="<span class='success'>Tebrikler!</span>";
+                } else {
+                    btn.classList.add('wrong'); setTimeout(()=>btn.classList.remove('wrong'), 500);
+                }
+            };
+            rightCol.appendChild(btn);
+        });
+    }
+
+    // 3. SIRALAMA
+    function loadOrdering(board, data) {
+        board.innerHTML = `<p style="text-align:center;">Sırasıyla seç:</p><div id="sort-area" class="sort-container"></div>`;
+        let area = document.getElementById('sort-area');
+        let shuffled = [...data].sort(()=>Math.random()-0.5);
+        let step = 0;
+
+        shuffled.forEach(txt => {
+            let div = document.createElement('div'); div.className = 'sort-item'; div.textContent = txt;
+            div.onclick = function() {
+                if(txt === data[step]) {
+                    this.style.background = '#059669'; this.style.pointerEvents='none'; step++;
+                    if(step === data.length) document.getElementById('feedback').innerHTML="<span class='success'>Doğru!</span>";
+                } else {
+                    this.style.background = '#dc2626'; setTimeout(()=>this.style.background='#065f46', 500);
+                }
+            };
+            area.appendChild(div);
+        });
+    }
+
+    // 4. ANAGRAM
+    function loadAnagram(board, data) {
+        if(anagramIndex >= data.length) { board.innerHTML="<h2 class='success'>Bitti! 🎉</h2>"; return; }
+        let item = data[anagramIndex];
+        currentAnagramState = { word: item.answer, pos: 0 };
+        board.innerHTML = `<div class="anagram-container"><div style="margin-bottom:20px; color:#fbbf24;">İpucu: ${item.hint}</div><div id="slots" class="anagram-slots"></div><div id="pool" class="letter-pool"></div></div>`;
+        
+        for(let i=0; i<item.answer.length; i++) {
+            let s = document.createElement('div'); s.className='anagram-slot'; s.id=`s-${i}`; document.getElementById('slots').appendChild(s);
+        }
+        item.scrambled.split('').forEach(char => {
+            let btn = document.createElement('button'); btn.className='letter-btn'; btn.textContent=char;
+            btn.onclick = function() {
+                if(char === currentAnagramState.word[currentAnagramState.pos]) {
+                    document.getElementById(`s-${currentAnagramState.pos}`).textContent = char;
+                    this.classList.add('correct'); currentAnagramState.pos++;
+                    if(currentAnagramState.pos >= item.answer.length) { anagramIndex++; setTimeout(()=>loadAnagram(board, data), 1000); }
+                } else {
+                    this.classList.add('wrong'); setTimeout(()=>this.classList.remove('wrong'), 400);
+                }
+            };
+            document.getElementById('pool').appendChild(btn);
+        });
+    }
+
+    /* --- ÖLÇEKLEME --- */
+    function fitScreen() {
+        if(window.innerWidth > 1024) {
+            const container = document.getElementById('app-container');
+            const scale = Math.min(window.innerWidth / 1540, window.innerHeight / 890);
+            container.style.transform = `scale(${scale})`;
+        } else {
+            document.getElementById('app-container').style.transform = 'none';
+        }
+    }
+
+    // Başlat
+    init();
+</script>
+</body>
+</html>

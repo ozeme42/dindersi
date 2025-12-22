@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hz. Muhammed’in (sav) Erken Hayatı ve Ahlakı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        /* Özel Tailwind renkleri */
+        .color-primary { color: #1D4ED8; }
+        .bg-primary { background-color: #1D4ED8; }
+        .text-accent { color: #FBBF24; }
+        .bg-accent { background-color: #FBBF24; }
+        .text-base { color: #0F172A; }
+        .border-primary { border-color: #1D4ED8; }
+        
+        /* Timeline için özel stil */
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 0.5rem;
+            top: 0.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            z-index: 10;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 1.25rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #CBD5E1;
+        }
+    </style>
+</head>
+<body class="text-base">
+
+    <!-- Plan Summary: The infographic uses a narrative flow: Birth & Context -> Guardianship Timeline -> Character/Ethics (Al-Amin & Hilfulfudul) -> Marriage/Family -> Turning Point (Kaaba Arbitration). Visualizations include a responsive timeline (HTML/CSS), a stacked bar chart (Chart.js) for guardianship periods, and card-based data displays. NO SVG, NO MERMAID JS used. -->
+    
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+
+        <header class="text-center py-10 bg-primary rounded-xl shadow-2xl mb-12">
+            <h1 class="text-3xl md:text-5xl font-black text-white mb-2">Peygamber Efendimizin Erken Hayatı (571-606)</h1>
+            <p class="text-lg md:text-xl text-white/90 max-w-4xl mx-auto">Yetimlikten Ticarete, Kâbe Hakemliğine: Bir Güven Abidesinin Yetişmesi</p>
+        </header>
+
+        <main>
+            
+            <!-- BÖLÜM 1: DOĞUM VE ERKEN YAŞAM KONTEKSTİ -->
+            <section class="mb-16 p-6 bg-white rounded-lg shadow-xl border-t-4 border-accent">
+                <h2 class="text-2xl md:text-3xl font-extrabold color-primary mb-6">Fil Yılı: Dünyaya Geliş</h2>
+                <p class="text-lg text-gray-700 mb-6">Hz. Muhammed (sav), Mekke'nin sosyal ve ahlaki açıdan çalkantılı "Cahiliye" döneminde dünyaya geldi. Doğumundan kısa süre önce gerçekleşen **Fil Vakası** nedeniyle bu yıl, **Fil Yılı** olarak tarihe geçti.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 rounded-lg bg-gray-50 shadow-md">
+                        <div class="text-3xl text-accent font-bold">571</div>
+                        <p class="text-sm font-semibold text-base">Doğum Yılı (Fil Yılı)</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-gray-50 shadow-md">
+                        <div class="text-3xl text-accent font-bold">12</div>
+                        <p class="text-sm font-semibold text-base">Rebîülevvel, Pazartesi</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-gray-50 shadow-md">
+                        <div class="text-3xl text-accent font-bold">yetim</div>
+                        <p class="text-sm font-semibold text-base">Babası Vefat Etti</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-gray-50 shadow-md">
+                        <div class="text-3xl text-accent font-bold">Muhammed</div>
+                        <p class="text-sm font-semibold text-base">Verilen İsim</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BÖLÜM 2: KORUYUCULAR VE ERKEN YILLAR (GRAFİK VE ZAMAN ÇİZELGESİ) -->
+            <section class="mb-16 p-6 bg-white rounded-lg shadow-xl border-l-4 border-primary">
+                <h2 class="text-2xl md:text-3xl font-extrabold color-primary mb-6">Şefkatli Kucaklar: Koruyuculuk Süreçleri</h2>
+                <p class="text-lg text-gray-700 mb-8">Peygamber Efendimiz (sav), henüz doğmadan başlayan yetimliği nedeniyle farklı kişilerin himayesinde büyüdü. Bu süreçler, O'nun karakterinin şekillenmesinde önemli rol oynadı.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- SÜRE GRAFİĞİ -->
+                    <div class="flex flex-col justify-center items-center">
+                        <h3 class="text-xl font-bold text-center text-base mb-4">Himaye Süreleri (Yaş Aralığı)</h3>
+                        <div class="chart-container h-80">
+                            <canvas id="guardianshipChart"></canvas>
+                        </div>
+                        <p class="mt-4 text-sm italic text-gray-500">Not: Amcası Ebu Talib'in himayesi, evlenene kadar (25 yaşına kadar) sürmüştür.</p>
+                    </div>
+
+                    <!-- ZAMAN ÇİZELGESİ -->
+                    <div class="relative pt-4">
+                         <div class="timeline-line"></div>
+                        
+                        <div class="timeline-item mb-8">
+                            <div class="timeline-dot bg-accent border-4 border-white shadow-md"></div>
+                            <div class="bg-primary/10 p-4 rounded-lg shadow-sm">
+                                <span class="font-bold text-base">0-4 Yaş:</span> <span class="color-primary font-semibold">Sütanne Halime</span>
+                                <p class="text-sm text-gray-600">Daha sağlıklı yetişmesi ve Arapça'yı güzel konuşması için şehir dışındaki Beni Sa'd yurdunda kaldı.</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item mb-8">
+                            <div class="timeline-dot bg-accent border-4 border-white shadow-md"></div>
+                            <div class="bg-primary/10 p-4 rounded-lg shadow-sm">
+                                <span class="font-bold text-base">6 Yaş:</span> <span class="color-primary font-semibold">Anne Vefatı</span>
+                                <p class="text-sm text-gray-600">Medine ziyareti dönüşünde annesi Hz. Âmine Ebvâ köyünde vefat etti. Öksüz kaldı.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item mb-8">
+                            <div class="timeline-dot bg-accent border-4 border-white shadow-md"></div>
+                            <div class="bg-primary/10 p-4 rounded-lg shadow-sm">
+                                <span class="font-bold text-base">6-8 Yaş:</span> <span class="color-primary font-semibold">Dedesi Abdülmuttalib</span>
+                                <p class="text-sm text-gray-600">Dedesi büyük bir şefkat gösterdi ancak 8 yaşında o da vefat etti.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item mb-8">
+                            <div class="timeline-dot bg-accent border-4 border-white shadow-md"></div>
+                            <div class="bg-primary/10 p-4 rounded-lg shadow-sm">
+                                <span class="font-bold text-base">8-25 Yaş:</span> <span class="color-primary font-semibold">Amcası Ebu Talib</span>
+                                <p class="text-sm text-gray-600">Evlenene kadar yanında kaldı. Ticaret yolculuklarında deneyim kazandı.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BÖLÜM 3: AHLAKİ KONUMLANMA VE SOSYAL FAALİYETLER -->
+            <section class="mb-16 p-6 bg-white rounded-lg shadow-xl border-r-4 border-primary">
+                <h2 class="text-2xl md:text-3xl font-extrabold color-primary mb-6">Muhammedü'l-Emin ve Erdemlilerin Yemini</h2>
+                <p class="text-lg text-gray-700 mb-8">Gençlik yıllarından itibaren Cahiliye döneminin kötü alışkanlıklarından uzak durdu. Bu eşsiz ahlakı, Mekkelilerin ona olan güvenini "el-Emin" (Güvenilir) lakabıyla tescilledi.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- EL-EMİN KARTI -->
+                    <div class="bg-primary text-white p-6 rounded-xl shadow-lg flex flex-col items-center text-center">
+                        <span class="text-5xl text-accent mb-3">🤝</span>
+                        <h3 class="font-bold text-xl mb-2">Muhammedü'l-Emin</h3>
+                        <p class="text-sm text-white/90">Sözünde durma, dürüstlük, yalan söylememe ve adaletle davranma gibi özellikleriyle Mekke'nin en güvenilir kişisi olarak tanındı.</p>
+                    </div>
+
+                    <!-- CAHİLİYE KARTI -->
+                     <div class="bg-gray-100 text-base p-6 rounded-xl shadow-lg flex flex-col items-center text-center">
+                        <span class="text-5xl text-red-500 mb-3">🚫</span>
+                        <h3 class="font-bold text-xl mb-2">Uzak Durulanlar</h3>
+                        <p class="text-sm text-gray-700">Putperestlik törenlerine katılmadı, putlar adına kesilen kurban etinden yemedi. İçki ve kumardan uzak durdu.</p>
+                    </div>
+                    
+                    <!-- HİLFÜLFUDUL KARTI -->
+                    <div class="bg-accent/20 text-base p-6 rounded-xl shadow-lg flex flex-col items-center text-center">
+                        <span class="text-5xl text-primary mb-3">⚖️</span>
+                        <h3 class="font-bold text-xl mb-2">Hilfülfudul (20 Yaş)</h3>
+                        <p class="text-sm text-gray-700">Haksızlığa uğrayanları koruma ve hakkını geri alma amacıyla kurulan "Erdemliler Topluluğu"na katıldı.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BÖLÜM 4: EVLİLİK VE AİLE HAYATI -->
+            <section class="mb-16 p-6 bg-white rounded-lg shadow-xl border-t-4 border-accent">
+                <h2 class="text-2xl md:text-3xl font-extrabold color-primary mb-6">Hz. Hatice ile Örnek Evlilik</h2>
+                <p class="text-lg text-gray-700 mb-8">Ticaret vesilesiyle yolları kesişen Hz. Hatice (Tâhire) ile kurduğu evlilik, sevgi, saygı ve güvenin en güzel örneği oldu.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-primary/20 p-6 rounded-xl shadow-md">
+                        <h3 class="font-bold text-xl color-primary mb-3">Evlilik Özellikleri</h3>
+                        <ul class="list-disc list-inside space-y-2 text-base">
+                            <li>Evlilik yaşı: <span class="font-semibold">25</span></li>
+                            <li>Süre: <span class="font-semibold">25 yıl</span> sürdü.</li>
+                            <li>Temel: Sevgi, saygı ve **güven** (el-Emin ve Tâhire'nin birleşimi).</li>
+                            <li>İlk doğan çocuk: <span class="font-semibold">Kasım</span> (lakabı Ebülkasım).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="font-bold text-xl text-center color-primary mb-3">Hz. Hatice'den Olan Çocuklar</h3>
+                        <div class="chart-container h-64">
+                            <canvas id="childrenChart"></canvas>
+                        </div>
+                        <p class="text-sm text-center text-gray-500 mt-2">Toplam 6 çocuk (3 erkek, 3 kız). Kızları Zeyneb, Rukiye, Ümmü Gülsüm, Fatıma vefatına tanıklık etmiştir.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- BÖLÜM 5: VAHİY ÖNCESİ ZİRVE NOKTASI -->
+            <section class="mb-16 p-6 bg-white rounded-lg shadow-xl border-l-4 border-accent">
+                <h2 class="text-2xl md:text-3xl font-extrabold color-primary mb-6">Kâbe Hakemliği: Savaşın Önlenmesi (35 Yaş)</h2>
+                <p class="text-lg text-gray-700 mb-8">Kâbe tamiratı sırasında, Hacerülesved'i yerine koyma şerefi yüzünden kabileler arasında çıkabilecek büyük bir savaşı, "el-Emin" lakabıyla tanınan Hz. Muhammed (sav) bilgece çözümüyle önlemiştir.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="md:col-span-1 p-6 bg-accent/20 rounded-xl shadow-lg border-b-4 border-accent flex flex-col justify-center">
+                        <p class="text-5xl font-black text-accent mb-2">35</p>
+                        <p class="text-sm font-semibold text-base">Yaşında Gerçekleşti</p>
+                    </div>
+                     <div class="md:col-span-2 p-6 bg-primary/10 rounded-xl shadow-lg border-b-4 border-primary">
+                        <h3 class="font-bold text-xl color-primary mb-3">Adil Çözüm Yöntemi</h3>
+                        <p class="text-sm text-gray-700">Bir örtü üzerine Hacerülesved'i koydu. Tüm kabile reislerinin örtünün kenarından tutarak taşı kaldırmasını istedi. Böylece şeref tek bir kabileye ait olmadı ve herkesi memnun eden adil bir karar verildi.</p>
+                        <span class="text-4xl block mt-3">🕋</span>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+
+        <footer class="text-center mt-12 py-6 border-t border-gray-300">
+            <p class="text-sm text-gray-500">Bu infografik, Allah Resulü'nün (sav) risalet öncesi hayatındaki temel olayları ve ahlaki duruşunu özetlemektedir.</p>
+        </footer>
+    </div>
+
+    <script>
+        
+        const labelWrapper = (label) => {
+            if (label.length > 16) {
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + word).length > 16 && currentLine.length > 0) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                });
+                if (currentLine.trim()) {
+                    lines.push(currentLine.trim());
+                }
+                return lines;
+            }
+            return label;
+        };
+
+        const guardianshipCtx = document.getElementById('guardianshipChart').getContext('2d');
+        const guardianshipChart = new Chart(guardianshipCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Sütanne Hz. Halime', 'Anne Hz. Âmine', 'Dede Abdülmuttalib', 'Amca Ebu Talib'],
+                datasets: [{
+                    label: 'Yaş Aralığı (Yıl)',
+                    data: [4, 2, 2, 17], 
+                    backgroundColor: ['#FBBF24', '#EF4444', '#6366F1', '#1D4ED8'], 
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, stacked: true },
+                    y: { stacked: true }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) { return label.join(' '); }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const childrenCtx = document.getElementById('childrenChart').getContext('2d');
+        
+        // Etiketleri kurala göre işle
+        const rawChildrenLabels = ['Kasım (Erkek)', 'Abdullah (Erkek)', 'Zeyneb (Kız)', 'Rukiye (Kız)', 'Ümmü Gülsüm (Kız)', 'Fâtıma (Kız)'];
+        const processedChildrenLabels = rawChildrenLabels.map(labelWrapper);
+        
+        const childrenChart = new Chart(childrenCtx, {
+            type: 'doughnut',
+            data: {
+                labels: processedChildrenLabels,
+                datasets: [{
+                    data: [1, 1, 1, 1, 1, 1], // Toplam 6 çocuk
+                    backgroundColor: ['#1D4ED8', '#1D4ED8', '#FBBF24', '#FBBF24', '#FBBF24', '#65A30D'], 
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, i) => {
+                                        const meta = chart.getDatasetMeta(0);
+                                        
+                                        const originalLabel = rawChildrenLabels[i];
+                                        return {
+                                            text: originalLabel,
+                                            fillStyle: data.datasets[0].backgroundColor[i],
+                                            strokeStyle: data.datasets[0].borderColor[i],
+                                            lineWidth: data.datasets[0].borderWidth,
+                                            hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
+                                            index: i
+                                        };
+                                    });
+                                }
+                                return [];
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                const originalIndex = item.dataIndex;
+                                return rawChildrenLabels[originalIndex];
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

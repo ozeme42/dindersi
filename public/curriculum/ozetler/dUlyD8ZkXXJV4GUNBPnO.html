@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamber ve İlahi Kitap İnancı</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4 md:p-8 min-h-screen">
+
+    <!-- Header -->
+    <div class="max-w-5xl mx-auto bg-emerald-700 text-white rounded-xl shadow-lg p-8 mb-8 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <i data-lucide="star" class="absolute -right-20 -top-20 w-[300px] h-[300px]"></i>
+            <i data-lucide="book-open" class="absolute -left-20 bottom-0 w-[200px] h-[200px]"></i>
+        </div>
+        <h1 class="text-3xl md:text-5xl font-bold mb-2 relative z-10">Peygamber ve İlahi Kitap İnancı</h1>
+        <p class="text-emerald-100 text-lg relative z-10">İnsanlara Rehber: Peygamberler</p>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Sol Kolon - Temel Bilgiler -->
+        <div class="lg:col-span-1 space-y-6">
+            
+            <!-- Tanım Kartı -->
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-emerald-500">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i data-lucide="book-open" class="text-emerald-600"></i> Temel Kavramlar
+                </h2>
+                <div class="space-y-4">
+                    <div class="bg-slate-50 p-3 rounded-lg">
+                        <span class="font-bold text-emerald-700 block">Peygamber (Farsça)</span>
+                        <span class="text-sm">Haber getiren, elçi.</span>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-lg">
+                        <span class="font-bold text-emerald-700 block">Vahiy</span>
+                        <span class="text-sm">Allah'ın emir ve yasaklarını peygamberlerine bildirmesi.</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-blue-50 p-2 rounded text-center">
+                            <span class="font-bold text-blue-800 block text-sm">Resul</span>
+                            <span class="text-xs">Kendisine kitap verilen elçi.</span>
+                        </div>
+                        <div class="bg-orange-50 p-2 rounded text-center">
+                            <span class="font-bold text-orange-800 block text-sm">Nebi</span>
+                            <span class="text-xs">Haberci, kendisine kitap verilmeyen.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İmanın Şartı -->
+            <div class="bg-emerald-800 text-white p-6 rounded-xl shadow-md">
+                <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                    <i data-lucide="star" class="text-yellow-400 fill-current"></i>
+                    İmanın Şartı
+                </h3>
+                <p class="text-sm leading-relaxed opacity-90">
+                    "O'nun peygamberlerinden hiçbirini diğerinden ayırt etmeyiz." (Bakara, 285)
+                    <br/><br/>
+                    İlk Peygamber: <strong>Hz. Âdem</strong><br/>
+                    Son Peygamber: <strong>Hz. Muhammed (sav)</strong>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Orta Kolon - Özellikler ve Görevler -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Peygamberlerin Sıfatları (JS ile doldurulacak) -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-b pb-2">
+                    <i data-lucide="user" class="text-emerald-600"></i> Peygamberlerin Sıfatları (Özellikleri)
+                </h2>
+                <div id="attributes-container" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <!-- İçerik Script ile gelecek -->
+                </div>
+            </div>
+
+            <!-- Peygamberlerin Görevleri (JS ile doldurulacak) -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 border-b pb-2">
+                    <i data-lucide="zap" class="text-emerald-600"></i> Peygamberlerin Görevleri
+                </h2>
+                <div id="duties-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- İçerik Script ile gelecek -->
+                </div>
+            </div>
+
+            <!-- Mucizeler (JS ile doldurulacak) -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 border-b pb-2">
+                    <i data-lucide="lightbulb" class="text-yellow-500"></i> Mucizeler
+                </h2>
+                <p class="text-sm text-slate-600 mb-4 italic">
+                    İnkarcılara meydan okumak ve aciz bırakmak için Allah'ın izniyle gösterilen olağanüstü olaylar.
+                </p>
+                <div id="miracles-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- İçerik Script ile gelecek -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Alt Bölüm - Kur'an'da Adı Geçen Peygamberler -->
+    <div class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-emerald-800">
+            <i data-lucide="users" class="text-emerald-600"></i> Kur'an'da Adı Geçen 25 Peygamber
+        </h2>
+        <div id="prophets-container" class="flex flex-wrap gap-2 justify-center">
+            <!-- İçerik Script ile gelecek -->
+        </div>
+        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-3">
+            <i data-lucide="info" class="text-yellow-600 flex-shrink-0 mt-0.5" size="18"></i>
+            <p class="text-xs text-yellow-800">
+                <strong>Not:</strong> Hz. Lokman, Hz. Üzeyir ve Hz. Zülkarneyn'in isimleri Kur'an'da geçmesine rağmen peygamber olup olmadıkları konusunda kesin bilgi yoktur.
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript Verileri ve Render Mantığı -->
+    <script>
+        // Veriler
+        const prophets = [
+            "Hz. Âdem", "Hz. İdris", "Hz. Nuh", "Hz. Hud", "Hz. Salih", 
+            "Hz. İbrahim", "Hz. Lut", "Hz. İsmail", "Hz. İshak", "Hz. Yakub", 
+            "Hz. Yusuf", "Hz. Eyyüb", "Hz. Şuayb", "Hz. Musa", "Hz. Harun", 
+            "Hz. Davud", "Hz. Süleyman", "Hz. İlyas", "Hz. Elyesa", "Hz. Zülkifl", 
+            "Hz. Yunus", "Hz. Zekeriyya", "Hz. Yahya", "Hz. İsa", "Hz. Muhammed (sav)"
+        ];
+
+        const attributes = [
+            { name: "Sıdk", meaning: "Doğruluk", desc: "Dürüst ve doğru sözlü olmak.", icon: "check-circle" },
+            { name: "Emanet", meaning: "Güvenilirlik", desc: "Emin ve güvenilir olmak.", icon: "shield" },
+            { name: "Fetanet", meaning: "Akıl", desc: "Akıllı ve zeki olmak, ikna kabiliyeti.", icon: "lightbulb" },
+            { name: "İsmet", meaning: "Günahsızlık", desc: "Günahtan korunmuş olmak.", icon: "heart" },
+            { name: "Tebliğ", meaning: "İletmek", desc: "Vahyi eksiksiz iletmek.", icon: "message-circle" },
+        ];
+
+        const duties = [
+            { title: "Tebliğ", text: "Allah'tan aldığı vahyi eksiksiz bildirmek.", color: "bg-blue-100 text-blue-800" },
+            { title: "Tebyin", text: "Emir ve yasakları açıklamak.", color: "bg-green-100 text-green-800" },
+            { title: "Temsil", text: "İnsanlara örnek olmak (Üsve-i Hasene).", color: "bg-purple-100 text-purple-800" },
+            { title: "İnzar", text: "Kötülüklere karşı uyarmak.", color: "bg-red-100 text-red-800" },
+            { title: "Tebşir", text: "İyileri müjdelemek.", color: "bg-yellow-100 text-yellow-800" },
+            { title: "Tezkiye", text: "Kötü huylardan arındırmak.", color: "bg-teal-100 text-teal-800" }
+        ];
+
+        const miracles = [
+            { prophet: "Hz. İbrahim", event: "Ateşin yakmaması" },
+            { prophet: "Hz. Musa", event: "Asasının yılan olması" },
+            { prophet: "Hz. İsa", event: "Ölüleri diriltmesi" },
+            { prophet: "Hz. Salih", event: "Kayadan deve çıkarması" },
+            { prophet: "Hz. Süleyman", event: "Hayvanlarla konuşması" },
+            { prophet: "Hz. Muhammed (sav)", event: "En büyük mucizesi Kur'an-ı Kerim" },
+        ];
+
+        // Render Fonksiyonları
+        
+        // 1. Sıfatlar
+        const attrsContainer = document.getElementById('attributes-container');
+        attributes.forEach(attr => {
+            const div = document.createElement('div');
+            div.className = "flex flex-col items-center text-center p-3 rounded-lg bg-slate-50 hover:bg-emerald-50 transition-colors border border-slate-100";
+            div.innerHTML = `
+                <div class="bg-white p-2 rounded-full shadow-sm mb-2 text-emerald-600">
+                    <i data-lucide="${attr.icon}" width="20" height="20"></i>
+                </div>
+                <h4 class="font-bold text-emerald-800 text-sm">${attr.name}</h4>
+                <span class="text-xs font-semibold text-slate-500 mb-1">${attr.meaning}</span>
+                <p class="text-[10px] leading-tight text-slate-600">${attr.desc}</p>
+            `;
+            attrsContainer.appendChild(div);
+        });
+
+        // 2. Görevler
+        const dutiesContainer = document.getElementById('duties-container');
+        duties.forEach(duty => {
+            const div = document.createElement('div');
+            div.className = `${duty.color} p-4 rounded-lg relative overflow-hidden group`;
+            div.innerHTML = `
+                <div class="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2">
+                    <i data-lucide="star" width="40" height="40"></i>
+                </div>
+                <h3 class="font-bold text-lg mb-1">${duty.title}</h3>
+                <p class="text-xs font-medium opacity-90">${duty.text}</p>
+            `;
+            dutiesContainer.appendChild(div);
+        });
+
+        // 3. Mucizeler
+        const miraclesContainer = document.getElementById('miracles-container');
+        miracles.forEach(m => {
+            const div = document.createElement('div');
+            div.className = "flex items-center gap-3 p-3 bg-slate-50 rounded-lg border-l-4 border-yellow-400";
+            div.innerHTML = `
+                <div class="w-2 h-2 rounded-full bg-yellow-400 flex-shrink-0"></div>
+                <div class="text-sm">
+                    <span class="font-bold text-slate-800">${m.prophet}:</span> <span class="text-slate-600">${m.event}</span>
+                </div>
+            `;
+            miraclesContainer.appendChild(div);
+        });
+
+        // 4. Peygamberler Listesi
+        const prophetsContainer = document.getElementById('prophets-container');
+        prophets.forEach((name, index) => {
+            const span = document.createElement('span');
+            // İlk ve son peygamber için özel stil
+            const isFirstOrLast = index === 0 || index === prophets.length - 1;
+            span.className = `px-3 py-1.5 rounded-full text-sm font-medium border ${
+                isFirstOrLast 
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm transform scale-105' 
+                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-emerald-50 hover:border-emerald-200 transition-colors'
+            }`;
+            span.textContent = name;
+            prophetsContainer.appendChild(span);
+        });
+
+        // İkonları oluştur
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -14,7 +14,9 @@ import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
 export function YazilacaklarClientPage() {
     const params = useParams();
-    const [courseId, unitId, topicId] = params.slug as string[];
+    const courseId = params.courseId as string;
+    const unitId = params.unitId as string;
+    const topicId = params.topicId as string;
 
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
     const [topicTitle, setTopicTitle] = useState<string>('');
@@ -48,7 +50,7 @@ export function YazilacaklarClientPage() {
             // manifest.json'dan konu adını al
             const manifestRes = await fetch('/curriculum/manifest.json');
             if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
-            const manifestData = await manifestRes.json();
+            const manifestData = await res.json();
             
             let foundTopic = null;
             for (const group of manifestData.classGroups) {
@@ -186,9 +188,18 @@ export function YazilacaklarClientPage() {
     );
     
     return (
-        <div ref={mainContentRef} className="w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden">
+        <div 
+            ref={mainContentRef} 
+            className={cn(
+                "w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden",
+                isFullscreen ? "p-4" : "pb-12"
+            )}
+        >
              {!isFullscreen && (
-                <div className="fixed inset-0 pointer-events-none z-0"><div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-cyan-600/5 rounded-full blur-[100px]" /><div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-violet-600/5 rounded-full blur-[100px]" /></div>
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-cyan-600/5 rounded-full blur-[100px]" />
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-violet-600/5 rounded-full blur-[100px]" />
+                </div>
             )}
             <div className="sticky top-0 z-30 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all pt-4">
                 <div className="container mx-auto px-4 pb-4">
@@ -196,7 +207,11 @@ export function YazilacaklarClientPage() {
                         <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topicTitle || 'Yazılacaklar'}</h1>
                         <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
                             <div className="flex items-center gap-2 min-w-max px-1">
-                                <div className="flex items-center bg-slate-900/80 border border-white/10 rounded-xl p-1"><Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Minus className="h-4 w-4"/></Button><span className="text-xs font-mono text-slate-500 w-8 text-center">{Math.round(fontSize * 100)}%</span><Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Plus className="h-4 w-4"/></Button></div>
+                                <div className="flex items-center bg-slate-900/80 border border-white/10 rounded-xl p-1">
+                                    <Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Minus className="h-4 w-4"/></Button>
+                                    <span className="text-xs font-mono text-slate-500 w-8 text-center">{Math.round(fontSize * 100)}%</span>
+                                    <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Plus className="h-4 w-4"/></Button>
+                                </div>
                                 <div className="w-px h-6 bg-white/10 mx-1" />
                                 <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={isDownloading} className="bg-slate-900/80 border-white/10 text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors h-10 px-4 rounded-xl gap-2">{isDownloading ? <Loader2 className="h-4 w-4 animate-spin"/> : <Download className="h-4 w-4" />}<span className="hidden sm:inline">PDF İndir</span></Button>
                                 <FullscreenToggle elementRef={mainContentRef} className="bg-slate-900/80 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 h-10 w-10 rounded-xl" />

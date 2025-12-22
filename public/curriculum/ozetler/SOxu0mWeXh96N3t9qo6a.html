@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Siyer Kronolojisi (610-632)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .timeline-wrapper {
+            position: relative;
+            padding-left: 20px;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 22px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #94a3b8; /* Slate-400 */
+            z-index: 5;
+        }
+        .timeline-event-card {
+            position: relative;
+            margin-left: 50px;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            z-index: 10;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -32px;
+            top: 1.75rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 9999px;
+            background-color: #3b82f6; /* Blue-500 (Mecca) */
+            border: 5px solid #dbeafe;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 0 4px #3b82f6;
+        }
+
+        /* Medine Yılları için özel nokta stili */
+        .dot-medina {
+            background-color: #10b981; /* Emerald-500 */
+            box-shadow: 0 0 0 4px #10b981;
+        }
+
+        @media (min-width: 1024px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .timeline-event-card {
+                width: 48%;
+                margin-left: 55%;
+            }
+            .timeline-event-card:nth-child(odd) {
+                margin-left: 55%;
+            }
+            .timeline-event-card:nth-child(even) {
+                margin-left: 0;
+                margin-right: 55%;
+                text-align: right;
+            }
+            .timeline-event-card:nth-child(even) .timeline-dot {
+                left: initial;
+                right: -32px;
+            }
+
+            .timeline-dot {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Başlık Bölümü -->
+        <header class="text-center py-8 md:py-12 bg-white rounded-xl shadow-2xl mb-12 border-b-4 border-blue-500">
+            <h1 class="text-3xl md:text-5xl font-black text-gray-800 mb-2">Peygamberimiz'in Siyer Kronolojisi</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto mt-3">Tüm Dönemler: Mekke (610-622) ve Medine (622-632)</p>
+        </header>
+
+        <!-- Ana İçerik: Dikey Zaman Çizelgesi -->
+        <div class="timeline-wrapper">
+            <div class="timeline-line"></div>
+            
+            <!-- MEKKE YILLARI BAŞLANGICI -->
+            <h2 class="text-center text-2xl font-bold text-blue-700 bg-blue-100 p-3 rounded-xl mb-6 shadow-md">I. MEKKE YILLARI (610 - 622)</h2>
+
+            <!-- 1. İlk Vahiy -->
+            <div class="timeline-event-card" id="vahiy">
+                <div class="timeline-dot">1</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">610: İlk Vahiy ve Nübüvvetin Başlangıcı</h3>
+                <p class="text-gray-700 mb-3">Hz. Muhammed (sav) 40 yaşında, Hira Mağarası'nda iken Alak Suresi'nin ilk 5 ayeti indi. İlk desteği **Hz. Hatice (ra)** verdi.</p>
+            </div>
+
+            <!-- 2. Gizli Davet -->
+            <div class="timeline-event-card" id="gizli">
+                <div class="timeline-dot">2</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">610-613: Gizli Davet Dönemi (3 Yıl)</h3>
+                <p class="text-gray-700 mb-3">Tebliğ görevi, ilk üç yıl gizli sürdürüldü. Bu dönemin merkezi **Dârülerkam** oldu. İlk Müslümanlar: Hz. Hatice, Hz. Ali, Zeyd b. Harise, Hz. Ebu Bekir.</p>
+            </div>
+
+            <!-- 3. Açık Davet -->
+            <div class="timeline-event-card" id="acik">
+                <div class="timeline-dot">3</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">613: Davetin Açıklanması ve İlk Tepkiler</h3>
+                <p class="text-gray-700 mb-3">Hicr Suresi, 94. ayetle davet açıktan ilan edildi. Müşriklerin şiddetli tepkisi ve düşmanlığı başladı.</p>
+            </div>
+
+            <!-- 4. Baskı ve Şehitler -->
+            <div class="timeline-event-card" id="baski">
+                <div class="timeline-dot">4</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">Zulüm ve İlk Şehadetler</h3>
+                <p class="text-gray-700 mb-3">Kimsesiz Müslümanlar ağır baskılara maruz kaldı. **Sümeyye (ra)** ilk şehit oldu. Hz. Ebu Bekir, Bilal-i Habeşi gibi köleleri özgürleştirdi.</p>
+            </div>
+
+            <!-- 5. Habeşistan Hicreti -->
+            <div class="timeline-event-card" id="habes">
+                <div class="timeline-dot">5</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">615: İlk Hicret (Habeşistan)</h3>
+                <p class="text-gray-700 mb-3">İşkencelerden korunmak amacıyla Müslümanlar, adil hükümdar Necâşî'nin olduğu Habeşistan'a göç etti.</p>
+            </div>
+
+            <!-- 6. Güçlenme -->
+            <div class="timeline-event-card" id="guc">
+                <div class="timeline-dot">6</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">616: İslam'ın İki Güçlü Sütunu: Hamza ve Ömer</h3>
+                <p class="text-gray-700 mb-3">Hz. Hamza (ra) ve Hz. Ömer (ra)'in Müslüman olmasıyla Müslümanların gücü ve morali arttı. Hz. Ömer'e **"Fâruk"** lakabı verildi.</p>
+            </div>
+
+            <!-- 7. Ambargo (Boykot) -->
+            <div class="timeline-event-card" id="ambargo">
+                <div class="timeline-dot">7</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">616-619: Haşimoğullarına Boykot (3 Yıl)</h3>
+                <p class="text-gray-700 mb-3">Müşrikler, Haşimoğullarını ekonomik ve sosyal yönden izole etti. Büyük açlık ve zorluklar yaşandı, ancak Müslümanlar daha da kenetlenerek çıktı.</p>
+            </div>
+
+            <!-- 8. Hüzün Yılı -->
+            <div class="timeline-event-card" id="huzun">
+                <div class="timeline-dot">8</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">620: Hüzün Yılı (Ammu'l-Hüzn)</h3>
+                <p class="text-gray-700 mb-3">Hz. Peygamber'in (sav) en büyük iki destekçisi, **Amcası Ebu Talib** ve eşi **Hz. Hatice (ra)** vefat etti. Müşriklerin baskısı arttı.</p>
+            </div>
+
+            <!-- 9. Taif Yolculuğu ve Merhamet Duası -->
+            <div class="timeline-event-card" id="taif">
+                <div class="timeline-dot">9</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">620: Taif Yolculuğu ve İlahi Merhamet</h3>
+                <p class="text-gray-700 mb-3">Himaye arayışıyla Taif'e giden Hz. Peygamber, burada taşlanarak kötü muamele gördü. Peygamberimiz, zulme uğrayanlara beddua etmek yerine onların soyundan Müslümanlar çıkması için dua etti.</p>
+            </div>
+
+            <!-- 10. İsra ve Miraç -->
+            <div class="timeline-event-card" id="isra_mirac">
+                <div class="timeline-dot">10</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">621: İsra ve Miraç Mucizesi</h3>
+                <p class="text-gray-700 mb-3">Mescid-i Haram'dan Mescid-i Aksa'ya (İsra) ve oradan göklere (Miraç) yükseltildi. **Beş vakit namaz** bu gecede farz kılındı.</p>
+            </div>
+
+            <!-- 11. Akabe Biatları -->
+            <div class="timeline-event-card" id="akabe">
+                <div class="timeline-dot">11</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">621-622: Akabe Biatları (Hicretin Temeli)</h3>
+                <p class="text-gray-700 mb-3">Medine'den (Yesrib) gelen Müslüman gruplarla (Ensar) siyasi ve askeri himaye antlaşmaları yapıldı. **İkinci Akabe Biatı** ile Medine'ye hicretin temeli atıldı.</p>
+            </div>
+
+            <!-- 12. Mekke'den Hicret Başlangıcı -->
+            <div class="timeline-event-card" id="hicret_baslangic">
+                <div class="timeline-dot">12</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">622: Müslümanların Yesrib'e (Medine) Hicreti</h3>
+                <p class="text-gray-700 mb-3">Mekkeli Müslümanlar, müşriklerin zulmünden kurtulmak için evlerini ve mallarını bırakarak Yesrib'e göç etmeye başladı. **Muhacir** Suheyb b. Sinan'ın malından vazgeçerek hicreti bu dönemin en büyük fedakarlık örneğidir.</p>
+            </div>
+
+            <!-- 13. Hz. Peygamber'in Hicreti ve Sevr Mağarası -->
+            <div class="timeline-event-card" id="peygamber_hicret">
+                <div class="timeline-dot">13</div>
+                <h3 class="text-xl font-extrabold text-blue-600 mb-2">622 (R. Evvel): Hz. Peygamber'in Yolculuğu</h3>
+                <p class="text-gray-700 mb-3">Müşriklerin öldürme planı sonrası Hz. Ebu Bekir (ra) ile Mekke'den ayrıldı. Üç gün **Sevr Mağarası'nda** gizlendiler. Hz. Peygamber (sav) arkadaşına: **"Üzülme çünkü Allah bizimle beraberdir."** buyurdu (Tevbe, 40).</p>
+            </div>
+
+            <!-- MEDİNE YILLARI BAŞLANGICI -->
+            <h2 class="text-center text-2xl font-bold text-emerald-700 bg-emerald-100 p-3 rounded-xl mb-6 shadow-md mt-8">II. MEDİNE YILLARI (622 - 632)</h2>
+
+            <!-- 14. Medine'ye Varış ve Misafirlik -->
+            <div class="timeline-event-card" id="medine_varis">
+                <div class="timeline-dot dot-medina">14</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">622 (H. 1): Yesrib'den Medine'ye</h3>
+                <p class="text-gray-700 mb-3">Yesrib halkının büyük coşkusuyla karşılanan Hz. Peygamber (sav), devesinin çöktüğü yere en yakın ev olan **Ebu Eyyüb el-Ensârî'nin** evine misafir oldu. Şehrin adı **Medinetü'l-Münevvere** (Nurlu Şehir) oldu.</p>
+            </div>
+
+            <!-- 15. Mescid-i Nebi ve Kardeşlik -->
+            <div class="timeline-event-card" id="muahat">
+                <div class="timeline-dot dot-medina">15</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">622: Mescid-i Nebi'nin İnşası ve Muâhât</h3>
+                <p class="text-gray-700 mb-3">Devenin çöktüğü boş arsaya **Mescid-i Nebi** inşa edildi. Hemen ardından, inanç uğruna her şeyini bırakan **Muhacir** ve onları evlerinde ağırlayan **Ensar** arasında eşsiz bir **İman Kardeşliği (Muâhât)** ilan edildi.</p>
+            </div>
+
+            <!-- 16. Medine Sözleşmesi -->
+            <div class="timeline-event-card" id="sozlesme">
+                <div class="timeline-dot dot-medina">16</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">623: Medine Sözleşmesi (Medine Vesikası)</h3>
+                <p class="text-gray-700 mb-3">Şehirdeki Müslüman, müşrik ve Yahudilerle hukukî, malî ve askerî düzenlemeler içeren bir sözleşme imzalandı. Bu sözleşme ile Hz. Peygamber (sav) **devlet başkanı** olarak kabul edildi ve ilk İslam devletinin temelleri atıldı.</p>
+            </div>
+
+            <!-- 17. Ezan ve Kıble Değişimi -->
+            <div class="timeline-event-card" id="kible">
+                <div class="timeline-dot dot-medina">17</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">624 (H. 2): İlk Ezan ve Kıblenin Değişmesi</h3>
+                <p class="text-gray-700 mb-3">Namaz vakitlerini bildirmek için **Ezan** uygulaması başladı (İlk müezzin: Bilal Habeşi). Aynı yıl, namaz kılınan yön, Mescid-i Aksa'dan (Kudüs) **Mescid-i Haram'a (Kâbe)** çevrildi. (Mescid-i Kıbleteyn olayı).</p>
+            </div>
+
+            <!-- 18. Büyük Gazveler (Bedir, Uhud, Hendek) -->
+            <div class="timeline-event-card" id="gazveler">
+                <div class="timeline-dot dot-medina">18</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">624-627 (H. 2-5): İlk Savunma Savaşları</h3>
+                <p class="text-gray-700 mb-3">Hz. Peygamber, müşriklerin saldırgan tutumlarından dolayı savaşları son çare olarak gördü. Bu dönemde; **Bedir (H. 2), Uhud (H. 3)** ve **Hendek (H. 5)** gibi önemli gazveler (Peygamberin bizzat katıldığı seferler) gerçekleşti.</p>
+            </div>
+
+            <!-- 19. Hudeybiye Antlaşması -->
+            <div class="timeline-event-card" id="hudeybiye">
+                <div class="timeline-dot dot-medina">19</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">628 (H. 6): Hudeybiye Antlaşması</h3>
+                <p class="text-gray-700 mb-3">Mekke'yi ziyaret etmek isteyen Müslümanlarla müşrikler arasında antlaşma imzalandı. Antlaşmanın maddeleri Müslümanların aleyhine gibi görünse de, İslam devletinin **resmen tanınmasını** sağladı ve barış ortamını oluşturdu.</p>
+            </div>
+
+            <!-- 20. Mekke'nin Fethi -->
+            <div class="timeline-event-card" id="feth">
+                <div class="timeline-dot dot-medina">20</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">630 (H. 8): Mekke'nin Fethi ve Genel Af</h3>
+                <p class="text-gray-700 mb-3">Müşriklerin Hudeybiye Antlaşması'nı ihlal etmesi üzerine Mekke, kimseye zarar verilmeden fethedildi. Hz. Peygamber Kâbe'yi putlardan temizledi ve tüm Mekkeliler için **genel af** ilan etti.</p>
+            </div>
+
+            <!-- 21. Genişleme ve Tebliğ -->
+            <div class="timeline-event-card" id="teblig">
+                <div class="timeline-dot dot-medina">21</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">630-631 (H. 8-9): İslam'ın Yayılışı</h3>
+                <p class="text-gray-700 mb-3">Fetih sonrası İslam daha geniş coğrafyaya yayıldı. Hz. Peygamber (sav) çevredeki devlet başkanlarına ve kabile reislerine **davet mektupları** gönderdi (Bizans, İran, Mısır vb.).</p>
+            </div>
+
+            <!-- 22. Veda Haccı ve Vefat -->
+            <div class="timeline-event-card" id="vefat">
+                <div class="timeline-dot dot-medina">22</div>
+                <h3 class="text-xl font-extrabold text-emerald-600 mb-2">632 (H. 10/11): Veda Haccı ve Vefat</h3>
+                <p class="text-gray-700 mb-3">Hz. Peygamber, on binlerce Müslüman ile ilk ve son haccını yaparak **Veda Hutbesi'ni** okudu. Bu hutbe, insan haklarının temel özelliklerini taşır. Kısa süre sonra Medine'de vefat etti ve **Ravza-i Mutahhara'ya** defnedildi.</p>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 py-6 border-t border-gray-300">
+            <p class="text-sm text-gray-500">Bu infografik, Peygamber Efendimiz'in (sav) tüm siyerini (Mekke ve Medine) kronolojik olarak özetlemektedir.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

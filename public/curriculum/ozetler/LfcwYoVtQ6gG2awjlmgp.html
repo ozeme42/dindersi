@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bir Peygamber Tanıyorum: Hz. İsmail (as)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Cinzel:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-title { font-family: 'Cinzel', serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Sekme Yönetimi */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Scrollbar Gizleme */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-[#fdf6e3] text-slate-800 selection:bg-amber-200">
+
+    <!-- Header Section -->
+    <header class="bg-amber-900 text-white py-12 px-4 shadow-xl relative overflow-hidden border-b-4 border-amber-700">
+        <!-- Desert Pattern Background -->
+        <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/sandpaper.png');"></div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-block bg-white/10 px-4 py-1 rounded-full text-amber-200 text-sm font-semibold mb-4 border border-white/20">
+                PEYGAMBERLER TARİHİ
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2 tracking-wider font-title">HZ. İSMAİL (A.S)</h1>
+            <p class="text-amber-100/80 text-lg font-light">"Teslimiyet ve Sabır Peygamberi"</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="sticky top-0 z-50 bg-[#fdf6e3]/95 backdrop-blur shadow-sm border-b border-amber-200">
+        <div class="max-w-6xl mx-auto flex overflow-x-auto justify-start md:justify-center p-2 gap-2 md:gap-4 no-scrollbar">
+            <button onclick="openTab('kimdir', this)" class="tab-btn active flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold bg-amber-700 text-white shadow-md transition-all whitespace-nowrap border border-amber-800">
+                <i data-lucide="user"></i> Kimdir?
+            </button>
+            <button onclick="openTab('zemzem', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold bg-white text-amber-900 hover:bg-amber-50 transition-all whitespace-nowrap border border-amber-200">
+                <i data-lucide="droplets"></i> Hicret & Zemzem
+            </button>
+            <button onclick="openTab('kurban', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold bg-white text-amber-900 hover:bg-amber-50 transition-all whitespace-nowrap border border-amber-200">
+                <i data-lucide="heart-handshake"></i> Büyük İmtihan
+            </button>
+            <button onclick="openTab('kabe', this)" class="tab-btn flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold bg-white text-amber-900 hover:bg-amber-50 transition-all whitespace-nowrap border border-amber-200">
+                <i data-lucide="home"></i> Kabe'nin İnşası
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8 min-h-[600px]">
+
+        <!-- TAB 1: KİMDİR? -->
+        <div id="kimdir" class="tab-content active animate-fade-in-up">
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <!-- Sol Taraf: Kimlik Kartı -->
+                <div class="md:col-span-1">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100 text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-amber-600"></div>
+                        <div class="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-700 border-4 border-white shadow">
+                            <i data-lucide="scroll" size="40"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-amber-900 font-title mb-1">Hz. İsmail</h2>
+                        <p class="text-slate-500 text-sm mb-6">Allah'ın Peygamberi</p>
+                        
+                        <div class="space-y-4 text-left">
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                                <i data-lucide="user-check" class="text-amber-600"></i>
+                                <div>
+                                    <div class="text-xs text-slate-400 font-bold uppercase">Babası</div>
+                                    <div class="font-semibold text-slate-700">Hz. İbrahim (as)</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                                <i data-lucide="heart" class="text-amber-600"></i>
+                                <div>
+                                    <div class="text-xs text-slate-400 font-bold uppercase">Annesi</div>
+                                    <div class="font-semibold text-slate-700">Hz. Hacer (ra)</div>
+                                </div>
+                            </div>
+                             <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                                <i data-lucide="map-pin" class="text-amber-600"></i>
+                                <div>
+                                    <div class="text-xs text-slate-400 font-bold uppercase">Yaşadığı Yer</div>
+                                    <div class="font-semibold text-slate-700">Mekke</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sağ Taraf: Detaylı Bilgiler -->
+                <div class="md:col-span-2 space-y-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-md border-l-4 border-amber-500">
+                        <h3 class="text-xl font-bold text-amber-800 mb-4 flex items-center gap-2">
+                            <i data-lucide="book-open"></i> Hayatından Notlar
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-1">1</span>
+                                <p class="text-slate-700">Filistin bölgesinde doğmuş, bebekken Mekke'ye hicret etmiştir.</p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-1">2</span>
+                                <p class="text-slate-700">Kendisine ayrı bir ilahi kitap verilmemiştir.</p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-1">3</span>
+                                <p class="text-slate-700">Babası Hz. İbrahim ile birlikte Kabe'yi inşa etmiş ve ilk tavafı yapmışlardır.</p>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="bg-amber-100 text-amber-800 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-1">4</span>
+                                <p class="text-slate-700 font-semibold text-amber-900">Son peygamber Hz. Muhammed (sav) onun soyundan gelmektedir.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Kardeş Bilgisi -->
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 flex items-center gap-4">
+                        <div class="bg-blue-100 p-3 rounded-full text-blue-600 shrink-0">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-900">Bir Kardeşi Vardır</h4>
+                            <p class="text-blue-800/80 text-sm">Hz. İsmail biraz büyüdüğünde Hz. Sare'den "İshak" isminde bir kardeşi dünyaya gelmiştir. O da bir peygamberdir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: HİCRET VE ZEMZEM -->
+        <div id="zemzem" class="tab-content animate-fade-in-up">
+            <div class="relative max-w-3xl mx-auto space-y-12">
+                <!-- Timeline Çizgisi -->
+                <div class="absolute left-6 top-6 bottom-6 w-0.5 bg-amber-200"></div>
+
+                <!-- Olay 1 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-3 top-0 w-6 h-6 bg-amber-500 rounded-full border-4 border-[#fdf6e3] z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-100">
+                        <h3 class="text-lg font-bold text-amber-900 mb-2">Issız Çöle Yolculuk</h3>
+                        <p class="text-slate-600">
+                            Hz. İbrahim, Allah'ın emriyle eşi Hz. Hacer ve oğlu İsmail'i, o zamanlar hiçbir insanın, ekinin ve suyun bulunmadığı Mekke vadisine bıraktı.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Olay 2 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-3 top-0 w-6 h-6 bg-amber-500 rounded-full border-4 border-[#fdf6e3] z-10"></div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-amber-100">
+                        <h3 class="text-lg font-bold text-amber-900 mb-2">Çaresizlik ve Arayış (Say)</h3>
+                        <p class="text-slate-600 mb-4">
+                            Yanlarındaki su bitince Hz. Hacer, oğlu susuzluktan ölecek korkusuyla Safa ve Merve tepeleri arasında 7 kez koşuşturdu.
+                        </p>
+                        <div class="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-200 text-sm">
+                            <span class="font-bold text-slate-700">Safa</span>
+                            <i data-lucide="move-horizontal" class="text-slate-400"></i>
+                            <span class="font-bold text-slate-700">Merve</span>
+                            <span class="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded">7 Kez</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2 italic">*Bu olay Hac ve Umre'deki "Say" ibadetinin kökenidir.</p>
+                    </div>
+                </div>
+
+                <!-- Olay 3 -->
+                <div class="relative pl-16">
+                    <div class="absolute left-1 top-0 w-10 h-10 bg-cyan-500 rounded-full border-4 border-[#fdf6e3] z-10 flex items-center justify-center text-white shadow-lg">
+                        <i data-lucide="droplets" size="18"></i>
+                    </div>
+                    <div class="bg-cyan-50 p-6 rounded-2xl shadow-lg border-2 border-cyan-100">
+                        <h3 class="text-xl font-bold text-cyan-800 mb-2">Zemzem Mucizesi</h3>
+                        <p class="text-cyan-900/80 mb-3">
+                            Merve tepesine gelen Hz. Hacer, Hz. İsmail'in ayağının (veya Cebrail'in kanadının) vurduğu yerden suyun kaynadığını gördü.
+                        </p>
+                        <div class="bg-white/60 p-3 rounded-lg text-cyan-900 text-sm italic border border-cyan-200">
+                            "Zemzem" (Dur, dur!) diyerek suyun etrafını çevirdi. Bu su sayesinde bölgeye insanlar yerleşti ve Mekke şehri oluştu.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: BÜYÜK İMTİHAN (KURBAN) -->
+        <div id="kurban" class="tab-content animate-fade-in-up">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-amber-900 font-title mb-4">Teslimiyet İmtihanı</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">
+                    Yıllarca evlat hasreti çeken Hz. İbrahim, rüyasında oğlunu Allah için kurban ettiğini gördü. Bu, baba ve oğul için en büyük imtihandı.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <!-- Hz. İbrahim -->
+                <div class="bg-white p-8 rounded-tr-[3rem] rounded-bl-[3rem] shadow-xl border-t-4 border-slate-400 relative">
+                    <div class="absolute -top-5 left-8 bg-slate-600 text-white px-4 py-1 rounded shadow text-sm font-bold">Hz. İbrahim</div>
+                    <p class="text-slate-600 italic mt-4 text-lg">
+                        "Yavrucuğum! Rüyada seni boğazladığımı görüyorum. Bir düşün, ne dersin?"
+                    </p>
+                </div>
+
+                <!-- Hz. İsmail -->
+                <div class="bg-emerald-50 p-8 rounded-tl-[3rem] rounded-br-[3rem] shadow-xl border-t-4 border-emerald-500 relative mt-8 md:mt-0">
+                    <div class="absolute -top-5 right-8 bg-emerald-600 text-white px-4 py-1 rounded shadow text-sm font-bold">Hz. İsmail</div>
+                    <p class="text-emerald-900 italic mt-4 text-lg font-serif">
+                        “... Babacığım! Emrolunduğun şeyi yap. İnşallah beni sabredenlerden bulursun.”
+                    </p>
+                    <div class="mt-4 text-right text-xs font-bold text-emerald-700">(Saffat suresi, 102. ayet)</div>
+                </div>
+            </div>
+
+            <div class="bg-amber-100 p-6 rounded-2xl border border-amber-300 flex items-start gap-4 shadow-inner">
+                <i data-lucide="gift" class="text-amber-700 mt-1" size="32"></i>
+                <div>
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">İlahi Mükafat</h3>
+                    <p class="text-amber-900/80">
+                        İkisi de Allah'ın emrine tam bir teslimiyet gösterince, Allah imtihanı kazandıklarını bildirdi ve kurban etmeleri için onlara bir <strong>koç</strong> gönderdi. Bu olay, günümüzdeki Kurban ibadetinin temeli oldu.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: KABE'NİN İNŞASI -->
+        <div id="kabe" class="tab-content animate-fade-in-up">
+            <div class="bg-slate-900 text-slate-100 rounded-3xl overflow-hidden shadow-2xl relative">
+                <!-- Background Decoration -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-slate-800 rounded-full filter blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
+                
+                <div class="p-8 md:p-12 relative z-10">
+                    <div class="flex flex-col md:flex-row items-center gap-8 mb-8">
+                        <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center shrink-0">
+                            <i data-lucide="layout-grid" size="48" class="text-amber-400 mx-auto mb-2"></i>
+                            <h3 class="font-bold text-amber-400">Beytullah</h3>
+                            <span class="text-xs text-slate-400">Allah'ın Evi</span>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold mb-4 font-title">Kabe'nin Yükselişi</h2>
+                            <p class="text-slate-300 leading-relaxed">
+                                Hz. İbrahim ve Hz. İsmail, Allah'ın emriyle Kabe'nin temellerini yükselttiler. İnşaat bittiğinde Kabe'yi ilk tavaf edenler de onlar oldu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Kur'an'ın Diliyle (Dua) -->
+                    <div class="bg-slate-800/50 p-6 rounded-2xl border-l-4 border-amber-400 backdrop-blur-sm">
+                        <h4 class="text-amber-400 font-bold mb-4 flex items-center gap-2">
+                            <i data-lucide="message-circle"></i> İnşaat Sırasındaki Duaları
+                        </h4>
+                        <div class="space-y-4">
+                            <p class="italic text-slate-200 font-serif">
+                                "Ey Rabb’imiz! Bizden bunu kabul buyur, şüphesiz sen işitensin, bilensin."
+                            </p>
+                            <p class="italic text-slate-200 font-serif">
+                                "Ey Rabb’imiz! Bizi sana boyun eğenlerden kıl, neslimizden de sana itaat eden bir ümmet çıkar..."
+                            </p>
+                            <p class="italic text-slate-200 font-serif">
+                                "Ey Rabb’imiz! Onlara içlerinden senin ayetlerini kendilerine okuyacak... bir peygamber gönder."
+                            </p>
+                        </div>
+                        <div class="mt-4 text-right text-xs text-slate-400 font-bold">
+                            (Bakara suresi, 127-129. ayetler)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-amber-800/60 text-sm mt-12 border-t border-amber-200 bg-[#fdf6e3]">
+        <p>2. Ünite: Hac ve Kurban | Grafik Bilgi 2.10 & Görsel 2.7 referans alınmıştır.</p>
+    </footer>
+
+    <script>
+        // İkonları oluştur
+        lucide.createIcons();
+
+        function openTab(tabName, btnElement) {
+            // İçerikleri gizle
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            
+            // Buton stillerini sıfırla
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active", "bg-amber-700", "text-white", "shadow-md");
+                buttons[i].classList.add("bg-white", "text-amber-900", "hover:bg-amber-50");
+            }
+
+            // Seçileni aç ve stillendir
+            document.getElementById(tabName).classList.add("active");
+            
+            // Animasyon reflow
+            const activeContent = document.getElementById(tabName);
+            activeContent.classList.remove('animate-fade-in-up');
+            void activeContent.offsetWidth; 
+            activeContent.classList.add('animate-fade-in-up');
+
+            // Aktif buton stili
+            btnElement.classList.remove("bg-white", "text-amber-900", "hover:bg-amber-50");
+            btnElement.classList.add("active", "bg-amber-700", "text-white", "shadow-md");
+        }
+    </script>
+</body>
+</html>

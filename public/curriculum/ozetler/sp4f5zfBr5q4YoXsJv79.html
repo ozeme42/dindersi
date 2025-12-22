@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umre ve Önemi - İnteraktif Ders Materyali</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; }
+        
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Sekme Gizleme/Gösterme */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Custom Scrollbar Hide */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 selection:bg-teal-200">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-br from-teal-900 to-emerald-800 text-white py-10 px-4 shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-8 opacity-5">
+            <i data-lucide="moon" width="200" height="200"></i>
+        </div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-block bg-white/20 px-3 py-1 rounded-full text-xs font-semibold mb-3 tracking-wide">
+                2. ÜNİTE: HAC VE KURBAN
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-tight">UMRE VE ÖNEMİ</h1>
+            <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20 max-w-2xl mx-auto mt-4">
+                <p class="text-lg italic font-serif">"Haccı ve umreyi Allah için eksiksiz yerine getirin..."</p>
+                <p class="text-xs text-emerald-200 mt-2 text-right opacity-80">(Bakara suresi, 196. ayet)</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+        <div class="max-w-5xl mx-auto flex overflow-x-auto justify-center p-2 gap-2 md:gap-4 no-scrollbar">
+            <button onclick="openTab('nedir', this)" class="tab-btn active flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-teal-600 text-white shadow-lg transform scale-105 transition-all whitespace-nowrap">
+                <i data-lucide="info"></i> Umre Nedir?
+            </button>
+            <button onclick="openTab('yapilis', this)" class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-teal-50 transition-all whitespace-nowrap">
+                <i data-lucide="list-checks"></i> Adım Adım Yapılış
+            </button>
+            <button onclick="openTab('farklar', this)" class="tab-btn flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-teal-50 transition-all whitespace-nowrap">
+                <i data-lucide="git-compare"></i> Hac vs Umre
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto p-4 md:p-8 min-h-[500px]">
+
+        <!-- TAB 1: UMRE NEDİR? -->
+        <div id="nedir" class="tab-content active animate-fade-in-up">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                
+                <!-- Tanım Kartı -->
+                <div class="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-teal-500">
+                    <h2 class="text-2xl font-bold text-teal-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="book-open" class="text-teal-600"></i> Tanım
+                    </h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        <span class="font-bold text-slate-800">Umre;</span> hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ibadettir.
+                    </p>
+                    <div class="mt-6 flex gap-3">
+                        <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm font-bold">Sünnettir</span>
+                        <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm font-bold">Her zaman yapılabilir</span>
+                    </div>
+                </div>
+
+                <!-- Fazilet Kartı -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-3xl shadow-lg border border-amber-100 relative overflow-hidden">
+                    <i data-lucide="quote" class="absolute top-4 right-4 text-amber-200 opacity-50" width="80" height="80"></i>
+                    <h3 class="text-xl font-bold text-amber-800 mb-4">Peygamber Müjdesidir</h3>
+                    <p class="text-slate-700 italic font-medium text-lg mb-4">
+                        “İki umre, aralarında işlenen günahlara kefarettir...”
+                    </p>
+                    <div class="flex items-center gap-2 text-sm text-amber-700 font-bold border-t border-amber-200 pt-4">
+                        <i data-lucide="book"></i> (Buhari, Umre, 1.)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ADIM ADIM YAPILIŞ -->
+        <div id="yapilis" class="tab-content animate-fade-in-up">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Umre Nasıl Yapılır?</h2>
+                <p class="text-slate-500">4 Temel Adımda Umre İbadeti</p>
+            </div>
+
+            <div class="space-y-6 max-w-3xl mx-auto">
+                
+                <!-- Step 1 -->
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold shadow-lg z-10">1</div>
+                        <div class="h-full w-1 bg-slate-200 group-hover:bg-teal-200 transition-colors"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex-1 hover:shadow-xl transition-all pb-8">
+                        <h3 class="text-xl font-bold text-teal-800 mb-2 flex items-center gap-2">
+                            <i data-lucide="shirt"></i> İhram ve Niyet
+                        </h3>
+                        <p class="text-slate-600 mb-3">Mikat sınırında gusledip temizlenilir ve ihrama girilir. İki rekat namaz kılınır.</p>
+                        <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500 text-sm italic text-teal-900">
+                            "Allah’ım umre yapmak istiyorum, onu bana kolay kıl ve benden kabul eyle."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold shadow-lg z-10">2</div>
+                        <div class="h-full w-1 bg-slate-200 group-hover:bg-teal-200 transition-colors"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex-1 hover:shadow-xl transition-all pb-8">
+                        <h3 class="text-xl font-bold text-teal-800 mb-2 flex items-center gap-2">
+                            <i data-lucide="rotate-ccw"></i> Tavaf
+                        </h3>
+                        <p class="text-slate-600 mb-3">Kabe'ye gelinir ve umre tavafı yapılır.</p>
+                        <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500 text-sm italic text-teal-900">
+                            "Allah’ım, senin rızan için umre tavafı yapmak istiyorum. Onu bana kolaylaştır ve kabul eyle."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold shadow-lg z-10">3</div>
+                        <div class="h-full w-1 bg-slate-200 group-hover:bg-teal-200 transition-colors"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex-1 hover:shadow-xl transition-all pb-8">
+                        <h3 class="text-xl font-bold text-teal-800 mb-2 flex items-center gap-2">
+                            <i data-lucide="footprints"></i> Say
+                        </h3>
+                        <p class="text-slate-600 mb-3">Safa ve Merve tepeleri arasında 7 kez yürünür.</p>
+                        <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500 text-sm italic text-teal-900">
+                            "Allah’ım senin rızan için Safa ile Merve arasında umre sayi yapmak istiyorum. Onu bana kolaylaştır ve kabul eyle."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex gap-4 group">
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold shadow-lg z-10">4</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 flex-1 hover:shadow-xl transition-all">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                            <i data-lucide="scissors"></i> Tıraş ve Çıkış
+                        </h3>
+                        <p class="text-slate-600">Saçlar tıraş edilir veya kısaltılır. Böylece ihramdan çıkılmış ve umre tamamlanmış olur.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 3: HAC VE UMRE FARKLARI -->
+        <div id="farklar" class="tab-content animate-fade-in-up">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Hac ve Umre Arasındaki Farklar</h2>
+                <p class="text-slate-500">Grafik Bilgi 2.6</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-0 md:gap-8 max-w-4xl mx-auto">
+                
+                <!-- HAC KISMI -->
+                <div class="bg-emerald-50 p-6 rounded-t-3xl md:rounded-3xl border-2 border-emerald-200 relative">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-1 rounded-full font-bold shadow-lg">HAC</div>
+                    
+                    <ul class="space-y-6 mt-4">
+                        <li class="flex items-start gap-3">
+                            <div class="bg-emerald-200 p-2 rounded-lg text-emerald-800"><i data-lucide="scale"></i></div>
+                            <div>
+                                <strong class="block text-emerald-900">Hükmü: FARZ</strong>
+                                <span class="text-sm text-slate-600">Gücü yeten her Müslümana farzdır.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-emerald-200 p-2 rounded-lg text-emerald-800"><i data-lucide="calendar"></i></div>
+                            <div>
+                                <strong class="block text-emerald-900">Zamanı: BELİRLİ</strong>
+                                <span class="text-sm text-slate-600">Sadece Zilhicce ayında yapılır.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-emerald-200 p-2 rounded-lg text-emerald-800"><i data-lucide="history"></i></div>
+                            <div>
+                                <strong class="block text-emerald-900">Tekrar: YILDA 1 DEFA</strong>
+                                <span class="text-sm text-slate-600">Senede sadece bir kez yapılabilir.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-emerald-200 p-2 rounded-lg text-emerald-800"><i data-lucide="list"></i></div>
+                            <div>
+                                <strong class="block text-emerald-900">İçerik: KAPSAMLI</strong>
+                                <span class="text-sm text-slate-600">Vakfe, Şeytan Taşlama ve Kurban Kesme vardır.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- VS Badge for Desktop -->
+                <div class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full items-center justify-center font-black text-slate-300 shadow-xl border-4 border-slate-50 z-20">VS</div>
+
+                <!-- UMRE KISMI -->
+                <div class="bg-blue-50 p-6 rounded-b-3xl md:rounded-3xl border-2 border-blue-200 relative mt-4 md:mt-0">
+                    <div class="absolute -top-4 md:-top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-6 py-1 rounded-full font-bold shadow-lg z-10">UMRE</div>
+                    
+                    <ul class="space-y-6 mt-4">
+                        <li class="flex items-start gap-3">
+                            <div class="bg-blue-200 p-2 rounded-lg text-blue-800"><i data-lucide="heart"></i></div>
+                            <div>
+                                <strong class="block text-blue-900">Hükmü: SÜNNET</strong>
+                                <span class="text-sm text-slate-600">Ömürde bir kere yapmak sünnettir.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-blue-200 p-2 rounded-lg text-blue-800"><i data-lucide="clock"></i></div>
+                            <div>
+                                <strong class="block text-blue-900">Zamanı: HER ZAMAN</strong>
+                                <span class="text-sm text-slate-600">Hac zamanı dışında her vakit yapılabilir.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-blue-200 p-2 rounded-lg text-blue-800"><i data-lucide="repeat"></i></div>
+                            <div>
+                                <strong class="block text-blue-900">Tekrar: ÇOK DEFA</strong>
+                                <span class="text-sm text-slate-600">Yıl içinde birden fazla yapılabilir.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-blue-200 p-2 rounded-lg text-blue-800"><i data-lucide="minus-circle"></i></div>
+                            <div>
+                                <strong class="block text-blue-900">İçerik: DAHA SADE</strong>
+                                <span class="text-sm text-slate-600">Vakfe, Şeytan Taşlama ve Kurban Kesme <u>YOKTUR</u>.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="py-8 text-center text-slate-400 text-sm mt-12 border-t border-slate-200">
+        <p>2. Ünite: Hac ve Kurban | Grafik Bilgi 2.6 referans alınmıştır.</p>
+    </footer>
+
+    <script>
+        // İkonları oluştur
+        lucide.createIcons();
+
+        function openTab(tabName, btnElement) {
+            // İçerikleri gizle
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            
+            // Buton stillerini sıfırla
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active", "bg-teal-600", "text-white", "shadow-lg", "scale-105");
+                buttons[i].classList.add("bg-slate-100", "text-slate-600", "hover:bg-teal-50");
+            }
+
+            // Seçileni aç ve stillendir
+            document.getElementById(tabName).classList.add("active");
+            
+            // Animasyon reflow
+            const activeContent = document.getElementById(tabName);
+            activeContent.classList.remove('animate-fade-in-up');
+            void activeContent.offsetWidth; 
+            activeContent.classList.add('animate-fade-in-up');
+
+            // Aktif buton stili
+            btnElement.classList.remove("bg-slate-100", "text-slate-600", "hover:bg-teal-50");
+            btnElement.classList.add("active", "bg-teal-600", "text-white", "shadow-lg", "scale-105");
+        }
+    </script>
+</body>
+</html>
