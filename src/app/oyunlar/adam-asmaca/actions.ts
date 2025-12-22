@@ -1,21 +1,6 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
-  getCountFromServer,
-  limit 
-} from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 
@@ -27,37 +12,30 @@ export type HangmanData = {
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getAdamAsmacaAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
+        if (!topicId || topicId === 'all') {
+            return { error: "Adam Asmaca oynamak için belirli bir konu seçmelisiniz.", data: null };
+        }
 
-        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
-                }
-            } catch (e) {
-                console.warn("Could not fetch static activity file, will try Firestore.", e);
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
             }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
         
-        if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
-            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
-            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
-            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
-
-            const querySnapshot = await getDocs(baseQuery);
-            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
-        }
+        const allItems: ActivityItem[] = await res.json();
         
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
 
         const suitableItems = allItems.filter(item => 
+            item.type === 'definition' &&
             item.content &&
             item.content.term && 
             item.content.definition &&
@@ -91,8 +69,16 @@ export async function submitAdamAsmacaScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
+     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        console.log("Static mode: Score submission is disabled.");
+        return { success: true };
+    }
     if (!userId || score <= 0) return { success: true };
     
+    // Lazy-load server-only imports
+    const { db } = await import('@/lib/firebase');
+    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),

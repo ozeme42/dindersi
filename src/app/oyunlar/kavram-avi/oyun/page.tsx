@@ -91,7 +91,6 @@ function ConceptHuntGame() {
     const [gameShake, setGameShake] = useState(false);
 
     const gameContext = useMemo(() => `Kavram Avı - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`, [searchParams]);
-    const isStatic = searchParams.get('isStatic') === 'true';
 
     // Seviye Hazırlama
     const setupLevel = useCallback((question: Anagram) => {
@@ -111,10 +110,7 @@ function ConceptHuntGame() {
         const fetchQuestions = async () => {
             setIsLoading(true);
             const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
                 topicId: searchParams.get('topicId') || undefined,
-                isStatic: searchParams.get('isStatic') === 'true'
             };
             const result = await getConceptHuntAction(params);
             if (result.error) {
@@ -189,7 +185,7 @@ function ConceptHuntGame() {
 
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
-        if (!user || score === 0 || isSaving || isStatic) {
+        if (!user || score === 0 || isSaving) {
             router.push('/oyunlar/kavram-avi');
             return;
         }

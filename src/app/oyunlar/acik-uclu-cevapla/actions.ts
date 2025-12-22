@@ -1,33 +1,33 @@
 
 'use server';
 
-import { db } from '@/lib/firebase';
-import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
 
 // Re-using the Question type for the output, as it fits the structure.
 export async function getAcikUcluCevaplaAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'));
+        if (!topicId || topicId === 'all') {
+             return { error: "Açık Uçlu Cevaplama oynamak için belirli bir konu seçmelisiniz.", questions: [] };
+        }
+        
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+            }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
 
-        const definitionsQuery = query(baseQuery, where('type', '==', 'definition'));
-        const definitionsSnapshot = await getDocs(definitionsQuery);
+        const staticItems: ActivityItem[] = await res.json();
         
-        const allDefinitions = definitionsSnapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
+        const allDefinitions = staticItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 1) {
             return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
@@ -38,7 +38,7 @@ export async function getAcikUcluCevaplaAction(
 
         const gameQuestions: Question[] = selectedDefinitions.map((item, index) => {
             return {
-                id: `${item.courseId}-${item.unitId}-${item.topicId}-${index}`, // Temporary ID for client-side key
+                id: `${topicId}-${index}`, // Temporary ID for client-side key
                 text: item.content.definition!,
                 type: 'Açık Uçlu',
                 correctAnswer: item.content.term!,
@@ -58,10 +58,21 @@ export async function getAcikUcluCevaplaAction(
 }
 
 
+// Puan kaydetme işlemleri veritabanı gerektirdiğinden bu kısım sadece dinamik modda çalışır.
+// Statik modda bu fonksiyonlar çağrılsa bile bir işlem yapmaz.
 export async function submitAcikUcluCevaplaScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        console.log("Static mode: Score submission is disabled.");
+        return { success: true };
+    }
+
     if (!userId || score <= 0) {
         return { success: true };
     }
+    
+    // Lazy-load server-only imports
+    const { db } = await import('@/lib/firebase');
+    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
 
     try {
         const attemptsQuery = query(

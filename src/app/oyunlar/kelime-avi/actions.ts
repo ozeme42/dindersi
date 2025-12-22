@@ -1,56 +1,35 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
-  getCountFromServer,
-} from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getKelimeAviAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-
-        if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' && topicId && topicId !== 'all') {
-             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'concept').map(item => ({ id: item.id, content: item.content }));
-                }
-             } catch (e) {
-                 console.warn("Could not fetch static activity file, will try Firestore.", e);
-             }
+        if (!topicId || topicId === 'all') {
+            return { error: "Kelime Avı oynamak için belirli bir konu seçmelisiniz.", concepts: null };
         }
+
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
         
-        if (allItems.length === 0) {
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'concept'));
-            if (topicId && topicId !== 'all') baseQuery = query(baseQuery, where("topicId", "==", topicId));
-            else if (unitId && unitId !== 'all') baseQuery = query(baseQuery, where("unitId", "==", unitId));
-            else if (courseId && courseId !== 'all') baseQuery = query(baseQuery, where("courseId", "==", courseId));
-
-            const querySnapshot = await getDocs(baseQuery);
-            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", concepts: null };
+            }
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
 
+        const allItems: ActivityItem[] = await res.json();
+        
         const allConcepts = allItems
-            .map(item => item.content?.text)
+            .filter(item => item.type === 'concept' || (item.type === 'definition' && item.content.term))
+            .map(item => item.content.text || item.content.term)
             .filter((text): text is string => 
                 typeof text === 'string' && 
                 text.trim().length > 2 &&
@@ -59,16 +38,18 @@ export async function getKelimeAviAction(
             )
             .map(text => text.toLocaleUpperCase('tr-TR'));
 
-        if (allConcepts.length < 5) {
+        const uniqueConcepts = [...new Set(allConcepts)];
+
+        if (uniqueConcepts.length < 5) {
             return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
         }
         
-        for (let i = allConcepts.length - 1; i > 0; i--) {
+        for (let i = uniqueConcepts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [allConcepts[i], allConcepts[j]] = [allConcepts[j], allConcepts[i]];
+            [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
         }
 
-        return { concepts: JSON.parse(JSON.stringify(allConcepts)) };
+        return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getKelimeAviAction):", error);
@@ -81,8 +62,16 @@ export async function submitKelimeAviScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        console.log("Static mode: Score submission is disabled.");
+        return { success: true };
+    }
     if (!userId || score <= 0) return { success: true };
     
+    // Lazy-load server-only imports
+    const { db } = await import('@/lib/firebase');
+    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),

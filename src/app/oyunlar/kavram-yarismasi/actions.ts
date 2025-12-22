@@ -1,8 +1,6 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { doc, updateDoc, increment, collection, getDocs, query, where, addDoc, serverTimestamp, writeBatch, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
 
@@ -18,28 +16,35 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'));
-
-        const conditions = [];
-        if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
-        }
-
-        const finalQuery = query(baseQuery, ...conditions);
-        const snapshot = await getDocs(finalQuery);
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        let allItems: ActivityItem[] = [];
         
-        const allDefinitions = snapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        // This game needs a broader pool of terms for distractors, so we might need to fetch more than one topic.
+        // For simplicity with static files, we'll try to get data from topic, then unit, then course.
+        
+        let urlToFetch = '';
+        if (topicId && topicId !== 'all') {
+            urlToFetch = `${baseUrl}/curriculum/activities/${topicId}.json`;
+        } else {
+             // In a static setup, fetching by unit or course is complex without a full manifest.
+             // We'll return an error to guide the user to select a specific topic.
+             return { error: "Lütfen 'Tüm Konular' yerine belirli bir konu seçerek devam edin.", questions: null };
+        }
+        
+        const res = await fetch(urlToFetch);
+        if (res.ok) {
+            allItems = await res.json();
+        } else if (res.status === 404) {
+             return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
+        } else {
+            throw new Error(`Static data failed to load from ${urlToFetch}`);
+        }
+        
+        const allDefinitions = allItems.filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        const allConcepts = [...new Set(allDefinitions.map(item => item.content.term!))];
 
-        const allConcepts = allDefinitions.map(item => item.content.term!);
-
-        if (allDefinitions.length < 8) {
-            return { error: "Bu oyun için en az 8 farklı kavram/tanım gereklidir.", questions: null };
+        if (allDefinitions.length < 1 || allConcepts.length < 8) {
+            return { error: "Bu oyun için en az 1 tanım ve 8 farklı kavram gereklidir.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -85,9 +90,17 @@ export async function getConceptQuizAction(
 
 // Renamed to be more specific
 export async function submitConceptQuizScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        console.log("Static mode: Score submission is disabled.");
+        return { success: true };
+    }
     if (!userId || score <= 0) {
         return { success: true };
     }
+    
+    // Lazy-load server-only imports
+    const { db } = await import('@/lib/firebase');
+    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
 
     try {
         const attemptsQuery = query(

@@ -6,14 +6,13 @@ import { OyunKurulum } from '@/components/oyun-kurulum';
 import { Search, Loader2 } from 'lucide-react';
 
 function KelimeAviPage() {
-    const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
     return (
         <OyunKurulum 
             gameName="Kelime Avı"
             gameIcon={Search}
             gamePath="kelime-avi"
             dataType="games"
-            isStatic={isStatic}
+            isStatic={true}
         />
     );
 }

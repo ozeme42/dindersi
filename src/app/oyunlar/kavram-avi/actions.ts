@@ -1,77 +1,36 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
-  getCountFromServer,
-  limit 
-} from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Anagram } from '@/lib/types';
 
 const MAX_ATTEMPTS_PER_CONTEXT = 10;
 
 export async function getConceptHuntAction({ 
-    courseId, 
-    unitId, 
-    topicId,
-    isStatic 
+    topicId
 }: { 
-    courseId?: string; 
-    unitId?: string; 
     topicId?: string; 
-    isStatic?: boolean;
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-        
-        if (isStatic && topicId && topicId !== 'all') {
-             try {
-                // IMPORTANT: We need to construct the absolute URL for server-side fetch
-                const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-                const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
-                
-                if (res.ok) {
-                    const staticItems: ActivityItem[] = await res.json();
-                    allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
-                } else if (res.status === 404) {
-                    // This is not a critical error, we can fallback to firestore
-                     console.warn(`Static activity file not found for topic ${topicId}, falling back to Firestore.`);
-                } else {
-                     throw new Error(`Failed to fetch static data: ${res.statusText}`);
-                }
-             } catch (e) {
-                 console.warn("Could not fetch static activity file, will try Firestore.", e);
-             }
+        if (!topicId || topicId === 'all') {
+            return { error: "Kavram Avı oynamak için belirli bir konu seçmelisiniz.", questions: null };
         }
-        
-        if (allItems.length === 0) { // Fallback to Firestore if static fetch fails or not in static mode
-            let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
 
-            if (topicId && topicId !== 'all') {
-                baseQuery = query(baseQuery, where("topicId", "==", topicId));
-            } else if (unitId && unitId !== 'all') {
-                baseQuery = query(baseQuery, where("unitId", "==", unitId));
-            } else if (courseId && courseId !== 'all') {
-                baseQuery = query(baseQuery, where("courseId", "==", courseId));
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
+        
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
             }
-
-            const querySnapshot = await getDocs(baseQuery);
-            allItems = querySnapshot.docs.map(doc => ({ id: doc.id, content: doc.data().content as ActivityItem['content'] }));
+            throw new Error(`Static data for topic ${topicId} failed to load.`);
         }
-
+        
+        const allItems: ActivityItem[] = await res.json();
+        
         const validItems = allItems.filter(item => 
+            item.type === 'definition' &&
             item.content?.term && 
             item.content?.definition &&
             item.content.term.trim().length > 2 &&
@@ -109,8 +68,16 @@ export async function submitConceptHuntScoreAction(
     score: number, 
     context: string
 ): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+        console.log("Static mode: Score submission is disabled.");
+        return { success: true };
+    }
     if (!userId || score <= 0) return { success: true };
     
+    // Lazy-load server-only imports
+    const { db } = await import('@/lib/firebase');
+    const { collection, query, where, getCountFromServer, writeBatch, doc, serverTimestamp, increment } = await import('firebase/firestore');
+
     try {
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
