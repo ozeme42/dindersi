@@ -138,37 +138,40 @@ export async function exportAllData(
         const allCourseDocs = coursesSnap.docs;
         const allUnitDocs = unitsSnap.docs;
     
+        // Determine relevant courses first
         if (courseId && courseId !== 'all') {
-            relevantCourseIds.push(courseId);
+            relevantCourseIds = [courseId];
         } else if (classId && classId !== 'all') {
-            allCourseDocs.forEach(doc => {
-                if (doc.data().classId === classId) {
-                    relevantCourseIds.push(doc.id);
-                }
-            });
+            relevantCourseIds = allCourseDocs
+                .filter(doc => doc.data().classId === classId)
+                .map(doc => doc.id);
+        } else {
+            // No class or course filter, means all courses are relevant
+            relevantCourseIds = allCourseDocs.map(doc => doc.id);
         }
     
+        // Determine relevant units
         if (unitId && unitId !== 'all') {
-            relevantUnitIds.push(unitId);
-        } else if (relevantCourseIds.length > 0) {
-            allUnitDocs.forEach(doc => {
+            relevantUnitIds = [unitId];
+        } else {
+             const courseUnitDocs = allUnitDocs.filter(doc => {
                 const parentPath = doc.ref.parent.parent?.path;
-                if (parentPath && relevantCourseIds.includes(parentPath.split('/')[1])) {
-                    relevantUnitIds.push(doc.id);
-                }
+                return parentPath && relevantCourseIds.includes(parentPath.split('/')[1]);
             });
+            relevantUnitIds = courseUnitDocs.map(doc => doc.id);
         }
     
+        // Determine relevant topics
         if (topicId && topicId !== 'all') {
-            relevantTopicIds.push(topicId);
+            relevantTopicIds = [topicId];
         } else if (relevantUnitIds.length > 0) {
-            const topicPromises = relevantUnitIds.map(uId => 
+             const topicPromises = relevantUnitIds.map(uId => 
                 db.collectionGroup('topics').where('__name__', '>', `courses/${courseId}/units/${uId}/topics/`).where('__name__', '<', `courses/${courseId}/units/${uId}/topics/~`).get()
             );
             const topicSnapsArray = await Promise.all(topicPromises);
             relevantTopicIds = topicSnapsArray.flatMap(snap => snap.docs.map(doc => doc.id));
         } else if (relevantCourseIds.length > 0) {
-             const courseUnitDocs = allUnitDocs.filter(doc => {
+            const courseUnitDocs = allUnitDocs.filter(doc => {
                 const parentPath = doc.ref.parent.parent?.path;
                 return parentPath && relevantCourseIds.includes(parentPath.split('/')[1]);
             });
@@ -507,21 +510,26 @@ export async function exportDataForStaticSite() {
     });
 
 
-    // 4. Batch write all files to the export collection, now with chunking
+    // 4. Batch write all files to the export collection, with chunking for writes and deletes
     const exportCollectionRef = db.collection('__static_export');
     
-    // Clear old data first by chunking deletes
+    // Chunked delete
     const CHUNK_SIZE_DELETE = 300;
     async function deleteCollection(collectionRef: FirebaseFirestore.CollectionReference, batchSize: number) {
         let query = collectionRef.limit(batchSize);
         let snapshot = await query.get();
         
         while (snapshot.size > 0) {
-            const batch = db.batch();
+            const deleteBatch = db.batch();
             snapshot.docs.forEach(doc => {
-                batch.delete(doc.ref);
+                deleteBatch.delete(doc.ref);
             });
-            await batch.commit();
+            await deleteBatch.commit();
+            
+            if (snapshot.size < batchSize) break; // Last batch
+            
+            const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            query = collectionRef.limit(batchSize).startAfter(lastVisible);
             snapshot = await query.get();
         }
     }
@@ -529,7 +537,7 @@ export async function exportDataForStaticSite() {
     await deleteCollection(exportCollectionRef, CHUNK_SIZE_DELETE);
 
 
-    // Write new data in chunks
+    // Chunked write
     let writeBatch = db.batch();
     let writeCount = 0;
     const CHUNK_SIZE_WRITE = 100; // More conservative chunk size
@@ -553,4 +561,3 @@ export async function exportDataForStaticSite() {
     
     return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }
-```
