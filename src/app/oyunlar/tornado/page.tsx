@@ -12,6 +12,7 @@ function TornadoPage() {
             gameIcon={Wind}
             gamePath="tornado"
             dataType="games"
+            isStatic={true}
         />
     );
 }

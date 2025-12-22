@@ -12,6 +12,7 @@ function LabirentPage() {
             gameIcon={Milestone}
             gamePath="labirent"
             dataType="games"
+            isStatic={true}
         />
     );
 }

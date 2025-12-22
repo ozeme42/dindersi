@@ -12,6 +12,7 @@ function HedefiVurPage() {
             gameIcon={MousePointerClick}
             gamePath="hedefi-vur"
             dataType="games"
+            isStatic={true}
         />
     );
 }

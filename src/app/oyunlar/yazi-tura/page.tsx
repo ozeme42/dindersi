@@ -12,6 +12,7 @@ function YaziTuraPage() {
             gameIcon={Coins}
             gamePath="yazi-tura"
             dataType="games"
+            isStatic={true}
         />
     );
 }
