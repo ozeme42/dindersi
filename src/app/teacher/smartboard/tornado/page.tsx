@@ -1,9 +1,10 @@
 
-"use client";
+'use client';
 
-import { TornadoSetupClientPage } from './client-page';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { Wind } from 'lucide-react';
 
-export default function SmartboardTornadoPage() {
-    // This component will likely have game settings passed as props in the future
-    return <TornadoSetupClientPage gameConfig={{}} />;
+
+export default function TornadoSetupPage() {
+    return <OyunKurulum gameName="Tornado" gameIcon={Wind} gamePath="tornado" />;
 }

@@ -1,9 +1,10 @@
 
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
-import { SmartboardBireyselClientPage } from "./client-page";
+'use client';
 
-export default async function SmartboardBireyselPage() {
-    const settings = await getGameSettings();
-    // Re-use bireysel settings for now as they are similar
-    return <SmartboardBireyselClientPage gameConfig={settings.teacherBireysel} />;
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { Package } from 'lucide-react';
+
+
+export default function SmartboardBireyselPage() {
+    return <OyunKurulum gameName="Kutu Aç" gameIcon={Package} gamePath="kutu-ac" />;
 }

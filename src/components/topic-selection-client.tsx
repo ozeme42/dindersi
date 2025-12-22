@@ -84,6 +84,7 @@ const steps = [
   { id: 3, name: "Konu", icon: ListTodo },
 ];
 
+const ICONS = [Book, Sparkles, Book, LayoutGrid]; // Renamed icon
 const getGradient = (index: number) => {
     const gradients = [
         "from-blue-600 to-cyan-500",
@@ -121,8 +122,8 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
   });
 
   const getBackUrl = () => {
-    if (targetPath === 'oyunlar') return '/oyunlar';
-    return '/student';
+    if (targetPath.startsWith('student')) return '/student';
+    return '/';
   };
 
   useEffect(() => {
@@ -164,7 +165,6 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
   const handleSelectUnit = (unitId: string, unitName: string) => {
     setSelection({ ...selection, unitId, unitName });
     
-    // For games, allow "all" topics selection
     if (dataType === 'games' && unitId === 'all') {
         const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
         const params = new URLSearchParams({
@@ -337,7 +337,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-1">
                             <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
-                                {isActive ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
+                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
                             </div>
                             <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
                         </div>
@@ -362,7 +362,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                 </h2>
                 
                 <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                    {currentStep} / {steps.length - 1}
+                    {currentStep} / {steps.length}
                 </div>
             </div>
 
@@ -372,9 +372,9 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
 
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
-                    {currentStep === 1 && "Bir ders seç."}
-                    {currentStep === 2 && "Bir ünite seç."}
-                    {currentStep === 3 && "Bir konu seç."}
+                    {currentStep === 1 && "Bir ders seçerek başla."}
+                    {currentStep === 2 && "İlgili üniteyi seç."}
+                    {currentStep === 3 && "Son olarak, bir konu seç."}
                 </span>
                 <div className="flex gap-1 md:gap-2 shrink-0">
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>

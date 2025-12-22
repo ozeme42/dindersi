@@ -1,14 +1,15 @@
+
 'use client';
 
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
-import { TopicSelectionClient } from "@/components/topic-selection-client";
 import { Gamepad2 } from 'lucide-react';
+import OyunKurulum from './SetupComponent';
 
 
 function OyunKurulumWrapper() {
     return (
-        <TopicSelectionClient 
+        <OyunKurulum
             pageTitle="Oyun Kurulumu"
             pageIcon={Gamepad2}
             targetPath="oyunlar"

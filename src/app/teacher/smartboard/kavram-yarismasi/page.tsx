@@ -1,7 +1,9 @@
+
 'use client';
 
-import { KavramYarismaSetupClientPage } from './client-page';
+import OyunKurulum from '@/app/oyunlar/oyun-kurulum/SetupComponent';
+import { BrainCircuit } from 'lucide-react';
 
 export default function SmartboardKavramYarismasiPage() {
-    return <KavramYarismaSetupClientPage />;
+    return <OyunKurulum gameName="Kavram Yarışması" gameIcon={BrainCircuit} gamePath="kavram-yarismasi" />;
 }
