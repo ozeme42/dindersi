@@ -1,42 +1,22 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote } from 'lucide-react';
-import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
+import type { YazilacaklarContent, Topic } from '@/lib/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-// --- Veri Çekme Fonksiyonu ---
-async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
-    if (!topicId) return [];
-    try {
-        const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => {
-            const item = doc.data() as ActivityItem;
-            return {
-                concept: item.content.term || '',
-                definition: item.content.definition || ''
-            };
-        }).filter(item => item.concept && item.definition);
-    } catch (error) {
-        console.error("Error fetching definitions for topic:", error);
-        return [];
-    }
-}
-
-function YazilacaklarDisplayPage() {
+export function YazilacaklarDisplayPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
 
-    const [topic, setTopic] = useState<Topic | null>(null);
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
+    const [topicTitle, setTopicTitle] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
@@ -46,9 +26,8 @@ function YazilacaklarDisplayPage() {
 
     useEffect(() => {
         const handleFullscreenChange = () => {
-            const isCurrentlyFullscreen = !!document.fullscreenElement;
-            setIsFullscreen(isCurrentlyFullscreen);
-             if (!isCurrentlyFullscreen) {
+            setIsFullscreen(!!document.fullscreenElement);
+             if (!document.fullscreenElement) {
                 setFontSize(1);
             }
         };
@@ -57,107 +36,92 @@ function YazilacaklarDisplayPage() {
     }, []);
 
     const fetchContent = useCallback(async () => {
-        if (!topicId || !courseId || !unitId) {
-            setError("Eksik bilgi: Gerekli konu detayları bulunamadı.");
+        if (!topicId) {
+            setError("Eksik konu bilgisi.");
             setIsLoading(false);
             return;
         }
         setIsLoading(true);
         setError(null);
         try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
+            // manifest.json'dan konu adını al
+            const manifestRes = await fetch('/curriculum/manifest.json');
+            if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
+            const manifestData = await manifestRes.json();
             
-            if (topicSnap.exists()) {
-                const topicData = topicSnap.data() as Topic;
-                setTopic(topicData);
-                
-                const definitions = await getDefinitionsForTopic(topicId);
-                const notes = topicData.writingContent?.notes || [];
-
-                if (definitions.length === 0 && notes.length === 0) {
-                     setError('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
-                } else {
-                    setContent({ conceptDefinitions: definitions, notes: notes });
+            let foundTopic = null;
+            for (const group of manifestData.classGroups) {
+                for (const course of group.courses) {
+                    for (const unit of course.units) {
+                        const topic = unit.topics.find((t: any) => t.id === topicId);
+                        if(topic) {
+                            foundTopic = topic;
+                            break;
+                        }
+                    }
+                    if(foundTopic) break;
                 }
-
-            } else {
-                 setError('Konu bulunamadı.');
+                if(foundTopic) break;
             }
+            
+            if (foundTopic) {
+                setTopicTitle((foundTopic as any).title);
+            }
+
+            // yazilacaklar/[topicId].json'dan içeriği al
+            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+            if (!res.ok) {
+                throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
+            }
+            const data: YazilacaklarContent = await res.json();
+
+            if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
+                 throw new Error('Bu konu için "Yazılacaklar" içeriği boş.');
+            }
+            
+            setContent(data);
         } catch (e: any) {
-            setError('İçerik alınırken bir hata oluştu.');
+            setError(e.message || 'İçerik alınırken bir hata oluştu.');
         } finally {
             setIsLoading(false);
         }
-    }, [topicId, courseId, unitId]);
+    }, [topicId]);
 
     useEffect(() => {
         fetchContent();
     }, [fetchContent]);
 
-    // --- PDF İNDİRME FONKSİYONU (GÜNCELLENDİ) ---
     const handleDownloadPDF = async () => {
-        if (!content || !topic) return;
+        if (!content || !topicTitle) return;
         setIsDownloading(true);
 
         try {
-            // html2pdf.js'yi dinamik import ediyoruz (SSR hatasını önlemek için)
-            // Lütfen terminalde: npm install html2pdf.js komutunu çalıştırın.
             const html2pdf = (await import('html2pdf.js')).default;
-
-            // Geçici bir div oluşturup içeriği dolduruyoruz
             const element = document.createElement('div');
             element.style.padding = '20px';
             element.style.fontFamily = 'Arial, sans-serif';
-            element.style.color = '#000'; // PDF'te yazı rengi siyah olsun
+            element.style.color = '#000';
 
-            let htmlContent = `
-                <h1 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">${topic.title}</h1>
-            `;
+            let htmlContent = `<h1 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">${topicTitle}</h1>`;
 
             if (content.conceptDefinitions.length > 0) {
                 htmlContent += `<h3 style="color: #0056b3; margin-top: 20px; background: #f0f0f0; padding: 8px;">Kavramlar ve Tanımları</h3>`;
                 content.conceptDefinitions.forEach((item, i) => {
-                    htmlContent += `
-                        <div style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
-                            <strong style="color: #000; font-size: 14px;">${i + 1}. ${item.concept}</strong>
-                            <div style="color: #444; font-size: 12px; margin-top: 4px;">${item.definition}</div>
-                        </div>
-                    `;
+                    htmlContent += `<div style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px;"><strong style="color: #000; font-size: 14px;">${i + 1}. ${item.concept}</strong><div style="color: #444; font-size: 12px; margin-top: 4px;">${item.definition}</div></div>`;
                 });
             }
 
             if (content.notes.length > 0) {
                 htmlContent += `<h3 style="color: #d97706; margin-top: 20px; background: #fff7ed; padding: 8px;">Önemli Notlar</h3>`;
                 content.notes.forEach((note, i) => {
-                    htmlContent += `
-                        <div style="margin-bottom: 10px; display: flex;">
-                            <span style="font-weight: bold; color: #d97706; margin-right: 10px;">${i + 1}.</span>
-                            <div style="color: #333; font-size: 12px;">${note}</div>
-                        </div>
-                    `;
+                    htmlContent += `<div style="margin-bottom: 10px; display: flex;"><span style="font-weight: bold; color: #d97706; margin-right: 10px;">${i + 1}.</span><div style="color: #333; font-size: 12px;">${note}</div></div>`;
                 });
             }
             
-            // Footer ekle
-            htmlContent += `
-                <div style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">
-                    Bu döküman Değerler Oyunu platformundan oluşturulmuştur.
-                </div>
-            `;
-
+            htmlContent += `<div style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">Bu döküman Değerler Oyunu platformundan oluşturulmuştur.</div>`;
             element.innerHTML = htmlContent;
 
-            // PDF Ayarları
-            const opt = {
-                margin:       10,
-                filename:     `${topic.title.replace(/\s+/g, '_')}_Ozet.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true }, // Yüksek kalite için scale 2
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // İndirme İşlemi
+            const opt = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Yazilacaklar.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas:  { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             await html2pdf().set(opt).from(element).save();
 
         } catch (err) {
@@ -195,67 +159,28 @@ function YazilacaklarDisplayPage() {
         );
     }
     
-    // --- KAVRAMLAR SEKMESİ İÇERİĞİ ---
     const KavramlarContent = (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pb-20">
             {content.conceptDefinitions.length > 0 ? content.conceptDefinitions.map((item, index) => (
-                <div 
-                    key={index} 
-                    className="group relative bg-slate-900/60 border border-white/5 rounded-2xl p-5 backdrop-blur-md hover:border-cyan-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-900/10 flex flex-col"
-                >
+                <div key={index} className="group relative bg-slate-900/60 border border-white/5 rounded-2xl p-5 backdrop-blur-md hover:border-cyan-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-900/10 flex flex-col">
                     <div className="flex items-center gap-3 mb-3 border-b border-white/5 pb-3">
-                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">
-                            {index + 1}
-                        </div>
-                        <h3 
-                            style={{ fontSize: `${fontSize * 1.1}rem` }} 
-                            className="font-bold text-slate-100 leading-tight"
-                        >
-                            {item.concept}
-                        </h3>
+                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold text-sm">{index + 1}</div>
+                        <h3 style={{ fontSize: `${fontSize * 1.1}rem` }} className="font-bold text-slate-100 leading-tight">{item.concept}</h3>
                     </div>
-                    <p 
-                        style={{ fontSize: `${fontSize}rem` }} 
-                        className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors"
-                    >
-                        {item.definition}
-                    </p>
+                    <p style={{ fontSize: `${fontSize}rem` }} className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">{item.definition}</p>
                 </div>
-            )) : (
-                <div className="col-span-full text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">
-                    Bu konu için kayıtlı tanım bulunamadı.
-                </div>
-            )}
+            )) : <div className="col-span-full text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">Bu konu için kayıtlı tanım bulunamadı.</div>}
         </div>
     );
 
-    // --- NOTLAR SEKMESİ İÇERİĞİ ---
     const NotlarContent = (
         <div className="space-y-3 pb-20">
              {content.notes.length > 0 ? content.notes.map((note, index) => (
-                <div 
-                    key={index} 
-                    className="flex gap-4 p-5 rounded-2xl bg-slate-900/60 border border-white/5 hover:bg-slate-900/80 transition-colors backdrop-blur-md items-start"
-                >
-                    {/* Sıra Numarası (Amber Rengi) */}
-                    <div className="flex-shrink-0 mt-0.5">
-                        <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-sm">
-                            {index + 1}
-                        </div>
-                    </div>
-                    
-                    <p 
-                        style={{ fontSize: `${fontSize}rem` }} 
-                        className={cn("text-slate-300 leading-relaxed pt-1", isFullscreen && "text-lg")}
-                    >
-                        {note}
-                    </p>
+                <div key={index} className="flex gap-4 p-5 rounded-2xl bg-slate-900/60 border border-white/5 hover:bg-slate-900/80 transition-colors backdrop-blur-md items-start">
+                    <div className="flex-shrink-0 mt-0.5"><div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-sm">{index + 1}</div></div>
+                    <p style={{ fontSize: `${fontSize}rem` }} className="text-slate-300 leading-relaxed pt-1">{note}</p>
                 </div>
-            )) : (
-                <div className="text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">
-                    Yapay zeka not üretemedi.
-                </div>
-            )}
+            )) : <div className="text-center py-12 text-slate-500 bg-slate-900/30 rounded-2xl border border-dashed border-white/5">Yapay zeka not üretemedi.</div>}
         </div>
     );
     
@@ -267,105 +192,45 @@ function YazilacaklarDisplayPage() {
                 isFullscreen ? "p-4" : "pb-12"
             )}
         >
-             {/* Arka Plan Efektleri */}
              {!isFullscreen && (
                 <div className="fixed inset-0 pointer-events-none z-0">
                     <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-cyan-600/5 rounded-full blur-[100px]" />
                     <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-violet-600/5 rounded-full blur-[100px]" />
                 </div>
             )}
-
-            {/* Üst Bar (Header) */}
-            <div className={cn(
-                "sticky top-0 z-30 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all",
-                !isFullscreen && "pt-4"
-            )}>
+            <div className="sticky top-0 z-30 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all pt-4">
                 <div className="container mx-auto px-4 pb-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        
-                        {/* Başlık ve Geri Dön */}
                         <div className="flex items-center gap-3 w-full md:w-auto">
                             {!isFullscreen && (
                                 <Button asChild variant="ghost" size="icon" className="shrink-0 hover:bg-white/5 text-slate-400 hover:text-white rounded-xl">
-                                    <Link href={backUrl}>
-                                        <ArrowLeft className="h-5 w-5"/>
-                                    </Link>
+                                    <Link href={backUrl}><ArrowLeft className="h-5 w-5"/></Link>
                                 </Button>
                             )}
-                            <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">
-                                {topic?.title || 'Yazılacaklar'}
-                            </h1>
+                            <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topicTitle || 'Yazılacaklar'}</h1>
                         </div>
-
-                        {/* Kontrol Butonları */}
                         <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
                             <div className="flex items-center gap-2 min-w-max px-1">
-                                {/* Font Boyutu */}
                                 <div className="flex items-center bg-slate-900/80 border border-white/10 rounded-xl p-1">
-                                    <Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg">
-                                        <Minus className="h-4 w-4"/>
-                                    </Button>
+                                    <Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Minus className="h-4 w-4"/></Button>
                                     <span className="text-xs font-mono text-slate-500 w-8 text-center">{Math.round(fontSize * 100)}%</span>
-                                    <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg">
-                                        <Plus className="h-4 w-4"/>
-                                    </Button>
+                                    <Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Plus className="h-4 w-4"/></Button>
                                 </div>
-
                                 <div className="w-px h-6 bg-white/10 mx-1" />
-
-                                {/* PDF İndir Butonu */}
-                                <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    onClick={handleDownloadPDF} 
-                                    disabled={isDownloading}
-                                    className="bg-slate-900/80 border-white/10 text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors h-10 px-4 rounded-xl gap-2"
-                                >
-                                    {isDownloading ? <Loader2 className="h-4 w-4 animate-spin"/> : <Download className="h-4 w-4" />}
-                                    <span className="hidden sm:inline">PDF İndir</span>
-                                </Button>
-
-                                {/* Tam Ekran */}
+                                <Button variant="outline" size="sm" onClick={handleDownloadPDF} disabled={isDownloading} className="bg-slate-900/80 border-white/10 text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-cyan-500/30 transition-colors h-10 px-4 rounded-xl gap-2">{isDownloading ? <Loader2 className="h-4 w-4 animate-spin"/> : <Download className="h-4 w-4" />}<span className="hidden sm:inline">PDF İndir</span></Button>
                                 <FullscreenToggle elementRef={mainContentRef} className="bg-slate-900/80 border-white/10 text-slate-300 hover:text-white hover:bg-white/10 h-10 w-10 rounded-xl" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* İçerik Alanı */}
-            <div className="flex-grow container mx-auto px-4 pt-6 relative z-10">
-                <Tabs defaultValue="kavramlar" className="w-full h-full flex flex-col">
-                    
-                    {/* Sekme Başlıkları */}
-                    <div className="flex justify-center mb-6">
-                        <TabsList className="bg-slate-900/80 border border-white/10 p-1 rounded-xl h-auto">
-                            <TabsTrigger 
-                                value="kavramlar" 
-                                className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 text-slate-400 px-6 py-2 rounded-lg transition-all duration-300 flex items-center gap-2"
-                            >
-                                <BookOpen className="h-4 w-4" />
-                                Kavramlar
-                            </TabsTrigger>
-                            <TabsTrigger 
-                                value="notlar" 
-                                className="data-[state=active]:bg-amber-500/20 data-[state=active]:text-amber-400 text-slate-400 px-6 py-2 rounded-lg transition-all duration-300 flex items-center gap-2"
-                            >
-                                <StickyNote className="h-4 w-4" />
-                                Notlar
-                            </TabsTrigger>
-                        </TabsList>
-                    </div>
-
-                    <TabsContent value="kavramlar" className="flex-grow outline-none data-[state=inactive]:hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {KavramlarContent}
-                    </TabsContent>
-                    
-                    <TabsContent value="notlar" className="flex-grow outline-none data-[state=inactive]:hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {NotlarContent}
-                    </TabsContent>
+            <main className="flex-grow container mx-auto px-4 pt-6 relative z-10 overflow-y-auto">
+                <Tabs defaultValue="kavramlar" className="w-full h-full flex flex-col items-center">
+                    <div className="flex justify-center mb-6 w-full"><TabsList className="grid grid-cols-2 w-full max-w-lg bg-slate-900/80 border border-white/20 p-1.5 rounded-full h-16 shadow-2xl backdrop-blur-xl"><TabsTrigger value="kavramlar" className="rounded-full text-lg font-bold data-[state=active]:bg-cyan-600 data-[state=active]:text-white text-slate-400 transition-all"><BookOpen className="w-5 h-5 mr-2" />Kavramlar</TabsTrigger><TabsTrigger value="notlar" className="rounded-full text-lg font-bold data-[state=active]:bg-amber-600 data-[state=active]:text-white text-slate-400 transition-all"><StickyNote className="w-5 h-5 mr-2" />Notlar</TabsTrigger></TabsList></div>
+                    <TabsContent value="kavramlar" className="w-full mt-0 data-[state=inactive]:hidden animate-in fade-in zoom-in-95 duration-300 focus:outline-none">{KavramlarContent}</TabsContent>
+                    <TabsContent value="notlar" className="w-full mt-0 data-[state=inactive]:hidden animate-in fade-in zoom-in-95 duration-300 focus:outline-none">{NotlarContent}</TabsContent>
                 </Tabs>
-            </div>
+            </main>
         </div>
     );
 }

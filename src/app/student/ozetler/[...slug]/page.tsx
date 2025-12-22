@@ -1,87 +1,61 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useCallback, useRef } from 'react';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
-import { Loader2, ArrowLeft, LayoutTemplate, AlertTriangle } from 'lucide-react';
-import type { Unit } from '@/lib/types';
+import { Suspense, useEffect, useState, useRef } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { Loader2, ArrowLeft, LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
-async function getStaticUnitOzet(unitId: string): Promise<{ title: string, htmlContent: string } | null> {
+async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
     try {
-        const manifestRes = await fetch('/curriculum/manifest.json');
-        if (!manifestRes.ok) throw new Error('Manifest not found');
-        const manifest = await manifestRes.json();
-        
-        let unitTitle = '';
-        manifest.classGroups.some((group: any) => 
-            group.courses.some((course: any) => 
-                course.units.some((unit: any) => {
-                    if(unit.id === unitId) {
-                        unitTitle = unit.title;
-                        return true;
-                    }
-                    return false;
-                })
-            )
-        );
-
-        if (!unitTitle) return null;
-
-        const res = await fetch(`/curriculum/ozetler/${unitId}.html`);
+        let contentId = topicId ? topicId : unitId;
+        const res = await fetch(`/curriculum/ozetler/${contentId}.html`);
         if (!res.ok) {
             return null;
         }
         const htmlContent = await res.text();
-        return { title: unitTitle, htmlContent };
-    } catch (e) {
-        console.error("Error fetching static unit for ozet:", e);
-        return null;
-    }
-}
-
-async function getStaticTopicOzet(topicId: string): Promise<{ title: string, htmlContent: string } | null> {
-    try {
+        
+        // Fetch title from manifest
         const manifestRes = await fetch('/curriculum/manifest.json');
         if (!manifestRes.ok) throw new Error('Manifest not found');
         const manifest = await manifestRes.json();
         
-        let topicTitle = '';
-        manifest.classGroups.some((group: any) => 
-            group.courses.some((course: any) => 
-                course.units.some((unit: any) => {
-                    const found = unit.topics.find((t: any) => t.id === topicId);
-                    if(found) {
-                        topicTitle = found.title;
-                        return true;
+        let title = '';
+         for (const group of manifest.classGroups) {
+            for (const course of group.courses) {
+                for (const unit of course.units) {
+                    if (!topicId && unit.id === unitId) {
+                        title = unit.title;
+                        break;
                     }
-                    return false;
-                })
-            )
-        );
-
-        if (!topicTitle) return null;
-
-        const res = await fetch(`/curriculum/ozetler/${topicId}.html`);
-        if (!res.ok) {
-            return null;
+                    if (topicId) {
+                        const topic = unit.topics.find((t: any) => t.id === topicId);
+                        if(topic) {
+                            title = topic.title;
+                            break;
+                        }
+                    }
+                }
+                if(title) break;
+            }
+            if(title) break;
         }
-        const htmlContent = await res.text();
-        return { title: topicTitle, htmlContent };
+
+        return { title: title || 'Özet', htmlContent };
     } catch (e) {
-        console.error("Error fetching static topic for ozet:", e);
+        console.error("Error fetching static content:", e);
         return null;
     }
 }
 
-
-function OzetlerDisplayPage() {
+function OzetDisplayPage() {
     const params = useParams();
     const [courseId, unitId, topicId] = params.slug as string[];
-    
+
     const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -99,25 +73,23 @@ function OzetlerDisplayPage() {
     }, []);
 
     useEffect(() => {
-        const fetchContent = async () => {
+        if (!courseId || !unitId) {
+            setError("Geçersiz URL. Gerekli parametreler eksik.");
+            setIsLoading(false);
+            return;
+        }
+        const fetchUnit = async () => {
             setIsLoading(true);
-            let fetchedContent = null;
-            if (topicId) {
-                fetchedContent = await getStaticTopicOzet(topicId);
-            } else if(unitId) {
-                fetchedContent = await getStaticUnitOzet(unitId);
-            }
-
+            const fetchedContent = await getContent(courseId, unitId, topicId || undefined);
             if (fetchedContent) {
                 setContent(fetchedContent);
             } else {
-                setError("İçerik bulunamadı veya bu konu için interaktif özet içeriği yok.");
+                setError('Bu içerik için interaktif özet bulunamadı.');
             }
             setIsLoading(false);
         };
-
-        fetchContent();
-    }, [topicId, unitId]);
+        fetchUnit();
+    }, [courseId, unitId, topicId]);
     
     if (isLoading) {
         return (
@@ -131,8 +103,7 @@ function OzetlerDisplayPage() {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
-                    <AlertTriangle className="h-12 w-12 text-red-300 mx-auto mb-4" />
-                    <p className="text-red-300 mb-6 font-medium text-lg">{error || "Bu içerik için interaktif özet içeriği bulunamadı."}</p>
+                    <p className="text-red-300 mb-6 font-medium text-lg">{error || "Bu içerik bulunamadı."}</p>
                     <Button asChild className="bg-white text-slate-900 hover:bg-slate-200 border-0 w-full font-bold">
                         <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
                     </Button>
@@ -223,7 +194,7 @@ function OzetlerDisplayPage() {
 export default function Page() {
     return (
         <Suspense fallback={<div className="min-h-screen bg-slate-800 flex justify-center items-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-400"/></div>}>
-            <OzetlerDisplayPage />
+            <OzetDisplayPage />
         </Suspense>
     );
 }

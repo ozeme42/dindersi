@@ -1,6 +1,7 @@
+
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Sparkles, Loader2, Gamepad2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -12,8 +13,6 @@ import { getCurriculumForSelection, type EnrichedCourse } from './actions/get-cu
 type Topic = { id: string; title: string; };
 type Unit = { id: string; title: string; topics: Topic[]; };
 type Course = EnrichedCourse;
-
-const ICONS = [Book, Sparkles, Gamepad2];
 
 // --- UI COMPONENTS ---
 const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -83,7 +82,6 @@ const steps = [
   { id: 1, name: "Ders", icon: Book },
   { id: 2, name: "Ünite", icon: Library },
   { id: 3, name: "Konu", icon: ListTodo },
-  { id: 4, name: "Başlat", icon: Sparkles },
 ];
 
 const getGradient = (index: number) => {
@@ -111,7 +109,6 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
   const [isLoading, setIsLoading] = useState(true);
   
   const [allCourses, setAllCourses] = useState<Course[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
 
@@ -121,8 +118,6 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
     courseColor: "", 
     unitId: "",
     unitName: "",
-    topicId: "",
-    topicName: "",
   });
 
   const getBackUrl = () => {
@@ -142,7 +137,6 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
         }));
         
         setAllCourses(enrichedCourses);
-        setFilteredCourses(enrichedCourses); // Initially show all relevant courses
         setIsLoading(false);
     };
     if (user) {
@@ -156,7 +150,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
         courseId: course.id, 
         courseName: course.title, 
         courseColor: course.color || "from-slate-700 to-slate-800",
-        unitId: '', unitName: '', topicId: '', topicName: '' 
+        unitId: '', unitName: '',
     });
     
     setIsLoading(true);
@@ -168,13 +162,23 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
   };
 
   const handleSelectUnit = (unitId: string, unitName: string) => {
-    setSelection({ ...selection, unitId, unitName, topicId: '', topicName: '' });
+    setSelection({ ...selection, unitId, unitName });
     
+    // For games, allow "all" topics selection
     if (dataType === 'games' && unitId === 'all') {
-      setSelection(prev => ({ ...prev, unitId, unitName, topicId: 'all', topicName: 'Tüm Konular' }));
-      setTopics([]);
-      router.push(`/oyunlar?${createQueryString()}`);
-      return;
+        const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
+        const params = new URLSearchParams({
+            gameName: pageTitle,
+            gamePath,
+            courseId: selection.courseId,
+            courseName: selection.courseName,
+            unitId: 'all',
+            unitName: 'Tüm Üniteler',
+            topicId: 'all',
+            topicName: 'Tüm Konular',
+        });
+        router.push(`/oyunlar/${gamePath}/oyun?${params.toString()}`);
+        return;
     }
 
     setIsLoading(true);
@@ -188,51 +192,31 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
-    setSelection({ ...selection, topicId, topicName });
-    setCurrentStep(4);
+      let url = '';
+      if (targetPath.startsWith('student')) {
+          url = `/${targetPath}/${selection.courseId}/${selection.unitId}/${topicId}`;
+      } else {
+          const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
+          const params = new URLSearchParams({
+            gameName: pageTitle,
+            gamePath,
+            courseId: selection.courseId,
+            courseName: selection.courseName,
+            unitId: selection.unitId,
+            unitName: selection.unitName,
+            topicId: topicId,
+            topicName: topicName,
+          });
+          url = `/oyunlar/${gamePath}/oyun?${params.toString()}`;
+      }
+      router.push(url);
   };
+
 
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
       else router.push(getBackUrl());
   };
-
-  const createQueryString = (finalSelection?: { topicId: string, topicName: string }) => {
-    const currentSelection = { ...selection, ...finalSelection };
-    
-    // For games, we pass all context to the game page itself.
-    if (targetPath === 'oyunlar') {
-        const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
-        const gameName = new URLSearchParams(window.location.search).get('gameName') || '';
-
-        const params = new URLSearchParams({
-            gameName,
-            gamePath,
-            courseId: currentSelection.courseId,
-            courseName: currentSelection.courseName,
-            unitId: currentSelection.unitId,
-            unitName: currentSelection.unitName,
-            topicId: currentSelection.topicId,
-            topicName: currentSelection.topicName,
-        });
-        return params.toString();
-    }
-    return '';
-  }
-
-  const getFinalUrl = (finalSelection?: { topicId: string, topicName: string }) => {
-      const currentSelection = { ...selection, ...finalSelection };
-      if (targetPath.startsWith('student')) {
-          return `/${targetPath}/${currentSelection.courseId}/${currentSelection.unitId}/${currentSelection.topicId}`;
-      }
-      
-      const gamePath = new URLSearchParams(window.location.search).get('gamePath');
-      if (targetPath === 'oyunlar' && gamePath) {
-          return `/oyunlar/${gamePath}/oyun?${createQueryString(finalSelection)}`;
-      }
-      return getBackUrl();
-  }
-  
 
   const renderStepContent = () => {
       if (isLoading) {
@@ -244,13 +228,11 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
           );
       }
       
-      const gamePath = new URLSearchParams(window.location.search).get('gamePath');
-
       switch(currentStep) {
           case 1:
             return (
                 <div className="grid grid-cols-1 gap-3 md:gap-6">
-                    {filteredCourses.map((course, idx) => (
+                    {allCourses.length > 0 ? allCourses.map((course, idx) => (
                         <SelectionCard 
                             key={course.id}
                             title={course.title}
@@ -260,7 +242,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                             onClick={() => handleSelectCourse(course)}
                             delay={idx * 50}
                         />
-                    ))}
+                    )) : <p className="text-center text-slate-500 py-10">Bu bölüm için uygun ders bulunmuyor.</p>}
                 </div>
             );
           case 2:
@@ -272,10 +254,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                             title="Tüm Üniteler (Karma)"
                             icon={Sparkles}
                             color="from-yellow-600 to-amber-500"
-                            onClick={() => {
-                                const newSelection = { unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular' };
-                                router.push(`/oyunlar/${gamePath}/oyun?${createQueryString(newSelection)}`);
-                            }}
+                            onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
                             delay={0}
                         />
                     )}
@@ -300,10 +279,7 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                             title="Tüm Konular (Karma)"
                             icon={Sparkles}
                             color="from-yellow-600 to-amber-500"
-                            onClick={() => {
-                                const newSelection = { topicId: 'all', topicName: 'Tüm Konular' };
-                                router.push(`/oyunlar/${gamePath}/oyun?${createQueryString(newSelection)}`);
-                            }}
+                            onClick={() => handleSelectTopic('all', 'Tüm Konular')}
                             delay={0}
                         />
                     )}
@@ -319,50 +295,10 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                     ))}
                 </div>
             );
-          case 4:
-            const url = getFinalUrl();
-            return (
-                <div className="flex flex-col items-center justify-center text-center space-y-4 md:space-y-8 py-2 md:py-8 animate-in zoom-in-95 duration-500">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-green-500 blur-3xl opacity-20 rounded-full"></div>
-                        <div className="bg-gradient-to-br from-green-400 to-emerald-600 p-3 md:p-6 rounded-2xl md:rounded-3xl shadow-2xl relative z-10 transform rotate-3">
-                            <Sparkles className="h-8 w-8 md:h-20 md:w-20 text-white" />
-                        </div>
-                    </div>
-                    
-                    <div className="space-y-1">
-                        <h2 className="text-xl md:text-5xl font-black text-white uppercase tracking-wide">Hazır Mısın?</h2>
-                        <p className="text-xs md:text-xl text-slate-300 max-w-md mx-auto">
-                            İşte seçtiğin görev detayları:
-                        </p>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 rounded-xl md:rounded-3xl p-4 md:p-8 w-full max-w-2xl backdrop-blur-md">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8 text-left">
-                            <div className="flex items-center md:block justify-between md:justify-start gap-2 border-b border-white/5 md:border-0 pb-2 md:pb-0">
-                                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest shrink-0">DERS</span>
-                                <span className="text-sm md:text-2xl font-bold text-white truncate text-right md:text-left" title={selection.courseName}>{selection.courseName}</span>
-                            </div>
-                            <div className="flex items-center md:block justify-between md:justify-start gap-2 border-b border-white/5 md:border-0 pb-2 md:pb-0">
-                                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest shrink-0">ÜNİTE</span>
-                                <span className="text-sm md:text-2xl font-bold text-white truncate text-right md:text-left" title={selection.unitName}>{selection.unitName}</span>
-                            </div>
-                            <div className="flex items-center md:block justify-between md:justify-start gap-2">
-                                <span className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest shrink-0">KONU</span>
-                                <span className="text-sm md:text-2xl font-bold text-white truncate text-right md:text-left" title={selection.topicName}>{selection.topicName}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Link href={url} className="w-full max-w-md pt-2">
-                        <button className="w-full py-3 md:py-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-black text-lg md:text-2xl uppercase tracking-widest rounded-xl md:rounded-2xl shadow-xl shadow-green-900/30 border-b-4 md:border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2 transition-all flex items-center justify-center gap-3">
-                            <Gamepad2 className="h-5 w-5 md:h-8 md:w-8" /> Başla
-                        </button>
-                    </Link>
-                </div>
-            );
+          default:
+            return null;
       }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 md:pb-10 font-sans text-white">
@@ -392,36 +328,25 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                 <div 
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
 
-                {steps.map((step) => {
+                {steps.slice(0, 3).map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
-                    
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-1">
-                            <div className={cn(
-                                "w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl",
-                                isActive 
-                                    ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" 
-                                    : "bg-slate-900 border-slate-700 text-slate-500"
-                            )}>
+                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
                                 {isActive ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
                             </div>
-                            <span className={cn(
-                                "text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300",
-                                isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600"
-                            )}>
-                                {step.name}
-                            </span>
+                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
                         </div>
                     );
                 })}
             </div>
         </div>
 
-        <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] md:min-h-[500px] flex flex-col">
+        <GlassCard className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
             <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
                     <span className="md:hidden">{steps.find(s => s.id === currentStep)?.name} Seçimi</span>
@@ -436,31 +361,27 @@ export function TopicSelectionClient({ pageTitle, pageIcon: PageIcon, targetPath
                     </span>
                 </h2>
                 
-                {currentStep < 4 && (
-                    <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                        {currentStep} / 4
-                    </div>
-                )}
+                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
+                    {currentStep} / {steps.length - 1}
+                </div>
             </div>
 
             <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
                 {renderStepContent()}
             </div>
 
-            {currentStep < 4 && (
-                <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
-                    <span className="truncate mr-4">
-                        {currentStep === 1 && "Bir ders seç."}
-                        {currentStep === 2 && "Bir ünite seç."}
-                        {currentStep === 3 && "Bir konu seç."}
-                    </span>
-                    <div className="flex gap-1 md:gap-2 shrink-0">
-                        <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
-                        <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
-                        <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
-                    </div>
+            <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
+                <span className="truncate mr-4">
+                    {currentStep === 1 && "Bir ders seç."}
+                    {currentStep === 2 && "Bir ünite seç."}
+                    {currentStep === 3 && "Bir konu seç."}
+                </span>
+                <div className="flex gap-1 md:gap-2 shrink-0">
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
                 </div>
-            )}
+            </div>
         </GlassCard>
 
     </div>
