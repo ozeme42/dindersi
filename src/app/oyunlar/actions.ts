@@ -25,22 +25,25 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        let allItems: Pick<ActivityItem, 'id' | 'content'>[] = [];
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-        
-        if (topicId && topicId !== 'all') {
-            const res = await fetch(`${baseUrl}/curriculum/activities/${topicId}.json`);
-            if (res.ok) {
-                const staticItems: ActivityItem[] = await res.json();
-                allItems = staticItems.filter(item => item.type === 'definition').map(item => ({ id: item.id, content: item.content }));
-            } else if (res.status !== 404) {
-                // Throw an error if file exists but can't be read, but not for 404
-                throw new Error(`Static data for topic ${topicId} failed to load with status ${res.status}.`);
-            }
+        if (!topicId || topicId === 'all') {
+            return { error: "Lütfen oynamak için belirli bir konu seçin.", questions: [] };
         }
+
+        // Use relative path for fetch, which works on both server and client side in Next.js
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/curriculum/activities/${topicId}.json`);
+
+        if (!res.ok) {
+            if (res.status === 404) {
+                 return { error: "Bu konu için 'Bil Bakalım' oyun verisi bulunamadı. Lütfen farklı bir konu seçin veya bu konu için veri oluşturun.", questions: [] };
+            }
+            throw new Error(`Veri dosyası yüklenemedi: ${res.statusText}`);
+        }
+
+        const staticItems: ActivityItem[] = await res.json();
         
-        // If allItems is still empty after trying to fetch, it means no data was found.
-        const allDefinitions = allItems.filter(item => item.content?.term && item.content?.definition);
+        const allDefinitions = staticItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition)
+            .map(item => ({ id: item.id, content: item.content }));
 
         if (allDefinitions.length < 3) {
             return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
@@ -59,7 +62,7 @@ export async function getBilBakalimAction(
         return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
     } catch (error: any) {
         console.error("Error getting Bil Bakalım questions:", error);
-        return { error: "Oyun için sorular alınırken bir hata oluştu.", questions: [] };
+        return { error: "Oyun için sorular alınırken bir hata oluştu. Dosya formatı veya erişim sorunu olabilir.", questions: [] };
     }
 }
 
