@@ -1,5 +1,5 @@
 
-      
+
 'use client';
 
 import { Suspense, useEffect, useState, useCallback, useRef } from 'react';
@@ -13,17 +13,35 @@ import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
 
-
-async function getUnitOzet(courseId: string, unitId: string): Promise<Unit | null> {
+async function getStaticUnitOzet(unitId: string): Promise<{ title: string, htmlContent: string } | null> {
     try {
-        const unitRef = doc(db, 'courses', courseId, 'units', unitId);
-        const unitSnap = await getDoc(unitRef);
-        if (unitSnap.exists()) {
-            return unitSnap.data() as Unit;
+        const manifestRes = await fetch('/curriculum/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest not found');
+        const manifest = await manifestRes.json();
+        
+        let unitTitle = '';
+        manifest.classGroups.some((group: any) => 
+            group.courses.some((course: any) => 
+                course.units.some((unit: any) => {
+                    if(unit.id === unitId) {
+                        unitTitle = unit.title;
+                        return true;
+                    }
+                    return false;
+                })
+            )
+        );
+
+        if (!unitTitle) return null;
+
+        const res = await fetch(`/curriculum/ozetler/${unitId}.html`);
+        if (!res.ok) {
+            return null;
         }
-        return null;
+        const htmlContent = await res.text();
+        return { title: unitTitle, htmlContent };
     } catch (e) {
-        console.error("Error fetching unit for ozet:", e);
+        console.error("Error fetching static unit for ozet:", e);
         return null;
     }
 }
@@ -34,13 +52,13 @@ function UnitOzetClientPage() {
     const courseId = params.courseId as string;
     const unitId = params.unitId as string;
 
-    const [unit, setUnit] = useState<Unit | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const backUrl = `/`;
+    const backUrl = `/curriculum`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -57,18 +75,18 @@ function UnitOzetClientPage() {
             return;
         }
 
-        const fetchUnit = async () => {
+        const fetchContent = async () => {
             setIsLoading(true);
-            const fetchedUnit = await getUnitOzet(courseId, unitId);
-            if (fetchedUnit && fetchedUnit.htmlContent) {
-                setUnit(fetchedUnit);
+            const fetchedContent = await getStaticUnitOzet(unitId);
+            if (fetchedContent) {
+                setContent(fetchedContent);
             } else {
-                setError(fetchedUnit ? "Bu ünite için interaktif özet içeriği bulunamadı." : "Ünite bulunamadı veya yüklenemedi.");
+                setError("Bu ünite için interaktif özet içeriği bulunamadı.");
             }
             setIsLoading(false);
         };
 
-        fetchUnit();
+        fetchContent();
     }, [courseId, unitId]);
     
     if (isLoading) {
@@ -79,7 +97,7 @@ function UnitOzetClientPage() {
         );
     }
     
-    if (error || !unit || !unit.htmlContent) {
+    if (error || !content || !content.htmlContent) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
@@ -124,7 +142,7 @@ function UnitOzetClientPage() {
                                 </Button>
                             )}
                             <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
-                                {unit?.title || 'Ünite Özeti'}
+                                {content?.title || 'Ünite Özeti'}
                             </h1>
                         </div>
                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
@@ -160,9 +178,9 @@ function UnitOzetClientPage() {
                         </div>
                     )}
                     <iframe
-                        srcDoc={unit.htmlContent}
+                        srcDoc={content.htmlContent}
                         className="w-full flex-grow border-0 bg-white"
-                        title={unit.title}
+                        title={content.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
                 </div>

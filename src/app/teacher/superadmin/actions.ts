@@ -381,22 +381,24 @@ export async function exportAllData(
 }
 
 /**
- * Stage 1: Exports manifest.json and HTML content for `ozetler` and `yazilacaklar`.
+ * Stage 1: Exports manifest.json and HTML content for `ozetler`.
  * This is a relatively light operation.
  */
 export async function exportManifestAndContent() {
     const db = getAdminDb();
-    const exportPath = path.join(process.cwd(), 'public', 'curriculum');
+    const publicPath = path.join(process.cwd(), 'public');
+    const curriculumPath = path.join(publicPath, 'curriculum');
     const allDocsToWrite: { path: string, content: string }[] = [];
     const CHUNK_SIZE = 100;
 
     try {
-        await fs.mkdir(exportPath, { recursive: true });
+        await fs.mkdir(curriculumPath, { recursive: true });
         
         const addFile = (filePath: string, content: any) => {
+            const finalContent = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
             allDocsToWrite.push({
-                path: path.join(exportPath, filePath),
-                content: JSON.stringify(content, null, 2)
+                path: path.join(curriculumPath, filePath),
+                content: finalContent
             });
         };
 
@@ -422,13 +424,17 @@ export async function exportManifestAndContent() {
                         const unitData = unitDoc.data() as Unit;
                         if (!(unitData.isPublished ?? true)) return null;
 
+                        // Create ozetler file for unit if content exists
+                        if (unitData.htmlContent) {
+                            addFile(`ozetler/${unitDoc.id}.html`, unitData.htmlContent);
+                        }
+
                         const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
-                        const defsSnap = await db.collection('activityItems').where('unitId', '==', unitDoc.id).where('type', '==', 'definition').limit(1).get();
                         
                         const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
-                            const topicData = topicDoc.data() as Topic;
-                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
-                            return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
+                             const topicData = topicDoc.data() as Topic;
+                             const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
                         });
 
                         return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
@@ -458,6 +464,17 @@ export async function exportManifestAndContent() {
 
                         const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').limit(1).get();
                         const hasYazilacaklarContent = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
+
+                        if (topicData.htmlContent) {
+                            addFile(`ozetler/${doc.id}.html`, topicData.htmlContent);
+                        }
+                        if (hasYazilacaklarContent) {
+                            const notes = topicData.writingContent?.notes || [];
+                            const defs = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').get();
+                            const conceptDefinitions = defs.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
+                            addFile(`yazilacaklar/${doc.id}.json`, { notes, conceptDefinitions });
+                        }
+                        
                         const hasOzetContent = !!topicData.htmlContent;
                         
                         if (hasOzetContent || hasYazilacaklarContent) {
@@ -477,6 +494,10 @@ export async function exportManifestAndContent() {
         finalClassGroups = finalClassGroups.filter(g => g.courses.length > 0);
         addFile('manifest.json', { classGroups: finalClassGroups });
 
+        // Ensure subdirectories exist
+        await fs.mkdir(path.join(curriculumPath, 'ozetler'), { recursive: true });
+        await fs.mkdir(path.join(curriculumPath, 'yazilacaklar'), { recursive: true });
+
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
             await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
@@ -495,12 +516,12 @@ export async function exportManifestAndContent() {
  */
 export async function exportActivityData() {
     const db = getAdminDb();
-    const exportPath = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+    const curriculumPath = path.join(process.cwd(), 'public', 'curriculum');
+    const exportPath = path.join(curriculumPath, 'activities');
     const allDocsToWrite: { path: string, content: string }[] = [];
     const CHUNK_SIZE = 100;
 
     try {
-        await fs.rm(exportPath, { recursive: true, force: true });
         await fs.mkdir(exportPath, { recursive: true });
 
         const activitiesSnapshot = await db.collection('activityItems').get();

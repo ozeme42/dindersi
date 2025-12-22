@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
@@ -12,19 +13,40 @@ import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-async function getTopicOzet(courseId: string, unitId: string, topicId: string): Promise<Topic | null> {
+async function getStaticTopicOzet(topicId: string): Promise<{ title: string, htmlContent: string } | null> {
     try {
-        const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-        const topicSnap = await getDoc(topicRef);
-        if (topicSnap.exists()) {
-            return topicSnap.data() as Topic;
+        const manifestRes = await fetch('/curriculum/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest not found');
+        const manifest = await manifestRes.json();
+        
+        let topicTitle = '';
+        manifest.classGroups.some((group: any) => 
+            group.courses.some((course: any) => 
+                course.units.some((unit: any) => {
+                    const found = unit.topics.find((t: any) => t.id === topicId);
+                    if(found) {
+                        topicTitle = found.title;
+                        return true;
+                    }
+                    return false;
+                })
+            )
+        );
+
+        if (!topicTitle) return null;
+
+        const res = await fetch(`/curriculum/ozetler/${topicId}.html`);
+        if (!res.ok) {
+            return null;
         }
-        return null;
+        const htmlContent = await res.text();
+        return { title: topicTitle, htmlContent };
     } catch (e) {
-        console.error("Error fetching topic for ozet:", e);
+        console.error("Error fetching static topic for ozet:", e);
         return null;
     }
 }
+
 
 export function OzetlerClientPage() {
     const params = useParams();
@@ -32,13 +54,13 @@ export function OzetlerClientPage() {
     const unitId = params.unitId as string;
     const topicId = params.topicId as string;
 
-    const [topic, setTopic] = useState<Topic | null>(null);
+    const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const backUrl = `/`;
+    const backUrl = `/curriculum`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -49,25 +71,25 @@ export function OzetlerClientPage() {
     }, []);
 
     useEffect(() => {
-        if (!courseId || !unitId || !topicId) {
+        if (!topicId) {
             setError("Geçersiz URL. Konu bilgileri eksik.");
             setIsLoading(false);
             return;
         }
 
-        const fetchTopic = async () => {
+        const fetchContent = async () => {
             setIsLoading(true);
-            const fetchedTopic = await getTopicOzet(courseId, unitId, topicId);
-            if (fetchedTopic) {
-                setTopic(fetchedTopic);
+            const fetchedContent = await getStaticTopicOzet(topicId);
+            if (fetchedContent) {
+                setContent(fetchedContent);
             } else {
-                setError("Konu bulunamadı veya yüklenemedi.");
+                setError("Konu bulunamadı veya bu konu için özet içeriği yok.");
             }
             setIsLoading(false);
         };
 
-        fetchTopic();
-    }, [courseId, unitId, topicId]);
+        fetchContent();
+    }, [topicId]);
     
     if (isLoading) {
         return (
@@ -77,7 +99,7 @@ export function OzetlerClientPage() {
         );
     }
     
-    if (error || !topic || !topic.htmlContent) {
+    if (error || !content || !content.htmlContent) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
@@ -96,7 +118,7 @@ export function OzetlerClientPage() {
             ref={mainContentRef} 
             className={cn(
                 "w-full min-h-screen bg-slate-800 flex flex-col relative overflow-hidden transition-all", 
-                !isFullscreen ? "pb-24 md:pb-8" : "pb-0"
+                !isFullscreen && "pb-24 md:pb-8"
             )}
         >
              {!isFullscreen && (
@@ -122,7 +144,7 @@ export function OzetlerClientPage() {
                                 </Button>
                             )}
                             <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
-                                {topic?.title || 'Özet'}
+                                {content?.title || 'Özet'}
                             </h1>
                         </div>
                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
@@ -158,9 +180,9 @@ export function OzetlerClientPage() {
                         </div>
                     )}
                     <iframe
-                        srcDoc={topic.htmlContent}
+                        srcDoc={content.htmlContent}
                         className="w-full flex-grow border-0 bg-white"
-                        title={topic.title}
+                        title={content.title}
                         sandbox="allow-scripts allow-same-origin"
                     />
                 </div>
@@ -168,4 +190,3 @@ export function OzetlerClientPage() {
         </div>
     );
 }
-

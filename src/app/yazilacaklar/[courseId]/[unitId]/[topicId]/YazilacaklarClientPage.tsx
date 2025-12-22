@@ -1,45 +1,23 @@
 
+
 'use client';
 
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote } from 'lucide-react';
-import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
+import type { YazilacaklarContent } from '@/lib/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 
-// --- Veri Çekme Fonksiyonu ---
-async function getDefinitionsForTopic(topicId: string): Promise<{ concept: string; definition: string; }[]> {
-    if (!topicId) return [];
-    try {
-        const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => {
-            const item = doc.data() as ActivityItem;
-            return {
-                concept: item.content.term || '',
-                definition: item.content.definition || ''
-            };
-        }).filter(item => item.concept && item.definition);
-    } catch (error) {
-        console.error("Error fetching definitions for topic:", error);
-        return [];
-    }
-}
-
-export function YazilacaklarClientPage() {
+function YazilacaklarDisplayPage() {
     const params = useParams();
-    const courseId = params.courseId as string;
-    const unitId = params.unitId as string;
-    const topicId = params.topicId as string;
+    const [courseId, unitId, topicId] = params.slug as string[];
 
-    const [topic, setTopic] = useState<Topic | null>(null);
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
+    const [topicTitle, setTopicTitle] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isDownloading, setIsDownloading] = useState(false);
@@ -59,100 +37,92 @@ export function YazilacaklarClientPage() {
     }, []);
 
     const fetchContent = useCallback(async () => {
-        if (!topicId || !courseId || !unitId) {
-            setError("Eksik bilgi: Gerekli konu detayları bulunamadı.");
+        if (!topicId) {
+            setError("Eksik konu bilgisi.");
             setIsLoading(false);
             return;
         }
         setIsLoading(true);
         setError(null);
         try {
-            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-            const topicSnap = await getDoc(topicRef);
+            // manifest.json'dan konu adını al
+            const manifestRes = await fetch('/curriculum/manifest.json');
+            if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
+            const manifestData = await manifestRes.json();
             
-            if (topicSnap.exists()) {
-                const topicData = topicSnap.data() as Topic;
-                setTopic(topicData);
-                
-                const definitions = await getDefinitionsForTopic(topicId);
-                const notes = topicData.writingContent?.notes || [];
-
-                if (definitions.length === 0 && notes.length === 0) {
-                     setError('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
-                } else {
-                    setContent({ conceptDefinitions: definitions, notes: notes });
+            let foundTopic = null;
+            for (const group of manifestData.classGroups) {
+                for (const course of group.courses) {
+                    for (const unit of course.units) {
+                        const topic = unit.topics.find((t: any) => t.id === topicId);
+                        if(topic) {
+                            foundTopic = topic;
+                            break;
+                        }
+                    }
+                    if(foundTopic) break;
                 }
-
-            } else {
-                 setError('Konu bulunamadı.');
+                if(foundTopic) break;
             }
+            
+            if (foundTopic) {
+                setTopicTitle((foundTopic as any).title);
+            }
+
+            // yazilacaklar/[topicId].json'dan içeriği al
+            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
+            if (!res.ok) {
+                throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
+            }
+            const data: YazilacaklarContent = await res.json();
+
+            if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
+                 throw new Error('Bu konu için "Yazılacaklar" içeriği boş.');
+            }
+            
+            setContent(data);
         } catch (e: any) {
-            setError('İçerik alınırken bir hata oluştu.');
+            setError(e.message || 'İçerik alınırken bir hata oluştu.');
         } finally {
             setIsLoading(false);
         }
-    }, [topicId, courseId, unitId]);
+    }, [topicId]);
 
     useEffect(() => {
         fetchContent();
     }, [fetchContent]);
-    
+
     const handleDownloadPDF = async () => {
-        if (!content || !topic) return;
+        if (!content || !topicTitle) return;
         setIsDownloading(true);
 
         try {
             const html2pdf = (await import('html2pdf.js')).default;
-
             const element = document.createElement('div');
             element.style.padding = '20px';
             element.style.fontFamily = 'Arial, sans-serif';
             element.style.color = '#000';
 
-            let htmlContent = `
-                <h1 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">${topic.title}</h1>
-            `;
+            let htmlContent = `<h1 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">${topicTitle}</h1>`;
 
             if (content.conceptDefinitions.length > 0) {
                 htmlContent += `<h3 style="color: #0056b3; margin-top: 20px; background: #f0f0f0; padding: 8px;">Kavramlar ve Tanımları</h3>`;
                 content.conceptDefinitions.forEach((item, i) => {
-                    htmlContent += `
-                        <div style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
-                            <strong style="color: #000; font-size: 14px;">${i + 1}. ${item.concept}</strong>
-                            <div style="color: #444; font-size: 12px; margin-top: 4px;">${item.definition}</div>
-                        </div>
-                    `;
+                    htmlContent += `<div style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px;"><strong style="color: #000; font-size: 14px;">${i + 1}. ${item.concept}</strong><div style="color: #444; font-size: 12px; margin-top: 4px;">${item.definition}</div></div>`;
                 });
             }
 
             if (content.notes.length > 0) {
                 htmlContent += `<h3 style="color: #d97706; margin-top: 20px; background: #fff7ed; padding: 8px;">Önemli Notlar</h3>`;
                 content.notes.forEach((note, i) => {
-                    htmlContent += `
-                        <div style="margin-bottom: 10px; display: flex;">
-                            <span style="font-weight: bold; color: #d97706; margin-right: 10px;">${i + 1}.</span>
-                            <div style="color: #333; font-size: 12px;">${note}</div>
-                        </div>
-                    `;
+                    htmlContent += `<div style="margin-bottom: 10px; display: flex;"><span style="font-weight: bold; color: #d97706; margin-right: 10px;">${i + 1}.</span><div style="color: #333; font-size: 12px;">${note}</div></div>`;
                 });
             }
             
-            htmlContent += `
-                <div style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">
-                    Bu döküman Değerler Oyunu platformundan oluşturulmuştur.
-                </div>
-            `;
-
+            htmlContent += `<div style="margin-top: 40px; font-size: 10px; color: #999; text-align: center; border-top: 1px solid #eee; padding-top: 10px;">Bu döküman Değerler Oyunu platformundan oluşturulmuştur.</div>`;
             element.innerHTML = htmlContent;
 
-            const opt = {
-                margin:       10,
-                filename:     `${topic.title.replace(/\s+/g, '_')}_Ozet.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
+            const opt = { margin: 10, filename: `${topicTitle.replace(/\s+/g, '_')}_Yazilacaklar.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas:  { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
             await html2pdf().set(opt).from(element).save();
 
         } catch (err) {
@@ -163,7 +133,7 @@ export function YazilacaklarClientPage() {
         }
     };
     
-    const backUrl = `/student/yazilacaklar`;
+    const backUrl = `/curriculum`;
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.1, 2.5));
     const decreaseFontSize = () => setFontSize(fs => Math.max(0.8, fs - 0.1));
@@ -189,7 +159,7 @@ export function YazilacaklarClientPage() {
             </div>
         );
     }
-
+    
     const KavramlarContent = (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pb-20">
             {content.conceptDefinitions.length > 0 ? content.conceptDefinitions.map((item, index) => (
@@ -223,7 +193,7 @@ export function YazilacaklarClientPage() {
             <div className="sticky top-0 z-30 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all pt-4">
                 <div className="container mx-auto px-4 pb-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 w-full md:w-auto"><h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topic?.title || 'Yazılacaklar'}</h1></div>
+                        <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topicTitle || 'Yazılacaklar'}</h1>
                         <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
                             <div className="flex items-center gap-2 min-w-max px-1">
                                 <div className="flex items-center bg-slate-900/80 border border-white/10 rounded-xl p-1"><Button variant="ghost" size="icon" onClick={decreaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Minus className="h-4 w-4"/></Button><span className="text-xs font-mono text-slate-500 w-8 text-center">{Math.round(fontSize * 100)}%</span><Button variant="ghost" size="icon" onClick={increaseFontSize} className="h-8 w-8 hover:bg-white/10 text-slate-400 hover:text-white rounded-lg"><Plus className="h-4 w-4"/></Button></div>

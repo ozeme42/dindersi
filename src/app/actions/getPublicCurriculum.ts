@@ -1,6 +1,10 @@
 
-      
+
 'use server';
+
+// This file is no longer used for the public curriculum page.
+// The page now fetches the static manifest.json directly.
+// This file is kept for potential future use or reference but can be deleted.
 
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
@@ -10,7 +14,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 export type PublicCourse = Omit<Course, 'units'> & {
     units: (Omit<Unit, 'topics'> & {
         topics: (Topic & { hasYazilacaklarContent: boolean; hasOzetContent: boolean })[]
-        hasUnitOzet: boolean; // Ünite özetinin olup olmadığını belirten alan
+        hasUnitOzet: boolean;
     })[]
 };
 
@@ -22,10 +26,13 @@ export type PublicClass = Omit<SchoolClass, 'courses'> & {
 export async function getPublicCurriculum(): Promise<{ classGroups: { name: string; courses: PublicCourse[] }[] }> {
     noStore();
     try {
-        const [allClassesSnap, allCoursesSnap] = await Promise.all([
+        const [allClassesSnap, allCoursesSnap, allActivityItemsSnap] = await Promise.all([
             getDocs(query(collection(db, 'classes'))),
-            getDocs(collection(db, 'courses'))
+            getDocs(collection(db, 'courses')),
+            getDocs(query(collection(db, 'activityItems'), where('type', '==', 'definition')))
         ]);
+
+        const allDefinitions = new Set(allActivityItemsSnap.docs.map(doc => doc.data().topicId));
 
         const allClasses = allClassesSnap.docs
             .map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass))
@@ -56,7 +63,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                         if (data.isPublished === false) {
                             return null;
                         }
-                        const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || (data.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        const hasYazilacaklar = (data.writingContent?.notes?.length || 0) > 0 || allDefinitions.has(topicDoc.id);
                         const hasOzet = !!data.htmlContent;
                         
                         if (hasYazilacaklar || hasOzet) {
@@ -74,7 +81,7 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
                         title: unitData.title,
                         topics: topics as any,
                         isPublished: unitData.isPublished,
-                        hasUnitOzet: hasUnitOzet // Bu bilgiyi ekliyoruz
+                        hasUnitOzet: hasUnitOzet
                     });
                 }
             }
@@ -113,7 +120,12 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
             .filter(group => group.courses.length > 0);
         
         if (generalCourses.length > 0) {
-            classGroups.push({ name: "Genel", courses: generalCourses });
+            const generalGroup = classGroups.find(g => g.name === 'Genel');
+            if (generalGroup) {
+                generalGroup.courses.push(...generalCourses);
+            } else {
+                classGroups.push({ name: "Genel", courses: generalCourses });
+            }
         }
         
         return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
@@ -123,5 +135,3 @@ export async function getPublicCurriculum(): Promise<{ classGroups: { name: stri
         return { classGroups: [] };
     }
 }
-
-    
