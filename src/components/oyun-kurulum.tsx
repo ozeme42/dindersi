@@ -7,20 +7,15 @@ import {
     Sparkles, Loader2, Feather, LayoutGrid, Users, Gamepad2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
+import { getCurriculumForSelection, type EnrichedCourse } from '@/components/actions/get-curriculum-for-selection';
 
 // --- TİP TANIMLARI ---
 type Topic = { id: string; title: string; };
 type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean };
-type Course = { 
-    id: string; 
-    title: string; 
-    className?: string; 
-    icon?: any; 
-    color?: string;
-    units: Unit[]; 
-};
+type Course = EnrichedCourse;
 type ClassGroup = { name: string; courses: Course[] };
 
 const ICONS = [Book, Sparkles, Feather, LayoutGrid];
@@ -77,10 +72,10 @@ const SelectionCard = ({
         <div className="relative h-full bg-[#1e293b] rounded-[10px] md:rounded-[1.3rem] p-3 md:p-6 flex flex-row items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/90 transition-colors">
             
             <div className={cn(
-                "h-10 w-10 md:h-16 md:w-16 lg:h-20 lg:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
+                "h-10 w-10 md:h-20 md:w-20 rounded-lg md:rounded-2xl flex items-center justify-center shadow-inner shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300",
                 color
             )}>
-                <Icon className="h-5 w-5 md:h-8 md:w-8 lg:h-10 lg:w-10 drop-shadow-md" />
+                <Icon className="h-5 w-5 md:h-10 md:w-10 drop-shadow-md" />
             </div>
             
             <div className="flex-grow min-w-0 flex flex-col justify-center w-full">
@@ -148,13 +143,10 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     const fetchManifest = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch('/curriculum/manifest.json');
-            if (!res.ok) {
-                throw new Error("Müfredat manifestosu yüklenemedi.");
-            }
-            const data = await res.json();
-            
-            const enrichedClassGroups = data.classGroups.map((group: any, groupIndex: number) => ({
+            const res = await getCurriculumForSelection(dataType, isStatic, user?.uid);
+            if(res.error) throw new Error(res.error);
+
+            const enrichedClassGroups = (res.classGroups || []).map((group: any, groupIndex: number) => ({
                 ...group,
                 courses: group.courses.map((course: any, courseIndex: number) => ({
                     ...course,
@@ -173,7 +165,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         }
     };
     fetchManifest();
-  }, []);
+  }, [user, dataType, isStatic]);
 
   const handleSelectClass = (group: ClassGroup) => {
     setSelection({ 
@@ -235,7 +227,12 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setIsLoading(true);
     setTimeout(() => {
         const selectedUnit = units.find(u => u.id === unitId);
-        setTopics(selectedUnit?.topics || []);
+        const availableTopics = (selectedUnit?.topics || []).filter(topic => {
+            if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
+            if (dataType === 'ozetler') return (topic as any).hasOzetContent;
+            return true;
+        });
+        setTopics(availableTopics);
         setIsLoading(false);
         setCurrentStep(4);
     }, 300);
@@ -265,13 +262,14 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       router.push(url);
   };
 
+
   const handleBack = () => {
       if (currentStep > 1) setCurrentStep(currentStep - 1);
       else router.push(getBackUrl());
   };
   
   const getBackUrl = () => {
-    if (targetPath.startsWith('student')) return '/student';
+    if (targetPath && targetPath.startsWith('student')) return '/student';
     if (user?.role === 'teacher' || user?.role === 'superadmin') return '/teacher/smartboard';
     return '/';
   };
@@ -464,5 +462,3 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
-
-    
