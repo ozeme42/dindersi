@@ -50,7 +50,7 @@ export function YazilacaklarClientPage() {
             // manifest.json'dan konu adını al
             const manifestRes = await fetch('/curriculum/manifest.json');
             if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
-            const manifestData = await res.json();
+            const manifestData = await manifestRes.json();
             
             let foundTopic = null;
             for (const group of manifestData.classGroups) {
