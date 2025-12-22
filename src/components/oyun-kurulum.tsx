@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { Gamepad2 } from 'lucide-react';
 
@@ -444,9 +444,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
                     {currentStep === 1 && "Bir sınıf seçerek başla."}
-                    {currentStep === 2 && "İlgili dersi seç."}
-                    {currentStep === 3 && "Bir ünite seç."}
-                    {currentStep === 4 && "Son olarak, bir konu seç."}
+                    {currentStep === 2 && `${selection.className} için bir ders seç.`}
+                    {currentStep === 3 && `${selection.courseName} dersi için bir ünite seç.`}
+                    {currentStep === 4 && `${selection.unitName} ünitesi için bir konu seç.`}
                 </span>
                 <div className="flex gap-1 md:gap-2 shrink-0">
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
