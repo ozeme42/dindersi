@@ -1,10 +1,15 @@
 
+
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
 import { getAdminAuth } from "firebase-admin/auth";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question, Assignment, ScoreEvent } from "@/lib/types";
+
+// Node.js file system and path modules
+import fs from 'fs/promises';
+import path from 'path';
 
 // Helper to serialize any data, converting Timestamps
 const serialize = (data: any): any => {
@@ -133,7 +138,7 @@ export async function exportAllData(
         let relevantCourseIds: string[] = [];
         let relevantUnitIds: string[] = [];
         let relevantTopicIds: string[] = [];
-    
+
         // 1. Determine relevant courses
         if (courseId && courseId !== 'all') {
             relevantCourseIds = [courseId];
@@ -144,7 +149,7 @@ export async function exportAllData(
         } else {
             relevantCourseIds = coursesSnap.docs.map(doc => doc.id);
         }
-    
+
         // 2. Determine relevant units based on courses
         if (unitId && unitId !== 'all') {
             relevantUnitIds = [unitId];
@@ -155,15 +160,16 @@ export async function exportAllData(
             const unitSnaps = await Promise.all(unitPromises);
             relevantUnitIds = unitSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
-    
+
         // 3. Determine relevant topics based on units
         if (topicId && topicId !== 'all') {
             relevantTopicIds = [topicId];
         } else {
-            const topicPromises = relevantUnitIds.map(uId => 
-                db.collectionGroup('topics').where('__name__', '>', `courses/${coursesMap.get(relevantCourseIds.find(cId => unitsSnap.docs.find(u => u.id === uId)?.ref.path.includes(cId)) || '') || ''}/units/${uId}/topics/`).where('__name__', '<', `courses/${coursesMap.get(relevantCourseIds.find(cId => unitsSnap.docs.find(u => u.id === uId)?.ref.path.includes(cId)) || '') || ''}/units/${uId}/topics/~`).get()
-            );
-            const topicSnaps = (await Promise.all(topicPromises));
+             const topicPromises = unitsSnap.docs
+                .filter(unitDoc => relevantUnitIds.includes(unitDoc.id))
+                .map(unitDoc => db.collection(unitDoc.ref.path + '/topics').get());
+
+            const topicSnaps = await Promise.all(topicPromises);
             relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
         }
         
@@ -188,16 +194,9 @@ export async function exportAllData(
             newItem.topicName = topicsMap.get(newItem.topicId)?.title;
         }
         
-        delete newItem.id;
-        delete newItem.createdAt;
-        delete newItem.classId;
-        delete newItem.courseId;
-        delete newItem.unitId;
-        delete newItem.topicId;
-        delete newItem.teacherId;
-        delete newItem.topic; 
-        delete newItem.uid;
-        if(newItem.password) delete newItem.password;
+        // Remove technical/unnecessary fields
+        const fieldsToRemove = ['id', 'createdAt', 'classId', 'courseId', 'unitId', 'topicId', 'teacherId', 'topic', 'uid', 'password'];
+        fieldsToRemove.forEach(field => delete newItem[field]);
 
 
         return newItem;
@@ -352,233 +351,228 @@ export async function exportDataForStaticSite(filters: { classId?: string | null
     const allDocsToWrite: { path: string, content: string }[] = [];
     const { classId, courseId, unitId, topicId } = filters;
 
-    // Fetch relevant courses, units, and topics based on filters
-    let coursesToProcess: FirebaseFirestore.QueryDocumentSnapshot[];
-    if (courseId && courseId !== 'all') {
-        const doc = await db.collection('courses').doc(courseId).get();
-        coursesToProcess = doc.exists ? [doc] : [];
-    } else if (classId && classId !== 'all') {
-        const snapshot = await db.collection('courses').where('classId', '==', classId).get();
-        coursesToProcess = snapshot.docs;
-    } else {
-        const snapshot = await db.collection('courses').get();
-        coursesToProcess = snapshot.docs;
-    }
-
-    // 1. Export flat collections - filtered by courses
-    const courseIds = coursesToProcess.map(doc => doc.id);
-    const collectionsToExport = ['questions', 'examQuestions', 'activityItems'];
-    for (const collectionName of collectionsToExport) {
-        if (courseIds.length === 0) continue;
-        const snapshot = await db.collection(collectionName).where('courseId', 'in', courseIds).get();
-        const data = snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
-        allDocsToWrite.push({
-            path: `public/curriculum/${collectionName}.json`,
-            content: JSON.stringify(data, null, 2)
-        });
-        if (['questions', 'activityItems', 'examQuestions'].includes(collectionName)) {
-            const byTopic: { [key: string]: any[] } = {};
-            data.forEach((item: any) => {
-                if (item.topicId) {
-                    if (!byTopic[item.topicId]) byTopic[item.topicId] = [];
-                    byTopic[item.topicId].push(item);
-                }
-            });
-            for (const tId in byTopic) {
-                allDocsToWrite.push({
-                    path: `public/curriculum/${collectionName}/${tId}.json`,
-                    content: JSON.stringify(byTopic[tId], null, 2)
-                });
-            }
-        }
-    }
-     allDocsToWrite.push({
-        path: `public/curriculum/courses.json`,
-        content: JSON.stringify(coursesToProcess.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
-    });
-
-    const classesSnapshot = await db.collection('classes').get();
-    allDocsToWrite.push({
-        path: `public/curriculum/classes.json`,
-        content: JSON.stringify(classesSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
-    });
-
-
-    // 2. Export subcollections and specific content files
-    for (const courseDoc of coursesToProcess) {
-        let unitsQuery = db.collection('courses').doc(courseDoc.id).collection('units');
-        if (unitId && unitId !== 'all') {
-            unitsQuery = unitsQuery.where('__name__', '==', unitId);
-        }
-        const unitsSnapshot = await unitsQuery.get();
-        
-        const unitDataForCourse = unitsSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data() as Unit}));
-        if (unitDataForCourse.length > 0) {
-            allDocsToWrite.push({
-                path: `public/curriculum/units/${courseDoc.id}.json`,
-                content: JSON.stringify(unitDataForCourse, null, 2)
-            });
-        }
-        
-        for (const unitDoc of unitsSnapshot.docs) {
-            const unitData = unitDoc.data() as Unit;
-
-            if(unitData.htmlContent) {
-                allDocsToWrite.push({
-                    path: `public/curriculum/ozetler/unit_${unitDoc.id}.json`,
-                    content: JSON.stringify({ title: unitData.title, htmlContent: unitData.htmlContent }, null, 2)
-                });
-            }
-            
-            let topicsQuery = db.collection('courses').doc(courseDoc.id).collection('units').doc(unitDoc.id).collection('topics');
-            if (topicId && topicId !== 'all') {
-                 topicsQuery = topicsQuery.where('__name__', '==', topicId);
-            }
-            const topicsSnapshot = await topicsQuery.get();
-
-            const topics = topicsSnapshot.docs.map(d => serialize({id: d.id, ...d.data()}));
-            if(topics.length > 0) {
-                 allDocsToWrite.push({
-                    path: `public/curriculum/topics/${unitDoc.id}.json`,
-                    content: JSON.stringify(topics, null, 2)
-                });
-            }
-
-            for (const topicDoc of topicsSnapshot.docs) {
-                const topicData = topicDoc.data() as Topic;
-                
-                const defsSnap = await db.collection('activityItems')
-                    .where('topicId', '==', topicDoc.id)
-                    .where('type', '==', 'definition')
-                    .get();
-                const definitions = defsSnap.docs.map(d => ({ concept: d.data().content.term, definition: d.data().content.definition }));
-                const notes = topicData.writingContent?.notes || [];
-                const hasYazilacaklar = notes.length > 0 || definitions.length > 0;
-
-                if (hasYazilacaklar) {
-                     allDocsToWrite.push({
-                        path: `public/curriculum/yazilacaklar/${topicDoc.id}.json`,
-                        content: JSON.stringify(serialize({
-                            notes: topicData.writingContent?.notes || [],
-                            conceptDefinitions: definitions,
-                        }), null, 2)
-                    });
-                }
-                
-                if(topicData.htmlContent) {
-                    allDocsToWrite.push({
-                        path: `public/curriculum/ozetler/${topicDoc.id}.json`,
-                        content: JSON.stringify({ title: topicData.title, htmlContent: topicData.htmlContent }, null, 2)
-                    });
-                }
-            }
-        }
-    }
+    const exportPath = path.join(process.cwd(), 'public', 'curriculum');
     
-    // 3. Create a manifest file - this should always fetch all data to build the complete manifest
-    const manifestClassesSnap = await db.collection("classes").orderBy('createdAt', 'asc').get();
-    const manifestCoursesSnap = await db.collection("courses").get();
-    const allCoursesForManifest = manifestCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as Course }));
+    try {
+        await fs.rm(exportPath, { recursive: true, force: true });
+        await fs.mkdir(exportPath, { recursive: true });
+        
+        // Helper to ensure directory exists
+        const ensureDir = async (filePath: string) => {
+            const dirname = path.dirname(filePath);
+            await fs.mkdir(dirname, { recursive: true });
+        };
+        
+        // Helper to write a file
+        const writeFile = async (filePath: string, content: string) => {
+            await ensureDir(filePath);
+            await fs.writeFile(filePath, content);
+        };
 
-    const manifestCourseGroups = await Promise.all(manifestClassesSnap.docs.map(async (classDoc) => {
-        const classData = classDoc.data() as SchoolClass;
-        const coursesInClass = allCoursesForManifest.filter(c => c.classId === classDoc.id && (c.isPublished ?? true));
+        // Fetch relevant courses, units, and topics based on filters
+        let coursesToProcess: FirebaseFirestore.QueryDocumentSnapshot[];
+        if (courseId && courseId !== 'all') {
+            const doc = await db.collection('courses').doc(courseId).get();
+            coursesToProcess = doc.exists ? [doc] : [];
+        } else if (classId && classId !== 'all') {
+            const snapshot = await db.collection('courses').where('classId', '==', classId).get();
+            coursesToProcess = snapshot.docs;
+        } else {
+            const snapshot = await db.collection('courses').get();
+            coursesToProcess = snapshot.docs;
+        }
 
-        const courseFiles = (await Promise.all(coursesInClass.map(async (course) => {
-            const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
+        // 1. Export flat collections - filtered by courses
+        const courseIds = coursesToProcess.map(doc => doc.id);
+        const collectionsToExport = ['questions', 'examQuestions', 'activityItems'];
+        
+        for (const collectionName of collectionsToExport) {
+            if (courseIds.length > 0) {
+                 const chunks: string[][] = [];
+                 for (let i = 0; i < courseIds.length; i += 30) {
+                     chunks.push(courseIds.slice(i, i + 30));
+                 }
+                 for (const chunk of chunks) {
+                     const snapshot = await db.collection(collectionName).where('courseId', 'in', chunk).get();
+                     const data = snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+
+                      const byTopic: { [key: string]: any[] } = {};
+                      data.forEach((item: any) => {
+                          if (item.topicId) {
+                              if (!byTopic[item.topicId]) byTopic[item.topicId] = [];
+                              byTopic[item.topicId].push(item);
+                          }
+                      });
+                      for (const tId in byTopic) {
+                           await writeFile(
+                               path.join(exportPath, collectionName, `${tId}.json`),
+                               JSON.stringify(byTopic[tId], null, 2)
+                           );
+                      }
+                 }
+            }
+        }
+        
+         await writeFile(
+            path.join(exportPath, 'courses.json'),
+            JSON.stringify(coursesToProcess.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
+        );
+
+        const classesSnapshot = await db.collection('classes').get();
+        await writeFile(
+            path.join(exportPath, 'classes.json'),
+            JSON.stringify(classesSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data()})), null, 2)
+        );
+
+        // 2. Export subcollections and specific content files
+        for (const courseDoc of coursesToProcess) {
+            let unitsQuery = db.collection('courses').doc(courseDoc.id).collection('units');
+            if (unitId && unitId !== 'all') {
+                unitsQuery = unitsQuery.where('__name__', '==', unitId);
+            }
+            const unitsSnapshot = await unitsQuery.get();
             
-            const units = (await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
+            const unitDataForCourse = unitsSnapshot.docs.map(doc => serialize({id: doc.id, ...doc.data() as Unit}));
+            if (unitDataForCourse.length > 0) {
+                await writeFile(
+                    path.join(exportPath, 'units', `${courseDoc.id}.json`),
+                    JSON.stringify(unitDataForCourse, null, 2)
+                );
+            }
+            
+            for (const unitDoc of unitsSnapshot.docs) {
                 const unitData = unitDoc.data() as Unit;
-                if (!(unitData.isPublished ?? true)) return null;
 
-                const hasUnitOzet = !!unitData.htmlContent;
+                if(unitData.htmlContent) {
+                    await writeFile(
+                        path.join(exportPath, 'ozetler', `unit_${unitDoc.id}.json`),
+                        JSON.stringify({ title: unitData.title, htmlContent: unitData.htmlContent }, null, 2)
+                    );
+                }
                 
-                const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').get();
-                
-                let hasTopicContent = false;
+                let topicsQuery = db.collection('courses').doc(courseDoc.id).collection('units').doc(unitDoc.id).collection('topics');
+                if (topicId && topicId !== 'all') {
+                    topicsQuery = topicsQuery.where('__name__', '==', topicId);
+                }
+                const topicsSnapshot = await topicsQuery.get();
+
+                const topics = topicsSnapshot.docs.map(d => serialize({id: d.id, ...d.data()}));
+                if(topics.length > 0) {
+                    await writeFile(
+                        path.join(exportPath, 'topics', `${unitDoc.id}.json`),
+                        JSON.stringify(topics, null, 2)
+                    );
+                }
+
                 for (const topicDoc of topicsSnapshot.docs) {
                     const topicData = topicDoc.data() as Topic;
-                    if (!(topicData.isPublished ?? true)) continue;
                     
-                    const hasOzet = !!topicData.htmlContent;
-                    const yazilacaklarSnap = await db.collection('activityItems').where('topicId', '==', topicDoc.id).limit(1).get();
-                    const hasYazilacaklar = !yazilacaklarSnap.empty || (topicData.writingContent?.notes?.length || 0) > 0;
+                    const defsSnap = await db.collection('activityItems')
+                        .where('topicId', '==', topicDoc.id)
+                        .where('type', '==', 'definition')
+                        .get();
+                    const definitions = defsSnap.docs.map(d => ({ concept: d.data().content.term, definition: d.data().content.definition }));
+                    const notes = topicData.writingContent?.notes || [];
+                    const hasYazilacaklar = notes.length > 0 || definitions.length > 0;
 
-                    if(hasOzet || hasYazilacaklar) {
-                        hasTopicContent = true;
-                        break;
+                    if (hasYazilacaklar) {
+                        await writeFile(
+                            path.join(exportPath, 'yazilacaklar', `${topicDoc.id}.json`),
+                            JSON.stringify(serialize({
+                                notes: topicData.writingContent?.notes || [],
+                                conceptDefinitions: definitions,
+                            }), null, 2)
+                        );
+                    }
+                    
+                    if(topicData.htmlContent) {
+                        await writeFile(
+                            path.join(exportPath, 'ozetler', `${topicDoc.id}.json`),
+                            JSON.stringify({ title: topicData.title, htmlContent: topicData.htmlContent }, null, 2)
+                        );
                     }
                 }
+            }
+        }
+        
+        // 3. Create a manifest file - this should always fetch all data to build the complete manifest
+        const manifestClassesSnap = await db.collection("classes").orderBy('createdAt', 'asc').get();
+        const manifestCoursesSnap = await db.collection("courses").get();
+        const allCoursesForManifest = manifestCoursesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as Course }));
+
+        const manifestCourseGroups = await Promise.all(manifestClassesSnap.docs.map(async (classDoc) => {
+            const classData = classDoc.data() as SchoolClass;
+            const coursesInClass = allCoursesForManifest.filter(c => c.classId === classDoc.id && (c.isPublished ?? true));
+
+            const courseFiles = (await Promise.all(coursesInClass.map(async (course) => {
+                const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
                 
-                return (hasUnitOzet || hasTopicContent) ? { id: unitDoc.id, title: unitData.title } : null;
+                const units = (await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
+                    const unitData = unitDoc.data() as Unit;
+                    if (!(unitData.isPublished ?? true)) return null;
+
+                    const hasUnitOzet = !!unitData.htmlContent;
+                    
+                    const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').get();
+                    
+                    let hasTopicContent = false;
+                    for (const topicDoc of topicsSnapshot.docs) {
+                        const topicData = topicDoc.data() as Topic;
+                        if (!(topicData.isPublished ?? true)) continue;
+                        
+                        const hasOzet = !!topicData.htmlContent;
+                        const yazilacaklarSnap = await db.collection('activityItems').where('topicId', '==', topicDoc.id).limit(1).get();
+                        const hasYazilacaklar = !yazilacaklarSnap.empty || (topicData.writingContent?.notes?.length || 0) > 0;
+
+                        if(hasOzet || hasYazilacaklar) {
+                            hasTopicContent = true;
+                            break;
+                        }
+                    }
+                    
+                    return (hasUnitOzet || hasTopicContent) ? { id: unitDoc.id, title: unitData.title } : null;
+                }))).filter(Boolean);
+
+                return units.length > 0 ? { id: course.id, title: course.title, file: `units/${course.id}.json` } : null;
             }))).filter(Boolean);
 
-            return units.length > 0 ? { id: course.id, title: course.title, file: `units/${course.id}.json` } : null;
-        }))).filter(Boolean);
-
-        return { name: classData.name, courses: courseFiles };
-    }));
-
-    const generalCourses = allCoursesForManifest.filter(c => !c.classId && (c.isPublished ?? true)).map(c => ({ id: c.id, title: c.title, file: `units/${c.id}.json`}));
-    if (generalCourses.length > 0) {
-        manifestCourseGroups.forEach(group => {
-            group.courses.push(...generalCourses as any);
-        });
-    }
-
-    allDocsToWrite.push({
-        path: 'public/curriculum/manifest.json',
-        content: JSON.stringify({ classGroups: manifestCourseGroups }, null, 2)
-    });
-
-
-    // 4. Batch write all files to the export collection, with chunking for writes and deletes
-    const exportCollectionRef = db.collection('__static_export');
-    
-    // Chunked delete
-    const CHUNK_SIZE_DELETE = 300;
-    async function deleteCollection(collectionRef: FirebaseFirestore.CollectionReference, batchSize: number) {
-        let query = collectionRef.limit(batchSize);
-        let snapshot = await query.get();
+            return { name: classData.name, courses: courseFiles };
+        }));
         
-        while (snapshot.size > 0) {
-            const deleteBatch = db.batch();
-            snapshot.docs.forEach(doc => {
-                deleteBatch.delete(doc.ref);
-            });
-            await deleteBatch.commit();
-            
-            if (snapshot.size < batchSize) break;
-            
-            const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-            query = collectionRef.limit(batchSize).startAfter(lastVisible);
-            snapshot = await query.get();
+        const generalCourses = allCoursesForManifest.filter(c => !c.classId && (c.isPublished ?? true));
+        if (generalCourses.length > 0) {
+            const generalCourseFiles = await Promise.all(generalCourses.map(async (course) => {
+                const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').get();
+                if (unitsSnapshot.empty) return null;
+                return { id: course.id, title: course.title, file: `units/${course.id}.json` };
+            }));
+
+            const validGeneralCourses = generalCourseFiles.filter(Boolean);
+            if (validGeneralCourses.length > 0) {
+                 const generalGroup = manifestCourseGroups.find(g => g.name === "Genel");
+                if (generalGroup) {
+                    generalGroup.courses.push(...validGeneralCourses as any);
+                } else if (manifestCourseGroups.length > 0) { // Add to the first available group if 'Genel' doesn't exist.
+                    manifestCourseGroups[0].courses.push(...validGeneralCourses as any);
+                }
+            }
         }
+
+        await writeFile(
+            path.join(exportPath, 'manifest.json'),
+            JSON.stringify({ classGroups: manifestCourseGroups }, null, 2)
+        );
+
+        return { success: true, message: `${coursesToProcess.length} ders işlendi. Statik dosyalar oluşturuldu.` };
+
+    } catch (e: any) {
+        console.error("Error exporting static site data:", e);
+        return { success: false, error: "Statik site verileri oluşturulurken bir hata oluştu: " + e.message };
     }
-    
-    await deleteCollection(exportCollectionRef, CHUNK_SIZE_DELETE);
-
-    // Chunked write
-    let writeBatch = db.batch();
-    let writeCount = 0;
-    const CHUNK_SIZE_WRITE = 100;
-
-    for (const fileData of allDocsToWrite) {
-        const docRef = exportCollectionRef.doc();
-        writeBatch.set(docRef, fileData);
-        writeCount++;
-
-        if (writeCount === CHUNK_SIZE_WRITE) {
-            await writeBatch.commit();
-            writeBatch = db.batch();
-            writeCount = 0;
-        }
-    }
-
-    // Commit any remaining writes
-    if (writeCount > 0) {
-        await writeBatch.commit();
-    }
-    
-    return { success: true, message: `${allDocsToWrite.length} dosya oluşturma görevi tetiklendi.` };
 }
+```,
+    "typescript": {
+    "ignoreBuildErrors": true,
+  }
+}
+```

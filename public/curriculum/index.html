@@ -8,55 +8,39 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
         
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #0f172a; 
-            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                              radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                              radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            background-attachment: fixed;
-            color: white; 
-            user-select: none; 
-            -webkit-user-select: none; 
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #0f172a; color: white; user-select: none; }
         
-        #debug-console { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); z-index: 9999; padding: 20px; 
-            overflow: auto; display: none; font-family: monospace; color: #ff5555;
-            user-select: text !important; -webkit-user-select: text !important; 
-        }
-        .debug-row { border-bottom: 1px solid #333; padding: 10px 0; font-size: 14px; }
-
+        /* UI STILLERI */
         .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .tab-btn.active { background: linear-gradient(90deg, #06b6d4, #3b82f6); border: none; }
         .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        
         /* OYUN STILLERI */
         .game-slot { width: 50px; height: 60px; background: rgba(255,255,255,0.1); border-bottom: 4px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; transition: 0.3s; }
         .game-slot.filled { background: #10b981; border-bottom-color: #047857; transform: scale(1.1); }
-        .letter-btn { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; top: 0; position: relative; border: 1px solid white; transition: 0.1s; }
+        .letter-btn { width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 6px 0 rgba(0,0,0,0.3); cursor: pointer; border: 1px solid white; }
         .letter-btn:active { top: 6px; box-shadow: none; }
         .letter-btn.used { transform: scale(0); opacity: 0; pointer-events: none; }
         .c-1 { background: #f59e0b; } .c-2 { background: #3b82f6; } .c-3 { background: #ec4899; } .c-4 { background: #8b5cf6; } .c-5 { background: #10b981; }
         .shake { animation: shake 0.4s; border-color: #ef4444 !important; color: #ef4444 !important; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
+        /* EŞLEŞTİRME */
+        .match-container { display: flex; gap: 20px; width: 100%; max-width: 1000px; justify-content: center; padding: 10px; }
+        .match-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .match-item { background: #1e293b; border: 2px solid #334155; padding: 15px; border-radius: 12px; cursor: pointer; min-height: 80px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .match-item.selected { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.02); }
+        .match-item.matched { cursor: default; transform: scale(1); pointer-events: none; border-color: white; color: white; opacity: 0.9; }
+        .m-color-0 { background: #059669 !important; } 
+        .m-color-1 { background: #7c3aed !important; }
+        .m-color-2 { background: #db2777 !important; }
+        
         .quiz-opt { transition: all 0.2s; }
         .quiz-opt:active { transform: scale(0.95); }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-
-    <div id="debug-console">
-        <div class="flex justify-between items-center border-b border-red-500 pb-2 mb-4">
-            <h2 class="text-2xl font-bold text-white">⚠️ HATA RAPORU</h2>
-            <button onclick="copyErrorText()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded font-bold text-sm">📋 Kopyala</button>
-        </div>
-        <div id="debug-content" class="bg-gray-900 p-4 rounded border border-gray-700 select-text mb-4"></div>
-        <button onclick="location.reload()" class="px-6 py-2 bg-gray-700 text-white border border-gray-500 rounded hover:bg-gray-600">Yeniden Dene</button>
-    </div>
 
     <header class="fixed top-0 w-full z-40 bg-slate-900/90 backdrop-blur border-b border-white/10 h-16 flex items-center justify-between px-4">
         <div class="flex items-center gap-2" onclick="location.reload()">
@@ -104,25 +88,9 @@
         <p class="text-slate-400 animate-pulse font-medium">Veriler Hazırlanıyor...</p>
     </div>
 
-    <script>
-        window.onerror = function(msg, url, line, col, error) {
-            const box = document.getElementById('debug-console');
-            const content = document.getElementById('debug-content');
-            box.style.display = 'block';
-            let file = url ? url.split('/').pop() : 'Bilinmeyen';
-            content.innerHTML += `<div class="debug-row"><strong style="color:#fff">HATA:</strong> ${msg}<br><strong style="color:#aaa">Dosya:</strong> ${file} (Satır: ${line})</div>`;
-            document.getElementById('loading').style.display = 'none';
-            return false;
-        };
-        function copyErrorText() {
-            const text = document.getElementById('debug-content').innerText;
-            navigator.clipboard.writeText(text).then(() => alert("Kopyalandı!")).catch(() => alert("Seçerek kopyalayın."));
-        }
-    </script>
-
     <script src="database.js"></script>
-    <script src="icerik.js?v=2"></script>
-    <script src="oyunlar.js?v=2"></script>
+    <script src="icerik.js?v=999"></script>
+    <script src="oyunlar.js?v=999"></script>
 
     <script>
         const App = {
@@ -134,6 +102,7 @@
                     if (typeof window.TUM_VERILER !== 'undefined') {
                         clearInterval(checkData);
                         let mainData = window.TUM_VERILER;
+                        // İÇERİK VARSA ZORLA BİRLEŞTİR
                         if (typeof window.EK_ICERIKLER !== 'undefined') {
                             mainData = DataManager.mergeContent(mainData, window.EK_ICERIKLER);
                         }
@@ -142,7 +111,8 @@
                     }
                     if (attempts > 50) { 
                         clearInterval(checkData);
-                        throw new Error("database.js yüklenemedi!");
+                        alert("Veri tabanı yüklenemedi!");
+                        document.getElementById('loading').style.display = 'none';
                     }
                 }, 100);
             },
@@ -153,49 +123,67 @@
                     UIManager.renderHome(formatted);
                     document.getElementById('loading').style.display = 'none';
                 } catch (e) {
-                    throw new Error("Veri işlenirken hata: " + e.message);
+                    console.error(e);
+                    alert("Başlatma hatası: " + e.message);
                 }
             }
         };
 
         const DataManager = {
-            // GELİŞMİŞ EŞLEŞTİRME (Fuzzy Matching)
+            // --- KRİTİK NOKTA: AKILLI BİRLEŞTİRME VE ZORLA EKLEME ---
             mergeContent: (db, ext) => {
-                // Temizleme fonksiyonu: Sayıları (1., 4. vb) ve boşlukları siler, küçük harfe çevirir
-                const clean = s => s ? s.toLowerCase().replace(/^\d+[\.\-\s]*/, '').replace(/\s+/g,'').replace(/i/g,'ı').replace(/ı/g,'i') : '';
+                // Temizlik fonksiyonu: Sadece harf ve rakamları bırakır, küçültür
+                const clean = s => s ? s.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '') : '';
                 
                 ext.forEach(item => {
-                    const c = db.courses.find(x => clean(x.title || x.name) === clean(item.courseName || item.courseTitle));
+                    // 1. SINIF BUL
+                    const cls = db.classes.find(x => clean(x.name) === clean(item.className));
+                    if (!cls) return;
+
+                    // 2. DERS BUL
+                    let c = db.courses.find(x => x.classId === cls.id && clean(x.title || x.name) === clean(item.courseName || item.courseTitle));
                     if(c) {
-                        const u = c.units.find(x => {
+                        // 3. ÜNİTE BUL
+                        let u = c.units.find(x => {
                             const dbU = clean(x.title || x.name);
                             const extU = clean(item.unitName || item.unitTitle);
                             return dbU.includes(extU) || extU.includes(dbU);
                         });
 
                         if(u) {
-                            if (!u.topics) u.topics = []; // Hata önleyici
+                            if (!u.topics) u.topics = [];
                             
-                            // Konu eşleştirme (Esnek)
-                            const t = u.topics.find(x => {
+                            // 4. KONU BUL
+                            let t = u.topics.find(x => {
                                 const dbT = clean(x.title || x.name);
                                 const extT = clean(item.topicName || item.topicTitle);
                                 return dbT.includes(extT) || extT.includes(dbT);
                             });
 
                             if(t) { 
+                                // Konu varsa içeriği güncelle
                                 t.writingContent = item.writingContent; 
                                 t.customUrl = item.url; 
                             } else {
-                                // Eğer konu database'de yoksa ama içerikte varsa, zorla ekle (Opsiyonel)
-                                // u.topics.push({ id: "custom-"+Math.random(), title: item.topicName, writingContent: item.writingContent });
+                                // --- ZORLA EKLEME ---
+                                // Eğer database'de konu yoksa ama içerikte varsa, YENİ OLUŞTUR!
+                                u.topics.push({
+                                    id: "auto-" + Math.random().toString(36).substr(2, 9),
+                                    title: item.topicName || item.topicTitle,
+                                    name: item.topicName || item.topicTitle,
+                                    writingContent: item.writingContent,
+                                    customUrl: item.url,
+                                    order: 999 // Sona ekle
+                                });
                             }
                         }
                     }
                 });
                 return db;
             },
+            
             sortItems: arr => arr ? arr.sort((a,b) => (a.order||0)-(b.order||0) || (a.name||a.title||'').localeCompare(b.name||b.title||'', undefined, {numeric:true})) : [],
+            
             transform: db => {
                 let classes = DataManager.sortItems([...db.classes]);
                 return classes.map(cls => {
@@ -216,6 +204,7 @@
                     };
                 });
             },
+            
             getTopicData: (id) => {
                 let res = { id, name:'', definitions:[], notes:[] };
                 App.data.courses.forEach(c => c.units.forEach(u => {
@@ -289,7 +278,7 @@
                 let html = '';
                 if(d.definitions.length) html += `<div class="glass-card p-6 rounded-2xl"><h3 class="text-xl font-bold text-yellow-400 mb-4">💡 Kavramlar</h3><div class="grid gap-3 md:grid-cols-2">${d.definitions.map(x => `<div class="bg-slate-800 p-3 rounded border-l-4 border-yellow-500 hover:bg-slate-700 transition"><strong>${x.term||x.concept}</strong>: ${x.definition}</div>`).join('')}</div></div>`;
                 if(d.notes.length) html += `<div class="glass-card p-6 rounded-2xl mt-4"><h3 class="text-xl font-bold text-purple-400 mb-4">📌 Notlar</h3><ul class="space-y-2">${d.notes.map(n => `<li class="flex gap-2 text-slate-300"><span class="text-purple-500 font-bold">➤</span>${n}</li>`).join('')}</ul></div>`;
-                if(!html) html = '<div class="text-center text-slate-500 py-10 border border-dashed border-slate-700 rounded-xl">Bu konu için henüz içerik eklenmemiş.<br><span class="text-xs text-slate-600">(İçerik dosyası ile başlık eşleşmesi kontrol edilmeli)</span></div>';
+                if(!html) html = '<div class="text-center text-slate-500 py-10 border border-dashed border-slate-700 rounded-xl">Bu konu için henüz içerik eklenmemiş.</div>';
                 document.getElementById('note-content').innerHTML = html;
             },
             renderGames: (id) => {
@@ -320,15 +309,13 @@
             }
         };
 
-        // --- GLOBAL OYUN KÖPRÜSÜ ---
         window.openGame = (type) => {
             if (typeof GameEngine === 'undefined') { alert("Oyun motoru yüklenemedi! (oyunlar.js)"); return; }
-            
             const data = DataManager.getTopicData(App.currentGameTopicId);
             const defs = data.definitions;
 
             if (!defs || defs.length === 0) {
-                alert("Bu oyun için veri (kavram) eksik. Lütfen Admin panelinden ekleyin.");
+                alert("Bu oyun için veri (kavram) eksik.");
                 return;
             }
 
