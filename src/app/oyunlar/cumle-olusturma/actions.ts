@@ -13,6 +13,7 @@ import {
   query, 
   where, 
   getCountFromServer,
+  getDocs
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
@@ -23,46 +24,46 @@ export type ScrambledSentenceData = {
 };
 
 export async function getCumleOlusturmaAction(
-    { topicId }: { topicId?: string; }
+    { courseId, unitId, topicId }: { courseId?: string, unitId?: string, topicId?: string; }
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-             return { error: "Cümle Oluşturma oynamak için belirli bir konu seçmelisiniz.", data: null };
+        if (!topicId && !unitId && !courseId) {
+            return { error: "Oynamak için bir ders, ünite veya konu seçmelisiniz.", data: null };
+        }
+
+        let q = query(collection(db, "activityItems"), where("type", "==", "sentence"));
+
+        if (topicId && topicId !== 'all') {
+            q = query(q, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            q = query(q, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            q = query(q, where("courseId", "==", courseId));
+        }
+
+        const querySnapshot = await getDocs(q);
+
+        const allSentences = querySnapshot.docs
+            .map(doc => doc.data() as ActivityItem)
+            .map(item => item.content.text!)
+            .filter(text => text && text.trim().length > 0 && text.trim().split(' ').length > 2);
+
+        if (allSentences.length < 1) {
+            return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
         }
         
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const staticItems: ActivityItem[] = JSON.parse(fileContent);
-
-            const allSentences = staticItems.filter(item => item.type === 'sentence' && item.content?.text)
-                .map(item => item.content.text!)
-                .filter(text => text.trim().length > 0 && text.trim().split(' ').length > 2);
-
-            if (allSentences.length < 1) {
-                return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
-            }
-            
-            // Fisher-Yates Shuffle
-            for (let i = allSentences.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
-            }
-
-            const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
-                correctSentence: sentence.trim(),
-            }));
-
-            return { data: JSON.parse(JSON.stringify(gameData)) };
-
-        } catch (fileError: any) {
-             if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
-            }
-            throw fileError;
+        // Fisher-Yates Shuffle
+        for (let i = allSentences.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
         }
+
+        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
+            correctSentence: sentence.trim(),
+        }));
+
+        return { data: JSON.parse(JSON.stringify(gameData)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getCumleOlusturmaAction):", error);

@@ -14,61 +14,64 @@ import {
   writeBatch, 
   doc, 
   serverTimestamp, 
-  increment 
+  increment,
+  getDocs
 } from 'firebase/firestore';
 
 
 export async function getConceptHuntAction({ 
+    courseId,
+    unitId,
     topicId
 }: { 
+    courseId?: string;
+    unitId?: string;
     topicId?: string; 
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-            return { error: "Kavram Avı oynamak için belirli bir konu seçmelisiniz.", questions: null };
+        if (!topicId && !unitId && !courseId) {
+            return { error: "Oynamak için bir ders, ünite veya konu seçmelisiniz.", questions: null };
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        let q = query(collection(db, "activityItems"), where("type", "==", "definition"));
+
+        if (topicId && topicId !== 'all') {
+            q = query(q, where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            q = query(q, where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            q = query(q, where("courseId", "==", courseId));
+        }
         
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
-            
-            const validItems = allItems.filter(item => 
-                item.type === 'definition' &&
-                item.content?.term && 
-                item.content?.definition &&
-                item.content.term.trim().length > 2 &&
-                !item.content.term.includes(' ')
-            );
+        const querySnapshot = await getDocs(q);
 
-            if (validItems.length < 1) {
-                return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
-            }
-            
-            for (let i = validItems.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
-            }
-            
-            const anagramQuestions: Anagram[] = validItems.map(item => {
-                const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
-                return {
-                    definition: item.content.definition!,
-                    scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
-                    correctAnswer: correctAnswer,
-                }
-            });
+        const validItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem).filter(item => 
+            item.content?.term && 
+            item.content?.definition &&
+            item.content.term.trim().length > 2 &&
+            !item.content.term.includes(' ')
+        );
 
-            return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
-            }
-            throw fileError;
+        if (validItems.length < 1) {
+            return { error: "Kavram Avı oynamak için bu konuda en az 1 adet uygun kelime bulunmalıdır.", questions: null };
         }
+        
+        for (let i = validItems.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [validItems[i], validItems[j]] = [validItems[j], validItems[i]];
+        }
+        
+        const anagramQuestions: Anagram[] = validItems.map(item => {
+            const correctAnswer = item.content.term!.trim().toLocaleUpperCase('tr-TR');
+            return {
+                definition: item.content.definition!,
+                scrambledWord: correctAnswer.split('').sort(() => 0.5 - Math.random()).join(''),
+                correctAnswer: correctAnswer,
+            }
+        });
+
+        return { questions: JSON.parse(JSON.stringify(anagramQuestions)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getConceptHuntAction):", error);
