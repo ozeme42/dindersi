@@ -93,6 +93,14 @@ type DeleteDialogState = {
     item: { id: string; name: string; path: string };
 };
 
+const colorThemes = [
+    { name: 'indigo', border: 'border-indigo-500/30', text: 'text-indigo-300', bg: 'bg-indigo-500/10 hover:bg-indigo-500/20', hoverBorder: 'hover:border-indigo-500/60' },
+    { name: 'cyan', border: 'border-cyan-500/30', text: 'text-cyan-300', bg: 'bg-cyan-500/10 hover:bg-cyan-500/20', hoverBorder: 'hover:border-cyan-500/60' },
+    { name: 'emerald', border: 'border-emerald-500/30', text: 'text-emerald-300', bg: 'bg-emerald-500/10 hover:bg-emerald-500/20', hoverBorder: 'hover:border-emerald-500/60' },
+    { name: 'rose', border: 'border-rose-500/30', text: 'text-rose-300', bg: 'bg-rose-500/10 hover:bg-rose-500/20', hoverBorder: 'hover:border-rose-500/60' },
+    { name: 'amber', border: 'border-amber-500/30', text: 'text-amber-300', bg: 'bg-amber-500/10 hover:bg-amber-500/20', hoverBorder: 'hover:border-amber-500/60' },
+];
+
 export default function ContentCreationPage() {
     const router = useRouter();
     const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
@@ -261,7 +269,10 @@ export default function ContentCreationPage() {
                         const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
                         const topicsSnapshot = await getDocs(
                             query(
-                                collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`),
+                                collection(
+                                    db,
+                                    `courses/${courseData.id}/units/${unitDoc.id}/topics`
+                                ),
                                 orderBy('title')
                             )
                         );
@@ -482,40 +493,13 @@ export default function ContentCreationPage() {
 
         let itemsToRender: any[] = [];
         let itemTitleKey = 'name';
-        let handleItemEdit = (item: any) => { };
-        let handleItemDelete = (item: any) => { };
-        let handleItemPublishToggle = (item: any, path: string, currentState: boolean) => {};
-
+        
         switch (currentStep) {
-            case 1:
-                itemsToRender = curriculum;
-                handleItemEdit = (item) => openDialog('edit', 'Sınıf', item);
-                handleItemDelete = (item) => openDeleteDialog('Sınıf', { ...item, path: `classes/${item.id}` });
-                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
-                break;
-            case 2:
-                itemsToRender = selectedClass?.courses || [];
-                itemTitleKey = 'title';
-                handleItemEdit = (item) => openDialog('edit', 'Ders', item, selections.classId);
-                handleItemDelete = (item) => openDeleteDialog('Ders', { ...item, path: `courses/${item.id}` });
-                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
-                break;
-            case 3: // Ünite Yönetimi
-                itemsToRender = selectedCourse?.units || [];
-                itemTitleKey = 'title';
-                handleItemEdit = (item) => openDialog('edit', 'Ünite', item, selections.courseId);
-                handleItemDelete = (item) => openDeleteDialog('Ünite', { ...item, path: `courses/${selections.courseId}/units/${item.id}` });
-                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
-                break;
-            case 4:
-                itemsToRender = selectedUnit?.topics || [];
-                itemTitleKey = 'title';
-                handleItemEdit = (item) => openDialog('edit', 'Konu', item, selections.unitId);
-                handleItemDelete = (item) => openDeleteDialog('Konu', { ...item, path: `courses/${selections.courseId}/units/${selections.unitId}/topics/${item.id}` });
-                handleItemPublishToggle = (item, path, currentState) => handleTogglePublish(path, currentState);
-                break;
-            default:
-                return null;
+            case 1: itemsToRender = curriculum; break;
+            case 2: itemsToRender = selectedClass?.courses || []; itemTitleKey = 'title'; break;
+            case 3: itemsToRender = selectedCourse?.units || []; itemTitleKey = 'title'; break;
+            case 4: itemsToRender = selectedUnit?.topics || []; itemTitleKey = 'title'; break;
+            default: return null;
         }
 
         if (itemsToRender.length === 0) {
@@ -530,7 +514,7 @@ export default function ContentCreationPage() {
 
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {itemsToRender.map((item) => {
+                {itemsToRender.map((item, index) => {
                      let path = '';
                      if (currentStep === 1) path = `classes/${item.id}`;
                      else if (currentStep === 2) path = `courses/${item.id}`;
@@ -539,12 +523,20 @@ export default function ContentCreationPage() {
                     
                     const isPublished = item.isPublished ?? true;
                     const questionCount = item.questionCount;
+                    const theme = colorThemes[index % colorThemes.length];
 
                     return (
-                        <div key={item.id} className={cn("relative group", !isPublished && "opacity-40 hover:opacity-100")}>
-                            <Button
-                                variant="ghost"
-                                className="w-full h-32 p-6 flex flex-col items-start justify-between text-left transition-all duration-300 rounded-2xl border-2 border-white/5 bg-slate-800/50 hover:bg-slate-800 hover:border-white/10"
+                        <div key={item.id} className={cn(
+                            "relative group rounded-2xl transition-all duration-300 transform",
+                            !isPublished && "opacity-40 hover:opacity-100",
+                            isSelected ? "ring-2 ring-offset-2 ring-offset-slate-950" : ""
+                            )}
+                        >
+                            <button
+                                className={cn(
+                                    "w-full h-32 p-6 flex flex-col items-start justify-between text-left transition-all duration-300 rounded-2xl border-2 hover:-translate-y-1 hover:shadow-2xl",
+                                    theme.bg, theme.border, theme.hoverBorder, theme.shadow
+                                )}
                                 onClick={() => {
                                     const displayName = item[itemTitleKey] || item.name;
                                     if (currentStep === 1) handleSelect('class', item.id, displayName);
@@ -553,11 +545,11 @@ export default function ContentCreationPage() {
                                     else if (currentStep === 4) router.push(`/teacher/content-creation/edit?courseId=${selections.courseId}&unitId=${selections.unitId}&topicId=${item.id}`);
                                 }}
                             >
-                                <span className="text-xl font-bold text-white leading-tight line-clamp-2">
+                                <span className={cn("text-xl font-bold leading-tight line-clamp-2", theme.text)}>
                                     {item[itemTitleKey] || item.name}
                                 </span>
-                                {questionCount !== undefined && <Badge variant="secondary" className="mt-2 text-xs">{questionCount} Soru</Badge>}
-                            </Button>
+                                {questionCount !== undefined && <Badge variant="secondary" className="mt-2 text-xs bg-black/20 text-slate-300 border-white/10">{questionCount} Soru</Badge>}
+                            </button>
                             
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 {currentStep === 3 && (
@@ -565,10 +557,10 @@ export default function ContentCreationPage() {
                                         <Workflow className="h-4 w-4" />
                                     </Button>
                                 )}
-                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemPublishToggle(item, path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
+                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleTogglePublish(path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
                                     {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                                 </Button>
-                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleItemEdit(item); }} title="Düzenle">
+                                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDialog('edit', steps.find(s => s.id === currentStep)?.name as any, item, selections.courseId); }} title="Düzenle">
                                     <FilePenLine className="h-4 w-4" />
                                 </Button>
                                 <Button size="icon" variant="destructive" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); openDeleteDialog(steps.find(s => s.id === currentStep)?.name as any, { ...item, name: item.title || item.name, path }); }} title="Sil">
@@ -623,9 +615,11 @@ export default function ContentCreationPage() {
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 
                 <div className="text-center space-y-4 py-6">
-                    <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-2">
-                        <Sparkles className="h-10 w-10 text-purple-400" />
-                    </div>
+                    <Link href="/teacher" className="inline-block transition-transform hover:scale-110 hover:rotate-3">
+                        <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl shadow-indigo-900/20 mb-2">
+                            <Sparkles className="h-10 w-10 text-purple-400" />
+                        </div>
+                    </Link>
                     <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg">
                         İçerik Sihirbazı
                     </h1>
@@ -712,7 +706,7 @@ export default function ContentCreationPage() {
                         </div>
 
                         <div className="flex-grow p-6 md:p-10 bg-black/20">
-                            {renderCurrentStep()}
+                            {renderContent()}
                         </div>
 
                         <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
