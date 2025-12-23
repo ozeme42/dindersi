@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -30,13 +29,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, getAllUsers, deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { updateUser, deleteUserFromFirestore, getAllUsers, deleteBulkUsers } from '@/app/teacher/superadmin/actions';
 import { addStudentToClass, bulkAddStudentsToClass, addManualScore, createNewStudent } from "./actions";
 
 
@@ -83,15 +83,36 @@ function StudentQuickScore({ studentId, onScoreAdd }: { studentId: string, onSco
     );
 }
 
-function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: { 
+function StudentTable({ 
+    students, 
+    isLoading, 
+    onEdit, 
+    onDelete, 
+    onAddScore,
+    selectedIds,
+    onSelect
+}: { 
     students: UserProfile[], 
     isLoading: boolean, 
-    onEdit: (student: UserProfile) => void, 
+    onEdit: (student: UserProfile) => void,
     onDelete: (studentId: string) => void,
-    onAddScore: (studentId: string, points: number, reason: string) => Promise<void>
+    onAddScore: (studentId: string, points: number, reason: string) => Promise<void>,
+    selectedIds: Set<string>,
+    onSelect: (id: string) => void,
 }) {
+
+    const handleSelectAll = (isChecked: boolean) => {
+        if (isChecked) {
+            students.forEach(s => onSelect(s.uid));
+        } else {
+            students.forEach(s => selectedIds.has(s.uid) && onSelect(s.uid));
+        }
+    }
+    const areAllSelected = students.length > 0 && students.every(s => selectedIds.has(s.uid));
+
+
     if (isLoading) {
-        return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
+        return <div className="flex justify-center items-center h-48"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
     
     return (
@@ -99,6 +120,13 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
+                        <TableHead className="w-12 text-center border-r border-white/5">
+                            <Checkbox 
+                                checked={areAllSelected}
+                                onCheckedChange={(checked) => handleSelectAll(!!checked)}
+                                className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"
+                            />
+                        </TableHead>
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Puan</TableHead>
@@ -109,7 +137,14 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
                 <TableBody>
                     {students.length > 0 ? students.map((student) => {
                         return (
-                        <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
+                        <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group" data-state={selectedIds.has(student.uid) ? 'selected' : ''}>
+                             <TableCell className="text-center border-r border-white/5">
+                                 <Checkbox 
+                                    checked={selectedIds.has(student.uid)} 
+                                    onCheckedChange={() => onSelect(student.uid)}
+                                    className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"
+                                />
+                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-3">
                                     <div className="relative">
@@ -136,15 +171,15 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
                                 <StudentQuickScore studentId={student.uid} onScoreAdd={onAddScore} />
                             </TableCell>
                             <TableCell className="text-right">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
-                                            <MoreHorizontal className="h-5 w-5" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                        <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
-                                        <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                 <DropdownMenu>
+                                     <DropdownMenuTrigger asChild>
+                                         <Button size="icon" variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10">
+                                             <MoreHorizontal className="h-5 w-5" />
+                                         </Button>
+                                     </DropdownMenuTrigger>
+                                     <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
+                                         <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                         <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer">
                                            <Link href={`/teacher/students/${student.uid}`}>
                                                 <Users className="mr-2 h-4 w-4 text-indigo-400" /> Profil
                                            </Link>
@@ -173,14 +208,14 @@ function StudentTable({ students, isLoading, onEdit, onDelete, onAddScore }: {
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
                                         </AlertDialog>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                     </DropdownMenuContent>
+                                 </DropdownMenu>
                             </TableCell>
                         </TableRow>
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={5} className="h-32 text-center text-slate-500 italic">
+                            <TableCell colSpan={6} className="h-32 text-center text-slate-500 italic">
                                 Bu filtrede öğrenci bulunamadı.
                             </TableCell>
                         </TableRow>
@@ -229,6 +264,9 @@ export default function StudentManagementPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [newStudentName, setNewStudentName] = useState("");
   const [bulkStudentNames, setBulkStudentNames] = useState("");
+  
+  const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { toast } = useToast();
 
@@ -237,7 +275,7 @@ export default function StudentManagementPage() {
     try {
       const usersData = await getAllUsers();
       if (usersData) {
-        const studentsData = usersData.filter(u => u.role === 'student');
+        const studentsData = usersData.filter(u => u.role === 'student' || u.role === 'guest');
         setAllStudents(studentsData);
       } else {
          toast({ title: "Hata", description: "Kullanıcılar getirilemedi.", variant: "destructive" });
@@ -300,6 +338,19 @@ export default function StudentManagementPage() {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
     }
   }
+
+  const handleBulkDelete = async () => {
+    setIsDeleting(true);
+    const result = await deleteBulkUsers(Array.from(selectedStudentIds));
+    if (result.success) {
+        toast({ title: "Başarılı", description: `${result.deletedCount} öğrenci silindi.` });
+        setSelectedStudentIds(new Set());
+        await fetchAllData();
+    } else {
+        toast({ title: "Hata", description: result.error, variant: "destructive" });
+    }
+    setIsDeleting(false);
+  };
 
   const handleAddManualScore = async (studentId: string, points: number, reason: string) => {
     const result = await addManualScore(studentId, points, reason);
@@ -385,6 +436,16 @@ export default function StudentManagementPage() {
     return list;
   }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, sortBy]);
   
+    const handleSelectQuestion = (id: string) => {
+        const newSet = new Set(selectedStudentIds);
+        if (newSet.has(id)) {
+            newSet.delete(id);
+        } else {
+            newSet.add(id);
+        }
+        setSelectedStudentIds(newSet);
+    };
+  
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
@@ -449,6 +510,29 @@ export default function StudentManagementPage() {
                     </Button>
                 </div>
              </div>
+             
+             {selectedStudentIds.size > 0 && (
+                 <div className="flex items-center justify-between p-4 rounded-xl bg-indigo-900/10 border border-indigo-500/20 animate-in fade-in">
+                    <p className="text-indigo-300 font-bold">{selectedStudentIds.size} öğrenci seçildi.</p>
+                     <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" disabled={isDeleting}>
+                                {isDeleting ? <Loader2 className="animate-spin mr-2 h-4 w-4"/> : <Trash2 className="mr-2 h-4 w-4"/>} Seçilenleri Sil
+                            </Button>
+                        </AlertDialogTrigger>
+                         <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className="text-red-400">Toplu Silme Onayı</AlertDialogTitle>
+                                <AlertDialogDescription className="text-slate-400">Seçili {selectedStudentIds.size} öğrenciyi ve tüm verilerini kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleBulkDelete} className="bg-red-600 hover:bg-red-500">Evet, Sil</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                     </AlertDialog>
+                 </div>
+             )}
 
              <StudentTable
                 students={filteredAndSortedStudents}
@@ -456,6 +540,8 @@ export default function StudentManagementPage() {
                 onEdit={handleOpenDialog}
                 onDelete={handleDeleteUser}
                 onAddScore={handleAddManualScore}
+                selectedIds={selectedStudentIds}
+                onSelect={handleSelectQuestion}
             />
           </TabsContent>
 
@@ -541,14 +627,14 @@ export default function StudentManagementPage() {
       </div>
 
       {dialogState.isOpen && (
-           <UserEditorDialog 
-                isOpen={dialogState.isOpen}
-                onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
-                user={dialogState.user}
-                onSave={handleSaveUser}
-                isSaving={isSaving}
-                classes={classes}
-           />
+         <UserEditorDialog 
+             isOpen={dialogState.isOpen}
+             onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
+             user={dialogState.user}
+             onSave={handleSaveUser}
+             isSaving={isSaving}
+             classes={classes}
+         />
       )}
     </div>
   );

@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -57,6 +56,51 @@ export async function deleteUserFromFirestore(userId: string): Promise<{ success
         return { success: false, error: 'Kullanıcı silinirken bir hata oluştu: ' + error.message };
     }
 }
+
+export async function deleteBulkUsers(userIds: string[]): Promise<{ success: boolean; error?: string; deletedCount?: number }> {
+    if (!userIds || userIds.length === 0) {
+        return { success: false, error: "Silinecek kullanıcı seçilmedi." };
+    }
+    
+    const auth = getAdminAuth();
+    const db = getAdminDb();
+    const batch = db.batch();
+    
+    let deletedCount = 0;
+    const errors: any[] = [];
+
+    // Auth deletions must happen one by one.
+    const authDeletions = userIds.map(uid => auth.deleteUser(uid).catch(e => ({ uid, error: e })));
+
+    const authResults = await Promise.allSettled(authDeletions);
+
+    authResults.forEach((result, index) => {
+        const uid = userIds[index];
+        if (result.status === 'fulfilled') {
+            // If auth deletion is successful, add Firestore deletion to batch.
+            const userRef = db.collection('users').doc(uid);
+            batch.delete(userRef);
+            deletedCount++;
+        } else {
+            // Collect errors for users that failed to be deleted from Auth.
+            errors.push({ uid: uid, reason: result.reason.message });
+            console.error(`Failed to delete user ${uid} from Auth:`, result.reason);
+        }
+    });
+
+    try {
+        // Commit all successful Firestore deletions.
+        await batch.commit();
+        if (errors.length > 0) {
+            return { success: false, error: `${errors.length} kullanıcı silinemedi. Detaylar için konsola bakın.`, deletedCount };
+        }
+        return { success: true, deletedCount };
+    } catch (dbError: any) {
+        console.error("Error committing Firestore deletions:", dbError);
+        return { success: false, error: "Veritabanı silme işlemi sırasında bir hata oluştu.", deletedCount };
+    }
+}
+
 
 export async function updateUser(user: UserProfile): Promise<{ success: boolean; error?: string }> {
     if (!user || !user.uid) {
