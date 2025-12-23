@@ -236,8 +236,7 @@ function CoursePageContent() {
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
-             const isUnlocked = isTopicUnlocked(nextTopic.id);
-             if (isUnlocked) {
+             if (isTopicUnlocked(nextTopic.id)) {
                  setActiveTopic(nextTopic);
                  return; 
              }
@@ -246,16 +245,10 @@ function CoursePageContent() {
         setView('map');
     };
     
-    const completedTopicsSet = useMemo(() => {
-        const set = new Set<string>();
-        Object.keys(completedTopics).forEach(topicId => {
-            if (completedTopics[topicId].completionCount > 0) {
-                set.add(topicId);
-            }
-        });
-        return set;
+    const isTopicCompleted = useCallback((topicId: string) => {
+        return (completedTopics[topicId]?.completionCount || 0) > 0;
     }, [completedTopics]);
-    
+
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
         if (!course) return false;
@@ -268,10 +261,9 @@ function CoursePageContent() {
         const previousTopic = allTopics[topicIndex - 1];
         if (!previousTopic) return true; 
         
-        return completedTopicsSet.has(previousTopic.id);
-    }, [course, completedTopicsSet, user?.role]);
+        return isTopicCompleted(previousTopic.id);
+    }, [course, isTopicCompleted, user?.role]);
 
-    // DÜZELTME: Bu fonksiyonlar eksikti, LessonContentViewer'a iletmek için eklendi.
     const handleLocalMultiAnswer = (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
         if (!activeTopicData) return;
         const topicId = activeTopicData.topic.id;
@@ -294,12 +286,13 @@ function CoursePageContent() {
         });
     };
 
-    const handleLocalAllTfAnswered = (stepIndex: number) => {
+    const handleLocalAllTfAnswered = () => {
         if (!activeTopicData) return;
         const topicId = activeTopicData.topic.id;
         onProgressUpdate(topicId, prevProgress => {
+            const stepIndex = steps.findIndex(s => s.type === 'trueFalseList');
             const answersForStep = prevProgress.answers[stepIndex];
-            if (!answersForStep || answersForStep.completed) return prevProgress;
+            if (!answersForStep || (answersForStep as any).completed) return prevProgress;
 
             const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
             const points = correctCount * 20;
@@ -345,7 +338,7 @@ function CoursePageContent() {
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
                         isTopicUnlocked={isTopicUnlocked}
-                        isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
+                        isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={{}} 
                     />
