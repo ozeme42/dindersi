@@ -151,10 +151,10 @@ export async function addManualScore(studentId: string, points: number, reason: 
         const db = getAdminDb();
         const batch = db.batch();
         
-        const userRef = doc(db, 'users', studentId);
+        const userRef = db.collection('users').doc(studentId);
         batch.update(userRef, { score: increment(points) });
 
-        const eventRef = doc(collection(db, 'scoreEvents'));
+        const eventRef = db.collection('scoreEvents').doc();
         batch.set(eventRef, {
             userId: studentId,
             points: points,
