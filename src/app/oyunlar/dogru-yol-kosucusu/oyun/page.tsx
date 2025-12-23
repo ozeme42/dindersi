@@ -140,9 +140,7 @@ function Game() {
         // Çarpışma Kontrolü (Oyuncu Y: 80-90 arası varsayalım)
         if (newY > 75 && newY < 90 && !obs.passed) {
           if (playerLane === obs.correctLane) {
-            const newStreak = correctStreak + 1;
-            const pointsToAdd = 20 + newStreak * 10;
-            setCorrectStreak(newStreak);
+            const pointsToAdd = 20; // Sabit puan
             setScore(s => {
                 scoreRef.current = s + pointsToAdd;
                 return s + pointsToAdd;
