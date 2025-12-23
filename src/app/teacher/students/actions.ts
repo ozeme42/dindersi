@@ -3,7 +3,7 @@
 'use server';
 
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { collection, doc, writeBatch, serverTimestamp, setDoc, updateDoc } from "firebase-admin/firestore";
+import { collection, doc, writeBatch, Timestamp, setDoc, updateDoc } from "firebase-admin/firestore";
 import { firestore } from 'firebase-admin';
 import type { UserProfile } from "@/lib/types";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
@@ -55,7 +55,7 @@ export async function addStudentToClass(displayName: string, className: string):
             role: 'student',
             class: className,
             score: 0,
-            createdAt: serverTimestamp(),
+            createdAt: Timestamp.now(),
         };
 
         await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
@@ -124,7 +124,7 @@ export async function bulkAddStudentsToClass(names: string[], className: string)
                     role: 'student',
                     class: className,
                     score: 0,
-                    createdAt: serverTimestamp(),
+                    createdAt: Timestamp.now(),
                 };
 
                 await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
@@ -159,7 +159,7 @@ export async function addManualScore(studentId: string, points: number, reason: 
         batch.set(eventRef, {
             userId: studentId,
             points: points,
-            timestamp: serverTimestamp(),
+            timestamp: Timestamp.now(),
             gameType: 'Manuel Puan',
             context: reason,
         });
@@ -218,7 +218,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             role: data.role || 'student',
             class: data.class,
             score: 0,
-            createdAt: serverTimestamp(),
+            createdAt: Timestamp.now(),
         };
 
         await firestoreDB.collection("users").doc(userRecord.uid).set(newUserProfile);
