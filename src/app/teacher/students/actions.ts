@@ -3,7 +3,8 @@
 'use server';
 
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { collection, doc, writeBatch, serverTimestamp, setDoc, updateDoc, increment } from "firebase-admin/firestore";
+import { collection, doc, writeBatch, serverTimestamp, setDoc, updateDoc } from "firebase-admin/firestore";
+import { firestore } from 'firebase-admin';
 import type { UserProfile } from "@/lib/types";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
@@ -152,7 +153,7 @@ export async function addManualScore(studentId: string, points: number, reason: 
         const batch = db.batch();
         
         const userRef = db.collection('users').doc(studentId);
-        batch.update(userRef, { score: increment(points) });
+        batch.update(userRef, { score: firestore.FieldValue.increment(points) });
 
         const eventRef = db.collection('scoreEvents').doc();
         batch.set(eventRef, {
@@ -167,6 +168,7 @@ export async function addManualScore(studentId: string, points: number, reason: 
 
         return { success: true };
     } catch(e: any) {
+        console.error("Error adding manual score:", e)
         return { success: false, error: 'Puan eklenirken bir hata oluştu.' };
     }
 }
@@ -208,7 +210,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             displayName: finalDisplayName,
         });
         
-        const firestore = getAdminDb();
+        const firestoreDB = getAdminDb();
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
@@ -219,7 +221,7 @@ export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdA
             createdAt: serverTimestamp(),
         };
 
-        await firestore.collection("users").doc(userRecord.uid).set(newUserProfile);
+        await firestoreDB.collection("users").doc(userRecord.uid).set(newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,

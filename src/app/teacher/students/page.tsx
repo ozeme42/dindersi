@@ -469,12 +469,12 @@ export default function StudentManagementPage() {
                         <CardTitle className="text-2xl text-white">Yeni Öğrenci Ekle</CardTitle>
                     </div>
                     <CardDescription className="text-slate-400 text-base">
-                        Öğrencileri tek tek veya toplu liste halinde ekleyebilirsiniz. Eklenen öğrenciler seçilen sınıfa atanır.
+                        Öğrencileri tek tek veya toplu liste halinde ekleyebilirsiniz. Eklenen öğrenciler seçtiğiniz sınıf ve şubeye atanır ve onlar için otomatik bir e-posta ve şifre oluşturulur.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="p-8 space-y-8">
+                <CardContent className="p-8">
                     {/* Sınıf Seçimi */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div className="space-y-2">
                             <Label className="text-slate-300">Sınıf</Label>
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
@@ -504,7 +504,7 @@ export default function StudentManagementPage() {
                           <TabsContent value="single" className="mt-0">
                             <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
                               <div className="flex-1 space-y-2">
-                                  <Label className="text-slate-300">Ad Soyad</Label>
+                                  <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
                                   <Input 
                                     placeholder="Örn: Ali Yılmaz" 
                                     value={newStudentName} 
