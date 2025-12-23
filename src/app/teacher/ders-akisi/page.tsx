@@ -1,24 +1,22 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
-    Workflow, Loader2, FilePenLine, Link as LinkIcon, BookOpen, Columns, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
+    Workflow, Loader2, BookOpen, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, doc, query, where, orderBy, Timestamp } from 'firebase/firestore';
-import type { SchoolClass, Course, Unit, Topic, Question } from '@/lib/types';
+import type { Topic, Unit, Course, SchoolClass } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardHeader } from '@/components/ui/card';
+import { getFlowData } from './actions'; // Yeni eylem import edildi
 
 type EnrichedTopic = Topic & { questionCount?: number };
 type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string };
 type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
+type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 type CourseGroup = { title: string; courses: EnrichedCourse[] };
 
 const colorClasses = [
@@ -32,154 +30,49 @@ const colorClasses = [
     'bg-cyan-600 border-cyan-500 shadow-cyan-500/20'
 ];
 
-// Helper to serialize Firestore Timestamps
-const serializeTimestamp = (timestamp: any): string | null => {
-    if (timestamp instanceof Timestamp) {
-        return timestamp.toDate().toISOString();
-    }
-    if (timestamp && typeof timestamp.toDate === 'function') {
-        return timestamp.toDate().toISOString();
-    }
-    return null;
-};
-
 
 export default function DersAkisiPage() {
-    const router = useRouter();
     const [curriculum, setCurriculum] = useState<EnrichedClass[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    
-    const { toast } = useToast();
 
     useEffect(() => {
-        const fetchCurriculum = async () => {
+        const fetchData = async () => {
             setIsLoading(true);
-            try {
-                const classesQuery = query(
-                    collection(db, 'classes'),
-                    orderBy('createdAt', 'asc')
-                );
-                const [classesSnapshot, allCoursesSnapshot, allQuestionsSnapshot] = await Promise.all([
-                    getDocs(classesQuery),
-                    getDocs(collection(db, 'courses')),
-                    getDocs(collection(db, 'questions')), 
-                ]);
-                
-                const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
-
-                const allCourses = allCoursesSnapshot.docs.map(
-                    (doc) => {
-                        const data = doc.data();
-                        return { 
-                            id: doc.id, 
-                            ...data,
-                            createdAt: serializeTimestamp(data.createdAt) 
-                        } as Course;
-                    }
-                );
-
-                const enrichedClasses: EnrichedClass[] = [];
-
-                for (const classDoc of classesSnapshot.docs) {
-                    const classData = {
-                        id: classDoc.id,
-                        ...classDoc.data(),
-                        createdAt: serializeTimestamp(classDoc.data().createdAt)
-                    } as SchoolClass;
-                    const enrichedClass: EnrichedClass = { ...classData, courses: [] };
-
-                    const classCourses = allCourses.filter(
-                        (course) => course.classId === classDoc.id
-                    );
-                    
-                    for (const courseData of classCourses) {
-                        const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
-
-                        const unitsSnapshot = await getDocs(
-                            query(
-                                collection(db, `courses/${courseData.id}/units`),
-                                orderBy('title')
-                            )
-                        );
-                        for (const unitDoc of unitsSnapshot.docs) {
-                            const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                            const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, htmlContent: unitData.htmlContent || '' };
-
-                            const topicsSnapshot = await getDocs(
-                                query(
-                                    collection(
-                                        db,
-                                        `courses/${courseData.id}/units/${unitDoc.id}/topics`
-                                    ),
-                                    orderBy('title')
-                                )
-                            );
-                            enrichedUnit.topics = topicsSnapshot.docs.map(
-                                (topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic)
-                            );
-                            
-                            const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
-                            enrichedUnit.questionCount = unitQuestionCount;
-
-                            enrichedCourse.units.push(enrichedUnit);
-                        }
-                        enrichedClass.courses.push(enrichedCourse);
-                    }
-                    enrichedClasses.push(enrichedClass);
-                }
-                
-                const generalCoursesData = allCourses.filter(course => !course.classId);
-                const generalCourses: EnrichedCourse[] = [];
-                for (const courseData of generalCoursesData) {
-                     const enrichedCourse: EnrichedCourse = { ...courseData, units: [] };
-                      const unitsSnapshot = await getDocs(
-                        query(
-                            collection(db, `courses/${courseData.id}/units`),
-                            orderBy('title')
-                        )
-                    );
-                    for (const unitDoc of unitsSnapshot.docs) {
-                        const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, htmlContent: unitData.htmlContent || '' };
-                        const topicsSnapshot = await getDocs(
-                            query(
-                                collection(db, `courses/${courseData.id}/units/${unitDoc.id}/topics`),
-                                orderBy('title')
-                            )
-                        );
-                        enrichedUnit.topics = topicsSnapshot.docs.map((topicDoc) => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                        const unitQuestionCount = allQuestions.filter(q => q.unitId === unitDoc.id).length;
-                        enrichedUnit.questionCount = unitQuestionCount;
-                        enrichedCourse.units.push(enrichedUnit);
-                    }
-                    generalCourses.push(enrichedCourse);
-                }
-
-                if (generalCourses.length > 0) {
-                     const generalClass = enrichedClasses.find(c => c.name === "Genel");
-                     if (generalClass) {
-                         generalClass.courses.push(...generalCourses);
-                     } else {
-                         enrichedClasses.push({
-                            id: 'general',
-                            name: 'Genel',
-                            courses: generalCourses,
-                            createdAt: new Date().toISOString()
-                        } as EnrichedClass);
-                     }
-                }
-                
-                setCurriculum(JSON.parse(JSON.stringify(enrichedClasses)));
-
-            } catch (error) {
-                console.error('Error fetching curriculum: ', error);
-            } finally {
-                setIsLoading(false);
-            }
+            const data = await getFlowData();
+            setCurriculum(data);
+            setIsLoading(false);
         };
-
-        fetchCurriculum();
+        fetchData();
     }, []);
+
+    const courseGroups: CourseGroup[] = useMemo(() => {
+        if (!curriculum) return [];
+        const grouped: { [title: string]: EnrichedCourse[] } = {};
+        
+        curriculum.forEach(cls => {
+            cls.courses?.forEach(course => {
+                let courseTitle = course.title;
+                if (courseTitle.toUpperCase() === 'DKAB') courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
+                else if (courseTitle.toUpperCase() === 'SİYER') courseTitle = 'Peygamberimizin Hayatı (Siyer)';
+
+                if (!grouped[courseTitle]) {
+                    grouped[courseTitle] = [];
+                }
+                grouped[courseTitle].push({...course, className: cls.name});
+            });
+        });
+
+        return Object.keys(grouped)
+            .map(title => ({
+                title,
+                courses: grouped[title].sort((a,b) => (a.className || '').localeCompare(b.className || '')),
+            }))
+            .sort((a,b) => {
+                 if (a.title.includes('Din Kültürü')) return -1;
+                 if (b.title.includes('Din Kültürü')) return 1;
+                 return a.title.localeCompare(b.title);
+            });
+    }, [curriculum]);
 
     const renderCourseContent = (courseGroups: CourseGroup[]) => {
         if (isLoading) {
@@ -341,35 +234,6 @@ export default function DersAkisiPage() {
             </Accordion>
         );
     }
-    
-    const courseGroups: CourseGroup[] = useMemo(() => {
-        if (!curriculum) return [];
-        const grouped: { [title: string]: EnrichedCourse[] } = {};
-        
-        curriculum.forEach(cls => {
-            cls.courses?.forEach(course => {
-                let courseTitle = course.title;
-                if (courseTitle.toUpperCase() === 'DKAB') courseTitle = 'Din Kültürü ve Ahlak Bilgisi';
-                else if (courseTitle.toUpperCase() === 'SİYER') courseTitle = 'Peygamberimizin Hayatı (Siyer)';
-
-                if (!grouped[courseTitle]) {
-                    grouped[courseTitle] = [];
-                }
-                grouped[courseTitle].push({...course, className: cls.name});
-            });
-        });
-
-        return Object.keys(grouped)
-            .map(title => ({
-                title,
-                courses: grouped[title].sort((a,b) => (a.className || '').localeCompare(b.className || '')),
-            }))
-            .sort((a,b) => {
-                 if (a.title.includes('Din Kültürü')) return -1;
-                 if (b.title.includes('Din Kültürü')) return 1;
-                 return a.title.localeCompare(b.title);
-            });
-    }, [curriculum]);
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-6 md:p-10 relative overflow-hidden">
