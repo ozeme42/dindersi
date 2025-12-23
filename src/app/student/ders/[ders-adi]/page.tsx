@@ -5,7 +5,7 @@ import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "rea
 import { useParams, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react"; // Bug ikonu silindi
+import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, serverTimestamp } from "firebase/firestore";
@@ -39,7 +39,6 @@ function CoursePageContent() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-
     // Get a stable reference to topicId from searchParams
     const startTopicIdFromUrl = useMemo(() => searchParams.get('topicId'), [searchParams]);
 
@@ -53,75 +52,72 @@ function CoursePageContent() {
         };
     }, []);
 
+    const fetchCourseData = useCallback(async () => {
+        if (!courseId || !user) return;
+        setIsLoading(true);
+        
+        setView(startTopicIdFromUrl ? 'content' : 'map');
+
+        try {
+            const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
+            const progressSnap = await getDoc(progressRef);
+            const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
+            setCompletedTopics(currentProgress);
+
+            const courseRef = doc(db, 'courses', courseId);
+            const courseSnap = await getDoc(courseRef);
+
+            if (!courseSnap.exists()) {
+                console.error("Course not found!");
+                setIsLoading(false);
+                return;
+            }
+
+            const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
+            
+            const unitsRef = collection(db, 'courses', courseId, 'units');
+            const unitsQuery = query(unitsRef, orderBy("title"));
+            const unitsSnap = await getDocs(unitsQuery);
+            const units: Unit[] = [];
+
+            for (const unitDoc of unitsSnap.docs) {
+                const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
+                
+                const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
+                const topicsQuery = query(topicsRef, orderBy("title"));
+                const topicsSnap = await getDocs(topicsQuery);
+                unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+                
+                units.push(unitData);
+            }
+
+            courseData.units = units;
+            setCourse(courseData);
+
+            if (startTopicIdFromUrl) {
+                const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
+                setActiveTopic(topic || null);
+            } else {
+                const allTopics = units.flatMap(u => u.topics);
+                const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
+                
+                if (firstUncompletedTopic) {
+                    setActiveTopic(firstUncompletedTopic);
+                } else if (allTopics.length > 0) {
+                    setActiveTopic(allTopics[allTopics.length-1] || null);
+                }
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch course data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [courseId, user, startTopicIdFromUrl]);
 
     useEffect(() => {
-        const fetchCourseData = async () => {
-            if (!courseId || !user) return;
-            setIsLoading(true);
-            
-            // Eğer URL'de topicId varsa direkt içeriği aç, yoksa haritayı göster
-            setView(startTopicIdFromUrl ? 'content' : 'map');
-            // setLocalProgressMap({}); // HATA KAYNAĞI: Bu satır sonsuz döngüye neden oluyor.
-
-            try {
-                const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                const progressSnap = await getDoc(progressRef);
-                const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
-                setCompletedTopics(currentProgress);
-
-                const courseRef = doc(db, 'courses', courseId);
-                const courseSnap = await getDoc(courseRef);
-
-                if (!courseSnap.exists()) {
-                    console.error("Course not found!");
-                    setIsLoading(false);
-                    return;
-                }
-
-                const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
-                
-                const unitsRef = collection(db, 'courses', courseId, 'units');
-                const unitsQuery = query(unitsRef, orderBy("title"));
-                const unitsSnap = await getDocs(unitsQuery);
-                const units: Unit[] = [];
-
-                for (const unitDoc of unitsSnap.docs) {
-                    const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
-                    
-                    const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
-                    const topicsQuery = query(topicsRef, orderBy("title"));
-                    const topicsSnap = await getDocs(topicsQuery);
-                    unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                    
-                    units.push(unitData);
-                }
-
-                courseData.units = units;
-                setCourse(courseData);
-
-                if (startTopicIdFromUrl) {
-                    const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
-                    setActiveTopic(topic || null);
-                } else {
-                    const allTopics = units.flatMap(u => u.topics);
-                    const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
-                    
-                    if (firstUncompletedTopic) {
-                        setActiveTopic(firstUncompletedTopic);
-                    } else if (allTopics.length > 0) {
-                        setActiveTopic(allTopics[allTopics.length-1] || null);
-                    }
-                }
-
-            } catch (error) {
-                console.error("Failed to fetch course data:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchCourseData();
-    }, [courseId, user, startTopicIdFromUrl]);
+    }, [fetchCourseData]);
     
     const activeTopicData = useMemo(() => {
         if (!course || !activeTopic) return null;
@@ -136,7 +132,6 @@ function CoursePageContent() {
     const handleSelectTopic = (topic: Topic) => {
         setActiveTopic(topic);
         setView('content');
-        // Mobilde scroll'u yukarı al
         if (window.innerWidth < 768) {
              window.scrollTo(0,0);
         }
@@ -263,18 +258,18 @@ function CoursePageContent() {
         
         return isTopicCompleted(previousTopic.id);
     }, [course?.units, isTopicCompleted, user?.role]);
-
-
+    
     const handleLocalMultiAnswer = (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
-        if (!activeTopicData) return;
-        const topicId = activeTopicData.topic.id;
+        if (!activeTopicData || !activeTopic) return;
+        const topicId = activeTopic.id;
 
-        onProgressUpdate(topicId, (prevProgress: LocalProgress): LocalProgress => {
+        setLocalProgressMap(prevMap => {
+            const prevProgress = prevMap[topicId] || { answers: {}, score: 0 };
             const currentAnswers = prevProgress.answers[stepIndex] || {};
-            if (currentAnswers[questionIndex] !== undefined) return prevProgress;
+            if (currentAnswers[questionIndex] !== undefined) return prevMap;
 
             const step = activeTopicData.topic.steps?.[stepIndex];
-            if (!step || step.type !== 'trueFalseList') return prevProgress;
+            if (!step || step.type !== 'trueFalseList') return prevMap;
 
             const question = step.questions[questionIndex];
             const isCorrect = selectedAnswer === question.isTrue;
@@ -283,28 +278,38 @@ function CoursePageContent() {
             const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
             const newAnswers = { ...prevProgress.answers, [stepIndex]: newAnswersForStep };
 
-            return { ...prevProgress, answers: newAnswers };
+            return {
+                ...prevMap,
+                [topicId]: { ...prevProgress, answers: newAnswers }
+            };
         });
     };
     
     const handleLocalAllTfAnswered = () => {
         if (!activeTopicData || !activeTopic) return;
-        const topicId = activeTopic;
-        const localProgress = localProgressMap[topicId.id]
+        const topicId = activeTopic.id;
 
-        onProgressUpdate(topicId.id, (prevProgress: LocalProgress): LocalProgress => {
+        setLocalProgressMap(prevMap => {
+            const prevProgress = prevMap[topicId];
+            if (!prevProgress) return prevMap;
+
             const stepIndex = (activeTopicData.topic.steps || []).findIndex(s => s.type === 'trueFalseList');
             const answersForStep = prevProgress.answers[stepIndex];
-            if (!answersForStep || (answersForStep as any).completed) return prevProgress;
+            if (!answersForStep || (answersForStep as any).completed) return prevMap;
 
             const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
             const points = correctCount * 20;
 
             const newAnswers = { ...prevProgress.answers, [stepIndex]: { ...answersForStep, completed: true } };
-            return { score: prevProgress.score + points, answers: newAnswers };
+            
+            return {
+                ...prevMap,
+                [topicId]: { score: prevProgress.score + points, answers: newAnswers }
+            };
         });
     };
-    
+
+
     if (isLoading) {
          return (
             <div className="flex h-screen items-center justify-center bg-slate-950">
@@ -321,16 +326,13 @@ function CoursePageContent() {
     return (
         <div className="flex flex-col h-[100dvh] bg-slate-950 overflow-hidden relative selection:bg-cyan-500/30">
              
-             {/* Arka Plan Efektleri */}
              <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-violet-900/10 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[120px]" />
             </div>
 
-            {/* Split Layout */}
             <div className={cn("flex flex-col md:flex-row flex-grow overflow-hidden relative z-10", isFullscreen ? "h-screen" : "")}>
                 
-                {/* SOL PANEL: Konu Haritası (Sidebar) */}
                 <div className={cn(
                     "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 flex flex-col",
                     view === 'content' ? 'hidden md:flex' : 'flex h-full',
@@ -347,13 +349,11 @@ function CoursePageContent() {
                     />
                 </div>
                 
-                {/* SAĞ PANEL: İçerik Görüntüleyici */}
                 <main ref={mainContentRef} className={cn(
                     "flex-1 overflow-hidden relative flex flex-col bg-slate-950/50",
                     view === 'map' ? 'hidden md:flex' : 'flex'
                 )}>
                     
-                    {/* Mobil Navigasyon Barı */}
                     {!isFullscreen && view === 'content' && (
                         <div className="md:hidden flex items-center justify-between p-3 bg-slate-900/90 backdrop-blur-md border-b border-white/5 z-20 shrink-0">
                             <Button 
@@ -374,7 +374,6 @@ function CoursePageContent() {
                         </div>
                     )}
                     
-                    {/* İçerik */}
                     <div className="flex-grow overflow-y-auto relative h-full">
                         {activeTopicData ? (
                             <LessonContentViewer
@@ -412,3 +411,5 @@ export default function CoursePage() {
         </Suspense>
     )
 }
+
+    
