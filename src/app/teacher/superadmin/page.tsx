@@ -180,12 +180,19 @@ export default function SuperAdminPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 font-sans">
         <main className="flex-1 container mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-3xl font-bold tracking-tight text-white">Süper Admin Paneli</h1>
-                    <p className="text-slate-400">Uygulama verilerini yönetin ve yedekleyin.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left">
+                <div className="flex items-center gap-4">
+                    <Link href="/teacher" className="inline-block transition-transform hover:scale-110 hover:rotate-3">
+                        <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl shadow-indigo-900/20">
+                            <Shield className="h-10 w-10 text-indigo-400" />
+                        </div>
+                    </Link>
+                    <div>
+                        <h1 className="text-4xl font-black text-white tracking-tight">Süper Admin Paneli</h1>
+                        <p className="text-slate-400 text-lg font-medium">Uygulama verilerini yönetin ve yedekleyin.</p>
+                    </div>
                 </div>
-                <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5">
+                <Button asChild variant="outline" className="mt-4 sm:mt-0 border-white/10 text-white hover:bg-white/5 bg-slate-900">
                     <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
                 </Button>
             </div>
