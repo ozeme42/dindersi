@@ -2,7 +2,7 @@
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
@@ -52,72 +52,73 @@ function CoursePageContent() {
         };
     }, []);
 
-    useEffect(() => {
+    const fetchCourseData = useCallback(async () => {
         if (!courseId || !user) return;
         setIsLoading(true);
         
         setView(startTopicIdFromUrl ? 'content' : 'map');
 
-        const fetchCourseData = async () => {
-            try {
-                const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                const progressSnap = await getDoc(progressRef);
-                const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
-                setCompletedTopics(currentProgress);
+        try {
+            const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
+            const progressSnap = await getDoc(progressRef);
+            const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
+            setCompletedTopics(currentProgress);
 
-                const courseRef = doc(db, 'courses', courseId);
-                const courseSnap = await getDoc(courseRef);
+            const courseRef = doc(db, 'courses', courseId);
+            const courseSnap = await getDoc(courseRef);
 
-                if (!courseSnap.exists()) {
-                    console.error("Course not found!");
-                    setIsLoading(false);
-                    return;
-                }
-
-                const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
-                
-                const unitsRef = collection(db, 'courses', courseId, 'units');
-                const unitsQuery = query(unitsRef, orderBy("title"));
-                const unitsSnap = await getDocs(unitsQuery);
-                const units: Unit[] = [];
-
-                for (const unitDoc of unitsSnap.docs) {
-                    const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
-                    
-                    const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
-                    const topicsQuery = query(topicsRef, orderBy("title"));
-                    const topicsSnap = await getDocs(topicsQuery);
-                    unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                    
-                    units.push(unitData);
-                }
-
-                courseData.units = units;
-                setCourse(courseData);
-
-                if (startTopicIdFromUrl) {
-                    const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
-                    setActiveTopic(topic || null);
-                } else {
-                    const allTopics = units.flatMap(u => u.topics);
-                    const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
-                    
-                    if (firstUncompletedTopic) {
-                        setActiveTopic(firstUncompletedTopic);
-                    } else if (allTopics.length > 0) {
-                        setActiveTopic(allTopics[allTopics.length-1] || null);
-                    }
-                }
-
-            } catch (error) {
-                console.error("Failed to fetch course data:", error);
-            } finally {
+            if (!courseSnap.exists()) {
+                console.error("Course not found!");
                 setIsLoading(false);
+                return;
             }
-        };
 
-        fetchCourseData();
+            const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
+            
+            const unitsRef = collection(db, 'courses', courseId, 'units');
+            const unitsQuery = query(unitsRef, orderBy("title"));
+            const unitsSnap = await getDocs(unitsQuery);
+            const units: Unit[] = [];
+
+            for (const unitDoc of unitsSnap.docs) {
+                const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
+                
+                const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
+                const topicsQuery = query(topicsRef, orderBy("title"));
+                const topicsSnap = await getDocs(topicsQuery);
+                unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+                
+                units.push(unitData);
+            }
+
+            courseData.units = units;
+            setCourse(courseData);
+
+            if (startTopicIdFromUrl) {
+                const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
+                setActiveTopic(topic || null);
+            } else {
+                const allTopics = units.flatMap(u => u.topics);
+                const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
+                
+                if (firstUncompletedTopic) {
+                    setActiveTopic(firstUncompletedTopic);
+                } else if (allTopics.length > 0) {
+                    setActiveTopic(allTopics[allTopics.length-1] || null);
+                }
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch course data:", error);
+        } finally {
+            setIsLoading(false);
+        }
     }, [courseId, user, startTopicIdFromUrl]);
+
+
+    useEffect(() => {
+        fetchCourseData();
+    }, [fetchCourseData]);
     
     const activeTopicData = useMemo(() => {
         if (!course || !activeTopic) return null;
@@ -247,28 +248,32 @@ function CoursePageContent() {
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
         if (!course?.units) return false;
-        
-        const allTopics = course.units.flatMap(u => u.topics || []) || [];
+
+        const allTopics = course.units.flatMap(u => u.topics || []);
+        if (allTopics.length === 0) return true;
+
         const topicIndex = allTopics.findIndex(t => t.id === topicId);
-        
+
+        // If it's the first topic, it's always unlocked.
         if (topicIndex <= 0) return true;
         
         const previousTopic = allTopics[topicIndex - 1];
-        if (!previousTopic) return true; 
+        if (!previousTopic) return true; // Should not happen
         
+        // The topic is unlocked if the previous topic is completed.
         return isTopicCompleted(previousTopic.id);
     }, [course?.units, isTopicCompleted, user?.role]);
-
-    const handleLocalMultiAnswer = (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
-        if (!activeTopicData || !activeTopic) return;
+    
+    const handleLocalMultiAnswer = useCallback((stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
+        if (!activeTopic) return;
         const topicId = activeTopic.id;
 
         setLocalProgressMap(prevMap => {
             const prevProgress = prevMap[topicId] || { answers: {}, score: 0 };
             const currentAnswers = prevProgress.answers[stepIndex] || {};
             if (currentAnswers[questionIndex] !== undefined) return prevMap;
-
-            const step = activeTopicData.topic.steps?.[stepIndex];
+            
+            const step = activeTopic.steps?.[stepIndex];
             if (!step || step.type !== 'trueFalseList') return prevMap;
 
             const question = step.questions[questionIndex];
@@ -283,10 +288,10 @@ function CoursePageContent() {
                 [topicId]: { ...prevProgress, answers: newAnswers }
             };
         });
-    };
+    }, [activeTopic]);
      
-    const handleLocalAllTfAnswered = () => {
-        if (!activeTopicData || !activeTopic) return;
+    const handleLocalAllTfAnswered = useCallback(() => {
+        if (!activeTopic || !activeTopicData) return;
         const topicId = activeTopic.id;
 
         setLocalProgressMap(prevMap => {
@@ -294,8 +299,10 @@ function CoursePageContent() {
             if (!prevProgress) return prevMap;
 
             const stepIndex = (activeTopicData.topic.steps || []).findIndex(s => s.type === 'trueFalseList');
+            if (stepIndex === -1) return prevMap;
+            
             const answersForStep = prevProgress.answers[stepIndex];
-            if (!answersForStep || (answersForStep as any).completed) return prevMap;
+            if (!answersForStep || answersForStep.completed) return prevMap;
 
             const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
             const points = correctCount * 20;
@@ -307,7 +314,7 @@ function CoursePageContent() {
                 [topicId]: { score: prevProgress.score + points, answers: newAnswers }
             };
         });
-    };
+    }, [activeTopic, activeTopicData]);
 
 
     if (isLoading) {
@@ -411,3 +418,5 @@ export default function CoursePage() {
         </Suspense>
     )
 }
+
+    
