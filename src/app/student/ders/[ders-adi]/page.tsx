@@ -246,22 +246,6 @@ function CoursePageContent() {
         setView('map');
     };
     
-    const isTopicUnlocked = useCallback((topicId: string): boolean => {
-        if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
-        if (!course) return false;
-        
-        const allTopics = course.units.flatMap(u => u.topics);
-        const topicIndex = allTopics.findIndex(t => t.id === topicId);
-        
-        if (topicIndex <= 0) return true;
-        
-        const previousTopic = allTopics[topicIndex - 1];
-        if (!previousTopic) return true;
-        
-        return (completedTopics[previousTopic.id]?.completionCount || 0) > 0;
-    }, [course, completedTopics, user?.role]);
-
-    
     const completedTopicsSet = useMemo(() => {
         const set = new Set<string>();
         Object.keys(completedTopics).forEach(topicId => {
@@ -271,6 +255,59 @@ function CoursePageContent() {
         });
         return set;
     }, [completedTopics]);
+    
+    const isTopicUnlocked = useCallback((topicId: string): boolean => {
+        if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
+        if (!course) return false;
+        
+        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
+        const topicIndex = allTopics.findIndex(t => t.id === topicId);
+        
+        if (topicIndex <= 0) return true;
+        
+        const previousTopic = allTopics[topicIndex - 1];
+        if (!previousTopic) return true; 
+        
+        return completedTopicsSet.has(previousTopic.id);
+    }, [course, completedTopicsSet, user?.role]);
+
+    // DÜZELTME: Bu fonksiyonlar eksikti, LessonContentViewer'a iletmek için eklendi.
+    const handleLocalMultiAnswer = (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
+        if (!activeTopicData) return;
+        const topicId = activeTopicData.topic.id;
+
+        onProgressUpdate(topicId, prevProgress => {
+            const currentAnswers = prevProgress.answers[stepIndex] || {};
+            if (currentAnswers[questionIndex] !== undefined) return prevProgress;
+
+            const step = activeTopicData.topic.steps?.[stepIndex];
+            if (!step || step.type !== 'trueFalseList') return prevProgress;
+
+            const question = step.questions[questionIndex];
+            const isCorrect = selectedAnswer === question.isTrue;
+            if (isCorrect) playSound('correct'); else playSound('incorrect');
+
+            const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
+            const newAnswers = { ...prevProgress.answers, [stepIndex]: newAnswersForStep };
+
+            return { ...prevProgress, answers: newAnswers };
+        });
+    };
+
+    const handleLocalAllTfAnswered = (stepIndex: number) => {
+        if (!activeTopicData) return;
+        const topicId = activeTopicData.topic.id;
+        onProgressUpdate(topicId, prevProgress => {
+            const answersForStep = prevProgress.answers[stepIndex];
+            if (!answersForStep || answersForStep.completed) return prevProgress;
+
+            const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
+            const points = correctCount * 20;
+
+            const newAnswers = { ...prevProgress.answers, [stepIndex]: { ...answersForStep, completed: true } };
+            return { score: prevProgress.score + points, answers: newAnswers };
+        });
+    };
     
     if (isLoading) {
          return (
@@ -303,24 +340,15 @@ function CoursePageContent() {
                     view === 'content' ? 'hidden md:flex' : 'flex h-full',
                     isFullscreen && 'hidden'
                 )}>
-                    {/* Sidebar Header */}
-                    <div className="p-5 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20">
-                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
-                        <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
-                    </div>
-
-                    {/* Sidebar Content */}
-                    <div className="flex-grow overflow-y-auto">
-                        <CourseSidebar
-                            course={course}
-                            activeTopic={activeTopic}
-                            onSelectTopic={handleSelectTopic}
-                            isTopicUnlocked={isTopicUnlocked}
-                            isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
-                            topicProgress={localProgressMap}
-                            testCounts={{}} 
-                        />
-                    </div>
+                    <CourseSidebar
+                        course={course}
+                        activeTopic={activeTopic}
+                        onSelectTopic={handleSelectTopic}
+                        isTopicUnlocked={isTopicUnlocked}
+                        isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
+                        topicProgress={localProgressMap}
+                        testCounts={{}} 
+                    />
                 </div>
                 
                 {/* SAĞ PANEL: İçerik Görüntüleyici */}
