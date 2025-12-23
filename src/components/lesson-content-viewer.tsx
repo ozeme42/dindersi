@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -434,7 +435,7 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
              <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                 <h2 className={cn("font-black text-white drop-shadow-lg tracking-wide uppercase", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"))}>{step.title}</h2>
+                 <h2 className={cn("font-black text-center text-white drop-shadow-lg tracking-wide uppercase", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"))}>{step.title}</h2>
              </div>
             <div className={cn("grid gap-6 pb-32", isTeacher ? "grid-cols-3 lg:grid-cols-4 gap-8" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}>
                 {step.cards.map((card, index) => (
@@ -1130,7 +1131,7 @@ export function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                  return <div className="text-center p-8 text-slate-500 text-lg">Kavram haritası bu görünümde desteklenmiyor.</div>; 
             case 'video': {
@@ -1310,6 +1311,8 @@ export function LessonContentViewer({
     onProgressUpdate,
     isFullscreen,
     completeButtonText, 
+    onMultiAnswer,
+    onAllTfAnswered
 }: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: any }) {
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
@@ -1340,7 +1343,7 @@ export function LessonContentViewer({
         } else if (isVisualMaximized) {
             setIsVisualMaximized(false);
         }
-    }, [currentStep]);
+    }, [currentStep, isVisualMaximized]);
 
 
     useEffect(() => {
@@ -1605,15 +1608,12 @@ export function LessonContentViewer({
         showContinueButton = revealedSentencesCount < totalItems;
     }
 
-    // GÜNCELLENEN KISIM: 
-    // isHtmlSlideStep de bu koşula eklendi.
     const showFloatingButton = isFullWidthStep && (
         (isActivityStep && (isStepCompleted || isTeacher)) || 
         (currentStep?.type === 'visual' && isVisualMaximized) ||
         isHtmlSlideStep
     );
     
-    // GÜNCELLENEN KISIM: Öğrenci bir aktivitedeyse alt barı tamamen gizle
     const isStudentInActivity = isActivityStep && !isTeacher;
 
     const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
@@ -1621,7 +1621,6 @@ export function LessonContentViewer({
     return (
       <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
         
-        {/* YENİ: Çizim Katmanı */}
         <DrawingCanvas />
 
         {showResumeDialog && (
@@ -1676,8 +1675,6 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* --- ALT MENÜ VE KONTROLLER (HOVER) --- */}
-        {/* GÜNCELLEME: Öğrenci bir aktivitede değilse bu bloğu göster */}
         {!isStudentInActivity && (
             <div className={cn(
                 "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300",
@@ -1709,7 +1706,6 @@ export function LessonContentViewer({
                         Geri
                     </Button>
                     
-                    {/* İlerleme Çubuğu */}
                     <div className="hidden md:flex items-center gap-2">
                         <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
                         <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
@@ -1720,7 +1716,6 @@ export function LessonContentViewer({
 
                 <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
                     
-                    {/* --- GLOBAL "ADIMI ATLA" TUŞU (Sadece Öğretmen) --- */}
                     {isTeacher && (
                         <Button 
                             variant="ghost" 
@@ -1740,14 +1735,13 @@ export function LessonContentViewer({
                     <Button 
                         size={isTeacher && isFullscreen ? "lg" : "sm"}
                         onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled}  // <-- isAnimating kaldırıldı
+                        disabled={!isNextButtonEnabled}
                         className={cn(
                             "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
                             showContinueButton ? "px-6" : "px-4",
                             isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
                         )}
                     >
-                        {/* isAnimating Loader kaldırıldı */}
                         {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
                         <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
                     </Button>

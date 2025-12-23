@@ -299,32 +299,33 @@ export default function StudentDashboard() {
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                <DashboardCardButton 
+                   href="/student/soru-bankasi" 
+                   icon={<Map />} 
+                   title="Macera Haritası" 
+                   subtitle="Dersleri Öğren"
+                   colorClass="sky"
+               />
+               <DashboardCardButton 
                    href="/oyunlar" 
                    icon={<Gamepad2 />} 
                    title="Etkinlikler" 
-                   subtitle="Arcade Modu"
-                   colorClass="sky"
+                   subtitle="Eğlenerek Pekiştir"
+                   colorClass="rose"
                />
                <DashboardCardButton 
                    href="/student/yarismalar" 
                    icon={<Swords />} 
                    title="Arena" 
-                   subtitle="Çok Oyunculu"
-                   colorClass="rose"
-               />
-               <DashboardCardButton 
-                   href="/student/yazilacaklar" 
-                   icon={<Columns />} 
-                   title="Panolar" 
-                   subtitle="Notlar & Kavramlar"
+                   subtitle="Arkadaşlarınla Yarış"
                    colorClass="orange"
                />
                <DashboardCardButton 
-                   href="/student/ozetler" 
-                   icon={<LayoutTemplate />} 
-                   title="Özetler" 
-                   subtitle="Ders Notları"
-                   colorClass="indigo"
+                   href="/student/deneme" 
+                   icon={<FileCog />} 
+                   title="Denemeler" 
+                   subtitle="Sınav Merkezi"
+                   colorClass="violet"
+                   badge={examStats.pending}
                />
                 <DashboardCardButton 
                    href="/student/shop" 
@@ -333,13 +334,12 @@ export default function StudentDashboard() {
                    subtitle="Puan Harca"
                    colorClass="emerald"
                />
-                <DashboardCardButton 
-                   href="/student/deneme" 
-                   icon={<FileCog />} 
-                   title="Denemeler" 
-                   subtitle="Sınav Merkezi"
-                   colorClass="violet"
-                   badge={examStats.pending}
+                 <DashboardCardButton 
+                   href="/leaderboard" 
+                   icon={<Trophy />} 
+                   title="Liderlik" 
+                   subtitle="Şampiyonları Gör"
+                   colorClass="indigo"
                />
           </div>
           
