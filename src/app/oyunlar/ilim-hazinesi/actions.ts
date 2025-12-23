@@ -103,7 +103,9 @@ export async function submitIlimHazinesiScoreAction(userId: string | null, score
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+        const attemptCount = attemptsSnapshot.data().count;
+        
+        if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -119,6 +121,7 @@ export async function submitIlimHazinesiScoreAction(userId: string | null, score
             timestamp: serverTimestamp(),
             gameType: 'İlim Hazinesi',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

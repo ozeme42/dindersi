@@ -107,8 +107,9 @@ export async function submitHitTheTargetScoreAction(
         );
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        
-        if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
@@ -127,6 +128,7 @@ export async function submitHitTheTargetScoreAction(
             timestamp: serverTimestamp(),
             gameType: 'Hedefi Vur',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

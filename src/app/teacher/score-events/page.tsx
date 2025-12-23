@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X } from 'lucide-react';
+import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Search } from 'lucide-react';
 import { getScoreEvents, deleteScoreEvents } from './actions';
 import type { ScoreEvent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -44,7 +44,6 @@ import { Timestamp } from 'firebase/firestore';
 
 type EnrichedScoreEvent = ScoreEvent & { 
     userName?: string;
-    attemptNumber?: number;
 };
 
 type SerializableTimestamp = {
@@ -234,8 +233,11 @@ export default function ScoreEventsPage() {
                                                 <TableCell className="text-slate-500">
                                                     {typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}
                                                     {event.attemptNumber && (
-                                                        <span className={cn("text-xs ml-2 font-semibold", (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse" : "text-slate-500")}>
-                                                            ({event.attemptNumber}. deneme)
+                                                        <span className={cn(
+                                                            "text-xs ml-2 font-semibold bg-slate-800 px-1.5 py-0.5 rounded", 
+                                                            (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse border border-red-500/50" : "text-slate-500"
+                                                        )}>
+                                                            {event.attemptNumber}. deneme
                                                         </span>
                                                     )}
                                                 </TableCell>

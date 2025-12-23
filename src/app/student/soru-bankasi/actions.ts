@@ -161,7 +161,9 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu testten daha fazla puan kazanamazsınız." };
         }
 
@@ -177,6 +179,7 @@ export async function submitSoruBankasiScore(userId: string, score: number, cont
             timestamp: serverTimestamp(),
             gameType: 'Soru Bankası',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

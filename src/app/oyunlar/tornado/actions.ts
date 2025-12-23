@@ -60,7 +60,9 @@ export async function submitTornadoScoreAction(userId: string | null, score: num
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -76,6 +78,7 @@ export async function submitTornadoScoreAction(userId: string | null, score: num
             timestamp: serverTimestamp(),
             gameType: 'Tornado',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

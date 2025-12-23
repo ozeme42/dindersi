@@ -76,7 +76,9 @@ export async function submitBalloonHunterScoreAction(userId: string | null, scor
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -92,6 +94,7 @@ export async function submitBalloonHunterScoreAction(userId: string | null, scor
             timestamp: serverTimestamp(),
             gameType: 'Balon Avcısı',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

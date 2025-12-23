@@ -93,8 +93,9 @@ export async function submitEslestirmeScoreAction(
         );
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
+        const attemptCount = attemptsSnapshot.data().count;
         
-        if (attemptsSnapshot.data().count >= 10) {
+        if (attemptCount >= 10) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
@@ -113,6 +114,7 @@ export async function submitEslestirmeScoreAction(
             timestamp: serverTimestamp(),
             gameType: 'Eşleştirme',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

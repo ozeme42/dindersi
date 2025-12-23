@@ -1,15 +1,13 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, QueryDocumentSnapshot, where, Query } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, where, Query, and } from "firebase/firestore";
 import type { ScoreEvent, UserProfile } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
 type EnrichedScoreEvent = ScoreEvent & {
     userName?: string;
-    attemptNumber?: number; // Add attempt number for Soru Bankası tests
 };
 
 type SerializableTimestamp = {
@@ -32,22 +30,37 @@ export async function getScoreEvents(params: {
 
         let eventsQuery: Query = collection(db, 'scoreEvents');
         
-        let queryConstraints = [orderBy('timestamp', 'desc')];
+        let queryConstraints: any[] = [orderBy('timestamp', 'desc')];
+        let postQueryFilters: ((event: EnrichedScoreEvent) => boolean)[] = [];
 
+        // Server-side filtering for excessive attempts
         if (showOnlyExcessiveAttempts) {
-             // This logic remains complex for Firestore queries alone.
-             // We'll fetch all and filter for this specific case for now.
-             // A better long-term solution involves denormalizing attempt counts.
+            queryConstraints.push(where("attemptNumber", ">", 10));
         }
         
+        // Server-side filtering for search term if possible
+        // Note: Firestore does not support full-text search. This is a very basic prefix search.
+        // For more complex search, a third-party service like Algolia is needed.
+        if (searchTerm) {
+            // We can't efficiently query by userName, so we have to filter client-side (after fetching)
+            // This is a limitation we accept for now.
+             postQueryFilters.push(event => 
+                event.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                event.gameType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (typeof event.context === 'string' && event.context.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+        }
+
         // Apply cursor for pagination
         if (cursor) {
             const cursorTimestamp = new Timestamp(cursor._seconds, cursor._nanoseconds);
             queryConstraints.push(startAfter(cursorTimestamp));
         }
 
-        queryConstraints.push(limit(itemsPerPage * (searchTerm ? 5 : 1))); // Fetch more if we need to filter client-side
-
+        // We fetch more items than needed if we have client-side filters
+        const fetchLimit = postQueryFilters.length > 0 ? itemsPerPage * 5 : itemsPerPage;
+        queryConstraints.push(limit(fetchLimit));
+        
         eventsQuery = query(collection(db, 'scoreEvents'), ...queryConstraints);
         
         const snapshot = await getDocs(eventsQuery);
@@ -59,29 +72,18 @@ export async function getScoreEvents(params: {
                 id: doc.id,
                 userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
                 timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
+                attemptNumber: data.attemptNumber || 1, // Default to 1 if not present
             } as EnrichedScoreEvent;
         });
         
-        // Client-side filtering for search term
-        if (searchTerm) {
-            const lowercasedTerm = searchTerm.toLowerCase();
-            events = events.filter(event => 
-                event.userName?.toLowerCase().includes(lowercasedTerm) ||
-                event.gameType?.toLowerCase().includes(lowercasedTerm) ||
-                (typeof event.context === 'string' && event.context.toLowerCase().includes(lowercasedTerm))
-            );
+        // Apply post-query filters
+        if (postQueryFilters.length > 0) {
+            events = events.filter(event => postQueryFilters.every(filterFn => filterFn(event)));
         }
-
-        // Handle attempt number calculation after filtering if needed
-        if (showOnlyExcessiveAttempts) {
-             // This is inefficient and should be improved with a better data model in the future.
-             // For now, it demonstrates the complexity. We'd need to fetch all events per user/context to do this accurately.
-             // The logic is omitted here to prefer performance, the UI should note this limitation.
-        }
-
+        
         const paginatedEvents = events.slice(0, itemsPerPage);
         
-        const lastVisibleDoc = snapshot.docs.length > itemsPerPage ? snapshot.docs[itemsPerPage - 1] : (snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null);
+        const lastVisibleDoc = snapshot.docs.length > 0 ? snapshot.docs[snapshot.docs.length - 1] : null;
         
         const lastVisibleTimestamp = lastVisibleDoc ? lastVisibleDoc.data().timestamp as Timestamp : null;
 

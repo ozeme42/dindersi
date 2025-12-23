@@ -83,7 +83,9 @@ export async function submitBilBakalimScoreAction(userId: string | null, score: 
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -99,6 +101,7 @@ export async function submitBilBakalimScoreAction(userId: string | null, score: 
             timestamp: serverTimestamp(),
             gameType: 'Bil Bakalım',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();
@@ -159,7 +162,9 @@ export async function submitDogruYanlisZinciriScoreAction(userId: string | null,
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -175,6 +180,7 @@ export async function submitDogruYanlisZinciriScoreAction(userId: string | null,
             timestamp: serverTimestamp(),
             gameType: 'Doğru/Yanlış Zinciri',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

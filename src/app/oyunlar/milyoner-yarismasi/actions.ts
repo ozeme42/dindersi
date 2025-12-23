@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer } from 'firebase/firestore';
+import { doc, runTransaction, arrayUnion, updateDoc, collection, query, where, getDocs, addDoc, serverTimestamp, getCountFromServer, getDoc } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import type { Question } from '@/lib/types';
@@ -19,15 +19,16 @@ export async function addScore(userId: string, score: number, context: string): 
   const scoreEventsRef = collection(db, 'scoreEvents');
 
   try {
-     // Check attempt limit
     const attemptsQuery = query(
       scoreEventsRef,
       where('userId', '==', userId),
       where('gameType', '==', 'Kim 1000 Puan İster?'),
-      where('context', '==', context) // Use the dynamic context here
+      where('context', '==', context) 
     );
     const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-    if (attemptsSnapshot.data().count >= MAX_ATTEMPTS_PER_CONTEXT) {
+    const attemptCount = attemptsSnapshot.data().count;
+
+    if (attemptCount >= MAX_ATTEMPTS_PER_CONTEXT) {
       return { success: false, error: "Bu konudan daha fazla puan kazanamazsınız." };
     }
 
@@ -44,8 +45,9 @@ export async function addScore(userId: string, score: number, context: string): 
           userId: userId,
           points: score,
           gameType: 'Kim 1000 Puan İster?',
-          context: context, // Use the provided context parameter
-          timestamp: serverTimestamp()
+          context: context, 
+          timestamp: serverTimestamp(),
+          attemptNumber: attemptCount + 1,
       });
     });
 

@@ -87,8 +87,9 @@ export async function submitCumleOlusturmaScoreAction(
         );
         
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { 
                 success: false, 
                 error: `Bu etkinlikten daha fazla puan kazanamazsınız. Lütfen farklı bir konu seçin.` 
@@ -107,6 +108,7 @@ export async function submitCumleOlusturmaScoreAction(
             timestamp: serverTimestamp(),
             gameType: 'Cümle Oluşturma',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();

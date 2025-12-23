@@ -77,11 +77,13 @@ export async function submitAcikUcluCevaplaScoreAction(userId: string | null, sc
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Açık Uçlu Cevapla'),
+            where('gameType', '==', 'Açık Uçlu Cevaplama'),
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -95,8 +97,9 @@ export async function submitAcikUcluCevaplaScoreAction(userId: string | null, sc
             userId: userId,
             points: score,
             timestamp: serverTimestamp(),
-            gameType: 'Açık Uçlu Cevapla',
+            gameType: 'Açık Uçlu Cevaplama',
             context: context,
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();
