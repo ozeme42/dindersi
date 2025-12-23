@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { generateTopicSummary } from '@/ai/flows/generate-topic-summary-flow';
 import { saveGeneratedActivityItems, deleteBulkActivityItems, saveActivityItem } from '@/app/teacher/activity-data/actions';
-import { updateTopicContent } from '@/app/teacher/ders-akisi/actions';
+import { updateTopicContent } from '@/app/teacher/content-creation/edit/actions';
 
 
 async function getDefinitionsForTopic(topicId: string): Promise<ActivityItem[]> {
@@ -126,7 +126,7 @@ function OzetPageContent() {
     }
 
     const handleSave = async () => {
-        if (!courseId || !unitId || !topicId) return;
+        if (!courseId || !unitId || !topicId || !topic) return;
         setIsSaving(true);
         
         const newDefinitions = definitions.filter(d => d.id.startsWith('new-'));
@@ -143,7 +143,7 @@ function OzetPageContent() {
             ...newDefinitions.map(d => saveActivityItem(serializeItem({ ...d, id: undefined }))), // Let Firestore generate ID
             ...updatedDefinitions.map(d => saveActivityItem(serializeItem(d))),
             idsToDelete.length > 0 ? deleteBulkActivityItems(idsToDelete) : Promise.resolve(),
-            updateTopicContent({ courseId, unitId, topicId, writingContent: { notes, conceptDefinitions: [] } }) // definitions are not stored here
+            updateTopicContent({ courseId, unitId, topicId, steps: topic.steps || [], writingContent: { notes, conceptDefinitions: [] } } as any)
         ];
 
         try {
