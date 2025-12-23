@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -18,13 +19,13 @@ import {
     AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, 
     AlertDialogTitle as RadixAlertDialogTitle, AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Progress } from '@/components/ui/progress';
 
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
-    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3
+    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -373,20 +374,16 @@ export default function ScalesPage() {
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 
                 {/* Ana Başlık ve Aksiyonlar */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-white/10 pb-4 gap-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
                      <div>
                         <h1 className="text-4xl font-black text-white flex items-center gap-3"><ScaleIcon className="text-purple-400 h-8 w-8"/> Değerlendirme Ölçekleri</h1>
                         <p className="text-slate-400 text-sm mt-1">Sınıf içi performans takibi ve analiz.</p>
                      </div>
                      
                      <div className="flex gap-3">
-                         {/* YENİ BUTON: Öğrenci Analiz Sayfasına Git */}
-                         <Button asChild variant="secondary" className="bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/50 shadow-lg shadow-emerald-900/20">
-                             <Link href="/teacher/scales/students">
-                                <Trophy className="mr-2 h-4 w-4"/> Öğrenci Başarı Analizi
-                             </Link>
+                         <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                           <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
                          </Button>
-
                          <Button 
                              onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
                              className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20"
