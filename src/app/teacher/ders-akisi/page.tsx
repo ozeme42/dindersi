@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
-    Workflow, Loader2, BookOpen, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText
+    Workflow, Loader2, BookOpen, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText, FilePenLine
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Topic, Unit, Course, SchoolClass } from '@/lib/types';
