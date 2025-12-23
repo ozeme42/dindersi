@@ -15,7 +15,7 @@ interface CourseSidebarProps {
     course: Course;
     activeTopic: Topic | null;
     onSelectTopic: (topic: Topic) => void;
-    isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
+    isTopicUnlocked: (topicId: string) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
     // Aşağıdaki proplar opsiyoneldir, soru bankasında kullanılabilir ama ders anlatımında boş gelebilir
     topicProgress?: { [topicId: string]: any }; 
@@ -86,7 +86,7 @@ export function CourseSidebar({
                                     {/* Timeline (Yol Haritası) Yapısı */}
                                     <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
                                         {unit.topics?.map((topic, topicIndex) => {
-                                            const isLocked = !isTopicUnlocked(topicIndex, unitIndex);
+                                            const isLocked = !isTopicUnlocked(topic.id);
                                             const isCompleted = isTopicCompleted(topic.id);
                                             const isActive = activeTopic?.id === topic.id;
 

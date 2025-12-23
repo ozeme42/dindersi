@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -13,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-// ErrorReportDialog importu silindi
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -37,7 +37,6 @@ function CoursePageContent() {
     const [localProgressMap, setLocalProgressMap] = useState<{ [topicId: string]: LocalProgress }>({});
     const mainContentRef = useRef<HTMLElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    // isReportDialogOpen state'i silindi
     const [isSaving, setIsSaving] = useState(false);
 
 
@@ -232,14 +231,13 @@ function CoursePageContent() {
             return newLocalProgress;
         });
 
-        // Bir sonraki konuya geç
         const allTopics = course.units.flatMap(u => u.topics);
         const currentIndex = allTopics.findIndex(t => t.id === topicId);
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
-             // Bir sonraki konunun kilidini kontrol et (Teacher hariç)
-             if (user.role === 'teacher' || user.role === 'superadmin' || isTopicUnlocked(nextTopic.id)) {
+             const isUnlocked = isTopicUnlocked(nextTopic.id);
+             if (isUnlocked) {
                  setActiveTopic(nextTopic);
                  return; 
              }
@@ -247,7 +245,7 @@ function CoursePageContent() {
         
         setView('map');
     };
-
+    
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
         if (!course) return false;
@@ -262,6 +260,7 @@ function CoursePageContent() {
         
         return (completedTopics[previousTopic.id]?.completionCount || 0) > 0;
     }, [course, completedTopics, user?.role]);
+
     
     const completedTopicsSet = useMemo(() => {
         const set = new Set<string>();
@@ -305,14 +304,9 @@ function CoursePageContent() {
                     isFullscreen && 'hidden'
                 )}>
                     {/* Sidebar Header */}
-                    <div className="p-4 border-b border-white/5 flex items-center gap-3">
-                        <div className="p-2 bg-slate-800 rounded-lg">
-                            <Map className="h-5 w-5 text-cyan-400" />
-                        </div>
-                        <div>
-                            <h2 className="font-bold text-white leading-tight">Konu Haritası</h2>
-                            <p className="text-xs text-slate-500">{course.title}</p>
-                        </div>
+                    <div className="p-5 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20">
+                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
+                        <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
                     </div>
 
                     {/* Sidebar Content */}
@@ -321,14 +315,7 @@ function CoursePageContent() {
                             course={course}
                             activeTopic={activeTopic}
                             onSelectTopic={handleSelectTopic}
-                            isTopicUnlocked={(topicIndex, unitIndex) => {
-                                if (!course) return false;
-                                const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
-                                const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-                                if (globalIndex <= 0) return true;
-                                const prevTopic = allTopics[globalIndex - 1];
-                                return (completedTopics[prevTopic.id]?.completionCount || 0) > 0;
-                            }}
+                            isTopicUnlocked={isTopicUnlocked}
                             isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
                             topicProgress={localProgressMap}
                             testCounts={{}} 
@@ -376,6 +363,8 @@ function CoursePageContent() {
                                 progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
                                 onProgressUpdate={onProgressUpdate}
                                 isFullscreen={isFullscreen}
+                                onMultiAnswer={handleLocalMultiAnswer}
+                                onAllTfAnswered={handleLocalAllTfAnswered}
                             />
                         ) : (
                             <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">
@@ -386,13 +375,8 @@ function CoursePageContent() {
                             </div>
                         )}
                     </div>
-
-                    {/* Hata Bildir Butonu KALDIRILDI */}
-
                 </main>
             </div>
-
-            {/* ErrorReportDialog çağrısı da silindi */}
         </div>
     )
 }
