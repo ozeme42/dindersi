@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -8,7 +7,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import type { Question } from '@/lib/types';
 
-const MAX_ATTEMPTS_PER_CONTEXT = 5; 
+const MAX_ATTEMPTS_PER_CONTEXT = 10; 
 
 export async function addScore(userId: string, score: number, context: string): Promise<{ success: boolean; error?: string }> {
   noStore();

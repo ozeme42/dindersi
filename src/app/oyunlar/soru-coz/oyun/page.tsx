@@ -28,7 +28,7 @@ function QuizGame() {
     const { toast } = useToast();
     
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState<(string | null)[]>([]);
+    const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
     const [isFinished, setIsFinished] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
@@ -68,7 +68,7 @@ function QuizGame() {
         fetchQuestions();
     }, [fetchQuestions]);
     
-    const handleAnswer = (answer: string) => {
+    const handleAnswer = (answer: string | boolean) => {
         if (answers[currentQuestionIndex] !== undefined && answers[currentQuestionIndex] !== null) return;
 
         const newAnswers = [...answers];
@@ -76,7 +76,8 @@ function QuizGame() {
         setAnswers(newAnswers);
 
         const question = questions[currentQuestionIndex];
-        const isCorrect = answer === question.correctAnswer;
+        const isCorrect = answer === question.correctAnswer || (question.type === 'Doğru/Yanlış' && (answer ? "Doğru" : "Yanlış") === question.correctAnswer);
+
 
         if(isCorrect) {
             playSound('correct');
@@ -136,7 +137,7 @@ function QuizGame() {
                 <Alert variant="destructive" className="max-w-lg">
                     <AlertTitle>Hata!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                     <div className="mt-4"><Button asChild variant="outline"><Link href="/oyunlar/bil-bakalim"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
+                     <div className="mt-4"><Button asChild variant="outline"><Link href="/oyunlar/soru-coz"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
                 </Alert>
             </div>
         );
@@ -148,7 +149,7 @@ function QuizGame() {
                 <Alert className="max-w-lg">
                     <AlertTitle>Soru Bulunamadı</AlertTitle>
                     <AlertDescription>Bu kriterlere uygun soru bulunamadı. Lütfen filtrelerinizi değiştirerek tekrar deneyin.</AlertDescription>
-                    <div className="mt-4"><Button asChild variant="outline"><Link href="/oyunlar/bil-bakalim"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
+                    <div className="mt-4"><Button asChild variant="outline"><Link href="/oyunlar/soru-coz"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
                 </Alert>
             </div>
         )
@@ -197,16 +198,25 @@ function QuizGame() {
                          {user?.role === 'student' && <span className="text-xs md:text-sm font-semibold text-primary">Puan: {score}</span>}
                     </div>
                 </CardHeader>
-                <CardContent className="py-4 md:py-6 min-h-[250px]">
+                <CardContent className="py-6 space-y-8">
                     <div className="text-center bg-background/50 border-2 border-primary/20 p-4 md:p-6 rounded-lg shadow-inner">
                         <p className="text-lg md:text-xl font-semibold">{currentQuestion.text}</p>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-                    {(currentQuestion.options || []).map(option => {
+                    {currentQuestion.type === 'Çoktan Seçmeli' && (currentQuestion.options || []).map(option => {
                         const isSelected = currentAnswer === option;
                         const isCorrect = currentQuestion.correctAnswer === option;
                         return (
                             <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                {option}
+                            </Button>
+                        );
+                    })}
+                     {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
+                        const isSelected = currentAnswer === option;
+                        const isCorrect = currentQuestion.correctAnswer === option;
+                        return (
+                            <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option === 'Doğru')} disabled={!!currentAnswer}>
                                 {option}
                             </Button>
                         );
