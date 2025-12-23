@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -175,16 +174,20 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
     );
 }
 
-// 2. InteractiveTrueFalseList
+// 2. InteractiveTrueFalseList (DÜZELTİLDİ: Sonsuz döngü engellendi)
 function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
+    
+    // YENİ: Zaten tamamlandı mı kontrolü
+    const isCompleted = answers?.completed;
 
     useEffect(() => {
-        if (allAnswered) {
+        // DÜZELTME: Eğer hepsi cevaplandıysa VE henüz 'completed' olarak işaretlenmemişse çalıştır.
+        if (allAnswered && !isCompleted) {
             onAllAnswered();
         }
-    }, [allAnswered, onAllAnswered]);
+    }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
         { card: 'border-cyan-500/50 bg-cyan-500/5 hover:bg-cyan-500/10', number: 'text-cyan-400' },
@@ -279,8 +282,8 @@ function ContentListPlayer({
 }: { 
     step: ContentStep | ObjectiveListStep | AccordionStep, 
     revealedSentencesCount: number, 
-    isFullscreen?: boolean,
-    onAnimationStart?: () => void,
+    isFullscreen?: boolean, 
+    onAnimationStart?: () => void, 
     onAnimationEnd?: () => void
 }) {
     const isTeacher = useTeacherMode();
@@ -1317,7 +1320,7 @@ export function LessonContentViewer({
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
     const { toast } = useToast();
-     
+      
     // State tanımları
     const [isAnimating, setIsAnimating] = useState(false);
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
@@ -1330,7 +1333,7 @@ export function LessonContentViewer({
     
     // Görsel büyütme durumu state'i
     const [isVisualMaximized, setIsVisualMaximized] = useState(false);
-     
+      
     // --- RESUME (KALINAN YERDEN DEVAM) ---
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
@@ -1351,7 +1354,7 @@ export function LessonContentViewer({
             // LocalStorage'dan kontrol et
             const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
             const savedData = localStorage.getItem(storageKey);
-             
+              
             if (savedData) {
                 const savedIndex = parseInt(savedData);
                 if (!isNaN(savedIndex) && savedIndex > 0 && savedIndex < steps.length) {
@@ -1420,20 +1423,20 @@ export function LessonContentViewer({
 
     useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
-     
+      
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
     const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
     
     // Görsel tam ekran yapıldığında da 'FullWidth' moduna geç
     const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
-     
+      
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
     const isNextButtonEnabled = useMemo(() => {
         if (!currentStep) return false;
         if (isTeacher) return true;
-         
+          
         // HTML Slide için her zaman aktif
         if (isHtmlSlideStep) return true;
 
@@ -1450,16 +1453,16 @@ export function LessonContentViewer({
             const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
             return cardSet.size === cards.length;
         }
-         
+          
         const answer = internalProgress.answers[currentStepIndex];
         if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-         
+          
         return answer !== undefined && answer !== null;
     }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     const handleNext = useCallback(() => {
         if (!currentStep) return;
-         
+          
         // Bitirince LocalStorage'ı temizle
         if (currentStepIndex === steps.length - 1) {
              if (topic) {
@@ -1548,7 +1551,7 @@ export function LessonContentViewer({
         const newAnswersForStep = { ...existingAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
         setInternalProgress(prev => ({ ...prev, answers: { ...prev.answers, [currentStepIndex]: newAnswersForStep }}));
     };
-     
+      
     const handleLocalAllTfAnswered = () => {
         if (!currentStep || currentStep.type !== 'trueFalseList') return;
         const answersForStep = internalProgress.answers[currentStepIndex];
@@ -1591,7 +1594,7 @@ export function LessonContentViewer({
              </div>
          )
     }
-     
+      
     if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
 
     const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);

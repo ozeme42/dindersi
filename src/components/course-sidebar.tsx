@@ -3,8 +3,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import type { Course, Topic, Unit, QuestionBankProgress } from '@/lib/types';
-import { Lock, Check, Play, MapPin, ChevronDown, BookOpen, Workflow } from 'lucide-react';
+import type { Course, Topic, Unit, UserProgress } from '@/lib/types';
+import { Lock, Check, Play, MapPin, ChevronDown, BookOpen, Workflow, ArrowLeft } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +15,7 @@ interface CourseSidebarProps {
     course: Course;
     activeTopic: Topic | null;
     onSelectTopic: (topic: Topic) => void;
-    isTopicUnlocked: (topicId: string) => boolean;
+    isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
     // Aşağıdaki proplar opsiyoneldir, soru bankasında kullanılabilir ama ders anlatımında boş gelebilir
     topicProgress?: { [topicId: string]: any }; 
@@ -42,9 +42,14 @@ export function CourseSidebar({
     return (
         <div className="h-full flex flex-col bg-slate-950 border-r border-white/5 select-none">
             {/* Başlık Alanı */}
-            <div className="p-5 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20">
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
-                <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
+            <div className="p-4 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
+                    <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
+                </div>
+                 <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl flex-shrink-0">
+                    <Link href="/student/soru-bankasi"><ArrowLeft className="h-5 w-5"/></Link>
+                </Button>
             </div>
 
             <ScrollArea className="flex-1">
@@ -86,7 +91,7 @@ export function CourseSidebar({
                                     {/* Timeline (Yol Haritası) Yapısı */}
                                     <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
                                         {unit.topics?.map((topic, topicIndex) => {
-                                            const isLocked = !isTopicUnlocked(topic.id);
+                                            const isLocked = !isTopicUnlocked(topicIndex, unitIndex);
                                             const isCompleted = isTopicCompleted(topic.id);
                                             const isActive = activeTopic?.id === topic.id;
 

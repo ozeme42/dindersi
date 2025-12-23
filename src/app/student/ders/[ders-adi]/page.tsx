@@ -1,12 +1,11 @@
-
 'use client';
 
-import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
-import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react"; 
-import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
+import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
+import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/auth-context";
@@ -19,6 +18,10 @@ type LocalProgress = {
     answers: { [stepIndex: number]: any };
     score: number;
 }
+
+// SABİT OBJELER
+const EMPTY_TEST_COUNTS = {};
+const MemoizedSidebar = React.memo(CourseSidebar);
 
 function CoursePageContent() {
     const params = useParams();
@@ -34,11 +37,10 @@ function CoursePageContent() {
     const [completedTopics, setCompletedTopics] = useState<UserProgress>({});
     const [view, setView] = useState<'map' | 'content'>('map');
     
-    const [internalProgress, setInternalProgress] = useState<LocalProgress>({ answers: {}, score: 0 });
+    const [localProgressMap, setLocalProgressMap] = useState<{ [topicId: string]: LocalProgress }>({});
     const mainContentRef = useRef<HTMLElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-
 
     const startTopicIdFromUrl = useMemo(() => searchParams.get('topicId'), [searchParams]);
 
@@ -52,69 +54,63 @@ function CoursePageContent() {
         };
     }, []);
 
-
     const fetchCourseData = useCallback(async () => {
-            if (!courseId || !user) return;
-            setIsLoading(true);
-            
-            setView(startTopicIdFromUrl ? 'content' : 'map');
-            
-            try {
-                const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                const progressSnap = await getDoc(progressRef);
-                const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
-                setCompletedTopics(currentProgress);
+        if (!courseId || !user) return;
+        setIsLoading(true);
+        setView(startTopicIdFromUrl ? 'content' : 'map');
 
-                const courseRef = doc(db, 'courses', courseId);
-                const courseSnap = await getDoc(courseRef);
+        try {
+            const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
+            const progressSnap = await getDoc(progressRef);
+            const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
+            setCompletedTopics(currentProgress);
 
-                if (!courseSnap.exists()) {
-                    console.error("Course not found!");
-                    setIsLoading(false);
-                    return;
-                }
+            const courseRef = doc(db, 'courses', courseId);
+            const courseSnap = await getDoc(courseRef);
 
-                const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
-                
-                const unitsRef = collection(db, 'courses', courseId, 'units');
-                const unitsQuery = query(unitsRef, orderBy("title"));
-                const unitsSnap = await getDocs(unitsQuery);
-                const units: Unit[] = [];
-
-                for (const unitDoc of unitsSnap.docs) {
-                    const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
-                    
-                    const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
-                    const topicsQuery = query(topicsRef, orderBy("title"));
-                    const topicsSnap = await getDocs(topicsQuery);
-                    unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                    
-                    units.push(unitData);
-                }
-
-                courseData.units = units;
-                setCourse(courseData);
-
-                if (startTopicIdFromUrl) {
-                    const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
-                    setActiveTopic(topic || null);
-                } else {
-                    const allTopics = units.flatMap(u => u.topics);
-                    const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
-                    
-                    if (firstUncompletedTopic) {
-                        setActiveTopic(firstUncompletedTopic);
-                    } else if (allTopics.length > 0) {
-                        setActiveTopic(allTopics[allTopics.length-1] || null);
-                    }
-                }
-
-            } catch (error) {
-                console.error("Failed to fetch course data:", error);
-            } finally {
+            if (!courseSnap.exists()) {
+                console.error("Course not found!");
                 setIsLoading(false);
+                return;
             }
-        }, [courseId, user, startTopicIdFromUrl]);
+
+            const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
+            const unitsRef = collection(db, 'courses', courseId, 'units');
+            const unitsQuery = query(unitsRef, orderBy("title"));
+            const unitsSnap = await getDocs(unitsQuery);
+            const units: Unit[] = [];
+
+            for (const unitDoc of unitsSnap.docs) {
+                const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
+                const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
+                const topicsQuery = query(topicsRef, orderBy("title"));
+                const topicsSnap = await getDocs(topicsQuery);
+                unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+                units.push(unitData);
+            }
+
+            courseData.units = units;
+            setCourse(courseData);
+
+            if (startTopicIdFromUrl) {
+                const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
+                setActiveTopic(topic || null);
+            } else {
+                const allTopics = units.flatMap(u => u.topics);
+                const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
+                
+                if (firstUncompletedTopic) {
+                    setActiveTopic(firstUncompletedTopic);
+                } else if (allTopics.length > 0) {
+                    setActiveTopic(allTopics[allTopics.length-1] || null);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to fetch course data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [courseId, user, startTopicIdFromUrl]);
 
     useEffect(() => {
         fetchCourseData();
@@ -130,16 +126,19 @@ function CoursePageContent() {
         return null;
     }, [course, activeTopic]);
 
-    const handleSelectTopic = (topic: Topic) => {
+    const handleSelectTopic = useCallback((topic: Topic) => {
         setActiveTopic(topic);
         setView('content');
         if (window.innerWidth < 768) {
              window.scrollTo(0,0);
         }
-    };
+    }, []);
 
     const onProgressUpdate = useCallback((topicId: string, newProgress: LocalProgress) => {
-        setInternalProgress(newProgress);
+        setLocalProgressMap(prev => ({
+            ...prev,
+            [topicId]: newProgress
+        }));
     }, []);
 
     const handleTopicComplete = async (topicId: string, score: number) => {
@@ -147,7 +146,6 @@ function CoursePageContent() {
         setIsSaving(true);
 
         const currentCompletionCount = completedTopics[topicId]?.completionCount || 0;
-        
         let completionBonus = 0;
         let toastTitle = "Konu Tamamlandı!";
         let toastDescription = "Tebrikler, bu konuyu başarıyla bitirdin!";
@@ -210,7 +208,6 @@ function CoursePageContent() {
             }));
             
             toast({ title: toastTitle, description: toastDescription, duration: 5000 });
-
         } catch(error) {
             console.error("Error saving progress:", error);
             toast({ title: "Hata", description: "İlerleme kaydedilemedi.", variant: "destructive" });
@@ -218,78 +215,97 @@ function CoursePageContent() {
             setIsSaving(false);
         }
         
-        setInternalProgress({ answers: {}, score: 0 });
+        setLocalProgressMap(prev => {
+            const newLocalProgress = {...prev};
+            delete newLocalProgress[topicId];
+            return newLocalProgress;
+        });
 
         const allTopics = course.units.flatMap(u => u.topics);
         const currentIndex = allTopics.findIndex(t => t.id === topicId);
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
-             if (user.role === 'teacher' || user.role === 'superadmin' || isTopicUnlocked(nextTopic.id)) {
+             if (isTopicUnlocked(nextTopic.id)) {
                  setActiveTopic(nextTopic);
                  return; 
              }
         }
-        
         setView('map');
     };
-
+    
+    const isTopicCompleted = useCallback((topicId: string) => {
+        return (completedTopics[topicId]?.completionCount || 0) > 0;
+    }, [completedTopics]);
+    
+    const isTopicUnlocked = useCallback((topicId: string): boolean => {
+        if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
+        if (!course?.units) return false;
+        const allTopics = course.units.flatMap(u => u.topics || []);
+        if (allTopics.length === 0) return true;
+        const topicIndex = allTopics.findIndex(t => t.id === topicId);
+        if (topicIndex <= 0) return true;
+        const previousTopic = allTopics[topicIndex - 1];
+        if (!previousTopic) return true;
+        return isTopicCompleted(previousTopic.id);
+    }, [course?.units, isTopicCompleted, user?.role]);
+    
     const handleLocalMultiAnswer = useCallback((stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
-        if (!activeTopic || !activeTopic.steps) return;
-        const currentStep = activeTopic.steps[stepIndex] as (LessonStep & { questions?: any[] });
-        
-        setInternalProgress(prev => {
-            const stepAnswers = prev.answers[stepIndex] || {};
-            if (stepAnswers[questionIndex] !== undefined) return prev; // Already answered
+        if (!activeTopic) return;
+        const topicId = activeTopic.id;
 
-            const question = currentStep.questions?.[questionIndex];
+        setLocalProgressMap(prevMap => {
+            const prevProgress = prevMap[topicId] || { answers: {}, score: 0 };
+            const currentAnswers = prevProgress.answers[stepIndex] || {};
+            if (currentAnswers[questionIndex] !== undefined) return prevMap;
+            
+            const step = activeTopic.steps?.[stepIndex];
+            if (!step || step.type !== 'trueFalseList') return prevMap;
+
+            const question = step.questions[questionIndex];
             const isCorrect = selectedAnswer === question.isTrue;
             if (isCorrect) playSound('correct'); else playSound('incorrect');
 
-            const newStepAnswers = { ...stepAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect }};
-            const newAnswers = { ...prev.answers, [stepIndex]: newStepAnswers };
-            return { ...prev, answers: newAnswers };
+            const newAnswersForStep = { ...currentAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
+            const newAnswers = { ...prevProgress.answers, [stepIndex]: newAnswersForStep };
+
+            return {
+                ...prevMap,
+                [topicId]: { ...prevProgress, answers: newAnswers }
+            };
         });
     }, [activeTopic]);
+     
+    // GÜVENLİK DÜZELTMESİ: completed: true ise tekrar state güncelleme
+    const handleLocalAllTfAnswered = useCallback((stepIndex?: number) => {
+        if (!activeTopic || !activeTopicData) return;
+        const topicId = activeTopic.id;
 
-    const handleLocalAllTfAnswered = useCallback((stepIndex: number) => {
-         if (!activeTopic || !activeTopic.steps) return;
-        
-        setInternalProgress(prev => {
-            const stepAnswers = prev.answers[stepIndex] || {};
-            const correctCount = Object.values(stepAnswers).filter((a: any) => a.isCorrect).length;
+        setLocalProgressMap(prevMap => {
+            const prevProgress = prevMap[topicId];
+            if (!prevProgress) return prevMap;
+
+            const targetStepIndex = stepIndex ?? (activeTopicData.topic.steps || []).findIndex(s => s.type === 'trueFalseList');
+            if (targetStepIndex === -1) return prevMap;
+            
+            const answersForStep = prevProgress.answers[targetStepIndex];
+            
+            // Eğer zaten tamamlandıysa çık, döngüyü kır.
+            if (!answersForStep || answersForStep.completed) return prevMap;
+
+            const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
             const points = correctCount * 20;
 
-            const newAnswers = { ...prev.answers, [stepIndex]: { ...stepAnswers, completed: true } };
-            return { ...prev, score: prev.score + points, answers: newAnswers };
+            const newAnswers = { ...prevProgress.answers, [targetStepIndex]: { ...answersForStep, completed: true } };
+            
+            return {
+                ...prevMap,
+                [topicId]: { score: prevProgress.score + points, answers: newAnswers }
+            };
         });
-    }, [activeTopic]);
-    
-    const isTopicUnlocked = useCallback((topicId: string): boolean => {
-        if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
-        if (!course) return false;
-        
-        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        const topicIndex = allTopics.findIndex(t => t.id === topicId);
-        
-        if (topicIndex <= 0) return true;
-        
-        const prevTopic = allTopics[topicIndex - 1];
-        if (!prevTopic) return true; // Should not happen if index > 0
-        
-        return (completedTopics[prevTopic.id]?.completionCount || 0) > 0;
-    }, [course?.units, completedTopics, user?.role]);
+    }, [activeTopic, activeTopicData]);
 
-    const completedTopicsSet = useMemo(() => {
-        const set = new Set<string>();
-        Object.keys(completedTopics).forEach(topicId => {
-            if (completedTopics[topicId].completionCount > 0) {
-                set.add(topicId);
-            }
-        });
-        return set;
-    }, [completedTopics]);
-    
+
     if (isLoading) {
          return (
             <div className="flex h-screen items-center justify-center bg-slate-950">
@@ -314,37 +330,22 @@ function CoursePageContent() {
             <div className={cn("flex flex-col md:flex-row flex-grow overflow-hidden relative z-10", isFullscreen ? "h-screen" : "")}>
                 
                 <div className={cn(
-                    "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 flex flex-col",
-                    view === 'content' ? 'hidden md:flex' : 'flex h-full',
+                    "md:w-80 lg:w-96 flex-shrink-0 border-r border-white/5 bg-slate-900/50 backdrop-blur-sm flex flex-col relative overflow-hidden",
+                    view === 'content' ? 'hidden md:flex h-full' : 'flex h-full',
                     isFullscreen && 'hidden'
                 )}>
-                    <div className="p-5 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20">
-                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
-                        <h2 className="font-bold text-white text-lg leading-tight line-clamp-1">{course.title}</h2>
-                    </div>
-
-                    <div className="flex-grow overflow-y-auto">
-                        <CourseSidebar
-                            course={course}
-                            activeTopic={activeTopic}
-                            onSelectTopic={handleSelectTopic}
-                            isTopicUnlocked={(topicId) => {
-                                if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
-                                if (!course) return false;
-                                const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-                                const topicIndex = allTopics.findIndex(t => t.id === topicId);
-                                if (topicIndex <= 0) return true;
-                                const prevTopic = allTopics[topicIndex - 1];
-                                if (!prevTopic) return true;
-                                return (completedTopics[prevTopic.id]?.completionCount || 0) > 0;
-                            }}
-                            isTopicCompleted={(topicId) => completedTopicsSet.has(topicId)}
-                            topicProgress={internalProgress ? { [activeTopic?.id || '']: internalProgress } : {}}
-                        />
-                    </div>
+                    <MemoizedSidebar
+                        course={course}
+                        activeTopic={activeTopic}
+                        onSelectTopic={handleSelectTopic}
+                        isTopicUnlocked={isTopicUnlocked}
+                        isTopicCompleted={isTopicCompleted}
+                        topicProgress={localProgressMap}
+                        testCounts={EMPTY_TEST_COUNTS} 
+                    />
                 </div>
                 
-                <main ref={mainContentRef as any} className={cn(
+                <main ref={mainContentRef} className={cn(
                     "flex-1 overflow-hidden relative flex flex-col bg-slate-950/50",
                     view === 'map' ? 'hidden md:flex' : 'flex'
                 )}>
@@ -378,7 +379,7 @@ function CoursePageContent() {
                                 courseTitle={course.title}
                                 unitTitle={activeTopicData.unitTitle}
                                 onTopicComplete={handleTopicComplete}
-                                progress={internalProgress}
+                                progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
                                 onProgressUpdate={onProgressUpdate}
                                 isFullscreen={isFullscreen}
                                 onMultiAnswer={handleLocalMultiAnswer}
