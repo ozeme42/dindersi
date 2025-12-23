@@ -3,7 +3,7 @@
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
-import { collection, doc, serverTimestamp, setDoc, updateDoc } from "firebase-admin/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase-admin/firestore";
 import type { UserProfile } from "@/lib/types";
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
@@ -86,8 +86,8 @@ export async function updateStudentClass(studentId: string, newClassName: string
 
     try {
         const db = getAdminDb();
-        const studentRef = doc(db, 'users', studentId);
-        await updateDoc(studentRef, {
+        const studentRef = db.collection('users').doc(studentId);
+        await studentRef.update({
             class: newClassName
         });
         return { success: true };
