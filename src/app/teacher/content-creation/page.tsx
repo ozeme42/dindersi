@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
@@ -529,7 +530,6 @@ export default function ContentCreationPage() {
                         <div key={item.id} className={cn(
                             "relative group rounded-2xl transition-all duration-300 transform",
                             !isPublished && "opacity-40 hover:opacity-100",
-                            isSelected ? "ring-2 ring-offset-2 ring-offset-slate-950" : ""
                             )}
                         >
                             <button
@@ -647,7 +647,7 @@ export default function ContentCreationPage() {
                             return (
                                 <div key={step.id} 
                                     className="flex flex-col items-center gap-3 group cursor-pointer"
-                                    onClick={() => currentStep > step.id && setCurrentStep(step.id)}
+                                    onClick={() => currentStep > step.id && handleBack()}
                                 >
                                     <div className={cn(
                                         "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
@@ -706,7 +706,7 @@ export default function ContentCreationPage() {
                         </div>
 
                         <div className="flex-grow p-6 md:p-10 bg-black/20">
-                            {renderContent()}
+                            {renderCurrentStep()}
                         </div>
 
                         <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
