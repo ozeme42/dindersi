@@ -8,7 +8,7 @@ import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react"; // Bug ikonu silindi
 import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, addDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -61,7 +61,7 @@ function CoursePageContent() {
             
             // Eğer URL'de topicId varsa direkt içeriği aç, yoksa haritayı göster
             setView(startTopicIdFromUrl ? 'content' : 'map');
-            setLocalProgressMap({});
+            // setLocalProgressMap({}); // HATA KAYNAĞI: Bu satır sonsuz döngüye neden oluyor.
 
             try {
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
@@ -248,12 +248,12 @@ function CoursePageContent() {
     const isTopicCompleted = useCallback((topicId: string) => {
         return (completedTopics[topicId]?.completionCount || 0) > 0;
     }, [completedTopics]);
-
+    
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (user?.role === 'teacher' || user?.role === 'superadmin') return true;
-        if (!course) return false;
+        if (!course?.units) return false;
         
-        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
+        const allTopics = course.units.flatMap(u => u.topics || []) || [];
         const topicIndex = allTopics.findIndex(t => t.id === topicId);
         
         if (topicIndex <= 0) return true;
@@ -262,13 +262,14 @@ function CoursePageContent() {
         if (!previousTopic) return true; 
         
         return isTopicCompleted(previousTopic.id);
-    }, [course, isTopicCompleted, user?.role]);
+    }, [course?.units, isTopicCompleted, user?.role]);
+
 
     const handleLocalMultiAnswer = (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
         if (!activeTopicData) return;
         const topicId = activeTopicData.topic.id;
 
-        onProgressUpdate(topicId, prevProgress => {
+        onProgressUpdate(topicId, (prevProgress: LocalProgress): LocalProgress => {
             const currentAnswers = prevProgress.answers[stepIndex] || {};
             if (currentAnswers[questionIndex] !== undefined) return prevProgress;
 
@@ -285,12 +286,14 @@ function CoursePageContent() {
             return { ...prevProgress, answers: newAnswers };
         });
     };
-
+    
     const handleLocalAllTfAnswered = () => {
-        if (!activeTopicData) return;
-        const topicId = activeTopicData.topic.id;
-        onProgressUpdate(topicId, prevProgress => {
-            const stepIndex = steps.findIndex(s => s.type === 'trueFalseList');
+        if (!activeTopicData || !activeTopic) return;
+        const topicId = activeTopic;
+        const localProgress = localProgressMap[topicId.id]
+
+        onProgressUpdate(topicId.id, (prevProgress: LocalProgress): LocalProgress => {
+            const stepIndex = (activeTopicData.topic.steps || []).findIndex(s => s.type === 'trueFalseList');
             const answersForStep = prevProgress.answers[stepIndex];
             if (!answersForStep || (answersForStep as any).completed) return prevProgress;
 
@@ -345,7 +348,7 @@ function CoursePageContent() {
                 </div>
                 
                 {/* SAĞ PANEL: İçerik Görüntüleyici */}
-                <main ref={mainContentRef as any} className={cn(
+                <main ref={mainContentRef} className={cn(
                     "flex-1 overflow-hidden relative flex flex-col bg-slate-950/50",
                     view === 'map' ? 'hidden md:flex' : 'flex'
                 )}>
