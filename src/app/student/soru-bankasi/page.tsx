@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from "react";
@@ -139,22 +140,19 @@ export default function SoruBankasiPage() {
                 ]);
                 
                 const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-                const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
-                
-                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-                const studentClassId = studentClass?.id;
-
                 const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
 
                 let filteredCourses: Course[] = [];
-                if (studentClassId) {
-                    const isFirstClass = studentClassId === firstClassId;
-                    filteredCourses = allCourses.filter(course =>
-                        !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-                    );
-                } else {
-                    filteredCourses = allCourses.filter(course => !course.classId && !course.isTeacherOnly);
-                }
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
+                
+                // Öğrencinin sınıfına atanmış, genel (classId'si olmayan) veya yaz okulu derslerini al
+                filteredCourses = allCourses.filter(course => 
+                    !course.isTeacherOnly && (
+                        (studentClass && course.classId === studentClass.id) || // Öğrencinin sınıfına ait
+                        !course.classId                                       // Genel dersler
+                    )
+                );
+
 
                 const coursesData = await Promise.all(filteredCourses.map(async (course) => {
                     const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
@@ -164,8 +162,16 @@ export default function SoruBankasiPage() {
                         getDoc(progressRef),
                         qbStats
                     ]);
-
-                    const completedTopics = progressSnap.exists() ? (progressSnap.data() as UserProgress).completedTopics || [] : [];
+                    
+                    let completedTopicsCount = 0;
+                    if(progressSnap.exists()){
+                        const progressData = progressSnap.data() as UserProgress;
+                        Object.values(progressData).forEach(topicProgress => {
+                            if(topicProgress.completionCount > 0) {
+                                completedTopicsCount++;
+                            }
+                        })
+                    }
                     
                     const unitsRef = collection(db, 'courses', course.id, 'units');
                     const unitsSnap = await getDocs(unitsRef);
@@ -175,13 +181,13 @@ export default function SoruBankasiPage() {
                         totalTopics += topicsSnap.size;
                     }
                     
-                    const lessonProgress = totalTopics > 0 ? Math.round((completedTopics.length / totalTopics) * 100) : 0;
+                    const lessonProgress = totalTopics > 0 ? Math.round((completedTopicsCount / totalTopics) * 100) : 0;
                     
                     return {
                         ...course,
                         className: studentClass?.name || 'Genel',
                         lessonProgress,
-                        completedTopicsCount: completedTopics.length,
+                        completedTopicsCount: completedTopicsCount,
                         topicsCount: totalTopics,
                         questionBankProgress: questionBankStats.completionPercentage,
                         passedTests: questionBankStats.passedTests,
@@ -206,7 +212,7 @@ export default function SoruBankasiPage() {
     }, [user]);
 
     return (
-        <div className="min-h-screen bg-slate-950 pb-24 md:pb-12 overflow-x-hidden relative selection:bg-cyan-500/30">
+        <div className="min-h-screen bg-[#0f172a] pb-24 md:pb-12 overflow-x-hidden relative selection:bg-cyan-500/30">
             
             {/* Arka Plan Işıkları */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -217,15 +223,13 @@ export default function SoruBankasiPage() {
             <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
                 
                 {/* Başlık Alanı */}
-                <div className="mb-10 md:mb-14 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div>
-                         <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl mb-2">
-                            Dersler <span className="text-slate-600">&</span> Soru Bankası
-                        </h1>
-                        <p className="text-slate-400 max-w-2xl text-lg">
-                            Derslerini çalış, testlerini çöz ve <span className="text-cyan-400 font-bold">başarıya ulaş!</span>
-                        </p>
-                    </div>
+                <div className="mb-10 md:mb-14 relative text-center md:text-left">
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl mb-2">
+                        Dersler <span className="text-slate-600">&</span> Soru Bankası
+                    </h1>
+                    <p className="text-slate-400 text-lg">
+                        Derslerini çalış, testlerini çöz ve <span className="text-cyan-400 font-bold">başarıya ulaş!</span>
+                    </p>
                 </div>
                 
                 {/* Yükleniyor veya İçerik */}
