@@ -33,7 +33,7 @@ const getGradient = (index: number) => {
 
 const GlassPanel = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className={cn(
-        "backdrop-blur-xl bg-[#0f172a]/80 border border-white/10 rounded-2xl shadow-2xl relative overflow-hidden",
+        "backdrop-blur-xl bg-[#0f172a]/80 border border-white/10 rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden relative transition-all duration-300",
         className
     )}>
          {/* Dekoratif üst çizgi */}
@@ -78,7 +78,7 @@ const SelectionCard = ({
         )}></div>
         
         {/* Kart İçeriği */}
-        <div className="relative h-full bg-[#1e293b] rounded-[15px] p-4 md:p-6 flex flex-row items-center gap-4 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
+        <div className="relative h-full bg-[#1e293b] rounded-[15px] p-4 md:p-6 flex flex-row items-center gap-4 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
             
             {/* İkon Kutusu */}
             <div className={cn(
@@ -199,10 +199,9 @@ const SidebarStepper = ({
 
 // --- MAIN PAGE COMPONENT ---
 const steps = [
-  { id: 1, name: "Sınıf Seviyesi", icon: Users },
-  { id: 2, name: "Ders Seçimi", icon: Book },
-  { id: 3, name: "Ünite Seçimi", icon: Library },
-  { id: 4, name: "Konu Seçimi", icon: ListTodo },
+  { id: 1, name: "Ders Seçimi", icon: Book },
+  { id: 2, name: "Ünite Seçimi", icon: Library },
+  { id: 3, name: "Konu Seçimi", icon: ListTodo },
 ];
 
 type OyunKurulumProps = {
@@ -240,23 +239,43 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     topicName: ""
   });
 
+  const getBackUrl = () => {
+    if (targetPath?.startsWith('student')) return '/student';
+    if(targetPath === 'oyunlar') return '/oyunlar';
+    return '/';
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+        setCurrentStep(currentStep - 1);
+    } else {
+        router.push(getBackUrl());
+    }
+  };
+
   const fetchManifest = useCallback(async () => {
     setIsLoading(true);
     try {
       const isForStudent = !isStatic && !!user;
-      const res = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user.uid : undefined);
+      const res = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
       if (res.error) throw new Error(res.error);
 
-      const enrichedClassGroups = (res.classGroups || []).map((group, groupIndex) => ({
+      // Sınıf gruplarını alıp derslere ikon ve renk ataması yap
+      const classGroupsWithData = (res.classGroups || []).map((group, groupIndex) => ({
           ...group,
           courses: group.courses.map((course: any, courseIndex: number) => ({
               ...course,
-              icon: ICONS[courseIndex % ICONS.length],
-              color: getGradient(courseIndex),
-              className: group.name,
+              icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
+              color: getGradient(groupIndex + courseIndex),
+              className: group.name, // Ders kartında sınıf adını göstermek için
           }))
       }));
-      setAllClassGroups(enrichedClassGroups);
+
+      // Tüm dersleri tek bir listede topla (sınıf filtresi olmadan başlangıç için)
+      const allCourses = classGroupsWithData.flatMap(group => group.courses);
+      
+      setAllClassGroups(classGroupsWithData);
+      setCourses(allCourses); // Başlangıçta tüm dersleri göster
     } catch (error) {
       console.error(error);
     } finally {
@@ -269,17 +288,15 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   }, [fetchManifest]);
 
   const handleJumpToStep = (stepId: number) => {
-      if (stepId < currentStep) setCurrentStep(stepId);
-  };
-
-  const handleSelectClass = (group: EnrichedClassGroup) => {
-    setSelection({ 
-        ...selection, 
-        className: formatGroupName(group.name), 
-        courseId: '', courseName: '', unitId: '', unitName: '', topicName: ''
-    });
-    setCourses(group.courses);
-    setCurrentStep(2);
+      if (stepId < currentStep) {
+          if (stepId === 1) {
+              setSelection(prev => ({ ...prev, courseId: '', courseName: '', unitId: '', unitName: '', topicName: '' }));
+          }
+           if (stepId === 2) {
+              setSelection(prev => ({ ...prev, unitId: '', unitName: '', topicName: '' }));
+          }
+          setCurrentStep(stepId);
+      }
   };
 
   const handleSelectCourse = (course: Course) => {
@@ -288,10 +305,15 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         courseId: course.id, 
         courseName: course.title, 
         courseColor: (course as any).color || "from-slate-700 to-slate-800",
-        unitId: '', unitName: '', topicName: ''
+        unitId: '', unitName: '',
     });
-    setUnits((course as any).units || []);
-    setCurrentStep(3);
+    
+    setIsLoading(true);
+    setTimeout(() => {
+        setUnits((course as any).units || []);
+        setIsLoading(false);
+        setCurrentStep(2);
+    }, 300);
   };
 
   const handleSelectUnit = (unitId: string, unitName: string) => {
@@ -299,14 +321,22 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     
     if (dataType === 'games' && unitId === 'all') {
         const params = new URLSearchParams({
-            gameName: finalGameName, gamePath: finalGamePath, courseId: selection.courseId, courseName: selection.courseName,
-            unitId: 'all', unitName: 'Tüm Üniteler', topicId: 'all', topicName: 'Tüm Konular', isStatic: String(isStatic),
+            gameName: finalGameName,
+            gamePath: finalGamePath,
+            courseId: selection.courseId,
+            courseName: selection.courseName,
+            unitId: 'all',
+            unitName: 'Tüm Üniteler',
+            topicId: 'all',
+            topicName: 'Tüm Konular',
+            isStatic: String(isStatic),
         });
-        router.push(`/oyunlar/${finalGamePath}/oyun?${params.toString()}`);
+        const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+        router.push(url);
         return;
     }
     
-     if (dataType === 'ozetler' && unitId !== 'all') {
+    if (dataType === 'ozetler' && unitId !== 'all') {
          const selectedUnit = units.find(u => u.id === unitId);
          if (selectedUnit && (selectedUnit as any).hasUnitOzet) {
             const urlPath = isStatic ? `ozetler` : `student/ozetler`;
@@ -315,31 +345,41 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
          }
     }
 
-    const selectedUnit = units.find(u => u.id === unitId);
-    const availableTopics = (selectedUnit?.topics || []).filter(topic => {
-        if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
-        if (dataType === 'ozetler') return topic.hasOzetContent;
-        return true;
-    });
-    setTopics(availableTopics);
-    setCurrentStep(4);
+    setIsLoading(true);
+    setTimeout(() => {
+        const selectedUnit = units.find(u => u.id === unitId);
+        const availableTopics = (selectedUnit?.topics || []).filter(topic => {
+            if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
+            if (dataType === 'ozetler') return topic.hasOzetContent;
+            return true;
+        });
+        setTopics(availableTopics);
+        setIsLoading(false);
+        setCurrentStep(3);
+    }, 300);
   };
   
   const handleSelectTopic = (topicId: string, topicName: string) => {
       setSelection({...selection, topicName});
       
       const pathPrefix = isStatic ? '' : '/student';
-      const basePath = targetPath || (isStatic ? 'oyunlar' : 'student/oyunlar');
+      let basePath = targetPath;
+      if (!basePath) {
+          basePath = isStatic ? 'oyunlar' : 'student/oyunlar';
+      }
 
       const params = new URLSearchParams({
         courseId: selection.courseId,
         courseName: selection.courseName,
         unitId: selection.unitId,
         unitName: selection.unitName,
-        topicId,
-        topicName,
-        isStatic: String(isStatic)
+        topicId: topicId,
+        topicName: topicName,
       });
+      // Add isStatic only if it's true, to keep URLs cleaner for dynamic routes
+      if (isStatic) {
+          params.append('isStatic', 'true');
+      }
       
       let finalUrl = `/${basePath}/${finalGamePath}/oyun?${params.toString()}`;
       if(dataType === 'yazilacaklar') finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
@@ -369,36 +409,20 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           case 1:
             return (
                 <div className={gridClass}>
-                    {allClassGroups.length > 0 ? allClassGroups.map((group, idx) => (
-                        <SelectionCard 
-                            key={group.name}
-                            title={formatGroupName(group.name)}
-                            subtitle="Sınıf Seviyesi"
-                            icon={Users}
-                            color={getGradient(idx)}
-                            onClick={() => handleSelectClass(group)}
-                            delay={idx * 50}
-                        />
-                    )) : <p className="col-span-full text-center text-slate-500 py-10">Müfredat içeriği bulunamadı.</p>}
-                </div>
-            );
-          case 2:
-            return (
-                <div className={gridClass}>
-                    {courses.map((course, idx) => (
+                    {courses.length > 0 ? courses.map((course, idx) => (
                         <SelectionCard 
                             key={course.id}
                             title={course.title}
-                            subtitle={selection.className}
+                            subtitle={(course as any).className}
                             icon={(course as any).icon || Book}
                             color={(course as any).color || getGradient(idx)}
                             onClick={() => handleSelectCourse(course)}
                             delay={idx * 50}
                         />
-                    ))}
+                    )) : <p className="col-span-full text-center text-slate-500 py-10">Bu bölüm için uygun ders bulunmuyor.</p>}
                 </div>
             );
-          case 3:
+          case 2:
             return (
                 <div className={gridClass}>
                     {dataType === 'games' && (
@@ -426,14 +450,14 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     ))}
                 </div>
             );
-          case 4:
+          case 3:
             return (
                 <div className={gridClass}>
                     {dataType === 'games' && (
                           <SelectionCard 
                             key="all-topics"
                             title="Tüm Konular (Karma)"
-                            subtitle="Ünite Özeti"
+                            subtitle="Ünite Tekrarı"
                             icon={Sparkles}
                             color="from-yellow-600 to-amber-500"
                             onClick={() => handleSelectTopic('all', 'Tüm Konular')}
@@ -461,88 +485,66 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   return (
     <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 md:pb-10 font-sans text-white">
         
-        {/* --- NAVBAR --- */}
-        <div className="sticky top-0 z-50 backdrop-blur-md bg-[#0f172a]/80 border-b border-white/5 shadow-lg max-w-7xl mx-auto rounded-t-2xl">
-            <div className="px-4 md:px-8 h-20 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <button 
-                        onClick={handleBack}
-                        className="p-2 md:p-2.5 bg-slate-800/50 hover:bg-slate-700 rounded-xl border border-white/10 transition-all group"
-                    >
-                        <ArrowLeft className="h-5 w-5 md:h-6 md:w-6 text-slate-400 group-hover:text-white transition-colors" />
-                    </button>
-                    <div className="h-8 w-[1px] bg-white/10 hidden md:block"></div>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/20 hidden md:block">
-                            <PageIcon className="h-6 w-6 text-blue-400" />
-                        </div>
-                        <div>
-                            <h1 className="text-lg md:text-xl font-bold text-slate-100 leading-none mb-1">{finalGameName}</h1>
-                            <p className="text-xs text-slate-400 font-medium">İçerik Seçim Sihirbazı</p>
-                        </div>
+        <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
+            <button 
+                onClick={handleBack}
+                className="p-2 md:p-2.5 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
+            >
+                <ArrowLeft className="h-5 w-5 md:h-6 md:w-6 text-slate-400 group-hover:text-white transition-colors" />
+            </button>
+            <div className="text-center mx-2 overflow-hidden flex-1">
+                <div className="flex items-center justify-center gap-2">
+                    <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl">
+                        <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
-                </div>
-                
-                {/* Mobile Step Indicator */}
-                <div className="md:hidden px-3 py-1 bg-slate-800 rounded-full text-xs font-bold text-cyan-400 border border-slate-700">
-                    Adım {currentStep}/4
+                    <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
+                        {pageTitle}
+                    </h1>
                 </div>
             </div>
+            <div className="w-9 md:w-20 shrink-0"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
-            
-            {/* --- LEFT SIDEBAR (Masaüstü) --- */}
-            <div className="hidden lg:block w-80 shrink-0 sticky top-28">
-                <GlassPanel className="p-6">
-                    <div className="mb-6">
-                        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">İlerleme Durumu</h2>
-                        <div className="h-1 w-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"></div>
-                    </div>
-                    <SidebarStepper 
-                        currentStep={currentStep} 
-                        steps={steps} 
-                        selection={selection}
-                        onJumpToStep={handleJumpToStep}
-                    />
-                </GlassPanel>
-            </div>
+        <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
+            <div className="relative flex justify-between items-center">
+                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                <div 
+                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700"
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                ></div>
 
-            {/* --- MAIN CONTENT AREA --- */}
-            <div className="flex-grow w-full">
-                {/* Mobile Stepper */}
-                <div className="lg:hidden mb-8">
-                     <div className="relative flex justify-between items-center px-2">
-                        <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
-                        <div 
-                            className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700"
-                            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-                        ></div>
-                        {steps.map((step) => (
-                            <div key={step.id} className={cn("w-10 h-10 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 font-black text-xs shadow-xl", currentStep >= step.id ? "bg-blue-600 border-blue-400 text-white scale-110" : "bg-slate-900 border-slate-700 text-slate-600")}>
-                                {currentStep > step.id ? <Check/> : step.id}
+                {steps.map((step) => {
+                    const isCompleted = currentStep > step.id;
+                    const isCurrent = currentStep === step.id;
+                    return (
+                        <div key={step.id} className="flex flex-col items-center gap-1">
+                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isCurrent ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : isCompleted ? "bg-cyan-600 border-cyan-400 text-white" : "bg-slate-900 border-slate-700 text-slate-500")}>
+                                {isCompleted ? <Check/> : step.id}
                             </div>
-                        ))}
-                    </div>
-                </div>
-
-                <GlassPanel className="min-h-[calc(100vh-240px)] flex flex-col">
-                    <div className="p-4 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
-                        <h2 className="text-lg md:text-2xl font-bold text-white flex items-center gap-3">
-                            {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 text-cyan-400" })}
-                            {steps[currentStep-1].name}
-                        </h2>
-                        <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider">
-                            {currentStep} / {steps.length}
+                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isCompleted ? "text-white" : "text-slate-600")}>{step.name}</span>
                         </div>
-                    </div>
-
-                    <div className="flex-grow p-4 md:p-8 lg:p-12 overflow-y-auto">
-                        {renderContent()}
-                    </div>
-                </GlassPanel>
+                    );
+                })}
             </div>
         </div>
+
+        <GlassPanel className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
+            <div className="p-4 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
+                <h2 className="text-lg md:text-2xl font-bold text-white flex items-center gap-3">
+                    {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 text-cyan-400" })}
+                    {steps[currentStep-1].name}
+                </h2>
+                
+                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider">
+                    {currentStep} / {steps.length}
+                </div>
+            </div>
+
+            <div className="flex-grow p-4 md:p-8 lg:p-12 overflow-y-auto">
+                {renderContent()}
+            </div>
+        </GlassPanel>
+
     </div>
   );
 }
