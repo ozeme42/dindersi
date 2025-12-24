@@ -1,11 +1,12 @@
 
+
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset } from '@/lib/types';
+import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset, Course, Unit } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -132,6 +133,13 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit }: {
                                 <LayersIcon className="h-4 w-4" />
                             </Button>
                         )}
+                        {step.type === 'activityLink' && (
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" asChild>
+                                <Link href={`/teacher/activity-data?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
+                                    <Database className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        )}
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" onClick={onEdit}>
                             <FilePenLine className="h-4 w-4" />
                         </Button>
@@ -168,6 +176,13 @@ export function TopicEditor({
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
     const topicId = searchParams.get('topicId');
+    
+    // YENİ: Context'i burada oluştur
+    const context = useMemo(() => ({
+        courseId,
+        unitId,
+        topicId
+    }), [courseId, unitId, topicId]);
     
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -214,7 +229,17 @@ export function TopicEditor({
             case 'iframe': newStep = { type, title: defaultTitle, url: 'https://phet.colorado.edu/tr/simulations/list' }; break;
             case 'htmlSlide': newStep = { type: 'htmlSlide', title: 'İnteraktif Sunum', htmlContent: '<!DOCTYPE html>\n<html lang="tr">\n<head>\n  <title>Başlık</title>\n</head>\n<body>\n  <h1>Merhaba Dünya</h1>\n</body>\n</html>' }; break;
             case 'video': newStep = { type, title: defaultTitle, url: 'https://www.youtube.com/embed/...' }; break;
-            case 'activityLink': return;
+            case 'activityLink': 
+                newStep = {
+                    type: 'activityLink',
+                    title: 'Yeni Etkinlik',
+                    activityType: '',
+                    activityLabel: '',
+                    courseId: courseId || undefined,
+                    unitId: unitId || undefined,
+                    topicId: topicId || undefined,
+                };
+                break;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
             case 'accordion': newStep = { type: 'accordion', title: 'Akordiyon Özet', items: [{ id: `item-${Date.now()}`, title: 'Başlık 1', content: 'İçerik 1'}] }; break;
             default: return;
@@ -272,19 +297,22 @@ export function TopicEditor({
             const cards = importedItems.map(item => ({ term: (item as ActivityItem).content.term || '', definition: (item as ActivityItem).content.definition || ''}));
             newSteps.push({ type: 'flashcard', title: 'Veri Bankası Bilgi Kartları', cards: cards });
         } else if (stepType === 'anagramGame') {
-            const cards = importedItems.map(item => ({
-                definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
-                correctAnswer: (item as ActivityItem).content.term || '',
-                scrambledWord: ((item as ActivityItem).content.term || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR')
-            }));
+            const cards = importedItems.map(item => {
+                const cleanWord = cleanForAnagram((item as ActivityItem).content.term || '');
+                return {
+                    definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
+                    correctAnswer: cleanWord,
+                    scrambledWord: cleanWord.replace(/\s/g, '').split('').sort(() => Math.random() - 0.5).join(''),
+                };
+            });
             newSteps.push({ type: 'anagramGame', title: 'Kelime Dehası', cards: cards });
         } else if (stepType === 'anagramFlashcard') {
             const cards = importedItems.map(item => ({
                 definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`,
-                scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => 0.5 - Math.random()).join('').toLocaleUpperCase('tr-TR'),
+                scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
                 correctAnswer: (item as ActivityItem).content.text || ''
             }));
-             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards });
+             newSteps.push({ type: 'anagramFlashcard', title: 'Veri Bankası Anagram Kartları', cards: cards });
         } else if (stepType === 'sentenceScramble') {
              const newSentence = (importedItems[0] as ActivityItem)?.content.text || '';
              newSteps.push({
@@ -294,7 +322,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
@@ -338,7 +366,7 @@ export function TopicEditor({
         { label: 'Anahtar Kavramlar (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'keyConcepts') },
         { label: 'Akordiyon Özet', type: 'accordion', defaultTitle: 'Konu Özeti' },
         { label: 'Bilgi Kartları (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'flashcard') },
-        { label: 'Görsel (Arşivden)', action: () => handleOpenLibrary(['images'], false, 'visual') },
+        { label: 'Görsel (Arşivden)', action: () => handleOpenLibrary(['images'], true, 'visual') },
         { label: 'Video', type: 'video', defaultTitle: 'Video' },
         { label: 'Diyagram / Şema', type: 'visual', defaultTitle: 'Diyagram' },
         { label: 'İnfografik', type: 'visual', defaultTitle: 'İnfografik' },
@@ -352,7 +380,7 @@ export function TopicEditor({
         { label: 'Doğru/Yanlış Listesi', type: 'trueFalseList', defaultTitle: 'Doğru/Yanlış Alıştırması' },
         { label: 'Boşluk Doldurma', type: 'fitb', defaultTitle: 'Boşluk Doldurma' },
         { label: 'Anagram', type: 'anagram', defaultTitle: 'Anagram' },
-        { label: 'Kelime Dehası (Veri Bankası)', action: () => handleOpenLibrary(['definition'], true, 'anagramGame') },
+        { label: 'Kelime Dehası', type: 'anagramGame', defaultTitle: 'Kelime Dehası'},
         { label: 'Anagram Kartları (Veri Bankası)', action: () => handleOpenLibrary(['concept'], true, 'anagramFlashcard') },
         { label: 'Cümle Düzeltme (Veri Bankası)', action: () => handleOpenLibrary(['sentence'], true, 'sentenceScramble') },
         { label: 'Soru Bankasından Soru Ekle', action: () => handleOpenLibrary(['questions'], true, 'questions') },
@@ -496,6 +524,9 @@ export function TopicEditor({
                                                 title: `${act.label} Etkinliği`,
                                                 activityType: act.href,
                                                 activityLabel: act.label,
+                                                courseId: courseId || undefined,
+                                                unitId: unitId || undefined,
+                                                topicId: topicId || undefined,
                                             } as any;
                                             const newStepWithId: DraggableLessonStep = { ...newStep, id: `step-${Date.now()}-${Math.random()}` };
                                             setSteps(currentSteps => [...currentSteps, newStepWithId]);
@@ -542,8 +573,8 @@ export function TopicEditor({
                     isOpen={isLibraryPanelOpen}
                     onOpenChange={setIsLibraryPanelOpen}
                     onItemsSelected={handleItemsImportedFromLibrary}
-                    context={{ courseId, unitId, topicId }}
-                    config={libraryConfig}
+                    context={context}
+                    config={libraryConfig!}
                 />
                 <StepEditorDialog 
                     isOpen={!!editingStep} 
@@ -551,7 +582,7 @@ export function TopicEditor({
                     step={editingStep?.step ?? null}
                     onSave={handleUpdateStep}
                     isSaving={isSaving}
-                    context={{ courseId, unitId, topicId }}
+                    context={context}
                 />
                 <LessonPreviewDialog 
                     isOpen={isPreviewOpen}
@@ -687,3 +718,7 @@ export default function Page() {
         </Suspense>
     )
 }
+
+
+
+    

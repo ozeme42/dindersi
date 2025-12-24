@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import isEqual from 'lodash.isequal';
@@ -17,13 +16,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library } from 'lucide-react';
-import type { ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, VideoStep, VisualStep, Question, ImageAsset } from '@/lib/types';
+// Layers ikonu buraya eklendi
+import { Loader2, PlusCircle, Trash2, Save, FileEdit, Database, List, Library, ArrowLeft, ArrowRight } from 'lucide-react';
+import type { ActivityItem, LessonStep, AnagramGameStep, AnagramFlashcardStep, SentenceScrambleStep, FlashcardStep, AccordionStep, ConceptExplanationStep, FitbStep, IframeStep, McqStep, ObjectiveListStep, TfStep, TrueFalseListStep, VideoStep, VisualStep, Question, ImageAsset, Course, Unit, Topic, SchoolClass } from '@/lib/types';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn, cleanForAnagram } from "@/lib/utils";
 import { LibraryImportDialog } from './library-import-dialog';
 import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "./ui/checkbox";
+import { db } from "@/lib/firebase";
+import { collection, query, getDocs, orderBy } from 'firebase/firestore';
 
 const getInitialFormData = (item: Partial<LessonStep> | null) => {
     const initialContent = (item as any)?.content || {};
@@ -54,9 +56,10 @@ type StepEditorDialogProps = {
     onSave: (updatedStep: LessonStep) => void;
     isSaving: boolean;
     context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
+    allCourses?: (Course & { units: (Unit & { topics: Topic[]})[]})[]; // Eklendi
 };
 
-export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
+export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context, allCourses = [] }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
     const [initialData, setInitialData] = useState<Partial<LessonStep>>({});
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
@@ -127,7 +130,6 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
           if (!prev) return null;
           const newStepData: any = { ...prev };
           
-          // Use a stable and unique ID for new items
           const newItemId = `item-${Date.now()}-${Math.random()}`;
     
           let targetArray: any[] = newStepData[path] || newStepData.content?.[path] || [];
@@ -242,15 +244,18 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
     };
 
     if (!isOpen || !editedStep) return null;
+    
+    const selectedCourseData = allCourses.find(c => c.id === (editedStep as any).courseId);
+    const selectedUnitData = selectedCourseData?.units.find(u => u.id === (editedStep as any).unitId);
+
 
     const renderEditorFields = () => {
-        // This function will now be much shorter
         return (
              <div className="space-y-4">
                  {libraryConfig?.enabled && <Button variant="outline" size="sm" onClick={() => setIsLibraryOpen(true)} className="border-white/10 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-900/20"><Library className="mr-2 h-4 w-4" /> Veri Bankasından Seç</Button>}
                  {
                  editedStep.type === 'content' ? (
-                    <Textarea value={(editedStep as any).content || ''} onChange={(e) => setEditedStep({ ...editedStep, content: e.target.value })} className="min-h-[200px]" placeholder="Metin içeriği (HTML destekler)"/>
+                    <Textarea value={(editedStep as any).content || ''} onChange={(e) => handleValueChange('content', e.target.value)} className="min-h-[200px]" placeholder="Metin içeriği (HTML destekler)"/>
                  ) : editedStep.type === 'objectiveList' ? (
                      <>
                         <Button size="sm" onClick={() => addToArray('items')}><PlusCircle className="mr-2 h-4 w-4"/>Hedef Ekle</Button>
@@ -266,19 +271,19 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                         ))}
                      </>
                  ) : editedStep.type === 'video' ? (
-                     <div className="space-y-4"><Input value={(editedStep as VideoStep).url} onChange={e => setEditedStep({...editedStep, url: e.target.value})} placeholder="YouTube/Vimeo URL"/> <Textarea value={(editedStep as VideoStep).description || ''} onChange={e => setEditedStep({...editedStep, description: e.target.value})} placeholder="Açıklama..."/></div>
+                     <div className="space-y-4"><Input value={(editedStep as VideoStep).url} onChange={e => handleValueChange('url', e.target.value)} placeholder="YouTube/Vimeo URL"/> <Textarea value={(editedStep as VideoStep).description || ''} onChange={e => handleValueChange('description', e.target.value)} placeholder="Açıklama..."/></div>
                  ) : editedStep.type === 'visual' ? (
-                    <Input value={(editedStep as VisualStep).imageUrl} onChange={(e) => setEditedStep({ ...editedStep, imageUrl: e.target.value })} />
+                    <Input value={(editedStep as VisualStep).imageUrl} onChange={(e) => handleValueChange('imageUrl', e.target.value)} />
                  ) : editedStep.type === 'iframe' ? (
-                    <Input value={(editedStep as IframeStep).url} onChange={(e) => setEditedStep({ ...editedStep, url: e.target.value })} />
+                    <Input value={(editedStep as IframeStep).url} onChange={(e) => handleValueChange('url', e.target.value)} />
                  ) : editedStep.type === 'htmlSlide' ? (
-                     <Textarea value={(editedStep as HtmlSlideStep).htmlContent} onChange={(e) => setEditedStep({ ...editedStep, htmlContent: e.target.value })} className="min-h-[250px] font-mono text-xs"/>
+                     <Textarea value={(editedStep as HtmlSlideStep).htmlContent} onChange={(e) => handleValueChange('htmlContent', e.target.value)} className="min-h-[250px] font-mono text-xs"/>
                  ) : editedStep.type === 'mcq' ? (
-                    <div className="space-y-2"><Textarea value={(editedStep as McqStep).question} onChange={e => setEditedStep({...editedStep, question: e.target.value})}/><RadioGroup value={(editedStep as McqStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as McqStep).options.map((opt, i) => <div key={`mcq-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as McqStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                    <div className="space-y-2"><Textarea value={(editedStep as McqStep).question} onChange={e => handleValueChange('question', e.target.value)}/><RadioGroup value={(editedStep as McqStep).correctAnswer} onValueChange={(val) => handleValueChange('correctAnswer', val)}>{(editedStep as McqStep).options.map((opt, i) => <div key={`mcq-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as McqStep).options]; newOpts[i] = e.target.value; handleValueChange('options', newOpts)}}/></div>)}</RadioGroup></div>
                  ) : editedStep.type === 'tf' ? (
-                    <div className="space-y-2"><Textarea value={(editedStep as TfStep).statement} onChange={e => setEditedStep({...editedStep, statement: e.target.value})}/><div className="flex items-center space-x-2"><Checkbox id="isTrue" checked={(editedStep as TfStep).isTrue} onCheckedChange={c => setEditedStep({...editedStep, isTrue: !!c})}/><Label htmlFor="isTrue">Bu ifade doğru</Label></div></div>
+                    <div className="space-y-2"><Textarea value={(editedStep as TfStep).statement} onChange={e => handleValueChange('statement', e.target.value)}/><div className="flex items-center space-x-2"><Checkbox id="isTrue" checked={(editedStep as TfStep).isTrue} onCheckedChange={c => handleValueChange('isTrue', !!c)}/><Label htmlFor="isTrue">Bu ifade doğru</Label></div></div>
                  ) : editedStep.type === 'fitb' ? (
-                    <div className="space-y-2"><Textarea value={(editedStep as FitbStep).sentenceWithBlank} onChange={e => setEditedStep({...editedStep, sentenceWithBlank: e.target.value})}/><RadioGroup value={(editedStep as FitbStep).correctAnswer} onValueChange={(val) => setEditedStep({...editedStep, correctAnswer: val})}>{(editedStep as FitbStep).options.map((opt, i) => <div key={`fitb-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-fitb-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as FitbStep).options]; newOpts[i] = e.target.value; setEditedStep({...editedStep, options: newOpts})}}/></div>)}</RadioGroup></div>
+                    <div className="space-y-2"><Textarea value={(editedStep as FitbStep).sentenceWithBlank} onChange={e => handleValueChange('sentenceWithBlank', e.target.value)}/><RadioGroup value={(editedStep as FitbStep).correctAnswer} onValueChange={(val) => handleValueChange('correctAnswer', val)}>{(editedStep as FitbStep).options.map((opt, i) => <div key={`fitb-opt-${i}`} className="flex items-center gap-2"><RadioGroupItem value={opt} id={`opt-fitb-${i}`}/><Input value={opt} onChange={e => {const newOpts = [...(editedStep as FitbStep).options]; newOpts[i] = e.target.value; handleValueChange('options', newOpts)}}/></div>)}</RadioGroup></div>
                  ) : editedStep.type === 'flashcard' || editedStep.type === 'anagramFlashcard' ? (
                      <>
                         <div className="flex justify-end"><Button size="sm" onClick={() => addToArray('cards')}><PlusCircle className="mr-2 h-4 w-4"/>Kart Ekle</Button></div>
@@ -309,9 +314,18 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                      </>
                  ) : editedStep.type === 'sentenceScramble' ? (
                     <>
-                        <Textarea value={(editedStep as SentenceScrambleStep).correctSentence} onChange={e => { const newCorrect = e.target.value; const newScrambled = newCorrect.split(' ').sort(() => Math.random() - 0.5).join(' '); setEditedStep({...editedStep, correctSentence: newCorrect, scrambledSentence: newScrambled }); }} placeholder="Doğru cümleyi yazın..." />
+                        <Textarea value={(editedStep as SentenceScrambleStep).correctSentence} onChange={e => { const newCorrect = e.target.value; const newScrambled = newCorrect.split(' ').sort(() => Math.random() - 0.5).join(' '); handleValueChange('correctSentence', newCorrect); handleValueChange('scrambledSentence', newScrambled); }} placeholder="Doğru cümleyi yazın..." />
                         <Input value={(editedStep as SentenceScrambleStep).scrambledSentence} readOnly disabled className="bg-muted"/>
                     </>
+                 ) : editedStep.type === 'activityLink' ? (
+                    <div className="space-y-4">
+                        <p className="text-sm text-slate-400">Bu etkinlik, içeriğini seçilen konudan alır. Varsayılan olarak mevcut konu seçilidir.</p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                             <Select value={(editedStep as any).courseId || ''} onValueChange={(val) => {setEditedStep({...editedStep, courseId: val, unitId: '', topicId: ''} as any)}}><SelectTrigger><SelectValue placeholder="Ders Seç"/></SelectTrigger><SelectContent>{allCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}</SelectContent></Select>
+                             <Select value={(editedStep as any).unitId || ''} onValueChange={(val) => {setEditedStep({...editedStep, unitId: val, topicId: ''} as any)}} disabled={!selectedCourseData}><SelectTrigger><SelectValue placeholder="Ünite Seç"/></SelectTrigger><SelectContent>{selectedCourseData?.units.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}</SelectContent></Select>
+                             <Select value={(editedStep as any).topicId || ''} onValueChange={(val) => {setEditedStep({...editedStep, topicId: val} as any)}} disabled={!selectedUnitData}><SelectTrigger><SelectValue placeholder="Konu Seç"/></SelectTrigger><SelectContent>{selectedUnitData?.topics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}</SelectContent></Select>
+                        </div>
+                    </div>
                  ) : null
                 }
              </div>
@@ -337,7 +351,7 @@ export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving,
                     <div className="px-6 py-4 space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="step-title">Adım Başlığı</Label>
-                            <Input id="step-title" value={editedStep.title} onChange={(e) => setEditedStep({ ...editedStep, title: e.target.value })} />
+                            <Input id="step-title" value={editedStep.title} onChange={(e) => handleValueChange('title', e.target.value)} />
                         </div>
                         {renderEditorFields()}
                     </div>
