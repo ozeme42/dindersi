@@ -64,29 +64,26 @@ export default function ScoreEventsPage() {
     const { toast } = useToast();
     
     // Pagination State
-    const [pageCursors, setPageCursors] = useState<SerializableTimestamp[]>([null]); // Array to store the first item of each page
+    const [pageCursors, setPageCursors] = useState<(SerializableTimestamp | undefined)[]>([undefined]);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
-    const [lastVisible, setLastVisible] = useState<SerializableTimestamp>(null);
-    const [isLastPage, setIsLastPage] = useState(false);
 
-    const fetchData = useCallback(async (pageIndex: number) => {
+    const fetchData = useCallback(async (pageIndex: number, direction: 'next' | 'prev' = 'next') => {
         setIsLoading(true);
-        const cursor = pageCursors[pageIndex] || null;
+        const cursor = pageCursors[pageIndex];
 
         const result = await getScoreEvents({ 
-            cursor: cursor,
+            cursor,
             searchTerm, 
             showOnlyExcessiveAttempts,
         });
 
         if (result.success && result.data) {
             setEvents(result.data);
-            setLastVisible(result.lastVisible || null);
-            setIsLastPage(!result.lastVisible);
-
-            // If we are moving to a new page, add its cursor to the history
-            if (result.lastVisible && pageIndex === pageCursors.length - 1) {
-                setPageCursors(prev => [...prev, result.lastVisible]);
+            if (direction === 'next' && result.lastVisible) {
+                // If there's a next page, add its starting cursor to history
+                if(pageIndex + 1 >= pageCursors.length) {
+                   setPageCursors(prev => [...prev, result.lastVisible]);
+                }
             }
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
@@ -94,16 +91,15 @@ export default function ScoreEventsPage() {
         setIsLoading(false);
     }, [searchTerm, showOnlyExcessiveAttempts, toast, pageCursors]);
     
-    useEffect(() => {
+     useEffect(() => {
+        // Debounce search/filter changes
         const handler = setTimeout(() => {
-             // Reset pagination on search/filter change
-            setPageCursors([null]);
+            setPageCursors([undefined]); // Reset pagination on search
             setCurrentPageIndex(0);
-            setIsLastPage(false);
             fetchData(0);
         }, 500); 
         return () => clearTimeout(handler);
-    }, [searchTerm, showOnlyExcessiveAttempts]); // fetchData is not needed here
+    }, [searchTerm, showOnlyExcessiveAttempts, fetchData]); // fetchData is stable due to useCallback
 
 
     const handleSelect = (id: string) => {
@@ -137,17 +133,19 @@ export default function ScoreEventsPage() {
     };
 
     const handleNextPage = () => {
-        if (isLastPage) return;
-        const nextPageIndex = currentPageIndex + 1;
-        fetchData(nextPageIndex);
-        setCurrentPageIndex(nextPageIndex);
+        if(currentPageIndex < pageCursors.length - 1) {
+            const nextPageIndex = currentPageIndex + 1;
+            fetchData(nextPageIndex, 'next');
+            setCurrentPageIndex(nextPageIndex);
+        }
     };
 
     const handlePrevPage = () => {
-        if (currentPageIndex === 0) return;
-        const prevPageIndex = currentPageIndex - 1;
-        fetchData(prevPageIndex);
-        setCurrentPageIndex(prevPageIndex);
+        if (currentPageIndex > 0) {
+            const prevPageIndex = currentPageIndex - 1;
+            fetchData(prevPageIndex, 'prev');
+            setCurrentPageIndex(prevPageIndex);
+        }
     };
     
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length;

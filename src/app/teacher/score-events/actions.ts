@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, QueryDocumentSnapshot, where } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, writeBatch, doc, Timestamp, runTransaction, limit, startAfter, QueryDocumentSnapshot, where, endBefore } from "firebase/firestore";
 import type { ScoreEvent, UserProfile } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -14,124 +14,82 @@ type EnrichedScoreEvent = ScoreEvent & {
 type SerializableTimestamp = {
     _seconds: number;
     _nanoseconds: number;
-};
+} | null;
 
-// This function now returns paginated data.
+
 export async function getScoreEvents(params: {
     cursor?: SerializableTimestamp | null,
+    direction?: 'next' | 'prev',
     searchTerm?: string | null,
     showOnlyExcessiveAttempts?: boolean,
-}): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null }> {
+}): Promise<{ success: boolean; data?: EnrichedScoreEvent[]; error?: string, lastVisible?: SerializableTimestamp | null, firstVisible?: SerializableTimestamp | null }> {
     noStore();
-    const { cursor, searchTerm, showOnlyExcessiveAttempts } = params;
+    const { cursor, direction = 'next', searchTerm, showOnlyExcessiveAttempts } = params;
     const itemsPerPage = 25;
 
     try {
         const usersSnapshot = await getDocs(collection(db, 'users'));
         const usersMap = new Map(usersSnapshot.docs.map(doc => [doc.id, doc.data().displayName]));
 
-        let baseQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'desc'));
+        let queryConstraints = [];
         
-        let allEvents: EnrichedScoreEvent[] = [];
-
-        // If searching or filtering, we need to fetch all and then filter/paginate in memory.
-        // This is not efficient for very large datasets.
-        if (searchTerm || showOnlyExcessiveAttempts) {
-             const allEventsSnapshot = await getDocs(baseQuery);
-             const allEventsData = allEventsSnapshot.docs.map(doc => {
-                 const data = doc.data();
-                 return { ...data, id: doc.id, timestamp: (data.timestamp as Timestamp).toDate() } as EnrichedScoreEvent;
-            });
-            
-            // Enrich with attempt numbers
-            const attemptCounts: { [key: string]: number } = {};
-            const eventsWithAttempts: EnrichedScoreEvent[] = [];
-            for (let i = allEventsData.length - 1; i >= 0; i--) {
-                const event = allEventsData[i];
-                const key = `${event.userId}-${event.gameType}-${typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}`;
-                attemptCounts[key] = (attemptCounts[key] || 0) + 1;
-                eventsWithAttempts.unshift({
-                    ...event,
-                    userName: usersMap.get(event.userId) || 'Bilinmeyen Kullanıcı',
-                    attemptNumber: attemptCounts[key]
-                });
-            }
-
-            // Apply filters
-            let filteredEvents = eventsWithAttempts;
-            if (searchTerm) {
-                 const lowercasedTerm = searchTerm.toLowerCase();
-                 filteredEvents = filteredEvents.filter(event => 
-                    event.userName?.toLowerCase().includes(lowercasedTerm) ||
-                    event.gameType?.toLowerCase().includes(lowercasedTerm) ||
-                    (typeof event.context === 'string' && event.context.toLowerCase().includes(lowercasedTerm))
-                );
-            }
-             if (showOnlyExcessiveAttempts) {
-                filteredEvents = filteredEvents.filter(event => (event.attemptNumber || 0) > 10);
-            }
-            
-            // Manual pagination on filtered results
-            const startIndex = cursor ? filteredEvents.findIndex(e => (e.timestamp as Date).getTime() === new Timestamp(cursor._seconds, cursor._nanoseconds).toDate().getTime()) + 1 : 0;
-            const paginatedEvents = filteredEvents.slice(startIndex, startIndex + itemsPerPage);
-            const lastEvent = paginatedEvents[paginatedEvents.length - 1];
-
-            allEvents = paginatedEvents;
-            const finalLastVisible = startIndex + itemsPerPage < filteredEvents.length ? filteredEvents[startIndex + itemsPerPage-1] : null;
-            
-            return {
-                success: true,
-                data: JSON.parse(JSON.stringify(allEvents.map(e => ({...e, timestamp: (e.timestamp as Date).toISOString()})))),
-                lastVisible: finalLastVisible ? { _seconds: (finalLastVisible.timestamp as Date).getTime() / 1000, _nanoseconds: 0 } : null
-            };
-
-        } else {
-            // Paginate directly with Firestore
+        if (showOnlyExcessiveAttempts) {
+             queryConstraints.push(where("attemptNumber", ">", 10));
+        }
+        
+        let finalQuery;
+        if (direction === 'next') {
+            finalQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'desc'), ...queryConstraints, limit(itemsPerPage));
             if (cursor) {
                 const startAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
-                baseQuery = query(baseQuery, startAfter(startAtTimestamp));
+                finalQuery = query(finalQuery, startAfter(startAtTimestamp));
             }
-
-            const finalQuery = query(baseQuery, limit(itemsPerPage));
-            const snapshot = await getDocs(finalQuery);
-
-            const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
-            const lastVisibleTimestamp = lastVisibleDoc ? lastVisibleDoc.data().timestamp as Timestamp : null;
-            
-            const eventsData = snapshot.docs.map(doc => {
-                 const data = doc.data();
-                 return { ...data, id: doc.id, timestamp: (data.timestamp as Timestamp).toDate().toISOString() } as EnrichedScoreEvent;
-            });
-            
-             // We still need to calculate attempt numbers for the fetched page
-            const attemptCounts: { [key: string]: number } = {};
-            const eventsWithAttempts: EnrichedScoreEvent[] = [];
-             for (let i = eventsData.length - 1; i >= 0; i--) {
-                const event = eventsData[i];
-                const key = `${event.userId}-${event.gameType}-${typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}`;
-                const previousAttemptsSnapshot = await getCountFromServer(query(
-                    collection(db, 'scoreEvents'),
-                    where('userId', '==', event.userId),
-                    where('gameType', '==', event.gameType),
-                    where('context', '==', event.context),
-                    where('timestamp', '<', Timestamp.fromMillis(new Date(event.timestamp).getTime()))
-                ));
-                const attemptNumber = previousAttemptsSnapshot.data().count + 1;
-                
-                eventsWithAttempts.unshift({
-                    ...event,
-                    userName: usersMap.get(event.userId) || 'Bilinmeyen Kullanıcı',
-                    attemptNumber: attemptNumber
-                });
+        } else { // direction === 'prev'
+            finalQuery = query(collection(db, 'scoreEvents'), orderBy('timestamp', 'asc'), ...queryConstraints, limit(itemsPerPage));
+            if (cursor) {
+                const endAtTimestamp = Timestamp.fromMillis(cursor._seconds * 1000 + cursor._nanoseconds / 1000000);
+                finalQuery = query(finalQuery, startAfter(endAtTimestamp)); // Firestore doesn't have `endBefore` with `orderBy desc`, so we reverse logic
             }
-
-
-            return {
-                success: true,
-                data: JSON.parse(JSON.stringify(eventsWithAttempts)),
-                lastVisible: lastVisibleTimestamp ? { _seconds: lastVisibleTimestamp.seconds, _nanoseconds: lastVisibleTimestamp.nanoseconds } : null
-            };
         }
+        
+        const snapshot = await getDocs(finalQuery);
+        
+        let eventsData = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                ...data,
+                id: doc.id,
+                timestamp: (data.timestamp as Timestamp).toDate().toISOString(),
+                userName: usersMap.get(data.userId) || 'Bilinmeyen Kullanıcı',
+            } as EnrichedScoreEvent;
+        });
+
+        // If 'prev', we need to reverse the order back to descending
+        if (direction === 'prev') {
+            eventsData.reverse();
+        }
+
+        // Apply search term filter after fetching because Firestore doesn't support text search on multiple fields efficiently.
+        if (searchTerm) {
+            const lowercasedTerm = searchTerm.toLowerCase();
+            eventsData = eventsData.filter(event => 
+                event.userName?.toLowerCase().includes(lowercasedTerm) ||
+                event.gameType?.toLowerCase().includes(lowercasedTerm) ||
+                (typeof event.context === 'string' && event.context.toLowerCase().includes(lowercasedTerm))
+            );
+        }
+
+        const firstVisibleDoc = snapshot.docs[0];
+        const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
+        const firstVisibleTimestamp = firstVisibleDoc ? (firstVisibleDoc.data().timestamp as Timestamp) : null;
+        const lastVisibleTimestamp = lastVisibleDoc ? (lastVisibleDoc.data().timestamp as Timestamp) : null;
+
+        return {
+            success: true,
+            data: JSON.parse(JSON.stringify(eventsData)),
+            firstVisible: firstVisibleTimestamp ? { _seconds: firstVisibleTimestamp.seconds, _nanoseconds: firstVisibleTimestamp.nanoseconds } : null,
+            lastVisible: lastVisibleTimestamp ? { _seconds: lastVisibleTimestamp.seconds, _nanoseconds: lastVisibleTimestamp.nanoseconds } : null
+        };
 
     } catch (error: any) {
         console.error("Error fetching score events:", error);
