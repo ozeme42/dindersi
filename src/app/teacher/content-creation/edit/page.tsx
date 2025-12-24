@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -13,7 +13,7 @@ import {
     FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, 
     Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, 
     BrainCircuit, Grip, LayoutTemplate, LayersIcon, Link as LinkIcon, 
-    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Workflow
+    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Workflow, Database
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
@@ -128,10 +128,10 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit }: {
                     {/* Actions - Always visible on mobile, hover on desktop */}
                     <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                          {step.type === 'activityLink' && (
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" asChild>
-                                 <Link href={`${(step as any).activityType}?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
-                                    <FilePenLine className="h-4 w-4" />
-                                </Link>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-teal-500/20 hover:text-teal-400" asChild>
+                                 <Link href={`/teacher/activity-data?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
+                                     <Database className="h-4 w-4" />
+                                 </Link>
                             </Button>
                         )}
                         {step.type === 'accordion' && onSplit && (
@@ -172,13 +172,16 @@ export function TopicEditor({
     const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     const searchParams = useSearchParams();
+    const courseId = searchParams.get('courseId');
+    const unitId = searchParams.get('unitId');
+    const topicId = searchParams.get('topicId');
     
     // YENİ: Context'i burada oluştur
     const context = useMemo(() => ({
-        courseId: searchParams.get('courseId'),
-        unitId: searchParams.get('unitId'),
-        topicId: searchParams.get('topicId')
-    }), [searchParams]);
+        courseId,
+        unitId,
+        topicId
+    }), [courseId, unitId, topicId]);
     
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -231,9 +234,9 @@ export function TopicEditor({
                     title: 'Yeni Etkinlik',
                     activityType: '',
                     activityLabel: '',
-                    courseId: context.courseId || undefined,
-                    unitId: context.unitId || undefined,
-                    topicId: context.topicId || undefined,
+                    courseId: context?.courseId || undefined,
+                    unitId: context?.unitId || undefined,
+                    topicId: context?.topicId || undefined,
                 };
                 break;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
@@ -318,7 +321,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
@@ -570,7 +573,7 @@ export function TopicEditor({
                     onOpenChange={setIsLibraryPanelOpen}
                     onItemsSelected={handleItemsImportedFromLibrary as any}
                     context={context}
-                    config={libraryConfig}
+                    config={libraryConfig!}
                 />
                 <StepEditorDialog 
                     isOpen={!!editingStep} 
@@ -714,4 +717,6 @@ export default function Page() {
         </Suspense>
     )
 }
+    
+
     
