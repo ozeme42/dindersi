@@ -13,7 +13,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
-import { ErrorReportDialog } from '@/components/error-report-dialog';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -43,14 +42,6 @@ function DenemeGame() {
 
     const [isFullscreen, setIsFullscreen] = useState(false);
     const mainContentRef = useRef<HTMLDivElement>(null);
-
-    const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
-    const [questionToReport, setQuestionToReport] = useState<Question | null>(null);
-
-    const handleReportQuestion = (question: Question) => {
-        setQuestionToReport(question);
-        setIsReportDialogOpen(true);
-    };
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -338,7 +329,7 @@ function DenemeGame() {
                 "flex-grow flex flex-col items-center justify-center p-4 relative z-10",
                 isFullscreen ? "h-full" : "container mx-auto max-w-4xl"
             )}>
-                <div className="w-full space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 key={currentQuestionIndex}">
+                <div className="w-full space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${100}ms` }}>
                     
                     {/* Soru Metni */}
                     <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-3xl shadow-2xl relative overflow-hidden group">
@@ -423,18 +414,7 @@ function DenemeGame() {
                         <ArrowLeft className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                         <span className="hidden md:inline">Önceki</span>
                     </Button>
-
-                    {/* Hata Bildir (Mobilde Sadece İkon) */}
-                    <Button 
-                        variant="ghost" 
-                        size="sm"
-                        onClick={() => handleReportQuestion(currentQuestion)}
-                        className="text-slate-500 hover:text-red-400 hover:bg-red-500/10"
-                    >
-                        <Bug className="h-4 w-4 md:mr-2" />
-                        <span className="hidden md:inline">Hata Bildir</span>
-                    </Button>
-
+                    
                     {/* Sonraki / Bitir Butonu */}
                     <Button 
                         onClick={handleNext}
@@ -453,12 +433,6 @@ function DenemeGame() {
                     </Button>
                 </div>
             </div>
-
-            <ErrorReportDialog 
-                isOpen={isReportDialogOpen} 
-                onOpenChange={setIsReportDialogOpen} 
-                itemToReport={questionToReport} 
-            />
         </div>
     );
 }

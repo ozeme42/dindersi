@@ -332,7 +332,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     imageLibrary: { key: 'imageLibrary', href: '/teacher/image-library', title: 'Görsel Arşivi', icon: <ImageIcon />, color: "bg-rose-500 shadow-rose-200" },
     gameSettingsTeacher: { key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />, color: "bg-slate-500 shadow-slate-200" },
     leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
-    errorReports: { key: 'errorReports', href: '/teacher/error-reports', title: 'Hata Raporları', icon: <Bug />, color: "bg-red-400 shadow-red-100" },
     scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "bg-emerald-500 shadow-emerald-200" },
     wheelOfFortune: { key: 'wheelOfFortune', href: '/teacher/smartboard/carkifelek', title: 'Çarkıfelek', icon: <Swords />, color: "bg-pink-500 shadow-pink-200" },
   };
@@ -351,7 +350,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.wheelOfFortune,
           managementButtons.imageLibrary,
           managementButtons.gameSettingsTeacher,
-          managementButtons.errorReports,
           managementButtons.scoreEvents,
       ];
       if(user.role === 'superadmin') {
