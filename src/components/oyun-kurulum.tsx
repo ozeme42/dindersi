@@ -30,7 +30,7 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
-const steps = [
+const defaultSteps = [
   { id: 1, name: "Ders", icon: Book },
   { id: 2, name: "Ünite", icon: Library },
   { id: 3, name: "Konu", icon: ListTodo },
@@ -158,7 +158,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const [isLoading, setIsLoading] = useState(true);
   
   const [allClassGroups, setAllClassGroups] = useState<EnrichedClassGroup[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
@@ -176,6 +176,18 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     unitName: "",
     topicName: ""
   });
+  
+  const stepsToDisplay = useMemo(() => {
+    const allSteps = [
+        { id: 1, name: "Ders", icon: Book },
+        { id: 2, name: "Ünite", icon: Library },
+        { id: 3, name: "Konu", icon: ListTodo },
+    ];
+    if (dataType === 'yazilacaklar' || dataType === 'ozetler') {
+        return allSteps.filter(s => s.id <= 3); // Only show up to Konu
+    }
+    return allSteps;
+  }, [dataType]);
 
   const getBackUrl = () => {
     if (targetPath?.startsWith('student')) return '/student';
@@ -213,7 +225,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         const allCourses = classGroupsWithData.flatMap(group => group.courses);
       
         setAllClassGroups(classGroupsWithData);
-        setCourses(allCourses);
+        setAllCourses(allCourses);
 
         return { classGroups: classGroupsWithData, allCourses };
     } catch (error) {
@@ -235,13 +247,13 @@ useEffect(() => {
         if (courseIdFromUrl) {
             const foundCourse = fetchedCourses.find(c => c.id === courseIdFromUrl);
             if (foundCourse) {
-                const courseUnits = (foundCourse as any).units || [];
                 handleSelectCourse(foundCourse, true);
 
                 if (unitIdFromUrl) {
+                    const courseUnits = (foundCourse as any).units || [];
                     const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
                     if (foundUnit) {
-                        handleSelectUnit(unitIdFromUrl, foundUnit.title, true)
+                        handleSelectUnit(unitIdFromUrl, foundUnit.title, true);
                         
                         if (topicIdFromUrl) {
                             const foundTopic = (foundUnit.topics || []).find((t:Topic) => t.id === topicIdFromUrl);
@@ -281,7 +293,7 @@ useEffect(() => {
     if (dataType === 'games' && unitId === 'all') {
         const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
         const params = new URLSearchParams({
-            gameName: pageTitle,
+            gameName: finalGameName,
             gamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
@@ -295,18 +307,9 @@ useEffect(() => {
         router.push(url);
         return;
     }
-    
-    if (dataType === 'ozetler' && unitId !== 'all') {
-         const selectedUnit = units.find(u => u.id === unitId);
-         if (selectedUnit && (selectedUnit as any).hasUnitOzet) {
-            const urlPath = isStatic ? `ozetler` : `student/ozetler`;
-            router.push(`/${urlPath}/${selection.courseId}/${unitId}`);
-            return;
-         }
-    }
 
     setIsLoading(true);
-    setSearchQuery(""); // İleri gidince aramayı temizle
+    setSearchQuery("");
     setTimeout(() => {
         const selectedUnit = units.find(u => u.id === unitId);
         const availableTopics = (selectedUnit?.topics || []).filter(topic => {
@@ -381,7 +384,7 @@ useEffect(() => {
       
       switch(currentStep) {
           case 1:
-            const filteredCourses = filterItems(courses);
+            const filteredCourses = filterItems(allCourses);
             return (
                 <>
                     <SearchInput value={searchQuery} onChange={setSearchQuery} />
@@ -426,7 +429,6 @@ useEffect(() => {
                                 color={selection.courseColor}
                                 onClick={() => handleSelectUnit(unit.id, unit.title)}
                                 delay={(idx + (dataType === 'games' ? 1 : 0)) * 50}
-                                hasContent={dataType === 'ozetler' ? ((unit as any).hasUnitOzet || (unit.topics.length > 0)) : true}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
                     </div>
@@ -434,6 +436,7 @@ useEffect(() => {
             );
           case 3:
             const filteredTopics = filterItems(topics);
+             const selectedUnit = units.find(u => u.id === selection.unitId);
             return (
                 <>
                     <SearchInput value={searchQuery} onChange={setSearchQuery} />
@@ -449,6 +452,16 @@ useEffect(() => {
                                 delay={0}
                             />
                         )}
+                        {dataType === 'ozetler' && selectedUnit?.hasUnitOzet && !searchQuery && (
+                             <SelectionCard 
+                                key="unit-summary"
+                                title={`${selection.unitName} (Ünite Özeti)`}
+                                icon={Book}
+                                color="from-purple-600 to-indigo-500"
+                                onClick={() => handleSelectTopic(selection.unitId, `${selection.unitName} (Ünite Özeti)`)}
+                                delay={0}
+                            />
+                        )}
                         {filteredTopics.length > 0 ? filteredTopics.map((topic, idx) => (
                             <SelectionCard 
                                 key={topic.id}
@@ -459,7 +472,9 @@ useEffect(() => {
                                 onClick={() => handleSelectTopic(topic.id, topic.title)}
                                 delay={(idx + 1) * 50}
                             />
-                        )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde konu bulunamadı.</p>}
+                        )) : (specialOptions.length === 0 || searchQuery) ? (
+                            <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde konu bulunamadı.</p>
+                        ) : null}
                     </div>
                 </>
             );
@@ -496,10 +511,10 @@ useEffect(() => {
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                 <div 
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                    style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
                 ></div>
 
-                {steps.map((step) => {
+                {stepsToDisplay.map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -517,13 +532,13 @@ useEffect(() => {
         <GlassPanel className="max-w-5xl mx-auto min-h-[600px] flex flex-col">
             <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
-                    {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 md:h-6 md:w-6 text-cyan-400" })}
-                    <span className="hidden md:inline">{steps[currentStep-1].name} Seçimi</span>
+                    {React.createElement(stepsToDisplay[currentStep-1].icon, { className: "h-5 w-5 md:h-6 md:w-6 text-cyan-400" })}
+                    <span className="hidden md:inline">{stepsToDisplay[currentStep-1].name} Seçimi</span>
                     <span className="md:hidden">Seçim Yap</span>
                 </h2>
                 
                 <div className="px-2 py-0.5 md:px-4 md:py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                    ADIM {currentStep} / {steps.length}
+                    ADIM {currentStep} / {stepsToDisplay.length}
                 </div>
             </div>
 
@@ -550,3 +565,4 @@ useEffect(() => {
     </div>
   );
 }
+```
