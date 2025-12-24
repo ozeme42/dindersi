@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -143,12 +144,20 @@ export default function ScoreEventsPage() {
     const handlePrevPage = () => {
         if (currentPageIndex > 0) {
             const prevPageIndex = currentPageIndex - 1;
-            fetchData(prevPageIndex, 'prev');
+            // For 'prev', we don't need to pass a direction as the cursor logic handles it.
+            fetchData(prevPageIndex); 
             setCurrentPageIndex(prevPageIndex);
         }
     };
     
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length;
+    const isLastPage = useMemo(() => {
+        // If we are on the last known page cursor and the number of events is less than itemsPerPage, it's the last page.
+        // The last item in pageCursors is always for the *next* page, so we look at the one before.
+        const itemsPerPage = 25; // As defined in actions.ts
+        return currentPageIndex === pageCursors.length - 2 && events.length < itemsPerPage;
+    }, [currentPageIndex, pageCursors, events]);
+
 
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
