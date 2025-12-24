@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
     Sparkles, Loader2, Gamepad2, Search, XCircle
@@ -100,7 +100,7 @@ const SelectionCard = ({
     >
         {/* Arkaplan Gradyanı (Border Effect) */}
         <div className={cn(
-            "absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br", 
+            "absolute inset-0 opacity-40 group-hover:opacity-100 transition-opacity bg-gradient-to-br", 
             color
         )}></div>
         
@@ -147,6 +147,12 @@ type OyunKurulumProps = {
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
     isStatic?: boolean;
 }
+
+const steps = [
+  { id: 1, name: "Ders", icon: Book },
+  { id: 2, name: "Ünite", icon: Library },
+  { id: 3, name: "Konu", icon: ListTodo },
+];
 
 export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
@@ -224,55 +230,55 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
 
 useEffect(() => {
     const processUrlParams = async () => {
+        const { allCourses: fetchedCourses } = await fetchManifest();
+
         const courseIdFromUrl = searchParams.get('courseId');
         const unitIdFromUrl = searchParams.get('unitId');
         const topicIdFromUrl = searchParams.get('topicId');
         
-        // Fetch data first, regardless of params
-        const { allCourses } = await fetchManifest();
-
-        // Now process params with the fetched data
         if (courseIdFromUrl) {
-            const foundCourse = allCourses.find(c => c.id === courseIdFromUrl);
+            const foundCourse = fetchedCourses.find(c => c.id === courseIdFromUrl);
             if (foundCourse) {
+                const courseUnits = (foundCourse as any).units || [];
                 setSelection(prev => ({
                     ...prev,
                     courseId: courseIdFromUrl,
                     courseName: foundCourse.title,
                     courseColor: (foundCourse as any).color || "from-slate-700 to-slate-800",
                 }));
-                const courseUnits = (foundCourse as any).units || [];
                 setUnits(courseUnits);
-                
+                setCurrentStep(2);
+
                 if (unitIdFromUrl) {
                     const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
                     if (foundUnit) {
-                        setSelection(prev => ({
-                            ...prev,
-                            unitId: unitIdFromUrl,
-                            unitName: foundUnit.title,
-                        }));
                         const availableTopics = (foundUnit.topics || []).filter((topic: Topic) => {
                              if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
                              if (dataType === 'ozetler') return (topic as any).hasOzetContent;
                              return true;
                         });
+                        setSelection(prev => ({
+                            ...prev,
+                            unitId: unitIdFromUrl,
+                            unitName: foundUnit.title,
+                        }));
                         setTopics(availableTopics);
-
+                        
                         if (topicIdFromUrl) {
-                            handleSelectTopic(topicIdFromUrl, topics.find(t => t.id === topicIdFromUrl)?.title || '');
+                            const foundTopic = availableTopics.find(t => t.id === topicIdFromUrl);
+                            if (foundTopic) {
+                                handleSelectTopic(topicIdFromUrl, foundTopic.title || '');
+                            }
                         } else {
-                            setCurrentStep(3); // Go to topic selection
+                            setCurrentStep(3);
                         }
                     }
-                } else {
-                    setCurrentStep(2); // Go to unit selection
                 }
             }
         }
     };
     processUrlParams();
-}, [searchParams, fetchManifest]); // Removed allClassGroups from dependency to prevent re-running
+}, []); // Runs only once on mount
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -541,7 +547,7 @@ useEffect(() => {
                 </div>
             </div>
 
-            <div className="flex-grow p-2 md:p-8 lg:p-10 overflow-y-auto">
+            <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
                 {renderStepContent()}
             </div>
 
@@ -564,4 +570,3 @@ useEffect(() => {
     </div>
   );
 }
-```
