@@ -334,6 +334,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       router.push(finalUrl);
   };
 
+
   // --- FILTERING LOGIC ---
   const filterItems = (items: any[]) => {
       if (!searchQuery) return items;
@@ -342,6 +343,12 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           (item.className && item.className.toLowerCase().includes(searchQuery.toLowerCase()))
       );
   };
+
+  const steps = [
+    { id: 1, name: "Ders", icon: Book },
+    { id: 2, name: "Ünite", icon: Library },
+    { id: 3, name: "Konu", icon: ListTodo },
+  ];
 
   const renderStepContent = () => {
       if (isLoading) {
@@ -480,7 +487,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
 
-                {steps.map((step) => {
+                {steps.slice(0, 3).map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -499,7 +506,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
                     {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 md:h-6 md:w-6 text-cyan-400" })}
-                    <span className="hidden md:inline">{steps[currentStep-1].name}</span>
+                    <span className="hidden md:inline">{steps[currentStep-1].name} Seçimi</span>
                     <span className="md:hidden">Seçim Yap</span>
                 </h2>
                 
