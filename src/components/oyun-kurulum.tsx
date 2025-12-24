@@ -10,7 +10,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
+import type { ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
 // --- TİP TANIMLARI ---
 type Topic = EnrichedClassGroup['courses'][0]['units'][0]['topics'][0];
@@ -136,6 +137,7 @@ const SelectionCard = ({
     </button>
 );
 
+
 // --- MAIN PAGE COMPONENT ---
 
 type OyunKurulumProps = {
@@ -147,12 +149,6 @@ type OyunKurulumProps = {
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
     isStatic?: boolean;
 }
-
-const steps = [
-  { id: 1, name: "Ders", icon: Book },
-  { id: 2, name: "Ünite", icon: Library },
-  { id: 3, name: "Konu", icon: ListTodo },
-];
 
 export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
@@ -240,37 +236,18 @@ useEffect(() => {
             const foundCourse = fetchedCourses.find(c => c.id === courseIdFromUrl);
             if (foundCourse) {
                 const courseUnits = (foundCourse as any).units || [];
-                setSelection(prev => ({
-                    ...prev,
-                    courseId: courseIdFromUrl,
-                    courseName: foundCourse.title,
-                    courseColor: (foundCourse as any).color || "from-slate-700 to-slate-800",
-                }));
-                setUnits(courseUnits);
-                setCurrentStep(2);
+                handleSelectCourse(foundCourse, true);
 
                 if (unitIdFromUrl) {
                     const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
                     if (foundUnit) {
-                        const availableTopics = (foundUnit.topics || []).filter((topic: Topic) => {
-                             if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
-                             if (dataType === 'ozetler') return (topic as any).hasOzetContent;
-                             return true;
-                        });
-                        setSelection(prev => ({
-                            ...prev,
-                            unitId: unitIdFromUrl,
-                            unitName: foundUnit.title,
-                        }));
-                        setTopics(availableTopics);
+                        handleSelectUnit(unitIdFromUrl, foundUnit.title, true)
                         
                         if (topicIdFromUrl) {
-                            const foundTopic = availableTopics.find(t => t.id === topicIdFromUrl);
+                            const foundTopic = (foundUnit.topics || []).find((t:Topic) => t.id === topicIdFromUrl);
                             if (foundTopic) {
                                 handleSelectTopic(topicIdFromUrl, foundTopic.title || '');
                             }
-                        } else {
-                            setCurrentStep(3);
                         }
                     }
                 }
@@ -280,7 +257,7 @@ useEffect(() => {
     processUrlParams();
 }, []); // Runs only once on mount
 
-  const handleSelectCourse = (course: Course) => {
+  const handleSelectCourse = (course: Course, fromUrl: boolean = false) => {
     setSelection({ 
         ...selection, 
         courseId: course.id, 
@@ -294,15 +271,18 @@ useEffect(() => {
     setTimeout(() => {
         setUnits((course as any).units || []);
         setIsLoading(false);
-        setCurrentStep(2);
+        if(!fromUrl) setCurrentStep(2);
     }, 300);
   };
 
-  const handleSelectUnit = (unitId: string, unitName: string) => {
+  const handleSelectUnit = (unitId: string, unitName: string, fromUrl: boolean = false) => {
     setSelection({ ...selection, unitId, unitName, topicName: '' });
     
     if (dataType === 'games' && unitId === 'all') {
+        const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
         const params = new URLSearchParams({
+            gameName: pageTitle,
+            gamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
             unitId: 'all',
@@ -336,7 +316,7 @@ useEffect(() => {
         });
         setTopics(availableTopics);
         setIsLoading(false);
-        setCurrentStep(3);
+        if(!fromUrl) setCurrentStep(3);
     }, 300);
   };
   
@@ -559,7 +539,7 @@ useEffect(() => {
                 </span>
                 
                 {/* Animasyonlu noktalar */}
-                <div className="flex gap-1.5 shrink-0 opacity-50">
+                <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
                     <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce"></div>
                     <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:100ms]"></div>
                     <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:200ms]"></div>
