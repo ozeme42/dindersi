@@ -2,59 +2,47 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { 
-  doc, 
-  updateDoc, 
-  increment, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  writeBatch, 
-  query, 
-  where, 
-  getDocs, 
-  getCountFromServer,
-  limit 
-} from 'firebase/firestore';
+import { doc, increment, writeBatch, collection, serverTimestamp, query, where, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Question } from '@/lib/types';
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import fs from 'fs/promises';
+import path from 'path';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
 
-const MAX_BOXES = 30;
-
-export async function getKutuAcQuestionsAction(
+export async function getDogruYanlisZinciriAction(
     { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        const params = {
+        const result = await getQuestionsFromBank({
             courseId,
             unitId,
             topicId,
-            questionCount: MAX_BOXES,
-            difficulty: ['Kolay', 'Orta', 'Zor'],
-            questionTypes: ['Çoktan Seçmeli', 'Doğru/Yanlış'],
-        };
-        
-        const result = await getQuestionsFromBank(params);
+            questionTypes: ['Doğru/Yanlış'],
+            questionCount: 50 // Fetch a good amount to shuffle
+        });
         
         if (result.error || result.questions.length < 5) {
-             return { questions: [], error: result.error || "Bu oyun için en az 5 soru gereklidir." };
+            return { questions: [], error: result.error || "Bu zincir oyunu için en az 5 Doğru/Yanlış sorusu gereklidir." };
         }
         
-        const shuffledQuestions = [...result.questions].sort(() => Math.random() - 0.5);
-
-        return { questions: shuffledQuestions as Question[] };
+        const questions = result.questions as Question[];
         
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+        
+        return { questions: JSON.parse(JSON.stringify(questions)) };
+
     } catch (e: any) {
-        console.error("Error getting Kutu Aç questions:", e);
+        console.error("Error getting D/Y Zinciri questions:", e);
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
 }
 
-
-export async function submitKutuAcScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) {
+export async function submitDogruYanlisZinciriScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
 
@@ -62,11 +50,13 @@ export async function submitKutuAcScoreAction(userId: string | null, score: numb
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Kutu Aç'),
+            where('gameType', '==', 'Doğru/Yanlış Zinciri'),
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
-        if (attemptsSnapshot.data().count >= 10) {
+        const attemptCount = attemptsSnapshot.data().count;
+
+        if (attemptCount >= 10) {
             return { success: false, error: "Puan limiti aşıldı. Bu etkinlikten daha fazla puan kazanamazsınız." };
         }
 
@@ -80,16 +70,16 @@ export async function submitKutuAcScoreAction(userId: string | null, score: numb
             userId: userId,
             points: score,
             timestamp: serverTimestamp(),
-            gameType: 'Kutu Aç',
+            gameType: 'Doğru/Yanlış Zinciri',
             context: context,
-            attemptNumber: attemptsSnapshot.data().count + 1
+            attemptNumber: attemptCount + 1,
         });
 
         await batch.commit();
 
         return { success: true };
     } catch (error: any) {
-        console.error("Error submitting Kutu Aç score:", error);
+        console.error("Error submitting D/Y Zinciri score:", error);
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }

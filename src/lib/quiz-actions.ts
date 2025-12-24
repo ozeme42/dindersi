@@ -19,14 +19,28 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     try {
         let allQuestions: Question[] = [];
 
-        if (isStaticBuild && topicId && topicId !== 'all') {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/questions/${topicId}.json`);
-            if (res.ok) {
-                allQuestions = await res.json();
-            } else if (res.status !== 404) { // Don't throw for 404, just return empty
-                throw new Error(`Static question data for topic ${topicId} not found or failed to load.`);
+        // In a static build, we can only fetch by topicId from a pre-generated file.
+        // If no topicId is provided, we cannot fetch data.
+        if (isStaticBuild) {
+            if (topicId && topicId !== 'all') {
+                 try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/questions/${topicId}.json`);
+                    if (res.ok) {
+                        allQuestions = await res.json();
+                    } else if (res.status !== 404) {
+                        console.warn(`Static question data for topic ${topicId} not found or failed to load. Status: ${res.status}`);
+                    }
+                 } catch(e) {
+                     console.warn(`Could not fetch static questions for ${topicId}:`, e);
+                 }
+            } else {
+                // In static mode, if no topicId is given, we can't fetch questions.
+                // This is a limitation of the static build approach.
+                // The UI should ideally prevent this state.
+                return { questions: [], error: "Statik modda, soru getirmek için bir konu seçimi zorunludur." };
             }
         } else if (!isStaticBuild) {
+            // In dynamic mode, query Firestore.
             let conditions = [];
             if (topicId && topicId !== 'all') {
                 conditions.push(where("topicId", "==", topicId));
@@ -37,13 +51,15 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             }
 
             const questionsRef = collection(db, "questions");
-            const finalQuery = conditions.length > 0 ? query(questionsRef, ...conditions) : query(questionsRef, firestoreLimit(100)); // Limit open queries
+            const finalQuery = conditions.length > 0 
+                ? query(questionsRef, ...conditions) 
+                : query(questionsRef, firestoreLimit(100)); // Limit open queries
             
             const querySnapshot = await getDocs(finalQuery);
             allQuestions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
         }
 
-        // Apply client-side filtering after fetching
+        // Apply client-side filtering for difficulty and type after fetching
         if (difficulty && difficulty.length > 0) {
             allQuestions = allQuestions.filter(q => difficulty.includes(q.difficulty));
         }
@@ -53,9 +69,11 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             allQuestions = allQuestions.filter(q => mappedTypes.includes(q.type));
         }
 
+        // Shuffle and select the required number of questions
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
         
+        // Final processing (e.g., shuffling options)
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             const standardizedQuestion: Question = {
                 ...question,

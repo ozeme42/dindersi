@@ -5,6 +5,8 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, limit, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
 import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import fs from 'fs/promises';
+import path from 'path';
 
 export type DogruYolQuestion = {
     q: string;
@@ -13,47 +15,47 @@ export type DogruYolQuestion = {
 }
 
 export async function getDogruYolKosucusuAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ questions: DogruYolQuestion[]; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'));
-
-        const conditions = [];
-        if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
+        if (!topicId || topicId === 'all') {
+             return { error: "Oyun oynamak için bir konu seçmelisiniz.", questions: [] };
         }
-        
-        conditions.push(where('type', '==', 'definition'));
 
-        const finalQuery = query(baseQuery, ...conditions);
-        const snapshot = await getDocs(finalQuery);
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
-        const allDefinitions = snapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const allItems: ActivityItem[] = JSON.parse(fileContent);
 
-        if (allDefinitions.length < 2) {
-            return { error: "Bu oyun için en az 2 farklı tanım/kavram gereklidir.", questions: [] };
+            const allDefinitions = allItems
+                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+
+            if (allDefinitions.length < 2) {
+                return { error: "Bu oyun için en az 2 farklı tanım/kavram gereklidir.", questions: [] };
+            }
+            
+            const gameQuestions: DogruYolQuestion[] = allDefinitions.map((item, index, arr) => {
+                const wrongOptions = arr.filter((_, i) => i !== index);
+                const wrongAnswerItem = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+
+                return {
+                    q: item.content.definition!,
+                    correct: item.content.term!,
+                    wrong: wrongAnswerItem.content.term!
+                };
+            });
+
+            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+            }
+            throw fileError;
         }
-        
-        // Create question-answer pairs
-        const gameQuestions: DogruYolQuestion[] = allDefinitions.map((item, index, arr) => {
-            const wrongOptions = arr.filter((_, i) => i !== index);
-            const wrongAnswerItem = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
 
-            return {
-                q: item.content.definition!,
-                correct: item.content.term!,
-                wrong: wrongAnswerItem.content.term!
-            };
-        });
-
-        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
     } catch (error: any) {
         console.error("Error getting Dogru Yol Kosucusu questions:", error);
         return { error: "Oyun için sorular alınırken bir hata oluştu.", questions: [] };
@@ -90,6 +92,7 @@ export async function submitDogruYolKosucusuScoreAction(userId: string | null, s
             timestamp: serverTimestamp(),
             gameType: 'Doğru Yol Koşucusu',
             context: context,
+            attemptNumber: attemptsSnapshot.data().count + 1,
         });
 
         await batch.commit();

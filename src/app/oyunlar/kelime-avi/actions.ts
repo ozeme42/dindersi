@@ -13,54 +13,54 @@ import {
   doc, 
   serverTimestamp, 
   increment,
-  getDocs
 } from 'firebase/firestore';
-
+import fs from 'fs/promises';
+import path from 'path';
 
 export async function getKelimeAviAction(
-    { courseId, unitId, topicId }: { courseId?: string; unitId?: string; topicId?: string; }
+    { topicId }: { topicId?: string; }
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId && !unitId && !courseId) {
-            return { error: "Kelime Avı oynamak için bir ders, ünite veya konu seçmelisiniz.", concepts: null };
+        if (!topicId || topicId === 'all') {
+            return { error: "Kelime Avı oynamak için bir konu seçmelisiniz.", concepts: null };
         }
 
-        let q = query(collection(db, "activityItems"), where("type", "in", ["concept", "definition"]));
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
 
-        if (topicId && topicId !== 'all') {
-            q = query(q, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            q = query(q, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            q = query(q, where("courseId", "==", courseId));
-        }
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const allItems: ActivityItem[] = JSON.parse(fileContent);
 
-        const querySnapshot = await getDocs(q);
+            const allConcepts = allItems
+                .map(item => item.content.text || item.content.term)
+                .filter((text): text is string => 
+                    typeof text === 'string' && 
+                    text.trim().length > 2 &&
+                    text.trim().length <= 12 &&
+                    !text.includes(' ')
+                )
+                .map(text => text.toLocaleUpperCase('tr-TR'));
 
-        const allConcepts = querySnapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .map(item => item.content.text || item.content.term)
-            .filter((text): text is string => 
-                typeof text === 'string' && 
-                text.trim().length > 2 &&
-                text.trim().length <= 12 &&
-                !text.includes(' ')
-            )
-            .map(text => text.toLocaleUpperCase('tr-TR'));
+            const uniqueConcepts = [...new Set(allConcepts)];
 
-        const uniqueConcepts = [...new Set(allConcepts)];
+            if (uniqueConcepts.length < 5) {
+                return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
+            }
+            
+            for (let i = uniqueConcepts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
+            }
 
-        if (uniqueConcepts.length < 5) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
-        }
+            return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
         
-        for (let i = uniqueConcepts.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
+        } catch (fileError: any) {
+            if (fileError.code === 'ENOENT') {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", concepts: null };
+            }
+            throw fileError;
         }
-
-        return { concepts: JSON.parse(JSON.stringify(uniqueConcepts)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getKelimeAviAction):", error);

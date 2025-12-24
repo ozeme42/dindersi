@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getBilBakalimAction, submitBilBakalimScoreAction } from '@/app/oyunlar/actions';
+import { getBilBakalimAction, submitBilBakalimScoreAction } from '@/app/oyunlar/bil-bakalim/actions';
 import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';

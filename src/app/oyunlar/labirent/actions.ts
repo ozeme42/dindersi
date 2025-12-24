@@ -76,6 +76,7 @@ export async function submitMazeScoreAction(userId: string | null, score: number
             timestamp: serverTimestamp(),
             gameType: 'Labirent',
             context: context,
+            attemptNumber: attemptsSnapshot.data().count + 1,
         });
 
         await batch.commit();

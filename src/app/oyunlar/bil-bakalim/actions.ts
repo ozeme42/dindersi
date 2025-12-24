@@ -2,27 +2,21 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, limit, doc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
-import type { ActivityItem } from "@/lib/types";
+import { doc, increment, writeBatch, collection, serverTimestamp, query, where, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
+import type { ActivityItem, Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
 
-export type BalloonHunterQuestion = {
-    q: string; // The definition
-    a: string; // The correct term
-    wrongs: string[]; // Distractor terms
-}
-
-export async function getBalloonHunterDataAction(
+export async function getBilBakalimAction(
     { topicId }: { topicId?: string; }
-): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
+): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
         if (!topicId || topicId === 'all') {
-             return { error: "Oyun oynamak için bir konu seçmelisiniz.", questions: [] };
+             return { error: "Oynamak için bir konu seçin.", questions: [] };
         }
-        
+
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
         
         try {
@@ -32,27 +26,19 @@ export async function getBalloonHunterDataAction(
             const allDefinitions = allItems
                 .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            if (allDefinitions.length < 5) {
-                return { error: "Bu oyun için en az 5 farklı tanım/kavram gereklidir.", questions: [] };
+            if (allDefinitions.length < 3) {
+                return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
             }
             
-            const allTerms = allDefinitions.map(item => item.content.term!);
-            
-            const gameQuestions: BalloonHunterQuestion[] = allDefinitions.map(item => {
-                const correctAnswer = item.content.term!;
-                const distractors = allTerms
-                    .filter(term => term !== correctAnswer)
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 4);
+            const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => ({
+                id: `${item.id}-${index}`,
+                text: item.content.definition!,
+                type: 'Bil Bakalım',
+                correctAnswer: item.content.term!,
+                difficulty: 'Orta',
+            }));
 
-                return {
-                    q: item.content.definition!,
-                    a: correctAnswer,
-                    wrongs: distractors,
-                };
-            });
-
-            return { questions: JSON.parse(JSON.stringify(gameQuestions.sort(() => 0.5 - Math.random()))) };
+            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
 
         } catch (fileError: any) {
             if (fileError.code === 'ENOENT') {
@@ -62,14 +48,13 @@ export async function getBalloonHunterDataAction(
         }
 
     } catch (error: any) {
-        console.error("Error getting Balloon Hunter data:", error);
-        return { error: "Oyun için veriler alınırken bir hata oluştu.", questions: [] };
+        console.error("Error getting Bil Bakalım questions:", error);
+        return { error: "Oyun için sorular alınırken bir hata oluştu.", questions: [] };
     }
 }
 
-
-export async function submitBalloonHunterScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
-    if (!userId || score <= 0) {
+export async function submitBilBakalimScoreAction(userId: string | null, score: number, context: string): Promise<{ success: boolean; error?: string }> {
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true' || !userId || score <= 0) {
         return { success: true };
     }
 
@@ -77,7 +62,7 @@ export async function submitBalloonHunterScoreAction(userId: string | null, scor
         const attemptsQuery = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('gameType', '==', 'Balon Avcısı'),
+            where('gameType', '==', 'Bil Bakalım'),
             where('context', '==', context)
         );
         const attemptsSnapshot = await getCountFromServer(attemptsQuery);
@@ -97,7 +82,7 @@ export async function submitBalloonHunterScoreAction(userId: string | null, scor
             userId: userId,
             points: score,
             timestamp: serverTimestamp(),
-            gameType: 'Balon Avcısı',
+            gameType: 'Bil Bakalım',
             context: context,
             attemptNumber: attemptCount + 1,
         });
@@ -106,7 +91,7 @@ export async function submitBalloonHunterScoreAction(userId: string | null, scor
 
         return { success: true };
     } catch (error: any) {
-        console.error("Error submitting score:", error);
+        console.error("Error submitting Bil Bakalım score:", error);
         return { success: false, error: "Skor kaydedilirken bir hata oluştu." };
     }
 }
