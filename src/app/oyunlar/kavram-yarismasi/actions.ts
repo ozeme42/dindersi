@@ -15,8 +15,6 @@ import {
   increment,
   getDocs
 } from 'firebase/firestore';
-import fs from 'fs/promises';
-import path from 'path';
 
 export type ConceptQuizQuestion = {
     definition: string;
@@ -29,60 +27,77 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-             return { error: "Lütfen 'Tüm Konular' yerine belirli bir konu seçerek devam edin.", questions: null };
+        if (!topicId) {
+             return { error: "Lütfen bir konu seçerek devam edin.", questions: null };
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        // Get all definitions for the selected topic
+        const definitionsQuery = query(
+            collection(db, "activityItems"), 
+            where("topicId", "==", topicId), 
+            where("type", "==", "definition")
+        );
         
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
-            
-            const allDefinitions = allItems.filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
-            const allConcepts = [...new Set(allItems.filter(item => item.content.term).map(item => item.content.term!))];
+        // Get ALL concepts for the same topic to use as distractors
+        const allConceptsQuery = query(
+            collection(db, "activityItems"), 
+            where("topicId", "==", topicId),
+            where("type", "in", ["concept", "definition"])
+        );
 
-            if (allDefinitions.length < 1 || allConcepts.length < 8) {
-                return { error: "Bu oyun için en az 1 tanım ve 8 farklı kavram gereklidir.", questions: null };
-            }
-            
-            const gameQuestions: ConceptQuizQuestion[] = [];
+        const [definitionsSnapshot, allItemsSnapshot] = await Promise.all([
+            getDocs(definitionsQuery),
+            getDocs(allConceptsQuery),
+        ]);
+        
+        const allDefinitions = definitionsSnapshot.docs
+            .map(doc => doc.data() as ActivityItem)
+            .filter(item => item.content?.term && item.content?.definition);
 
-            for (const item of allDefinitions) {
-                const correctAnswer = item.content.term!;
-                const definition = item.content.definition!;
+        // Create a unique set of all terms (concepts) within the topic
+        const allTermsInTopic = [...new Set(
+            allItemsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.term).filter(Boolean)
+        )] as string[];
 
-                const distractors = allConcepts
-                    .filter(concept => concept !== correctAnswer)
-                    .sort(() => 0.5 - Math.random()) 
-                    .slice(0, 7);
-
-                if (distractors.length < 7) {
-                    continue;
-                }
-
-                const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
-                
-                gameQuestions.push({
-                    definition,
-                    options,
-                    correctAnswer,
-                });
-            }
-            
-            if (gameQuestions.length === 0) {
-                 return { error: "Oyun için uygun soru oluşturulamadı. Konuda yeterli çeşitlilikte kavram olmayabilir.", questions: null };
-            }
-            
-            const shuffledGameQuestions = gameQuestions.sort(() => 0.5 - Math.random());
-            return { questions: JSON.parse(JSON.stringify(shuffledGameQuestions)) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
-            }
-            throw fileError;
+        if (allDefinitions.length < 1) {
+            return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
+        if (allTermsInTopic.length < 4) {
+             return { error: "Bu oyun için en az 4 farklı kavram gereklidir. Lütfen veri bankasına daha fazla kavram ekleyin.", questions: null };
+        }
+        
+        const gameQuestions: ConceptQuizQuestion[] = [];
+
+        for (const item of allDefinitions) {
+            const correctAnswer = item.content.term!;
+            const definition = item.content.definition!;
+
+            // Get 3 other random terms from the topic to use as distractors
+            const distractors = allTermsInTopic
+                .filter(concept => concept !== correctAnswer) // Exclude the correct answer
+                .sort(() => 0.5 - Math.random()) // Shuffle the rest
+                .slice(0, 3); // Get the first 3
+
+            // Ensure we have enough distractors
+            if (distractors.length < 3) {
+                continue; // Skip this question if not enough distractors can be found
+            }
+
+            const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
+            
+            gameQuestions.push({
+                definition,
+                options,
+                correctAnswer,
+            });
+        }
+        
+        if (gameQuestions.length === 0) {
+             return { error: "Oyun için uygun soru oluşturulamadı. Konuda yeterli çeşitlilikte kavram olmayabilir.", questions: null };
+        }
+        
+        const shuffledGameQuestions = gameQuestions.sort(() => 0.5 - Math.random());
+        return { questions: JSON.parse(JSON.stringify(shuffledGameQuestions)) };
 
     } catch (error: any) {
         console.error("Error getting Kavram Yarışması questions:", error);

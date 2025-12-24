@@ -10,6 +10,7 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
   
   const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
   
+  // Düzeltme: Yalnızca topicId'nin varlığını kontrol et.
   if (!topicId) {
       return (
           <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
