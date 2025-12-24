@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
@@ -247,8 +247,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setTimeout(() => {
         const selectedUnit = units.find(u => u.id === unitId);
         const availableTopics = (selectedUnit?.topics || []).filter(topic => {
-            if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
-            if (dataType === 'ozetler') return topic.hasOzetContent;
+            if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
+            if (dataType === 'ozetler') return (topic as any).hasOzetContent;
             return true;
         });
         setTopics(availableTopics);
@@ -263,7 +263,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       const pathPrefix = isStatic ? '' : '/student';
       let basePath = targetPath;
       if (!basePath) {
-          basePath = isStatic ? 'oyunlar' : 'student/oyunlar';
+          basePath = 'oyunlar'; // default to games if not specified
       }
       
       const params = new URLSearchParams({
@@ -280,21 +280,26 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       }
       
       let finalUrl = `/${basePath}/${finalGamePath}/oyun?${params.toString()}`;
-      if(dataType === 'yazilacaklar') finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
-      if(dataType === 'ozetler') finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+      
+      if(dataType === 'yazilacaklar') {
+          finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
+      }
+      if(dataType === 'ozetler') {
+           finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+      }
 
       router.push(finalUrl);
   };
 
-  const renderContent = () => {
+  const renderStepContent = () => {
       if (isLoading) {
           return (
-              <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-6 animate-pulse">
+              <div className="flex flex-col items-center justify-center h-48 md:h-96 gap-4 animate-pulse">
                   <div className="relative">
-                    <Loader2 className="h-16 w-16 text-cyan-400 animate-spin" />
+                    <Loader2 className="h-10 w-10 md:h-20 md:w-20 text-cyan-400 animate-spin" />
                     <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full"></div>
                   </div>
-                  <p className="text-xl font-medium text-cyan-200">İçerikler Yükleniyor...</p>
+                  <p className="text-sm md:text-2xl font-bold text-cyan-200">İçerikler Yükleniyor...</p>
               </div>
           );
       }
@@ -382,9 +387,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
             <button 
                 onClick={handleBack}
-                className="p-2 md:p-2.5 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
+                className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
             >
-                <ArrowLeft className="h-5 w-5 md:h-6 md:w-6 text-slate-400 group-hover:text-white transition-colors" />
+                <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
             </button>
             <div className="text-center mx-2 overflow-hidden flex-1">
                 <div className="flex items-center justify-center gap-2">
@@ -397,6 +402,29 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                 </div>
             </div>
             <div className="w-9 md:w-20 shrink-0"></div>
+        </div>
+
+        <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
+            <div className="relative flex justify-between items-center">
+                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                <div 
+                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
+                ></div>
+
+                {steps.map((step) => {
+                    const isActive = currentStep >= step.id;
+                    const isCurrent = currentStep === step.id;
+                    return (
+                        <div key={step.id} className="flex flex-col items-center gap-1">
+                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
+                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
+                            </div>
+                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
 
         <GlassPanel className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
@@ -412,7 +440,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             </div>
 
             <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
-                {renderContent()}
+                {renderStepContent()}
             </div>
 
             <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
