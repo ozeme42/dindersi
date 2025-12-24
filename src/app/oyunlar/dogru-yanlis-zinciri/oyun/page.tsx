@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getDogruYanlisZinciriAction, submitDogruYanlisZinciriScoreAction } from '@/app/oyunlar/actions';
+import { getDogruYanlisZinciriAction, submitDogruYanlisZinciriScoreAction } from '@/app/oyunlar/dogru-yanlis-zinciri/actions';
 import type { Question } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
