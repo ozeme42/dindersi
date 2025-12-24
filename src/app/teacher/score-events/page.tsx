@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Search } from 'lucide-react';
+import { Loader2, DollarSign, Trash2, ArrowLeft, ArrowRight, X, Home } from 'lucide-react';
 import { getScoreEvents, deleteScoreEvents } from './actions';
 import type { ScoreEvent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -41,9 +41,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Timestamp } from 'firebase/firestore';
+import Link from 'next/link';
+
 
 type EnrichedScoreEvent = ScoreEvent & { 
     userName?: string;
+    attemptNumber?: number;
 };
 
 type SerializableTimestamp = {
@@ -60,32 +63,47 @@ export default function ScoreEventsPage() {
     const [showOnlyExcessiveAttempts, setShowOnlyExcessiveAttempts] = useState(false);
     const { toast } = useToast();
     
-    // NOTE: Pagination state is currently disabled because server-side filtering is complex.
-    // We are fetching all data and filtering on the client for now.
-    // This is not ideal for very large datasets.
+    // Pagination State
+    const [pageCursors, setPageCursors] = useState<SerializableTimestamp[]>([null]); // Array to store the first item of each page
+    const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const [lastVisible, setLastVisible] = useState<SerializableTimestamp>(null);
+    const [isLastPage, setIsLastPage] = useState(false);
 
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async (pageIndex: number) => {
         setIsLoading(true);
-        // We pass search and filter terms to the backend now.
+        const cursor = pageCursors[pageIndex] || null;
+
         const result = await getScoreEvents({ 
+            cursor: cursor,
             searchTerm, 
-            showOnlyExcessiveAttempts 
+            showOnlyExcessiveAttempts,
         });
+
         if (result.success && result.data) {
             setEvents(result.data);
+            setLastVisible(result.lastVisible || null);
+            setIsLastPage(!result.lastVisible);
+
+            // If we are moving to a new page, add its cursor to the history
+            if (result.lastVisible && pageIndex === pageCursors.length - 1) {
+                setPageCursors(prev => [...prev, result.lastVisible]);
+            }
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    }, [searchTerm, showOnlyExcessiveAttempts, toast]);
+    }, [searchTerm, showOnlyExcessiveAttempts, toast, pageCursors]);
     
     useEffect(() => {
-        // Debounce search input
         const handler = setTimeout(() => {
-            fetchData();
-        }, 500); // 500ms delay after user stops typing
+             // Reset pagination on search/filter change
+            setPageCursors([null]);
+            setCurrentPageIndex(0);
+            setIsLastPage(false);
+            fetchData(0);
+        }, 500); 
         return () => clearTimeout(handler);
-    }, [fetchData]);
+    }, [searchTerm, showOnlyExcessiveAttempts]); // fetchData is not needed here
 
 
     const handleSelect = (id: string) => {
@@ -111,11 +129,25 @@ export default function ScoreEventsPage() {
         if (result.success) {
             toast({ title: 'Başarılı!', description: 'Seçilen puan hareketleri silindi ve öğrenci skorları güncellendi.' });
             setSelectedEventIds(new Set());
-            await fetchData(); // Refetch data
+            fetchData(currentPageIndex); // Refetch current page
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
         setIsDeleting(false);
+    };
+
+    const handleNextPage = () => {
+        if (isLastPage) return;
+        const nextPageIndex = currentPageIndex + 1;
+        fetchData(nextPageIndex);
+        setCurrentPageIndex(nextPageIndex);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPageIndex === 0) return;
+        const prevPageIndex = currentPageIndex - 1;
+        fetchData(prevPageIndex);
+        setCurrentPageIndex(prevPageIndex);
     };
     
     const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length;
@@ -130,15 +162,19 @@ export default function ScoreEventsPage() {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+                 <div className="flex items-center justify-between">
+                     <h1 className="text-3xl font-bold font-headline flex items-center gap-2"><DollarSign className="h-8 w-8 text-purple-400"/> Puan Hareketleri</h1>
+                     <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                         <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+                     </Button>
+                 </div>
+
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                     <CardHeader className="border-b border-white/5 pb-4">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
                                 <CardTitle className="text-2xl font-black text-white flex items-center gap-2">
-                                    <div className="p-2 bg-purple-500/20 rounded-lg border border-purple-500/30">
-                                        <DollarSign className="h-6 w-6 text-purple-400" />
-                                    </div>
-                                    Puan Hareketleri
+                                    Puan Kayıtları
                                 </CardTitle>
                                 <CardDescription className="text-slate-400 mt-2">Sistemdeki tüm puan kazanma ve kaybetme olaylarının kaydı.</CardDescription>
                             </div>
@@ -233,11 +269,8 @@ export default function ScoreEventsPage() {
                                                 <TableCell className="text-slate-500">
                                                     {typeof event.context === 'string' ? event.context : JSON.stringify(event.context)}
                                                     {event.attemptNumber && (
-                                                        <span className={cn(
-                                                            "text-xs ml-2 font-semibold bg-slate-800 px-1.5 py-0.5 rounded", 
-                                                            (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse border border-red-500/50" : "text-slate-500"
-                                                        )}>
-                                                            {event.attemptNumber}. deneme
+                                                        <span className={cn("text-xs ml-2 font-semibold", (event.attemptNumber || 0) > 10 ? "text-red-400 animate-pulse" : "text-slate-500")}>
+                                                            ({event.attemptNumber}. deneme)
                                                         </span>
                                                     )}
                                                 </TableCell>
@@ -257,6 +290,17 @@ export default function ScoreEventsPage() {
                             </Table>
                         </div>
                     </CardContent>
+                    <CardFooter className="flex justify-end p-4 border-t border-white/5 bg-slate-800/50">
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={handlePrevPage} disabled={currentPageIndex === 0 || isLoading}>
+                                <ArrowLeft className="mr-2 h-4 w-4"/> Önceki
+                            </Button>
+                            <span className="text-sm font-bold text-slate-400">Sayfa {currentPageIndex + 1}</span>
+                            <Button variant="outline" size="sm" onClick={handleNextPage} disabled={isLastPage || isLoading}>
+                                Sonraki <ArrowRight className="ml-2 h-4 w-4"/>
+                            </Button>
+                        </div>
+                    </CardFooter>
                 </Card>
             </div>
         </div>
