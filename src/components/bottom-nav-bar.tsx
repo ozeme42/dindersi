@@ -70,17 +70,15 @@ export function BottomNavBar() {
         return null;
     }
     
-    // 2. Öğrencinin odaklanması gereken (oyun/sınav/ders) sayfalarda veya gömülü içeriklerde gizle
-    const studentDistractionFreePaths = [
-        '/oyun/', 
-        '/student/deneme/coz', 
-        '/student/soru-bankasi/test',
-        '/student/ders/' // BÜTÜN DERS AKIŞI SAYFALARINI KAPSAR
-    ];
-    
     const isEmbedded = searchParams.get('embedded') === 'true';
 
-    if (user.role === 'student' && (isEmbedded || studentDistractionFreePaths.some(p => pathname.startsWith(p)))) {
+    // 2. Öğrencinin odaklanması gereken sayfalarda gizle
+    const distractionFreePaths = [
+        '/student/ders/', // Ders akışı ve tüm alt sayfaları
+        '/oyunlar/',      // Tüm oyun sayfaları
+    ];
+
+    if (user.role === 'student' && (isEmbedded || distractionFreePaths.some(p => pathname.startsWith(p)))) {
         return null;
     }
 
