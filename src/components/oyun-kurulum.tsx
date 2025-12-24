@@ -29,6 +29,12 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
+const steps = [
+  { id: 1, name: "Ders", icon: Book },
+  { id: 2, name: "Ünite", icon: Library },
+  { id: 3, name: "Konu", icon: ListTodo },
+];
+
 // --- UI COMPONENTS ---
 
 const GlassPanel = ({ children, className }: { children: React.ReactNode, className?: string }) => (
@@ -188,57 +194,85 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const fetchManifest = useCallback(async () => {
     setIsLoading(true);
     try {
-      const isForStudent = !isStatic && !!user;
-      const res = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
-      if (res.error) throw new Error(res.error);
+        const isForStudent = !isStatic && !!user;
+        const res = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
+        if (res.error) throw new Error(res.error);
 
-      const classGroupsWithData = (res.classGroups || []).map((group, groupIndex) => ({
-          ...group,
-          courses: group.courses.map((course: any, courseIndex: number) => ({
-              ...course,
-              icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
-              color: getGradient(groupIndex + courseIndex),
-              className: group.name,
-          }))
-      }));
-
-      const allCourses = classGroupsWithData.flatMap(group => group.courses);
+        const classGroupsWithData = (res.classGroups || []).map((group, groupIndex) => ({
+            ...group,
+            courses: group.courses.map((course: any, courseIndex: number) => ({
+                ...course,
+                icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
+                color: getGradient(groupIndex + courseIndex),
+                className: group.name,
+            }))
+        }));
+        
+        const allCourses = classGroupsWithData.flatMap(group => group.courses);
       
-      setAllClassGroups(classGroupsWithData);
-      setCourses(allCourses);
+        setAllClassGroups(classGroupsWithData);
+        setCourses(allCourses);
+
+        return { classGroups: classGroupsWithData, allCourses };
     } catch (error) {
-      console.error(error);
+        console.error(error);
+        return { classGroups: [], allCourses: [] };
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  }, [user, dataType, isStatic]);
+}, [user, dataType, isStatic]);
 
-   useEffect(() => {
-    // URL parametrelerini kontrol et
-    const courseIdFromUrl = searchParams.get('courseId');
-    const unitIdFromUrl = searchParams.get('unitId');
-    const topicIdFromUrl = searchParams.get('topicId');
-    const courseNameFromUrl = searchParams.get('courseName');
+useEffect(() => {
+    const processUrlParams = async () => {
+        const courseIdFromUrl = searchParams.get('courseId');
+        const unitIdFromUrl = searchParams.get('unitId');
+        const topicIdFromUrl = searchParams.get('topicId');
+        
+        // Fetch data first, regardless of params
+        const { allCourses } = await fetchManifest();
 
-    if (courseIdFromUrl && courseNameFromUrl) {
-      // Önce veriyi çek, sonra state'i ayarla
-      fetchManifest().then(() => {
-        const foundCourse = allClassGroups.flatMap(g => g.courses).find(c => c.id === courseIdFromUrl);
-        if (foundCourse) {
-          setSelection(prev => ({
-            ...prev,
-            courseId: courseIdFromUrl,
-            courseName: courseNameFromUrl,
-            courseColor: (foundCourse as any).color || "from-slate-700 to-slate-800",
-          }));
-          setUnits((foundCourse as any).units || []);
-          setCurrentStep(2); // Doğrudan 2. adıma geç
+        // Now process params with the fetched data
+        if (courseIdFromUrl) {
+            const foundCourse = allCourses.find(c => c.id === courseIdFromUrl);
+            if (foundCourse) {
+                setSelection(prev => ({
+                    ...prev,
+                    courseId: courseIdFromUrl,
+                    courseName: foundCourse.title,
+                    courseColor: (foundCourse as any).color || "from-slate-700 to-slate-800",
+                }));
+                const courseUnits = (foundCourse as any).units || [];
+                setUnits(courseUnits);
+                
+                if (unitIdFromUrl) {
+                    const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
+                    if (foundUnit) {
+                        setSelection(prev => ({
+                            ...prev,
+                            unitId: unitIdFromUrl,
+                            unitName: foundUnit.title,
+                        }));
+                        const availableTopics = (foundUnit.topics || []).filter((topic: Topic) => {
+                             if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
+                             if (dataType === 'ozetler') return (topic as any).hasOzetContent;
+                             return true;
+                        });
+                        setTopics(availableTopics);
+
+                        if (topicIdFromUrl) {
+                            handleSelectTopic(topicIdFromUrl, topics.find(t => t.id === topicIdFromUrl)?.title || '');
+                        } else {
+                            setCurrentStep(3); // Go to topic selection
+                        }
+                    }
+                } else {
+                    setCurrentStep(2); // Go to unit selection
+                }
+            }
         }
-      });
-    } else {
-      fetchManifest();
-    }
-  }, [searchParams, fetchManifest, allClassGroups]);
+    };
+    processUrlParams();
+}, [searchParams, fetchManifest]); // Removed allClassGroups from dependency to prevent re-running
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -344,12 +378,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       );
   };
 
-  const steps = [
-    { id: 1, name: "Ders", icon: Book },
-    { id: 2, name: "Ünite", icon: Library },
-    { id: 3, name: "Konu", icon: ListTodo },
-  ];
-
   const renderStepContent = () => {
       if (isLoading) {
           return (
@@ -454,8 +482,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       }
   }
 
-  const stepsToDisplay = steps.slice(0, dataType === 'games' ? 3 : 2);
-
   return (
     <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 font-sans text-white">
         
@@ -468,10 +494,10 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             </button>
             <div className="text-center mx-2 overflow-hidden flex-1">
                 <div className="flex items-center justify-center gap-3">
-                    <div className="hidden md:flex p-2.5 bg-blue-500/20 rounded-xl">
-                        <PageIcon className="h-6 w-6 md:h-8 md:w-8 text-blue-400" />
+                    <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl">
+                        <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
-                    <h1 className="text-xl md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
+                    <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
                         {finalGameName}
                     </h1>
                 </div>
@@ -487,7 +513,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
 
-                {steps.slice(0, 3).map((step) => {
+                {steps.map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -538,3 +564,4 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
+```
