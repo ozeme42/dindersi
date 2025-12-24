@@ -7,7 +7,6 @@ import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import { Loader2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
 
 export default async function KavramYarismaOyunPage({ searchParams }: { 
     searchParams: { [key: string]: string | string[] | undefined };
@@ -16,10 +15,9 @@ export default async function KavramYarismaOyunPage({ searchParams }: {
   const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
 
   if (!topicId) {
-      // Bu hata, URL'de topicId olmadığında gösterilir.
       return (
            <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
-              Hata: Geçerli bir konu ID'si gerekli. Lütfen kurulum ekranından bir konu seçin.
+              Hata: Geçerli bir konu ID'si gerekli.
           </div>
       )
   }
