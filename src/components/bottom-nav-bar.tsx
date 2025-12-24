@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   Home, Trophy, User, PenSquare, Users, MonitorPlay, 
-  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2 
+  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, LogOut, Swords, Library, FileText, ChevronRight, ArrowRight
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
@@ -65,16 +65,22 @@ export function BottomNavBar() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    // 1. Giriş/Kayıt sayfalarında gizle
+    // 1. Giriş/Kayıt sayfalarında veya kullanıcı yoksa gizle
     if (!user || pathname === '/login' || pathname === '/register') {
         return null;
     }
     
     // 2. Öğrencinin odaklanması gereken (oyun/sınav/ders) sayfalarda veya gömülü içeriklerde gizle
-    const studentDistractionFreePaths = ['/coz', '/oyun/', '/ders/', '/soru-bankasi/test'];
+    const studentDistractionFreePaths = [
+        '/oyun/', 
+        '/student/deneme/coz', 
+        '/student/soru-bankasi/test',
+        '/student/ders/' // BÜTÜN DERS AKIŞI SAYFALARINI KAPSAR
+    ];
+    
     const isEmbedded = searchParams.get('embedded') === 'true';
 
-    if (user.role === 'student' && (isEmbedded || studentDistractionFreePaths.some(p => pathname.includes(p)))) {
+    if (user.role === 'student' && (isEmbedded || studentDistractionFreePaths.some(p => pathname.startsWith(p)))) {
         return null;
     }
 
