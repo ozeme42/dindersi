@@ -230,7 +230,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const finalGamePath = gamePath || searchParams.get('gamePath') || "";
 
   const [selection, setSelection] = useState({
-    className: "",
     courseId: "",
     courseName: "",
     courseColor: "from-slate-700 to-slate-800", 
@@ -244,7 +243,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     if(targetPath === 'oyunlar') return '/oyunlar';
     return '/';
   };
-
+  
   const handleBack = () => {
     if (currentStep > 1) {
         setCurrentStep(currentStep - 1);
@@ -252,6 +251,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         router.push(getBackUrl());
     }
   };
+
 
   const fetchManifest = useCallback(async () => {
     setIsLoading(true);
@@ -321,16 +321,14 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     
     if (dataType === 'games' && unitId === 'all') {
         const params = new URLSearchParams({
-            gameName: finalGameName,
-            gamePath: finalGamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
             unitId: 'all',
             unitName: 'Tüm Üniteler',
             topicId: 'all',
             topicName: 'Tüm Konular',
-            isStatic: String(isStatic),
         });
+        if (isStatic) params.append('isStatic', 'true');
         const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         router.push(url);
         return;
@@ -368,6 +366,20 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           basePath = isStatic ? 'oyunlar' : 'student/oyunlar';
       }
 
+      // KAVRAM YARIŞMASI İÇİN ÖZEL YÖNLENDİRME
+      if (finalGamePath === 'kavram-yarismasi') {
+           const params = new URLSearchParams({
+            courseId: selection.courseId,
+            courseName: selection.courseName,
+            unitId: selection.unitId,
+            unitName: selection.unitName,
+            topicName: topicName,
+          });
+          const url = `/oyunlar/kavram-yarismasi/oyun/konu/${topicId}?${params.toString()}`;
+          router.push(url);
+          return;
+      }
+      
       const params = new URLSearchParams({
         courseId: selection.courseId,
         courseName: selection.courseName,
@@ -376,7 +388,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         topicId: topicId,
         topicName: topicName,
       });
-      // Add isStatic only if it's true, to keep URLs cleaner for dynamic routes
+
       if (isStatic) {
           params.append('isStatic', 'true');
       }
@@ -416,7 +428,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                             subtitle={(course as any).className}
                             icon={(course as any).icon || Book}
                             color={(course as any).color || getGradient(idx)}
-                            onClick={() => handleSelectCourse(course)}
+                            onClick={() => handleSelectCourse(course as Course)}
                             delay={idx * 50}
                         />
                     )) : <p className="col-span-full text-center text-slate-500 py-10">Bu bölüm için uygun ders bulunmuyor.</p>}
@@ -498,7 +510,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
                     <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {pageTitle}
+                        {finalGameName}
                     </h1>
                 </div>
             </div>
@@ -509,19 +521,19 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             <div className="relative flex justify-between items-center">
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                 <div 
-                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700"
+                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
                     style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
                 ></div>
 
-                {steps.map((step) => {
-                    const isCompleted = currentStep > step.id;
+                {steps.slice(0, 3).map((step) => {
+                    const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
                         <div key={step.id} className="flex flex-col items-center gap-1">
-                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isCurrent ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : isCompleted ? "bg-cyan-600 border-cyan-400 text-white" : "bg-slate-900 border-slate-700 text-slate-500")}>
-                                {isCompleted ? <Check/> : step.id}
+                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isCurrent ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : isActive ? "bg-cyan-600 border-cyan-400 text-white" : "bg-slate-900 border-slate-700 text-slate-500")}>
+                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
                             </div>
-                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isCompleted ? "text-white" : "text-slate-600")}>{step.name}</span>
+                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
                         </div>
                     );
                 })}
@@ -529,18 +541,18 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         </div>
 
         <GlassPanel className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
-            <div className="p-4 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
-                <h2 className="text-lg md:text-2xl font-bold text-white flex items-center gap-3">
+            <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
+                <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-3">
                     {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 text-cyan-400" })}
                     {steps[currentStep-1].name}
                 </h2>
                 
-                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider">
+                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
                     {currentStep} / {steps.length}
                 </div>
             </div>
 
-            <div className="flex-grow p-4 md:p-8 lg:p-12 overflow-y-auto">
+            <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
                 {renderContent()}
             </div>
         </GlassPanel>

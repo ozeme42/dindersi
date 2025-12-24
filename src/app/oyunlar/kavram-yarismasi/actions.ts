@@ -39,7 +39,7 @@ export async function getConceptQuizAction(
         );
         
         // Get ALL concepts for the same topic to use as distractors
-        const allConceptsQuery = query(
+        const allItemsQuery = query(
             collection(db, "activityItems"), 
             where("topicId", "==", topicId),
             where("type", "in", ["concept", "definition"])
@@ -47,7 +47,7 @@ export async function getConceptQuizAction(
 
         const [definitionsSnapshot, allItemsSnapshot] = await Promise.all([
             getDocs(definitionsQuery),
-            getDocs(allConceptsQuery),
+            getDocs(allItemsQuery),
         ]);
         
         const allDefinitions = definitionsSnapshot.docs
@@ -56,7 +56,7 @@ export async function getConceptQuizAction(
 
         // Create a unique set of all terms (concepts) within the topic
         const allTermsInTopic = [...new Set(
-            allItemsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.term).filter(Boolean)
+            allItemsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.term || (doc.data() as ActivityItem).content.text).filter(Boolean)
         )] as string[];
 
         if (allDefinitions.length < 1) {
