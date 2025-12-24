@@ -8,9 +8,8 @@ import { Loader2 } from 'lucide-react';
 
 export default async function KavramYarismaOyunPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
   
-  const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
-  
-  // Düzeltme: Yalnızca topicId'nin varlığını kontrol et.
+  const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : undefined;
+
   if (!topicId) {
       return (
           <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
