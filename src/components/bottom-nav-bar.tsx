@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   Home, Trophy, User, PenSquare, Users, MonitorPlay, 
   ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2 
@@ -63,15 +63,18 @@ const NavLink = ({ href, icon: Icon, label }: { href: string; icon: React.Elemen
 export function BottomNavBar() {
     const { user } = useAuth();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     // 1. Giriş/Kayıt sayfalarında gizle
     if (!user || pathname === '/login' || pathname === '/register') {
         return null;
     }
     
-    // 2. Öğrencinin odaklanması gereken (oyun/sınav) sayfalarda gizle
+    // 2. Öğrencinin odaklanması gereken (oyun/sınav) sayfalarda veya gömülü içeriklerde gizle
     const studentGamePaths = ['/coz', '/oyun/', '/ders/', '/soru-bankasi/test'];
-    if (user.role === 'student' && studentGamePaths.some(p => pathname.includes(p))) {
+    const isEmbedded = searchParams.get('embedded') === 'true';
+
+    if (user.role === 'student' && (isEmbedded || studentGamePaths.some(p => pathname.includes(p)))) {
         return null;
     }
 
