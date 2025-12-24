@@ -1,12 +1,11 @@
 
-
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset, Course, Unit } from '@/lib/types';
+import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset, Course, Unit, SchoolClass } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -14,7 +13,7 @@ import {
     FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, 
     Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, 
     BrainCircuit, Grip, LayoutTemplate, LayersIcon, Link as LinkIcon, 
-    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle 
+    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Workflow
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
@@ -38,7 +37,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { cn, cleanForAnagram } from '@/lib/utils';
 import { playableActivities } from '@/lib/game-config';
 import React from 'react';
 import { Input } from '@/components/ui/input';
@@ -128,16 +127,16 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit }: {
 
                     {/* Actions - Always visible on mobile, hover on desktop */}
                     <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                         {step.type === 'activityLink' && (
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" asChild>
+                                 <Link href={`${(step as any).activityType}?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
+                                    <FilePenLine className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        )}
                         {step.type === 'accordion' && onSplit && (
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-blue-500/20 hover:text-blue-400" onClick={onSplit} title="Adımlara Ayır">
                                 <LayersIcon className="h-4 w-4" />
-                            </Button>
-                        )}
-                        {step.type === 'activityLink' && (
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" asChild>
-                                <Link href={`/teacher/activity-data?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
-                                    <Database className="h-4 w-4" />
-                                </Link>
                             </Button>
                         )}
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400" onClick={onEdit}>
@@ -173,16 +172,13 @@ export function TopicEditor({
     const [libraryConfig, setLibraryConfig] = useState<{ filter: (ActivityItem['type'] | 'questions' | 'images')[]; multiSelect: boolean; stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame'; }>({ filter: [], multiSelect: false, stepType: 'content' });
     const { toast } = useToast();
     const searchParams = useSearchParams();
-    const courseId = searchParams.get('courseId');
-    const unitId = searchParams.get('unitId');
-    const topicId = searchParams.get('topicId');
     
     // YENİ: Context'i burada oluştur
     const context = useMemo(() => ({
-        courseId,
-        unitId,
-        topicId
-    }), [courseId, unitId, topicId]);
+        courseId: searchParams.get('courseId'),
+        unitId: searchParams.get('unitId'),
+        topicId: searchParams.get('topicId')
+    }), [searchParams]);
     
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -235,9 +231,9 @@ export function TopicEditor({
                     title: 'Yeni Etkinlik',
                     activityType: '',
                     activityLabel: '',
-                    courseId: courseId || undefined,
-                    unitId: unitId || undefined,
-                    topicId: topicId || undefined,
+                    courseId: context.courseId || undefined,
+                    unitId: context.unitId || undefined,
+                    topicId: context.topicId || undefined,
                 };
                 break;
             case 'conceptMap': newStep = { type: 'conceptMap', 'title': 'Kavram Haritası', mapData: { nodes: [], edges: [] } }; break;
@@ -524,9 +520,9 @@ export function TopicEditor({
                                                 title: `${act.label} Etkinliği`,
                                                 activityType: act.href,
                                                 activityLabel: act.label,
-                                                courseId: courseId || undefined,
-                                                unitId: unitId || undefined,
-                                                topicId: topicId || undefined,
+                                                courseId: context?.courseId || undefined,
+                                                unitId: context?.unitId || undefined,
+                                                topicId: context?.topicId || undefined,
                                             } as any;
                                             const newStepWithId: DraggableLessonStep = { ...newStep, id: `step-${Date.now()}-${Math.random()}` };
                                             setSteps(currentSteps => [...currentSteps, newStepWithId]);
@@ -572,9 +568,9 @@ export function TopicEditor({
                 <LibraryImportDialog 
                     isOpen={isLibraryPanelOpen}
                     onOpenChange={setIsLibraryPanelOpen}
-                    onItemsSelected={handleItemsImportedFromLibrary}
+                    onItemsSelected={handleItemsImportedFromLibrary as any}
                     context={context}
-                    config={libraryConfig!}
+                    config={libraryConfig}
                 />
                 <StepEditorDialog 
                     isOpen={!!editingStep} 
@@ -718,7 +714,4 @@ export default function Page() {
         </Suspense>
     )
 }
-
-
-
     

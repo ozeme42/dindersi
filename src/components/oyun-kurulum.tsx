@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -98,7 +99,7 @@ const SelectionCard = ({
         )}></div>
         
         {/* Kart İçeriği */}
-        <div className="relative h-full w-full bg-[#1e293b] rounded-[15px] p-4 md:p-5 flex items-center gap-4 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
+        <div className="relative h-full w-full bg-[#1e293b] rounded-[15px] p-4 md:p-5 flex items-center gap-4 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
             
             {/* İkon Kutusu */}
             <div className={cn(
@@ -130,11 +131,6 @@ const SelectionCard = ({
 );
 
 // --- MAIN PAGE COMPONENT ---
-const steps = [
-  { id: 1, name: "Ders Seçimi", icon: Book },
-  { id: 2, name: "Ünite Seçimi", icon: Library },
-  { id: 3, name: "Konu Seçimi", icon: ListTodo },
-];
 
 type OyunKurulumProps = {
     pageTitle?: string;
@@ -176,7 +172,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const getBackUrl = () => {
     if (targetPath?.startsWith('student')) return '/student';
     if(targetPath === 'oyunlar') return '/oyunlar';
-    return '/';
+    if(isStatic) return '/';
+    return '/teacher/smartboard';
   };
   
   const handleBack = () => {
@@ -216,9 +213,32 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     }
   }, [user, dataType, isStatic]);
 
-  useEffect(() => {
+   useEffect(() => {
+    // URL parametrelerini kontrol et
+    const courseIdFromUrl = searchParams.get('courseId');
+    const unitIdFromUrl = searchParams.get('unitId');
+    const topicIdFromUrl = searchParams.get('topicId');
+    const courseNameFromUrl = searchParams.get('courseName');
+
+    if (courseIdFromUrl && courseNameFromUrl) {
+      // Önce veriyi çek, sonra state'i ayarla
+      fetchManifest().then(() => {
+        const foundCourse = allClassGroups.flatMap(g => g.courses).find(c => c.id === courseIdFromUrl);
+        if (foundCourse) {
+          setSelection(prev => ({
+            ...prev,
+            courseId: courseIdFromUrl,
+            courseName: courseNameFromUrl,
+            courseColor: (foundCourse as any).color || "from-slate-700 to-slate-800",
+          }));
+          setUnits((foundCourse as any).units || []);
+          setCurrentStep(2); // Doğrudan 2. adıma geç
+        }
+      });
+    } else {
       fetchManifest();
-  }, [fetchManifest]);
+    }
+  }, [searchParams, fetchManifest, allClassGroups]);
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -286,7 +306,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       const pathPrefix = isStatic ? '' : '/student';
       let basePath = targetPath;
       if (!basePath) {
-          basePath = 'oyunlar';
+          basePath = dataType === 'games' ? 'oyunlar' : dataType;
       }
       
       const params = new URLSearchParams({
@@ -318,7 +338,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const filterItems = (items: any[]) => {
       if (!searchQuery) return items;
       return items.filter(item => 
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.title || item.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
           (item.className && item.className.toLowerCase().includes(searchQuery.toLowerCase()))
       );
   };
@@ -336,7 +356,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
           );
       }
       
-      // GRID CLASSES: Masaüstü için 3 kolonlu yapı eklendi (lg:grid-cols-3)
       const gridClasses = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 pb-10";
       
       switch(currentStep) {
@@ -428,17 +447,19 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       }
   }
 
+  const stepsToDisplay = steps.slice(0, dataType === 'games' ? 3 : 2);
+
   return (
-    <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-4 md:p-10 pb-24 font-sans text-white">
+    <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 font-sans text-white">
         
-        <div className="max-w-7xl mx-auto flex items-center justify-between mb-8 md:mb-12 pt-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between mb-8 md:mb-12 pt-2">
             <button 
                 onClick={handleBack}
-                className="p-3 md:p-4 bg-white/5 hover:bg-white/10 rounded-xl md:rounded-2xl border border-white/10 transition-all group shrink-0"
+                className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
             >
-                <ArrowLeft className="h-5 w-5 md:h-6 md:w-6 text-slate-400 group-hover:text-white transition-colors" />
+                <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
             </button>
-            <div className="text-center mx-4 overflow-hidden flex-1">
+            <div className="text-center mx-2 overflow-hidden flex-1">
                 <div className="flex items-center justify-center gap-3">
                     <div className="hidden md:flex p-2.5 bg-blue-500/20 rounded-xl">
                         <PageIcon className="h-6 w-6 md:h-8 md:w-8 text-blue-400" />
@@ -448,10 +469,10 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     </h1>
                 </div>
             </div>
-            <div className="w-12 md:w-20 shrink-0"></div>
+            <div className="w-9 md:w-20 shrink-0"></div>
         </div>
 
-        <div className="max-w-4xl mx-auto mb-8 md:mb-12 px-4">
+        <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
             <div className="relative flex justify-between items-center">
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                 <div 
@@ -463,39 +484,39 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
-                        <div key={step.id} className="flex flex-col items-center gap-2">
-                            <div className={cn("w-10 h-10 md:w-16 md:h-16 rounded-full flex items-center justify-center border-4 transition-all duration-500 z-10 font-black text-sm md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
-                                {isActive && !isCurrent ? <Check className="h-4 w-4 md:h-7 md:w-7" /> : step.id}
+                        <div key={step.id} className="flex flex-col items-center gap-1">
+                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
+                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
                             </div>
-                            <span className={cn("text-[10px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
+                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
                         </div>
                     );
                 })}
             </div>
         </div>
 
-        <GlassPanel className="max-w-6xl mx-auto min-h-[600px] flex flex-col">
-            <div className="p-4 md:p-8 border-b border-white/5 bg-black/20 flex justify-between items-center backdrop-blur-md sticky top-0 z-20">
-                <h2 className="text-lg md:text-2xl font-bold text-white flex items-center gap-3">
-                    {React.createElement(steps[currentStep-1].icon, { className: "h-6 w-6 text-cyan-400" })}
+        <GlassPanel className="max-w-5xl mx-auto min-h-[600px] flex flex-col">
+            <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
+                <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
+                    {React.createElement(steps[currentStep-1].icon, { className: "h-5 w-5 md:h-6 md:w-6 text-cyan-400" })}
                     <span className="hidden md:inline">{steps[currentStep-1].name}</span>
                     <span className="md:hidden">Seçim Yap</span>
                 </h2>
                 
-                <div className="px-3 py-1 md:px-5 md:py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
+                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
                     ADIM {currentStep} / {steps.length}
                 </div>
             </div>
 
-            <div className="flex-grow p-4 md:p-8 lg:p-10 overflow-y-auto">
+            <div className="flex-grow p-2 md:p-8 lg:p-10 overflow-y-auto">
                 {renderStepContent()}
             </div>
 
-            <div className="p-4 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-xs md:text-sm font-medium">
+            <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
                 <span className="truncate mr-4">
                     {currentStep === 1 && "Devam etmek için bir ders seçin."}
                     {currentStep === 2 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.courseName} seçildi. Şimdi ünite seçin.</span>}
-                    {currentStep === 3 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.unitName} seçildi. Son olarak konuyu belirleyin.</span>}
+                    {currentStep === 3 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.unitName} seçildi. Son olarak, bir konu seç.</span>}
                 </span>
                 
                 {/* Animasyonlu noktalar */}

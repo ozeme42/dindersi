@@ -1,4 +1,5 @@
-'use client';
+
+"use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import isEqual from 'lodash.isequal';
@@ -56,15 +57,36 @@ type StepEditorDialogProps = {
     onSave: (updatedStep: LessonStep) => void;
     isSaving: boolean;
     context?: { courseId?: string | null, unitId?: string | null, topicId?: string | null };
-    allCourses?: (Course & { units: (Unit & { topics: Topic[]})[]})[]; // Eklendi
 };
 
-export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context, allCourses = [] }: StepEditorDialogProps) {
+export function StepEditorDialog({ isOpen, onOpenChange, step, onSave, isSaving, context }: StepEditorDialogProps) {
     const [editedStep, setEditedStep] = useState<LessonStep | null>(step);
     const [initialData, setInitialData] = useState<Partial<LessonStep>>({});
     const [isLibraryOpen, setIsLibraryOpen] = useState(false);
     
     const { toast } = useToast();
+    const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[]})[]})[]>([]);
+    
+    useEffect(() => {
+        if(isOpen && editedStep?.type === 'activityLink'){
+            const fetchCourses = async () => {
+                const coursesSnapshot = await getDocs(query(collection(db, "courses")));
+                 const coursesData = await Promise.all(coursesSnapshot.docs.map(async (courseDoc) => {
+                    const course = { id: courseDoc.id, ...courseDoc.data() } as Course & { units: (Unit & { topics: Topic[]})[] };
+                    const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`)));
+                    course.units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
+                        const unit = { id: unitDoc.id, ...unitDoc.data() } as Unit & { topics: Topic[] };
+                        const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unit.id}/topics`)));
+                        unit.topics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic);
+                        return unit;
+                    }));
+                    return course;
+                }));
+                setAllCourses(coursesData);
+            }
+            fetchCourses();
+        }
+    }, [isOpen, editedStep?.type]);
 
     useEffect(() => {
         const initial = getInitialFormData(step);
