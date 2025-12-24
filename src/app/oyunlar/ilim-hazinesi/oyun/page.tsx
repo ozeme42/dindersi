@@ -251,6 +251,8 @@ function GameComponent() {
     if (!currentLevel) return null;
 
     const targetWords = currentLevel.mainWord.split(' ');
+    // FIX: Define constructedLetters here
+    const constructedLetters = currentSelection.map(idx => ({ id: idx, letter: shuffledLetters[idx] }));
 
     return (
         <div 
