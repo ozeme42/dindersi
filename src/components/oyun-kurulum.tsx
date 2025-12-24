@@ -4,14 +4,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    Sparkles, Loader2, Gamepad2, Search, XCircle
+    Sparkles, Loader2, Gamepad2, Search, XCircle, BookOpen
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
-import type { ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
 // --- TİP TANIMLARI ---
 type Topic = EnrichedClassGroup['courses'][0]['units'][0]['topics'][0];
@@ -162,7 +161,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
-  // Arama state'i
   const [searchQuery, setSearchQuery] = useState("");
 
   const finalGameName = gameName || searchParams.get('gameName') || pageTitle || "Etkinlik Kurulumu";
@@ -183,9 +181,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         { id: 2, name: "Ünite", icon: Library },
         { id: 3, name: "Konu", icon: ListTodo },
     ];
-    if (dataType === 'yazilacaklar' || dataType === 'ozetler') {
-        return allSteps.filter(s => s.id <= 3); // Only show up to Konu
-    }
+    // For ozetler, we want to go up to the topic selection.
+    // The final step will render both unit and topic summaries.
     return allSteps;
   }, [dataType]);
 
@@ -253,12 +250,12 @@ useEffect(() => {
                     const courseUnits = (foundCourse as any).units || [];
                     const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
                     if (foundUnit) {
-                        handleSelectUnit(unitIdFromUrl, foundUnit.title, true);
+                        handleSelectUnit(foundUnit, true);
                         
                         if (topicIdFromUrl) {
                             const foundTopic = (foundUnit.topics || []).find((t:Topic) => t.id === topicIdFromUrl);
                             if (foundTopic) {
-                                handleSelectTopic(topicIdFromUrl, foundTopic.title || '');
+                                handleSelectTopic(foundTopic.id, foundTopic.title || '');
                             }
                         }
                     }
@@ -287,10 +284,10 @@ useEffect(() => {
     }, 300);
   };
 
-  const handleSelectUnit = (unitId: string, unitName: string, fromUrl: boolean = false) => {
-    setSelection({ ...selection, unitId, unitName, topicName: '' });
+  const handleSelectUnit = (unit: Unit, fromUrl: boolean = false) => {
+    setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
     
-    if (dataType === 'games' && unitId === 'all') {
+    if (dataType === 'games' && unit.id === 'all') {
         const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
         const params = new URLSearchParams({
             gameName: finalGameName,
@@ -311,7 +308,7 @@ useEffect(() => {
     setIsLoading(true);
     setSearchQuery("");
     setTimeout(() => {
-        const selectedUnit = units.find(u => u.id === unitId);
+        const selectedUnit = units.find(u => u.id === unit.id);
         const availableTopics = (selectedUnit?.topics || []).filter(topic => {
             if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
             if (dataType === 'ozetler') return (topic as any).hasOzetContent;
@@ -427,7 +424,7 @@ useEffect(() => {
                                 subtitle={selection.courseName}
                                 icon={Library}
                                 color={selection.courseColor}
-                                onClick={() => handleSelectUnit(unit.id, unit.title)}
+                                onClick={() => handleSelectUnit(unit as Unit)}
                                 delay={(idx + (dataType === 'games' ? 1 : 0)) * 50}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
@@ -436,7 +433,10 @@ useEffect(() => {
             );
           case 3:
             const filteredTopics = filterItems(topics);
-             const selectedUnit = units.find(u => u.id === selection.unitId);
+            const selectedUnit = units.find(u => u.id === selection.unitId);
+
+            const hasUnitOzet = dataType === 'ozetler' && selectedUnit && (selectedUnit as any).hasUnitOzet;
+
             return (
                 <>
                     <SearchInput value={searchQuery} onChange={setSearchQuery} />
@@ -452,11 +452,11 @@ useEffect(() => {
                                 delay={0}
                             />
                         )}
-                        {dataType === 'ozetler' && selectedUnit?.hasUnitOzet && !searchQuery && (
-                             <SelectionCard 
+                        {hasUnitOzet && !searchQuery && (
+                            <SelectionCard 
                                 key="unit-summary"
                                 title={`${selection.unitName} (Ünite Özeti)`}
-                                icon={Book}
+                                icon={BookOpen}
                                 color="from-purple-600 to-indigo-500"
                                 onClick={() => handleSelectTopic(selection.unitId, `${selection.unitName} (Ünite Özeti)`)}
                                 delay={0}
@@ -472,9 +472,9 @@ useEffect(() => {
                                 onClick={() => handleSelectTopic(topic.id, topic.title)}
                                 delay={(idx + 1) * 50}
                             />
-                        )) : (specialOptions.length === 0 || searchQuery) ? (
+                        )) : (hasUnitOzet || (dataType === 'games' && !searchQuery)) ? null : (
                             <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde konu bulunamadı.</p>
-                        ) : null}
+                        )}
                     </div>
                 </>
             );
@@ -486,7 +486,7 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 font-sans text-white">
         
-        <div className="max-w-7xl mx-auto flex items-center justify-between mb-8 md:mb-12 pt-2">
+        <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
             <button 
                 onClick={handleBack}
                 className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
@@ -565,4 +565,3 @@ useEffect(() => {
     </div>
   );
 }
-```
