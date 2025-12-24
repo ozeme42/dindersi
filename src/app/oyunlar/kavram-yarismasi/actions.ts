@@ -3,6 +3,8 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
+import fs from 'fs/promises';
+import path from 'path';
 import { db } from "@/lib/firebase";
 import { 
   collection, 
@@ -26,44 +28,39 @@ export async function getConceptQuizAction(
     { topicId }: { topicId?: string; }
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
+    if (!topicId) {
+        return { error: "Geçerli bir konu ID'si gerekli.", questions: null };
+    }
+
     try {
-        if (!topicId) {
-             return { error: "Geçerli bir konu ID'si gerekli.", questions: null };
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        const allItemsForTopicPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+
+        const [fileContent, allItemsContent] = await Promise.all([
+            fs.readFile(filePath, 'utf-8').catch(() => null),
+            fs.readFile(allItemsForTopicPath, 'utf-8').catch(() => null)
+        ]);
+
+        if (!fileContent || !allItemsContent) {
+            return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
         }
 
-        // Get all definitions for the selected topic
-        const definitionsQuery = query(
-            collection(db, "activityItems"), 
-            where("topicId", "==", topicId), 
-            where("type", "==", "definition")
+        const allDefinitions: ActivityItem[] = JSON.parse(fileContent).filter((item: ActivityItem) => 
+            item.type === 'definition' && item.content?.term && item.content?.definition
         );
         
-        // Get ALL concepts for the same topic to use as distractors
-        const allItemsQuery = query(
-            collection(db, "activityItems"), 
-            where("topicId", "==", topicId),
-            where("type", "in", ["concept", "definition"])
-        );
-
-        const [definitionsSnapshot, allItemsSnapshot] = await Promise.all([
-            getDocs(definitionsQuery),
-            getDocs(allItemsQuery),
-        ]);
-        
-        const allDefinitions = definitionsSnapshot.docs
-            .map(doc => doc.data() as ActivityItem)
-            .filter(item => item.content?.term && item.content?.definition);
-
-        // Create a unique set of all terms (concepts) within the topic
+        const allItems: ActivityItem[] = JSON.parse(allItemsContent);
         const allTermsInTopic = [...new Set(
-            allItemsSnapshot.docs.map(doc => (doc.data() as ActivityItem).content.term || (doc.data() as ActivityItem).content.text).filter(Boolean)
+            allItems
+                .map(item => item.content?.term || item.content?.text)
+                .filter(Boolean)
         )] as string[];
 
         if (allDefinitions.length < 1) {
             return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
         if (allTermsInTopic.length < 8) {
-             return { error: "Bu oyun için en az 8 farklı kavram gereklidir. Lütfen veri bankasına daha fazla kavram ekleyin.", questions: null };
+            return { error: "Bu oyun için en az 8 farklı kavram gereklidir. Lütfen veri bankasına daha fazla kavram ekleyin.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -72,15 +69,13 @@ export async function getConceptQuizAction(
             const correctAnswer = item.content.term!;
             const definition = item.content.definition!;
 
-            // Get 7 other random terms from the topic to use as distractors
             const distractors = allTermsInTopic
-                .filter(concept => concept !== correctAnswer) // Exclude the correct answer
-                .sort(() => 0.5 - Math.random()) // Shuffle the rest
-                .slice(0, 7); // Get the first 7
+                .filter(concept => concept !== correctAnswer)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 7);
 
-            // Ensure we have enough distractors
             if (distractors.length < 7) {
-                continue; // Skip this question if not enough distractors can be found
+                continue; 
             }
 
             const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
