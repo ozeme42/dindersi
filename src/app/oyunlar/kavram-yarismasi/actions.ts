@@ -28,7 +28,7 @@ export async function getConceptQuizAction(
     noStore();
     try {
         if (!topicId) {
-             return { error: "Lütfen bir konu seçerek devam edin.", questions: null };
+             return { error: "Geçerli bir konu ID'si gerekli.", questions: null };
         }
 
         // Get all definitions for the selected topic
@@ -62,8 +62,8 @@ export async function getConceptQuizAction(
         if (allDefinitions.length < 1) {
             return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
-        if (allTermsInTopic.length < 4) {
-             return { error: "Bu oyun için en az 4 farklı kavram gereklidir. Lütfen veri bankasına daha fazla kavram ekleyin.", questions: null };
+        if (allTermsInTopic.length < 8) {
+             return { error: "Bu oyun için en az 8 farklı kavram gereklidir. Lütfen veri bankasına daha fazla kavram ekleyin.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -72,14 +72,14 @@ export async function getConceptQuizAction(
             const correctAnswer = item.content.term!;
             const definition = item.content.definition!;
 
-            // Get 3 other random terms from the topic to use as distractors
+            // Get 7 other random terms from the topic to use as distractors
             const distractors = allTermsInTopic
                 .filter(concept => concept !== correctAnswer) // Exclude the correct answer
                 .sort(() => 0.5 - Math.random()) // Shuffle the rest
-                .slice(0, 3); // Get the first 3
+                .slice(0, 7); // Get the first 7
 
             // Ensure we have enough distractors
-            if (distractors.length < 3) {
+            if (distractors.length < 7) {
                 continue; // Skip this question if not enough distractors can be found
             }
 

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
@@ -47,9 +48,16 @@ function KavramYarismaGame() {
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
         };
+
+        if (!params.topicId) {
+             setError("Geçerli bir konu ID'si gerekli.");
+             setGameState('error');
+             return;
+        }
+
         const { questions: fetchedQuestions, error: fetchError } = await getConceptQuizAction(params);
         
-        if (fetchError || !fetchedQuestions) {
+        if (fetchError || !fetchedQuestions || fetchedQuestions.length === 0) {
             setError(fetchError || "Sorular yüklenemedi.");
             setGameState('error');
         } else {
@@ -74,8 +82,8 @@ function KavramYarismaGame() {
         setGameState('playing');
         resetTurn();
     }, [questions]);
-    
-     const resetTurn = useCallback(() => {
+
+    const resetTurn = useCallback(() => {
         setTimeLeft(15);
         setWrongGuesses(0);
         setFeedbackMsg('');
@@ -105,7 +113,7 @@ function KavramYarismaGame() {
         setFeedbackMsg('Süre Bitti!');
         const currentQ = questions[currentQIndex];
         if (currentQ) {
-            setCorrectCard(currentQ.a);
+            setCorrectCard(currentQ.correctAnswer);
         }
         setDisabledCards(questions[currentQIndex]?.options.map(c => c) || []);
         setIsRoundOver(true);
@@ -118,7 +126,7 @@ function KavramYarismaGame() {
         const currentQ = questions[currentQIndex];
         if (!currentQ) return;
 
-        if (concept === currentQ.a) {
+        if (concept === currentQ.correctAnswer) {
             if (timerRef.current) clearInterval(timerRef.current);
             stopSound('timer');
             playSound('correct');
@@ -136,7 +144,7 @@ function KavramYarismaGame() {
                 if (timerRef.current) clearInterval(timerRef.current);
                 stopSound('timer');
                 setFeedbackMsg('Hakkın Kalmadı!');
-                setCorrectCard(currentQ.a);
+                setCorrectCard(currentQ.correctAnswer);
                 setIsRoundOver(true);
             } else {
                 setFeedbackMsg('Yanlış! Son hakkın.');
@@ -192,7 +200,7 @@ function KavramYarismaGame() {
         return (
              <div className="flex h-screen items-center justify-center p-4 bg-slate-950">
                 <div className="bg-slate-900 border border-red-500/30 text-white px-8 py-6 rounded-3xl relative max-w-md text-center shadow-2xl">
-                    <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                    <Zap className="h-12 w-12 text-red-500 mx-auto mb-4" />
                     <h3 className="text-xl font-bold mb-2">Hata Oluştu</h3>
                     <p className="text-slate-400 mb-6">{error}</p>
                     <Button asChild className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 rounded-xl">
@@ -219,7 +227,7 @@ function KavramYarismaGame() {
                     </div>
                     
                     <div>
-                        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 mb-2">KAVRAM AVCISI</h1>
+                        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500 mb-2">KAVRAM YARIŞMASI</h1>
                         <p className="text-slate-400 text-lg">Bilgini test etmeye hazır mısın?</p>
                     </div>
 
@@ -285,7 +293,7 @@ function KavramYarismaGame() {
                                 <Zap className="h-6 w-6 text-emerald-400" />
                             </div>
                             <div>
-                                <h1 className="text-lg font-bold text-white">Kavram Avcısı</h1>
+                                <h1 className="text-lg font-bold text-white">Kavram Yarışması</h1>
                                 <p className="text-slate-400 text-xs font-mono">SORU {currentQIndex + 1}/{questions.length}</p>
                             </div>
                         </div>
@@ -332,13 +340,13 @@ function KavramYarismaGame() {
             </div>
 
             {/* --- OYUN ALANI --- */}
-            <main className="relative flex-grow flex flex-col items-center justify-center p-4 w-full max-w-4xl z-10 pb-24 md:pb-8">
+            <main className="relative flex-grow flex flex-col items-center justify-center p-4 w-full max-w-5xl z-10 pb-24 md:pb-8">
                 
                 {/* Soru Kartı */}
                 <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-3xl shadow-2xl mb-6 relative group animate-in slide-in-from-bottom-4 duration-500">
                     <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-3xl" />
                     <h3 className="text-xl md:text-3xl font-bold text-white leading-relaxed text-center">
-                        {currentQ.q}
+                        {currentQ.definition}
                     </h3>
                 </div>
 
@@ -353,16 +361,16 @@ function KavramYarismaGame() {
                 )}
 
                 {/* Seçenekler */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
                     {currentQ.options.map((option) => {
                         const isCorrectOption = option === correctCard;
                         const isDisabledOption = disabledCards.includes(option);
                         
                         let btnStyle = "h-auto py-6 text-lg md:text-xl font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group ";
                         
-                        if (isCorrectOption) {
+                        if (correctCard === option) {
                             btnStyle += "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
-                        } else if (isDisabledOption) {
+                        } else if (disabledCards.includes(option)) {
                             btnStyle += "bg-slate-800 border-red-500/50 text-red-400 opacity-50 cursor-not-allowed";
                         } else {
                             btnStyle += "bg-slate-900/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-emerald-500/50 hover:text-white hover:shadow-lg";
@@ -376,10 +384,10 @@ function KavramYarismaGame() {
                                 disabled={disabledCards.includes(option) || correctCard !== null || isRoundOver}
                             >
                                 <span className="relative z-10">{option}</span>
-                                {isCorrectOption && (
+                                {correctCard === option && (
                                     <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-emerald-200 animate-in zoom-in duration-300" />
                                 )}
-                                {isDisabledOption && !isCorrectOption && (
+                                {disabledCards.includes(option) && correctCard !== option && (
                                     <XCircle className="absolute right-4 top-1/2 -translate-y-1/2 h-6 w-6 text-red-400 animate-in zoom-in duration-300" />
                                 )}
                             </button>
