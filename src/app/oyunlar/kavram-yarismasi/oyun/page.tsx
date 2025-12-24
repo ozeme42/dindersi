@@ -10,7 +10,6 @@ export default async function KavramYarismaOyunPage({ searchParams }: { searchPa
   
   const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
   
-  // FIX: The game only strictly requires a topicId. The previous check for courseId and unitId was too restrictive.
   if (!topicId) {
       return (
           <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
