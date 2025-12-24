@@ -2,21 +2,26 @@
 'use server';
 
 import { Suspense } from 'react';
-import KavramYarismaOyunClientPage from '@/app/oyunlar/kavram-yarismasi/oyun/client-page';
+import KavramYarismaOyunClientPage from './client-page';
 import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import { Loader2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
 
-export default async function KavramYarismaOyunPage({ params, searchParams }: { 
-    params: { topicId: string };
+export const dynamic = 'force-dynamic';
+
+export default async function KavramYarismaOyunPage({ searchParams }: { 
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
   
-  const topicId = params.topicId;
+  const topicId = typeof searchParams.topicId === 'string' ? searchParams.topicId : '';
 
   if (!topicId) {
-      // This should technically not be reached with the new file-based routing
-      return notFound();
+      // Bu hata, URL'de topicId olmadığında gösterilir.
+      return (
+           <div className="flex h-screen items-center justify-center bg-slate-950 text-red-400">
+              Hata: Geçerli bir konu ID'si gerekli. Lütfen kurulum ekranından bir konu seçin.
+          </div>
+      )
   }
 
   // Veriyi sunucuda çek

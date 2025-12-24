@@ -4,11 +4,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { 
     ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, 
-    Sparkles, Loader2, Gamepad2, Users, ChevronRight, RefreshCcw
+    Sparkles, Loader2, Gamepad2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
@@ -37,7 +37,7 @@ const GlassPanel = ({ children, className }: { children: React.ReactNode, classN
         className
     )}>
          {/* Dekoratif üst çizgi */}
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 opacity-50"></div>
         {children}
     </div>
 );
@@ -65,7 +65,7 @@ const SelectionCard = ({
         onClick={onClick}
         disabled={!hasContent}
         className={cn(
-            "group relative w-full overflow-hidden rounded-2xl p-[1px] transition-all duration-300 text-left h-full",
+            "group relative w-full overflow-hidden rounded-xl p-[1px] transition-all duration-300 text-left h-full",
             hasContent ? "hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-500/10" : "opacity-40 cursor-not-allowed",
             "animate-in slide-in-from-bottom-4 fade-in fill-mode-forwards"
         )}
@@ -78,11 +78,11 @@ const SelectionCard = ({
         )}></div>
         
         {/* Kart İçeriği */}
-        <div className="relative h-full bg-[#1e293b] rounded-[15px] p-4 md:p-6 flex flex-row items-center gap-4 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
+        <div className="relative h-full bg-[#1e293b] rounded-[10px] p-3 md:p-6 flex items-center gap-3 md:gap-6 border border-white/5 group-hover:bg-[#1e293b]/95 transition-colors">
             
             {/* İkon Kutusu */}
             <div className={cn(
-                "h-12 w-12 md:h-16 md:w-16 rounded-xl flex items-center justify-center shadow-lg shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300 border border-white/10",
+                "h-12 w-12 md:h-16 md:w-16 rounded-lg md:rounded-2xl flex items-center justify-center shadow-lg shrink-0 bg-gradient-to-br text-white transition-transform group-hover:scale-110 duration-300 border border-white/10",
                 color
             )}>
                 <Icon className="h-6 w-6 md:h-8 md:w-8 drop-shadow-md" />
@@ -102,100 +102,12 @@ const SelectionCard = ({
             </div>
             
             {/* Sağ Ok */}
-            <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shrink-0 ml-2">
-                <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-slate-500 group-hover:text-white" />
+            <div className="h-6 w-6 md:h-10 md:w-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-all shrink-0 ml-2">
+                <ArrowRight className="h-3 w-3 md:h-5 md:w-5 text-slate-500 group-hover:text-white" />
             </div>
         </div>
     </button>
 );
-
-// --- SIDEBAR STEPPER COMPONENT (Masaüstü İçin Yeni) ---
-const SidebarStepper = ({ 
-    currentStep, 
-    steps, 
-    selection, 
-    onJumpToStep 
-}: { 
-    currentStep: number, 
-    steps: any[], 
-    selection: any, 
-    onJumpToStep: (step: number) => void 
-}) => {
-    return (
-        <div className="flex flex-col gap-6 py-4">
-            {steps.map((step) => {
-                const isCompleted = currentStep > step.id;
-                const isCurrent = currentStep === step.id;
-                const isPending = currentStep < step.id;
-
-                let label = step.name;
-                let subLabel = "Seçim Bekleniyor";
-                let activeColor = "text-slate-500";
-                let borderColor = "border-slate-700 bg-slate-900";
-
-                // Adım durumuna göre içerik belirleme
-                if (step.id === 1) { // Sınıf
-                    if (selection.className) subLabel = selection.className;
-                } else if (step.id === 2) { // Ders
-                    if (selection.courseName) subLabel = selection.courseName;
-                } else if (step.id === 3) { // Ünite
-                    if (selection.unitName) subLabel = selection.unitName;
-                } else if (step.id === 4) { // Konu
-                     if (selection.topicName) subLabel = selection.topicName;
-                }
-
-                if (isCompleted) {
-                    activeColor = "text-cyan-400";
-                    borderColor = "border-cyan-500 bg-cyan-500/20 text-cyan-400";
-                } else if (isCurrent) {
-                    activeColor = "text-white";
-                    borderColor = "border-blue-500 bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]";
-                    subLabel = "Seçim Yapılıyor...";
-                }
-
-                return (
-                    <div key={step.id} className={cn("relative flex gap-4 group", !isPending && "cursor-pointer")} onClick={() => !isPending && onJumpToStep(step.id)}>
-                        {/* Dikey Çizgi */}
-                        {step.id !== steps.length && (
-                            <div className={cn(
-                                "absolute left-[19px] top-10 bottom-[-24px] w-[2px] transition-colors duration-500",
-                                isCompleted ? "bg-cyan-500/50" : "bg-slate-800"
-                            )} />
-                        )}
-
-                        {/* Yuvarlak İkon */}
-                        <div className={cn(
-                            "relative z-10 w-10 h-10 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-300",
-                            borderColor
-                        )}>
-                            {isCompleted ? <Check className="w-5 h-5" /> : <step.icon className="w-5 h-5" />}
-                        </div>
-
-                        {/* Metinler */}
-                        <div className="flex flex-col pt-1">
-                            <span className={cn("text-xs font-bold uppercase tracking-wider transition-colors", activeColor)}>
-                                {label}
-                            </span>
-                            <span className={cn(
-                                "text-sm font-medium transition-colors line-clamp-1",
-                                isCompleted ? "text-slate-200" : isCurrent ? "text-white animate-pulse" : "text-slate-600"
-                            )}>
-                                {subLabel}
-                            </span>
-                        </div>
-                        
-                        {/* Geri Dön İpucu (Hover) */}
-                        {isCompleted && (
-                            <div className="absolute right-0 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <RefreshCcw className="w-4 h-4 text-slate-400" />
-                            </div>
-                        )}
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
 
 // --- MAIN PAGE COMPONENT ---
 const steps = [
@@ -287,18 +199,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       fetchManifest();
   }, [fetchManifest]);
 
-  const handleJumpToStep = (stepId: number) => {
-      if (stepId < currentStep) {
-          if (stepId === 1) {
-              setSelection(prev => ({ ...prev, courseId: '', courseName: '', unitId: '', unitName: '', topicName: '' }));
-          }
-           if (stepId === 2) {
-              setSelection(prev => ({ ...prev, unitId: '', unitName: '', topicName: '' }));
-          }
-          setCurrentStep(stepId);
-      }
-  };
-
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
         ...selection, 
@@ -365,20 +265,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       if (!basePath) {
           basePath = isStatic ? 'oyunlar' : 'student/oyunlar';
       }
-
-      // KAVRAM YARIŞMASI İÇİN ÖZEL YÖNLENDİRME
-      if (finalGamePath === 'kavram-yarismasi') {
-           const params = new URLSearchParams({
-            courseId: selection.courseId,
-            courseName: selection.courseName,
-            unitId: selection.unitId,
-            unitName: selection.unitName,
-            topicName: topicName,
-          });
-          const url = `/oyunlar/kavram-yarismasi/oyun/konu/${topicId}?${params.toString()}`;
-          router.push(url);
-          return;
-      }
       
       const params = new URLSearchParams({
         courseId: selection.courseId,
@@ -400,10 +286,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       router.push(finalUrl);
   };
 
-  const formatGroupName = (name: string) => !isNaN(parseInt(name)) ? `${name}. Sınıf` : name;
-
-  const gridClass = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6";
-
   const renderContent = () => {
       if (isLoading) {
           return (
@@ -420,7 +302,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       switch(currentStep) {
           case 1:
             return (
-                <div className={gridClass}>
+                <div className="grid grid-cols-1 gap-3 md:gap-6">
                     {courses.length > 0 ? courses.map((course, idx) => (
                         <SelectionCard 
                             key={course.id}
@@ -436,7 +318,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             );
           case 2:
             return (
-                <div className={gridClass}>
+                <div className="grid grid-cols-1 gap-3 md:gap-6">
                     {dataType === 'games' && (
                         <SelectionCard 
                             key="all-units"
@@ -457,14 +339,14 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                             color={selection.courseColor}
                             onClick={() => handleSelectUnit(unit.id, unit.title)}
                             delay={(idx + (dataType === 'games' ? 1 : 0)) * 50}
-                            hasContent={true}
+                            hasContent={dataType === 'ozetler' ? ((unit as any).hasUnitOzet || (unit.topics.length > 0)) : true}
                         />
                     ))}
                 </div>
             );
           case 3:
             return (
-                <div className={gridClass}>
+                <div className="grid grid-cols-1 gap-3 md:gap-6">
                     {dataType === 'games' && (
                           <SelectionCard 
                             key="all-topics"
@@ -517,29 +399,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             <div className="w-9 md:w-20 shrink-0"></div>
         </div>
 
-        <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
-            <div className="relative flex justify-between items-center">
-                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
-                <div 
-                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-                ></div>
-
-                {steps.slice(0, 3).map((step) => {
-                    const isActive = currentStep >= step.id;
-                    const isCurrent = currentStep === step.id;
-                    return (
-                        <div key={step.id} className="flex flex-col items-center gap-1">
-                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isCurrent ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : isActive ? "bg-cyan-600 border-cyan-400 text-white" : "bg-slate-900 border-slate-700 text-slate-500")}>
-                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
-                            </div>
-                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-
         <GlassPanel className="max-w-5xl mx-auto min-h-[calc(100vh-240px)] flex flex-col">
             <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
                 <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-3">
@@ -548,12 +407,25 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                 </h2>
                 
                 <div className="px-2 py-0.5 md:px-4 md:py-2 rounded bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                    {currentStep} / {steps.length}
+                    ADIM {currentStep} / {steps.length}
                 </div>
             </div>
 
             <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
                 {renderContent()}
+            </div>
+
+            <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
+                <span className="truncate mr-4">
+                    {currentStep === 1 && "Bir ders seçerek başla."}
+                    {currentStep === 2 && `${selection.courseName} > Bir ünite seç.`}
+                    {currentStep === 3 && `${selection.unitName} > Bir konu seç.`}
+                </span>
+                <div className="flex gap-1 md:gap-2 shrink-0">
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:100ms]"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:200ms]"></div>
+                </div>
             </div>
         </GlassPanel>
 
