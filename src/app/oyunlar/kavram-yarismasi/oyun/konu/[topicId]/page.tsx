@@ -6,9 +6,6 @@ import KavramYarismaOyunClientPage from '@/app/oyunlar/kavram-yarismasi/oyun/cli
 import { getConceptQuizAction } from '@/app/oyunlar/kavram-yarismasi/actions';
 import { Loader2 } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
-
-export const dynamic = 'force-dynamic';
 
 export default async function KavramYarismaOyunPage({ params, searchParams }: { 
     params: { topicId: string };
