@@ -74,6 +74,7 @@ export default function ScoreEventsPage() {
 
         const result = await getScoreEvents({ 
             cursor,
+            direction,
             searchTerm, 
             showOnlyExcessiveAttempts,
         });
@@ -90,7 +91,7 @@ export default function ScoreEventsPage() {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsLoading(false);
-    }, [searchTerm, showOnlyExcessiveAttempts, toast, pageCursors]);
+    }, [searchTerm, showOnlyExcessiveAttempts, toast]); // pageCursors removed from dependencies
     
      useEffect(() => {
         // Debounce search/filter changes
@@ -100,7 +101,7 @@ export default function ScoreEventsPage() {
             fetchData(0);
         }, 500); 
         return () => clearTimeout(handler);
-    }, [searchTerm, showOnlyExcessiveAttempts, fetchData]); // fetchData is stable due to useCallback
+    }, [searchTerm, showOnlyExcessiveAttempts, fetchData]);
 
 
     const handleSelect = (id: string) => {
@@ -144,19 +145,20 @@ export default function ScoreEventsPage() {
     const handlePrevPage = () => {
         if (currentPageIndex > 0) {
             const prevPageIndex = currentPageIndex - 1;
-            // For 'prev', we don't need to pass a direction as the cursor logic handles it.
-            fetchData(prevPageIndex); 
+            fetchData(prevPageIndex, 'prev');
             setCurrentPageIndex(prevPageIndex);
         }
     };
     
-    const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length;
+    const isAllOnPageSelected = events.length > 0 && selectedEventIds.size === events.length && events.every(e => selectedEventIds.has(e.id));
+    
     const isLastPage = useMemo(() => {
-        // If we are on the last known page cursor and the number of events is less than itemsPerPage, it's the last page.
-        // The last item in pageCursors is always for the *next* page, so we look at the one before.
-        const itemsPerPage = 25; // As defined in actions.ts
-        return currentPageIndex === pageCursors.length - 2 && events.length < itemsPerPage;
-    }, [currentPageIndex, pageCursors, events]);
+        // When we are at the last page, the pageCursors array will have one more item (for the next page)
+        // than the current page index. If the number of items on the current page is less than the page size,
+        // it means there are no more items to fetch.
+        const itemsPerPage = 25; // This should match the limit in the server action
+        return events.length < itemsPerPage;
+    }, [events]);
 
 
     return (
