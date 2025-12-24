@@ -70,11 +70,11 @@ export function BottomNavBar() {
         return null;
     }
     
-    // 2. Öğrencinin odaklanması gereken (oyun/sınav) sayfalarda veya gömülü içeriklerde gizle
-    const studentGamePaths = ['/coz', '/oyun/', '/ders/', '/soru-bankasi/test'];
+    // 2. Öğrencinin odaklanması gereken (oyun/sınav/ders) sayfalarda veya gömülü içeriklerde gizle
+    const studentDistractionFreePaths = ['/coz', '/oyun/', '/ders/', '/soru-bankasi/test'];
     const isEmbedded = searchParams.get('embedded') === 'true';
 
-    if (user.role === 'student' && (isEmbedded || studentGamePaths.some(p => pathname.includes(p)))) {
+    if (user.role === 'student' && (isEmbedded || studentDistractionFreePaths.some(p => pathname.includes(p)))) {
         return null;
     }
 
