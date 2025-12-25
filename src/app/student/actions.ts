@@ -60,11 +60,11 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
 
         // Check if the streak goal for today has already been met and recorded.
         if (userData.lastStreakDate === todayStr) {
-            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
+            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
 
-        // Calculate total points earned today
+        // Calculate total points earned today, EXCLUDING smartboard activities
         const startOfTodayDate = startOfDay(today);
         const endOfTodayDate = endOfDay(today);
         const scoreEventsQuery = query(
@@ -75,11 +75,20 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         );
         
         const eventsSnapshot = await getDocs(scoreEventsQuery);
-        const todayScore = eventsSnapshot.docs.reduce((sum, doc) => sum + doc.data().points, 0);
+        
+        const todayScore = eventsSnapshot.docs.reduce((sum, doc) => {
+            const event = doc.data();
+            // Only add points if it's NOT a smartboard game type
+            if (!event.gameType?.startsWith('smartboard_')) {
+                return sum + event.points;
+            }
+            return sum;
+        }, 0);
+
 
         // If the 500 point goal for today is not met yet, exit.
         if (todayScore < 500) {
-            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
+            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
         
@@ -115,7 +124,7 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
             lastStreakDate: todayStr, // The last day the goal was met
         });
         
-        const canSpinWheel = newStreak >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
+        const canSpinWheel = newStreak >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
 
         return { streakUpdated: true, newStreak, canSpinWheel };
 
