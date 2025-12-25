@@ -78,8 +78,8 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         
         const todayScore = eventsSnapshot.docs.reduce((sum, doc) => {
             const event = doc.data();
-            // Only add points if it's NOT a smartboard game type
-            if (!event.gameType?.startsWith('smartboard_')) {
+            // Only add points if it's NOT a smartboard game type or Derece/Manuel Puanı
+            if (!event.gameType?.startsWith('smartboard_') && event.gameType !== 'Derece Puanı' && event.gameType !== 'Manuel Puan') {
                 return sum + event.points;
             }
             return sum;
@@ -94,14 +94,17 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         
         // At this point, the 500 point goal for today has been reached for the first time.
         
-        const lastStreakDate = userData.lastStreakDate ? new Date(userData.lastStreakDate) : null;
+        const lastStreakDateObj = userData.lastStreakDate 
+            ? (userData.lastStreakDate instanceof Timestamp ? userData.lastStreakDate.toDate() : new Date(userData.lastStreakDate))
+            : null;
+            
         const currentStreak = userData.currentStreak || 0;
         const longestStreak = userData.longestStreak || 0;
 
         let newStreak = currentStreak;
 
-        if (lastStreakDate) {
-            const diff = differenceInCalendarDays(today, lastStreakDate);
+        if (lastStreakDateObj) {
+            const diff = differenceInCalendarDays(today, lastStreakDateObj);
             if (diff === 1) {
                 // Goal met yesterday, streak continues.
                 newStreak = currentStreak + 1;
