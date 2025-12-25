@@ -16,51 +16,54 @@ import {
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 export type ScrambledSentenceData = {
     correctSentence: string;
 };
 
 export async function getCumleOlusturmaAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ data: ScrambledSentenceData[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
+        let allItems: ActivityItem[] = [];
+
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+            try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                allItems = JSON.parse(fileContent);
+            } catch (fileError: any) {
+                if (fileError.code === 'ENOENT') {
+                    return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+                }
+                throw fileError;
+            }
+        } else if (topicId === 'all') {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
             return { error: "Oynamak için bir konu seçmelisiniz.", data: null };
         }
         
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        const allSentences = allItems
+            .filter(item => item.type === 'sentence' && item.content.text && item.content.text.trim().length > 0 && item.content.text.trim().split(' ').length > 2)
+            .map(item => item.content.text!);
 
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
-
-            const allSentences = allItems
-                .filter(item => item.type === 'sentence' && item.content.text && item.content.text.trim().length > 0 && item.content.text.trim().split(' ').length > 2)
-                .map(item => item.content.text!);
-
-            if (allSentences.length < 1) {
-                return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
-            }
-            
-            for (let i = allSentences.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
-            }
-
-            const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
-                correctSentence: sentence.trim(),
-            }));
-
-            return { data: JSON.parse(JSON.stringify(gameData)) };
-        
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
-            }
-            throw fileError;
+        if (allSentences.length < 1) {
+            return { error: "Cümle Oluşturma oynamak için bu konuda yeterli uygunlukta cümle bulunamadı.", data: null };
         }
+        
+        for (let i = allSentences.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allSentences[i], allSentences[j]] = [allSentences[j], allSentences[i]];
+        }
+
+        const gameData: ScrambledSentenceData[] = allSentences.map(sentence => ({
+            correctSentence: sentence.trim(),
+        }));
+
+        return { data: JSON.parse(JSON.stringify(gameData)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getCumleOlusturmaAction):", error);

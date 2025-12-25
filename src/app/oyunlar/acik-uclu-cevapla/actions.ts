@@ -16,52 +16,56 @@ import {
   serverTimestamp, 
   increment 
 } from 'firebase/firestore';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 
 export async function getAcikUcluCevaplaAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
+        let staticItems: ActivityItem[] = [];
+
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+             try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                staticItems = JSON.parse(fileContent);
+            } catch (fileError: any) {
+                if (fileError.code === 'ENOENT') {
+                    return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+                }
+                throw fileError;
+            }
+        } else if (topicId === 'all') {
+             staticItems = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
              return { error: "Açık Uçlu Cevaplama oynamak için belirli bir konu seçmelisiniz.", questions: [] };
         }
-        
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const staticItems: ActivityItem[] = JSON.parse(fileContent);
-            
-            const allDefinitions = staticItems
-                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            if (allDefinitions.length < 1) {
-                return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
-            }
-            
-            const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
+        const allDefinitions = staticItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            const gameQuestions: Question[] = selectedDefinitions.map((item, index) => ({
-                id: `${topicId}-${index}`,
-                text: item.content.definition!,
-                type: 'Açık Uçlu',
-                correctAnswer: item.content.term!,
-                difficulty: 'Orta',
-                courseId: item.courseId,
-                unitId: item.unitId,
-                topicId: item.topicId,
-                topic: '', 
-            }));
-
-            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-            }
-            throw fileError;
+        if (allDefinitions.length < 1) {
+            return { error: "Açık Uçlu Cevaplama için bu konuda uygun tanım bulunamadı.", questions: [] };
         }
+        
+        const selectedDefinitions = allDefinitions.sort(() => 0.5 - Math.random());
+
+        const gameQuestions: Question[] = selectedDefinitions.map((item, index) => ({
+            id: `${topicId}-${index}`,
+            text: item.content.definition!,
+            type: 'Açık Uçlu',
+            correctAnswer: item.content.term!,
+            difficulty: 'Orta',
+            courseId: item.courseId,
+            unitId: item.unitId,
+            topicId: item.topicId,
+            topic: '', 
+        }));
+
+        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
+
     } catch (error: any) {
         console.error("Error getting Acik Uclu questions:", error);
         return { error: "Açık uçlu sorular alınırken bir hata oluştu.", questions: [] };

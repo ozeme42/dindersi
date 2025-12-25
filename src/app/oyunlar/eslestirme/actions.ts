@@ -19,6 +19,7 @@ import {
 } from 'firebase/firestore';
 import fs from 'fs/promises';
 import path from 'path';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 export type MatchingPair = {
     id: string;
@@ -28,46 +29,48 @@ export type MatchingPair = {
 };
 
 export async function getEslestirmeAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-            return { error: "Eşleştirme oynamak için belirli bir konu seçmelisiniz.", pairs: null };
+        let allItems: ActivityItem[] = [];
+
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+             try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                allItems = JSON.parse(fileContent);
+            } catch (fileError: any) {
+                if (fileError.code === 'ENOENT') {
+                     return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
+                }
+                throw fileError;
+            }
+        } else if (topicId === 'all') {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
+             return { error: "Eşleştirme oynamak için belirli bir konu seçmelisiniz.", pairs: null };
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
+        const validItems = allItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            const validItems = allItems
-                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
-
-            if (validItems.length < 4) {
-                return { error: "Eşleştirme oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
-            }
-
-            const selectedItems = validItems.sort(() => 0.5 - Math.random());
-
-            const gamePairs: MatchingPair[] = [];
-            selectedItems.forEach((item, index) => {
-                const pairId = `pair-${index}`;
-                gamePairs.push({ id: `term-${index}`, type: 'term', content: item.content.term!, pairId });
-                gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
-            });
-
-            const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
-
-            return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
-
-        } catch (fileError: any) {
-             if (fileError.code === 'ENOENT') {
-                 return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
-            }
-            throw fileError;
+        if (validItems.length < 4) {
+            return { error: "Eşleştirme oynamak için bu konuda en az 4 adet tanım ve kavram gereklidir.", pairs: null };
         }
+
+        const selectedItems = validItems.sort(() => 0.5 - Math.random());
+
+        const gamePairs: MatchingPair[] = [];
+        selectedItems.forEach((item, index) => {
+            const pairId = `pair-${index}`;
+            gamePairs.push({ id: `term-${index}`, type: 'term', content: item.content.term!, pairId });
+            gamePairs.push({ id: `def-${index}`, type: 'definition', content: item.content.definition!, pairId });
+        });
+
+        const shuffledPairs = gamePairs.sort(() => Math.random() - 0.5);
+
+        return { pairs: JSON.parse(JSON.stringify(shuffledPairs)) };
 
     } catch (error: any) {
         console.error("Server Action Error (getEslestirmeAction):", error);

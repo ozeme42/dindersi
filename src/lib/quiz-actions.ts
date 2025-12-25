@@ -1,9 +1,12 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs, limit as firestoreLimit } from "firebase/firestore";
-import type { Question, GetQuizInput, GetQuizOutput } from "@/lib/types";
+import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
+import path from 'path';
+import fs from 'fs/promises';
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
@@ -100,4 +103,58 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         }
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
+}
+
+/**
+ * Fetches all activity items for a given course or unit when "all" is selected.
+ * This is crucial for static builds where we can't perform complex queries.
+ */
+export async function getStaticQuestionsForGame(params: {
+  courseId?: string;
+  unitId?: string;
+}): Promise<ActivityItem[]> {
+    const { courseId, unitId } = params;
+
+    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+    const manifest = JSON.parse(manifestContent);
+
+    let topicIds: string[] = [];
+
+    // Find all topics under the specified course or unit
+    for (const group of manifest.classGroups) {
+        for (const course of group.courses) {
+            if (courseId && course.id !== courseId) continue;
+            
+            for (const unit of course.units) {
+                if (unitId && unitId !== 'all' && unit.id !== unitId) continue;
+                
+                unit.topics.forEach((topic: { id: string }) => {
+                    topicIds.push(topic.id);
+                });
+            }
+        }
+    }
+    
+    // Remove duplicates
+    topicIds = [...new Set(topicIds)];
+
+    let allItems: ActivityItem[] = [];
+
+    // Fetch and combine activity items from all relevant topic files
+    for (const topicId of topicIds) {
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const items: ActivityItem[] = JSON.parse(fileContent);
+            allItems = allItems.concat(items);
+        } catch (error: any) {
+            // ENOENT means file not found, which is okay, just skip it.
+            if (error.code !== 'ENOENT') {
+                console.warn(`Could not read or parse activity file for topic ${topicId}:`, error);
+            }
+        }
+    }
+    
+    return allItems;
 }

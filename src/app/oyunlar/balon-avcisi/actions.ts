@@ -7,6 +7,7 @@ import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 export type BalloonHunterQuestion = {
     q: string; // The definition
@@ -15,51 +16,53 @@ export type BalloonHunterQuestion = {
 }
 
 export async function getBalloonHunterDataAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
+        let allItems: ActivityItem[] = [];
+
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+            try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                allItems = JSON.parse(fileContent);
+            } catch (fileError: any) {
+                if (fileError.code === 'ENOENT') {
+                    return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
+                }
+                throw fileError;
+            }
+        } else if (topicId === 'all') {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
              return { error: "Oyun oynamak için bir konu seçmelisiniz.", questions: [] };
         }
-        
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
 
-            const allDefinitions = allItems
-                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+        const allDefinitions = allItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            if (allDefinitions.length < 5) {
-                return { error: "Bu oyun için en az 5 farklı tanım/kavram gereklidir.", questions: [] };
-            }
-            
-            const allTerms = allDefinitions.map(item => item.content.term!);
-            
-            const gameQuestions: BalloonHunterQuestion[] = allDefinitions.map(item => {
-                const correctAnswer = item.content.term!;
-                const distractors = allTerms
-                    .filter(term => term !== correctAnswer)
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 4);
-
-                return {
-                    q: item.content.definition!,
-                    a: correctAnswer,
-                    wrongs: distractors,
-                };
-            });
-
-            return { questions: JSON.parse(JSON.stringify(gameQuestions.sort(() => 0.5 - Math.random()))) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-            }
-            throw fileError;
+        if (allDefinitions.length < 5) {
+            return { error: "Bu oyun için en az 5 farklı tanım/kavram gereklidir.", questions: [] };
         }
+        
+        const allTerms = allDefinitions.map(item => item.content.term!);
+        
+        const gameQuestions: BalloonHunterQuestion[] = allDefinitions.map(item => {
+            const correctAnswer = item.content.term!;
+            const distractors = allTerms
+                .filter(term => term !== correctAnswer)
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 4);
+
+            return {
+                q: item.content.definition!,
+                a: correctAnswer,
+                wrongs: distractors,
+            };
+        });
+
+        return { questions: JSON.parse(JSON.stringify(gameQuestions.sort(() => 0.5 - Math.random()))) };
 
     } catch (error: any) {
         console.error("Error getting Balloon Hunter data:", error);

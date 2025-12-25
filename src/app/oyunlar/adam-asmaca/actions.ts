@@ -16,6 +16,7 @@ import {
   where, 
   getCountFromServer,
 } from 'firebase/firestore';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 
 export type HangmanData = {
@@ -24,54 +25,56 @@ export type HangmanData = {
 };
 
 export async function getAdamAsmacaAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ data: HangmanData[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
+        let allItems: ActivityItem[] = [];
+
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+            try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                allItems = JSON.parse(fileContent);
+            } catch (fileError: any) {
+                if (fileError.code === 'ENOENT') {
+                    return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
+                }
+                throw fileError;
+            }
+        } else if (topicId === 'all') {
+            allItems = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
             return { error: "Adam Asmaca oynamak için belirli bir konu seçmelisiniz.", data: null };
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+
+        const suitableItems = allItems
+            .filter(item => 
+                item.type === 'definition' &&
+                item.content &&
+                item.content.term && 
+                item.content.definition &&
+                item.content.term.trim().length >= 4 && 
+                item.content.term.trim().length <= 14 && 
+                !item.content.term.includes(' ') && 
+                turkishAlphabetRegex.test(item.content.term.trim())
+            );
         
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
-
-            const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
-
-            const suitableItems = allItems
-                .filter(item => 
-                    item.type === 'definition' &&
-                    item.content &&
-                    item.content.term && 
-                    item.content.definition &&
-                    item.content.term.trim().length >= 4 && 
-                    item.content.term.trim().length <= 14 && 
-                    !item.content.term.includes(' ') && 
-                    turkishAlphabetRegex.test(item.content.term.trim())
-                );
-            
-            if (suitableItems.length < 3) {
-                return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (4-14 harf, boşluksuz, en az 3 adet).", data: null };
-            }
-            
-            const shuffled = [...suitableItems].sort(() => 0.5 - Math.random());
-            
-            const gameData: HangmanData[] = shuffled.map(item => ({
-                word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
-                hint: item.content.definition!,
-            }));
-
-            return { data: JSON.parse(JSON.stringify(gameData)) };
-        
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", data: null };
-            }
-            throw fileError;
+        if (suitableItems.length < 3) {
+            return { error: "Adam Asmaca oynamak için bu konuda yeterli uygunlukta kelime bulunamadı (4-14 harf, boşluksuz, en az 3 adet).", data: null };
         }
+        
+        const shuffled = [...suitableItems].sort(() => 0.5 - Math.random());
+        
+        const gameData: HangmanData[] = shuffled.map(item => ({
+            word: item.content.term!.trim().toLocaleUpperCase('tr-TR'),
+            hint: item.content.definition!,
+        }));
 
+        return { data: JSON.parse(JSON.stringify(gameData)) };
+        
     } catch (error: any) {
         console.error("Server Action Error (getAdamAsmacaAction):", error);
         return { error: "Oyun verileri alınırken teknik bir hata oluştu.", data: null };
