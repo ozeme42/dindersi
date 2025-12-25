@@ -58,13 +58,13 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         const today = new Date();
         const todayStr = format(today, 'yyyy-MM-dd');
 
-        // Eğer bugün için seri zaten güncellendiyse, tekrar işlem yapma.
-        if (userData.lastStreakCheckDate === todayStr) {
+        // Check if the streak goal for today has already been met and recorded.
+        if (userData.lastStreakDate === todayStr) {
             const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
 
-        // Bugün kazanılan toplam puanı hesapla
+        // Calculate total points earned today
         const startOfTodayDate = startOfDay(today);
         const endOfTodayDate = endOfDay(today);
         const scoreEventsQuery = query(
@@ -77,13 +77,13 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         const eventsSnapshot = await getDocs(scoreEventsQuery);
         const todayScore = eventsSnapshot.docs.reduce((sum, doc) => sum + doc.data().points, 0);
 
-        // Eğer bugün 500 puandan az kazanılmışsa, seri güncellemesi yapma ve çık.
+        // If the 500 point goal for today is not met yet, exit.
         if (todayScore < 500) {
             const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
         
-        // Bu noktadan sonra, bugün 500 puan barajı aşıldı demektir.
+        // At this point, the 500 point goal for today has been reached for the first time.
         
         const lastStreakDate = userData.lastStreakDate ? new Date(userData.lastStreakDate) : null;
         const currentStreak = userData.currentStreak || 0;
@@ -94,26 +94,25 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         if (lastStreakDate) {
             const diff = differenceInCalendarDays(today, lastStreakDate);
             if (diff === 1) {
-                // Dün de hedefe ulaşılmış, seri devam ediyor.
+                // Goal met yesterday, streak continues.
                 newStreak = currentStreak + 1;
             } else if (diff > 1) {
-                // Arada boş gün var, seri bozuldu.
+                // Missed a day, streak is reset.
                 newStreak = 1;
             }
-            // diff === 0 ise (aynı gün) seri değişmez, bu durum en başta kontrol ediliyor.
+            // if diff === 0, it means the goal was already met today, handled by the initial check.
         } else {
-            // İlk kez hedefe ulaşıldı.
+            // First time ever meeting the goal.
             newStreak = 1;
         }
 
         const newLongestStreak = Math.max(longestStreak, newStreak);
         
-        // Veritabanını güncelle
+        // Update database
         await updateDoc(userRef, {
             currentStreak: newStreak,
             longestStreak: newLongestStreak,
-            lastStreakDate: todayStr, // Hedefe ulaşılan son gün
-            lastStreakCheckDate: todayStr, // Bu kontrolün yapıldığı gün (tekrar tekrar çalışmasın diye)
+            lastStreakDate: todayStr, // The last day the goal was met
         });
         
         const canSpinWheel = newStreak >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
