@@ -10,14 +10,14 @@ function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
 }
 
-// 1. Manuel Kontrol İçin Fonksiyon
+// 1. Manuel Kontrol İçin Fonksiyon (Artık daha basit)
 export async function forceStreakCheck(userId: string) {
-    // Bu fonksiyon artık doğrudan checkAndUpdateStreak'i çağıracak.
-    // currentAddedScore parametresi 0 olduğu için, sadece mevcut veritabanı durumunu kontrol edecek.
-    return await checkAndUpdateStreak(userId, 0);
+    // checkAndUpdateStreak fonksiyonu artık dışarıdan puan almayacak,
+    // doğrudan DB'den kontrol edecek.
+    return await checkAndUpdateStreak(userId);
 }
 
-// 2. Puan Ekleme (GÜNCELLENDİ)
+// 2. Puan Ekleme (Sadece puan ekler ve seri kontrolünü tetikler)
 export async function updateScore(userId: string, score: number, gameType: string, context: string) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return;
     if (!userId || !gameType) return;
@@ -31,11 +31,9 @@ export async function updateScore(userId: string, score: number, gameType: strin
             timestamp: serverTimestamp()
         });
         
-        // Puan eklendikten sonra seri kontrolünü otomatik olarak tetikle.
-        // Sadece öğrencinin bireysel kazandığı puanlar seriyi etkilemeli.
         const isIndividualScore = !gameType.startsWith('smartboard_') && gameType !== 'Derece Puanı' && gameType !== 'Manuel Puan';
         if (isIndividualScore && score > 0) {
-           await checkAndUpdateStreak(userId, score);
+           await checkAndUpdateStreak(userId);
         }
 
     } catch (error) {
@@ -43,8 +41,8 @@ export async function updateScore(userId: string, score: number, gameType: strin
     }
 }
 
-// 3. Seri Hesaplama Mantığı (YENİDEN YAZILDI)
-export async function checkAndUpdateStreak(userId: string, currentAddedScore: number = 0): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
+// 3. Seri Hesaplama Mantığı (YENİDEN DÜZENLENDİ)
+export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     if (!userId) return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
 
     const userRef = doc(db, 'users', userId);
@@ -57,13 +55,12 @@ export async function checkAndUpdateStreak(userId: string, currentAddedScore: nu
         const todayStr = getTurkeyDateString(); 
 
         // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
-        const lastStreakDateStr = userData.lastStreakDate;
-        if (lastStreakDateStr === todayStr) {
+        if (userData.lastStreakDate === todayStr) {
              const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
              return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
 
-        // Günlük Puan Kontrolü
+        // Günlük Puan Kontrolü (O GÜNE AİT TÜM PUANLARI YENİDEN HESAPLA)
         const startOfDay = new Date(`${todayStr}T00:00:00+03:00`);
         const endOfDay = new Date(`${todayStr}T23:59:59+03:00`);
 
@@ -76,7 +73,7 @@ export async function checkAndUpdateStreak(userId: string, currentAddedScore: nu
         
         const snapshot = await getDocs(q);
         
-        let totalDailyScore = snapshot.docs.reduce((sum, d) => {
+        const totalDailyScore = snapshot.docs.reduce((sum, d) => {
             const data = d.data();
             // Seriyi etkilemeyecek puan türlerini hariç tut
             if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan') {
@@ -85,10 +82,6 @@ export async function checkAndUpdateStreak(userId: string, currentAddedScore: nu
             return sum;
         }, 0);
         
-        // Bu fonksiyon çağrıldığında eklenen yeni puanı da hesaba kat (veritabanı gecikmesini önlemek için)
-        // Bu satır artık gerekli değil çünkü veritabanından çekiyoruz ama manuel kontrol için kalabilir.
-        totalDailyScore += currentAddedScore;
-
         if (totalDailyScore < 500) {
              // Hedef tamamlanmadı, bir şey yapma
              const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
@@ -97,25 +90,23 @@ export async function checkAndUpdateStreak(userId: string, currentAddedScore: nu
         
         // Hedef tamamlandı, seri mantığını çalıştır
         let newStreak = userData.currentStreak || 0;
+        const lastStreakDateStr = userData.lastStreakDate;
         
         if (lastStreakDateStr) {
             const lastDate = new Date(lastStreakDateStr);
             const todayDate = new Date(todayStr);
 
-            // Tarihleri UTC'ye çevirip gün farkını hesapla (saat dilimi sorunlarını önlemek için)
             const utcLast = Date.UTC(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
             const utcToday = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
             
             const diffDays = (utcToday - utcLast) / (1000 * 60 * 60 * 24);
 
             if (diffDays === 1) {
-                newStreak += 1; // Seri devam ediyor
+                newStreak += 1;
             } else if (diffDays > 1) {
-                newStreak = 1; // Seri bozuldu, yeniden başlıyor
+                newStreak = 1;
             }
-            // diffDays === 0 veya negatif ise (saat farkı nedeniyle olabilir), seriyi artırma. Bu durum zaten ilk kontrolle engelleniyor.
         } else {
-            // İlk defa hedefe ulaşıyor
             newStreak = 1;
         }
 
@@ -124,7 +115,7 @@ export async function checkAndUpdateStreak(userId: string, currentAddedScore: nu
         await updateDoc(userRef, {
             currentStreak: newStreak,
             longestStreak: newLongestStreak,
-            lastStreakDate: todayStr, // Hedefin tamamlandığı son gün olarak bugünü kaydet
+            lastStreakDate: todayStr,
         });
 
         const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : "";

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from "react";
@@ -29,7 +30,7 @@ function HardestWorkersToday() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
+        getLiveLeaderboard('daily').then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -94,6 +95,13 @@ export default function StudentDashboard() {
   const [stats, setStats] = useState({ score: 0, totalCourses: 0, generalRank: 0, classRank: 0, branchRank: 0, todayScore: 0 });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
   const [isChecking, setIsChecking] = useState(false); // Manuel kontrol butonu durumu
+
+  // YENİ: Sayfa yüklendiğinde seri kontrolü yap
+  useEffect(() => {
+    if (user?.uid) {
+      forceStreakCheck(user.uid);
+    }
+  }, [user?.uid]);
 
   useEffect(() => {
     async function fetchData() {
@@ -232,7 +240,7 @@ export default function StudentDashboard() {
                     <div className="flex-1 w-full md:max-w-md mx-4"><div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5"><div className={cn("h-full transition-all duration-1000 ease-out relative", isGoalReached ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" : "bg-emerald-500/50")} style={{ width: `${progressToDailyGoal}%` }} /></div></div>
                     <div className="w-full md:w-auto flex justify-end">
                         {canSpin ? (
-                             <Button onClick={() => router.push('/student/wheel')} className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"><Gift className="mr-2 h-5 w-5 animate-bounce" /> ÇARKI ÇEVİR!</Button>
+                             <Button onClick={() => router.push('/student/carkifelek')} className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"><Gift className="mr-2 h-5 w-5 animate-bounce" /> ÇARKI ÇEVİR!</Button>
                         ) : isGoalReached ? (
                              <Button disabled className="bg-slate-700 text-slate-400 border border-slate-600 cursor-not-allowed opacity-80"><Timer className="mr-2 h-4 w-4" /> Yarın Gel</Button>
                         ) : (
