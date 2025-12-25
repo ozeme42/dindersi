@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react"; // useEffect eklendi
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, PartyPopper, Repeat, Save, CheckCircle2, Home, Trophy, Star } from "lucide-react";
@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
 
 type GameEndScreenProps = {
     score: number;
-    onSave: () => void;
-    isSaving: boolean;
-    scoreSaved?: boolean;
+    onSave: () => void;      // Bu fonksiyon tetiklenince DB işlemleri başlayacak
+    isSaving: boolean;       // Butona basılınca true olacak
+    scoreSaved?: boolean;    // İşlem bitince true olacak
     onRestart: () => void;
     backUrl: string;
-    passThreshold?: number; // Geçme notu (Opsiyonel, varsayılan 50 yapabiliriz)
+    passThreshold?: number;
 };
 
 export function GameEndScreen({ 
@@ -24,13 +24,11 @@ export function GameEndScreen({
     onRestart, 
     backUrl, 
     scoreSaved,
-    passThreshold = 50 // Varsayılan geçme notu
+    passThreshold = 50 
 }: GameEndScreenProps) {
 
-    // --- BU KISIM DERS AKIŞIYLA HABERLEŞMEYİ SAĞLAR ---
+    // --- Ders Akışı ile Haberleşme (Sadece bilgi verir, kayıt yapmaz) ---
     useEffect(() => {
-        // Bu ekran render olduğunda (yani oyun bittiğinde)
-        // Eğer bir iframe içindeysek ana pencereye mesaj gönderiyoruz.
         if (window.parent) {
             window.parent.postMessage({
                 type: 'ACTIVITY_COMPLETED',
@@ -39,12 +37,11 @@ export function GameEndScreen({
             }, '*');
         }
     }, [score, passThreshold]);
-    // ---------------------------------------------------
 
     return (
         <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
             
-            {/* Arka Plan Efektleri (Altın/Zafer Teması) */}
+            {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[120px]" />
                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px]" />
@@ -53,7 +50,7 @@ export function GameEndScreen({
             <div className="relative z-10 w-full max-w-md animate-in zoom-in slide-in-from-bottom-8 duration-500">
                 <Card className="w-full bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden rounded-3xl">
                     
-                    {/* Üst Kısım (Header & İkon) */}
+                    {/* Başlık ve İkon */}
                     <div className="flex flex-col items-center text-center p-8 pb-6">
                         <div className="relative mb-6">
                             <div className="absolute inset-0 bg-amber-500/20 blur-xl rounded-full animate-pulse" />
@@ -66,10 +63,10 @@ export function GameEndScreen({
                         </div>
                         
                         <h2 className="text-3xl font-black text-white tracking-tight mb-2">Tebrikler!</h2>
-                        <p className="text-slate-400 text-sm font-medium">Oyunu başarıyla tamamladın.</p>
+                        <p className="text-slate-400 text-sm font-medium">Oyun tamamlandı.</p>
                     </div>
 
-                    {/* Skor Alanı */}
+                    {/* Skor Göstergesi */}
                     <div className="px-8 pb-8">
                         <div className="bg-slate-950/50 border border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -82,7 +79,6 @@ export function GameEndScreen({
                                 </span>
                             </div>
                             
-                            {/* Geçme Durumu Göstergesi */}
                             <div className={cn("mt-2 text-xs font-bold px-2 py-1 rounded-full border", 
                                 score >= passThreshold 
                                     ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
@@ -93,29 +89,35 @@ export function GameEndScreen({
                         </div>
                     </div>
 
-                    {/* Butonlar */}
+                    {/* BUTONLAR ALANI */}
                     <div className="p-6 pt-0 space-y-3">
+                        
+                        {/* 1. PUANI KAYDET BUTONU (Tıklanabilir) */}
                         <Button 
-                            onClick={onSave} 
-                            disabled={isSaving || scoreSaved || score <= 0}
+                            onClick={onSave} // Tıklayınca kaydet fonksiyonunu çalıştır
+                            disabled={isSaving || scoreSaved || score <= 0} // İşlem sürüyorsa veya bittiyse tıklatama
                             className={cn(
                                 "w-full h-14 text-lg font-bold rounded-xl shadow-lg transition-all relative overflow-hidden",
                                 scoreSaved 
-                                    ? "bg-slate-800 text-slate-400 border border-white/5 cursor-default"
-                                    : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/20 hover:scale-[1.02]"
+                                    ? "bg-slate-800 text-slate-400 border border-white/5 cursor-default" // Kaydedildi stili
+                                    : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/20 hover:scale-[1.02]" // Normal stil
                             )}
                         >
+                            {/* Buton Durumları */}
                             {isSaving ? (
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Kaydediliyor...
+                                </>
                             ) : scoreSaved ? (
                                 <>
                                     <CheckCircle2 className="mr-2 h-5 w-5 text-emerald-500" />
-                                    Kaydedildi
+                                    Kaydedildi!
                                 </>
                             ) : (
                                 <>
                                     <Save className="mr-2 h-5 w-5" />
-                                    Puanı Kaydet ve Çık
+                                    Puanı Kaydet
                                 </>
                             )}
                         </Button>

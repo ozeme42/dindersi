@@ -1,138 +1,139 @@
 
-
 'use server';
 
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, where, Timestamp, getDocs } from 'firebase/firestore';
-import { format, subDays, differenceInCalendarDays, startOfDay, endOfDay } from 'date-fns';
 import type { UserProfile } from '@/lib/types';
 
+// Türkiye saatine göre tarih stringi (YYYY-MM-DD)
+function getTurkeyDateString(date: Date = new Date()): string {
+    return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
+}
 
+// 1. Manuel Kontrol İçin Fonksiyon
+export async function forceStreakCheck(userId: string) {
+    // Bu fonksiyon artık doğrudan checkAndUpdateStreak'i çağıracak.
+    // currentAddedScore parametresi 0 olduğu için, sadece mevcut veritabanı durumunu kontrol edecek.
+    return await checkAndUpdateStreak(userId, 0);
+}
+
+// 2. Puan Ekleme (GÜNCELLENDİ)
 export async function updateScore(userId: string, score: number, gameType: string, context: string) {
-    // This is a client-called function. It should not use the Admin SDK.
-    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
-        console.log(`Static mode: Score update for ${userId} ignored.`);
-        return;
-    }
-
-    if (!userId || !gameType) {
-        console.error("User ID or game type is missing for score update.");
-        return;
-    }
+    if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return;
+    if (!userId || !gameType) return;
 
     try {
-        // Use client SDK 'db' from @/lib/firebase
         await addDoc(collection(db, 'scoreEvents'), {
-            userId: userId,
+            userId,
             points: score,
-            gameType: gameType,
-            context: context,
+            gameType,
+            context,
             timestamp: serverTimestamp()
         });
         
-        // Puan eklendikten sonra seri kontrolünü tetikle
-        await checkAndUpdateStreak(userId);
+        // Puan eklendikten sonra seri kontrolünü otomatik olarak tetikle.
+        // Sadece öğrencinin bireysel kazandığı puanlar seriyi etkilemeli.
+        const isIndividualScore = !gameType.startsWith('smartboard_') && gameType !== 'Derece Puanı' && gameType !== 'Manuel Puan';
+        if (isIndividualScore && score > 0) {
+           await checkAndUpdateStreak(userId, score);
+        }
 
     } catch (error) {
-        console.error("Error updating score in actions.ts: ", error);
-        // We don't throw an error here to prevent the client from crashing
-        // if score logging fails. This is a background task.
+        console.error("Error updating score:", error);
     }
 }
 
-
-export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
-    if (!userId) {
-        return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
-    }
+// 3. Seri Hesaplama Mantığı (YENİDEN YAZILDI)
+export async function checkAndUpdateStreak(userId: string, currentAddedScore: number = 0): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
+    if (!userId) return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
 
     const userRef = doc(db, 'users', userId);
     
     try {
         const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
-            return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
-        }
+        if (!userSnap.exists()) return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
 
         const userData = userSnap.data() as UserProfile;
-        const today = new Date();
-        const todayStr = format(today, 'yyyy-MM-dd');
+        const todayStr = getTurkeyDateString(); 
 
-        // Check if the streak goal for today has already been met and recorded.
-        if (userData.lastStreakDate === todayStr) {
-            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
-            return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+        // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
+        const lastStreakDateStr = userData.lastStreakDate;
+        if (lastStreakDateStr === todayStr) {
+             const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
+             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
 
-        // Calculate total points earned today, EXCLUDING smartboard activities
-        const startOfTodayDate = startOfDay(today);
-        const endOfTodayDate = endOfDay(today);
-        const scoreEventsQuery = query(
+        // Günlük Puan Kontrolü
+        const startOfDay = new Date(`${todayStr}T00:00:00+03:00`);
+        const endOfDay = new Date(`${todayStr}T23:59:59+03:00`);
+
+        const q = query(
             collection(db, 'scoreEvents'),
             where('userId', '==', userId),
-            where('timestamp', '>=', Timestamp.fromDate(startOfTodayDate)),
-            where('timestamp', '<=', Timestamp.fromDate(endOfTodayDate))
+            where('timestamp', '>=', Timestamp.fromDate(startOfDay)),
+            where('timestamp', '<=', Timestamp.fromDate(endOfDay))
         );
         
-        const eventsSnapshot = await getDocs(scoreEventsQuery);
+        const snapshot = await getDocs(q);
         
-        const todayScore = eventsSnapshot.docs.reduce((sum, doc) => {
-            const event = doc.data();
-            // Only add points if it's NOT a smartboard game type or Derece/Manuel Puanı
-            if (!event.gameType?.startsWith('smartboard_') && event.gameType !== 'Derece Puanı' && event.gameType !== 'Manuel Puan') {
-                return sum + event.points;
+        let totalDailyScore = snapshot.docs.reduce((sum, d) => {
+            const data = d.data();
+            // Seriyi etkilemeyecek puan türlerini hariç tut
+            if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan') {
+                return sum + (data.points || 0);
             }
             return sum;
         }, 0);
+        
+        // Bu fonksiyon çağrıldığında eklenen yeni puanı da hesaba kat (veritabanı gecikmesini önlemek için)
+        // Bu satır artık gerekli değil çünkü veritabanından çekiyoruz ama manuel kontrol için kalabilir.
+        totalDailyScore += currentAddedScore;
 
-
-        // If the 500 point goal for today is not met yet, exit.
-        if (todayScore < 500) {
-            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
-            return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+        if (totalDailyScore < 500) {
+             // Hedef tamamlanmadı, bir şey yapma
+             const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
+             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
         
-        // At this point, the 500 point goal for today has been reached for the first time.
+        // Hedef tamamlandı, seri mantığını çalıştır
+        let newStreak = userData.currentStreak || 0;
         
-        const lastStreakDateObj = userData.lastStreakDate 
-            ? (userData.lastStreakDate instanceof Timestamp ? userData.lastStreakDate.toDate() : new Date(userData.lastStreakDate))
-            : null;
+        if (lastStreakDateStr) {
+            const lastDate = new Date(lastStreakDateStr);
+            const todayDate = new Date(todayStr);
+
+            // Tarihleri UTC'ye çevirip gün farkını hesapla (saat dilimi sorunlarını önlemek için)
+            const utcLast = Date.UTC(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
+            const utcToday = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
             
-        const currentStreak = userData.currentStreak || 0;
-        const longestStreak = userData.longestStreak || 0;
+            const diffDays = (utcToday - utcLast) / (1000 * 60 * 60 * 24);
 
-        let newStreak = currentStreak;
-
-        if (lastStreakDateObj) {
-            const diff = differenceInCalendarDays(today, lastStreakDateObj);
-            if (diff === 1) {
-                // Goal met yesterday, streak continues.
-                newStreak = currentStreak + 1;
-            } else if (diff > 1) {
-                // Missed a day, streak is reset.
-                newStreak = 1;
+            if (diffDays === 1) {
+                newStreak += 1; // Seri devam ediyor
+            } else if (diffDays > 1) {
+                newStreak = 1; // Seri bozuldu, yeniden başlıyor
             }
-            // if diff === 0, it means the goal was already met today, handled by the initial check.
+            // diffDays === 0 veya negatif ise (saat farkı nedeniyle olabilir), seriyi artırma. Bu durum zaten ilk kontrolle engelleniyor.
         } else {
-            // First time ever meeting the goal.
+            // İlk defa hedefe ulaşıyor
             newStreak = 1;
         }
 
-        const newLongestStreak = Math.max(longestStreak, newStreak);
+        const newLongestStreak = Math.max(userData.longestStreak || 0, newStreak);
         
-        // Update database
         await updateDoc(userRef, {
             currentStreak: newStreak,
             longestStreak: newLongestStreak,
-            lastStreakDate: todayStr, // The last day the goal was met
+            lastStreakDate: todayStr, // Hedefin tamamlandığı son gün olarak bugünü kaydet
         });
-        
-        const canSpinWheel = newStreak >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin).toDateString() !== today.toDateString());
+
+        const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : "";
+        const canSpinWheel = newStreak >= 7 && lastSpinStr !== todayStr;
 
         return { streakUpdated: true, newStreak, canSpinWheel };
 
     } catch (error) {
-        console.error("Error updating streak:", error);
+        console.error("Streak Error:", error);
         return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
     }
 }
