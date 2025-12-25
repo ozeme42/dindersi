@@ -69,7 +69,7 @@ export function WheelOfFortune({ segments, onSpinStart, onSpinEnd }: WheelOfFort
             </div>
 
             <div 
-                className="relative w-full h-full rounded-full transition-transform duration-[7000ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                className="relative w-full h-full rounded-full transition-transform duration-[7000ms] ease-[cubic-bezier(0.25,0.1,0.25,1.275)]"
                 style={{ transform: `rotate(${rotation}deg)` }}
             >
                 <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.5)] z-10 pointer-events-none border-[4px] border-white/5" />
