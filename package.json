@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 9003",
+    "dev": "next dev",
     "genkit:dev": "genkit start",
     "genkit:watch": "genkit start --watch",
     "build": "next build",
