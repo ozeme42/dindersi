@@ -14,7 +14,8 @@ import {
   writeBatch, 
   doc, 
   serverTimestamp, 
-  increment 
+  increment,
+  getDocs
 } from 'firebase/firestore';
 import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
@@ -55,13 +56,13 @@ export async function getConceptQuizAction(
             item.type === 'definition' && !!item.content?.term && !!item.content?.definition
         );
         
-        const allTermsFromDefinitions = allDefinitions.map(item => item.content.term);
+        const allTermsFromDefinitions = [...new Set(allDefinitions.map(item => item.content.term))];
 
         if (allDefinitions.length < 1) {
             return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
-        if (allTermsFromDefinitions.length < 8) {
-            return { error: "Bu oyun için en az 8 farklı kavram/tanım çifti gereklidir.", questions: null };
+        if (allTermsFromDefinitions.length < 4) {
+            return { error: "Bu oyun için en az 4 farklı kavram/tanım çifti gereklidir.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -77,11 +78,11 @@ export async function getConceptQuizAction(
                 .slice(0, 7);
 
             // Eğer yeterli çeldirici yoksa bu soruyu atla (pratikte yukarıdaki kontrol bunu engellemeli)
-            if (distractors.length < 7) {
+            if (distractors.length < 3) { // Need at least 3 distractors for a 4-option question
                 continue; 
             }
 
-            const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
+            const options = [...new Set([correctAnswer, ...distractors])].sort(() => 0.5 - Math.random());
             
             gameQuestions.push({
                 definition,
