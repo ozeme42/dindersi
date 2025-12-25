@@ -5,9 +5,7 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, where, Timestamp, getDocs } from 'firebase/firestore';
 import type { UserProfile } from '@/lib/types';
 
-// Türkiye saatine göre tarih stringi (YYYY-MM-DD)
-// HATA DÜZELTMESİ: 'export' kaldırıldı, çünkü bu dosya 'use server' olarak işaretli
-// ve dışa aktarılan tüm fonksiyonların async olması gerekiyor. Bu ise bir yardımcı fonksiyon.
+
 function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
 }
@@ -16,14 +14,15 @@ function getTurkeyDateString(date: Date = new Date()): string {
 export async function forceStreakCheck(userId: string): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     if (!userId) return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
 
-    const userRef = doc(db, 'users', userId);
     try {
+        const userRef = doc(db, 'users', userId);
         const userSnap = await getDoc(userRef);
         if (!userSnap.exists()) {
              return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
         }
         const userData = userSnap.data() as UserProfile;
         
+        // This function will now internally check the score, no need to pass it.
         return await checkAndUpdateStreak(userId, userData);
 
     } catch (error) {
@@ -32,23 +31,13 @@ export async function forceStreakCheck(userId: string): Promise<{ streakUpdated:
     }
 }
 
+
 // 2. Puan Ekleme (Sadece puan ekler ve seri kontrolünü tetikler)
 export async function updateScore(userId: string, score: number, gameType: string, context: string) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return;
     if (!userId || !gameType) return;
 
     try {
-        const userRef = doc(db, 'users', userId);
-
-        // Önce kullanıcı belgesini al
-        const userSnap = await getDoc(userRef);
-        if (!userSnap.exists()) {
-            console.error("User does not exist to update score.");
-            return;
-        }
-        const userData = userSnap.data() as UserProfile;
-
-        // Puanı ekle
         await addDoc(collection(db, 'scoreEvents'), {
             userId,
             points: score,
@@ -57,10 +46,9 @@ export async function updateScore(userId: string, score: number, gameType: strin
             timestamp: serverTimestamp()
         });
         
-        // Bireysel puan ise seri kontrolü yap
-        const isIndividualScore = !gameType.startsWith('smartboard_') && gameType !== 'Derece Puanı' && gameType !== 'Manuel Puan' && gameType !== 'Hediye Puan';
-        if (isIndividualScore && score > 0) {
-           await checkAndUpdateStreak(userId, userData, score);
+        // Puan eklendikten sonra seri kontrolünü tetikle
+        if (score > 0) {
+           await forceStreakCheck(userId);
         }
 
     } catch (error) {
@@ -69,8 +57,8 @@ export async function updateScore(userId: string, score: number, gameType: strin
 }
 
 // 3. Seri Hesaplama Mantığı (GÜVENİLİR VE YENİDEN YAZILMIŞ)
-async function checkAndUpdateStreak(userId: string, userData: UserProfile, scoreToAdd: number = 0): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
-    const todayStr = getTurkeyDateString(); 
+async function checkAndUpdateStreak(userId: string, userData: UserProfile): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
+    const todayStr = getTurkeyDateString();
 
     // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
     if (userData.lastStreakDate === todayStr) {
@@ -93,15 +81,16 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile, score
     
     const totalDailyScore = snapshot.docs.reduce((sum, d) => {
         const data = d.data();
+        // Sadece bireysel kazanılan puanları say
         if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan' && data.gameType !== 'Hediye Puan') {
             return sum + (data.points || 0);
         }
         return sum;
-    }, 0) + scoreToAdd; // Henüz DB'ye yansımamış olabilecek puanı da ekle
+    }, 0);
     
     if (totalDailyScore < 500) {
-         const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
-         return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+        const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
+        return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
     
     // Hedef tamamlandı, seri mantığını çalıştır
@@ -121,7 +110,7 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile, score
             newStreak += 1;
         } else if (diffDays > 1) {
             newStreak = 1;
-        }
+        } // diffDays <= 0 ise bir şey yapma (aynı gün içinde tekrar tekrar tetiklenirse)
     } else {
         newStreak = 1;
     }
@@ -140,7 +129,6 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile, score
 
     return { streakUpdated: true, newStreak, canSpinWheel };
 }
-
 
 // Geçici Test Fonksiyonu
 export async function setStreakForTesting(userId: string, streakValue: number): Promise<{ success: boolean }> {

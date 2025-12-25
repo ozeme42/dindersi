@@ -103,11 +103,9 @@ export default function StudentDashboard() {
     setIsChecking(true);
     try {
         const res = await forceStreakCheck(user.uid);
-        if (res.streakUpdated || res.newStreak !== user.currentStreak || res.canSpinWheel !== canSpinWheel) {
-            // State has changed, a reload is the simplest way to get fresh user data from context
-            window.location.reload();
+        if (res.canSpinWheel !== canSpinWheel) {
+            setCanSpinWheel(res.canSpinWheel);
         }
-        setCanSpinWheel(res.canSpinWheel);
     } catch(e) {
         console.error("Streak check failed", e);
     } finally {
