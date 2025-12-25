@@ -14,8 +14,8 @@ import { collection, getDocs, query, where, orderBy, Timestamp } from "firebase/
 import type { Course, UserProfile } from "@/lib/types";
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-// DİKKAT: actions dosyan neredeyse oradan import et
-import { forceStreakCheck } from "./actions"; 
+// Action dosyanın doğru yerinden import et
+import { forceStreakCheck, setStreakForTesting } from "@/app/student/actions"; 
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,13 +24,13 @@ import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// --- GÜNLÜK LİDERLİK ---
+// --- GÜNLÜK LİDERLİK TABLOSU ---
 function HardestWorkersToday() {
     const [dailyTop, setDailyTop] = useState<UserProfile[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard('daily').then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
+        getLiveLeaderboard().then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -70,6 +70,7 @@ function HardestWorkersToday() {
     )
 }
 
+// --- STANDART BUTON KARTI ---
 const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number }) => {
      const colors: {[key: string]: string} = {
         "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40", "rose": "from-rose-500 to-pink-600 border-rose-600 shadow-rose-900/40",
@@ -94,18 +95,15 @@ export default function StudentDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({ score: 0, totalCourses: 0, generalRank: 0, classRank: 0, branchRank: 0, todayScore: 0 });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
-  const [isChecking, setIsChecking] = useState(false); // Manuel kontrol butonu durumu
-
-  // YENİ: Sayfa yüklendiğinde seri kontrolü yap
-  useEffect(() => {
-    if (user?.uid) {
-      forceStreakCheck(user.uid);
-    }
-  }, [user?.uid]);
+  const [isChecking, setIsChecking] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       if (!user?.uid) { setIsLoading(false); return; };
+      
+      // Sayfa yüklenir yüklenmez seri kontrolü yap
+      await forceStreakCheck(user.uid);
+
       setIsLoading(true);
       try {
         const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' });
@@ -127,6 +125,7 @@ export default function StudentDashboard() {
 
         const todayTotalScore = todayScoreSnapshot.docs.reduce((sum, doc) => {
             const data = doc.data();
+            // Puan filtreleme mantığı
             if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan') {
                 return sum + (data.points || 0);
             }
@@ -152,7 +151,7 @@ export default function StudentDashboard() {
     fetchData();
   }, [user]);
 
-  // MANUEL KONTROL FONKSİYONU
+  // Manuel Seri Kontrol Fonksiyonu
   const handleForceCheck = async () => {
     if(!user || isChecking) return;
     setIsChecking(true);
@@ -162,7 +161,7 @@ export default function StudentDashboard() {
             alert(`Süper! Seri güncellendi: ${res.newStreak} Gün`);
             window.location.reload();
         } else {
-             alert(`Henüz 500 puana ulaşılmamış veya bugün zaten sayılmış. (Bugünkü Puan: ${stats.todayScore})`);
+             alert(`Henüz 500 puana ulaşılmamış veya bugün zaten sayılmış.\n(Bugünkü Puanın: ${stats.todayScore})`);
         }
     } catch(e) {
         alert("Hata oluştu.");
@@ -171,26 +170,51 @@ export default function StudentDashboard() {
     }
   };
   
+    // TEST Butonu Fonksiyonu
+    const handleSetStreak = async () => {
+        if (!user) return;
+        setIsChecking(true);
+        const result = await setStreakForTesting(user.uid, 7);
+        if (result.success) {
+            alert('Seri test için 7 güne ayarlandı! Sayfa yenileniyor...');
+            window.location.reload();
+        } else {
+            alert('Seri ayarlanamadı.');
+        }
+        setIsChecking(false);
+    };
+
   if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
 
+  // --- HESAPLAMALAR ---
   const level = Math.floor(stats.score / 1000) + 1;
   const progressToNextLevel = ((stats.score % 1000) / 1000) * 100;
+  
   const dailyGoal = 500;
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
+  
+  // Çark Durumu Kontrolü
   const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' });
-  const lastSpinStr = user?.lastWheelSpin ? new Date(user.lastWheelSpin.toDate()).toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' }) : "";
-  const canSpin = (user?.currentStreak || 0) >= 7 && isGoalReached && lastSpinStr !== todayStr;
+  const lastSpinStr = user?.lastWheelSpin ? new Date(user.lastWheelSpin).toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' }) : "";
+  
+  const currentStreak = user?.currentStreak || 0;
+  const canSpin = currentStreak >= 7 && isGoalReached && lastSpinStr !== todayStr;
   
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
+      
+      {/* Arka Plan Efektleri */}
       <div className="fixed inset-0 pointer-events-none z-0"><div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/20 rounded-full blur-[150px]" /><div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-cyan-900/10 rounded-full blur-[150px]" /></div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">
+           
            {/* Profil Kartı */}
            <div className="relative w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/10 group">
                 <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl z-0"></div>
                 <div className="relative z-10 p-6 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+                    
+                    {/* Avatar */}
                     <div className="relative shrink-0">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full p-1.5 bg-gradient-to-br from-amber-300 via-yellow-500 to-orange-600 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
                              <div className="w-full h-full rounded-full overflow-hidden border-4 border-slate-900 bg-slate-800"><UserAvatar user={user} className="w-full h-full" /></div>
@@ -199,29 +223,34 @@ export default function StudentDashboard() {
                              <Sparkles className="h-3 w-3 text-yellow-400 fill-yellow-400"/> SEVİYE {level}
                         </div>
                     </div>
+
+                    {/* Bilgiler */}
                     <div className="flex-1 text-center md:text-left w-full">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
                             <div>
                                 <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md">{user?.displayName}</h1>
                                 <div className="flex items-center justify-center md:justify-start gap-2 mt-2 text-slate-300 font-medium"><Backpack className="h-4 w-4 text-indigo-400" /><span>{user?.class || 'Sınıfsız'}</span><span className="mx-2">•</span><span className="text-indigo-300">{stats.totalCourses} Ders</span></div>
                             </div>
+                            
+                            {/* İstatistik Kutucukları */}
                             <div className="flex items-center gap-3 justify-center md:justify-end">
                                 <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[160px]">
                                     <div className="p-3 bg-amber-500/20 rounded-xl border border-amber-500/30"><Star className="h-6 w-6 text-amber-400 fill-amber-400 animate-pulse" /></div>
                                     <div className="text-left"><p className="text-xs text-amber-200/70 font-bold uppercase tracking-wider">XP</p><p className="text-2xl font-black text-white tabular-nums">{stats.score.toLocaleString()}</p></div>
                                 </div>
-                                {/* SERİ KUTUSU VE BUTONU */}
-                                <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[140px] relative group/streak">
+                                
+                                <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[140px] relative">
                                     <div className="p-3 bg-orange-500/20 rounded-xl border border-orange-500/30 relative"><Flame className="h-6 w-6 text-orange-500 fill-orange-500 animate-[bounce_2s_infinite]" /></div>
                                     <div className="text-left"><p className="text-xs text-orange-200/70 font-bold uppercase tracking-wider">Seri</p><p className="text-2xl font-black text-white tabular-nums">{user?.currentStreak || 0} Gün</p></div>
                                     
-                                    {/* YENİLEME BUTONU */}
+                                    {/* Manuel Kontrol Butonu */}
                                     <button onClick={handleForceCheck} disabled={isChecking} className="absolute -top-2 -right-2 bg-slate-700 hover:bg-slate-600 text-white p-1.5 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-90" title="Seriyi Kontrol Et">
                                         <RefreshCcw className={cn("w-3 h-3", isChecking && "animate-spin")} />
                                     </button>
                                 </div>
                             </div>
                         </div>
+
                         <div className="mt-6">
                             <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide"><span>İlerleme</span><span>{Math.floor(progressToNextLevel)}%</span></div>
                             <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative"><div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all duration-1000 ease-out" style={{ width: `${progressToNextLevel}%` }} /></div>
@@ -230,21 +259,58 @@ export default function StudentDashboard() {
                 </div>
            </div>
            
-           {/* GÜNLÜK HEDEF */}
+           {/* GÜNLÜK HEDEF VE ÇARK */}
            <div className="relative w-full bg-gradient-to-r from-slate-900 to-slate-800 rounded-3xl p-1 border border-white/10 shadow-lg overflow-hidden">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 md:px-8">
+                    
                     <div className="flex items-center gap-4 w-full md:w-auto">
-                        <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0"><Target className="h-6 w-6 text-emerald-400" /></div>
-                        <div className="flex-1"><h3 className="font-bold text-white text-lg">Günlük Görev</h3><div className="flex items-center gap-2 text-sm text-slate-400"><span>Bugün {stats.todayScore} XP</span><span className="text-slate-600">/</span><span className="text-emerald-400 font-bold">{dailyGoal} XP Hedef</span></div></div>
+                        <div className="h-12 w-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0">
+                            <Target className="h-6 w-6 text-emerald-400" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="font-bold text-white text-lg">Günlük Görev</h3>
+                            <div className="flex items-center gap-2 text-sm text-slate-400">
+                                <span>Bugün {stats.todayScore} XP</span>
+                                <span className="text-slate-600">/</span>
+                                <span className="text-emerald-400 font-bold">{dailyGoal} XP Hedef</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex-1 w-full md:max-w-md mx-4"><div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5"><div className={cn("h-full transition-all duration-1000 ease-out relative", isGoalReached ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" : "bg-emerald-500/50")} style={{ width: `${progressToDailyGoal}%` }} /></div></div>
+
+                    <div className="flex-1 w-full md:max-w-md mx-4">
+                        <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                            <div className={cn("h-full transition-all duration-1000 ease-out relative", isGoalReached ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" : "bg-emerald-500/50")} style={{ width: `${progressToDailyGoal}%` }} />
+                        </div>
+                        {currentStreak < 7 && (
+                            <p className="text-center text-[10px] text-slate-500 mt-1">Çark için serini 7 güne tamamla ({currentStreak}/7)</p>
+                        )}
+                    </div>
+                     {/* YENİ EKLENEN TEST BUTONU */}
+                    <Button onClick={handleSetStreak} disabled={isChecking} className="bg-orange-500">Seriyi 7 Yap (Test)</Button>
+
                     <div className="w-full md:w-auto flex justify-end">
                         {canSpin ? (
-                             <Button onClick={() => router.push('/student/carkifelek')} className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"><Gift className="mr-2 h-5 w-5 animate-bounce" /> ÇARKI ÇEVİR!</Button>
-                        ) : isGoalReached ? (
-                             <Button disabled className="bg-slate-700 text-slate-400 border border-slate-600 cursor-not-allowed opacity-80"><Timer className="mr-2 h-4 w-4" /> Yarın Gel</Button>
+                             <Button 
+                                onClick={() => router.push('/student/wheel')} 
+                                className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"
+                             >
+                                <Gift className="mr-2 h-5 w-5 animate-bounce" />
+                                ÇARKI ÇEVİR!
+                             </Button>
+                        ) : isGoalReached && lastSpinStr === todayStr ? (
+                             <Button disabled className="bg-slate-700 text-slate-400 border border-slate-600 cursor-not-allowed opacity-80">
+                                <Timer className="mr-2 h-4 w-4" />
+                                Yarın Gel
+                             </Button>
+                        ) : isGoalReached && currentStreak < 7 ? (
+                            <div className="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center gap-2">
+                                <span className="text-xs">Seri 7 Gün Olmalı</span>
+                            </div>
                         ) : (
-                             <div className="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center gap-2 whitespace-nowrap"><div className="h-2 w-2 rounded-full bg-slate-500 animate-pulse"></div>{Math.max(0, dailyGoal - stats.todayScore)} XP Daha Gerekli</div>
+                             <div className="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center gap-2 whitespace-nowrap">
+                                <div className="h-2 w-2 rounded-full bg-slate-500 animate-pulse"></div>
+                                {Math.max(0, dailyGoal - stats.todayScore)} XP Daha Gerekli
+                             </div>
                         )}
                     </div>
                 </div>
@@ -263,6 +329,7 @@ export default function StudentDashboard() {
                <DashboardCardButton href="/student/shop" icon={<ShoppingCart />} title="Mağaza" subtitle="Puan Harca" colorClass="emerald" />
                <DashboardCardButton href="/student/deneme" icon={<FileCog />} title="Denemeler" subtitle="Sınav Merkezi" colorClass="violet" badge={examStats.pending} />
           </div>
+          
           <HardestWorkersToday />
       </div>
     </div>
