@@ -22,7 +22,6 @@ export async function forceStreakCheck(userId: string): Promise<{ streakUpdated:
         }
         const userData = userSnap.data() as UserProfile;
         
-        // This function will now internally check the score, no need to pass it.
         return await checkAndUpdateStreak(userId, userData);
 
     } catch (error) {
