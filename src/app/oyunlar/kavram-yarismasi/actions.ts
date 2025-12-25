@@ -16,6 +16,7 @@ import {
   serverTimestamp, 
   increment 
 } from 'firebase/firestore';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 
 export type ConceptQuizQuestion = {
@@ -25,23 +26,29 @@ export type ConceptQuizQuestion = {
 };
 
 export async function getConceptQuizAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string; unitId?: string; }
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
-    if (!topicId) {
-        return { error: "Geçerli bir konu ID'si gerekli.", questions: null };
+    if (!topicId && !courseId && !unitId) {
+        return { error: "Oynamak için bir ders, ünite veya konu seçmelisiniz.", questions: null };
     }
 
     try {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        
-        const fileContent = await fs.readFile(filePath, 'utf-8').catch(() => null);
+        let itemsForTopic: ActivityItem[] = [];
 
-        if (!fileContent) {
-            return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
+        if (topicId && topicId !== 'all') {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+            const fileContent = await fs.readFile(filePath, 'utf-8').catch(() => null);
+            if (!fileContent) {
+                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
+            }
+            itemsForTopic = JSON.parse(fileContent);
+        } else if (topicId === 'all') {
+            itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId });
+        } else {
+            return { error: "Geçerli bir konu seçimi yapılmadı.", questions: null };
         }
 
-        const itemsForTopic: ActivityItem[] = JSON.parse(fileContent);
 
         // Sadece 'definition' tipindeki verileri al
         const allDefinitions = itemsForTopic.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
