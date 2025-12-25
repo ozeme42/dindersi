@@ -124,16 +124,25 @@ export async function getStaticQuestionsForGame(params: {
     // Find all topics under the specified course or unit
     for (const group of manifest.classGroups) {
         for (const course of group.courses) {
+            // If a specific course is selected, skip others
             if (courseId && course.id !== courseId) continue;
             
             for (const unit of course.units) {
+                // If a specific unit is selected (and not 'all'), only process that unit.
+                // If 'all' units are selected, this condition is skipped, processing all units in the course.
                 if (unitId && unitId !== 'all' && unit.id !== unitId) continue;
                 
                 unit.topics.forEach((topic: { id: string }) => {
                     topicIds.push(topic.id);
                 });
+
+                // If a specific unit was targeted, we are done with this course.
+                if (unitId && unitId !== 'all' && unit.id === unitId) break;
             }
+            // If a specific course was targeted, we are done with all groups.
+            if (courseId && course.id === courseId) break;
         }
+        if (courseId && topicIds.length > 0) break; 
     }
     
     // Remove duplicates
