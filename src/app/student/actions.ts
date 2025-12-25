@@ -4,11 +4,8 @@
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, where, Timestamp, getDocs } from 'firebase/firestore';
 import type { UserProfile } from '@/lib/types';
+import { getTurkeyDateString } from '@/lib/utils';
 
-
-function getTurkeyDateString(date: Date = new Date()): string {
-    return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
-}
 
 // 1. Manuel Kontrol ve Puan Yükleme Kontrolü İçin Fonksiyon
 export async function forceStreakCheck(userId: string): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {

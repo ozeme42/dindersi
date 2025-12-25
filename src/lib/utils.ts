@@ -29,3 +29,8 @@ export const cleanForAnagram = (text: string): string => {
   const cleanedText = upperCaseText.replace(/[^A-ZĞÜŞİÖÇ0-9\s]/g, '');
   return cleanedText;
 };
+
+// Türkiye saatine göre tarih stringi (YYYY-MM-DD)
+export function getTurkeyDateString(date: Date = new Date()): string {
+    return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
+}

@@ -4,7 +4,7 @@
 import { db } from '@/lib/firebase';
 import { doc, getDoc, serverTimestamp, runTransaction } from 'firebase/firestore';
 import type { UserProfile } from '@/lib/types';
-import { getTurkeyDateString } from '@/app/student/actions';
+import { getTurkeyDateString } from '@/lib/utils';
 
 // This function will be called AFTER the wheel spin animation on the client
 // to award the points and mark the wheel as spun for the day.
