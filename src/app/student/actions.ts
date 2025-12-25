@@ -3,8 +3,8 @@
 'use server';
 
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { format, subDays, differenceInCalendarDays } from 'date-fns';
+import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, where, Timestamp, getDocs } from 'firebase/firestore';
+import { format, subDays, differenceInCalendarDays, startOfDay, endOfDay } from 'date-fns';
 import type { UserProfile } from '@/lib/types';
 
 
@@ -29,6 +29,10 @@ export async function updateScore(userId: string, score: number, gameType: strin
             context: context,
             timestamp: serverTimestamp()
         });
+        
+        // Puan eklendikten sonra seri kontrolünü tetikle
+        await checkAndUpdateStreak(userId);
+
     } catch (error) {
         console.error("Error updating score in actions.ts: ", error);
         // We don't throw an error here to prevent the client from crashing
@@ -54,50 +58,67 @@ export async function checkAndUpdateStreak(userId: string): Promise<{ streakUpda
         const today = new Date();
         const todayStr = format(today, 'yyyy-MM-dd');
 
-        const lastLoginDate = userData.lastLoginDate ? new Date(userData.lastLoginDate) : null;
+        // Eğer bugün için seri zaten güncellendiyse, tekrar işlem yapma.
+        if (userData.lastStreakCheckDate === todayStr) {
+            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
+            return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+        }
 
-        // If last login is today, do nothing.
-        if (userData.lastLoginDate === todayStr) {
-             const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
+        // Bugün kazanılan toplam puanı hesapla
+        const startOfTodayDate = startOfDay(today);
+        const endOfTodayDate = endOfDay(today);
+        const scoreEventsQuery = query(
+            collection(db, 'scoreEvents'),
+            where('userId', '==', userId),
+            where('timestamp', '>=', Timestamp.fromDate(startOfTodayDate)),
+            where('timestamp', '<=', Timestamp.fromDate(endOfTodayDate))
+        );
+        
+        const eventsSnapshot = await getDocs(scoreEventsQuery);
+        const todayScore = eventsSnapshot.docs.reduce((sum, doc) => sum + doc.data().points, 0);
+
+        // Eğer bugün 500 puandan az kazanılmışsa, seri güncellemesi yapma ve çık.
+        if (todayScore < 500) {
+            const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
             return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
         }
         
+        // Bu noktadan sonra, bugün 500 puan barajı aşıldı demektir.
+        
+        const lastStreakDate = userData.lastStreakDate ? new Date(userData.lastStreakDate) : null;
         const currentStreak = userData.currentStreak || 0;
         const longestStreak = userData.longestStreak || 0;
 
         let newStreak = currentStreak;
-        let streakUpdated = false;
 
-        if (lastLoginDate) {
-            const yesterday = subDays(today, 1);
-            const diff = differenceInCalendarDays(today, lastLoginDate);
-
+        if (lastStreakDate) {
+            const diff = differenceInCalendarDays(today, lastStreakDate);
             if (diff === 1) {
-                // Streak continues
+                // Dün de hedefe ulaşılmış, seri devam ediyor.
                 newStreak = currentStreak + 1;
             } else if (diff > 1) {
-                // Streak is broken
+                // Arada boş gün var, seri bozuldu.
                 newStreak = 1;
             }
-            // if diff is 0 or less, it's the same day, do nothing (handled above)
+            // diff === 0 ise (aynı gün) seri değişmez, bu durum en başta kontrol ediliyor.
         } else {
-            // First login
+            // İlk kez hedefe ulaşıldı.
             newStreak = 1;
         }
 
-        if (newStreak !== currentStreak) {
-            streakUpdated = true;
-            const newLongestStreak = Math.max(longestStreak, newStreak);
-            await updateDoc(userRef, {
-                currentStreak: newStreak,
-                longestStreak: newLongestStreak,
-                lastLoginDate: todayStr,
-            });
-        }
+        const newLongestStreak = Math.max(longestStreak, newStreak);
+        
+        // Veritabanını güncelle
+        await updateDoc(userRef, {
+            currentStreak: newStreak,
+            longestStreak: newLongestStreak,
+            lastStreakDate: todayStr, // Hedefe ulaşılan son gün
+            lastStreakCheckDate: todayStr, // Bu kontrolün yapıldığı gün (tekrar tekrar çalışmasın diye)
+        });
         
         const canSpinWheel = newStreak >= 7 && (!userData.lastWheelSpin || new Date(userData.lastWheelSpin) < new Date(today.toDateString()));
 
-        return { streakUpdated, newStreak, canSpinWheel };
+        return { streakUpdated: true, newStreak, canSpinWheel };
 
     } catch (error) {
         console.error("Error updating streak:", error);
