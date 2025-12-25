@@ -63,3 +63,5 @@ export * from './letter-uu-badge';
 export * from './letter-v-badge';
 export * from './letter-y-badge';
 export * from './letter-z-badge';
+export * from './bronze-flame-badge';
+export * from './silver-flame-badge';

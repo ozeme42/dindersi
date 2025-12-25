@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from "react";
@@ -5,7 +6,7 @@ import {
     BookOpen, Trophy, Star, Gamepad2, Users, 
     ShoppingCart, Columns, LayoutTemplate, FileCog, 
     Crown, Award, Zap, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, Home, User, ArrowRight
+    Loader2, Home, User, ArrowRight, Sun, Flame, Gift
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
@@ -95,7 +96,7 @@ function HardestWorkersToday() {
 }
 
 // --- ANA SAYFA KARTI BİLEŞENİ ---
-const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number }) => {
+const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge, disabled = false }: { href: string, icon: React.ReactNode, title: string, subtitle?: string, colorClass: string, badge?: number, disabled?: boolean }) => {
      // Renk sınıflarını parçala (basit bir haritalama)
      const colors: {[key: string]: string} = {
         "sky": "from-sky-500 to-blue-600 border-sky-600 shadow-sky-900/40",
@@ -108,34 +109,34 @@ const DashboardCardButton = ({ href, icon, title, subtitle, colorClass, badge }:
 
      const gradient = colors[colorClass] || "from-slate-700 to-slate-800 border-slate-600";
 
-     return (
-        <Button asChild className={cn(
+     const content = (
+        <div className={cn(
             "relative w-full h-auto flex flex-col md:flex-row items-center justify-center md:justify-start gap-3 p-4 rounded-2xl transition-all duration-300 group overflow-hidden",
-            "border-b-[6px] active:border-b-0 active:translate-y-[6px]", // 3D effect
-            "bg-gradient-to-br text-white shadow-xl",
-            gradient
+            "border-b-[6px] shadow-xl",
+            disabled ? "bg-slate-800 border-slate-900 text-slate-500 cursor-not-allowed grayscale" : cn(gradient, "active:border-b-0 active:translate-y-[6px] bg-gradient-to-br")
         )}>
-            <Link href={href} className="w-full">
-                {/* Işıltı Efekti */}
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                
-                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner shrink-0">
-                    {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-white" })}
-                </div>
-                
-                <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 min-w-0">
-                    <span className="font-black text-lg uppercase tracking-wide leading-tight">{title}</span>
-                    {subtitle && <span className="text-[11px] font-medium opacity-80 leading-tight">{subtitle}</span>}
-                </div>
+            {/* Işıltı Efekti */}
+            {!disabled && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />}
+            
+            <div className="p-3 bg-black/20 rounded-xl backdrop-blur-sm shadow-inner shrink-0">
+                {React.cloneElement(icon as React.ReactElement, { className: "h-6 w-6 text-white" })}
+            </div>
+            
+            <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1 min-w-0">
+                <span className="font-black text-lg uppercase tracking-wide leading-tight">{title}</span>
+                {subtitle && <span className="text-[11px] font-medium opacity-80 leading-tight">{subtitle}</span>}
+            </div>
 
-                {badge && badge > 0 && (
-                    <div className="absolute top-2 right-2 flex h-6 min-w-[24px] px-1.5 items-center justify-center rounded-full bg-white text-red-600 text-xs font-black shadow-lg animate-bounce z-10">
-                        {badge}
-                    </div>
-                )}
-            </Link>
-        </Button>
-     )
+            {badge && badge > 0 && (
+                <div className="absolute top-2 right-2 flex h-6 min-w-[24px] px-1.5 items-center justify-center rounded-full bg-white text-red-600 text-xs font-black shadow-lg animate-bounce z-10">
+                    {badge}
+                </div>
+            )}
+        </div>
+     );
+     
+    if (disabled) return <div className="w-full cursor-not-allowed">{content}</div>
+    return <Link href={href} className="block w-full">{content}</Link>;
 }
 
 
@@ -146,15 +147,10 @@ export default function StudentDashboard() {
   // State for stats
   const [stats, setStats] = useState({
       score: 0,
-      completedTopics: 0,
-      totalTopics: 0,
-      coursesStarted: 0,
-      coursesCompleted: 0,
       totalCourses: 0,
       generalRank: 0,
       classRank: 0,
       branchRank: 0,
-      questionBankProgress: 0,
   });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
 
@@ -178,7 +174,7 @@ export default function StudentDashboard() {
         
         // --- Sınav İstatistikleri ---
         if (examsSnapshot.success && examsSnapshot.data) {
-            const pending = examsSnapshot.data.filter(a => !a.solvedEvent).length;
+            const pending = examsSnapshot.data.filter(a => !a.solvedEvent && (!a.dueDate || new Date(a.dueDate) > new Date())).length;
             const solved = examsSnapshot.data.length - pending;
             setExamStats({ pending, solved });
         }
@@ -207,39 +203,24 @@ export default function StudentDashboard() {
             branchRank = studentsInBranch.sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
         }
 
-        // --- Kurs İlerlemeleri ---
-        
         const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
         const studentClassName = user.class?.split(' - ')[0];
         const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-        const studentClassId = studentClass?.id;
-
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        const studentVisibleCourses = allCourses.filter(c => !c.isTeacherOnly);
         
-        let filteredCourses: Course[] = [];
-        if (studentClassId) {
-            const isFirstClass = studentClassId === firstClassId;
-            filteredCourses = studentVisibleCourses.filter(course =>
-                !course.isTeacherOnly && (course.classId === studentClassId || (!course.classId && isFirstClass))
-            );
-        } else {
-            filteredCourses = studentVisibleCourses.filter(course => !course.classId && !course.isTeacherOnly);
-        }
+        const filteredCourses = allCourses.filter(c => 
+            !c.isTeacherOnly && (
+                (studentClass && c.classId === studentClass.id) || !c.classId
+            )
+        );
 
         setStats({
             score: userScore,
-            completedTopics: 0, 
-            totalTopics: 0,     
-            coursesStarted: 0,
-            coursesCompleted: 0,
             totalCourses: filteredCourses.length,
             generalRank,
             classRank,
             branchRank,
-            questionBankProgress: 0, 
         });
 
       } catch (error) {
@@ -264,9 +245,9 @@ export default function StudentDashboard() {
 
   // Seviye Hesaplama
   const level = Math.floor(stats.score / 1000) + 1;
-  const nextLevelScore = level * 1000;
   const progressToNextLevel = ((stats.score % 1000) / 1000) * 100;
-  
+  const canSpinWheel = (user?.currentStreak || 0) >= 7 && (!user?.lastWheelSpin || new Date(user.lastWheelSpin) < new Date(new Date().toDateString()));
+
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
       
@@ -345,73 +326,8 @@ export default function StudentDashboard() {
                 </div>
            </div>
           
-          {/* Ana Kartlar Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               {/* Soru Bankası (Macera Haritası) */}
-              <Link href="/student/soru-bankasi" className="group block h-full">
-                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-sky-900 to-blue-900 border border-sky-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-sky-500/20">
-                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                     <div className="absolute top-0 right-0 p-32 bg-sky-500/20 rounded-full blur-[80px] pointer-events-none"></div>
-
-                     <div className="relative z-10 p-8 flex flex-col h-full">
-                         <div className="flex justify-between items-start mb-6">
-                             <div className="p-4 bg-sky-500/20 rounded-2xl border border-sky-400/30 backdrop-blur-md">
-                                 <Map className="h-8 w-8 text-sky-300" />
-                             </div>
-                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-sky-200">
-                                 DERSLER VE SORU BANKASI
-                             </div>
-                         </div>
-                         
-                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Macera <br/><span className="text-sky-400">Haritası</span></h2>
-                         <p className="text-sky-100/70 font-medium mb-8">Derslerini seç, soruları çöz ve haritada ilerle.</p>
-                         
-                         <div className="mt-auto flex items-center gap-2 text-white font-bold text-lg group-hover:gap-4 transition-all">
-                             Hemen Başla <ArrowRight className="h-5 w-5" />
-                         </div>
-                     </div>
-                 </div>
-              </Link>
-            
-              {/* Liderlik Tablosu (Şöhret Salonu) */}
-              <Link href="/leaderboard" className="group block h-full">
-                 <div className="relative h-full rounded-3xl overflow-hidden bg-gradient-to-br from-amber-900 to-orange-900 border border-amber-500/30 shadow-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-amber-500/20">
-                     <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
-                     <div className="absolute bottom-0 left-0 p-32 bg-amber-500/20 rounded-full blur-[80px] pointer-events-none"></div>
-
-                     <div className="relative z-10 p-8 flex flex-col h-full">
-                         <div className="flex justify-between items-start mb-6">
-                             <div className="p-4 bg-amber-500/20 rounded-2xl border border-amber-400/30 backdrop-blur-md">
-                                 <Trophy className="h-8 w-8 text-amber-300" />
-                             </div>
-                             <div className="px-4 py-1.5 rounded-full bg-black/30 border border-white/10 text-xs font-bold text-amber-200">
-                                 LİDERLİK
-                             </div>
-                         </div>
-                         
-                         <h2 className="text-3xl font-black text-white mb-2 leading-tight">Şöhret <br/><span className="text-amber-400">Salonu</span></h2>
-                         
-                         <div className="mt-auto grid grid-cols-3 gap-3">
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.generalRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Genel</span>
-                              </div>
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.classRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Sınıf</span>
-                              </div>
-                              <div className="bg-black/20 p-3 rounded-xl border border-white/5 flex flex-col items-center">
-                                  <span className="text-2xl font-black text-white">#{stats.branchRank || '-'}</span>
-                                  <span className="text-[10px] font-bold text-amber-200/60 uppercase">Şube</span>
-                              </div>
-                         </div>
-                     </div>
-                 </div>
-              </Link>
-          </div>
-
-          {/* Aksiyon Butonları (Grid) */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          {/* Aksiyon Kartları Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                <DashboardCardButton 
                    href="/oyunlar" 
                    icon={<Gamepad2 />} 
@@ -427,27 +343,6 @@ export default function StudentDashboard() {
                    colorClass="rose"
                />
                <DashboardCardButton 
-                   href="/student/yazilacaklar" 
-                   icon={<Columns />} 
-                   title="Panolar" 
-                   subtitle="Notlar & Kavramlar"
-                   colorClass="orange"
-               />
-               <DashboardCardButton 
-                   href="/student/ozetler" 
-                   icon={<LayoutTemplate />} 
-                   title="Özetler" 
-                   subtitle="Ders Notları"
-                   colorClass="indigo"
-               />
-                <DashboardCardButton 
-                   href="/student/shop" 
-                   icon={<ShoppingCart />} 
-                   title="Mağaza" 
-                   subtitle="Puan Harca"
-                   colorClass="emerald"
-               />
-                <DashboardCardButton 
                    href="/student/deneme" 
                    icon={<FileCog />} 
                    title="Denemeler" 
@@ -456,6 +351,36 @@ export default function StudentDashboard() {
                    badge={examStats.pending}
                />
           </div>
+
+           {/* Günlük Seri ve Şans Çarkı */}
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
+                     <div className="p-6 flex items-center justify-between border-b border-white/10 bg-black/20">
+                        <div className="flex items-center gap-4">
+                            <Flame className={cn("h-8 w-8", (user?.currentStreak || 0) > 0 ? "text-orange-500 fill-orange-500/50 animate-pulse" : "text-slate-600")} />
+                            <div>
+                                <h3 className="text-lg font-bold text-white">Günlük Seri</h3>
+                                <p className="text-sm text-slate-400">Arka arkaya giriş rekoru</p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                             <p className="text-4xl font-black text-orange-400 drop-shadow-lg">{(user?.currentStreak || 0)}</p>
+                             <p className="text-xs font-bold text-slate-500">GÜN</p>
+                        </div>
+                     </div>
+                     <div className="p-6 text-center text-slate-300 text-sm">
+                         En uzun serin: <span className="font-bold text-white">{user?.longestStreak || 0}</span> gün. Serini korumaya devam et!
+                     </div>
+                </Card>
+                <DashboardCardButton
+                    href="/student/carkifelek"
+                    icon={<Gift />}
+                    title="Şans Çarkı"
+                    subtitle="7 günlük seriye özel!"
+                    colorClass="emerald"
+                    disabled={!canSpinWheel}
+                />
+           </div>
           
           <HardestWorkersToday />
       </div>

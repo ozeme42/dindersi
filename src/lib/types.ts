@@ -15,6 +15,11 @@ export type UserProfile = {
     equippedFrameUrl?: string | null;
     equippedBadgeId?: string | null;
     guestPlayers?: string[];
+    // Streak properties
+    currentStreak?: number;
+    longestStreak?: number;
+    lastLoginDate?: string; // ISO string 'yyyy-MM-dd'
+    lastWheelSpin?: string; // ISO string for the last time the wheel was spun
 };
 
 export type ShopItem = {
