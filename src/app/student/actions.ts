@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -5,7 +6,9 @@ import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, whe
 import type { UserProfile } from '@/lib/types';
 
 // Türkiye saatine göre tarih stringi (YYYY-MM-DD)
-export function getTurkeyDateString(date: Date = new Date()): string {
+// HATA DÜZELTMESİ: 'export' kaldırıldı, çünkü bu dosya 'use server' olarak işaretli
+// ve dışa aktarılan tüm fonksiyonların async olması gerekiyor. Bu ise bir yardımcı fonksiyon.
+function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
 }
 
