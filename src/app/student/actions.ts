@@ -1,4 +1,3 @@
-
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -6,12 +5,12 @@ import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc, query, whe
 import type { UserProfile } from '@/lib/types';
 
 // Türkiye saatine göre tarih stringi (YYYY-MM-DD)
-function getTurkeyDateString(date: Date = new Date()): string {
+export function getTurkeyDateString(date: Date = new Date()): string {
     return new Date(date.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' })).toISOString().split('T')[0];
 }
 
 // 1. Manuel Kontrol ve Puan Yükleme Kontrolü İçin Fonksiyon
-export async function forceStreakCheck(userId: string) {
+export async function forceStreakCheck(userId: string): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     if (!userId) return { streakUpdated: false, newStreak: 0, canSpinWheel: false };
 
     const userRef = doc(db, 'users', userId);
@@ -22,7 +21,6 @@ export async function forceStreakCheck(userId: string) {
         }
         const userData = userSnap.data() as UserProfile;
         
-        // Bu fonksiyon artık sadece puanları kontrol edecek, puan eklemeyecek.
         return await checkAndUpdateStreak(userId, userData);
 
     } catch (error) {
@@ -57,9 +55,9 @@ export async function updateScore(userId: string, score: number, gameType: strin
         });
         
         // Bireysel puan ise seri kontrolü yap
-        const isIndividualScore = !gameType.startsWith('smartboard_') && gameType !== 'Derece Puanı' && gameType !== 'Manuel Puan';
+        const isIndividualScore = !gameType.startsWith('smartboard_') && gameType !== 'Derece Puanı' && gameType !== 'Manuel Puan' && gameType !== 'Hediye Puan';
         if (isIndividualScore && score > 0) {
-           await checkAndUpdateStreak(userId, userData);
+           await checkAndUpdateStreak(userId, userData, score);
         }
 
     } catch (error) {
@@ -67,8 +65,8 @@ export async function updateScore(userId: string, score: number, gameType: strin
     }
 }
 
-// 3. Seri Hesaplama Mantığı (YENİDEN DÜZENLENDİ)
-async function checkAndUpdateStreak(userId: string, userData: UserProfile): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
+// 3. Seri Hesaplama Mantığı (GÜVENİLİR VE YENİDEN YAZILMIŞ)
+async function checkAndUpdateStreak(userId: string, userData: UserProfile, scoreToAdd: number = 0): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     const todayStr = getTurkeyDateString(); 
 
     // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
@@ -77,7 +75,7 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
          return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
 
-    // Günlük Puan Kontrolü (O GÜNE AİT TÜM PUANLARI YENİDEN HESAPLA)
+    // Günlük Puan Kontrolü
     const startOfDay = new Date(`${todayStr}T00:00:00+03:00`);
     const endOfDay = new Date(`${todayStr}T23:59:59+03:00`);
 
@@ -92,15 +90,13 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     
     const totalDailyScore = snapshot.docs.reduce((sum, d) => {
         const data = d.data();
-        // Seriyi etkilemeyecek puan türlerini hariç tut
-        if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan') {
+        if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan' && data.gameType !== 'Hediye Puan') {
             return sum + (data.points || 0);
         }
         return sum;
-    }, 0);
+    }, 0) + scoreToAdd; // Henüz DB'ye yansımamış olabilecek puanı da ekle
     
     if (totalDailyScore < 500) {
-         // Hedef tamamlanmadı, bir şey yapma
          const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
          return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
@@ -110,13 +106,9 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     const lastStreakDateStr = userData.lastStreakDate;
     
     if (lastStreakDateStr) {
-        // Gelen değer Timestamp ise Date'e çevir, string ise doğrudan kullan
-        const lastDate = lastStreakDateStr instanceof Timestamp 
-            ? lastStreakDateStr.toDate() 
-            : new Date(lastStreakDateStr);
-
+        const lastDate = new Date(lastStreakDateStr);
         const todayDate = new Date(todayStr);
-
+        
         const utcLast = Date.UTC(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate());
         const utcToday = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
         
@@ -125,11 +117,10 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
         if (diffDays === 1) {
             newStreak += 1;
         } else if (diffDays > 1) {
-            newStreak = 1; // Seri bozuldu
+            newStreak = 1;
         }
-        // if diffDays is 0 or less, do nothing.
     } else {
-        newStreak = 1; // İlk defa hedefe ulaşıldı
+        newStreak = 1;
     }
 
     const newLongestStreak = Math.max(userData.longestStreak || 0, newStreak);
@@ -160,8 +151,8 @@ export async function setStreakForTesting(userId: string, streakValue: number): 
 
         await updateDoc(userRef, {
             currentStreak: streakValue,
-            lastStreakDate: yesterdayStr, // Bugünün hedefinin sayılabilmesi için düne ayarla
-            lastWheelSpin: null, // Çarkı çevirme hakkını da sıfırla
+            lastStreakDate: yesterdayStr,
+            lastWheelSpin: null,
         });
         return { success: true };
     } catch (error) {

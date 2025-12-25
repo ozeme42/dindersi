@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
@@ -96,13 +96,31 @@ export default function StudentDashboard() {
   const [stats, setStats] = useState({ score: 0, totalCourses: 0, generalRank: 0, classRank: 0, branchRank: 0, todayScore: 0 });
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
   const [isChecking, setIsChecking] = useState(false);
+  const [canSpinWheel, setCanSpinWheel] = useState(false);
+
+  const checkStreak = useCallback(async () => {
+    if (!user || isChecking) return;
+    setIsChecking(true);
+    try {
+        const res = await forceStreakCheck(user.uid);
+        if (res.streakUpdated || res.newStreak !== user.currentStreak || res.canSpinWheel !== canSpinWheel) {
+            // State has changed, a reload is the simplest way to get fresh user data from context
+            window.location.reload();
+        }
+        setCanSpinWheel(res.canSpinWheel);
+    } catch(e) {
+        console.error("Streak check failed", e);
+    } finally {
+        setIsChecking(false);
+    }
+  }, [user, canSpinWheel, isChecking]);
+
 
   useEffect(() => {
     async function fetchData() {
       if (!user?.uid) { setIsLoading(false); return; };
       
-      // Sayfa yüklenir yüklenmez seri kontrolü yap
-      await forceStreakCheck(user.uid);
+      checkStreak();
 
       setIsLoading(true);
       try {
@@ -126,7 +144,7 @@ export default function StudentDashboard() {
         const todayTotalScore = todayScoreSnapshot.docs.reduce((sum, doc) => {
             const data = doc.data();
             // Puan filtreleme mantığı
-            if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan') {
+            if (!data.gameType?.startsWith('smartboard_') && data.gameType !== 'Derece Puanı' && data.gameType !== 'Manuel Puan' && data.gameType !== 'Hediye Puan') {
                 return sum + (data.points || 0);
             }
             return sum;
@@ -149,26 +167,7 @@ export default function StudentDashboard() {
       } catch (error) { console.error(error); } finally { setIsLoading(false); }
     }
     fetchData();
-  }, [user]);
-
-  // Manuel Seri Kontrol Fonksiyonu
-  const handleForceCheck = async () => {
-    if(!user || isChecking) return;
-    setIsChecking(true);
-    try {
-        const res = await forceStreakCheck(user.uid);
-        if(res.streakUpdated || res.newStreak !== user.currentStreak) {
-            alert(`Süper! Seri güncellendi: ${res.newStreak} Gün`);
-            window.location.reload();
-        } else {
-             alert(`Henüz 500 puana ulaşılmamış veya bugün zaten sayılmış.\n(Bugünkü Puanın: ${stats.todayScore})`);
-        }
-    } catch(e) {
-        alert("Hata oluştu.");
-    } finally {
-        setIsChecking(false);
-    }
-  };
+  }, [user, checkStreak]);
   
     // TEST Butonu Fonksiyonu
     const handleSetStreak = async () => {
@@ -193,13 +192,6 @@ export default function StudentDashboard() {
   const dailyGoal = 500;
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
-  
-  // Çark Durumu Kontrolü
-  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' });
-  const lastSpinStr = user?.lastWheelSpin ? new Date(user.lastWheelSpin).toLocaleDateString('en-CA', { timeZone: 'Europe/Istanbul' }) : "";
-  
-  const currentStreak = user?.currentStreak || 0;
-  const canSpin = currentStreak >= 7 && isGoalReached && lastSpinStr !== todayStr;
   
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
@@ -244,7 +236,7 @@ export default function StudentDashboard() {
                                     <div className="text-left"><p className="text-xs text-orange-200/70 font-bold uppercase tracking-wider">Seri</p><p className="text-2xl font-black text-white tabular-nums">{user?.currentStreak || 0} Gün</p></div>
                                     
                                     {/* Manuel Kontrol Butonu */}
-                                    <button onClick={handleForceCheck} disabled={isChecking} className="absolute -top-2 -right-2 bg-slate-700 hover:bg-slate-600 text-white p-1.5 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-90" title="Seriyi Kontrol Et">
+                                    <button onClick={checkStreak} disabled={isChecking} className="absolute -top-2 -right-2 bg-slate-700 hover:bg-slate-600 text-white p-1.5 rounded-full shadow-lg transition-transform hover:scale-110 active:scale-90" title="Seriyi Kontrol Et">
                                         <RefreshCcw className={cn("w-3 h-3", isChecking && "animate-spin")} />
                                     </button>
                                 </div>
@@ -281,33 +273,29 @@ export default function StudentDashboard() {
                         <div className="h-3 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
                             <div className={cn("h-full transition-all duration-1000 ease-out relative", isGoalReached ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]" : "bg-emerald-500/50")} style={{ width: `${progressToDailyGoal}%` }} />
                         </div>
-                        {currentStreak < 7 && (
-                            <p className="text-center text-[10px] text-slate-500 mt-1">Çark için serini 7 güne tamamla ({currentStreak}/7)</p>
+                        {!canSpinWheel && (user?.currentStreak || 0) < 7 && (
+                            <p className="text-center text-[10px] text-slate-500 mt-1">Çark için serini 7 güne tamamla ({user?.currentStreak || 0}/7)</p>
                         )}
                     </div>
-                     {/* YENİ EKLENEN TEST BUTONU */}
-                    <Button onClick={handleSetStreak} disabled={isChecking} className="bg-orange-500">Seriyi 7 Yap (Test)</Button>
 
                     <div className="w-full md:w-auto flex justify-end">
-                        {canSpin ? (
+                        {canSpinWheel ? (
                              <Button 
-                                onClick={() => router.push('/student/wheel')} 
-                                className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"
+                                asChild
+                                className="w-full md:w-auto bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-black border-b-4 border-rose-800 active:border-b-0 active:translate-y-1 shadow-[0_0_20px_rgba(236,72,153,0.4)] animate-pulse"
                              >
-                                <Gift className="mr-2 h-5 w-5 animate-bounce" />
-                                ÇARKI ÇEVİR!
+                                <Link href="/student/wheel">
+                                    <Gift className="mr-2 h-5 w-5 animate-bounce" />
+                                    ÇARKI ÇEVİR!
+                                </Link>
                              </Button>
-                        ) : isGoalReached && lastSpinStr === todayStr ? (
-                             <Button disabled className="bg-slate-700 text-slate-400 border border-slate-600 cursor-not-allowed opacity-80">
+                        ) : isGoalReached ? (
+                             <Button disabled className="w-full md:w-auto bg-slate-700 text-slate-400 border border-slate-600 cursor-not-allowed opacity-80">
                                 <Timer className="mr-2 h-4 w-4" />
                                 Yarın Gel
                              </Button>
-                        ) : isGoalReached && currentStreak < 7 ? (
-                            <div className="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center gap-2">
-                                <span className="text-xs">Seri 7 Gün Olmalı</span>
-                            </div>
                         ) : (
-                             <div className="px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center gap-2 whitespace-nowrap">
+                             <div className="w-full md:w-auto px-4 py-2 bg-slate-800 rounded-xl border border-slate-700 text-slate-400 text-sm font-medium flex items-center justify-center gap-2 whitespace-nowrap">
                                 <div className="h-2 w-2 rounded-full bg-slate-500 animate-pulse"></div>
                                 {Math.max(0, dailyGoal - stats.todayScore)} XP Daha Gerekli
                              </div>
