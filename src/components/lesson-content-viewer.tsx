@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -117,7 +116,7 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
         }, speed);
 
         return () => clearInterval(intervalId);
-    }, [content, speed, onComplete, isCompleted, displayedContent]); 
+    }, [content, speed, onComplete, isCompleted]); 
 
     if (isCompleted) {
         return <div dangerouslySetInnerHTML={{ __html: content }} />;
@@ -178,7 +177,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
 }
 
 // 2. InteractiveTrueFalseList
-function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllTfAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllTfAnswered: () => void }) {
+function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
@@ -186,11 +185,10 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     const isCompleted = answers?.completed;
 
     useEffect(() => {
-        // DÜZELTME: Eğer hepsi cevaplandıysa VE henüz 'completed' olarak işaretlenmemişse çalıştır.
         if (allAnswered && !isCompleted) {
-            onAllTfAnswered();
+            onAllAnswered();
         }
-    }, [allAnswered, isCompleted, onAllTfAnswered]);
+    }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
         { card: 'border-cyan-500/50 bg-cyan-500/5 hover:bg-cyan-500/10', number: 'text-cyan-400' },
@@ -380,7 +378,7 @@ function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer
-function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string; definition: string; }[], isFullscreen: boolean, title: string }) {
+function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
       
@@ -597,7 +595,8 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     }, [step]);
       
     const handleLetterClick = (clickedLetter: typeof initialLetters[0]) => {
-        if (isAnswerRevealed || shakingLetterId !== null) return;
+        if (isAnswerRevealed) return;
+
         const currentIndex = constructedLetters.length;
         const targetChar = targetStringClean[currentIndex];
 
@@ -608,7 +607,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
         } else {
             playSound('incorrect');
             setShakingLetterId(clickedLetter.id);
-            setTimeout(() => { setShakingLetterId(null); }, 820);
+            setTimeout(() => setShakingLetterId(null), 500);
         }
     };
 
@@ -624,13 +623,6 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
         }
     }, [constructedLetters, targetStringClean.length, isAnswerRevealed, onAnswer, step.correctAnswer]);
       
-    useEffect(() => {
-        if (answer?.isCorrect) {
-            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1200);
-            return () => clearTimeout(timeoutId);
-        }
-    }, [answer, onCorrectAndNext]);
-
     let globalCharIndex = 0;
 
     return (
@@ -867,7 +859,7 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-4 p-2 md:p-4">
+                <div className="flex flex-wrap justify-center gap-4 p-2">
                     {bankWords.map((item, index) => (
                         <div
                             key={item.id}
@@ -1066,26 +1058,724 @@ function DrawingCanvas() {
     );
 }
 
-// --- MAIN COMPONENT: LessonContentViewer ---
-export function LessonContentViewer(props: LessonContentViewerProps) {
-    const { topic, onTopicComplete } = props;
+// --- ANA BİLEŞEN: StepContent ---
+
+export function StepContent({ 
+    step, answer, onAnswer, onCorrectAndNext, stepAnswers, topic, courseId, unitId, courseTitle, unitTitle, isFullscreen, 
+    revealedSentencesCount, flippedCards, flippedAnagramCards, onCardFlip, onSlideScrolledToEnd, onMultiAnswer, onAllTfAnswered,
+    onAnimationStart, onAnimationEnd,
+    isVisualMaximized,
+    onToggleVisualMaximize
+}: any) {
     const isTeacher = useTeacherMode();
-    const [currentStepIndex, setCurrentStepIndex] = useState(0);
-    const [internalProgress, setInternalProgress] = useState<LocalProgress>({ answers: {}, score: 0 });
 
-    const visibleSteps = useMemo(() => {
-        return topic?.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
-    }, [topic, isTeacher]);
+    const renderContent = () => {
+        if(step.isPublished === false && !isTeacher) {
+            return (
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900 text-white">
+                    <Lock className="h-16 w-16 text-slate-500 mb-4" />
+                    <h2 className="text-2xl font-bold mb-2">Bu İçerik Henüz Aktif Değil</h2>
+                    <p className="text-slate-400">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
+                </div>
+            );
+        }
+        
+        switch (step.type) {
+            case 'content':
+            case 'objectiveList':
+            case 'accordion':
+                 return <ContentListPlayer step={step} revealedSentencesCount={revealedSentencesCount} isFullscreen={isFullscreen} onAnimationStart={onAnimationStart} onAnimationEnd={onAnimationEnd} />
+            case 'conceptExplanation': {
+                return <ConceptExplanationPlayer items={step.items} isFullscreen={isFullscreen} title={step.title} />
+            }
+            case 'visual':
+                return (
+                      <div className="w-full h-full p-0 md:p-2">
+                        <VisualPlayer 
+                            step={step as VisualStep} 
+                            isMaximized={isVisualMaximized} 
+                            onToggleMaximize={onToggleVisualMaximize}
+                        />
+                      </div>
+                );
+            case 'iframe':
+                 return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-2xl bg-white", "h-full")} allowFullScreen></iframe></div>
+            
+            case 'htmlSlide':
+                 return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
+            
+            case 'activityLink':
+                const activityStep = step as ActivityLinkStep;
+                const params = new URLSearchParams({
+                    courseId: activityStep.courseId || courseId,
+                    unitId: activityStep.unitId || unitId,
+                    topicId: activityStep.topicId || topic.id,
+                    courseName: courseTitle,
+                    unitName: unitTitle,
+                    topicName: topic.title,
+                    embedded: 'true', 
+                    autoStart: 'true'
+                });
+                const activityUrl = `${activityStep.activityType}?${params.toString()}`;
+                return (
+                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-950">
+                          <iframe
+                             src={activityUrl}
+                             title={activityStep.activityLabel}
+                             className="w-full h-full border-0 bg-slate-900"
+                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                             allowFullScreen
+                             loading="lazy"
+                          />
+                    </div>
+                );
 
-    const currentStep = useMemo(() => visibleSteps[currentStepIndex], [visibleSteps, currentStepIndex]);
-    
-    // Other state and useEffects...
-    // ...
+            case 'flashcard':
+                return <FlashcardPlayer step={step as FlashcardStep} flippedCards={flippedCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
+            case 'anagramFlashcard':
+                return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
+            case 'trueFalseList':
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+            case 'conceptMap':
+                 return <div className="text-center p-8 text-slate-500 text-lg">Kavram haritası bu görünümde desteklenmiyor.</div>; 
+            case 'video': {
+                const videoStep = step as VideoStep;
+                const embedUrl = getEmbedUrl(videoStep.url);
+                return (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-4">
+                        <div className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
+                            <iframe 
+                                src={embedUrl} 
+                                title={videoStep.title} 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowFullScreen 
+                                className="w-full h-full"
+                            ></iframe>
+                        </div>
+                         {videoStep.description && <p className={cn("mt-6 text-center text-slate-400 font-medium max-w-5xl", isTeacher ? "text-3xl" : "text-lg")}>{videoStep.description}</p>}
+                    </div>
+                );
+            }
+            case 'mcq': {
+                const mcqStep = step as McqStep;
+                const optionColors = ['border-cyan-500/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-100', 'border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-100', 'border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-100', 'border-rose-500/50 bg-rose-500/10 hover:bg-rose-500/20 text-rose-100'];
+                return (
+                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl justify-center")}>
+                        <div className={cn("rounded-3xl shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
+                           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 to-blue-500" />
+                          <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
+                        </div>
+                        <div className={cn("grid gap-6", isTeacher ? "grid-cols-2" : "grid-cols-1")}>
+                            {mcqStep.options.map((option, index) => {
+                                const isCorrect = option === mcqStep.correctAnswer;
+                                const isSelected = answer?.answer === option;
+                                const colorClass = optionColors[index % optionColors.length];
+
+                                return (
+                                    <Button
+                                        key={index}
+                                        variant="default"
+                                        className={cn(
+                                            "h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
+                                            "font-medium",
+                                            isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
+                                            !answer ? colorClass : "",
+                                            !answer && "hover:scale-[1.01] hover:shadow-lg",
+                                            answer && isCorrect ? "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10" : "",
+                                            answer && isSelected && !isCorrect ? "bg-red-600 border-red-400 text-white animate-shake" : "",
+                                            answer && !isSelected && !isCorrect ? "bg-slate-900/50 border-transparent text-slate-600 opacity-30" : ""
+                                        )}
+                                        onClick={() => onAnswer(option)}
+                                        disabled={!!answer}
+                                    >
+                                            <span className={cn(
+                                                "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
+                                                isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
+                                                !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20"
+                                            )}>
+                                                {String.fromCharCode(65 + index)}
+                                            </span>
+                                            <span className="flex-1">{option}</span>
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            }
+            case 'tf': {
+                const tfStep = step as TfStep;
+                const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
+                return (
+                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl justify-center")}>
+                         <div className={cn(
+                             "rounded-3xl shadow-2xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
+                             "bg-gradient-to-br from-purple-500/20 to-pink-500/20",
+                             "border-4 border-purple-500/50",
+                             "shadow-[0_0_30px_rgba(168,85,247,0.3)]",
+                             isTeacher ? "p-10" : "p-10"
+                          )}>
+                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-pink-500" />
+                             <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
+                        </div>
+                        <div className="flex gap-8 justify-center">
+                            {["Doğru", "Yanlış"].map((option) => {
+                                const isSelected = answer?.answer === option;
+                                const isCorrect = option === correctOption;
+                                return (
+                                    <Button
+                                        key={option}
+                                        className={cn(
+                                            "font-bold rounded-[2rem] transition-all duration-300 transform shadow-xl border-b-8 active:border-b-0 active:translate-y-2",
+                                            isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
+                                            !answer && (option === "Doğru" ? "bg-slate-800 border-slate-950 text-green-400 hover:bg-slate-700" : "bg-slate-800 border-slate-950 text-red-400 hover:bg-slate-700"),
+                                            answer && isCorrect && "bg-green-500 border-green-700 text-white scale-105 z-10 shadow-[0_0_30px_rgba(34,197,94,0.4)]",
+                                            answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white animate-shake",
+                                            answer && !isSelected && !isCorrect && "opacity-30 grayscale scale-95"
+                                        )}
+                                        onClick={() => onAnswer(option)}
+                                        disabled={!!answer}
+                                    >
+                                        <div className="flex flex-col items-center gap-4">
+                                            {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
+                                            {option}
+                                        </div>
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            }
+            case 'fitb': {
+                const fitbStep = step as FitbStep;
+                const optionColors = ['border-cyan-500/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-100', 'border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-100', 'border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-100', 'border-rose-500/50 bg-rose-500/10 hover:bg-rose-500/20 text-rose-100'];
+                return (
+                    <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl justify-center")}>
+                        <div className={cn("rounded-3xl shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
+                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-500" />
+                          <h3 className={cn("font-bold text-white leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-4xl" : "text-2xl md:text-3xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                        </div>
+                        <div className={cn("grid gap-6", isTeacher ? "grid-cols-2 gap-8" : "grid-cols-1 sm:grid-cols-2 gap-6")}>
+                            {(fitbStep.options || []).map((option, index) => {
+                                const isCorrect = option === fitbStep.correctAnswer;
+                                const isSelected = answer?.answer === option;
+                                const colorClass = optionColors[index % optionColors.length];
+                                return (
+                                    <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-600 border-emerald-800 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-600 border-red-800 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-900/50 border-transparent text-slate-600 opacity-30" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
+                                            <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
+                                            {option}
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            }
+            case 'anagram': 
+                return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer} onCorrectAndNext={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
+            
+            case 'anagramGame': 
+            case 'kelimeDahasi': 
+                 return <AnagramGamePlayer step={step as AnagramGameStep} onAnswered={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
+
+            case 'sentenceScramble': 
+                return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
+            
+            default: 
+                // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
+                return (
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900 text-white">
+                        <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
+                        <h2 className="text-2xl font-bold mb-2">İçerik Tipi Tanınamadı</h2>
+                        <div className="bg-black/50 p-4 rounded-xl border border-white/10 font-mono text-sm">
+                             Gelen Tip: <span className="text-yellow-400">"{step.type}"</span>
+                        </div>
+                    </div>
+                );
+        }
+    }
 
     return (
-        // ... (The main return JSX of LessonContentViewer)
-        <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
-            <p>Rendering content...</p>
+        <div className="relative w-full h-full">
+            {renderContent()}
         </div>
+    );
+}
+
+// --- ANA EKRAN: LessonContentViewer ---
+
+export function LessonContentViewer({
+    topic,
+    courseId,
+    unitId,
+    courseTitle,
+    unitTitle,
+    onTopicComplete,
+    progress,
+    onProgressUpdate,
+    isFullscreen,
+    completeButtonText, 
+    onMultiAnswer,
+    onAllTfAnswered
+}: LessonContentViewerProps) {
+    const { user } = useAuth();
+    const isTeacher = useTeacherMode();
+    const { toast } = useToast();
+      
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
+    const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+    const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
+    const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
+    
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [isFinished, setIsFinished] = useState(false);
+    
+    const [isVisualMaximized, setIsVisualMaximized] = useState(false);
+      
+    const [showResumeDialog, setShowResumeDialog] = useState(false);
+    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+
+    const steps = useMemo(() => {
+        if (!topic) return [];
+        return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+    }, [topic, isTeacher]);
+
+    const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
+    
+    useEffect(() => {
+        if (currentStep?.type === 'visual') {
+            setIsVisualMaximized(true);
+        } else if (isVisualMaximized) {
+            setIsVisualMaximized(false);
+        }
+    }, [currentStep, isVisualMaximized]);
+
+
+    useEffect(() => {
+        if (topic) {
+            // LocalStorage'dan kontrol et
+            const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
+            const savedData = localStorage.getItem(storageKey);
+              
+            if (savedData) {
+                const savedIndex = parseInt(savedData);
+                if (!isNaN(savedIndex) && savedIndex > 0 && savedIndex < steps.length) {
+                    setSavedStepIndex(savedIndex);
+                    setShowResumeDialog(true);
+                } else {
+                    setCurrentStepIndex(0);
+                }
+            } else {
+                setCurrentStepIndex(0);
+            }
+
+            setInternalProgress({ answers: {}, score: 0 });
+            setIsFinished(false);
+            setRevealedSentencesCount(1);
+            setFlippedCards(new Set());
+            setFlippedAnagramCards(new Set());
+            setIsAnimating(false);
+            setIsVisualMaximized(false); // Reset
+        }
+    }, [topic, user?.uid, steps.length]);
+
+    useEffect(() => {
+        if (topic && currentStepIndex > 0) {
+            const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
+            localStorage.setItem(storageKey, currentStepIndex.toString());
+        }
+    }, [currentStepIndex, topic, user?.uid]);
+
+    const handleResume = () => {
+        if (savedStepIndex !== null) {
+            setCurrentStepIndex(savedStepIndex);
+        }
+        setShowResumeDialog(false);
+    };
+
+    const handleRestart = () => {
+        setCurrentStepIndex(0);
+        if (topic) {
+            const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
+            localStorage.removeItem(storageKey);
+        }
+        setShowResumeDialog(false);
+    };
+
+    useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === 'ACTIVITY_COMPLETED') {
+                const { score, passed } = event.data;
+                if (passed) {
+                    const currentAnswers = internalProgress.answers[currentStepIndex] || {};
+                    if (!currentAnswers.completed) {
+                        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
+                        setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 50), answers: newAnswers }));
+                        toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-600 border-none text-white" });
+                        playSound('win');
+                    }
+                } else {
+                    toast({ title: "Tekrar Dene", description: `Henüz yeterli puana ulaşamadın.`, variant: "destructive" });
+                }
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [currentStepIndex, internalProgress, toast]);
+
+    useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
+
+      
+    // --- KONTROL MANTIĞI ---
+    const isActivityStep = currentStep?.type === 'activityLink';
+    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
+    
+    // Görsel tam ekran yapıldığında da 'FullWidth' moduna geç
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
+      
+    const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
+
+    const isNextButtonEnabled = useMemo(() => {
+        if (!currentStep) return false;
+        if (isTeacher) return true;
+          
+        // HTML Slide için her zaman aktif
+        if (isHtmlSlideStep) return true;
+
+        // Oyun için: Sadece completed true ise aktif
+        if (isActivityStep) return !!isStepCompleted;
+
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
+        if (isPassiveStep) return true;
+        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
+
+        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
+        if (isCardStep) {
+            const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards;
+            const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
+            return cardSet.size === cards.length;
+        }
+          
+        const answer = internalProgress.answers[currentStepIndex];
+        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
+          
+        return answer !== undefined && answer !== null;
+    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
+
+    const handleNext = useCallback(() => {
+        if (!currentStep) return;
+          
+        // Bitirince LocalStorage'ı temizle
+        if (currentStepIndex === steps.length - 1) {
+             if (topic) {
+                const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
+                localStorage.removeItem(storageKey);
+            }
+        }
+
+        // Pasif adımları otomatik tamamla
+        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide'].includes(currentStep.type)) {
+            if (internalProgress.answers[currentStepIndex] === undefined) {
+                const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
+                setInternalProgress(prev => ({...prev, answers: newAnswers }));
+            }
+        }
+        if (currentStepIndex < steps.length - 1) {
+            setCurrentStepIndex(currentStepIndex + 1);
+            setRevealedSentencesCount(1);
+            setFlippedCards(new Set());
+            setFlippedAnagramCards(new Set());
+            setIsAnimating(false);
+            setIsVisualMaximized(false); // Adım değişince büyütmeyi kapat 
+        } else {
+            setIsFinished(true);
+            playSound('win');
+            onTopicComplete(topic!.id, internalProgress.score);
+        }
+    }, [currentStep, currentStepIndex, steps.length, internalProgress, onTopicComplete, topic, user?.uid]);
+
+    const handleAnswer = (answer: string | boolean) => {
+        if (internalProgress.answers[currentStepIndex] !== undefined) return;
+        let isCorrect = false;
+        let points = 0;
+        if (currentStep.type === 'mcq' || currentStep.type === 'fitb') {
+            isCorrect = answer === (currentStep as McqStep).correctAnswer;
+            points = isCorrect ? 40 : 0;
+        } else if (currentStep.type === 'tf') {
+            isCorrect = (answer === "Doğru") === (currentStep as TfStep).isTrue;
+            points = isCorrect ? 20 : 0;
+        } else if (currentStep.type === 'anagram') {
+            isCorrect = (answer as string).toLocaleUpperCase('tr-TR') === (currentStep as AnagramStep).correctAnswer.toLocaleUpperCase('tr-TR');
+            points = isCorrect ? 50 : 0;
+        } else if (currentStep.type === 'sentenceScramble') {
+             isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence;
+             points = isCorrect ? 50 : 0;
+        }
+        if (isCorrect) playSound('correct'); else playSound('incorrect');
+        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect } };
+        const newScore = internalProgress.score + points;
+        setInternalProgress({ answers: newAnswers, score: newScore });
+    };
+
+    const handleCardFlip = useCallback((cardIndex: number, type: 'flashcard' | 'anagramFlashcard') => {
+        playSound('pop'); 
+        const cardSet = type === 'flashcard' ? flippedCards : flippedAnagramCards;
+        const setCardSet = type === 'flashcard' ? setFlippedCards : setFlippedAnagramCards;
+        const currentStepTyped = currentStep as FlashcardStep | AnagramFlashcardStep;
+        const totalCards = currentStepTyped.cards.length;
+        const newSet = new Set(cardSet);
+        if (newSet.has(cardIndex)) newSet.delete(cardIndex);
+        else newSet.add(cardIndex);
+        setCardSet(newSet);
+        const isAllFlipped = newSet.size === totalCards;
+        if(isAllFlipped && internalProgress.answers[currentStepIndex] === undefined) {
+             const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
+            setInternalProgress(prev => ({ ...prev, answers: newAnswers }));
+        }
+    }, [currentStep, flippedCards, flippedAnagramCards, internalProgress, currentStepIndex]);
+
+    const handleSlideScrolledToEnd = useCallback(() => {
+        if (internalProgress.answers && internalProgress.answers[currentStepIndex] === undefined) {
+            const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
+            setInternalProgress(prev => ({ ...prev, answers: newAnswers }));
+        }
+    }, [currentStepIndex, internalProgress]);
+
+    const handlePrev = () => { if(currentStepIndex > 0) setCurrentStepIndex(prev => prev - 1); };
+
+    const handleLocalMultiAnswer = (questionIndex: number, selectedAnswer: boolean) => {
+        if (!currentStep || currentStep.type !== 'trueFalseList') return;
+        const existingAnswers = internalProgress.answers[currentStepIndex] || {};
+        if (existingAnswers[questionIndex] !== undefined) return;
+        const question = (currentStep as any).questions[questionIndex];
+        const isCorrect = selectedAnswer === question.isTrue;
+        if (isCorrect) playSound('correct'); else playSound('incorrect');
+        const newAnswersForStep = { ...existingAnswers, [questionIndex]: { answer: selectedAnswer, isCorrect } };
+        setInternalProgress(prev => ({ ...prev, answers: { ...prev.answers, [currentStepIndex]: newAnswersForStep }}));
+    };
+      
+    const handleLocalAllTfAnswered = () => {
+        if (!currentStep || currentStep.type !== 'trueFalseList') return;
+        const answersForStep = internalProgress.answers[currentStepIndex];
+        const correctCount = Object.values(answersForStep || {}).filter((a: any) => a.isCorrect).length;
+        const points = correctCount * 20;
+        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { ...answersForStep, completed: true } };
+        setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
+    }
+
+    const handleContinueOrNext = () => {
+          if (!currentStep) return;
+        const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
+        if (isContentList) {
+             let totalItems = 0;
+             if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
+             else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
+             else if (currentStep.type === 'content') {
+                 const stepContent = (currentStep as ContentStep).content || '';
+                 const listItems = stepContent.match(/<li>/g) || [];
+                 totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+             }
+            const isListFullyRevealed = revealedSentencesCount >= totalItems;
+            if (isListFullyRevealed) handleNext(); else setRevealedSentencesCount(prev => prev + 1);
+        } else {
+            handleNext();
+        }
+    };
+
+    // --- RENDER ---
+
+    if (isFinished) {
+         return (
+             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-6">
+                 <PartyPopper className="h-20 w-20 text-yellow-400 animate-bounce" />
+                 <h1 className="text-4xl font-bold">Ders Tamamlandı!</h1>
+                 <p className="text-2xl text-cyan-400 font-bold">Toplam Puan: {internalProgress.score}</p>
+                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">
+                     {completeButtonText || 'Bitir'}
+                 </Button>
+             </div>
+         )
+    }
+      
+    if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
+
+    const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
+    let showContinueButton = false;
+    if (isContentList) {
+         let totalItems = 0;
+         if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
+         else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
+         else if (currentStep.type === 'content') {
+             const stepContent = (currentStep as ContentStep).content || '';
+             const listItems = stepContent.match(/<li>/g) || [];
+             totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+         }
+        showContinueButton = revealedSentencesCount < totalItems;
+    }
+
+    const showFloatingButton = isFullWidthStep && (
+        (isActivityStep && (isStepCompleted || isTeacher)) || 
+        (currentStep?.type === 'visual' && isVisualMaximized) ||
+        isHtmlSlideStep
+    );
+    
+    const isStudentInActivity = isActivityStep && !isTeacher;
+
+    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
+
+    return (
+      <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
+        
+        <DrawingCanvas />
+
+        {showResumeDialog && (
+            <div className="absolute inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-white animate-in zoom-in-95">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-400" />Kaldığın Yerden Devam Et</CardTitle>
+                        <CardDescription>Daha önce bu konuda <strong>{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription>
+                    </CardHeader>
+                    <CardFooter className="flex flex-col gap-3">
+                        <Button onClick={handleResume} className="w-full bg-cyan-600 hover:bg-cyan-500 text-lg py-6 rounded-xl">Evet, Devam Et</Button>
+                        <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-400 hover:text-white">Hayır, Baştan Başla</Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        )}
+
+        {/* --- İÇERİK ALANI --- */}
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
+             {!isFullWidthStep && (
+                 <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+                     <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" />
+                     <div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-500/5 rounded-full blur-[80px]" />
+                 </div>
+             )}
+
+           <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4")}>
+              <StepContent 
+                step={currentStep}
+                answer={internalProgress.answers[currentStepIndex]}
+                onAnswer={handleAnswer}
+                onCorrectAndNext={() => setTimeout(handleNext, 1000)}
+                stepAnswers={internalProgress.answers[currentStepIndex]}
+                topic={topic}
+                courseId={courseId}
+                unitId={unitId}
+                courseTitle={courseTitle}
+                unitTitle={unitTitle}
+                isFullscreen={isFullscreen}
+                revealedSentencesCount={revealedSentencesCount}
+                flippedCards={flippedCards}
+                flippedAnagramCards={flippedAnagramCards}
+                onCardFlip={handleCardFlip}
+                onSlideScrolledToEnd={handleSlideScrolledToEnd}
+                onMultiAnswer={handleLocalMultiAnswer}
+                onAllTfAnswered={handleLocalAllTfAnswered}
+                onAnimationStart={() => setIsAnimating(true)}
+                onAnimationEnd={() => setIsAnimating(false)}
+                isVisualMaximized={isVisualMaximized}
+                onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
+              />
+           </div>
+        </div>
+        
+        {!isStudentInActivity && (
+            <div className={cn(
+                "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300",
+                isFullWidthStep 
+                    ? "absolute bottom-0 left-0 right-0 h-16 px-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100" 
+                    : (isTeacher && isFullscreen 
+                        ? (isImmersiveStep 
+                            ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none"
+                            : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10"
+                        )
+                        : (isFullscreen 
+                            ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" 
+                            : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md"
+                        )
+                    )
+            )}>
+                <div className="flex items-center gap-4 flex-1">
+                    <Button 
+                        variant="outline" 
+                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        onClick={handlePrev} 
+                        disabled={currentStepIndex === 0} 
+                        className={cn(
+                            "border-white/10 hover:bg-white/5 text-slate-300 hover:text-white",
+                            isTeacher && isFullscreen && "text-lg font-bold border-2"
+                        )}
+                    >
+                        <ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                        Geri
+                    </Button>
+                    
+                    <div className="hidden md:flex items-center gap-2">
+                        <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
+                        <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
+                    </div>
+                </div>
+
+                <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
+
+                <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
+                    
+                    {isTeacher && (
+                        <Button 
+                            variant="ghost" 
+                            size={isTeacher && isFullscreen ? "default" : "sm"}
+                            onClick={handleNext} 
+                            className={cn(
+                                "text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors",
+                                isTeacher && isFullscreen && "text-base font-semibold"
+                            )}
+                            title="Bu adımı zorla geç (Puan verilmez)"
+                        >
+                            <FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> 
+                            Atla
+                        </Button>
+                    )}
+
+                    <Button 
+                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        onClick={handleContinueOrNext} 
+                        disabled={!isNextButtonEnabled || isAnimating}
+                        className={cn(
+                            "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
+                            showContinueButton ? "px-6" : "px-4",
+                            isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
+                        )}
+                    >
+                        {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
+                        <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                    </Button>
+                </div>
+            </div>
+        )}
+
+        {showFloatingButton && (
+            <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
+                <Button 
+                    size="lg" 
+                    onClick={handleNext}
+                    className={cn(
+                        "text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all",
+                        (isActivityStep && isStepCompleted) 
+                            ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" 
+                            : (isTeacher && isActivityStep
+                                ? "bg-amber-600 hover:bg-amber-500 border-amber-800/50 shadow-amber-900/30"
+                                : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30"
+                            )
+                    )}
+                >
+                    {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
+                    <ArrowRight className="ml-2 h-6 w-6" />
+                </Button>
+            </div>
+        )}
+      </div>
     );
 }

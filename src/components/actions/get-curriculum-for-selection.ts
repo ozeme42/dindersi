@@ -69,6 +69,7 @@ export async function getCurriculumForSelection(
 
             for (const unitDoc of unitsSnapshot.docs) {
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
+                
                 const topicsWithFlag = topicsSnapshot.docs
                     .map(topicDoc => {
                         const topicData = topicDoc.data() as Topic;
@@ -78,18 +79,18 @@ export async function getCurriculumForSelection(
                            hasContent = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
                         } else if (dataType === 'ozetler') {
                            hasContent = !!topicData.htmlContent;
-                        } else { // games
-                           hasContent = true;
+                        } else if (dataType === 'games') {
+                           // For games, a topic is valid if it's published and has at least one lesson step.
+                           hasContent = (topicData.isPublished ?? true) && (topicData.steps?.length || 0) > 0;
                         }
 
                         return {
                             id: topicDoc.id,
                             ...topicData,
-                            hasYazilacaklarContent: hasContent,
-                            hasOzetContent: !!topicData.htmlContent,
+                            hasContent: hasContent, // Generic content flag
                         };
                     })
-                    .filter(t => t[dataType === 'yazilacaklar' ? 'hasYazilacaklarContent' : (dataType === 'ozetler' ? 'hasOzetContent' : 'isPublished')] ?? true);
+                    .filter(t => t.hasContent);
 
                 if (topicsWithFlag.length > 0) {
                     const unitData = unitDoc.data() as Unit;
@@ -97,7 +98,7 @@ export async function getCurriculumForSelection(
                         id: unitDoc.id,
                         title: unitData.title,
                         hasUnitOzet: !!unitData.htmlContent,
-                        topics: topicsWithFlag
+                        topics: topicsWithFlag as any,
                     });
                 }
             }
