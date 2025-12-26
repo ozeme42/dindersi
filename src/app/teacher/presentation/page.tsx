@@ -60,7 +60,7 @@ function PresentationPageContent() {
                     setTopic({
                         id: unitId,
                         title: unitData.title,
-                        steps: unitData.steps || [],
+                        steps: (unitData.steps || []).filter(s => s.isPublished ?? true), // Filter here
                     });
                 }
             }

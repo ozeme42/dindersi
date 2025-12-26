@@ -50,24 +50,28 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
 
         const topicsByUnit: { [unitId: string]: Topic[] } = {};
         for (const topic of allTopics) {
+            // Since topics is a subcollection of units, its ref path contains the unit ID.
             const pathSegments = allTopicsSnapshot.docs.find(d => d.id === topic.id)?.ref.path.split('/');
             if(pathSegments && pathSegments.length > 3) {
                 const unitId = pathSegments[3];
                  if (!topicsByUnit[unitId]) {
                     topicsByUnit[unitId] = [];
                 }
+                // No filtering by isPublished here for the teacher view
                 topicsByUnit[unitId].push(topic);
             }
         }
         
         const unitsByCourse: { [courseId: string]: EnrichedUnit[] } = {};
         for (const unit of allUnits) {
+             // Find the parent course ID from the document reference path
             const pathSegments = allUnitsSnapshot.docs.find(d => d.id === unit.id)?.ref.path.split('/');
             if(pathSegments && pathSegments.length > 1) {
                 const courseId = pathSegments[1];
                  if (!unitsByCourse[courseId]) {
                     unitsByCourse[courseId] = [];
                 }
+                // No filtering by isPublished here for the teacher view
                 const topicsForUnit = (topicsByUnit[unit.id] || []).sort((a,b) => a.title.localeCompare(b.title));
                 unitsByCourse[courseId].push({
                     ...unit,
@@ -83,12 +87,14 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
             if (!coursesByClass[classId]) {
                 coursesByClass[classId] = [];
             }
+            // No filtering by isPublished here for the teacher view
             const unitsForCourse = (unitsByCourse[course.id] || []).sort((a,b) => a.title.localeCompare(b.title));
             coursesByClass[classId].push({ ...course, units: unitsForCourse });
         }
 
         const enrichedClasses: EnrichedClass[] = classesSnapshot.docs.map(doc => {
             const classData = { id: doc.id, ...doc.data() } as SchoolClass;
+            // No filtering by isPublished here for the teacher view
             return { ...classData, courses: coursesByClass[doc.id] || [] };
         });
 

@@ -4,7 +4,7 @@
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Wand2, ArrowLeft, Download, PlusCircle, Save, Trash2, Columns } from 'lucide-react';
+import { Loader2, Wand2, ArrowLeft, Download, Plus, Minus, Maximize, Minimize, Columns } from 'lucide-react';
 import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
 import Link from 'next/link';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
@@ -20,7 +20,6 @@ import { Input } from '@/components/ui/input';
 import { generateTopicSummary } from '@/ai/flows/generate-topic-summary-flow';
 import { saveGeneratedActivityItems, deleteBulkActivityItems, saveActivityItem } from '@/app/teacher/activity-data/actions';
 import { updateTopicContent } from '@/app/teacher/content-creation/edit/actions';
-
 
 async function getDefinitionsForTopic(topicId: string): Promise<ActivityItem[]> {
     if (!topicId) return [];
@@ -58,6 +57,7 @@ function OzetPageContent() {
 
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [fontSize, setFontSize] = useState(1.5); 
 
     const colorClasses = [
         'bg-chart-1', 'bg-chart-2', 'bg-chart-3',
@@ -200,6 +200,9 @@ function OzetPageContent() {
 
     const backUrl = `/teacher/ders-akisi`;
     
+    const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.2, 5.0));
+    const decreaseFontSize = () => setFontSize(fs => Math.max(1.0, fs - 0.2));
+
     if (isLoading) {
         return <div className="flex h-screen items-center justify-center"><Loader2 className="h-10 w-10 animate-spin text-primary"/></div>;
     }
@@ -290,7 +293,7 @@ function OzetPageContent() {
     );
 }
 
-export default function OzetPage() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-12 w-12 animate-spin text-primary"/></div>}>
             <OzetPageContent />
