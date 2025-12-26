@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
 import { Loader2, Zap } from "lucide-react";
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 // This page now only serves to redirect users. 
 // The main dashboard logic has been consolidated into the root `src/app/page.tsx`.
@@ -15,6 +16,7 @@ export default function TeacherDashboardRedirect() {
   useEffect(() => {
     if (!loading) {
       if (user) {
+        // Yönlendirmeyi /teacher yerine ana dizine yap
         router.replace('/');
       } else {
         router.replace('/login');

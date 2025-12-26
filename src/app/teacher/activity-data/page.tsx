@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -29,7 +27,8 @@ import {
     ArrowRight,
     Check,
     User,
-    Save
+    Save,
+    Home
 } from "lucide-react";
 import {
     Select,
@@ -67,6 +66,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ActivityItemEditorDialog } from "@/components/activity-item-editor-dialog";
 import { BulkActivityImportDialog } from "@/components/bulk-activity-import-dialog";
 import { cn } from "@/lib/utils";
+import Link from 'next/link';
 
 type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
 
@@ -422,16 +422,18 @@ export default function ActivityDataManagementPage() {
       <div className="max-w-7xl mx-auto relative z-10 space-y-6">
         
         {/* Header */}
-        <div className="text-center space-y-4 py-6">
-             <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl mb-2">
-                <Database className="h-10 w-10 text-teal-400" />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg">
+        <div className="flex items-center justify-between border-b border-white/5 pb-6 mb-4">
+            <h1 className="text-3xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
+                <div className="p-2 bg-teal-500/20 rounded-xl border border-teal-500/30">
+                    <Database className="h-8 w-8 text-teal-400" />
+                </div>
                 Etkinlik Veri Bankası
             </h1>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
-                Yapay zeka ile üretilmiş veya manuel eklenmiş etkinlik verilerini yönetin.
-            </p>
+            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                <Link href="/teacher">
+                    <Home className="mr-2 h-4 w-4" /> Panele Dön
+                </Link>
+            </Button>
         </div>
 
         {/* Main Content Card */}
@@ -497,7 +499,9 @@ export default function ActivityDataManagementPage() {
                     </div>
                     {selectedItemIds.size > 0 && (
                         <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-5 duration-300">
-                            <span className="text-sm font-bold text-indigo-400">{selectedItemIds.size} öğe seçildi</span>
+                            <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border-indigo-500/30 px-3 py-1.5 text-sm">
+                                {selectedItemIds.size} öğe seçildi
+                            </Badge>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild><Button variant="destructive" size="sm" disabled={isDeleting} className="bg-red-600 hover:bg-red-500 shadow-lg shadow-red-900/20"><Trash2 className="mr-2 h-4 w-4"/> Sil</Button></AlertDialogTrigger>
                                 <AlertDialogContent className="bg-slate-900 border-white/10 text-white">

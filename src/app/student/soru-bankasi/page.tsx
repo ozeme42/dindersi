@@ -1,32 +1,54 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
+import type { Course, SchoolClass, UserProgress } from "@/lib/types";
+import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Star, Target, Loader2, Book, Sparkles, LayoutGrid, Gamepad2, XCircle } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Star, Target } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
 // --- TİP TANIMLAMALARI ---
-type Course = EnrichedClassGroup['courses'][0];
-
-const ICONS = [Book, Sparkles, LayoutGrid, Gamepad2];
-const getGradient = (index: number) => {
-    const gradients = [
-        "from-blue-600 to-cyan-500",
-        "from-violet-600 to-purple-500",
-        "from-emerald-600 to-teal-500",
-        "from-rose-600 to-pink-500",
-        "from-amber-600 to-orange-500"
-    ];
-    return gradients[index % gradients.length];
+type CourseWithAllProgress = Course & {
+    lessonProgress?: number;
+    questionBankProgress?: number;
+    topicsCount?: number;
+    completedTopicsCount?: number;
+    passedTests?: number;
+    totalQuestionBankTests?: number;
 };
 
+// --- ÖZEL İLERLEME ÇUBUĞU (NEON EFEKTLİ) ---
+const CyberProgress = ({ value, colorClass, label, subLabel, icon: Icon }: { value: number, colorClass: string, label: string, subLabel: string, icon: any }) => (
+    <div className="space-y-2">
+        <div className="flex justify-between items-end">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <Icon className="w-3.5 h-3.5 opacity-70" />
+                {label}
+            </div>
+            <span className={cn("text-xs font-black", colorClass.replace('bg-', 'text-'))}>{value}%</span>
+        </div>
+        <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative">
+            <div 
+                className={cn("h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_currentColor] relative", colorClass)} 
+                style={{ width: `${value}%` }} 
+            >
+                {/* Işıltı Efekti */}
+                <div className="absolute top-0 right-0 bottom-0 w-1 bg-white/50 blur-[1px]" />
+            </div>
+        </div>
+        <p className="text-[10px] text-slate-500 text-right font-mono font-medium tracking-tight">{subLabel}</p>
+    </div>
+);
+
 // --- DERS KARTI BİLEŞENİ (GÜNCELLENMİŞ) ---
-const CourseCardWithProgress = ({ course }: { course: Course }) => (
+const CourseCardWithProgress = ({ course }: { course: CourseWithAllProgress }) => (
     <div className="group relative flex flex-col rounded-[2rem] bg-slate-900/60 border border-white/10 backdrop-blur-xl overflow-hidden hover:border-cyan-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-cyan-900/20">
         
         {/* Arka Plan Efekti */}
@@ -36,9 +58,9 @@ const CourseCardWithProgress = ({ course }: { course: Course }) => (
         <div className="p-6 flex-grow space-y-6 relative z-10">
             {/* Başlık ve İkon */}
             <div className="flex items-start gap-5">
-                <div className={cn("p-3.5 bg-gradient-to-br rounded-2xl border border-white/10 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shrink-0 relative overflow-hidden", (course as any).color)}>
-                    <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <BookOpen className="h-7 w-7 text-white drop-shadow-md" />
+                <div className="p-3.5 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-white/10 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shrink-0 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <BookOpen className="h-7 w-7 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
                 </div>
                 <div>
                     <h3 className="text-xl font-black text-white leading-tight group-hover:text-cyan-300 transition-colors drop-shadow-md line-clamp-2">
@@ -51,6 +73,24 @@ const CourseCardWithProgress = ({ course }: { course: Course }) => (
                         </span>
                     </div>
                 </div>
+            </div>
+
+            {/* İlerleme Barları */}
+            <div className="space-y-5 bg-slate-950/30 p-5 rounded-2xl border border-white/5 shadow-inner">
+                <CyberProgress 
+                    value={course.lessonProgress || 0} 
+                    colorClass="bg-cyan-500" 
+                    label="Konu Anlatımı"
+                    subLabel={`${course.completedTopicsCount || 0}/${course.topicsCount || 0} Konu Tamamlandı`}
+                    icon={Star}
+                />
+                <CyberProgress 
+                    value={course.questionBankProgress || 0} 
+                    colorClass="bg-amber-500" 
+                    label="Soru Bankası"
+                    subLabel={`${course.passedTests || 0}/${course.totalQuestionBankTests || 0} Test Başarılı`}
+                    icon={Target}
+                />
             </div>
         </div>
 
@@ -79,7 +119,7 @@ const CourseCardWithProgress = ({ course }: { course: Course }) => (
 // --- ANA SAYFA BİLEŞENİ ---
 export default function SoruBankasiPage() {
     const { user } = useAuth();
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<CourseWithAllProgress[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -91,42 +131,84 @@ export default function SoruBankasiPage() {
 
             setIsLoading(true);
             try {
-                // Use the centralized action to get curriculum data
-                const result = await getCurriculumForSelection('games', false, user.uid);
+                const studentClassName = user.class?.split(' - ')[0];
+
+                const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+                const [classesSnapshot, allCoursesSnapshot] = await Promise.all([
+                    getDocs(classesQuery),
+                    getDocs(collection(db, "courses"))
+                ]);
                 
-                if (result.error) {
-                    console.error(result.error);
-                }
+                const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+                const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+
+                let filteredCourses: Course[] = [];
+                const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
                 
-                // Flatten the class groups into a single course list
-                const allCourses = (result.classGroups || []).flatMap((group, groupIndex) => 
-                    group.courses.map((course: any, courseIndex: number) => ({
-                        ...course,
-                        className: group.name, // Add class name for display
-                        icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
-                        color: getGradient(groupIndex + courseIndex)
-                    }))
+                // Öğrencinin sınıfına atanmış, genel (classId'si olmayan) veya yaz okulu derslerini al
+                filteredCourses = allCourses.filter(course => 
+                    !course.isTeacherOnly && (
+                        (studentClass && course.classId === studentClass.id) || // Öğrencinin sınıfına ait
+                        !course.classId                                       // Genel dersler
+                    )
                 );
 
-                // Sort courses to put "Din Kültürü" first
-                allCourses.sort((a, b) => {
+
+                const coursesData = await Promise.all(filteredCourses.map(async (course) => {
+                    const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
+                    const qbStats = getCourseQuestionBankStats(course.id, user.uid);
+                    
+                    const [progressSnap, questionBankStats] = await Promise.all([
+                        getDoc(progressRef),
+                        qbStats
+                    ]);
+                    
+                    let completedTopicsCount = 0;
+                    if(progressSnap.exists()){
+                        const progressData = progressSnap.data() as UserProgress;
+                        Object.values(progressData).forEach(topicProgress => {
+                            if(topicProgress.completionCount > 0) {
+                                completedTopicsCount++;
+                            }
+                        })
+                    }
+                    
+                    const unitsRef = collection(db, 'courses', course.id, 'units');
+                    const unitsSnap = await getDocs(unitsRef);
+                    let totalTopics = 0;
+                    for (const unitDoc of unitsSnap.docs) {
+                        const topicsSnap = await getDocs(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`));
+                        totalTopics += topicsSnap.size;
+                    }
+                    
+                    const lessonProgress = totalTopics > 0 ? Math.round((completedTopicsCount / totalTopics) * 100) : 0;
+                    
+                    return {
+                        ...course,
+                        className: studentClass?.name || 'Genel',
+                        lessonProgress,
+                        completedTopicsCount: completedTopicsCount,
+                        topicsCount: totalTopics,
+                        questionBankProgress: questionBankStats.completionPercentage,
+                        passedTests: questionBankStats.passedTests,
+                        totalQuestionBankTests: questionBankStats.totalTests,
+                    };
+                }));
+
+                coursesData.sort((a, b) => {
                     if (a.title.includes('Din Kültürü')) return -1;
                     if (b.title.includes('Din Kültürü')) return 1;
                     return a.title.localeCompare(b.title);
                 });
 
-                setCourses(allCourses);
+                setCourses(coursesData);
             } catch (error) {
                 console.error("Error fetching courses for question bank:", error);
             } finally {
                 setIsLoading(false);
             }
         }
-        if (user) {
-            fetchCoursesAndProgress();
-        } else {
-            setIsLoading(false);
-        }
+        fetchCoursesAndProgress();
     }, [user]);
 
     return (
@@ -143,7 +225,7 @@ export default function SoruBankasiPage() {
                 {/* Başlık Alanı */}
                 <div className="mb-10 md:mb-14 relative text-center md:text-left">
                     <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl mb-2">
-                        Dersler <span className="text-slate-600">&</span> Macera Haritası
+                        Dersler <span className="text-slate-600">&</span> Soru Bankası
                     </h1>
                     <p className="text-slate-400 text-lg">
                         Derslerini çalış, testlerini çöz ve <span className="text-cyan-400 font-bold">başarıya ulaş!</span>
@@ -154,7 +236,7 @@ export default function SoruBankasiPage() {
                 {isLoading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="rounded-[2rem] border border-white/5 bg-slate-900/50 p-6 space-y-6 animate-pulse">
+                            <div key={i} className="rounded-[2rem] border border-white/5 bg-slate-900/50 p-6 space-y-6">
                                 <div className="flex items-center gap-4">
                                     <Skeleton className="h-14 w-14 rounded-2xl bg-slate-800" />
                                     <div className="space-y-2">

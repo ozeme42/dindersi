@@ -3,7 +3,7 @@
 
 import React, { type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, MonitorPlay, Workflow, Gamepad2 } from 'lucide-react';
+import { ArrowRight, MonitorPlay, Workflow, Gamepad2, FileJson } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 const FeatureButton = ({ href, title, description, icon, colorClass }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string }) => {
@@ -57,12 +57,12 @@ export function TeacherMainButtons() {
       colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500',
     },
     {
-      key: 'activityCenterTeacher',
-      href: '/oyunlar',
-      title: 'Etkinlik Merkezi',
-      description: 'Tüm öğrenci etkinliklerini buradan test edin.',
-      icon: <Gamepad2 />,
-      colorClass: 'bg-fuchsia-600 border-fuchsia-800 hover:bg-fuchsia-500',
+      key: 'staticDataEditor',
+      href: '/teacher/static-data-editor',
+      title: 'Statik Veri Editörü',
+      description: 'Oyunlar için kullanılan JSON dosyalarını düzenleyin.',
+      icon: <FileJson />,
+      colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500',
     },
   ];
 
