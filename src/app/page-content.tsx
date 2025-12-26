@@ -333,7 +333,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     gameSettingsTeacher: { key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />, color: "bg-slate-500 shadow-slate-200" },
     leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
     scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "bg-emerald-500 shadow-emerald-200" },
-    staticDataEditor: { key: 'staticDataEditor', href: '/teacher/static-data-editor', title: 'Statik Veri Editörü', icon: <FileJson />, color: "bg-pink-500 shadow-pink-200" },
+    veriEditoru: { key: 'veriEditoru', href: '/teacher/veri-editoru', title: 'Veri Editörü', icon: <FileJson />, color: "bg-pink-500 shadow-pink-200" },
   };
 
   const getManagementButtons = () => {
@@ -350,7 +350,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.imageLibrary,
           managementButtons.gameSettingsTeacher,
           managementButtons.scoreEvents,
-          managementButtons.staticDataEditor, // Buraya eklendi
+          managementButtons.veriEditoru,
       ];
       if(user.role === 'superadmin') {
           buttons.unshift(managementButtons.superAdmin);
