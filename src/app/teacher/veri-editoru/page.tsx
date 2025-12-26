@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -174,8 +173,8 @@ export default function VeriEditoruPage() {
     };
     
     return (
-         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            <div className="max-w-7xl mx-auto w-full relative z-10 space-y-8">
+         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
+            <div className="max-w-7xl mx-auto w-full relative z-10 space-y-8 flex-grow flex flex-col">
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
                      <FileJson className="h-8 w-8 text-purple-400"/> Statik Veri Editörü
@@ -183,7 +182,7 @@ export default function VeriEditoruPage() {
                   <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>
                 </div>
                 
-                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col min-h-[70vh]">
+                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col flex-grow min-h-[70vh]">
                     <CardHeader className="border-b border-white/5 pb-4">
                         <div className="flex items-center justify-between">
                             <CardTitle className="text-xl text-white">
@@ -192,7 +191,7 @@ export default function VeriEditoruPage() {
                             <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="flex-grow flex justify-center items-start p-6 min-h-[400px]">
+                    <CardContent className="flex-grow flex justify-center items-start p-6 overflow-y-auto">
                         {renderContent()}
                     </CardContent>
                 </Card>
