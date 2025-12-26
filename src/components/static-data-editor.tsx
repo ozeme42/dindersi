@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Loader2, ArrowLeft, PlusCircle, Save, Trash2 } from 'lucide-react';
 import { ActivityItemEditorDialog } from './activity-item-editor-dialog';
 import { useToast } from '@/hooks/use-toast';
@@ -85,7 +85,7 @@ export function StaticDataEditor({ topicName, topicId, initialData, onBack, save
                 </CardHeader>
                 <CardContent className="space-y-4">
                      <div className="flex justify-end">
-                        <Button onClick={() => setEditingItem({ item: { type: 'concept', courseId, unitId, topicId }, index: -1 })}>
+                        <Button onClick={() => setEditingItem({ item: { type: 'concept' }, index: -1 })}>
                             <PlusCircle className="mr-2 h-4 w-4"/> Yeni Veri Ekle
                         </Button>
                     </div>
@@ -131,7 +131,7 @@ export function StaticDataEditor({ topicName, topicId, initialData, onBack, save
                  <ActivityItemEditorDialog 
                     isOpen={!!editingItem} 
                     onOpenChange={(open) => !open && setEditingItem(null)} 
-                    item={{...editingItem.item, courseId, unitId, topicId}}
+                    item={{...editingItem.item, topicId}}
                     onSave={handleSaveItem} 
                     isSaving={false} // This dialog just updates local state
                  />
