@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -122,6 +121,7 @@ export default function VeriEditoruPage() {
     
     const filteredCourses = useMemo(() => {
         if (!selection.classId || selection.classId === 'all') return allCourses;
+        // When a class is selected, show both courses specific to that class AND courses with no classId
         return allCourses.filter(c => c.classId === selection.classId || !c.classId);
     }, [selection.classId, allCourses]);
 
@@ -161,8 +161,7 @@ export default function VeriEditoruPage() {
             case 1:
                 return <SelectionGrid items={allClasses} onSelect={(id, name) => handleHierarchySelect(1, id, name)} titleKey="name" isLoading={isLoading} />;
             case 2:
-                const courses = allCourses.filter(c => c.classId === selection.classId || !c.classId);
-                return <SelectionGrid items={courses} onSelect={(id, name) => handleHierarchySelect(2, id, name)} titleKey="title" isLoading={isLoading} />;
+                return <SelectionGrid items={filteredCourses} onSelect={(id, name) => handleHierarchySelect(2, id, name)} titleKey="title" isLoading={isLoading} />;
             case 3:
                 const units = allCourses.find(c => c.id === selection.courseId)?.units || [];
                 return <SelectionGrid items={units} onSelect={(id, name) => handleHierarchySelect(3, id, name)} specialOptions={[{ id: 'all', name: `Tüm Üniteler (${selection.courseId})`}]} titleKey="title" isLoading={isLoading} />;
