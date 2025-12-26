@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -10,7 +9,7 @@ import {
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
-    Maximize2, Maximize, Minimize, AlertTriangle, FastForward
+    Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -1131,7 +1130,7 @@ export function StepContent({
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
                 return (
                     <div className="absolute inset-0 w-full h-full z-40 bg-slate-950">
-                         <iframe
+                          <iframe
                              src={activityUrl}
                              title={activityStep.activityLabel}
                              className="w-full h-full border-0 bg-slate-900"
@@ -1683,8 +1682,11 @@ export function LessonContentViewer({
                 flippedAnagramCards={flippedAnagramCards}
                 onCardFlip={handleCardFlip}
                 onSlideScrolledToEnd={handleSlideScrolledToEnd}
-                onMultiAnswer={onMultiAnswer}
-                onAllTfAnswered={onAllTfAnswered}
+                
+                // BURASI DÜZELTİLDİ:
+                onMultiAnswer={handleLocalMultiAnswer}
+                onAllTfAnswered={handleLocalAllTfAnswered}
+                
                 onAnimationStart={() => setIsAnimating(true)}
                 onAnimationEnd={() => setIsAnimating(false)}
                 isVisualMaximized={isVisualMaximized}

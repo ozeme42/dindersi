@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -244,7 +245,7 @@ function CoursePageContent() {
         });
     
         // Find next uncompleted topic to suggest
-        const allTopics = course.units.flatMap(u => u.topics);
+        const allTopics = course.units.flatMap(u => u.topics || []);
         const currentIndex = allTopics.findIndex(t => t.id === (isUnitFlow ? null : contentId));
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
@@ -362,7 +363,17 @@ function CoursePageContent() {
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
                         onSelectUnitFlow={handleSelectUnitFlow}
-                        isTopicUnlocked={(topicId: string) => isTopicUnlocked(topicId)}
+                        isTopicUnlocked={(topicId: string) => {
+                            if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
+                            if (!course?.units) return false;
+                            const allTopics = course.units.flatMap(u => u.topics || []);
+                            if (allTopics.length === 0) return true;
+                            const topicIndex = allTopics.findIndex(t => t.id === topicId);
+                            if (topicIndex <= 0) return true;
+                            const previousTopic = allTopics[topicIndex - 1];
+                            if (!previousTopic) return true;
+                            return isTopicCompleted(previousTopic.id);
+                        }}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
@@ -406,8 +417,8 @@ function CoursePageContent() {
                                 progress={localProgressMap[activeContentData.data.id]}
                                 onProgressUpdate={(id, prog) => onProgressUpdate(id, prog)}
                                 isFullscreen={isFullscreen}
-                                onMultiAnswer={(stepIndex, qIndex, val) => handleLocalMultiAnswer(stepIndex, qIndex, val)}
-                                onAllTfAnswered={(stepIndex) => handleLocalAllTfAnswered(stepIndex)}
+                                onMultiAnswer={handleLocalMultiAnswer}
+                                onAllTfAnswered={handleLocalAllTfAnswered}
                             />
                         ) : (
                             <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">
@@ -432,3 +443,4 @@ export default function CoursePage() {
     )
 }
 
+    
