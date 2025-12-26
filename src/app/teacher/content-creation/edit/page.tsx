@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
@@ -96,9 +97,17 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
         }
     }
 
+    const isPublished = step.isPublished ?? true;
+
     return (
-        <div ref={setNodeRef} style={style} className={cn("group", !(step.isPublished ?? true) && "opacity-50 hover:opacity-100")}>
-            <Card className="bg-slate-900/80 backdrop-blur-sm border-white/5 hover:border-white/20 transition-all hover:shadow-lg overflow-hidden group-hover:bg-slate-800/80">
+        <div ref={setNodeRef} style={style} className="group">
+            <Card className={cn(
+                "backdrop-blur-sm border-white/5 hover:border-white/20 transition-all hover:shadow-lg overflow-hidden", 
+                isPublished ? "bg-slate-900/80 group-hover:bg-slate-800/80" : "bg-slate-950/50 border-slate-800/50"
+            )}>
+                {!isPublished && (
+                    <div className="absolute inset-0 bg-black/30 pointer-events-none z-10" />
+                )}
                 <div className="flex items-center p-3 gap-3">
                     {/* Drag Handle */}
                     <button 
@@ -120,7 +129,7 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-bold text-slate-200 truncate group-hover:text-white transition-colors">{step.title}</h4>
+                        <h4 className={cn("text-sm font-bold truncate transition-colors", isPublished ? "text-slate-200 group-hover:text-white" : "text-slate-500 group-hover:text-slate-300")}>{step.title}</h4>
                         <div className="mt-1">
                             {renderContentPreview()}
                         </div>
@@ -128,8 +137,8 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
 
                     {/* Actions - Always visible on mobile, hover on desktop */}
                     <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-slate-500/20 hover:text-slate-200" onClick={onTogglePublish} title={step.isPublished ?? true ? "Gizle" : "Görünür Yap"}>
-                            {step.isPublished ?? true ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-slate-500/20 hover:text-slate-200" onClick={onTogglePublish} title={isPublished ? "Gizle" : "Görünür Yap"}>
+                            {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
                         </Button>
                          {step.type === 'activityLink' && (
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-teal-500/20 hover:text-teal-400" asChild>
@@ -442,7 +451,7 @@ export function TopicEditor({
                                 <DropdownMenuItem onClick={() => onOpenAIGeneration?.('anlatim', { title, sourceText })} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <FileText className="mr-2 h-4 w-4 text-blue-400"/> Anlatım Adımları Üret
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => onOpenAIGeneration?.('degerlendirme', { title, sourceText })} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                <DropdownMenuItem onClick={()={() => onOpenAIGeneration?.('degerlendirme', { title, sourceText })} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                     <HelpCircle className="mr-2 h-4 w-4 text-purple-400"/> Değerlendirme Adımları Üret
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -731,4 +740,6 @@ export default function Page() {
         </Suspense>
     )
 }
+    
+
     
