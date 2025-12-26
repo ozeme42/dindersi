@@ -41,7 +41,7 @@ export type LessonContentViewerProps = {
     progress: LocalProgress | undefined;
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
     isFullscreen: boolean;
-    completeButtonText?: string;
+    completeButtonText?: string; 
     onMultiAnswer?: (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => void;
     onAllTfAnswered?: (stepIndex?: number) => void;
 };
@@ -704,7 +704,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
 // 7.1 AnagramGamePlayer (Çoklu Kartlar İçin)
 function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step: AnagramGameStep, onAnswered: () => void, isTeacher: boolean, isFullscreen: boolean }) {
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const [answerState, setAnswerState] = useState<{ [cardIndex: number]: { answer: string; isCorrect: boolean } }>({});
+    const [answerState, setAnswerState<{ [cardIndex: number]: { answer: string; isCorrect: boolean } }> = useState({});
     
     if (!step.cards || step.cards.length === 0) {
         return (
@@ -1284,14 +1284,14 @@ export function StepContent({
                     </div>
                 );
             }
-            case 'anagram': return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer} onCorrectAndNext={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
+            case 'anagram': return <AnagramGame step={step as AnagramStep} onAnswer={onAnswer} answer={answer} isAnswerRevealed={!!answer} onCorrectAndNext={handleNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
             
             // --- EKLENEN KISIM: Kelime Dahası (AnagramGamePlayer) ---
             case 'anagramGame': 
             case 'kelimeDahasi': // Fallback alias
-                 return <AnagramGamePlayer step={step as AnagramGameStep} onAnswered={onCorrectAndNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
+                 return <AnagramGamePlayer step={step as AnagramGameStep} onAnswered={handleNext} isTeacher={isTeacher} isFullscreen={isFullscreen} />;
 
-            case 'sentenceScramble': return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={onCorrectAndNext} answer={answer} isAnswerRevealed={!!answer} />;
+            case 'sentenceScramble': return <SentenceScrambleGame step={step as SentenceScrambleStep} onAnswer={onAnswer} onCorrectAndNext={handleNext} answer={answer} isAnswerRevealed={!!answer} />;
             
             default: 
                 // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
@@ -1334,30 +1334,26 @@ export function LessonContentViewer({
     const isTeacher = useTeacherMode();
     const { toast } = useToast();
       
-    // State tanımları
     const [isAnimating, setIsAnimating] = useState(false);
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
-    const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
-    const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
+    const [flippedCards, setFlippedCards<Set<number>>(new Set());
+    const [flippedAnagramCards, setFlippedAnagramCards<Set<number>>(new Set());
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
-    const [steps, setSteps] = useState<LessonStep[]>([]);
+    
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     
-    // Görsel büyütme durumu state'i
     const [isVisualMaximized, setIsVisualMaximized] = useState(false);
       
-    // --- RESUME (KALINAN YERDEN DEVAM) ---
     const [showResumeDialog, setShowResumeDialog] = useState(false);
-    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+    const [savedStepIndex, setSavedStepIndex<number | null>(null);
+
+    const steps = useMemo(() => {
+        if (!topic) return [];
+        return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+    }, [topic, isTeacher]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
-    
-    useEffect(() => {
-        if (!topic) return;
-        const visibleSteps = topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
-        setSteps(visibleSteps);
-    }, [topic, isTeacher]);
     
     useEffect(() => {
         if (currentStep?.type === 'visual') {

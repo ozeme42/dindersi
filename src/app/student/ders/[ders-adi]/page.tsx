@@ -339,7 +339,7 @@ function CoursePageContent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
-                        isTopicUnlocked={isTopicUnlocked}
+                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(topicId as string)}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
@@ -374,7 +374,7 @@ function CoursePageContent() {
                     <div className="flex-grow overflow-y-auto relative h-full">
                         {activeTopicData ? (
                             <LessonContentViewer
-                                topic={{...activeTopicData.topic, steps: activeTopicData.topic.steps?.filter(s => (s.isPublished ?? true))}}
+                                topic={activeTopicData.topic}
                                 courseId={course.id}
                                 unitId={activeTopicData.unitId}
                                 courseTitle={course.title}

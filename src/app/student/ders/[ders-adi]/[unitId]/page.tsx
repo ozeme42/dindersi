@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
+import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
@@ -339,7 +339,7 @@ function CoursePageContent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
-                        isTopicUnlocked={isTopicUnlocked}
+                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(course.units[unitIndex].topics[topicIndex].id)}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
@@ -374,7 +374,7 @@ function CoursePageContent() {
                     <div className="flex-grow overflow-y-auto relative h-full">
                         {activeTopicData ? (
                             <LessonContentViewer
-                                topic={{...activeTopicData.topic, steps: activeTopicData.topic.steps?.filter(s => (s.isPublished ?? true))}}
+                                topic={activeTopicData.topic}
                                 courseId={course.id}
                                 unitId={activeTopicData.unitId}
                                 courseTitle={course.title}
