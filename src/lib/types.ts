@@ -18,8 +18,8 @@ export type UserProfile = {
     // Streak properties
     currentStreak?: number;
     longestStreak?: number;
-    lastLoginDate?: string; // ISO string 'yyyy-MM-dd'
-    lastWheelSpin?: string; // ISO string for the last time the wheel was spun
+    lastStreakDate?: string; // ISO string 'yyyy-MM-dd'
+    lastWheelSpin?: any; // Can be a server timestamp on write, string on read
 };
 
 export type ShopItem = {
@@ -93,25 +93,25 @@ export type Folder = {
 
 
 // Discriminated union for more type-safe lesson steps
-export type ContentStep = { type: 'content'; title: string; content: string; };
-export type ObjectiveListStep = { type: 'objectiveList'; title: string; items: string[]; };
-export type ConceptExplanationStep = { type: 'conceptExplanation'; title: string; items: { concept: string; definition: string; }[]; };
-export type McqStep = { type: 'mcq'; title: string; question: string; options: string[]; correctAnswer: string; };
-export type TfStep = { type: 'tf'; title: string; statement: string; isTrue: boolean; };
-export type TrueFalseListStep = { type: 'trueFalseList'; title: string; questions: { statement: string; isTrue: boolean; }[]; };
-export type FitbStep = { type: 'fitb'; title: string; sentenceWithBlank: string; options: string[]; correctAnswer: string; };
-export type FlashcardStep = { type: 'flashcard'; title: string; cards: { term: string; definition: string; }[]; };
-export type AnagramStep = { type: 'anagram'; title: string; definition: string; scrambledWord: string; correctAnswer: string; };
+export type ContentStep = { type: 'content'; title: string; content: string; isPublished?: boolean; };
+export type ObjectiveListStep = { type: 'objectiveList'; title: string; items: string[]; isPublished?: boolean; };
+export type ConceptExplanationStep = { type: 'conceptExplanation'; title: string; items: { concept: string; definition: string; }[]; isPublished?: boolean; };
+export type McqStep = { type: 'mcq'; title: string; question: string; options: string[]; correctAnswer: string; isPublished?: boolean; };
+export type TfStep = { type: 'tf'; title: string; statement: string; isTrue: boolean; isPublished?: boolean; };
+export type TrueFalseListStep = { type: 'trueFalseList'; title: string; questions: { statement: string; isTrue: boolean; }[]; isPublished?: boolean; };
+export type FitbStep = { type: 'fitb'; title: string; sentenceWithBlank: string; options: string[]; correctAnswer: string; isPublished?: boolean; };
+export type FlashcardStep = { type: 'flashcard'; title: string; cards: { term: string; definition: string; }[]; isPublished?: boolean; };
+export type AnagramStep = { type: 'anagram'; title: string; definition: string; scrambledWord: string; correctAnswer: string; isPublished?: boolean; };
 export type AnagramCard = { definition: string; scrambledWord: string; correctAnswer: string; };
-export type AnagramFlashcardStep = { type: 'anagramFlashcard'; title: string; cards: AnagramCard[]; };
-export type SentenceScrambleStep = { type: 'sentenceScramble'; title: string; scrambledSentence: string; correctSentence: string; };
-export type VisualStep = { type: 'visual'; title: string; imageUrl: string; prompt?: string; };
-export type AccordionStep = { type: 'accordion'; title: string; items: { id: string, title: string; content: string; }[]; };
-export type IframeStep = { type: 'iframe'; title: string; url: string; };
-export type ActivityLinkStep = { type: 'activityLink'; title: string; activityType: string; activityLabel: string; };
-export type HtmlSlideStep = { type: 'htmlSlide'; title: string; htmlContent: string; };
-export type VideoStep = { type: 'video'; title: string; url: string; description?: string; };
-export type AnagramGameStep = { type: 'anagramGame'; title: string; cards: AnagramCard[] };
+export type AnagramFlashcardStep = { type: 'anagramFlashcard'; title: string; cards: AnagramCard[]; isPublished?: boolean; };
+export type SentenceScrambleStep = { type: 'sentenceScramble'; title: string; scrambledSentence: string; correctSentence: string; isPublished?: boolean; };
+export type VisualStep = { type: 'visual'; title: string; imageUrl: string; prompt?: string; isPublished?: boolean; };
+export type AccordionStep = { type: 'accordion'; title: string; items: { id: string, title: string; content: string; }[]; isPublished?: boolean; };
+export type IframeStep = { type: 'iframe'; title: string; url: string; isPublished?: boolean; };
+export type ActivityLinkStep = { type: 'activityLink'; title: string; activityType: string; activityLabel: string; isPublished?: boolean; };
+export type HtmlSlideStep = { type: 'htmlSlide'; title: string; htmlContent: string; isPublished?: boolean; };
+export type VideoStep = { type: 'video'; title: string; url: string; description?: string; isPublished?: boolean; };
+export type AnagramGameStep = { type: 'anagramGame'; title: string; cards: AnagramCard[]; isPublished?: boolean; };
 
 
 export type ConceptMapData = {
@@ -123,6 +123,7 @@ export type ConceptMapStep = {
   type: 'conceptMap';
   title: string;
   mapData: ConceptMapData;
+  isPublished?: boolean;
 };
 
 export type LessonStep = 

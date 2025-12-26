@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
@@ -41,6 +42,8 @@ export type LessonContentViewerProps = {
     onProgressUpdate: (topicId: string, newProgress: LocalProgress) => void;
     isFullscreen: boolean;
     completeButtonText?: string;
+    onMultiAnswer?: (stepIndex: number, questionIndex: number, selectedAnswer: boolean) => void;
+    onAllTfAnswered?: (stepIndex?: number) => void;
 };
 
 const useTeacherMode = () => {
@@ -867,13 +870,13 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                             key={item.id}
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "font-bold rounded-2xl transition-all duration-200 border-b-4 active:border-b-0 active:translate-y-2 text-white shadow-xl cursor-pointer flex items-center justify-center",
+                                "font-bold rounded-2xl transition-all duration-200 border-b-8 active:border-b-0 active:translate-y-2 text-white shadow-xl cursor-pointer flex items-center justify-center",
                                 wordColors[item.id % wordColors.length],
-                                isTeacher ? "text-3xl h-20 px-8 border-b-8" : "text-sm h-12 px-4 md:text-lg md:h-16 md:px-6 md:rounded-2xl md:border-b-8",
+                                isTeacher ? "text-3xl h-24 px-8" : "text-lg h-16 px-6 md:text-xl md:h-20 md:px-8",
                                 mistakenWordId === item.id && "animate-shake bg-red-600 border-red-800 hover:bg-red-600 !bg-none"
                             )}
                         >
-                            {mistakenWordId === item.id && <X className="h-4 w-4 md:h-8 md:w-8 mr-1 md:mr-2" />}
+                            {mistakenWordId === item.id && <X className="h-8 w-8 mr-2" />}
                             {item.word}
                         </div>
                     ))}
@@ -1079,6 +1082,16 @@ export function StepContent({
     const isTeacher = useTeacherMode();
 
     const renderContent = () => {
+        if(step.isPublished === false && !isTeacher) {
+            return (
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900 text-white">
+                    <Lock className="h-16 w-16 text-slate-500 mb-4" />
+                    <h2 className="text-2xl font-bold mb-2">Bu İçerik Henüz Aktif Değil</h2>
+                    <p className="text-slate-400">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
+                </div>
+            );
+        }
+        
         switch (step.type) {
             case 'content':
             case 'objectiveList':
@@ -1134,7 +1147,7 @@ export function StepContent({
             case 'anagramFlashcard':
                 return <AnagramFlashcardPlayer step={step as AnagramFlashcardStep} flippedCards={flippedAnagramCards} onCardFlip={onCardFlip} isFullscreen={isFullscreen} />;
             case 'trueFalseList':
-                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllAnswered={onAllTfAnswered} />;
+                 return <InteractiveTrueFalseList step={step as TrueFalseListStep} isFullscreen={isFullscreen || false} answers={stepAnswers || {}} onAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} />;
             case 'conceptMap':
                  return <div className="text-center p-8 text-slate-500 text-lg">Kavram haritası bu görünümde desteklenmiyor.</div>; 
             case 'video': {
@@ -1316,7 +1329,7 @@ export function LessonContentViewer({
     completeButtonText, 
     onMultiAnswer,
     onAllTfAnswered
-}: LessonContentViewerProps & { onMultiAnswer?: any, onAllTfAnswered?: any }) {
+}: LessonContentViewerProps) {
     const { user } = useAuth();
     const isTeacher = useTeacherMode();
     const { toast } = useToast();
@@ -1327,7 +1340,7 @@ export function LessonContentViewer({
     const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
     const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
-    const steps = useMemo(() => topic?.steps || [], [topic]);
+    const [steps, setSteps] = useState<LessonStep[]>([]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     
@@ -1339,6 +1352,12 @@ export function LessonContentViewer({
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
+    
+    useEffect(() => {
+        if (!topic) return;
+        const visibleSteps = topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+        setSteps(visibleSteps);
+    }, [topic, isTeacher]);
     
     useEffect(() => {
         if (currentStep?.type === 'visual') {
@@ -1668,8 +1687,8 @@ export function LessonContentViewer({
                 flippedAnagramCards={flippedAnagramCards}
                 onCardFlip={handleCardFlip}
                 onSlideScrolledToEnd={handleSlideScrolledToEnd}
-                onMultiAnswer={handleLocalMultiAnswer}
-                onAllTfAnswered={handleLocalAllTfAnswered}
+                onMultiAnswer={onMultiAnswer}
+                onAllTfAnswered={onAllTfAnswered}
                 onAnimationStart={() => setIsAnimating(true)}
                 onAnimationEnd={() => setIsAnimating(false)}
                 isVisualMaximized={isVisualMaximized}

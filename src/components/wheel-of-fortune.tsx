@@ -1,128 +1,144 @@
-
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Gift, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { playSound } from '@/lib/audio-service';
+import { Loader2 } from 'lucide-react';
 
-type Segment = {
+interface Segment {
   value: number;
   label: string;
   color: string;
-};
+}
 
-type WheelOfFortuneProps = {
+interface WheelOfFortuneProps {
   segments: Segment[];
-  onSpinStart: () => void;
-  onSpinEnd: (prize: Segment) => void;
-};
+  onSpinStart?: () => void;
+  onSpinEnd?: (winner: Segment) => void;
+  spinDuration?: number; // Saniye
+}
 
-export function WheelOfFortune({ segments, onSpinStart, onSpinEnd }: WheelOfFortuneProps) {
-    const [isSpinning, setIsSpinning] = useState(false);
-    const [rotation, setRotation] = useState(0);
+export function WheelOfFortune({
+  segments,
+  onSpinStart,
+  onSpinEnd,
+  spinDuration = 10,
+}: WheelOfFortuneProps) {
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const wheelRef = useRef<HTMLDivElement>(null);
 
-    const numSegments = segments.length;
-    const anglePerSegment = 360 / numSegments;
+  const numSegments = segments.length;
+  const sliceAngle = 360 / numSegments;
 
-    const spin = () => {
-        if (isSpinning) return;
-        
-        onSpinStart();
-        setIsSpinning(true);
-        playSound('correct'); 
+  // --- RENK GRADYANI (DÜZELTİLMİŞ) ---
+  const conicGradient = useMemo(() => {
+    // from -90deg: Gradyanı saat 12 yerine saat 3 yönünden (Sağdan) başlatır.
+    // Böylece CSS transform rotate(0deg) ile tam eşleşir.
+    let gradientString = 'conic-gradient(from -90deg, ';
+    
+    segments.forEach((segment, index) => {
+        const startAngle = index * sliceAngle;
+        const endAngle = (index + 1) * sliceAngle;
+        gradientString += `${segment.color} ${startAngle}deg ${endAngle}deg, `;
+    });
 
-        const randomSpins = Math.floor(Math.random() * 5) + 8; // 8-12 arası tam tur
-        const randomStopIndex = Math.floor(Math.random() * numSegments);
-        const stopAngle = randomStopIndex * anglePerSegment;
-        
-        const targetRotation = (rotation + (360 * randomSpins) + stopAngle) - (anglePerSegment / 2) + (Math.random() * anglePerSegment * 0.8 - anglePerSegment * 0.4);
-        
-        setRotation(targetRotation);
-        
-        setTimeout(() => {
-            const finalAngle = targetRotation % 360;
-            let winningSlice = Math.floor((360 - finalAngle + anglePerSegment / 2) / anglePerSegment) % numSegments;
-            if(winningSlice < 0) winningSlice += numSegments;
+    return gradientString.slice(0, -2) + ')';
+  }, [segments, sliceAngle]);
 
-            setIsSpinning(false);
-            onSpinEnd(segments[winningSlice]);
-        }, 7000); 
-    };
 
-    const getCoordinatesForPercent = (percent: number) => {
-        const x = Math.cos(2 * Math.PI * percent);
-        const y = Math.sin(2 * Math.PI * percent);
-        return [x, y];
-    };
+  const handleSpin = () => {
+    if (isSpinning) return;
 
-    return (
-        <div className="relative w-full h-full flex items-center justify-center">
-            
-            <div className="absolute inset-0 bg-slate-900 rounded-full shadow-[0_0_100px_rgba(109,40,217,0.4)] border-8 border-slate-800" />
-            <div className="absolute inset-6 bg-gradient-to-br from-purple-900/50 to-indigo-900/50 rounded-full shadow-inner" />
+    setIsSpinning(true);
+    if (onSpinStart) onSpinStart();
 
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20" style={{ transform: 'translateX(-50%)' }}>
-                 <div className="w-0 h-0 border-x-[20px] border-x-transparent border-b-[35px] border-b-yellow-400 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" />
-                 <div className="absolute top-[28px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-slate-900 border-2 border-yellow-400" />
-            </div>
+    const newWinnerIndex = Math.floor(Math.random() * numSegments);
+    
+    // --- DÖNÜŞ HESAPLAMASI (ORTALAMA DÜZELTİLDİ) ---
+    const spinRounds = 5 + Math.floor(Math.random() * 3);
+    const extraDegrees = 360 * spinRounds;
+    
+    // Kazanan dilimin tam ORTA noktası
+    const winnerCenterAngle = (newWinnerIndex * sliceAngle) + (sliceAngle / 2);
 
-            <div 
-                className="relative w-full h-full rounded-full transition-transform duration-[7000ms] ease-[cubic-bezier(0.25,0.1,0.25,1.275)]"
-                style={{ transform: `rotate(${rotation}deg)` }}
+    // İbre Sağda (0 derecede).
+    // Hedef: (360 - Kazananın Ortası). 
+    // Bu işlem kazanan dilimin ortasını tam 0 noktasına (sağa) getirir.
+    const targetRotation = extraDegrees + (360 - winnerCenterAngle);
+
+    const currentRotation = rotation % 360;
+    const finalRotation = rotation + (targetRotation - currentRotation) + 360;
+
+    setRotation(finalRotation);
+
+    setTimeout(() => {
+      setIsSpinning(false);
+      if (onSpinEnd) {
+        onSpinEnd(segments[newWinnerIndex]);
+      }
+    }, spinDuration * 1000);
+  };
+
+  return (
+    <div className="relative flex items-center justify-center w-full h-full">
+      
+      {/* İBRE (OK) - SAĞ TARAFTA */}
+      <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-lg">
+        <div 
+            className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[30px] border-r-white"
+            style={{ transform: 'rotate(180deg)' }} 
+        ></div>
+      </div>
+
+      {/* DIŞ ÇEMBER GÖLGESİ */}
+      <div className="absolute inset-0 rounded-full shadow-2xl z-0"></div>
+
+      {/* DÖNEN ÇARK KONTEYNERİ */}
+      <div
+        ref={wheelRef}
+        className="w-full h-full rounded-full relative z-10 overflow-hidden border-8 border-slate-800/80"
+        style={{
+          transform: `rotate(${rotation}deg)`,
+          transition: `transform ${spinDuration}s cubic-bezier(0.2, 0, 0.1, 1)`, 
+          backgroundImage: conicGradient, 
+        }}
+      >
+        {/* METİNLER */}
+        {segments.map((segment, index) => {
+          // DÜZELTME: Dilimin başlangıcına değil, ORTASINA hizala
+          const centerRotate = (index * sliceAngle) + (sliceAngle / 2);
+          
+          return (
+            <div
+              key={index}
+              className="absolute top-0 left-0 w-full h-full flex items-center justify-end pr-10"
+              style={{
+                  // Metni dilimin tam ortasına döndür
+                  transform: `rotate(${centerRotate}deg)`,
+              }}
             >
-                <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,0.5)] z-10 pointer-events-none border-[4px] border-white/5" />
-                
-                <svg viewBox="-1 -1 2 2" className="w-full h-full" style={{ transform: 'rotate(90deg)' }}>
-                    {segments.map((segment, index) => {
-                        const startPercent = index / numSegments;
-                        const endPercent = (index + 1) / numSegments;
-                        
-                        const [startX, startY] = getCoordinatesForPercent(startPercent);
-                        const [endX, endY] = getCoordinatesForPercent(endPercent);
-                        const largeArcFlag = endPercent - startPercent > 0.5 ? 1 : 0;
-                        const pathData = `M 0 0 L ${startX} ${startY} A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
-                        
-                        const midAngle = (startPercent + endPercent) * Math.PI; 
-                        const textRadius = 0.65;
-                        const textX = Math.cos(midAngle) * textRadius;
-                        const textY = Math.sin(midAngle) * textRadius;
-                        const rotationDeg = (midAngle * 180) / Math.PI - 90;
-                        
-                        const fontSize = Math.max(0.04, Math.min(0.08, 0.5 / (numSegments > 0 ? numSegments : 1)));
-
-                        return (
-                            <g key={index}>
-                                <path d={pathData} fill={segment.color} stroke="#1e293b" strokeWidth="0.008" />
-                                <text 
-                                    x={textX} 
-                                    y={textY} 
-                                    fill="white" 
-                                    fontSize={fontSize}
-                                    fontWeight="900"
-                                    textAnchor="middle" 
-                                    alignmentBaseline="middle"
-                                    transform={`rotate(${rotationDeg}, ${textX}, ${textY})`}
-                                    style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}
-                                >
-                                    {segment.label}
-                                </text>
-                            </g>
-                        );
-                    })}
-                </svg>
+               <span className="text-white font-black text-lg sm:text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] select-none origin-center z-20">
+                  {segment.label}
+               </span>
             </div>
+          );
+        })}
+      </div>
 
-            <div className="absolute w-32 h-32 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 p-2 shadow-2xl border-4 border-slate-600">
-                <Button 
-                    onClick={spin}
-                    disabled={isSpinning}
-                    className="w-full h-full rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 text-white font-black text-2xl uppercase tracking-wider shadow-inner active:scale-95 transition-all"
-                >
-                    {isSpinning ? <Loader2 className="animate-spin h-8 w-8" /> : <Gift className="h-8 w-8 animate-bounce" />}
-                </Button>
-            </div>
-        </div>
-    );
+      {/* ORTA BUTON */}
+      <button
+        onClick={handleSpin}
+        disabled={isSpinning}
+        className={cn(
+          "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40",
+          "w-24 h-24 rounded-full bg-gradient-to-br from-white to-slate-200 border-4 border-slate-300 shadow-[0_0_30px_rgba(255,255,255,0.3)]",
+          "flex items-center justify-center font-black text-slate-900 tracking-wider text-xl",
+          "transition-all active:scale-95 hover:scale-105 hover:shadow-[0_0_50px_rgba(255,255,255,0.5)]",
+          isSpinning && "opacity-90 cursor-not-allowed scale-100"
+        )}
+      >
+        {isSpinning ? <Loader2 className="animate-spin h-8 w-8 text-slate-500"/> : "ÇEVİR"}
+      </button>
+    </div>
+  );
 }
