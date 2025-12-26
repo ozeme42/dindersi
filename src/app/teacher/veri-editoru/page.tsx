@@ -104,7 +104,7 @@ export default function VeriEditoruPage() {
             const finalDataType = (dataType === 'activity-items' && id === 'all' && newSelection.unitId) ? 'activities' : dataType;
             
             const result = dataType === 'ozetler' || dataType === 'flows'
-                ? await getStaticHtmlContent(dataType, targetId)
+                ? await getStaticHtmlContent(finalDataType!, targetId)
                 : await getStaticData(finalDataType!, targetId);
 
             if (result.success) {
@@ -121,12 +121,9 @@ export default function VeriEditoruPage() {
     };
     
     const filteredCourses = useMemo(() => {
-        if (!filters.classId || filters.classId === 'all') return allCourses;
-        const selectedClass = allClasses.find(c => c.id === filters.classId);
-        // Sadece ilk sınıfta "Genel" dersleri göster mantığı yanlıştı.
-        // Artık herhangi bir sınıf seçildiğinde, hem o sınıfa özel hem de "Genel" dersler listelenir.
-        return allCourses.filter(c => c.classId === filters.classId || !c.classId);
-    }, [filters.classId, allCourses, allClasses]);
+        if (!selection.classId || selection.classId === 'all') return allCourses;
+        return allCourses.filter(c => c.classId === selection.classId || !c.classId);
+    }, [selection.classId, allCourses]);
 
     const filteredUnits = useMemo(() => {
         if (!selection.courseId || selection.courseId === 'all') return [];
