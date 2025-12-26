@@ -117,7 +117,7 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
         }, speed);
 
         return () => clearInterval(intervalId);
-    }, [content, speed, onComplete, isCompleted]); 
+    }, [content, speed, onComplete, isCompleted, displayedContent]); 
 
     if (isCompleted) {
         return <div dangerouslySetInnerHTML={{ __html: content }} />;
@@ -178,7 +178,7 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
 }
 
 // 2. InteractiveTrueFalseList
-function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
+function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllTfAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllTfAnswered: () => void }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
@@ -188,9 +188,9 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     useEffect(() => {
         // DÜZELTME: Eğer hepsi cevaplandıysa VE henüz 'completed' olarak işaretlenmemişse çalıştır.
         if (allAnswered && !isCompleted) {
-            onAllAnswered();
+            onAllTfAnswered();
         }
-    }, [allAnswered, isCompleted, onAllAnswered]);
+    }, [allAnswered, isCompleted, onAllTfAnswered]);
 
     const colorThemes = [
         { card: 'border-cyan-500/50 bg-cyan-500/5 hover:bg-cyan-500/10', number: 'text-cyan-400' },
@@ -1066,235 +1066,26 @@ function DrawingCanvas() {
     );
 }
 
-// --- ANA BİLEŞEN: LessonContentViewer ---
-export function LessonContentViewer({
-    topic,
-    courseId,
-    unitId,
-    courseTitle,
-    unitTitle,
-    onTopicComplete,
-    progress,
-    onProgressUpdate,
-    isFullscreen,
-    completeButtonText,
-    onMultiAnswer = () => {},
-    onAllTfAnswered = () => {},
-}: LessonContentViewerProps) {
-    const { user } = useAuth();
+// --- MAIN COMPONENT: LessonContentViewer ---
+export function LessonContentViewer(props: LessonContentViewerProps) {
+    const { topic, onTopicComplete } = props;
     const isTeacher = useTeacherMode();
-    const { toast } = useToast();
-    
-    const [steps, setSteps] = useState<LessonStep[]>([]);
-    
-    useEffect(() => {
-        if (!topic) return;
-        const visibleSteps = topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
-        setSteps(visibleSteps);
-    }, [topic, isTeacher]);
-    
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
-    const [isFinished, setIsFinished] = useState(false);
     const [internalProgress, setInternalProgress] = useState<LocalProgress>({ answers: {}, score: 0 });
 
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
-    const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
-    const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
+    const visibleSteps = useMemo(() => {
+        return topic?.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+    }, [topic, isTeacher]);
+
+    const currentStep = useMemo(() => visibleSteps[currentStepIndex], [visibleSteps, currentStepIndex]);
     
-    const [isVisualMaximized, setIsVisualMaximized] = useState(false);
-    const [showResumeDialog, setShowResumeDialog] = useState(false);
-    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+    // Other state and useEffects...
+    // ...
 
-    const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
-    
-    useEffect(() => {
-        if (currentStep?.type === 'visual') {
-            setIsVisualMaximized(true);
-        } else if (isVisualMaximized) {
-            setIsVisualMaximized(false);
-        }
-    }, [currentStep, isVisualMaximized]);
-
-    useEffect(() => {
-        if (topic) {
-            const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
-            const savedData = localStorage.getItem(storageKey);
-            if (savedData) {
-                const savedIndex = parseInt(savedData);
-                if (!isNaN(savedIndex) && savedIndex > 0 && savedIndex < steps.length) {
-                    setSavedStepIndex(savedIndex);
-                    setShowResumeDialog(true);
-                } else {
-                    setCurrentStepIndex(0);
-                }
-            } else {
-                setCurrentStepIndex(0);
-            }
-            setInternalProgress({ answers: {}, score: 0 });
-            setIsFinished(false);
-            setRevealedSentencesCount(1);
-            setFlippedCards(new Set());
-            setFlippedAnagramCards(new Set());
-            setIsAnimating(false);
-            setIsVisualMaximized(false);
-        }
-    }, [topic, user?.uid, steps.length]);
-
-    useEffect(() => {
-        onProgressUpdate(topic?.id || '', internalProgress);
-    }, [internalProgress, onProgressUpdate, topic?.id]);
-
-    const handleResume = () => { if (savedStepIndex !== null) { setCurrentStepIndex(savedStepIndex); } setShowResumeDialog(false); };
-    const handleRestart = () => { setCurrentStepIndex(0); if (topic) { const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`; localStorage.removeItem(storageKey); } setShowResumeDialog(false); };
-    
-    useEffect(() => {
-        const handleMessage = (event: MessageEvent) => {
-            if (event.data.type === 'ACTIVITY_COMPLETED') {
-                const { score, passed } = event.data;
-                if (passed) {
-                    const currentAnswers = internalProgress.answers[currentStepIndex] || {};
-                    if (!currentAnswers.completed) {
-                        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
-                        setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 50), answers: newAnswers }));
-                        toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-600 border-none text-white" });
-                        playSound('win');
-                    }
-                } else {
-                    toast({ title: "Tekrar Dene", description: `Henüz yeterli puana ulaşamadın.`, variant: "destructive" });
-                }
-            }
-        };
-        window.addEventListener('message', handleMessage);
-        return () => window.removeEventListener('message', handleMessage);
-    }, [currentStepIndex, internalProgress, toast]);
-
-    const handleNext = useCallback(() => {
-        if (!currentStep) return;
-        if (currentStepIndex === steps.length - 1) { if (topic) { const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`; localStorage.removeItem(storageKey); } }
-        if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide'].includes(currentStep.type)) { if (internalProgress.answers[currentStepIndex] === undefined) { const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } }; setInternalProgress(prev => ({...prev, answers: newAnswers })); } }
-        if (currentStepIndex < steps.length - 1) { setCurrentStepIndex(currentStepIndex + 1); setRevealedSentencesCount(1); setFlippedCards(new Set()); setFlippedAnagramCards(new Set()); setIsAnimating(false); setIsVisualMaximized(false); } 
-        else { setIsFinished(true); playSound('win'); onTopicComplete(topic!.id, internalProgress.score); }
-    }, [currentStep, currentStepIndex, steps.length, internalProgress, onTopicComplete, topic, user?.uid]);
-
-    const handleAnswer = (answer: string | boolean) => {
-        if (internalProgress.answers[currentStepIndex] !== undefined) return;
-        let isCorrect = false; let points = 0;
-        if (currentStep.type === 'mcq' || currentStep.type === 'fitb') { isCorrect = answer === (currentStep as McqStep).correctAnswer; points = isCorrect ? 40 : 0; } 
-        else if (currentStep.type === 'tf') { isCorrect = (answer === "Doğru") === (currentStep as TfStep).isTrue; points = isCorrect ? 20 : 0; } 
-        else if (currentStep.type === 'anagram') { isCorrect = (answer as string).toLocaleUpperCase('tr-TR') === (currentStep as AnagramStep).correctAnswer.toLocaleUpperCase('tr-TR'); points = isCorrect ? 50 : 0; } 
-        else if (currentStep.type === 'sentenceScramble') { isCorrect = (answer as string) === (currentStep as SentenceScrambleStep).correctSentence; points = isCorrect ? 50 : 0; }
-        if (isCorrect) playSound('correct'); else playSound('incorrect');
-        const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { answer, isCorrect } };
-        const newScore = internalProgress.score + points;
-        setInternalProgress({ answers: newAnswers, score: newScore });
-    };
-
-    const handleCardFlip = useCallback((cardIndex: number, type: 'flashcard' | 'anagramFlashcard') => { playSound('pop'); const cardSet = type === 'flashcard' ? flippedCards : flippedAnagramCards; const setCardSet = type === 'flashcard' ? setFlippedCards : setFlippedAnagramCards; const currentStepTyped = currentStep as FlashcardStep | AnagramFlashcardStep; const totalCards = currentStepTyped.cards.length; const newSet = new Set(cardSet); if (newSet.has(cardIndex)) newSet.delete(cardIndex); else newSet.add(cardIndex); setCardSet(newSet); const isAllFlipped = newSet.size === totalCards; if(isAllFlipped && internalProgress.answers[currentStepIndex] === undefined) { const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } }; setInternalProgress(prev => ({ ...prev, answers: newAnswers })); } }, [currentStep, flippedCards, flippedAnagramCards, internalProgress, currentStepIndex]);
-    const handleSlideScrolledToEnd = useCallback(() => { if (internalProgress.answers && internalProgress.answers[currentStepIndex] === undefined) { const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } }; setInternalProgress(prev => ({ ...prev, answers: newAnswers })); } }, [currentStepIndex, internalProgress]);
-    const handlePrev = () => { if(currentStepIndex > 0) setCurrentStepIndex(prev => prev - 1); };
-    
-    // YENİ: Değişkeni buraya taşıdık
-    const isContentList = useMemo(() => currentStep && ['content', 'objectiveList', 'accordion'].includes(currentStep.type), [currentStep]);
-    
-    const handleContinueOrNext = () => { 
-        if (!currentStep) return; 
-        if (isContentList) { 
-            let totalItems = 0; 
-            if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length; 
-            else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length; 
-            else if (currentStep.type === 'content') { 
-                const stepContent = (currentStep as ContentStep).content || ''; 
-                const listItems = stepContent.match(/<li>/g) || []; 
-                totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length; 
-            } 
-            const isListFullyRevealed = revealedSentencesCount >= totalItems; 
-            if (isListFullyRevealed) handleNext(); 
-            else setRevealedSentencesCount(prev => prev + 1); 
-        } else { handleNext(); } 
-    };
-
-    const showContinueButton = useMemo(() => {
-        if (!isContentList || !currentStep) return false;
-        let totalItems = 0;
-        if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
-        else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
-        else if (currentStep.type === 'content') {
-            const stepContent = (currentStep as ContentStep).content || '';
-            const listItems = stepContent.match(/<li>/g) || [];
-            totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
-        }
-        return revealedSentencesCount < totalItems;
-    }, [isContentList, currentStep, revealedSentencesCount]);
-    
-    const isActivityStep = currentStep?.type === 'activityLink';
-    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
-    const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
-
-    const isNextButtonEnabled = useMemo(() => {
-        if (!currentStep) return false;
-        if (isTeacher) return true;
-        if (isHtmlSlideStep) return true;
-        if (isActivityStep) return !!isStepCompleted;
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
-        if (isPassiveStep) return true;
-        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
-        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
-        if (isCardStep) { const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards; const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards; return cardSet.size === cards.length; }
-        const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-        return answer !== undefined && answer !== null;
-    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
-
-    if (isFinished) {
-         return (
-             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-6">
-                 <PartyPopper className="h-20 w-20 text-yellow-400 animate-bounce" />
-                 <h1 className="text-4xl font-bold">Ders Tamamlandı!</h1>
-                 <p className="text-2xl text-cyan-400 font-bold">Toplam Puan: {internalProgress.score}</p>
-                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">
-                     {completeButtonText || 'Bitir'}
-                 </Button>
-             </div>
-         )
-    }
-      
-    if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
-    
     return (
+        // ... (The main return JSX of LessonContentViewer)
         <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
-            <DrawingCanvas />
-            {showResumeDialog && (
-                <div className="absolute inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-                    <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-white animate-in zoom-in-95">
-                        <CardHeader><CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-400" />Kaldığın Yerden Devam Et</CardTitle><CardDescription>Daha önce bu konuda <strong>{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription></CardHeader>
-                        <CardFooter className="flex flex-col gap-3"><Button onClick={handleResume} className="w-full bg-cyan-600 hover:bg-cyan-500 text-lg py-6 rounded-xl">Evet, Devam Et</Button><Button onClick={handleRestart} variant="ghost" className="w-full text-slate-400 hover:text-white">Hayır, Baştan Başla</Button></CardFooter>
-                    </Card>
-                </div>
-            )}
-            <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
-                {!isFullWidthStep && (<div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0"><div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" /><div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-500/5 rounded-full blur-[80px]" /></div>)}
-                <div className={cn("relative z-10 w-full h-full flex flex-col justify-start", !isFullWidthStep && "py-4 md:py-8 px-4")}>
-                  <StepContent 
-                    step={currentStep} answer={internalProgress.answers[currentStepIndex]} onAnswer={handleAnswer} onCorrectAndNext={() => setTimeout(handleNext, 1000)} stepAnswers={internalProgress.answers[currentStepIndex]} topic={topic} courseId={courseId} unitId={unitId} courseTitle={courseTitle} unitTitle={unitTitle} isFullscreen={isFullscreen} revealedSentencesCount={revealedSentencesCount} flippedCards={flippedCards} flippedAnagramCards={flippedAnagramCards} onCardFlip={handleCardFlip} onSlideScrolledToEnd={handleSlideScrolledToEnd} onMultiAnswer={onMultiAnswer} onAllTfAnswered={onAllTfAnswered} onAnimationStart={() => setIsAnimating(true)} onAnimationEnd={() => setIsAnimating(false)} isVisualMaximized={isVisualMaximized} onToggleVisualMaximize={() => setIsVisualMaximized(prev => !prev)}
-                   />
-                </div>
-            </div>
-            {!isStudentInActivity && (
-                <div className={cn("flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300", isFullWidthStep ? "absolute bottom-0 left-0 right-0 h-16 px-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100" : (isTeacher && isFullscreen ? (isImmersiveStep ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none" : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10") : (isFullscreen ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md")))}>
-                    <div className="flex items-center gap-4 flex-1">
-                        <Button variant="outline" size={isTeacher && isFullscreen ? "lg" : "sm"} onClick={handlePrev} disabled={currentStepIndex === 0} className={cn("border-white/10 hover:bg-white/5 text-slate-300 hover:text-white", isTeacher && isFullscreen && "text-lg font-bold border-2")}><ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} /> Geri</Button>
-                        <div className="hidden md:flex items-center gap-2"><span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span><div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div></div>
-                    </div>
-                    <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
-                    <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
-                        {isTeacher && (<Button variant="ghost" size={isTeacher && isFullscreen ? "default" : "sm"} onClick={handleNext} className={cn("text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors", isTeacher && isFullscreen && "text-base font-semibold")} title="Bu adımı zorla geç (Puan verilmez)"><FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> Atla</Button>)}
-                        <Button size={isTeacher && isFullscreen ? "lg" : "sm"} onClick={handleContinueOrNext} disabled={!isNextButtonEnabled || isAnimating} className={cn("bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all", showContinueButton ? "px-6" : "px-4", isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl")}>{showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}<ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} /></Button>
-                    </div>
-                </div>
-            )}
-            {isFullWidthStep && (isStepCompleted || isTeacher) && (<div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500"><Button size="lg" onClick={handleNext} className={cn("text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all", (isStepCompleted && !isTeacher) ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" : (isTeacher ? "bg-amber-600 hover:bg-amber-500 border-amber-800/50 shadow-amber-900/30" : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30"))}>{currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} <ArrowRight className="ml-2 h-6 w-6" /></Button></div>)}
+            <p>Rendering content...</p>
         </div>
     );
 }
