@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -473,12 +474,18 @@ export async function exportManifestAndContent() {
                             addFile(`ozetler/${unitDoc.id}.html`, unitData.htmlContent);
                         }
 
+                        // Export unit steps (ders akışı)
+                        if (unitData.steps && unitData.steps.length > 0) {
+                            addFile(`flows/${unitDoc.id}.json`, unitData.steps);
+                        }
+
                         const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
                         
-                        const hasContent = !!unitData.htmlContent || topicsSnapshot.docs.some(topicDoc => {
+                        const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0) || topicsSnapshot.docs.some(topicDoc => {
                              const topicData = topicDoc.data() as Topic;
                              const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar);
+                             const hasFlow = (topicData.steps || []).length > 0;
+                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || hasFlow);
                         });
 
                         return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
@@ -518,11 +525,16 @@ export async function exportManifestAndContent() {
                             const conceptDefinitions = defs.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
                             addFile(`yazilacaklar/${doc.id}.json`, { notes, conceptDefinitions });
                         }
+                        // Export topic steps (ders akışı)
+                        if (topicData.steps && topicData.steps.length > 0) {
+                            addFile(`flows/${doc.id}.json`, topicData.steps);
+                        }
                         
                         const hasOzetContent = !!topicData.htmlContent;
-                        
-                        if (hasOzetContent || hasYazilacaklarContent) {
-                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent, hasOzetContent };
+                        const hasDersAkisiContent = (topicData.steps || []).length > 0;
+
+                        if (hasOzetContent || hasYazilacaklarContent || hasDersAkisiContent) {
+                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent, hasOzetContent, hasFlowContent: hasDersAkisiContent };
                         }
                         return null;
                     });
@@ -530,7 +542,7 @@ export async function exportManifestAndContent() {
                     const topics = (await Promise.all(topicPromises)).filter(Boolean);
                     unit.topics = topics;
                 }
-                course.units = course.units.filter((u: any) => u.topics.length > 0 || u.hasUnitOzet);
+                course.units = course.units.filter((u: any) => u.topics.length > 0 || u.hasUnitOzet || (u.steps && u.steps.length > 0));
             }
             group.courses = group.courses.filter((c: any) => c.units.length > 0);
         }
@@ -541,6 +553,7 @@ export async function exportManifestAndContent() {
         // Ensure subdirectories exist
         await fs.mkdir(path.join(curriculumPath, 'ozetler'), { recursive: true });
         await fs.mkdir(path.join(curriculumPath, 'yazilacaklar'), { recursive: true });
+        await fs.mkdir(path.join(curriculumPath, 'flows'), { recursive: true }); // DERS AKIŞI KLASÖRÜ
 
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
