@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -30,12 +28,15 @@ function CoursePageContent() {
     const searchParams = useSearchParams();
     const { user } = useAuth();
     const courseId = params['ders-adi'] as string;
+    const unitIdFromUrl = params.unitId as string;
     const { toast } = useToast();
 
     const [course, setCourse] = useState<Course | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     
     const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
+    const [activeUnit, setActiveUnit] = useState<Unit | null>(null);
+
     const [completedTopics, setCompletedTopics] = useState<UserProgress>({});
     const [view, setView] = useState<'map' | 'content'>('map');
     
@@ -59,7 +60,7 @@ function CoursePageContent() {
     const fetchCourseData = useCallback(async () => {
         if (!courseId || !user) return;
         setIsLoading(true);
-        setView(startTopicIdFromUrl ? 'content' : 'map');
+        setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
             const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
@@ -97,8 +98,13 @@ function CoursePageContent() {
             if (startTopicIdFromUrl) {
                 const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
                 setActiveTopic(topic || null);
+                setActiveUnit(null); // Clear active unit if a topic is directly linked
+            } else if (unitIdFromUrl) {
+                const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
+                setActiveUnit(unit || null);
+                setActiveTopic(null); // Clear active topic for unit flow
             } else {
-                const allTopics = units.flatMap(u => u.topics);
+                 const allTopics = units.flatMap(u => u.topics);
                 const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
                 
                 if (firstUncompletedTopic) {
@@ -112,29 +118,45 @@ function CoursePageContent() {
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl]);
 
     useEffect(() => {
         fetchCourseData();
     }, [fetchCourseData]);
     
-    const activeTopicData = useMemo(() => {
-        if (!course || !activeTopic) return null;
-        for (const unit of course.units ?? []) {
-            if (unit.topics?.find(t => t.id === activeTopic.id)) {
-                return { topic: activeTopic, unitId: unit.id, courseTitle: course.title, unitTitle: unit.title };
+    const activeContentData = useMemo(() => {
+        if (!course) return null;
+        if (activeTopic) {
+            for (const unit of course.units ?? []) {
+                if (unit.topics?.find(t => t.id === activeTopic.id)) {
+                    return { type: 'topic', data: activeTopic, unitId: unit.id, courseTitle: course.title, unitTitle: unit.title } as const;
+                }
             }
         }
+        if (activeUnit) {
+            return { type: 'unit', data: activeUnit, unitId: activeUnit.id, courseTitle: course.title, unitTitle: activeUnit.title } as const;
+        }
         return null;
-    }, [course, activeTopic]);
+    }, [course, activeTopic, activeUnit]);
+
 
     const handleSelectTopic = useCallback((topic: Topic) => {
         setActiveTopic(topic);
+        setActiveUnit(null);
         setView('content');
         if (window.innerWidth < 768) {
              window.scrollTo(0,0);
         }
     }, []);
+    
+     const handleSelectUnitFlow = (unit: Unit) => {
+        setActiveUnit(unit);
+        setActiveTopic(null);
+        setView('content');
+         if (window.innerWidth < 768) {
+             window.scrollTo(0,0);
+        }
+    };
 
     const onProgressUpdate = useCallback((topicId: string, newProgress: LocalProgress) => {
         setLocalProgressMap(prev => ({
@@ -143,32 +165,30 @@ function CoursePageContent() {
         }));
     }, []);
 
-    const handleTopicComplete = async (topicId: string, score: number) => {
-        if (!user || !course || !activeTopicData || isSaving) return;
+    const handleTopicComplete = async (contentId: string, score: number) => {
+        if (!user || !course || !activeContentData || isSaving) return;
         setIsSaving(true);
-
-        const currentCompletionCount = completedTopics[topicId]?.completionCount || 0;
+    
+        const isUnitFlow = activeContentData.type === 'unit';
+        const currentCompletionCount = completedTopics[contentId]?.completionCount || 0;
         let completionBonus = 0;
-        let toastTitle = "Konu Tamamlandı!";
-        let toastDescription = "Tebrikler, bu konuyu başarıyla bitirdin!";
+        let toastTitle = "İçerik Tamamlandı!";
+        let toastDescription = "Tebrikler, bu bölümü başarıyla bitirdin!";
         let totalScore = 0;
-
+    
         if (currentCompletionCount < 2) {
-            completionBonus = score;
+            completionBonus = isUnitFlow ? score + 50 : score;
             totalScore = score + completionBonus;
-            toastTitle = currentCompletionCount === 0 ? "Harika! Konu Bitti!" : "Konu Tekrarı!";
+            toastTitle = currentCompletionCount === 0 ? "Harika! Bölüm Bitti!" : "Bölüm Tekrarı!";
             toastDescription = `Adımlardan ${score} ve bonustan ${completionBonus} puan kazandın. Toplam: ${totalScore} Puan!`;
         } else {
             totalScore = 0;
-            toastDescription = "Bu konuyu daha önce tamamladığın için tekrar puan kazanmadın.";
+            toastDescription = "Bu bölümü daha önce tamamladığın için tekrar puan kazanmadın.";
         }
-
+    
         if (user.role !== 'student') {
             setView('map');
-            toast({
-                title: "Konu Tamamlandı (Öğretmen Modu)",
-                description: "Puanlar sadece öğrenciler için kaydedilir.",
-            });
+            toast({ title: "Bölüm Tamamlandı (Öğretmen Modu)", description: "Puanlar sadece öğrenciler için kaydedilir." });
             setIsSaving(false);
             return;
         }
@@ -179,12 +199,12 @@ function CoursePageContent() {
             const newCompletionCount = currentCompletionCount + 1;
             
             batch.set(progressRef, { 
-                [topicId]: {
+                [contentId]: {
                     completionCount: newCompletionCount,
                     lastCompleted: serverTimestamp()
                 }
             }, { merge: true });
-
+    
             if (totalScore > 0) {
                 const userRef = doc(db, 'users', user.uid);
                 batch.update(userRef, { score: increment(totalScore) });
@@ -194,16 +214,16 @@ function CoursePageContent() {
                     userId: user.uid,
                     points: totalScore,
                     timestamp: serverTimestamp(),
-                    gameType: 'Ders Tamamlama',
-                    context: `${course.title} - ${activeTopicData.topic.title} (${newCompletionCount}. kez)`,
+                    gameType: isUnitFlow ? 'Ünite Tamamlama' : 'Ders Tamamlama',
+                    context: `${course.title} - ${activeContentData.data.title} (${newCompletionCount}. kez)`,
                 });
             }
             
             await batch.commit();
-
+    
             setCompletedTopics(prev => ({
                 ...prev,
-                [topicId]: {
+                [contentId]: {
                     completionCount: newCompletionCount,
                     lastCompleted: new Date().toISOString()
                 }
@@ -219,20 +239,23 @@ function CoursePageContent() {
         
         setLocalProgressMap(prev => {
             const newLocalProgress = {...prev};
-            delete newLocalProgress[topicId];
+            delete newLocalProgress[contentId];
             return newLocalProgress;
         });
-
+    
+        // Find next uncompleted topic to suggest
         const allTopics = course.units.flatMap(u => u.topics);
-        const currentIndex = allTopics.findIndex(t => t.id === topicId);
+        const currentIndex = allTopics.findIndex(t => t.id === (isUnitFlow ? null : contentId));
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
              if (isTopicUnlocked(nextTopic.id)) {
                  setActiveTopic(nextTopic);
+                 setActiveUnit(null); // Make sure unit flow is deactivated
                  return; 
              }
         }
+        // If no next topic, go back to map
         setView('map');
     };
     
@@ -253,15 +276,15 @@ function CoursePageContent() {
     }, [course?.units, isTopicCompleted, user?.role]);
     
     const handleLocalMultiAnswer = useCallback((stepIndex: number, questionIndex: number, selectedAnswer: boolean) => {
-        if (!activeTopic) return;
-        const topicId = activeTopic.id;
+        if (!activeContentData) return;
+        const contentId = activeContentData.data.id;
 
         setLocalProgressMap(prevMap => {
-            const prevProgress = prevMap[topicId] || { answers: {}, score: 0 };
+            const prevProgress = prevMap[contentId] || { answers: {}, score: 0 };
             const currentAnswers = prevProgress.answers[stepIndex] || {};
             if (currentAnswers[questionIndex] !== undefined) return prevMap;
             
-            const step = activeTopic.steps?.[stepIndex];
+            const step = activeContentData.data.steps?.[stepIndex];
             if (!step || step.type !== 'trueFalseList') return prevMap;
 
             const question = step.questions[questionIndex];
@@ -273,26 +296,24 @@ function CoursePageContent() {
 
             return {
                 ...prevMap,
-                [topicId]: { ...prevProgress, answers: newAnswers }
+                [contentId]: { ...prevProgress, answers: newAnswers }
             };
         });
-    }, [activeTopic]);
+    }, [activeContentData]);
      
-    // GÜVENLİK DÜZELTMESİ: completed: true ise tekrar state güncelleme
     const handleLocalAllTfAnswered = useCallback((stepIndex?: number) => {
-        if (!activeTopic || !activeTopicData) return;
-        const topicId = activeTopic.id;
+        if (!activeContentData) return;
+        const contentId = activeContentData.data.id;
 
         setLocalProgressMap(prevMap => {
-            const prevProgress = prevMap[topicId];
+            const prevProgress = prevMap[contentId];
             if (!prevProgress) return prevMap;
 
-            const targetStepIndex = stepIndex ?? (activeTopicData.topic.steps || []).findIndex(s => s.type === 'trueFalseList');
+            const targetStepIndex = stepIndex ?? (activeContentData.data.steps || []).findIndex(s => s.type === 'trueFalseList');
             if (targetStepIndex === -1) return prevMap;
             
             const answersForStep = prevProgress.answers[targetStepIndex];
             
-            // Eğer zaten tamamlandıysa çık, döngüyü kır.
             if (!answersForStep || answersForStep.completed) return prevMap;
 
             const correctCount = Object.values(answersForStep).filter((a: any) => a.isCorrect).length;
@@ -302,10 +323,10 @@ function CoursePageContent() {
             
             return {
                 ...prevMap,
-                [topicId]: { score: prevProgress.score + points, answers: newAnswers }
+                [contentId]: { score: prevProgress.score + points, answers: newAnswers }
             };
         });
-    }, [activeTopic, activeTopicData]);
+    }, [activeContentData]);
 
 
     if (isLoading) {
@@ -340,10 +361,8 @@ function CoursePageContent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
-                        isTopicUnlocked={(topicIndex, unitIndex) => {
-                             const topicId = course.units[unitIndex]?.topics?.[topicIndex]?.id;
-                             return topicId ? isTopicUnlocked(topicId) : false;
-                        }}
+                        onSelectUnitFlow={handleSelectUnitFlow}
+                        isTopicUnlocked={(topicId: string) => isTopicUnlocked(topicId)}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
@@ -368,7 +387,7 @@ function CoursePageContent() {
                             </Button>
                             
                             <p className="font-semibold text-sm text-white truncate max-w-[150px]">
-                                {activeTopicData?.topic.title}
+                                {activeContentData?.data.title}
                             </p>
                             
                             <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 h-8 w-8" />
@@ -376,19 +395,19 @@ function CoursePageContent() {
                     )}
                     
                     <div className="flex-grow overflow-y-auto relative h-full">
-                        {activeTopicData ? (
+                        {activeContentData ? (
                             <LessonContentViewer
-                                topic={activeTopicData.topic}
+                                topic={activeContentData.data}
                                 courseId={course.id}
-                                unitId={activeTopicData.unitId}
-                                courseTitle={course.title}
-                                unitTitle={activeTopicData.unitTitle}
+                                unitId={activeContentData.unitId}
+                                courseTitle={activeContentData.courseTitle}
+                                unitTitle={activeContentData.unitTitle}
                                 onTopicComplete={handleTopicComplete}
-                                progress={activeTopic ? localProgressMap[activeTopic.id] : undefined}
-                                onProgressUpdate={onProgressUpdate}
+                                progress={localProgressMap[activeContentData.data.id]}
+                                onProgressUpdate={(id, prog) => onProgressUpdate(id, prog)}
                                 isFullscreen={isFullscreen}
-                                onMultiAnswer={handleLocalMultiAnswer}
-                                onAllTfAnswered={handleLocalAllTfAnswered}
+                                onMultiAnswer={(stepIndex, qIndex, val) => handleLocalMultiAnswer(stepIndex, qIndex, val)}
+                                onAllTfAnswered={(stepIndex) => handleLocalAllTfAnswered(stepIndex)}
                             />
                         ) : (
                             <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">
@@ -412,3 +431,4 @@ export default function CoursePage() {
         </Suspense>
     )
 }
+
