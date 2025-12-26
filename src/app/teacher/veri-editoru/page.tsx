@@ -120,8 +120,9 @@ export default function VeriEditoruPage() {
         }
     };
     
-    const filteredCourses = useMemo(() => {
+     const filteredCourses = useMemo(() => {
         if (!selection.classId || selection.classId === 'all') return allCourses;
+        // Artık herhangi bir sınıf seçildiğinde, hem o sınıfa özel hem de "Genel" dersler listelenir.
         return allCourses.filter(c => c.classId === selection.classId || !c.classId);
     }, [selection.classId, allCourses]);
 
@@ -182,7 +183,7 @@ export default function VeriEditoruPage() {
                   <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>
                 </div>
                 
-                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl max-w-7xl mx-auto w-full">
+                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col min-h-[70vh]">
                     <CardHeader className="border-b border-white/5 pb-4">
                         <div className="flex items-center justify-between">
                             <CardTitle className="text-xl text-white">
@@ -191,7 +192,7 @@ export default function VeriEditoruPage() {
                             <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="flex-grow flex justify-center items-start p-6 min-h-[70vh]">
+                    <CardContent className="flex-grow flex justify-center items-start p-6 min-h-[400px]">
                         {renderContent()}
                     </CardContent>
                 </Card>
@@ -199,4 +200,3 @@ export default function VeriEditoruPage() {
          </div>
     );
 }
-
