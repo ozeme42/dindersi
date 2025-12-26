@@ -60,7 +60,7 @@ function PresentationPageContent() {
                     setTopic({
                         id: unitId,
                         title: unitData.title,
-                        steps: (unitData.steps || []).filter(s => s.isPublished ?? true), // Filter here
+                        steps: (unitData.steps || []), // No filtering for teacher presentation
                     });
                 }
             }
@@ -146,7 +146,7 @@ function PresentationPageContent() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl ring-1 ring-white/10"
                 )}>
                     <LessonContentViewer
-                        topic={{...topic, steps: topic.steps?.filter(s => s.isPublished ?? true)}}
+                        topic={topic} // Pass all steps, no filtering
                         courseId={courseId!}
                         unitId={unitId!}
                         courseTitle={courseName!}
