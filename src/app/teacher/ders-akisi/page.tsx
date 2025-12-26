@@ -7,7 +7,7 @@ import {
     Workflow, Loader2, BookOpen, Layers, ChevronRight, Hash, GraduationCap, Book, Home, FileText, FilePenLine
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { Topic, Unit, Course, SchoolClass } from '@/lib/types';
+import type { Topic, Unit, Course, SchoolClass, Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardHeader } from '@/components/ui/card';
@@ -138,87 +138,99 @@ export default function DersAkisiPage() {
                                                         </AccordionTrigger>
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
-                                                                {course.units?.map((unit, unitIndex) => (
-                                                                    <Accordion key={unit.id} type="multiple" className="w-full">
-                                                                        <AccordionItem value={unit.id} className="border-2 border-white/5 rounded-2xl bg-slate-900/50 overflow-hidden">
-                                                                                <AccordionTrigger className={cn(
-                                                                                    "px-6 py-5 text-xl md:text-2xl font-bold hover:no-underline transition-colors",
-                                                                                    "text-slate-400 hover:text-white hover:bg-white/5"
-                                                                                )}>
-                                                                                    <div className="flex items-center gap-4 group/unit-link">
-                                                                                        <div className="p-2 bg-white/5 rounded-lg">
-                                                                                            <Book className="w-6 h-6 text-slate-500 group-hover/unit-link:text-white transition-colors" />
-                                                                                        </div>
-                                                                                        {unit.title}
-                                                                                    </div>
-                                                                                </AccordionTrigger>
-                                                                                <AccordionContent className="p-6 bg-black/20">
-                                                                                    {unit.topics && unit.topics.length > 0 ? (
-                                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                                            {unit.htmlContent && (
-                                                                                                 <div className="group relative aspect-[4/5] min-h-[14rem]">
-                                                                                                    <Link 
-                                                                                                        href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
-                                                                                                        className={cn(
-                                                                                                            "absolute inset-0 flex flex-col justify-center items-center text-center font-bold",
-                                                                                                            "transition-all duration-300 group-hover:scale-[1.02] active:scale-[0.98]",
-                                                                                                            "rounded-[2rem] shadow-2xl",
-                                                                                                            "break-words whitespace-normal leading-tight p-8",
-                                                                                                            "border-b-8 text-white",
-                                                                                                            "bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800"
-                                                                                                        )}
-                                                                                                    >
-                                                                                                        <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                        <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Özeti)</span>
-                                                                                                    </Link>
-                                                                                                    <Button asChild size="icon" className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                                                        <Link href={`/teacher/content-creation/edit-unit/${unit.id}?courseId=${course.id}`}>
-                                                                                                            <FilePenLine className="w-4 h-4"/>
-                                                                                                        </Link>
-                                                                                                    </Button>
-                                                                                                </div>
-                                                                                            )}
-                                                                                            {unit.topics?.map((topic, topicIndex) => {
-                                                                                                const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
-                                                                                                const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
-                                                                                                const editUrl = `/teacher/content-creation/edit?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}`;
+                                                                {course.units?.map((unit, unitIndex) => {
+                                                                    // DÜZELTME: Bu kontrol artık tüm adımların yayın durumuna bakmıyor,
+                                                                    // sadece sunum içeriği olup olmadığına bakıyor.
+                                                                    const hasAnyContent = unit.steps && unit.steps.length > 0;
+                                                                    if (!hasAnyContent) return null;
 
-                                                                                                return (
-                                                                                                    <div key={topic.id} className="group relative aspect-[4/5] min-h-[14rem]">
+                                                                    return (
+                                                                        <Accordion key={unit.id} type="multiple" className="w-full">
+                                                                            <AccordionItem value={unit.id} className="border-2 border-white/5 rounded-2xl bg-slate-900/50 overflow-hidden">
+                                                                                    <AccordionTrigger className={cn(
+                                                                                        "px-6 py-5 text-xl md:text-2xl font-bold hover:no-underline transition-colors",
+                                                                                        "text-slate-400 hover:text-white hover:bg-white/5"
+                                                                                    )}>
+                                                                                        <div className="flex items-center gap-4 group/unit-link">
+                                                                                            <div className="p-2 bg-white/5 rounded-lg">
+                                                                                                <Book className="w-6 h-6 text-slate-500 group-hover/unit-link:text-white transition-colors" />
+                                                                                            </div>
+                                                                                            {unit.title}
+                                                                                        </div>
+                                                                                    </AccordionTrigger>
+                                                                                    <AccordionContent className="p-6 bg-black/20">
+                                                                                        {unit.topics && unit.topics.length > 0 ? (
+                                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                                                                {/* DÜZELTME: Ünite akış linki kontrolü */}
+                                                                                                {unit.steps && unit.steps.length > 0 && (
+                                                                                                     <div className="group relative aspect-[4/5] min-h-[14rem]">
                                                                                                         <Link 
-                                                                                                            href={presentationUrl}
+                                                                                                            href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
                                                                                                             className={cn(
                                                                                                                 "absolute inset-0 flex flex-col justify-center items-center text-center font-bold",
                                                                                                                 "transition-all duration-300 group-hover:scale-[1.02] active:scale-[0.98]",
                                                                                                                 "rounded-[2rem] shadow-2xl",
                                                                                                                 "break-words whitespace-normal leading-tight p-8",
                                                                                                                 "border-b-8 text-white",
-                                                                                                                neonClass
+                                                                                                                "bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800"
                                                                                                             )}
                                                                                                         >
-                                                                                                            <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
-                                                                                                            <span className="text-2xl md:text-3xl line-clamp-3">
-                                                                                                                {topic.title}
-                                                                                                            </span>
+                                                                                                            <FileText className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                            <span className="text-2xl md:text-3xl line-clamp-3">{unit.title} (Ünite Akışı)</span>
                                                                                                         </Link>
                                                                                                         <Button asChild size="icon" className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                                                            <Link href={editUrl}>
+                                                                                                            <Link href={`/teacher/content-creation/edit-unit/${unit.id}?courseId=${course.id}`}>
                                                                                                                 <FilePenLine className="w-4 h-4"/>
                                                                                                             </Link>
                                                                                                         </Button>
                                                                                                     </div>
-                                                                                                );
-                                                                                            })}
-                                                                                        </div>
-                                                                                    ) : (
-                                                                                        <div className="text-xl text-slate-500 italic p-8 text-center border-4 border-dashed border-slate-800 rounded-3xl">
-                                                                                            Bu üniteye henüz konu eklenmemiş.
-                                                                                        </div>
-                                                                                    )}
-                                                                                </AccordionContent>
-                                                                        </AccordionItem>
-                                                                    </Accordion>
-                                                                ))}
+                                                                                                )}
+                                                                                                {/* DÜZELTME: Konu akış linki kontrolü */}
+                                                                                                {unit.topics?.map((topic, topicIndex) => {
+                                                                                                    const hasTopicContent = topic.steps && topic.steps.length > 0;
+                                                                                                    if (!hasTopicContent) return null;
+
+                                                                                                    const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
+                                                                                                    const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
+                                                                                                    const editUrl = `/teacher/content-creation/edit?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}`;
+
+                                                                                                    return (
+                                                                                                        <div key={topic.id} className="group relative aspect-[4/5] min-h-[14rem]">
+                                                                                                            <Link 
+                                                                                                                href={presentationUrl}
+                                                                                                                className={cn(
+                                                                                                                    "absolute inset-0 flex flex-col justify-center items-center text-center font-bold",
+                                                                                                                    "transition-all duration-300 group-hover:scale-[1.02] active:scale-[0.98]",
+                                                                                                                    "rounded-[2rem] shadow-2xl",
+                                                                                                                    "break-words whitespace-normal leading-tight p-8",
+                                                                                                                    "border-b-8 text-white",
+                                                                                                                    neonClass
+                                                                                                                )}
+                                                                                                            >
+                                                                                                                <GraduationCap className="h-12 w-12 mb-4 opacity-70 group-hover:scale-110 transition-transform" />
+                                                                                                                <span className="text-2xl md:text-3xl line-clamp-3">
+                                                                                                                    {topic.title}
+                                                                                                                </span>
+                                                                                                            </Link>
+                                                                                                            <Button asChild size="icon" className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                                                                <Link href={editUrl}>
+                                                                                                                    <FilePenLine className="w-4 h-4"/>
+                                                                                                                </Link>
+                                                                                                            </Button>
+                                                                                                        </div>
+                                                                                                    );
+                                                                                                })}
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <div className="text-xl text-slate-500 italic p-8 text-center border-4 border-dashed border-slate-800 rounded-3xl">
+                                                                                                Bu üniteye henüz konu eklenmemiş.
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </AccordionContent>
+                                                                            </AccordionItem>
+                                                                        </Accordion>
+                                                                    )
+                                                                })}
                                                             </div>
                                                         </AccordionContent>
                                                     </AccordionItem>
