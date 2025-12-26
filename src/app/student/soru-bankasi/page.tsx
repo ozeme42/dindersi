@@ -1,11 +1,11 @@
 
 'use client';
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Star, Target, Loader2 } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Star, Target, Loader2, Book, Sparkles, LayoutGrid, Gamepad2, XCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
@@ -13,28 +13,17 @@ import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from
 // --- TİP TANIMLAMALARI ---
 type Course = EnrichedClassGroup['courses'][0];
 
-// --- ÖZEL İLERLEME ÇUBUĞU (NEON EFEKTLİ) ---
-const CyberProgress = ({ value, colorClass, label, subLabel, icon: Icon }: { value: number, colorClass: string, label: string, subLabel: string, icon: any }) => (
-    <div className="space-y-2">
-        <div className="flex justify-between items-end">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-400">
-                <Icon className="w-3.5 h-3.5 opacity-70" />
-                {label}
-            </div>
-            <span className={cn("text-xs font-black", colorClass.replace('bg-', 'text-'))}>{value}%</span>
-        </div>
-        <div className="h-2.5 w-full bg-slate-950 rounded-full overflow-hidden border border-white/5 relative">
-            <div 
-                className={cn("h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_currentColor] relative", colorClass)} 
-                style={{ width: `${value}%` }} 
-            >
-                {/* Işıltı Efekti */}
-                <div className="absolute top-0 right-0 bottom-0 w-1 bg-white/50 blur-[1px]" />
-            </div>
-        </div>
-        <p className="text-[10px] text-slate-500 text-right font-mono font-medium tracking-tight">{subLabel}</p>
-    </div>
-);
+const ICONS = [Book, Sparkles, LayoutGrid, Gamepad2];
+const getGradient = (index: number) => {
+    const gradients = [
+        "from-blue-600 to-cyan-500",
+        "from-violet-600 to-purple-500",
+        "from-emerald-600 to-teal-500",
+        "from-rose-600 to-pink-500",
+        "from-amber-600 to-orange-500"
+    ];
+    return gradients[index % gradients.length];
+};
 
 // --- DERS KARTI BİLEŞENİ (GÜNCELLENMİŞ) ---
 const CourseCardWithProgress = ({ course }: { course: Course }) => (
@@ -111,7 +100,7 @@ export default function SoruBankasiPage() {
                 
                 // Flatten the class groups into a single course list
                 const allCourses = (result.classGroups || []).flatMap((group, groupIndex) => 
-                    group.courses.map((course, courseIndex) => ({
+                    group.courses.map((course: any, courseIndex: number) => ({
                         ...course,
                         className: group.name, // Add class name for display
                         icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
@@ -133,7 +122,11 @@ export default function SoruBankasiPage() {
                 setIsLoading(false);
             }
         }
-        fetchCoursesAndProgress();
+        if (user) {
+            fetchCoursesAndProgress();
+        } else {
+            setIsLoading(false);
+        }
     }, [user]);
 
     return (
