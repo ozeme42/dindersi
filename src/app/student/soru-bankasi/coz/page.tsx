@@ -101,7 +101,7 @@ function QuizGame() {
     
     const handleSaveAndExit = async () => {
         if (!user || user.role !== 'student' || score <= 0 || isSubmitting) {
-            router.push('/student');
+            router.push('/student/soru-bankasi');
             return;
         }
 
@@ -115,7 +115,7 @@ function QuizGame() {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsSubmitting(false);
-        router.push('/student');
+        router.push(`/student/soru-bankasi/${searchParams.get('courseId')}`);
     };
 
     const handleRestart = () => {
@@ -174,7 +174,7 @@ function QuizGame() {
                         </Button>
                         <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
                              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Panele Dön"}
+                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Konuya Dön"}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -213,10 +213,12 @@ function QuizGame() {
                         );
                     })}
                      {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
-                        const isSelected = currentAnswer === option;
-                        const isCorrect = currentQuestion.correctAnswer === option;
+                        const answerValue = option === 'Doğru';
+                        const isSelected = currentAnswer === answerValue;
+                        const isCorrect = (question.isTrue ?? (question.correctAnswer === 'Doğru')) === answerValue;
+                        
                         return (
-                            <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                            <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
                                 {option}
                             </Button>
                         );
@@ -241,3 +243,5 @@ export default function SoruCozOyunPage() {
         </Suspense>
     )
 }
+
+    
