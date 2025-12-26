@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -78,10 +79,16 @@ export default function VeriEditoruPage() {
         const newSelection = { ...selection };
         if (level === 1) { // Class
             newSelection.classId = id;
+            newSelection.courseId = undefined;
+            newSelection.unitId = undefined;
+            newSelection.topicId = undefined;
         } else if (level === 2) { // Course
             newSelection.courseId = id;
+            newSelection.unitId = undefined;
+            newSelection.topicId = undefined;
         } else if (level === 3) { // Unit
             newSelection.unitId = id;
+            newSelection.topicId = undefined;
         } else if (level === 4) { // Topic
             newSelection.topicId = id;
         }
@@ -89,14 +96,15 @@ export default function VeriEditoruPage() {
         setSelection(newSelection);
         setSelectionName(name);
 
-        const targetId = id === 'all' ? (selection.unitId || selection.courseId || '') : id;
+        const targetId = id === 'all' ? (newSelection.unitId || newSelection.courseId || '') : id;
 
-        if (level === 4 || (level < 4 && id === 'all') || (dataType && ['questions', 'examQuestions'].includes(dataType))) {
+        // Bitiş koşulları: Konu seçildiğinde veya özel "Tümü" seçeneği tıklandığında veriyi yükle.
+        if (level === 4 || id === 'all') {
             setIsDataLoading(true);
-            const finalDataType = (dataType === 'activity-items' && id === 'all' && selection.unitId) ? 'activities' : dataType;
+            const finalDataType = (dataType === 'activity-items' && id === 'all' && newSelection.unitId) ? 'activities' : dataType;
             
-            const result = dataType === 'ozetler' 
-                ? await getStaticHtmlContent('ozetler', targetId)
+            const result = dataType === 'ozetler' || dataType === 'flows'
+                ? await getStaticHtmlContent(dataType, targetId)
                 : await getStaticData(finalDataType!, targetId);
 
             if (result.success) {
@@ -112,11 +120,31 @@ export default function VeriEditoruPage() {
         }
     };
     
+    const filteredCourses = useMemo(() => {
+        if (!filters.classId || filters.classId === 'all') return allCourses;
+        const selectedClass = allClasses.find(c => c.id === filters.classId);
+        // Sadece ilk sınıfta "Genel" dersleri göster mantığı yanlıştı.
+        // Artık herhangi bir sınıf seçildiğinde, hem o sınıfa özel hem de "Genel" dersler listelenir.
+        return allCourses.filter(c => c.classId === filters.classId || !c.classId);
+    }, [filters.classId, allCourses, allClasses]);
+
+    const filteredUnits = useMemo(() => {
+        if (!selection.courseId || selection.courseId === 'all') return [];
+        const course = filteredCourses.find(c => c.id === selection.courseId);
+        return course?.units || [];
+    }, [selection.courseId, filteredCourses]);
+
+    const filteredTopics = useMemo(() => {
+        if (!selection.unitId || selection.unitId === 'all') return [];
+        const unit = filteredUnits.find(u => u.id === selection.unitId);
+        return unit?.topics || [];
+    }, [selection.unitId, filteredUnits]);
+    
     const renderContent = () => {
         if(isDataLoading || isLoading) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>;
 
         if (activeData !== null && activeDataId && dataType) {
-             if (dataType === 'ozetler') {
+             if (dataType === 'ozetler' || dataType === 'flows') {
                 return <TextDataEditor
                     fileName={`${selectionName} (${dataType})`}
                     initialContent={activeData}
@@ -126,7 +154,7 @@ export default function VeriEditoruPage() {
             return <JsonDataEditor 
                         fileName={`${selectionName} (${dataType})`}
                         initialData={activeData}
-                        saveAction={(data) => saveStaticData(dataType, activeDataId, data)}
+                        saveAction={(data) => saveStaticData(dataType!, activeDataId, data)}
                    />;
         }
 
@@ -134,7 +162,6 @@ export default function VeriEditoruPage() {
             case 0:
                 return <SelectionGrid items={DATA_TYPES} onSelect={(id) => handleDataTypeSelect(id)} titleKey="name" isLoading={false} />;
             case 1:
-                const coursesForClass = allCourses.filter(c => c.classId === selection.classId || !c.classId);
                 return <SelectionGrid items={allClasses} onSelect={(id, name) => handleHierarchySelect(1, id, name)} titleKey="name" isLoading={isLoading} />;
             case 2:
                 const courses = allCourses.filter(c => c.classId === selection.classId || !c.classId);
