@@ -138,7 +138,7 @@ function CoursePageContent() {
             return { type: 'unit', data: activeUnit, unitId: activeUnit.id, courseTitle: course.title, unitTitle: activeUnit.title } as const;
         }
         return null;
-    }, [course, activeTopic, activeUnit]);
+    }, [course, activeTopic?.id, activeUnit?.id]);
 
 
     const handleSelectTopic = useCallback((topic: Topic) => {
@@ -363,16 +363,12 @@ function CoursePageContent() {
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
                         onSelectUnitFlow={handleSelectUnitFlow}
-                        isTopicUnlocked={(topicId: string) => {
-                            if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
-                            if (!course?.units) return false;
-                            const allTopics = course.units.flatMap(u => u.topics || []);
-                            if (allTopics.length === 0) return true;
-                            const topicIndex = allTopics.findIndex(t => t.id === topicId);
-                            if (topicIndex <= 0) return true;
-                            const previousTopic = allTopics[topicIndex - 1];
-                            if (!previousTopic) return true;
-                            return isTopicCompleted(previousTopic.id);
+                        isTopicUnlocked={(topicIndex, unitIndex) => {
+                            const allTopics = course.units?.flatMap(u => u.topics || []) || [];
+                            const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
+                            if (globalIndex <= 0) return true;
+                            const prevTopic = allTopics[globalIndex - 1];
+                            return prevTopic ? isTopicCompleted(prevTopic.id) : true;
                         }}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
@@ -415,10 +411,10 @@ function CoursePageContent() {
                                 unitTitle={activeContentData.unitTitle}
                                 onTopicComplete={handleTopicComplete}
                                 progress={localProgressMap[activeContentData.data.id]}
-                                onProgressUpdate={(id, prog) => onProgressUpdate(id, prog)}
+                                onProgressUpdate={onProgressUpdate}
                                 isFullscreen={isFullscreen}
                                 onMultiAnswer={handleLocalMultiAnswer}
-                                onAllTfAnswered={handleLocalAllTfAnswered}
+                                onAllTfAnswered={() => handleLocalAllTfAnswered()}
                             />
                         ) : (
                             <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">
@@ -442,5 +438,3 @@ export default function CoursePage() {
         </Suspense>
     )
 }
-
-    
