@@ -35,79 +35,76 @@ const serialize = (data: any): any => {
 
 export async function getFlowData(): Promise<EnrichedClass[]> {
     try {
-        const [classesSnapshot, allCoursesSnapshot, allUnitsSnapshot, allTopicsSnapshot, allQuestionsSnapshot] = await Promise.all([
+        const [classesSnap, coursesSnap, unitsSnap, topicsSnap, questionsSnap] = await Promise.all([
             getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
             getDocs(query(collection(db, 'courses'))),
             getDocs(collectionGroup(db, 'units')),
             getDocs(collectionGroup(db, 'topics')),
-            getDocs(collection(db, 'questions'))
+            getDocs(collection(db, 'questions')),
         ]);
 
-        const allQuestions = allQuestionsSnapshot.docs.map(doc => doc.data() as Question);
-        const allTopics = allTopicsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Topic));
-        const allUnits = allUnitsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Unit));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        const topicsByUnit: { [unitId: string]: Topic[] } = {};
-        for (const topic of allTopics) {
-            // Since topics is a subcollection of units, its ref path contains the unit ID.
-            const pathSegments = allTopicsSnapshot.docs.find(d => d.id === topic.id)?.ref.path.split('/');
-            if(pathSegments && pathSegments.length > 3) {
-                const unitId = pathSegments[3];
-                 if (!topicsByUnit[unitId]) {
-                    topicsByUnit[unitId] = [];
-                }
-                // No filtering by isPublished here for the teacher view
-                topicsByUnit[unitId].push(topic);
-            }
-        }
+        const allQuestions = questionsSnap.docs.map(doc => doc.data() as Question);
         
-        const unitsByCourse: { [courseId: string]: EnrichedUnit[] } = {};
-        for (const unit of allUnits) {
-             // Find the parent course ID from the document reference path
-            const pathSegments = allUnitsSnapshot.docs.find(d => d.id === unit.id)?.ref.path.split('/');
-            if(pathSegments && pathSegments.length > 1) {
-                const courseId = pathSegments[1];
-                 if (!unitsByCourse[courseId]) {
-                    unitsByCourse[courseId] = [];
+        const topicsByUnit = new Map<string, EnrichedTopic[]>();
+        topicsSnap.forEach(doc => {
+            const topic = { id: doc.id, ...doc.data() } as Topic;
+            const parentUnitPath = doc.ref.parent.parent?.path;
+            if (parentUnitPath) {
+                const unitId = doc.ref.parent.parent!.id;
+                if (!topicsByUnit.has(unitId)) {
+                    topicsByUnit.set(unitId, []);
                 }
-                // No filtering by isPublished here for the teacher view
-                const topicsForUnit = (topicsByUnit[unit.id] || []).sort((a,b) => a.title.localeCompare(b.title));
-                unitsByCourse[courseId].push({
+                topicsByUnit.get(unitId)!.push(topic);
+            }
+        });
+        
+        const unitsByCourse = new Map<string, EnrichedUnit[]>();
+        unitsSnap.forEach(doc => {
+            const unit = { id: doc.id, ...doc.data() } as Unit;
+            const parentCoursePath = doc.ref.parent.parent?.path;
+            if(parentCoursePath) {
+                const courseId = doc.ref.parent.parent!.id;
+                if (!unitsByCourse.has(courseId)) {
+                    unitsByCourse.set(courseId, []);
+                }
+                const topicsForUnit = (topicsByUnit.get(unit.id) || []).sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+                unitsByCourse.get(courseId)!.push({
                     ...unit,
                     topics: topicsForUnit,
                     questionCount: allQuestions.filter(q => q.unitId === unit.id).length
                 });
             }
-        }
+        });
         
-        const coursesByClass: { [classId: string]: EnrichedCourse[] } = {};
-        for (const course of allCourses) {
-            const classId = course.classId || 'general';
-            if (!coursesByClass[classId]) {
-                coursesByClass[classId] = [];
-            }
-            // No filtering by isPublished here for the teacher view
-            const unitsForCourse = (unitsByCourse[course.id] || []).sort((a,b) => a.title.localeCompare(b.title));
-            coursesByClass[classId].push({ ...course, units: unitsForCourse });
-        }
-
-        const enrichedClasses: EnrichedClass[] = classesSnapshot.docs.map(doc => {
-            const classData = { id: doc.id, ...doc.data() } as SchoolClass;
-            // No filtering by isPublished here for the teacher view
-            return { ...classData, courses: coursesByClass[doc.id] || [] };
+        const courses = coursesSnap.docs.map(doc => {
+            const courseData = { id: doc.id, ...doc.data() } as Course;
+            const unitsForCourse = (unitsByCourse.get(courseData.id) || []).sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+            return { ...courseData, units: unitsForCourse };
         });
 
-        if (coursesByClass['general']) {
-             enrichedClasses.unshift({
-                id: 'general',
-                name: 'Genel',
-                courses: coursesByClass['general'],
-                createdAt: new Date()
-            } as EnrichedClass);
+        const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        const enrichedClasses: EnrichedClass[] = classes.map(cls => ({
+            ...cls,
+            courses: courses.filter(c => c.classId === cls.id),
+        }));
+
+        const generalCourses = courses.filter(c => !c.classId);
+        if (generalCourses.length > 0) {
+            const generalClassIndex = enrichedClasses.findIndex(c => c.name === "Genel");
+            if (generalClassIndex > -1) {
+                enrichedClasses[generalClassIndex].courses.push(...generalCourses);
+            } else {
+                enrichedClasses.unshift({
+                    id: 'general',
+                    name: 'Genel',
+                    courses: generalCourses,
+                    createdAt: new Date(),
+                } as EnrichedClass);
+            }
         }
         
-        return serialize(enrichedClasses) as EnrichedClass[];
+        return serialize(enrichedClasses);
+
     } catch (error) {
         console.error("Error fetching curriculum data:", error);
         return [];
