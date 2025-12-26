@@ -69,49 +69,56 @@ function CoursePageContent() {
             const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
             setCompletedTopics(currentProgress);
 
-            const courseRef = doc(db, 'courses', courseId);
-            const courseSnap = await getDoc(courseRef);
+            const manifestRes = await fetch('/curriculum/manifest.json');
+            const manifest = await manifestRes.json();
 
-            if (!courseSnap.exists()) {
-                console.error("Course not found!");
+            let courseData: Course | undefined;
+            for (const group of manifest.classGroups) {
+                const foundCourse = group.courses.find((c: Course) => c.id === courseId);
+                if (foundCourse) {
+                    courseData = foundCourse;
+                    break;
+                }
+            }
+
+            if (!courseData) {
+                console.error("Course not found in manifest!");
                 setIsLoading(false);
                 return;
             }
-
-            const courseData: Course = { id: courseSnap.id, ...courseSnap.data() } as Course;
-            const unitsRef = collection(db, 'courses', courseId, 'units');
-            const unitsQuery = query(unitsRef, orderBy("title"));
-            const unitsSnap = await getDocs(unitsQuery);
-            const units: Unit[] = [];
-
-            for (const unitDoc of unitsSnap.docs) {
-                const unitData: Unit = { id: unitDoc.id, ...unitDoc.data(), topics: [] } as Unit;
-                const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
-                const topicsQuery = query(topicsRef, orderBy("title"));
-                const topicsSnap = await getDocs(topicsQuery);
-                unitData.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-                units.push(unitData);
+            
+            // Populate steps from static JSON files
+            for (const unit of courseData.units || []) {
+                if (unit.steps && unit.steps.length > 0) {
+                     const flowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                     if(flowRes.ok) unit.steps = await flowRes.json();
+                }
+                for (const topic of unit.topics || []) {
+                    if ((topic as any).hasFlowContent) {
+                        const flowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                        if (flowRes.ok) topic.steps = await flowRes.json();
+                    }
+                }
             }
 
-            courseData.units = units;
             setCourse(courseData);
 
             if (startTopicIdFromUrl) {
                 const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
                 setActiveTopic(topic || null);
-                setActiveUnit(null); // Clear active unit if a topic is directly linked
+                setActiveUnit(null); 
             } else if (unitIdFromUrl) {
                 const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
                 setActiveUnit(unit || null);
-                setActiveTopic(null); // Clear active topic for unit flow
+                setActiveTopic(null);
             } else {
-                 const allTopics = units.flatMap(u => u.topics);
+                 const allTopics = courseData.units.flatMap(u => u.topics || []);
                 const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
                 
                 if (firstUncompletedTopic) {
                     setActiveTopic(firstUncompletedTopic);
                 } else if (allTopics.length > 0) {
-                    setActiveTopic(allTopics[allTopics.length-1] || null);
+                    setActiveTopic(allTopics[allTopics.length - 1] || null);
                 }
             }
         } catch (error) {
@@ -414,7 +421,7 @@ function CoursePageContent() {
                                 onProgressUpdate={onProgressUpdate}
                                 isFullscreen={isFullscreen}
                                 onMultiAnswer={handleLocalMultiAnswer}
-                                onAllTfAnswered={() => handleLocalAllTfAnswered()}
+                                onAllTfAnswered={handleLocalAllTfAnswered}
                             />
                         ) : (
                             <div className="flex h-full items-center justify-center text-slate-500 flex-col gap-4 p-8 text-center">

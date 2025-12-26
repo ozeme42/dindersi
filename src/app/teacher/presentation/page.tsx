@@ -44,32 +44,40 @@ function PresentationPageContent() {
         }
 
         try {
+            let contentRef;
             if (topicId) {
-                // Fetch single topic
-                const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-                const topicSnap = await getDoc(topicRef);
-                if (topicSnap.exists()) {
-                    setTopic({ id: topicSnap.id, ...topicSnap.data() } as Topic);
-                }
+                contentRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
             } else {
-                // Fetch all topics in the unit and merge their steps for a full unit presentation
-                const unitRef = doc(db, `courses/${courseId}/units/${unitId}`);
-                const unitSnap = await getDoc(unitRef);
-                if (unitSnap.exists()) {
-                    const unitData = unitSnap.data() as Unit;
-                    setTopic({
-                        id: unitId,
-                        title: unitData.title,
-                        steps: (unitData.steps || []), // No filtering for teacher presentation
-                    });
-                }
+                contentRef = doc(db, 'courses', courseId, 'units', unitId);
+            }
+
+            const contentSnap = await getDoc(contentRef);
+            
+            if (contentSnap.exists()) {
+                 const data = contentSnap.data();
+                 const contentId = contentSnap.id;
+                 let steps = data.steps || [];
+
+                 // If it's a unit-level presentation without its own steps, aggregate from topics
+                 if (!topicId && steps.length === 0) {
+                     const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`), orderBy("title")));
+                     steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
+                 }
+                 
+                 // If static flow files exist, fetch them.
+                 const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
+                 if (flowRes.ok) {
+                     steps = await flowRes.json();
+                 }
+
+                 setTopic({ id: contentId, title: data.title, steps: steps.filter((s: any) => s.isPublished ?? true) });
             }
         } catch (error) {
             console.error("Error fetching content for presentation:", error);
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, unitId, topicId, unitName]);
+    }, [courseId, unitId, topicId]);
 
     useEffect(() => {
         fetchContent();
@@ -142,11 +150,11 @@ function PresentationPageContent() {
             
             <div className="flex-grow flex flex-col min-h-0 relative z-10">
                  <div className={cn(
-                    "w-full h-full overflow-hidden transition-all duration-300 bg-white dark:bg-slate-900",
-                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl ring-1 ring-white/10"
+                    "w-full h-full overflow-hidden transition-all duration-300",
+                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white dark:bg-slate-900 ring-1 ring-white/10"
                 )}>
                     <LessonContentViewer
-                        topic={topic} // Pass all steps, no filtering
+                        topic={topic}
                         courseId={courseId!}
                         unitId={unitId!}
                         courseTitle={courseName!}
@@ -172,5 +180,3 @@ export default function PresentationPage() {
         </Suspense>
     )
 }
-
-    

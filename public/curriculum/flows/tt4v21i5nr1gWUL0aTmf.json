@@ -1,0 +1,336 @@
+[
+  {
+    "type": "objectiveList",
+    "items": [
+      "Peygamberlerin temel davetlerini ve İslam'ın evrensel mesajlarını açıklayabileceksiniz.",
+      "İslam'ın insan onuruna verdiği önemi ve insanların dokunulmazlığı kavramını tanımlayabileceksiniz.",
+      "İslam'ın beş temel koruma prensibini (canın, dinin, namusun, aklın ve malın korunması) örneklerle açıklayabileceksiniz.",
+      "Canın korunması ilkesini, ayet ve hadislerle ilişkilendirerek yorumlayabileceksiniz.",
+      "İslam'da inanç ve din hürriyetinin önemini Hz. Peygamber'in uygulamaları üzerinden ifade edebileceksiniz.",
+      "İslam'da namus ve iffet kavramlarının korunmasının toplumsal önemini açıklayabileceksiniz.",
+      "Aklın korunması ilkesini, akla zarar veren alışkanlıklardan uzak durmanın gerekliliğiyle birlikte belirtebileceksiniz.",
+      "Malın korunması prensibini, helal kazanç ve haksız kazanç kavramlarıyla ilişkilendirerek açıklayabileceksiniz."
+    ],
+    "title": "Öğrenme Hedefleri"
+  },
+  {
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "type": "content",
+    "content": "<ul><li>Namus</li><li>Peygamber</li><li>Mal</li><li>Dokunulmazlık</li><li>Akıl</li><li>İslam</li><li>Can</li></ul>"
+  },
+  {
+    "content": "Peygamberler, gönderildikleri toplumlara Allah'ın birliğine inanmayı ve ahlaki değerleri benimsemeyi öğretmişlerdir. Hz Peygamber (sav), cahiliye döneminde güçlülerin zayıfların haklarını çiğnediği bir ortamda, her insanın Allah katında özel ve biricik olduğunu vurgulayarak insan onurunun korunmasının önemini belirtmiştir.",
+    "type": "content",
+    "title": "İnsan Onurunun Gözetilmesi"
+  },
+  {
+    "content": "İslam, her insanın din, dil, ırk veya cinsiyet farkı gözetmeksizin yaşama hakkına sahip olduğunu ilan etmiştir. Veda Hutbesi'nde Hz Peygamber (sav), canların, malların, şeref ve namusun kutsal olduğunu ve dokunulmazlığını vurgulayarak kan davalarını kaldırmış, böylece toplumda huzur ve güvenin tesis edilmesini amaçlamıştır.",
+    "type": "content",
+    "title": "Temel Hakların Dokunulmazlığı"
+  },
+  {
+    "title": "Dinin, Aklın ve Malın Korunması",
+    "type": "content",
+    "content": "İslam, 'Dinde zorlama yoktur' ilkesiyle inanç özgürlüğünü temel kabul etmiştir. Akıl, insana verilen en büyük nimet olduğundan uyuşturucu, içki, kumar gibi aklı zayıflatan unsurlardan uzak durulmasını emretmiştir. Malın korunması kapsamında ise haksız kazanç, hırsızlık, hile gibi fiilleri yasaklayarak helal yoldan kazanılan malın dokunulmazlığını güvence altına almış, aynı zamanda zekat ve sadaka ile malın sosyal sorumluluğuna dikkat çekmiştir."
+  },
+  {
+    "type": "content",
+    "title": "Namusun(Nesil) Korunması",
+    "content": "İslam dini, iffetli olmayı ve başkalarının namusuna göz dikmemeyi emreder. Evleri gözetlemek, kadına iftira atmak gibi haysiyeti zedeleyici davranışları kesinlikle yasaklamıştır. Hem erkek hem de kadın için 'Gözlerini haramdan sakınsınlar' emriyle toplumun temel yapısı olan ailenin ve neslin korunması hedeflenmiştir."
+  },
+  {
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Dokunulmazlık",
+        "definition": "Can, mal ve namus gibi değerlerin koruma altında olmasına ne denir?"
+      },
+      {
+        "term": "Can",
+        "definition": "Her insanın sahip olduğu yaşama hakkına ne denir?"
+      },
+      {
+        "term": "Namus",
+        "definition": "İffetli olmak ve kendine ait olmayana göz dikmemek hangi değerle ilgilidir?"
+      },
+      {
+        "term": "Peygamber",
+        "definition": "Toplumları Allah'ın birliğine davet eden elçi kimdir?"
+      },
+      {
+        "term": "İslam",
+        "definition": "Allah katında geçerli tek din nedir?"
+      },
+      {
+        "definition": "Helal yoldan kazanılan kişisel varlıklara ne denir?",
+        "term": "Mal"
+      },
+      {
+        "term": "Akıl",
+        "definition": "İnsana verilen en büyük nimetlerden biri nedir?"
+      }
+    ],
+    "type": "flashcard"
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "correctAnswer": "Namus",
+        "scrambledWord": "ASUNM",
+        "definition": "İpucu: Bu kelime \"Namus\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Peygamber\"",
+        "scrambledWord": "ARMPEGYEB",
+        "correctAnswer": "Peygamber"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Mal\"",
+        "correctAnswer": "Mal",
+        "scrambledWord": "LAM"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Dokunulmazlık\"",
+        "correctAnswer": "Dokunulmazlık",
+        "scrambledWord": "DOILUZKANKMUL"
+      },
+      {
+        "correctAnswer": "Akıl",
+        "scrambledWord": "ALKI",
+        "definition": "İpucu: Bu kelime \"Akıl\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İslam\"",
+        "scrambledWord": "SMİLA",
+        "correctAnswer": "İslam"
+      },
+      {
+        "correctAnswer": "Can",
+        "definition": "İpucu: Bu kelime \"Can\"",
+        "scrambledWord": "NCA"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "questions": [
+      {
+        "isTrue": true,
+        "statement": "Peygamberimiz (sav) önceki peygamberlerin sadece kendi kavimlerine gönderildiğini, kendisinin ise tüm insanlığa gönderildiğini belirtmiştir."
+      },
+      {
+        "isTrue": true,
+        "statement": "İslam'da, din, dil, ırk veya cinsiyet farkı gözetmeksizin herkesin yaşama hakkı vardır."
+      },
+      {
+        "statement": "Hz. Peygamber (sav) Veda Haccı'nda kan davalarını tamamen kaldırmıştır.",
+        "isTrue": true
+      },
+      {
+        "isTrue": false,
+        "statement": "Kur'an-ı Kerim, aklın sağlıklı çalışmasını engelleyen kötü alışkanlıkları teşvik eder."
+      },
+      {
+        "isTrue": false,
+        "statement": "Medine Sözleşmesi yalnızca Müslümanlar arasında yapılmış ve farklı inançtan olanları kapsamamıştır."
+      },
+      {
+        "statement": "İslam'da kişinin helal yoldan kazandığı mal kendine aittir ve rızası dışında ona dokunulamaz.",
+        "isTrue": true
+      },
+      {
+        "isTrue": false,
+        "statement": "Peygamber Efendimiz (sav), bir kimsenin alışverişi sürerken üçüncü bir kişinin pazarlığı kendi menfaati için bozmasına izin vermiştir."
+      }
+    ],
+    "title": "Doğru/Yanlış Alıştırması"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Peygamber mesajı tüm insanlığa yöneliktir.",
+    "scrambledSentence": "insanlığa mesajı yöneliktir. Peygamber tüm"
+  },
+  {
+    "scrambledSentence": "çok İnsan İslam'da onuru değerlidir.",
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İnsan onuru İslam'da çok değerlidir."
+  },
+  {
+    "sentenceWithBlank": "Peygamberler, gönderildikleri toplumları Allah’ın (cc) birliğine ve ___ gününe inanmaya davet etmişlerdir.",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "options": [
+      "kıyamet",
+      "yargı",
+      "hesap",
+      "ceza"
+    ],
+    "correctAnswer": "hesap"
+  },
+  {
+    "sentenceWithBlank": "Hz. Peygamber, her insanın Allah (cc) katında biricik ve özel olduğunu vurgulayarak insan ___ korumanın önemi üzerinde durmuştur.",
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "onurunu",
+    "options": [
+      "canını",
+      "onurunu",
+      "malını",
+      "ailesini"
+    ]
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "sentenceWithBlank": "İslam’da her insan; din, dil, ırk, cinsiyet farkı gözetilmeksizin ___ hakkına sahiptir.",
+    "correctAnswer": "yaşama",
+    "options": [
+      "eğitim",
+      "yaşama",
+      "mülkiyet",
+      "ibadet"
+    ]
+  },
+  {
+    "options": [
+      "zorlama",
+      "zorbalık",
+      "kural",
+      "ayrım"
+    ],
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Allah Teâlâ “Dinde ___ yoktur…” ayetiyle herkesi dinini seçmekte özgür bırakmıştır.",
+    "correctAnswer": "zorlama"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Her canın yaşama hakkı vardır.",
+    "scrambledSentence": "canın Her vardır. yaşama hakkı"
+  },
+  {
+    "options": [
+      "el",
+      "söz",
+      "göz",
+      "gönül"
+    ],
+    "type": "fitb",
+    "sentenceWithBlank": "İffetli olmak, kendine ait olmayana ___ dikmemektir.",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "göz"
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "sentenceWithBlank": "İnsana verilen en büyük nimet ___dır.",
+    "options": [
+      "beden",
+      "akıl",
+      "mal",
+      "sağlık"
+    ],
+    "correctAnswer": "akıl"
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "correctAnswer": "sadaka",
+    "options": [
+      "zekat",
+      "cihad",
+      "sadaka",
+      "namaz"
+    ],
+    "sentenceWithBlank": "Dinimizde ailenin geçimi için çalışmak, ___ derecesinde ibadet sayılmıştır."
+  },
+  {
+    "type": "mcq",
+    "correctAnswer": "Ey insanlar!",
+    "options": [
+      "Ey Müslümanlar!",
+      "Ey ümmetim!",
+      "Ey insanlar!",
+      "Ey inananlar!"
+    ],
+    "question": "Peygamberimizin (sav) mesajlarının evrenselliğini vurgulamak amacıyla son hutbelerinde hangi hitabı daha çok kullandığı belirtilmiştir?",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "correctAnswer": "Kanlarınız, mallarınız, şeref ve namusunuz tıpkı bu beldenin, bu ayın ve bugünlerin mukaddes oluşu gibi dokunulmazdır.",
+    "question": "Hz. Peygamber (sav) Veda Haccı’nda canın dokunulmazlığına dair neyi ifade etmiştir?",
+    "options": [
+      "Sadece Müslümanların canı mukaddestir.",
+      "Kanlarınız, mallarınız, şeref ve namusunuz tıpkı bu beldenin, bu ayın ve bugünlerin mukaddes oluşu gibi dokunulmazdır.",
+      "Can dokunulmazlığı sadece savaş zamanında geçerlidir.",
+      "Mallarınız size helaldir, başkasına haramdır."
+    ],
+    "type": "mcq",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "correctAnswer": "Dinde zorlama yoktur...",
+    "options": [
+      "Sadece İslam'ın tek din olduğu",
+      "İbadetlerin zorunluluğu",
+      "Peygamberin tebliğ görevini yerine getirmesi",
+      "Dinde zorlama yoktur..."
+    ],
+    "question": "Kur'an-ı Kerim'de inanç hürriyetinin esas olduğunu belirten ayet hangi konuya vurgu yapmaktadır?",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Malın helal yoldan kazanılması gerekir.",
+    "scrambledSentence": "helal gerekir. kazanılması Malın yoldan",
+    "type": "sentenceScramble"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Gözlerini haramdan sakınsınlar!...",
+    "options": [
+      "Sözünüzde durun.",
+      "Komşuluk haklarına riayet edin.",
+      "Gözlerini haramdan sakınsınlar!...",
+      "Zekat ve sadaka verin."
+    ],
+    "question": "İslam dininde ailenin ve neslin korunmasını amaçlayan, hem erkeğe hem kadına hitap eden emir hangi konuda verilmiştir?",
+    "type": "mcq"
+  },
+  {
+    "question": "Metne göre, aklın sağlıklı çalışmasını engelleyen maddi ve manevi kötülüklerden hangileri uzak durulması gerekenler arasında sayılmıştır?",
+    "title": "Çoktan Seçmeli",
+    "options": [
+      "Misafirperverlik ve cömertlik",
+      "Kitap okuma ve araştırma",
+      "Uyuşturucu, içki, kumar gibi maddi; kin, haset gibi manevi kötülükler.",
+      "Çalışkanlık ve dürüstlük"
+    ],
+    "type": "mcq",
+    "correctAnswer": "Uyuşturucu, içki, kumar gibi maddi; kin, haset gibi manevi kötülükler."
+  },
+  {
+    "correctAnswer": "Sahibinin izni olmaksızın arazisine yapılan binanın yıktırılacağı, haksız alınan bir karış yerin bile hesap gününde kişinin boynuna dolanacağı.",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber (sav) malın korunması konusunda ashabını hangi uyarılarla bilgilendirmiştir?",
+    "options": [
+      "Malların sadece miras yoluyla el değiştirebileceği.",
+      "Sahibinin izni olmaksızın arazisine yapılan binanın yıktırılacağı, haksız alınan bir karış yerin bile hesap gününde kişinin boynuna dolanacağı.",
+      "Sadece zekat vermenin yeterli olduğu.",
+      "Savaşlarda alınan ganimetlerin tamamen serbest olduğu."
+    ],
+    "type": "mcq"
+  },
+  {
+    "scrambledSentence": "İnanç yoktur. zorlama özgürlüğü esastır,",
+    "type": "sentenceScramble",
+    "correctSentence": "İnanç özgürlüğü esastır, zorlama yoktur.",
+    "title": "Cümle Düzeltme (Veri Bankası)"
+  }
+]

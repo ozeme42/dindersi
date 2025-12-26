@@ -1,0 +1,514 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Hac ibadetinin ne zaman ve nerede yapıldığını açıklayabileceksiniz.",
+      "İhram kavramını tanımlayarak ihrama giriş adımlarını ve ihramlıyken yapılması ve yapılmaması gereken fiilleri listeleyebileceksiniz.",
+      "Telbiyenin anlamını ve metnini ifade edebileceksiniz.",
+      "Harem bölgesi ve mikat sınırı kavramlarını açıklayabileceksiniz.",
+      "Tavaf ibadetini, nasıl yapıldığını, 'şavt' kavramını ve tavaf çeşitlerini (Kudüm, Ziyaret, Veda) açıklayabileceksiniz.",
+      "Say ibadetini ve Safa ile Merve tepeleri arasında nasıl yapıldığını belirtebileceksiniz.",
+      "Arafat vakfesinin hacdaki yerini, zamanını, yapılışını ve farz oluşunun önemini açıklayabileceksiniz.",
+      "Müzdelife vakfesini ve şeytan taşlama ibadetini açıklayabileceksiniz.",
+      "Haccın farzlarını ve vaciplerini ayırt edebileceksiniz.",
+      "Hac ibadetinin genel yapılış sırasını özetleyebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>İhram</li><li>Mikat sınırı</li><li>Veda tavafı</li><li>Şavt</li><li>Hacerülesved</li><li>Arafat</li><li>Kudüm tavafı</li><li>Zemzem</li><li>Hedy kurbanı</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Arafat’ta vakfe</li><li>Harem bölgesi</li><li>Say</li><li>Tavaf</li><li>İhram Yasakları</li><li>Şeytan taşlama</li><li>Ziyaret tavafı</li><li>Telbiye</li><li>Müzdelife vakfesi</li><li>Kabe'nin diğer isimleri</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Haccın Başlangıcı ve İhram",
+    "content": "Hac ibadeti, arefe günü ile Kurban Bayramı döneminde Kâbe ve çevresine gidilmesiyle başlar. İbadetlere başlamadan önce ihrama girilir; bu, hac veya umreye niyet eden kişinin belirli fiilleri kendine haram kılması durumudur. Erkekler dikişsiz iki parça giysi giyerken, kadınlar kendi elbiselerini kullanır ve telbiye duası okunmaya başlanır. İhram giyilmesinin zorunlu olduğu sınırlara mikat denir."
+  },
+  {
+    "type": "content",
+    "title": "Tavaf İbadeti ve Şavt Kavramı",
+    "content": "İhrama girdikten sonra Kâbe'ye gelinir ve tavaf ibadeti yapılır. Tavaf, Kâbe'nin etrafında Hacerülesved köşesinden başlayarak saat yönünün tersine yedi kez dönmekten (şavt) ibarettir. Hac esnasında Kudüm (sünnet), Ziyaret (farz) ve Veda (sünnet) olmak üzere üç farklı tavaf yapılır."
+  },
+  {
+    "type": "content",
+    "title": "Say ve Önemli Vakfeler",
+    "content": "Tavaftan sonra hac ibadetinin önemli bir parçası olan say yapılır; bu, Safa ve Merve tepeleri arasında gidiş-dönüş yedi kez yürümektir. Haccın farzlarından biri olan Arafat vakfesi, arefe günü öğle saatlerinde Arafat'ta bulunmayı gerektirir. Ardından arefe akşamı Müzdelife vakfesi yapılır, burada namazlar birleştirilir ve şeytan taşlamak için taş toplanır."
+  },
+  {
+    "type": "content",
+    "title": "Şeytan Taşlama, Kurban ve İhramdan Çıkış",
+    "content": "Müzdelife'den sonra Mina'ya gidilerek şeytan taşlama ibadeti yerine getirilir. Bu ibadet, Kurban Bayramı günlerinde cemre adı verilen yerlere yedişer taş atılmasıyla sembolik olarak yapılır ve haccın vaciplerindendir. Bayramın ilk günü kurban kesilir, şeytan taşlamanın ardından saç kesilerek ihramdan çıkılır ve ziyaret tavafı ile say tamamlanınca hac ibadeti yerine getirilmiş olur."
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Arafat’ta vakfe",
+        "definition": "Hac ibadetini yerine getirmek isteyen kişinin, arefe günü öğle namazı vakti ile bayramın birinci günü sabah namazına kadarki süre içerisinde Arafat’ta bulunması (zorunda olduğu, haccın farzı olan) ibadet."
+      },
+      {
+        "term": "Kabe'nin diğer isimleri",
+        "definition": "Beytullah,Beytü’l-Haram,Kâbe-i Muazzama"
+      },
+      {
+        "term": "İhram Yasakları",
+        "definition": "Kavga edilmez, kötü söz söylenmez. Parfüm sürülmez, kokulu sabun kullanılmaz. Hayvanlar incitilmez, bitkiler koparılmaz. Tırnak kesilmez, tıraş olunmaz."
+      },
+      {
+        "term": "Telbiye",
+        "definition": "Hac ve umrede tüm Müslümanların okudukları ortak bir dua; Allah’a (cc) olan teslimiyete, yönelişe ve yalnız O’na ibadet edildiğine dair verilen bir söz."
+      },
+      {
+        "term": "Arafat",
+        "definition": "Mekke’nin doğusunda bulunan (vakfe yapılan) bir mekân."
+      },
+      {
+        "term": "Şeytan taşlama",
+        "definition": "Kurban Bayramı günlerinde Mina'da, cemre adı verilen yerlere yedişer taş atılarak yerine getirilen (vacip olan) sembolik ibadet."
+      },
+      {
+        "term": "Ziyaret tavafı",
+        "definition": "Hacdaki son tavaftır ve (haccın) farzıdır."
+      },
+      {
+        "term": "Tavaf",
+        "definition": "Kâbe’nin etrafında yedi kez dönmekten ibaret olan özel ibadet."
+      },
+      {
+        "term": "Say",
+        "definition": "Mekke’deki Safa ve Merve tepeleri arasında gidiş dönüş şeklinde toplam yedi kez yürümek (olan haccın vacibi)."
+      }
+    ]
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Veda tavafı",
+        "definition": "Mekke’den ayrılmadan önce son yapılan sünnet (ve haccın vacibi olan) bir tavaf."
+      },
+      {
+        "term": "Zemzem",
+        "definition": "Kâbe’de Hacerülesved’in tam karşısından çıkan, Müslümanların önem verdiği su."
+      },
+      {
+        "term": "Kudüm tavafı",
+        "definition": "Haccın en başında yapılan sünnet bir tavaf."
+      },
+      {
+        "term": "Hedy kurbanı",
+        "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."
+      },
+      {
+        "term": "İhram",
+        "definition": "Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılması."
+      },
+      {
+        "term": "Şavt",
+        "definition": "Kâbe’nin etrafında bir (tek) dönüş."
+      },
+      {
+        "term": "Hacerülesved",
+        "definition": "“Siyah taş” anlamına gelen, Kâbe'de tavafın başlangıç yerini belirlemek maksadıyla Hz. İbrahim tarafından yerleştirilmiş taş."
+      },
+      {
+        "term": "Müzdelife vakfesi",
+        "definition": "Arafat’tan sonra arefe gününün akşamında Müzdelife adı verilen bölgede yapılan (haccın vacibi olan) vakfe."
+      },
+      {
+        "term": "Mikat sınırı",
+        "definition": "İhramın giyilmesinin zorunlu olduğu (Harem bölgesinin başladığı) yerler."
+      },
+      {
+        "term": "Harem bölgesi",
+        "definition": "Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"İhram\"",
+        "scrambledWord": "MHAİR",
+        "correctAnswer": "İhram"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Mikat sınırı\"",
+        "scrambledWord": "TKİ SANIIMRI",
+        "correctAnswer": "Mikat sınırı"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Veda tavafı\"",
+        "scrambledWord": "FVAADITEV A",
+        "correctAnswer": "Veda tavafı"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Şavt\"",
+        "scrambledWord": "ATŞV",
+        "correctAnswer": "Şavt"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Hacerülesved\"",
+        "scrambledWord": "VAHRESCELDEÜ",
+        "correctAnswer": "Hacerülesved"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Arafat\"",
+        "scrambledWord": "FATARA",
+        "correctAnswer": "Arafat"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Kudüm tavafı\"",
+        "scrambledWord": "KI AUVDMFTAÜ",
+        "correctAnswer": "Kudüm tavafı"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Zemzem\"",
+        "scrambledWord": "ZMZEME",
+        "correctAnswer": "Zemzem"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Hedy kurbanı\"",
+        "scrambledWord": "DRHEAYBKIN U",
+        "correctAnswer": "Hedy kurbanı"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Arafat’ta vakfe\"",
+        "scrambledWord": " FAAVETFRKATAA’",
+        "correctAnswer": "Arafat’ta vakfe"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Harem bölgesi\"",
+        "scrambledWord": "İ HÖAMERGLEBS",
+        "correctAnswer": "Harem bölgesi"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Say\"",
+        "scrambledWord": "AYS",
+        "correctAnswer": "Say"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Tavaf\"",
+        "scrambledWord": "FVATA",
+        "correctAnswer": "Tavaf"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İhram Yasakları\"",
+        "scrambledWord": "İALIARSMHRYA AK",
+        "correctAnswer": "İhram Yasakları"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Şeytan taşlama\"",
+        "scrambledWord": "NTYTAEAŞ AAŞML",
+        "correctAnswer": "Şeytan taşlama"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Ziyaret tavafı\"",
+        "scrambledWord": "RYVAA FİIZATET",
+        "correctAnswer": "Ziyaret tavafı"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Telbiye\"",
+        "scrambledWord": "İTEBYLE",
+        "correctAnswer": "Telbiye"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Müzdelife vakfesi\"",
+        "scrambledWord": "FDİEİFÜEMEZLAKV S",
+        "correctAnswer": "Müzdelife vakfesi"
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Hac ibadeti için Arefe günü ile Kurban Bayramı dönemi (Zilhicce ayının 9, 10, 11, 12 ve 13. günleri) Kâbe ve çevresine gidilir.",
+        "isTrue": true
+      },
+      {
+        "statement": "İhrama giren erkekler dikişsiz giysi yerine kendi normal kıyafetlerini giyerler.",
+        "isTrue": false
+      },
+      {
+        "statement": "Telbiye, hac ve umrede Müslümanların okudukları ortak bir duadır ve Allah'a teslimiyeti ifade eder.",
+        "isTrue": true
+      },
+      {
+        "statement": "Mikat sınırı, ihram kıyafetinin giyilmesinin zorunlu olduğu bölgeleri ifade eder.",
+        "isTrue": true
+      },
+      {
+        "statement": "İhramlıyken tırnak kesmek ve tıraş olmak serbesttir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kâbe'nin etrafında yedi kez dönmeye 'şavt' denir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Tavafa Kâbe'de Hacerülesved'in bulunduğu köşeden başlanır ve saat yönünde dönülür.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ziyaret tavafı, hacdaki son tavaftır ve farzdır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Say ibadetine Merve Tepesi'nden başlanır ve Safa Tepesi'nde son verilir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Arafat vakfesi, haccın farzlarından biridir ve bunu yerine getirmeyen hacı adayının hac ibadeti tamamlanmış olmaz.",
+        "isTrue": true
+      },
+      {
+        "statement": "Müzdelife vakfesi, haccın farzlarından biri değildir ancak vaciplerindendir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Şeytan taşlama ibadeti, insanın nefsinin kötülüklerinden uzaklaşacağına dair verdiği sözü temsil eden sembolik bir ibadettir.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "İhrama girilince telbiye okunmaya başlanır.",
+    "scrambledSentence": "İhrama başlanır. okunmaya girilince telbiye"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılmasına ___ denir.",
+    "options": [
+      "ihram",
+      "tavaf",
+      "say",
+      "vakfe"
+    ],
+    "correctAnswer": "ihram"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kâbe'nin etrafında yedi kez dönme ibadetine ___ denir.",
+    "options": [
+      "tavaf",
+      "şavt",
+      "say",
+      "vakfe"
+    ],
+    "correctAnswer": "tavaf"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hac ibadetinde Arafat'ta vakfe, ___ bir ibadettir.",
+    "options": [
+      "farz",
+      "sünnet",
+      "vacip",
+      "müstehap"
+    ],
+    "correctAnswer": "farz"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Say ibadeti, Mekke'deki ___ Tepesi'nden başlanıp Merve Tepesi'nde sona erer.",
+    "options": [
+      "Safa",
+      "Cebeli Nur",
+      "Sevr",
+      "Uhud"
+    ],
+    "correctAnswer": "Safa"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hac ve umrede Müslümanların okudukları ve Allah'a teslimiyete dair verilen söz olan ortak duaya ___ denir.",
+    "options": [
+      "Telbiye",
+      "Tekbir",
+      "Salavat",
+      "Fatiha"
+    ],
+    "correctAnswer": "Telbiye"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Yasaklara uyulmaması durumunda ya sadaka verilir ya da kurban kesilir.",
+    "scrambledSentence": "Yasaklara sadaka kurban verilir durumunda uyulmaması ya da ya kesilir."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılmasına ne ad verilir?",
+    "options": [
+      "Say",
+      "Vakfe",
+      "İhram",
+      "Tavaf"
+    ],
+    "correctAnswer": "İhram"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İhrama girecek olan erkekler hangi tür kıyafetleri giyerler?",
+    "options": [
+      "Normal günlük kıyafetler",
+      "Tek parça dikişli elbise",
+      "İki parça dikişsiz giysi",
+      "Özel tasarlanmış parlak cübbeler"
+    ],
+    "correctAnswer": "İki parça dikişsiz giysi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Telbiye duası neyin bir ifadesidir?",
+    "options": [
+      "Peygamberi övgüye",
+      "Cenneti arzulamaya",
+      "Allah'a olan teslimiyete, yönelişe ve yalnız O'na ibadet edildiğine dair verilen bir söz",
+      "Günahlardan arınmaya"
+    ],
+    "correctAnswer": "Allah'a olan teslimiyete, yönelişe ve yalnız O'na ibadet edildiğine dair verilen bir söz"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Mekke şehri ve etrafındaki, ihram kıyafetinin giyilmesinin zorunlu olduğu geniş alana ne denir?",
+    "options": [
+      "Mina bölgesi",
+      "Safa bölgesi",
+      "Merve bölgesi",
+      "Harem bölgesi"
+    ],
+    "correctAnswer": "Harem bölgesi"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi ihramlıyken yapılması yasak olan fiillerden biridir?",
+    "options": [
+      "Kol saati takmak",
+      "Parfümsüz sabun kullanmak",
+      "Diş fırçalamak",
+      "Parfüm sürmek"
+    ],
+    "correctAnswer": "Parfüm sürmek"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Kâbe'nin etrafında yedi kez dönme ibadetine ne ad verilir?",
+    "options": [
+      "Say",
+      "Tavaf",
+      "Vakfe",
+      "Cemre"
+    ],
+    "correctAnswer": "Tavaf"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Tavafa Kâbe'de hangi köşeden başlanır?",
+    "options": [
+      "Irak köşesi",
+      "Şam köşesi",
+      "Hacerülesved'in bulunduğu köşe",
+      "Yemen köşesi"
+    ],
+    "correctAnswer": "Hacerülesved'in bulunduğu köşe"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hac ibadeti esnasında yapılan ve farz olan tavafın adı nedir?",
+    "options": [
+      "Nafile tavafı",
+      "Kudüm tavafı",
+      "Veda tavafı",
+      "Ziyaret tavafı"
+    ],
+    "correctAnswer": "Ziyaret tavafı"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Say ibadeti nerede yapılır?",
+    "options": [
+      "Safa ve Merve tepeleri arasında",
+      "Arafat Dağı'nda",
+      "Mina bölgesinde",
+      "Müzdelife'de"
+    ],
+    "correctAnswer": "Safa ve Merve tepeleri arasında"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Haccın farzlarından olan Arafat vakfesi hangi gün yapılır?",
+    "options": [
+      "Zilhicce ayının onuncu günü",
+      "Kurban Bayramı'nın ilk günü",
+      "Zilhicce ayının dokuzuncu günü (Arefe günü)",
+      "Zilhicce ayının sekizinci günü"
+    ],
+    "correctAnswer": "Zilhicce ayının dokuzuncu günü (Arefe günü)"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi haccın farzlarından biridir?",
+    "options": [
+      "Şeytan taşlama",
+      "Kurban kesme",
+      "İhram",
+      "Say"
+    ],
+    "correctAnswer": "İhram"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi haccın vaciplerinden biridir?",
+    "options": [
+      "Arafat'ta Vakfe",
+      "Ziyaret Tavafı",
+      "İhram",
+      "Müzdelife Vakfesi"
+    ],
+    "correctAnswer": "Müzdelife Vakfesi"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Buyur Allah’ım buyur. Emrindeyim buyur! Senin hiçbir ortağın yoktur. Allah’ım buyur. Hamd sana mahsustur. Nimet de senin, mülk de senindir. Senin hiçbir ortağın yoktur.",
+    "scrambledSentence": "sana Emrindeyim buyur. ortağın buyur. Buyur mahsustur. buyur! Hamd Senin senindir. senin, de Senin mülk yoktur. yoktur. hiçbir Allah’ım Allah’ım Nimet hiçbir de ortağın"
+  }
+]

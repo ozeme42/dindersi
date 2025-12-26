@@ -1,0 +1,289 @@
+[
+  {
+    "items": [
+      "Ahiret inancının insan davranışları üzerindeki etkilerini açıklayabileceksiniz.",
+      "Dünya hayatının bir imtihan yurdu olduğunu kavrayabileceksiniz.",
+      "Ahiret inancının dünya hayatına anlam kattığını ifade edebileceksiniz.",
+      "Kuran ayetleri ışığında ahiret hayatının önemini ve sürekliliğini açıklayabileceksiniz.",
+      "Ahiret inancının adalet duygusuyla ilişkisini değerlendirebileceksiniz.",
+      "Allah'ın mutlak adaletine ve merhametine olan güvenin birey üzerindeki etkilerini belirtebileceksiniz.",
+      "Günah işledikten sonra tövbenin önemini ve Allah'ın rahmetinin genişliğini açıklayabileceksiniz."
+    ],
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList"
+  },
+  {
+    "type": "content",
+    "content": "<ul><li>Ahiret İnancı</li><li>İmtihan Dünyası</li><li>Sorumluluk</li><li>Hesap Günü</li><li>İlahi Adalet</li><li>Mükâfat ve Ceza</li><li>Tövbe ve Mağfiret</li><li>Sonsuz Hayat</li><li>Dünya Hayatının Geçiciliği</li><li>Allah'ın Merhameti</li></ul>",
+    "title": "Anahtar Kavramlar"
+  },
+  {
+    "content": "Öldükten sonra dirilip dünya hayatında yaptıklarının hesabını Allah'a (cc) vereceğine inanan bir insan, O'nun emirlerini yerine getirmeye ve yasaklarından sakınmaya gayret eder. Bu inanç, kişinin seçimlerinden sorumlu olduğunu bilmesini ve davranışlarına dikkat etmesini sağlar.",
+    "type": "content",
+    "title": "Ahiret İnancının İnsan Davranışlarına Etkisi"
+  },
+  {
+    "content": "Yüce Allah insanı dünyaya başıboş ve amaçsız göndermemiştir; dünya hayatı bir imtihan yurdudur. Ahirete iman, bu hayatı anlamlı kılar ve insanı varlık, yokluk, hastalık, ölüm gibi durumlarla sınandığının bilincine vardırır.",
+    "title": "Dünya Hayatının Bir İmtihan Yurdu Oluşu",
+    "type": "content"
+  },
+  {
+    "title": "Ahirette Adaletin Tam Olarak Tecellisi",
+    "type": "content",
+    "content": "Dünyada tam olarak gerçekleşmeyen adaletin ahirette eksiksiz bir şekilde yerini bulacağına inanılır. Ahiret, iyilerin mükâfatlandırılacağı, inkârcıların ise cezalandırılacağı, Allah'ın (cc) sonsuz adaletiyle hükmedeceği yerdir."
+  },
+  {
+    "content": "Ahirete iman eden insan, Allah'ın (cc) mutlak adaletine ve sonsuz merhametine güvenir, dünyanın geçici zevklerinden uzaklaşıp kalıcı olan ahiret için çalışır. Ayrıca sevdikleriyle sonsuza kadar bir arada yaşama isteği ahirette gerçekleşecek, orada ölüm olmayacaktır.",
+    "title": "Ahiret İnancının Verdiği Umut ve Sonsuzluk Arzusu",
+    "type": "content"
+  },
+  {
+    "title": "Bilgi Kartları",
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "Öldükten sonra tekrar dirilip dünyada yaptıklarının hesabını Allah'a (cc) vereceğine inanmak; dünya hayatını anlamlı kılan ve insan davranışlarını şekillendiren temel inanç.",
+        "term": "Ahiret İnancı"
+      },
+      {
+        "term": "Dünya Hayatı",
+        "definition": "İnsanın varlık, yokluk, hastalık, ölüm gibi durumlarla sınandığı, geçici bir imtihan yurdu."
+      },
+      {
+        "definition": "Allah'ın (cc) insanı dünya hayatında hayırla da şerle de sınaması, denemesi.",
+        "term": "İmtihan"
+      },
+      {
+        "definition": "İnsanın iyi ile kötüyü, doğru ile yanlışı ayırt edebilme özelliği nedeniyle seçimlerinden ve yaratılış gayesini gerçekleştirmek üzere üstlendiği görevlerden hesap verme yükümlülüğü.",
+        "term": "Sorumluluk"
+      },
+      {
+        "definition": "Ahirete iman sayesinde canlı tutulan; dünyada tam gerçekleşmeyen adaletin ahirette kesinlikle yerini bulacağına dair inanç.",
+        "term": "Adalet Duygusu"
+      },
+      {
+        "definition": "Günah işleyip hatasından pişman olan insanın samimi bir şekilde Allah'a (cc) yönelerek af dilemesi.",
+        "term": "Tövbe"
+      },
+      {
+        "term": "Mükafat",
+        "definition": "Ahirette, dünya hayatında Allah'ın (cc) emirlerini yerine getiren ve iyi işler yapan kullara verilecek olan ödül."
+      },
+      {
+        "definition": "Ahirette, dünya hayatında inkârcı olanların veya kötü işler yapanların uğrayacağı karşılık.",
+        "term": "Ceza"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "cards": [
+      {
+        "scrambledWord": "teahri",
+        "definition": "Öldükten sonraki sonsuz yaşam.",
+        "correctAnswer": "Ahiret"
+      },
+      {
+        "correctAnswer": "İman",
+        "scrambledWord": "mian",
+        "definition": "Allah'a ve gönderdiklerine inanma."
+      },
+      {
+        "definition": "İnsanların dünyada sınandığı durum.",
+        "scrambledWord": "nıhtami",
+        "correctAnswer": "İmtihan"
+      },
+      {
+        "scrambledWord": "teadal",
+        "correctAnswer": "Adalet",
+        "definition": "Her şeyi yerli yerine koyma, hakkaniyet."
+      },
+      {
+        "correctAnswer": "Merhamet",
+        "scrambledWord": "metreham",
+        "definition": "Acıma, şefkat gösterme duygusu."
+      }
+    ],
+    "title": "Anagram Bilgi Kartları"
+  },
+  {
+    "title": "Doğru/Yanlış Alıştırması",
+    "type": "trueFalseList",
+    "questions": [
+      {
+        "statement": "Ahirete inanan bir insan, Allah'ın emirlerini yerine getirmeye ve yasaklarından sakınmaya çalışır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Dünya hayatı, Allah tarafından başıboş ve amaçsız yaratılmıştır.",
+        "isTrue": false
+      },
+      {
+        "isTrue": false,
+        "statement": "Ahiret hayatı, dünya hayatına göre geçicidir."
+      },
+      {
+        "statement": "İnsan, iyi ile kötüyü ayırt edebilme özelliğine sahip olduğu için seçimlerinden sorumlu tutulmuştur.",
+        "isTrue": true
+      },
+      {
+        "isTrue": true,
+        "statement": "Ahirette tüm haksızlıklar giderilecek ve hak yerini bulacaktır."
+      },
+      {
+        "statement": "Allah'ın ahiretteki rahmeti, yarattığı tüm canlılara tahsis edilmiştir.",
+        "isTrue": false
+      }
+    ]
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "options": [
+      "eğlence",
+      "imtihan",
+      "oyun",
+      "geçici"
+    ],
+    "sentenceWithBlank": "Dünya hayatı bir ___ yurdudur.",
+    "type": "fitb",
+    "correctAnswer": "imtihan"
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "correctAnswer": "anlamlı",
+    "sentenceWithBlank": "Ahirete iman, dünya hayatını ___ kılar.",
+    "options": [
+      "basit",
+      "anlamsız",
+      "anlamlı",
+      "kolay"
+    ]
+  },
+  {
+    "type": "fitb",
+    "sentenceWithBlank": "Ahiret, verilen görevleri yerine getirenlerin mükâfatlandırılacağı, inkârcı olanların ise ___ yerdir.",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "cezalandırılacağı",
+    "options": [
+      "affedileceği",
+      "sorgulanacağı",
+      "cezalandırılacağı",
+      "unutulacağı"
+    ]
+  },
+  {
+    "sentenceWithBlank": "___ duygusu ahirete imanı taze tutar.",
+    "type": "fitb",
+    "correctAnswer": "Adalet",
+    "title": "Boşluk Doldurma",
+    "options": [
+      "Merhamet",
+      "Adalet",
+      "Korku",
+      "Sabır"
+    ]
+  },
+  {
+    "type": "fitb",
+    "options": [
+      "kudretine",
+      "rahmetine",
+      "adaletine",
+      "sevgisine"
+    ],
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "adaletine",
+    "sentenceWithBlank": "Ahirete iman eden insan, Allah’ın (cc) mutlak ___ sonsuz güven duyar."
+  },
+  {
+    "question": "Ahirete inanan bir insanın davranışları üzerinde bu inancın temel etkisi nedir?",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "options": [
+      "Gelecek kaygısı taşımak ve sürekli endişeli olmak",
+      "Allah'ın (c.c.) emirlerini yerine getirmeye ve yasaklarından sakınmaya çalışmak",
+      "Dünya nimetlerine daha fazla yönelmek",
+      "Sadece kendi çıkarlarını düşünen bir yaşam sürmek"
+    ],
+    "correctAnswer": "Allah'ın (c.c.) emirlerini yerine getirmeye ve yasaklarından sakınmaya çalışmak"
+  },
+  {
+    "type": "mcq",
+    "options": [
+      "\"Sizi sırf boş yere yarattığımızı ve sizin artık huzurumuza geri getirilmeyeceğinizi mi sandınız?\" (Mü’minûn suresi, 115. ayet.)",
+      "\"Fakat siz dünya hayatını tercih ediyorsunuz.\" (A’lâ suresi, 16. ayet.)",
+      "\"Her canlı, ölümü tadar. Bir deneme olarak sizi hayırla da şerle de imtihan ederiz. Ve siz, ancak bize döndürüleceksiniz.\" (Enbiya suresi, 35. ayet.)",
+      "\"Oysa ahiret daha hayırlıdır ve süreklidir.\" (A’lâ suresi, 17. ayet.)"
+    ],
+    "question": "Aşağıdaki ayetlerden hangisi, insanların dünyada sınandığını ve Allah'a döndürüleceğini ifade etmektedir?",
+    "correctAnswer": "\"Her canlı, ölümü tadar. Bir deneme olarak sizi hayırla da şerle de imtihan ederiz. Ve siz, ancak bize döndürüleceksiniz.\" (Enbiya suresi, 35. ayet.)",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "correctAnswer": "Ahirette hiçbir haksızlığın kalmayıp hakkın yerini bulacağına inanılmasıyla",
+    "options": [
+      "Sadece güçlü olanın adaleti sağlamasıyla",
+      "Ahirette hiçbir haksızlığın kalmayıp hakkın yerini bulacağına inanılmasıyla",
+      "Dünya mahkemelerinin mükemmel işlemesiyle",
+      "Herkesin bu dünyada hak ettiği cezayı almasıyla"
+    ],
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "question": "Ahiret inancı, adalet duygusunu nasıl canlı tutar?"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Sadece Allah'a ve ahirete iman eden kullara (müminlere)",
+    "question": "Yüce Allah'ın rahmeti ahirette kimlere tahsis edilmiştir?",
+    "options": [
+      "Sadece Allah'a ve ahirete iman eden kullara (müminlere)",
+      "Dünya hayatında zengin olanlara",
+      "Her canlıya, istisnasız",
+      "Günah işlemeyen tüm insanlara"
+    ],
+    "type": "mcq"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "question": "Hz. Peygamber'in (s.a.v.) en çok ettiği dualardan biri olarak metinde zikredilen dua aşağıdakilerden hangisidir?",
+    "options": [
+      "\"Allah'ım! Bizi düşmanlarımıza karşı galip kıl!\"",
+      "\"Allah'ım! Bize rızık ver ve bizi koru!\"",
+      "\"Allah'ım! Bize dünyada iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru!\"",
+      "\"Allah'ım! Bizi affet ve cennetine koy!\""
+    ],
+    "correctAnswer": "\"Allah'ım! Bize dünyada iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru!\""
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Dünya hayatı bir imtihan yeridir.",
+    "scrambledSentence": "imtihan bir hayatı yeridir. Dünya"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Dünyadaki seçimlerimiz ahiretimizi belirler.",
+    "scrambledSentence": "Dünyadaki seçimlerimiz ahiretimizi belirler."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Her canlı, ölümü tadar. Bir deneme olarak sizi hayırla da şerle de imtihan ederiz. Ve siz, ancak bize döndürüleceksiniz.",
+    "scrambledSentence": "tadar. Her deneme sizi bize hayırla olarak ölümü da ancak ederiz. siz, Bir imtihan canlı, Ve şerle döndürüleceksiniz. de"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Allah’ım! Bize dünyada iyilik ver, ahirette de iyilik ver ve bizi cehennem azabından koru!",
+    "scrambledSentence": "azabından iyilik koru! ahirette ver iyilik dünyada de ve ver, Bize Allah’ım! bizi cehennem"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ahirete iman davranışları etkiler.",
+    "scrambledSentence": "etkiler. davranışları iman Ahirete"
+  }
+]
