@@ -6,7 +6,7 @@ import {
     Loader2, BookOpen, Columns, LayoutTemplate, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
     Image as ImageIcon, Settings, Trophy, Bug, DollarSign, LogIn, ListOrdered, Smartphone, 
-    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Library, FileText, ChevronRight, ArrowRight, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, Target
+    Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, User, LogOut, Swords, MonitorPlay, LayoutGrid, Library, FileText, ChevronRight, ArrowRight, Crosshair, Shuffle, Lightbulb, Puzzle, Skull, Layers, Target, FileJson
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -333,7 +333,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     gameSettingsTeacher: { key: 'gameSettingsTeacher', href: '/teacher/game-settings', title: 'Oyun Ayarları', icon: <Settings />, color: "bg-slate-500 shadow-slate-200" },
     leaderboard: { key: 'leaderboard', href: "/leaderboard", title: "Liderlik", icon: <Trophy />, color: "bg-yellow-500 shadow-yellow-200" },
     scoreEvents: { key: 'scoreEvents', href: '/teacher/score-events', title: 'Puan Hareketleri', icon: <DollarSign />, color: "bg-emerald-500 shadow-emerald-200" },
-    wheelOfFortune: { key: 'wheelOfFortune', href: '/teacher/smartboard/carkifelek', title: 'Çarkıfelek', icon: <Swords />, color: "bg-pink-500 shadow-pink-200" },
+    staticDataEditor: { key: 'staticDataEditor', href: '/teacher/static-data-editor', title: 'Statik Veri Editörü', icon: <FileJson />, color: "bg-pink-500 shadow-pink-200" },
   };
 
   const getManagementButtons = () => {
@@ -347,10 +347,10 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.evaluationScales,
           managementButtons.leaderboard,
           managementButtons.statsTeacher,
-          managementButtons.wheelOfFortune,
           managementButtons.imageLibrary,
           managementButtons.gameSettingsTeacher,
           managementButtons.scoreEvents,
+          managementButtons.staticDataEditor, // Buraya eklendi
       ];
       if(user.role === 'superadmin') {
           buttons.unshift(managementButtons.superAdmin);

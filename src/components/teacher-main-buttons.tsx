@@ -22,7 +22,7 @@ const FeatureButton = ({ href, title, description, icon, colorClass }: { href: s
                 </div>
                 
                 {/* Başlık */}
-                <h3 className="font-black text-3xl md:text-4xl mt-2 text-white drop-shadow-md relative z-10 uppercase tracking-tight leading-tight">{title}</h3>
+                <h3 className="font-black text-4xl mt-2 text-white drop-shadow-md relative z-10 uppercase tracking-tight leading-tight">{title}</h3>
                 
                 {/* Açıklama */}
                 <p className="mt-3 text-white/80 text-lg font-medium relative z-10 leading-snug">{description}</p>
@@ -57,11 +57,11 @@ export function TeacherMainButtons() {
       colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500',
     },
     {
-      key: 'static-data-editor',
-      href: '/teacher/static-data-editor',
-      title: 'Statik Veri Editörü',
-      description: 'Oyunlar için statik JSON verilerini düzenleyin.',
-      icon: <FileJson />,
+      key: 'oyunlar',
+      href: '/oyunlar',
+      title: 'Etkinlikler',
+      description: 'Tüm oyun ve etkinlikleri görüntüleyin.',
+      icon: <Gamepad2 />,
       colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500',
     },
   ];
