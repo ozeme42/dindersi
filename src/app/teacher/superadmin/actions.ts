@@ -4,7 +4,7 @@
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { Timestamp } from "firebase-admin/firestore";
-import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question, Assignment, ScoreEvent } from "@/lib/types";
+import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question, Assignment, ScoreEvent, LessonStep } from "@/lib/types";
 
 // Node.js file system and path modules
 import fs from 'fs/promises';
@@ -476,19 +476,18 @@ export async function exportManifestAndContent() {
 
                         // Export unit steps (ders akışı)
                         if (unitData.steps && unitData.steps.length > 0) {
-                            addFile(`flows/${unitDoc.id}.json`, unitData.steps);
+                            addFile(`flows/${unitDoc.id}.json`, unitData.steps.filter((s: LessonStep) => s.isPublished ?? true));
                         }
 
                         const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
                         
-                        const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0) || topicsSnapshot.docs.some(topicDoc => {
+                        const hasAnyVisibleContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0) || topicsSnapshot.docs.some(topicDoc => {
                              const topicData = topicDoc.data() as Topic;
                              const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                             const hasFlow = (topicData.steps || []).length > 0;
-                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || hasFlow);
+                             return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                         });
 
-                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, topics: [] } : null;
+                        return hasAnyVisibleContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, steps: unitData.steps, topics: [] } : null;
                     }));
 
                     const validUnits = units.filter(Boolean);
@@ -527,14 +526,14 @@ export async function exportManifestAndContent() {
                         }
                         // Export topic steps (ders akışı)
                         if (topicData.steps && topicData.steps.length > 0) {
-                            addFile(`flows/${doc.id}.json`, topicData.steps);
+                            addFile(`flows/${doc.id}.json`, topicData.steps.filter((s: LessonStep) => s.isPublished ?? true));
                         }
                         
                         const hasOzetContent = !!topicData.htmlContent;
-                        const hasDersAkisiContent = (topicData.steps || []).length > 0;
+                        const hasFlowContent = (topicData.steps || []).length > 0;
 
-                        if (hasOzetContent || hasYazilacaklarContent || hasDersAkisiContent) {
-                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent, hasOzetContent, hasFlowContent: hasDersAkisiContent };
+                        if (hasOzetContent || hasYazilacaklarContent || hasFlowContent) {
+                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent, hasOzetContent, hasFlowContent };
                         }
                         return null;
                     });

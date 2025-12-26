@@ -13,8 +13,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Card, CardHeader } from '@/components/ui/card';
 import { getFlowData } from './actions'; // Yeni eylem import edildi
 
-type EnrichedTopic = Topic & { questionCount?: number };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string };
+type EnrichedTopic = Topic & { questionCount?: number, hasFlowContent?: boolean };
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[] };
 type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 type CourseGroup = { title: string; courses: EnrichedCourse[] };
@@ -38,8 +38,21 @@ export default function DersAkisiPage() {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            const data = await getFlowData();
-            setCurriculum(data);
+            // In static mode, we will fetch from manifest.json
+            const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
+            if (isStatic) {
+                try {
+                    const res = await fetch('/curriculum/manifest.json');
+                    if (!res.ok) throw new Error('Manifest not found');
+                    const manifest = await res.json();
+                    setCurriculum(manifest.classGroups || []);
+                } catch (error) {
+                    console.error("Failed to load static curriculum data:", error);
+                }
+            } else {
+                const data = await getFlowData();
+                setCurriculum(data);
+            }
             setIsLoading(false);
         };
         fetchData();
@@ -139,9 +152,7 @@ export default function DersAkisiPage() {
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
                                                                 {course.units?.map((unit, unitIndex) => {
-                                                                    // DÜZELTME: Bu kontrol artık tüm adımların yayın durumuna bakmıyor,
-                                                                    // sadece sunum içeriği olup olmadığına bakıyor.
-                                                                    const hasAnyContent = unit.steps && unit.steps.length > 0;
+                                                                    const hasAnyContent = (unit.steps && unit.steps.length > 0) || unit.topics.some(t => t.hasFlowContent);
                                                                     if (!hasAnyContent) return null;
 
                                                                     return (
@@ -161,8 +172,8 @@ export default function DersAkisiPage() {
                                                                                     <AccordionContent className="p-6 bg-black/20">
                                                                                         {unit.topics && unit.topics.length > 0 ? (
                                                                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                                                {/* DÜZELTME: Ünite akış linki kontrolü */}
-                                                                                                {unit.steps && unit.steps.length > 0 && (
+                                                                                                {/* Ünite akış linki */}
+                                                                                                {(unit.steps && unit.steps.length > 0) && (
                                                                                                      <div className="group relative aspect-[4/5] min-h-[14rem]">
                                                                                                         <Link 
                                                                                                             href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
@@ -185,10 +196,9 @@ export default function DersAkisiPage() {
                                                                                                         </Button>
                                                                                                     </div>
                                                                                                 )}
-                                                                                                {/* DÜZELTME: Konu akış linki kontrolü */}
+                                                                                                {/* Konu akış linkleri */}
                                                                                                 {unit.topics?.map((topic, topicIndex) => {
-                                                                                                    const hasTopicContent = topic.steps && topic.steps.length > 0;
-                                                                                                    if (!hasTopicContent) return null;
+                                                                                                    if (!topic.hasFlowContent) return null;
 
                                                                                                     const presentationUrl = `/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&topicId=${topic.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`;
                                                                                                     const neonClass = colorClasses[(topicIndex + unitIndex + 2) % colorClasses.length];
