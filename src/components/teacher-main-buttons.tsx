@@ -57,11 +57,11 @@ export function TeacherMainButtons() {
       colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500',
     },
     {
-      key: 'activities',
-      href: '/teacher/activities',
-      title: 'Etkinlikler',
-      description: 'Tüm oyun ve etkinliklere tek bir yerden erişin.',
-      icon: <Gamepad2 />,
+      key: 'static-data-editor',
+      href: '/teacher/static-data-editor',
+      title: 'Statik Veri Editörü',
+      description: 'Oyunlar için statik JSON verilerini düzenleyin.',
+      icon: <FileJson />,
       colorClass: 'bg-rose-600 border-rose-800 hover:bg-rose-500',
     },
   ];
