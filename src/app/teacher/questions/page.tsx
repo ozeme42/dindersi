@@ -1,69 +1,69 @@
 
 
-"use client"
+'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table"
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+    Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
-  PlusCircle,
-  FilePenLine,
-  ArrowLeft,
-  ArrowRight,
-  Loader2,
-  Upload,
-  Sparkles,
-  Users,
-  Book,
-  Library,
-  ListTodo,
-  Check,
-  ChevronDown,
-  Trash2,
-  ArrowDownAZ,
-  CalendarClock,
-  Search,
-  Filter
-} from "lucide-react"
+    PlusCircle,
+    FilePenLine,
+    ArrowLeft,
+    ArrowRight,
+    Loader2,
+    Upload,
+    Sparkles,
+    Users,
+    Book,
+    Library,
+    ListTodo,
+    Check,
+    ChevronDown,
+    Trash2,
+    ArrowDownAZ,
+    CalendarClock,
+    Search,
+    Filter
+} from "lucide-react";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuCheckboxItem,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { db } from "@/lib/firebase"
-import { collection, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore"
-import type { Question, Course, Unit, Topic, SchoolClass } from "@/lib/types"
-import { useToast } from "@/hooks/use-toast"
-import { AIGenerationDialog } from "@/components/ai-generation-dialog"
-import { BulkImportDialog } from "@/components/bulk-import-dialog"
-import { cn } from "@/lib/utils"
-import { SelectionGrid } from "@/components/selection-grid"
-import { saveQuestion, updateQuestionDifficulty, deleteBulkQuestions, saveBulkQuestions, saveGeneratedQuestions } from "./actions"
-import { Checkbox } from "@/components/ui/checkbox"
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, orderBy, where, Timestamp } from "firebase/firestore";
+import type { Question, Course, Unit, Topic, SchoolClass } from "@/lib/types";
+import { useToast } from "@/hooks/use-toast";
+import { AIGenerationDialog } from "@/components/ai-generation-dialog";
+import { BulkImportDialog } from "@/components/bulk-import-dialog";
+import { cn } from "@/lib/utils";
+import { SelectionGrid } from "@/components/selection-grid";
+import { saveQuestion, updateQuestionDifficulty, deleteBulkQuestions, saveBulkQuestions, saveGeneratedQuestions } from "./actions";
+import { Checkbox } from "@/components/ui/checkbox";
 import { QuestionEditorDialog } from "@/components/question-editor-dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
 type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
@@ -319,8 +319,10 @@ export default function ExamQuestionBankPage() {
     } else if (selection.courseId && selection.courseId !== 'all') {
         tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
     } else if (selection.classId) {
-         const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
-         tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
+        if (selection.classId !== 'all') {
+            const courseIdsInClass = new Set(allData.courses.filter(c => c.classId === selection.classId).map(c => c.id));
+            tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
+        }
     }
 
     if (searchTerm) {
@@ -340,7 +342,6 @@ export default function ExamQuestionBankPage() {
         );
     }
     
-     // Return a new sorted array to ensure re-render
     return [...tempQuestions].sort((a, b) => {
         if (sortBy === 'text') {
             return (a.text || '').localeCompare(b.text || '', 'tr');
@@ -352,12 +353,11 @@ export default function ExamQuestionBankPage() {
     });
 
   }, [
-    allData.questions,
+    allData,
     selection,
     searchTerm,
     selectedQuestionTypes,
     selectedDifficulties,
-    filteredCourses,
     sortBy,
   ]);
   
@@ -776,20 +776,13 @@ export default function ExamQuestionBankPage() {
         <div className="mt-12">
             <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
                 <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
-                    <div>
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                            <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-lg">
-                                {currentStep}
-                            </span>
-                            {steps.find(s => s.id === currentStep)?.name}
-                        </h2>
-                        <p className="text-sm text-slate-400 mt-1 pl-14">
-                            {selectionNames.className}
-                            {selectionNames.courseName && ` > ${selectionNames.courseName}`}
-                            {selectionNames.unitName && ` > ${selectionNames.unitName}`}
-                            {selectionNames.topicName && ` > ${selectionNames.topicName}`}
-                        </p>
-                    </div>
+                     <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                        <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-lg">
+                            {currentStep}
+                        </span>
+                        {steps.find(s => s.id === currentStep)?.name}
+                     </h2>
+                     {isLoading && <Loader2 className="h-6 w-6 animate-spin text-indigo-500" />}
                 </div>
 
                 <div className="flex-grow p-6 md:p-10 bg-black/20">
