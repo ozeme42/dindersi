@@ -380,7 +380,7 @@ function ContentListPlayer({
 }
 
 // 4. ConceptExplanationPlayer
-function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
+function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string; definition: string; }[], isFullscreen: boolean, title: string }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
       
@@ -597,7 +597,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     }, [step]);
       
     const handleLetterClick = (clickedLetter: typeof initialLetters[0]) => {
-        if (isAnswerRevealed || mistakenWordId !== null) return;
+        if (isAnswerRevealed || shakingLetterId !== null) return;
         const currentIndex = constructedLetters.length;
         const targetChar = targetStringClean[currentIndex];
 
@@ -867,7 +867,7 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center gap-4 p-2">
+                <div className="flex flex-wrap justify-center gap-4 p-2 md:p-4">
                     {bankWords.map((item, index) => (
                         <div
                             key={item.id}
@@ -1085,9 +1085,12 @@ export function LessonContentViewer({
     const isTeacher = useTeacherMode();
     const { toast } = useToast();
     
-    const steps = useMemo(() => {
-        if (!topic) return [];
-        return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+    const [steps, setSteps] = useState<LessonStep[]>([]);
+    
+    useEffect(() => {
+        if (!topic) return;
+        const visibleSteps = topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
+        setSteps(visibleSteps);
     }, [topic, isTeacher]);
     
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -1139,11 +1142,8 @@ export function LessonContentViewer({
     }, [topic, user?.uid, steps.length]);
 
     useEffect(() => {
-        if (topic && currentStepIndex > 0) {
-            const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
-            localStorage.setItem(storageKey, currentStepIndex.toString());
-        }
-    }, [currentStepIndex, topic, user?.uid]);
+        onProgressUpdate(topic?.id || '', internalProgress);
+    }, [internalProgress, onProgressUpdate, topic?.id]);
 
     const handleResume = () => { if (savedStepIndex !== null) { setCurrentStepIndex(savedStepIndex); } setShowResumeDialog(false); };
     const handleRestart = () => { setCurrentStepIndex(0); if (topic) { const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`; localStorage.removeItem(storageKey); } setShowResumeDialog(false); };
@@ -1169,28 +1169,6 @@ export function LessonContentViewer({
         return () => window.removeEventListener('message', handleMessage);
     }, [currentStepIndex, internalProgress, toast]);
 
-    useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
-
-    const isActivityStep = currentStep?.type === 'activityLink';
-    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
-    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
-    const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
-
-    const isNextButtonEnabled = useMemo(() => {
-        if (!currentStep) return false;
-        if (isTeacher) return true;
-        if (isHtmlSlideStep) return true;
-        if (isActivityStep) return !!isStepCompleted;
-        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
-        if (isPassiveStep) return true;
-        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
-        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
-        if (isCardStep) { const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards; const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards; return cardSet.size === cards.length; }
-        const answer = internalProgress.answers[currentStepIndex];
-        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-        return answer !== undefined && answer !== null;
-    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
-
     const handleNext = useCallback(() => {
         if (!currentStep) return;
         if (currentStepIndex === steps.length - 1) { if (topic) { const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`; localStorage.removeItem(storageKey); } }
@@ -1215,9 +1193,59 @@ export function LessonContentViewer({
     const handleCardFlip = useCallback((cardIndex: number, type: 'flashcard' | 'anagramFlashcard') => { playSound('pop'); const cardSet = type === 'flashcard' ? flippedCards : flippedAnagramCards; const setCardSet = type === 'flashcard' ? setFlippedCards : setFlippedAnagramCards; const currentStepTyped = currentStep as FlashcardStep | AnagramFlashcardStep; const totalCards = currentStepTyped.cards.length; const newSet = new Set(cardSet); if (newSet.has(cardIndex)) newSet.delete(cardIndex); else newSet.add(cardIndex); setCardSet(newSet); const isAllFlipped = newSet.size === totalCards; if(isAllFlipped && internalProgress.answers[currentStepIndex] === undefined) { const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } }; setInternalProgress(prev => ({ ...prev, answers: newAnswers })); } }, [currentStep, flippedCards, flippedAnagramCards, internalProgress, currentStepIndex]);
     const handleSlideScrolledToEnd = useCallback(() => { if (internalProgress.answers && internalProgress.answers[currentStepIndex] === undefined) { const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } }; setInternalProgress(prev => ({ ...prev, answers: newAnswers })); } }, [currentStepIndex, internalProgress]);
     const handlePrev = () => { if(currentStepIndex > 0) setCurrentStepIndex(prev => prev - 1); };
-    const handleContinueOrNext = () => { if (!currentStep) return; const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type); if (isContentList) { let totalItems = 0; if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length; else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length; else if (currentStep.type === 'content') { const stepContent = (currentStep as ContentStep).content || ''; const listItems = stepContent.match(/<li>/g) || []; totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length; } const isListFullyRevealed = revealedSentencesCount >= totalItems; if (isListFullyRevealed) handleNext(); else setRevealedSentencesCount(prev => prev + 1); } else { handleNext(); } };
-    const isStudentInActivity = isActivityStep && !isTeacher;
-    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
+    
+    // YENİ: Değişkeni buraya taşıdık
+    const isContentList = useMemo(() => currentStep && ['content', 'objectiveList', 'accordion'].includes(currentStep.type), [currentStep]);
+    
+    const handleContinueOrNext = () => { 
+        if (!currentStep) return; 
+        if (isContentList) { 
+            let totalItems = 0; 
+            if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length; 
+            else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length; 
+            else if (currentStep.type === 'content') { 
+                const stepContent = (currentStep as ContentStep).content || ''; 
+                const listItems = stepContent.match(/<li>/g) || []; 
+                totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length; 
+            } 
+            const isListFullyRevealed = revealedSentencesCount >= totalItems; 
+            if (isListFullyRevealed) handleNext(); 
+            else setRevealedSentencesCount(prev => prev + 1); 
+        } else { handleNext(); } 
+    };
+
+    const showContinueButton = useMemo(() => {
+        if (!isContentList || !currentStep) return false;
+        let totalItems = 0;
+        if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
+        else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
+        else if (currentStep.type === 'content') {
+            const stepContent = (currentStep as ContentStep).content || '';
+            const listItems = stepContent.match(/<li>/g) || [];
+            totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
+        }
+        return revealedSentencesCount < totalItems;
+    }, [isContentList, currentStep, revealedSentencesCount]);
+    
+    const isActivityStep = currentStep?.type === 'activityLink';
+    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
+    const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
+    const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
+
+    const isNextButtonEnabled = useMemo(() => {
+        if (!currentStep) return false;
+        if (isTeacher) return true;
+        if (isHtmlSlideStep) return true;
+        if (isActivityStep) return !!isStepCompleted;
+        const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
+        if (isPassiveStep) return true;
+        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
+        const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
+        if (isCardStep) { const cards = (currentStep as FlashcardStep | AnagramFlashcardStep).cards; const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards; return cardSet.size === cards.length; }
+        const answer = internalProgress.answers[currentStepIndex];
+        if (currentStep.type === 'trueFalseList') return !!answer?.completed;
+        return answer !== undefined && answer !== null;
+    }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     if (isFinished) {
          return (
@@ -1233,19 +1261,6 @@ export function LessonContentViewer({
     }
       
     if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
-
-    const showContinueButton = useMemo(() => {
-        if (!isContentList) return false;
-        let totalItems = 0;
-        if (currentStep.type === 'objectiveList') totalItems = (currentStep as ObjectiveListStep).items.length;
-        else if (currentStep.type === 'accordion') totalItems = (currentStep as AccordionStep).items.length;
-        else if (currentStep.type === 'content') {
-            const stepContent = (currentStep as ContentStep).content || '';
-            const listItems = stepContent.match(/<li>/g) || [];
-            totalItems = listItems.length > 0 ? listItems.length : (stepContent.match(/[^.!?]+[.!?]+/g) || [stepContent]).length;
-        }
-        return revealedSentencesCount < totalItems;
-    }, [isContentList, currentStep, revealedSentencesCount]);
     
     return (
         <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
