@@ -52,7 +52,7 @@ export function CourseSidebar({
                 </Button>
             </div>
 
-            <ScrollArea className="flex-1">
+            <div className="overflow-y-auto">
                 <div className="p-4 pb-20">
                     <Accordion type="multiple" defaultValue={course.units?.map(u => u.id)} className="space-y-6">
                         {course.units?.map((unit, unitIndex) => (
@@ -164,7 +164,7 @@ export function CourseSidebar({
                         ))}
                     </Accordion>
                 </div>
-            </ScrollArea>
+            </div>
 
             {/* Alt Bilgi */}
             <div className="p-4 border-t border-white/5 bg-slate-900/80 backdrop-blur-md text-[10px] text-slate-500 flex justify-between items-center">
