@@ -704,7 +704,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
 // 7.1 AnagramGamePlayer (Çoklu Kartlar İçin)
 function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step: AnagramGameStep, onAnswered: () => void, isTeacher: boolean, isFullscreen: boolean }) {
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const [answerState, setAnswerState<{ [cardIndex: number]: { answer: string; isCorrect: boolean } }> = useState({});
+    const [answerState, setAnswerState] = useState<{ [cardIndex: number]: { answer: string; isCorrect: boolean } }>({});
     
     if (!step.cards || step.cards.length === 0) {
         return (
@@ -1336,8 +1336,8 @@ export function LessonContentViewer({
       
     const [isAnimating, setIsAnimating] = useState(false);
     const [revealedSentencesCount, setRevealedSentencesCount] = useState(1);
-    const [flippedCards, setFlippedCards<Set<number>>(new Set());
-    const [flippedAnagramCards, setFlippedAnagramCards<Set<number>>(new Set());
+    const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+    const [flippedAnagramCards, setFlippedAnagramCards] = useState<Set<number>>(new Set());
     const [internalProgress, setInternalProgress] = useState<LocalProgress>(() => ({ answers: {}, score: 0 }));
     
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -1346,7 +1346,7 @@ export function LessonContentViewer({
     const [isVisualMaximized, setIsVisualMaximized] = useState(false);
       
     const [showResumeDialog, setShowResumeDialog] = useState(false);
-    const [savedStepIndex, setSavedStepIndex<number | null>(null);
+    const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
 
     const steps = useMemo(() => {
         if (!topic) return [];
@@ -1753,7 +1753,7 @@ export function LessonContentViewer({
                     <Button 
                         size={isTeacher && isFullscreen ? "lg" : "sm"}
                         onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled}
+                        disabled={!isNextButtonEnabled || isAnimating}
                         className={cn(
                             "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
                             showContinueButton ? "px-6" : "px-4",
