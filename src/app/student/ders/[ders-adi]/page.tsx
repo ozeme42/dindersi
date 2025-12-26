@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -373,7 +374,7 @@ function CoursePageContent() {
                     <div className="flex-grow overflow-y-auto relative h-full">
                         {activeTopicData ? (
                             <LessonContentViewer
-                                topic={activeTopicData.topic}
+                                topic={{...activeTopicData.topic, steps: activeTopicData.topic.steps?.filter(s => (s.isPublished ?? true))}}
                                 courseId={course.id}
                                 unitId={activeTopicData.unitId}
                                 courseTitle={course.title}

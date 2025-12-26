@@ -146,7 +146,7 @@ function PresentationPageContent() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl ring-1 ring-white/10"
                 )}>
                     <LessonContentViewer
-                        topic={topic}
+                        topic={{...topic, steps: topic.steps?.filter(s => s.isPublished ?? true)}}
                         courseId={courseId!}
                         unitId={unitId!}
                         courseTitle={courseName!}

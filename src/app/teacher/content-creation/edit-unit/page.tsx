@@ -4,19 +4,26 @@
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import type { Topic, Unit, LessonStep } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Loader2, ArrowLeft, Save, FileText, Sparkles, BookOpen, LayersIcon, HelpCircle, Gamepad2, Brain, FilePenLine } from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
+import type { Unit, LessonStep, Topic } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { updateUnitContent } from './actions';
-import { LessonContentViewer } from '@/components/lesson-content-viewer';
-import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; // Re-use the editor component logic
+import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
+import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
+
+// Adımlara benzersiz ve istikrarlı ID'ler atayan yardımcı fonksiyon
+const addStableIdsToSteps = (steps: LessonStep[]): (LessonStep & { id: string })[] => {
+    return steps.map((step, index) => {
+        // Eğer adımda zaten bir ID varsa onu kullan, yoksa yeni bir tane oluştur.
+        const existingId = (step as any).id;
+        return {
+            ...step,
+            isPublished: step.isPublished ?? true, // YENİ: Varsayılan olarak true ata
+            id: existingId || `step-${Date.now()}-${index}-${Math.random()}`
+        };
+    });
+};
 
 
 function UnitFlowEditor() {
@@ -28,49 +35,92 @@ function UnitFlowEditor() {
     const courseId = searchParams.get('courseId');
 
     const [unit, setUnit] = useState<Unit | null>(null);
-    const [title, setTitle] = useState('');
-    const [steps, setSteps] = useState<LessonStep[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    
+    const [isAiOpen, setIsAiOpen] = useState(false);
+    const [aiGenerationType, setAiGenerationType] = useState<'anlatim' | 'degerlendirme' | null>(null);
+    
     const { toast } = useToast();
+    
+    const [title, setTitle] = useState('');
+    const [steps, setSteps] = useState<(LessonStep & { id: string })[]>([]); // Adım state'i artık ID içerecek
+    const [sourceText, setSourceText] = useState('');
 
-    useEffect(() => {
-        const fetchUnitData = async () => {
-            if (!courseId || !unitId) {
-                toast({ title: "Hata", description: "Geçersiz yol.", variant: "destructive" });
-                router.back();
-                return;
-            }
-            setIsLoading(true);
+    const fetchUnitData = useCallback(async () => {
+        if (!courseId || !unitId) {
+            toast({ title: "Hata", description: "Geçersiz ders veya ünite yolu.", variant: "destructive" });
+            return;
+        }
+
+        setIsLoading(true);
+        try {
             const unitRef = doc(db, 'courses', courseId, 'units', unitId);
             const unitSnap = await getDoc(unitRef);
+
             if (unitSnap.exists()) {
                 const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
-                setUnit(unitData);
+                
                 setTitle(unitData.title);
-                // Ünitenin kendi adımlarını yüklüyoruz
-                setSteps(unitData.steps || []);
+                // DÜZELTME: Veritabanından gelen adımlara ID atama işlemi burada yapılıyor.
+                setSteps(addStableIdsToSteps(unitData.steps || []));
+                setSourceText(unitData.sourceText || '');
+                setUnit(unitData);
+
             } else {
                 toast({ title: "Hata", description: "Ünite bulunamadı.", variant: "destructive" });
+                router.back();
             }
+        } catch (error) {
+            console.error("Ünite getirme hatası:", error);
+            toast({ title: "Hata", description: "Veri yüklenirken bir sorun oluştu.", variant: "destructive" });
+        } finally {
             setIsLoading(false);
-        };
-        fetchUnitData();
-    }, [courseId, unitId, toast, router]);
-
-    const handleSave = async (newSteps: LessonStep[]) => {
-        if (!courseId || !unitId) return;
-        setIsSaving(true);
-        const result = await updateUnitContent(courseId, unitId, { title, steps: newSteps });
-        if (result.success) {
-            toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
-        setIsSaving(false);
+    }, [courseId, unitId, toast, router]);
+    
+    useEffect(() => {
+        fetchUnitData();
+    }, [fetchUnitData]);
+
+    const handleSave = async () => {
+        if (!courseId || !unitId || !unit) return;
+        
+        setIsSaving(true);
+        
+        const dataToSave = {
+            title: title,
+            steps: steps.map(({ id, ...rest }) => rest), // Kaydederken geçici ID'leri kaldır
+            sourceText: sourceText,
+        };
+
+        try {
+            const result = await updateUnitContent(courseId, unitId, dataToSave);
+
+            if (result.success) {
+                toast({ title: "Başarılı", description: "Ünite akışı kaydedildi." });
+                await fetchUnitData();
+            } else {
+                toast({ title: "Hata", description: result.error, variant: "destructive" });
+            }
+        } catch (error) {
+            toast({ title: "Hata", description: "Kaydetme sırasında beklenmedik hata.", variant: "destructive" });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+    
+    const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
+        // AI'dan gelen yeni adımlara da ID ata
+        const stepsWithIds = addStableIdsToSteps(newSteps);
+        setSteps(prev => [...prev, ...stepsWithIds]);
+        toast({
+            title: "Başarılı",
+            description: `${newSteps.length} yeni adım taslağa eklendi. Değişiklikleri kaydetmeyi unutmayın.`
+        });
     };
 
-    if (isLoading) {
+    if (isLoading || !unit) {
         return (
             <div className="flex h-screen items-center justify-center bg-slate-950">
                 <Loader2 className="h-16 w-16 animate-spin text-purple-500" />
@@ -79,17 +129,33 @@ function UnitFlowEditor() {
     }
     
     return (
-        <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
-            {/* The TopicEditor component is re-used. It's a generic lesson step editor now. */}
-            {/* We just need to feed it the right data and save handlers. */}
+        <>
             <TopicEditor
-                 initialTopic={{ id: unitId, title: title, steps: steps }}
-                 courseId={courseId!}
-                 unitId={unitId}
-                 onSave={(newSteps) => handleSave(newSteps)}
-                 isUnitFlow={true} // A prop to slightly change behavior/text if needed
+                title={title}
+                setTitle={setTitle}
+                steps={steps}
+                setSteps={setSteps as any}
+                sourceText={sourceText}
+                setSourceText={setSourceText}
+                htmlContent={unit.htmlContent || ''} // This is not editable here, so we pass it directly
+                setHtmlContent={() => {}} // Dummy function
+                onSave={handleSave}
+                isSaving={isSaving}
+                isUnitFlow={true}
+                onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
             />
-        </div>
+             <AiLessonStepGenerationDialog
+                isOpen={isAiOpen}
+                onOpenChange={setIsAiOpen}
+                context={{ 
+                    topicId: unit.id, // Pass unitId as topicId for context
+                    topicTitle: unit.title, 
+                    sourceText: sourceText
+                }}
+                onStepsGenerated={handleAiStepsGenerated}
+                generationType={aiGenerationType}
+            />
+        </>
     );
 }
 
