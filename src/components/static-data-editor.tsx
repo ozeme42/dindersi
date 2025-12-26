@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Loader2, ArrowLeft, PlusCircle, Save, Trash2 } from 'lucide-react';
+import { Loader2, ArrowLeft, PlusCircle, Save, Trash2, FilePenLine } from 'lucide-react';
 import { ActivityItemEditorDialog } from './activity-item-editor-dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { ActivityItem } from '@/lib/types';
