@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -339,7 +340,10 @@ function CoursePageContent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={handleSelectTopic}
-                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(course.units[unitIndex].topics[topicIndex].id)}
+                        isTopicUnlocked={(topicIndex, unitIndex) => {
+                             const topicId = course.units[unitIndex]?.topics?.[topicIndex]?.id;
+                             return topicId ? isTopicUnlocked(topicId) : false;
+                        }}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={localProgressMap}
                         testCounts={EMPTY_TEST_COUNTS} 
