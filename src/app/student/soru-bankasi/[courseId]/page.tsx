@@ -639,7 +639,8 @@ function QuestionBankCoursePageComponent() {
                                     </Button>
                                     <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
                                         {course.title}
-                                        <Badge variant="secondary" className="ml-2">Soru Bankası</Badge>
+                                        <Badge variant="secondary" className="ml-2 bg-blue-500/10 text-blue-300 border-blue-500/30">Soru Bankası</Badge>
+                                        <Badge variant="outline" className="ml-2 border-green-500/20 text-green-400">Dosyadan</Badge>
                                     </h1>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -715,3 +716,4 @@ export default function Page() {
         </Suspense>
     )
 }
+```
