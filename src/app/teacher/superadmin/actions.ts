@@ -186,14 +186,50 @@ export async function exportAllData(
     // It's a trade-off for simplicity. A more robust version would recursively find all sub-collection IDs.
     const fetchCollection = async (collectionName: string) => {
         let query: FirebaseFirestore.Query = db.collection(collectionName);
+        
+        const allTopicIds: string[] = [];
+
+        // If a filter is applied, we need to gather all topic IDs under that filter.
         if (topicId && topicId !== 'all') {
-            query = query.where('topicId', '==', topicId);
+            allTopicIds.push(topicId);
         } else if (unitId && unitId !== 'all') {
-            query = query.where('unitId', '==', unitId);
+            const topicsSnap = await db.collection('courses').doc(courseId!).collection('units').doc(unitId).collection('topics').get();
+            topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
         } else if (courseId && courseId !== 'all') {
-            query = query.where('courseId', '==', courseId);
+            const unitsSnap = await db.collection('courses').doc(courseId).collection('units').get();
+            for (const unitDoc of unitsSnap.docs) {
+                const topicsSnap = await unitDoc.ref.collection('topics').get();
+                topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
+            }
+        } else if (classId && classId !== 'all') {
+            const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
+            for (const courseDoc of coursesSnap.docs) {
+                const unitsSnap = await courseDoc.ref.collection('units').get();
+                for (const unitDoc of unitsSnap.docs) {
+                    const topicsSnap = await unitDoc.ref.collection('topics').get();
+                    topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
+                }
+            }
         }
-        // Class filter requires joining, so we'll filter post-fetch for simplicity here.
+
+        if (allTopicIds.length > 0) {
+            // Firestore 'in' query supports up to 30 items. We need to chunk.
+            const chunks = [];
+            for (let i = 0; i < allTopicIds.length; i += 30) {
+                chunks.push(allTopicIds.slice(i, i + 30));
+            }
+            const queryPromises = chunks.map(chunk => 
+                query.where('topicId', 'in', chunk).get()
+            );
+            const querySnapshots = await Promise.all(queryPromises);
+            const results = querySnapshots.flatMap(snap => snap.docs.map(doc => serialize({ id: doc.id, ...doc.data() })));
+            return results;
+        } else if (filters.topicId || filters.unitId || filters.courseId || filters.classId) {
+             // A filter was selected, but no topics were found. Return empty.
+            return [];
+        }
+
+        // If no topic-based filter, run the original simple query
         const snapshot = await query.get();
         return snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
     };
@@ -234,7 +270,7 @@ export async function exportAllData(
             } else if (classId && classId !== 'all') {
                  const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
                  const courseIds = new Set(coursesSnap.docs.map(d => d.id));
-                 allTopics = allTopics.filter(t => courseIds.has(t.courseId));
+                 allTopics = allTopics.filter(t => t.courseId && courseIds.has(t.courseId));
             }
 
             const yazilacaklarData: { [topicId: string]: any } = {};
@@ -246,10 +282,7 @@ export async function exportAllData(
                 if (hasNotes || hasDefinitions) {
                     yazilacaklarData[topic.id] = {
                         notes: topic.writingContent?.notes || [],
-                        conceptDefinitions: definitionsSnap.docs.map(d => ({
-                            concept: d.data().content.term,
-                            definition: d.data().content.definition
-                        }))
+                        conceptDefinitions: definitionsSnap.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }))
                     };
                 }
             }
@@ -261,12 +294,6 @@ export async function exportAllData(
         case 'assignments':
         case 'scoreEvents':
              data = await fetchCollection(dataType);
-             // Post-filter by class if needed
-             if (classId && classId !== 'all') {
-                const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
-                const courseIdsInClass = new Set(coursesSnap.docs.map(d => d.id));
-                return data.filter(item => item.courseId && courseIdsInClass.has(item.courseId));
-             }
              return data;
         
         default:
