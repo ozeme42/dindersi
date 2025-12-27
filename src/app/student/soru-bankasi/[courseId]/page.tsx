@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -18,7 +17,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader2, ArrowLeft, ArrowRight, CheckCircle2, Circle, Lock, PlayCircle, Star, ShieldCheck, Shield, ShieldAlert, Check, Repeat, Home, PartyPopper, Activity, BookCopy, Target, CheckCheck, XCircle, Trophy, Bug, Menu } from "lucide-react";
+import { Loader2, ArrowLeft, ArrowRight, CheckCircle2, Circle, Lock, PlayCircle, Star, ShieldCheck, Shield, ShieldAlert, Check, Repeat, Home, PartyPopper, Activity, BookCopy, Target, CheckCheck, XCircle, Trophy, Bug, Menu } from 'lucide-react';
 import { addQuestionToReviewList } from '@/app/student/tekrar-et/actions';
 import { playSound } from '@/lib/audio-service';
 import { CourseSidebar } from '@/components/course-sidebar';
@@ -222,7 +221,7 @@ function QuestionTest({
                             
                             if (currentAnswer) {
                                 if (isCorrect) {
-                                    btnStyle += "bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] z-10";
+                                    btnStyle += "bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] scale-[1.02] z-10";
                                 } else if (isSelected) {
                                     btnStyle += "bg-red-500/20 border-red-500 text-red-100 opacity-80";
                                 } else {
@@ -254,7 +253,7 @@ function QuestionTest({
                         })}
                         
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
-                            const answerValue = option === 'Doğru' ? 'Doğru' : 'Yanlış';
+                            const answerValue = option;
                             const isCorrect = answerValue === currentQuestion.correctAnswer;
                             const isSelected = currentAnswer === answerValue;
                              
@@ -286,7 +285,7 @@ function QuestionTest({
                     </div>
                 </CardContent>
                 
-                <CardFooter className="flex justify-end pt-4 pb-6 px-6 border-t border-white/5 bg-slate-900/95 sticky bottom-0 z-20">
+                <CardFooter className="flex justify-end pt-4 pb-6 px-6 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
                         disabled={!currentAnswer}
@@ -420,7 +419,7 @@ function QuestionBankCoursePageComponent() {
         } catch (e) {
             console.error("Failed to save progress:", e);
         }
-    }, [user, courseId, activeTest, topicProgress, course?.title]);
+    }, [user, courseId, activeTest, course?.title]);
     
      useEffect(() => {
         if (isLoading || isCountsLoading || !course || activeTopic) return;
@@ -638,7 +637,10 @@ function QuestionBankCoursePageComponent() {
                                     <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white rounded-xl">
                                         <Link href="/student/soru-bankasi"><ArrowLeft className="h-5 w-5"/></Link>
                                     </Button>
-                                    <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">{course.title} <Badge variant="secondary" className="ml-2">Dosya</Badge></h1>
+                                    <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
+                                        {course.title}
+                                        <Badge variant="secondary" className="ml-2">Soru Bankası</Badge>
+                                    </h1>
                                 </div>
                                 <div className="flex items-center gap-2">
                                      <AccordionTrigger className="py-0 hover:no-underline pr-2">
@@ -713,5 +715,3 @@ export default function Page() {
         </Suspense>
     )
 }
-
-```
