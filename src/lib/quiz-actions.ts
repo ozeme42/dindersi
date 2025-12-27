@@ -2,8 +2,6 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, limit as firestoreLimit } from "firebase/firestore";
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
 import path from 'path';
 import fs from 'fs/promises';
@@ -42,7 +40,7 @@ async function getAllTopicIdsForContext(courseId?: string, unitId?: string): Pro
 }
 
 
-// Centralized function to fetch questions - NOW STATIC ONLY for students
+// Centralized function to fetch questions - STATIC ONLY
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 10, difficulty, questionTypes } = params;
 
@@ -52,16 +50,8 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
         if (topicId && topicId !== 'all') {
             topicIdsToFetch = [topicId];
-        } else if (unitId && unitId !== 'all') {
-            topicIdsToFetch = await getAllTopicIdsForContext(courseId, unitId);
-        } else if (courseId && courseId !== 'all') {
-            topicIdsToFetch = await getAllTopicIdsForContext(courseId);
         } else {
-             // If no specific context, it implies a broader scope not suitable for static fetching without a starting point.
-             // However, if the intent is "all questions ever", that's a different, very heavy operation.
-             // For now, we'll assume a context is usually provided for games.
-             // For general question bank, it should be filtered by course at least.
-             return { questions: [], error: "Lütfen bir ders veya ünite seçin." };
+            topicIdsToFetch = await getAllTopicIdsForContext(courseId, unitId);
         }
 
         if (topicIdsToFetch.length === 0) {
@@ -74,7 +64,6 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
                 const fileContent = await fs.readFile(filePath, 'utf-8');
                 return JSON.parse(fileContent) as Question[];
             } catch (e: any) {
-                // ENOENT is file not found, which is fine, just means no questions for this topic.
                 if (e.code !== 'ENOENT') {
                     console.warn(`Could not read/parse questions for topic ${tId}:`, e.message);
                 }
@@ -84,7 +73,6 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
         allQuestions = (await Promise.all(questionPromises)).flat();
         
-        // Apply client-side filtering for difficulty and type after fetching
         if (difficulty && difficulty.length > 0) {
             allQuestions = allQuestions.filter(q => difficulty.includes(q.difficulty));
         }
@@ -94,11 +82,9 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             allQuestions = allQuestions.filter(q => mappedTypes.includes(q.type));
         }
 
-        // Shuffle and select the required number of questions
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
         
-        // Final processing (e.g., shuffling options)
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             const standardizedQuestion: Question = {
                 ...question,
