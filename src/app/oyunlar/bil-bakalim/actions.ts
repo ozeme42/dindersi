@@ -27,6 +27,7 @@ export async function getBilBakalimAction(
         
         const conditions = [where("type", "==", "definition")];
 
+        // Apply the most specific filter available, ensuring a strict hierarchy
         if (topicId && topicId !== 'all') {
             conditions.push(where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
@@ -35,11 +36,8 @@ export async function getBilBakalimAction(
             conditions.push(where("courseId", "==", courseId));
         }
         
-        if (conditions.length > 1) {
-            q = query(q, and(...conditions));
-        } else {
-            q = query(q, conditions[0]);
-        }
+        // Combine all conditions into a single query
+        q = query(q, and(...conditions));
 
         const querySnapshot = await getDocs(q);
 
