@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -22,7 +24,7 @@ type LocalProgress = {
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
 
-function PageContent() {
+function Page() {
     const params = useParams();
     const searchParams = useSearchParams();
     const { user } = useAuth();
@@ -453,10 +455,10 @@ function PageContent() {
     )
 }
 
-export default function Page() {
+export default function StudentCoursePage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
-            <PageContent />
+            <Page />
         </Suspense>
     )
 }
