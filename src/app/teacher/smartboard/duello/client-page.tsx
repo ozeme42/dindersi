@@ -1,24 +1,19 @@
 
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Settings, Swords, UserPlus, Loader2, User, Trophy, Shield } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Swords, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 import { useAuth } from "@/context/auth-context";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SelectionGrid } from "@/components/selection-grid";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-
-const STORAGE_KEY = 'hikmet-oyunu-guest-players';
 
 const steps = [
   { id: 1, name: "Ders", icon: <Book className="h-5 w-5" /> },
@@ -38,8 +33,6 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
-  const [guestPlayers, setGuestPlayers] = useState<string[]>([]);
-
   const [selection, setSelection] = useState({
     courseId: "",
     courseName: "",
@@ -49,70 +42,32 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
     topicName: "",
   });
 
-  const [settings, setSettings] = useState({
-    questionCount: gameConfig.questionCount.default,
-    questionTimer: gameConfig.questionTimer.default,
-    pullStrength: gameConfig.pullStrength,
-  });
-
   useEffect(() => {
     const fetchInitialData = async () => {
       setIsLoading(true);
-
       try {
-          const stored = localStorage.getItem(STORAGE_KEY);
-          if(stored) setGuestPlayers(JSON.parse(stored));
-      } catch (e) { console.error("Could not load guests", e); }
-
-      if (!user) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const studentClassName = user.class?.split(' - ')[0];
-
-        const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-        const classesSnapshot = await getDocs(classesQuery);
-        const allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-        
-        const allCoursesSnapshot = await getDocs(collection(db, "courses"));
-        const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-
-        let finalCourses: Course[] = [];
-
-        if (user.role === 'teacher' || user.role === 'superadmin') {
-            finalCourses = allCourses.map(course => {
-                const courseClass = allClasses.find(c => c.id === course.classId);
-                return {
-                    ...course,
-                    className: courseClass?.name || 'Genel'
-                };
-            });
-        } else {
-            const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
-            const studentClassId = studentClass?.id;
-            
-            if (studentClassId) { 
-                finalCourses = allCourses.filter(course => 
-                    course.classId === studentClassId
-                );
-            } else { 
-                finalCourses = allCourses.filter(course => !course.classId);
-            }
-        }
+        const allCoursesSnapshot = await getDocs(query(collection(db, "courses"), orderBy("title")));
+        const finalCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         setCourses(finalCourses);
       } catch (error) {
         console.error("Error fetching filtered courses:", error);
+        toast({ title: "Hata", description: "Dersler getirilirken bir hata oluştu.", variant: "destructive" });
       } finally {
         setIsLoading(false);
       }
     };
     fetchInitialData();
-  }, [user]);
+  }, [toast]);
 
   const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
-  const handleBack = () => currentStep > 1 && setCurrentStep(currentStep - 1);
+  const handleBack = () => {
+    if (currentStep > 1) {
+        if (currentStep === 2) setSelection(s => ({...s, courseId: '', courseName: ''}));
+        if (currentStep === 3) setSelection(s => ({...s, unitId: '', unitName: ''}));
+        if (currentStep === 4) setSelection(s => ({...s, topicId: '', topicName: ''}));
+        setCurrentStep(currentStep - 1);
+    }
+  };
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
     setSelection(prev => ({ ...prev, courseId, courseName, unitId: '', unitName: '', topicId: '', topicName: '' }));
@@ -152,12 +107,6 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
         courseId: selection.courseId,
         unitId: selection.unitId,
         topicId: selection.topicId,
-        questionCount: settings.questionCount.toString(),
-        questionTimer: settings.questionTimer.toString(),
-        // Default players for a simple duel
-        p1Name: "Mavi Takım",
-        p2Name: "Kırmızı Takım",
-        pullStrength: JSON.stringify(settings.pullStrength),
     });
     return `/teacher/smartboard/duello/oyun?${params.toString()}`;
   }
@@ -177,9 +126,9 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
                     <Card className="bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
                         <div className="bg-gradient-to-r from-red-600 to-blue-600 p-1"></div>
                         <CardHeader className="text-center pb-2">
-                             <Trophy className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>
-                             <CardTitle className="text-2xl text-white">Düello Özeti</CardTitle>
-                             <CardDescription className="text-slate-400">Her şey hazır, mücadele başlasın!</CardDescription>
+                             <Swords className="h-12 w-12 text-yellow-400 mx-auto mb-2 drop-shadow-md"/>
+                             <CardTitle className="text-2xl text-white">Yarışmaya Hazır</CardTitle>
+                             <CardDescription className="text-slate-400">Seçilen konuyla tırmanma yarışını başlatın.</CardDescription>
                         </CardHeader>
                          <CardContent className="space-y-6 pt-4">
                              <div className="space-y-2 text-sm text-slate-300">
@@ -188,10 +137,10 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
                                  <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
                              </div>
                         </CardContent>
-                        <CardFooter>
+                         <CardFooter>
                             <Button asChild className="w-full h-16 text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 shadow-[0_0_20px_rgba(220,38,38,0.4)]">
                                 <Link href={getGameUrl()}>
-                                    <Swords className="mr-3 h-6 w-6"/> Düelloyu Başlat
+                                    <Swords className="mr-3 h-6 w-6"/> Yarışı Başlat
                                 </Link>
                             </Button>
                         </CardFooter>
@@ -212,8 +161,8 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex-grow flex flex-col">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">Düello Kurulumu</h1>
-          <p className="text-slate-400 mt-1">Savaşçıları seç ve mücadeleyi başlat.</p>
+          <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg">Tırmanma Yarışı</h1>
+          <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>
         </div>
         
         <div className="flex justify-center items-center mb-8 px-4">
