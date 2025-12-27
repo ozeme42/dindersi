@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -25,10 +26,7 @@ import {
     Filter,
     ArrowLeft,
     ArrowRight,
-    Check,
-    User,
-    Save,
-    Home
+    Check
 } from "lucide-react";
 import {
     Select,
@@ -427,7 +425,10 @@ export default function ActivityDataManagementPage() {
                 <div className="p-2 bg-teal-500/20 rounded-xl border border-teal-500/30">
                     <Database className="h-8 w-8 text-teal-400" />
                 </div>
-                Etkinlik Veri Bankası
+                <div>
+                  Etkinlik Veri Bankası
+                  <Badge className="ml-3 bg-pink-500/20 text-pink-300 border-pink-500/30">CANLI VERİTABANI</Badge>
+                </div>
             </h1>
             <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
                 <Link href="/teacher">

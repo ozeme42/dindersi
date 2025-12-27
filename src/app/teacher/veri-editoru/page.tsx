@@ -11,6 +11,7 @@ import { getStaticData, saveStaticData, getStaticHtmlContent, saveStaticHtmlCont
 import { getExamCreationData } from '@/app/teacher/exams/actions';
 import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
 import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
 
@@ -138,7 +139,7 @@ export default function VeriEditoruPage() {
     }, [selection.unitId, filteredUnits]);
     
     const renderContent = () => {
-        if(isDataLoading || isLoading) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>;
+        if(isDataLoading || isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>;
 
         if (activeData !== null && activeDataId && dataType) {
              if (dataType === 'ozetler' || dataType === 'flows') {
@@ -177,7 +178,11 @@ export default function VeriEditoruPage() {
             <div className="max-w-7xl mx-auto w-full relative z-10 space-y-8 flex-grow flex flex-col">
                 <div className="text-center mb-8">
                   <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
-                     <FileJson className="h-8 w-8 text-purple-400"/> Statik Veri Editörü
+                     <FileJson className="h-8 w-8 text-purple-400"/> 
+                     <div>
+                        Veri Editörü
+                        <Badge className="ml-3 bg-pink-500/20 text-pink-300 border-pink-500/30">STATİK DOSYA</Badge>
+                     </div>
                   </h1>
                   <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>
                 </div>

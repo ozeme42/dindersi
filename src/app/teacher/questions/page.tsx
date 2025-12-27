@@ -641,7 +641,7 @@ export default function ExamQuestionBankPage() {
                     <Button variant={sortBy === 'text' ? 'secondary' : 'ghost'} onClick={() => setSortBy('text')} size="sm" className={cn("h-9 border", sortBy === 'text' ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" : "border-transparent text-slate-400 hover:text-white hover:bg-white/5")}>
                         <ArrowDownAZ className="mr-2 h-4 w-4"/> A-Z
                     </Button>
-                    <Button variant={sortBy === 'createdAt' ? 'secondary' : 'ghost'} onClick={() => setSortBy('createdAt')} size="sm" className={cn("h-9 border", sortBy === 'createdAt' ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" : "border-transparent text-slate-400 hover:text-white hover:bg-white/5")}>
+                     <Button variant={sortBy === 'createdAt' ? 'secondary' : 'ghost'} onClick={() => setSortBy('createdAt')} size="sm" className={cn("h-9 border", sortBy === 'createdAt' ? "bg-indigo-500/20 text-indigo-300 border-indigo-500/30" : "border-transparent text-slate-400 hover:text-white hover:bg-white/5")}>
                         <CalendarClock className="mr-2 h-4 w-4"/> Tarih
                     </Button>
                     <div className="w-px h-6 bg-white/10 mx-2 hidden sm:block"></div>
@@ -727,8 +727,9 @@ export default function ExamQuestionBankPage() {
             <div className="inline-flex items-center justify-center p-4 bg-slate-900 border border-white/10 rounded-full shadow-2xl mb-2">
                 <FilePenLine className="h-10 w-10 text-indigo-400" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg">
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase drop-shadow-lg flex items-center gap-4 justify-center">
                 Soru Bankası Sihirbazı
+                <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30">CANLI VERİTABANI</Badge>
             </h1>
             <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
                 Oyunlarda ve etkinliklerde kullanılacak soruları yönetin.
