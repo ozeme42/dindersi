@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -8,8 +7,6 @@ import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -25,7 +22,7 @@ type LocalProgress = {
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
 
-function CoursePageContent() {
+function PageContent() {
     const params = useParams();
     const searchParams = useSearchParams();
     const { user } = useAuth();
@@ -64,8 +61,9 @@ function CoursePageContent() {
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
-            // Öğrenci ilerlemesi (varsa) her zaman Firestore'dan okunur
             if (user) {
+                // Since onSnapshot will handle updates, we can use getDoc for the initial load.
+                // This simplifies the logic slightly.
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
                 const progressSnap = await getDoc(progressRef);
                 if (progressSnap.exists()) {
@@ -73,7 +71,6 @@ function CoursePageContent() {
                 }
             }
             
-            // Müfredat ve içerik statik manifest.json dosyasından okunur
             const manifestRes = await fetch('/curriculum/manifest.json');
             if (!manifestRes.ok) throw new Error("Müfredat manifestosu bulunamadı.");
             const manifest = await manifestRes.json();
@@ -93,7 +90,6 @@ function CoursePageContent() {
                 return;
             }
             
-            // Ders akış adımlarını (steps) ilgili JSON dosyalarından çek
             const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
                 let unitSteps: LessonStep[] = [];
                 if (unit.hasFlowContent) {
@@ -122,12 +118,10 @@ function CoursePageContent() {
                 if (unit && unit.steps && unit.steps.length > 0) {
                      setActiveContent(unit);
                 } else if (unit) {
-                    // Ünite akışı yoksa ilk konuyu aç
                      const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
                      setActiveContent(firstUncompletedTopicInUnit || unit.topics[0] || null);
                 }
             } else {
-                 // Başlangıç konusu/ünitesi yoksa ilk tamamlanmamış konuyu bul
                 const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
                 const firstUncompletedTopic = allTopics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
                 setActiveContent(firstUncompletedTopic || allTopics[0] || null);
@@ -275,7 +269,6 @@ function CoursePageContent() {
             return newLocalProgress;
         });
     
-        // Find next uncompleted topic to suggest
         const allTopics = course.units.flatMap(u => u.topics || []);
         const currentIndex = allTopics.findIndex(t => t.id === (isUnitFlow ? null : contentId));
         
@@ -286,7 +279,6 @@ function CoursePageContent() {
                  return; 
              }
         }
-        // If no next topic, go back to map
         setView('map');
     };
     
@@ -461,10 +453,12 @@ function CoursePageContent() {
     )
 }
 
-export default function CoursePage() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
-            <CoursePageContent />
+            <PageContent />
         </Suspense>
     )
 }
+
+    
