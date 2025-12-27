@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
@@ -118,85 +117,78 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 export async function getStaticQuestionsForGame(params: {
   courseId?: string;
   unitId?: string;
+  classId?: string;
 }): Promise<ActivityItem[]> {
-    const { courseId, unitId } = params;
+    const { courseId, unitId, classId } = params;
 
-    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-    const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-    const manifest = JSON.parse(manifestContent);
+    try {
+        const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        const manifest = JSON.parse(manifestContent);
 
-    let topicIds: string[] = [];
+        let topicIds: string[] = [];
 
-    // Find the correct course first
-    let targetCourse = null;
-    for (const group of manifest.classGroups) {
-        const foundCourse = group.courses.find((c: any) => c.id === courseId);
-        if (foundCourse) {
-            targetCourse = foundCourse;
-            break;
-        }
-    }
-    
-    // If a course is specified but not found, return empty
-    if (courseId && !targetCourse) {
-        return [];
-    }
-
-    // If no course is specified, we can't proceed with filtering units/topics
-    if (!targetCourse) {
-        // Fallback or error, for now, let's assume this scenario implies a wider search if needed.
-        // But for the user's issue, we must narrow it down. Let's return empty if no courseId.
-        if (courseId) return [];
-
-        // If no courseId is provided at all, the old logic might run, which is incorrect.
-        // Let's iterate through all courses if no courseId is given (though this is not the user's current problem).
+        // 1. Find all courses that match the filter criteria
+        let relevantCourses: any[] = [];
         for (const group of manifest.classGroups) {
-            for (const course of group.courses) {
-                 for (const unit of course.units) {
-                    unit.topics.forEach((topic: { id: string }) => {
-                        topicIds.push(topic.id);
-                    });
-                }
-            }
-        }
-
-    } else {
-        // We found the course, now process its units
-        for (const unit of targetCourse.units) {
-            // If a specific unit is selected, only process that one.
-            // If 'all' units are selected for the course, unitId will be 'all' and we process all units.
-            if (unitId && unitId !== 'all' && unit.id !== unitId) {
+            // Filter by class if classId is provided
+            if (classId && group.id !== classId) {
                 continue;
             }
             
-            unit.topics.forEach((topic: { id: string }) => {
-                topicIds.push(topic.id);
-            });
-
-            // If we were looking for a specific unit and found it, stop.
-            if (unitId && unitId !== 'all' && unit.id === unitId) break;
+            for (const course of group.courses) {
+                // If a courseId is provided, only consider that course
+                if (courseId && course.id === courseId) {
+                    relevantCourses = [course]; // Found it, stop searching other courses
+                    break;
+                }
+                // If no courseId, add all courses from the filtered class (or all classes if no classId)
+                if (!courseId) {
+                    relevantCourses.push(course);
+                }
+            }
+            if (courseId && relevantCourses.length > 0) break; // Exit outer loop if specific course found
         }
-    }
-    
-    // Remove duplicates
-    topicIds = [...new Set(topicIds)];
-
-    let allItems: ActivityItem[] = [];
-
-    // Fetch and combine activity items from all relevant topic files
-    for (const topicId of topicIds) {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const items: ActivityItem[] = JSON.parse(fileContent);
-            allItems = allItems.concat(items);
-        } catch (error: any) {
-            // ENOENT means file not found, which is okay, just skip it.
-            if (error.code !== 'ENOENT') {
-                console.warn(`Could not read or parse activity file for topic ${topicId}:`, error);
+        
+        // 2. From the relevant courses, find the relevant units and topics
+        for (const course of relevantCourses) {
+            for (const unit of course.units) {
+                // If a specific unit is chosen, only look at its topics
+                if (unitId && unitId !== 'all' && unit.id !== unitId) {
+                    continue;
+                }
+                
+                // Add all topics from the matching unit(s)
+                unit.topics.forEach((topic: { id: string }) => {
+                    topicIds.push(topic.id);
+                });
             }
         }
+        
+        // Remove duplicates
+        const uniqueTopicIds = [...new Set(topicIds)];
+
+        // 3. Fetch activity data for the collected topic IDs
+        let allItems: ActivityItem[] = [];
+        const activityPromises = uniqueTopicIds.map(async (topicId) => {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+            try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                return JSON.parse(fileContent) as ActivityItem[];
+            } catch (error: any) {
+                if (error.code !== 'ENOENT') {
+                    console.warn(`Could not read or parse activity file for topic ${topicId}:`, error);
+                }
+                return [];
+            }
+        });
+
+        const results = await Promise.all(activityPromises);
+        allItems = results.flat();
+        
+        return allItems;
+    } catch (e) {
+        console.error("Major error in getStaticQuestionsForGame:", e);
+        return [];
     }
-    
-    return allItems;
 }
