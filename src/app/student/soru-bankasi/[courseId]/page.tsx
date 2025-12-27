@@ -3,8 +3,7 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { getQuestionsForTest } from '@/lib/quiz-actions'; // GÜNCELLEME: Doğru action dosyasından import ediliyor
-import { submitSoruBankasiScore } from '../actions';
+import { getQuestionsForTest, submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '@/app/student/soru-bankasi/actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +24,7 @@ import { CourseSidebar } from '@/components/course-sidebar';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { Badge } from '@/components/ui/badge';
-import { getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
+
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 
@@ -225,11 +224,11 @@ function QuestionTest({
                         
                          {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                             const answerValue = option === 'Doğru';
-                            const isSelected = String(currentAnswer) === String(answerValue);
+                            const isSelected = currentAnswer === answerValue;
                             const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                             
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer !== null && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer !== null && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(answerValue)} disabled={currentAnswer !== null}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer !== null && isCorrect && isSelected ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer !== null && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(answerValue)} disabled={currentAnswer !== null}>
                                     {option}
                                 </Button>
                             );
@@ -256,12 +255,10 @@ function QuestionTest({
     );
 }
 
-
 function QuestionBankCoursePageComponent() {
     const params = useParams();
     const { user } = useAuth();
     const courseId = params.courseId as string;
-    const { toast } = useToast();
     const mainContentRef = useRef<HTMLDivElement>(null);
 
     const [course, setCourse] = useState<Course | null>(null);
@@ -284,16 +281,13 @@ function QuestionBankCoursePageComponent() {
 
         const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
             const total = Math.ceil((counts[key] || 0) / 10);
-            if (total > 0) {
-                 const passed = Object.values(progress[key] || {}).filter(res => res.status === 'passed').length;
-                 return passed === total;
-            }
-            return false;
+            if (total === 0) return true; // If no tests for this level, it's considered "complete" for unlock purposes.
+            const passed = Object.values(progress[key] || {}).filter(res => res.status === 'passed').length;
+            return passed >= total;
         }
 
-        if (Math.ceil((counts.hard || 0)/10) > 0) return checkLevel('hard');
-        if (Math.ceil((counts.medium || 0)/10) > 0) return checkLevel('medium');
-        return checkLevel('easy');
+        return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
+
     }, [topicProgress, testCounts]);
 
     useEffect(() => {
@@ -380,7 +374,7 @@ function QuestionBankCoursePageComponent() {
     }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic]);
 
      const courseStats = useMemo(() => {
-         if (isCountsLoading || !course) return { totalTests: 0, completedTests: 0, passedTests: 0, completionPercentage: 0, totalCorrect: 0, totalIncorrect: 0, totalScore: 0, classRank: 0, classTotal: 0 };
+        if (isCountsLoading || !course) return { totalTests: 0, passedTests: 0, completionPercentage: 0, totalScore: 0, classRank: 0, totalStudents: 0 };
         
         let totalTests = 0;
         let passedTests = 0;
@@ -401,7 +395,7 @@ function QuestionBankCoursePageComponent() {
         }
         
         const completionPercentage = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
-        return { totalTests, passedTests, completionPercentage, totalScore, classRank: classRank?.rank || 0 };
+        return { totalTests, passedTests, completionPercentage, totalScore, classRank: classRank?.rank || 0, totalStudents: classRank?.total || 0 };
 
     }, [isCountsLoading, course, testCounts, topicProgress, classRank]);
 
@@ -604,7 +598,7 @@ function QuestionBankCoursePageComponent() {
                                         </div>
                                          <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
                                             <div className="p-2 bg-violet-500/10 rounded-lg"><Star className="h-5 w-5 text-violet-500" /></div>
-                                            <div><p className="text-lg font-bold text-white">#{courseStats.classRank}</p><p className="text-[10px] text-slate-400 uppercase">Sıralama</p></div>
+                                            <div><p className="text-lg font-bold text-white">#{courseStats.classRank}</p><p className="text-[10px] text-slate-400 uppercase">Sıralama ({courseStats.totalStudents})</p></div>
                                         </div>
                                          <div className="bg-slate-800/50 p-3 rounded-xl border border-white/5 flex items-center gap-3">
                                             <div className="p-2 bg-cyan-500/10 rounded-lg"><Activity className="h-5 w-5 text-cyan-500" /></div>
@@ -652,88 +646,5 @@ export default function Page() {
             <QuestionBankCoursePageComponent />
         </Suspense>
     );
-}
-```
-- src/hooks/use-local-storage.ts:
-```ts
-import { useState, useEffect } from 'react';
-
-// Bu hook, bileşenin yeniden render olmasına neden olmadan localStorage'ı güvenli bir şekilde kullanır.
-// Özellikle sunucu tarafında render edilen bileşenlerde (SSR) "localStorage is not defined" hatasını önler.
-export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
-  // State'i, tarayıcıda çalışıyorsa localStorage'dan, değilse başlangıç değerinden alır.
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === 'undefined') {
-      return initialValue;
-    }
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key “${key}”:`, error);
-      return initialValue;
-    }
-  });
-
-  // State güncellendiğinde localStorage'ı da günceller.
-  const setValue = (value: T) => {
-    try {
-      // Allow value to be a function so we have same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
-    } catch (error) {
-      console.error(`Error setting localStorage key “${key}”:`, error);
-    }
-  };
-  
-  // Bu useEffect, bileşen ilk render olduğunda ve localStorage değeri değiştiğinde state'i günceller.
-  // Bu, farklı sekmeler arasında senkronizasyonu sağlar.
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key && e.newValue) {
-        setStoredValue(JSON.parse(e.newValue));
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, [key]);
-
-  return [storedValue, setValue];
-}
-
-```
-- tsconfig.json:
-```json
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
 }
 ```
