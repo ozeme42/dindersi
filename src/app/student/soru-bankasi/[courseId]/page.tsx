@@ -3,7 +3,8 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { getQuestionsForTest, submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '@/app/student/soru-bankasi/actions';
+import { getQuestionsForTest } from '@/lib/quiz-actions';
+import { submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '@/app/student/soru-bankasi/actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -108,7 +109,7 @@ function QuestionTest({
             playSound('win');
             setIsFinished(true);
         }
-    };
+    }
     
     const finishTest = () => {
         const passed = (correctCount / questions.length) >= PASS_THRESHOLD;
@@ -212,23 +213,23 @@ function QuestionTest({
                     
                     {/* Seçenekler */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-                        {(currentQuestion.type === 'Çoktan Seçmeli' || currentQuestion.type === 'Boşluk Doldurma') && (currentQuestion.options || []).map(option => {
+                        {currentQuestion.type === 'Doğru/Yanlış' ? (
+                             ["Doğru", "Yanlış"].map((option, idx) => {
+                                const answerValue = option === 'Doğru';
+                                const isSelected = currentAnswer === answerValue;
+                                const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
+                                
+                                return (
+                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && isSelected && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && !isCorrect && isSelected && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
+                                        {option}
+                                    </Button>
+                                );
+                            })
+                        ) : (currentQuestion.options || []).map(option => {
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
-                                    {option}
-                                </Button>
-                            );
-                        })}
-                        
-                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
-                            const answerValue = option === 'Doğru';
-                            const isSelected = currentAnswer === answerValue;
-                            const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
-                            
-                            return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer !== null && isCorrect && isSelected ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer !== null && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(answerValue)} disabled={currentAnswer !== null}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -238,7 +239,7 @@ function QuestionTest({
                 <CardFooter className="flex justify-end pt-4 pb-6 px-6 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
-                        disabled={currentAnswer === null}
+                        disabled={currentAnswer === null || currentAnswer === undefined}
                         className={cn(
                             "h-12 px-8 rounded-xl font-bold transition-all duration-300 w-full md:w-auto",
                             currentAnswer !== null
