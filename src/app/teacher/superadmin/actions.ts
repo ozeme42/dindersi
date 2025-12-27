@@ -372,19 +372,6 @@ export async function exportAllData(
                 const units = await Promise.all(unitsInCourse.map(async (unitDoc) => {
                     const unitData = unitDoc.data() as Unit;
                     if (!(unitData.isPublished ?? true)) return null;
-
-                        // Create ozetler file for unit if content exists
-                        if (unitData.htmlContent) {
-                            addFile(`ozetler/${unitDoc.id}.html`, unitData.htmlContent);
-                        }
-
-                        // Export unit steps (ders akışı)
-                        if (unitData.steps && unitData.steps.length > 0) {
-                            const publishedSteps = unitData.steps.filter((s: LessonStep) => s.isPublished ?? true);
-                            if (publishedSteps.length > 0) {
-                                addFile(`flows/${unitDoc.id}.json`, JSON.stringify(publishedSteps));
-                            }
-                        }
                     
                     const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
                     
@@ -507,7 +494,7 @@ export async function exportManifestAndContent() {
                         return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                     });
 
-                    const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
+                    const hasContent = (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
                     
                     return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).some(s => s.isPublished ?? true), topics: [] } : null;
                 }));

@@ -65,9 +65,6 @@ function PageContent() {
 
         try {
             if (user) {
-                // We use getDoc for initial load and then rely on onTopicComplete to update state.
-                // This prevents re-fetching on every progress update which might be too frequent.
-                // For a more real-time experience, an onSnapshot could be used here.
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
                 const progressSnap = await getDoc(progressRef);
                 if (progressSnap.exists()) {
@@ -476,5 +473,3 @@ export default function Page() {
         </Suspense>
     );
 }
-
-
