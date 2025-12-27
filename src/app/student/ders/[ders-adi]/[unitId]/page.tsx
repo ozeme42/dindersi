@@ -1,9 +1,9 @@
 
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
 import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { doc, getDoc, collection, onSnapshot, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { CourseSidebar } from "@/components/course-sidebar";
 
 type LocalProgress = {
     answers: { [stepIndex: number]: any };
@@ -24,7 +25,7 @@ type LocalProgress = {
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
 
-export default function Page() {
+function PageContent() {
     const params = useParams();
     const searchParams = useSearchParams();
     const { user } = useAuth();
@@ -64,12 +65,14 @@ export default function Page() {
 
         try {
             if (user) {
+                // We use getDoc for initial load and then rely on onTopicComplete to update state.
+                // This prevents re-fetching on every progress update which might be too frequent.
+                // For a more real-time experience, an onSnapshot could be used here.
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                onSnapshot(progressRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        setCompletedTopics(docSnap.data() as UserProgress);
-                    }
-                });
+                const progressSnap = await getDoc(progressRef);
+                if (progressSnap.exists()) {
+                    setCompletedTopics(progressSnap.data() as UserProgress);
+                }
             }
             
             const manifestRes = await fetch('/curriculum/manifest.json');
@@ -93,15 +96,20 @@ export default function Page() {
             
             const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
                 let unitSteps: LessonStep[] = [];
+                // Check for both direct flow content and existence in the flows directory
                 if (unit.hasFlowContent) {
-                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
-                    if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
+                     try {
+                        const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                        if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
+                     } catch (e) { console.warn(`No flow file for unit ${unit.id}`) }
                 }
                 const enrichedTopics = await Promise.all((unit.topics || []).map(async (topic: any) => {
                     let topicSteps: LessonStep[] = [];
                     if (topic.hasFlowContent) {
-                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
-                        if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
+                         try {
+                            const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                            if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
+                         } catch(e) { console.warn(`No flow file for topic ${topic.id}`) }
                     }
                     return { ...topic, steps: topicSteps };
                 }));
@@ -118,7 +126,7 @@ export default function Page() {
             } else if (unitIdFromUrl) {
                 const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
                 if (unit) {
-                    // Eğer doğrudan bir ünite akışı varsa onu göster, yoksa ilk konuyu göster
+                    // If the unit itself has steps, show it. Otherwise, find the first topic.
                     if (unit.steps && unit.steps.length > 0) {
                          setActiveContent(unit);
                     } else {
@@ -138,7 +146,7 @@ export default function Page() {
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast, completedTopics]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast]);
 
 
     useEffect(() => {
@@ -201,7 +209,9 @@ export default function Page() {
         setIsSaving(true);
     
         const isUnitFlow = activeContentData.type === 'unit';
-        const currentCompletionCount = completedTopics[contentId]?.completionCount || 0;
+        const currentCompletionData = completedTopics[contentId];
+        const currentCompletionCount = currentCompletionData ? (currentCompletionData.completionCount || 0) : 0;
+        
         let completionBonus = 0;
         let toastTitle = "İçerik Tamamlandı!";
         let toastDescription = "Tebrikler, bu bölümü başarıyla bitirdin!";
@@ -251,8 +261,15 @@ export default function Page() {
             }
             
             await batch.commit();
-    
-            // No need to setCompletedTopics locally, onSnapshot will handle it.
+            
+            // Optimistically update local state
+             setCompletedTopics(prev => ({
+                ...prev,
+                [contentId]: {
+                    completionCount: newCompletionCount,
+                    lastCompleted: new Date().toISOString()
+                }
+            }));
             
             toast({ title: toastTitle, description: toastDescription, duration: 5000 });
         } catch(error) {
@@ -448,4 +465,16 @@ export default function Page() {
                     </div>
                 </main>
             </div>
-        
+        </div>
+    );
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
+            <PageContent />
+        </Suspense>
+    );
+}
+
+
