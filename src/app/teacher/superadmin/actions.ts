@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -497,19 +498,19 @@ export async function exportManifestAndContent() {
                                 addFile(`flows/${unitDoc.id}.json`, JSON.stringify(publishedSteps));
                             }
                         }
+                    
+                    const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
+                    
+                    const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
+                        const topicData = topicDoc.data() as Topic;
+                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
+                    });
 
-                        const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
-                        
-                        const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
-                            const topicData = topicDoc.data() as Topic;
-                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                            return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
-                        });
-
-                        const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
-                        
-                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).some(s => s.isPublished ?? true), topics: [] } : null;
-                    }));
+                    const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
+                    
+                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).some(s => s.isPublished ?? true), topics: [] } : null;
+                }));
 
                     const validUnits = units.filter(Boolean);
                     return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
@@ -554,7 +555,6 @@ export async function exportManifestAndContent() {
                         }
                         
                         const hasOzetContent = !!topicData.htmlContent;
-                        const hasFlowContent = (topicData.steps || []).some(s => s.isPublished ?? true);
                         const hasFlowContent = (topicData.steps || []).some(s => s.isPublished ?? true);
 
                         if (hasOzetContent || hasYazilacaklarContent || hasFlowContent) {
@@ -633,5 +633,3 @@ export async function exportActivityData() {
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
-
-    
