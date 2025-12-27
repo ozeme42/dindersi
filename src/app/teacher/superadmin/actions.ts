@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -221,9 +222,38 @@ export async function exportAllData(
             return { message: "Curriculum export needs a dedicated, recursive function." };
 
         case 'yazilacaklar':
-             // This needs a special implementation like the one in manifest export.
-             // For now, let's return a message.
-            return { message: "Yazılacaklar export needs a dedicated function similar to manifest generation." };
+            const allTopicsSnap = await db.collectionGroup('topics').get();
+            let allTopics = allTopicsSnap.docs.map(d => ({id: d.id, ...d.data()} as Topic));
+
+            if (topicId && topicId !== 'all') {
+                allTopics = allTopics.filter(t => t.id === topicId);
+            } else if (unitId && unitId !== 'all') {
+                allTopics = allTopics.filter(t => t.unitId === unitId);
+            } else if (courseId && courseId !== 'all') {
+                allTopics = allTopics.filter(t => t.courseId === courseId);
+            } else if (classId && classId !== 'all') {
+                 const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
+                 const courseIds = new Set(coursesSnap.docs.map(d => d.id));
+                 allTopics = allTopics.filter(t => courseIds.has(t.courseId));
+            }
+
+            const yazilacaklarData: { [topicId: string]: any } = {};
+            for (const topic of allTopics) {
+                const definitionsSnap = await db.collection('activityItems').where('topicId', '==', topic.id).where('type', '==', 'definition').get();
+                const hasNotes = topic.writingContent?.notes && topic.writingContent.notes.length > 0;
+                const hasDefinitions = !definitionsSnap.empty;
+
+                if (hasNotes || hasDefinitions) {
+                    yazilacaklarData[topic.id] = {
+                        notes: topic.writingContent?.notes || [],
+                        conceptDefinitions: definitionsSnap.docs.map(d => ({
+                            concept: d.data().content.term,
+                            definition: d.data().content.definition
+                        }))
+                    };
+                }
+            }
+            return yazilacaklarData;
             
         case 'questions':
         case 'examQuestions':
