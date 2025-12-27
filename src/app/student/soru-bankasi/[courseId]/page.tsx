@@ -217,7 +217,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -226,10 +226,10 @@ function QuestionTest({
                          {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                             const answerValue = option === 'Doğru';
                             const isSelected = currentAnswer === String(answerValue);
-                            const isCorrect = (question.correctAnswer === 'Doğru') === answerValue;
+                            const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                             
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -667,3 +667,4 @@ export default function Page() {
         </Suspense>
     );
 }
+```
