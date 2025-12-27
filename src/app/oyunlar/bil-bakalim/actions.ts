@@ -14,13 +14,19 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        // Eğer "Tüm Konular" seçildiyse, topicId'yi null yapıp unitId'yi kullan
+        // getStaticQuestionsForGame bu duruma göre doğru dosyayı seçecektir.
+        const items = await getStaticQuestionsForGame({ 
+            courseId, 
+            unitId, 
+            topicId: topicId === 'all' ? undefined : topicId 
+        });
         
-        if (allItems.length === 0) {
+        if (items.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
         }
 
-        const allDefinitions = allItems
+        const allDefinitions = items
             .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 3) {
