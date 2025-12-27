@@ -1,3 +1,4 @@
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -33,18 +34,7 @@ export async function getCurriculumForSelection(
             return { classGroups: data.classGroups || [] };
         }
 
-        if (!userId) {
-            return { classGroups: [], error: "Kullanıcı bilgisi gerekli." };
-        }
-
-        // Logic for authenticated users
-        const userDoc = await getDoc(doc(db, "users", userId));
-        if (!userDoc.exists()) {
-            return { classGroups: [], error: "Öğrenci bulunamadı." };
-        }
-        const student = userDoc.data() as UserProfile;
-        const studentClassName = student.class?.split(' - ')[0];
-
+        // --- DYNAMIC DATA FETCHING LOGIC (FOR BOTH TEACHER & STUDENT) ---
         const [classesSnap, coursesSnap] = await Promise.all([
             getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
             getDocs(collection(db, "courses"))
@@ -54,11 +44,19 @@ export async function getCurriculumForSelection(
         const allClasses = classesSnap.docs.map(d => ({ id: d.id, ...d.data() } as SchoolClass));
 
         let relevantCourses: Course[];
-        if (studentClassName) {
+
+        if (userId) { // --- STUDENT LOGIC ---
+            const userDoc = await getDoc(doc(db, "users", userId));
+            if (!userDoc.exists()) {
+                return { classGroups: [], error: "Öğrenci bulunamadı." };
+            }
+            const student = userDoc.data() as UserProfile;
+            const studentClassName = student.class?.split(' - ')[0];
+            
             const studentClass = allClasses.find(c => c.name === studentClassName);
             relevantCourses = allCourses.filter(c => !c.isTeacherOnly && (c.classId === studentClass?.id || !c.classId));
-        } else {
-            relevantCourses = allCourses.filter(c => !c.isTeacherOnly && !c.classId);
+        } else { // --- TEACHER/SMARTBOARD LOGIC ---
+            relevantCourses = allCourses.filter(c => !(c.isTeacherOnly ?? false));
         }
 
         const enrichedCourses: EnrichedCourse[] = [];
@@ -73,6 +71,7 @@ export async function getCurriculumForSelection(
                     const topicData = topicDoc.data() as Topic;
                     
                     let hasYazilacaklarContent = false;
+                    // Check for definitions to determine if 'yazilacaklar' exists
                     const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
                     const definitionsSnapshot = await getDocs(definitionsQuery);
                     hasYazilacaklarContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
@@ -89,9 +88,15 @@ export async function getCurriculumForSelection(
                 const unitData = unitDoc.data() as Unit;
                 
                 const unitHasOzet = !!unitData.htmlContent;
-                const unitHasTopicsWithContent = validTopics.some(t => t.hasOzetContent || t.hasYazilacaklarContent || dataType === 'games');
+                // A unit should appear if it has its own content, or any of its topics have content relevant to the data type
+                const unitHasTopicsWithContent = validTopics.some(t => {
+                    if (dataType === 'games') return true; // For games, just having a topic is enough
+                    if (dataType === 'ozetler') return t.hasOzetContent;
+                    if (dataType === 'yazilacaklar') return t.hasYazilacaklarContent;
+                    return false;
+                });
                 
-                if (unitHasTopicsWithContent || unitHasOzet) {
+                if (unitHasTopicsWithContent || (dataType === 'ozetler' && unitHasOzet)) {
                     enrichedUnits.push({
                         id: unitDoc.id,
                         title: unitData.title,
@@ -102,9 +107,10 @@ export async function getCurriculumForSelection(
             }
 
             if (enrichedUnits.length > 0) {
+                const courseClassInfo = allClasses.find(c => c.id === course.classId);
                 enrichedCourses.push({
                     ...course,
-                    className: student.class || 'Genel',
+                    className: courseClassInfo?.name || 'Genel',
                     units: enrichedUnits,
                 });
             }
@@ -112,7 +118,6 @@ export async function getCurriculumForSelection(
         
         enrichedCourses.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
 
-        // Group by class name for the final structure
         const groupedByClass: {[key: string]: Course[]} = {};
         enrichedCourses.forEach(course => {
             const className = course.className || 'Genel';
@@ -127,6 +132,13 @@ export async function getCurriculumForSelection(
             courses: groupedByClass[name]
         }));
         
+        // Ensure "Genel" group is always first if it exists
+        classGroups.sort((a,b) => {
+            if (a.name === 'Genel') return -1;
+            if (b.name === 'Genel') return 1;
+            return a.name.localeCompare(b.name, 'tr', { numeric: true });
+        });
+
         return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
         
     } catch (e: any) {
