@@ -10,6 +10,8 @@ function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
+// This function is now OBSOLETE as we will fetch directly from aggregated files.
+// Kept for reference but will not be used by getStaticQuestionsForGame.
 async function getAllTopicIdsForContext(courseId?: string, unitId?: string): Promise<string[]> {
     const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
     try {
@@ -49,28 +51,29 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
         if (topicId && topicId !== 'all') {
             topicIdsToFetch = [topicId];
-        } else {
+        } else if (unitId && unitId !== 'all') {
+             // This branch might be less used now but kept for potential direct unit calls
             topicIdsToFetch = await getAllTopicIdsForContext(courseId, unitId);
+        } else if (courseId && courseId !== 'all') {
+             topicIdsToFetch = await getAllTopicIdsForContext(courseId);
         }
 
-        if (topicIdsToFetch.length === 0) {
+        if (topicIdsToFetch.length === 0 && !(topicId === 'all')) {
              return { questions: [], error: "Seçilen kritere uygun konu bulunamadı." };
         }
 
-        const questionPromises = topicIdsToFetch.map(async (tId) => {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${tId}.json`);
-            try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                return JSON.parse(fileContent) as Question[];
-            } catch (e: any) {
-                if (e.code !== 'ENOENT') {
-                    console.warn(`Could not read/parse questions for topic ${tId}:`, e.message);
-                }
-                return [];
-            }
-        });
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
 
-        allQuestions = (await Promise.all(questionPromises)).flat();
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            allQuestions = JSON.parse(fileContent) as Question[];
+        } catch (e: any) {
+            if (e.code !== 'ENOENT') {
+                console.warn(`Could not read/parse questions for topic ${topicId}:`, e.message);
+            }
+             // If a specific topic file is not found, it's an error.
+            return { questions: [], error: `Soru dosyası bulunamadı: ${topicId}.json` };
+        }
         
         if (difficulty && difficulty.length > 0) {
             allQuestions = allQuestions.filter(q => difficulty.includes(q.difficulty));
@@ -109,86 +112,48 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     }
 }
 
-
 /**
  * Fetches all activity items for a given course or unit when "all" is selected.
  * This is crucial for static builds where we can't perform complex queries.
+ * REWRITTEN to be simpler and more robust.
  */
 export async function getStaticQuestionsForGame(params: {
   courseId?: string;
   unitId?: string;
-  classId?: string;
 }): Promise<ActivityItem[]> {
-    const { courseId, unitId, classId } = params;
+    const { courseId, unitId } = params;
 
     try {
-        const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-        const manifest = JSON.parse(manifestContent);
+        let filePath;
+        let contextDescription;
 
-        let topicIds: string[] = [];
-
-        // 1. Find all courses that match the filter criteria
-        let relevantCourses: any[] = [];
-        for (const group of manifest.classGroups) {
-            // Filter by class if classId is provided
-            if (classId && group.id !== classId) {
-                continue;
-            }
-            
-            for (const course of group.courses) {
-                // If a courseId is provided, only consider that course
-                if (courseId && course.id === courseId) {
-                    relevantCourses = [course]; // Found it, stop searching other courses
-                    break;
-                }
-                // If no courseId, add all courses from the filtered class (or all classes if no classId)
-                if (!courseId) {
-                    relevantCourses.push(course);
-                }
-            }
-            if (courseId && relevantCourses.length > 0) break; // Exit outer loop if specific course found
+        // Determine which pre-aggregated file to read based on the selection.
+        if (unitId && unitId !== 'all') {
+            // A specific unit is selected.
+            filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${unitId}.json`);
+            contextDescription = `unit ${unitId}`;
+        } else if (courseId) {
+            // "All units" for a specific course is selected.
+            filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', `${courseId}.json`);
+            contextDescription = `course ${courseId}`;
+        } else {
+            console.warn("getStaticQuestionsForGame called without courseId or unitId. This is not optimal.");
+            // Fallback to fetching everything, though this should be avoided.
+            // This case is not fully supported by the new aggregation logic.
+            // Returning empty to prevent incorrect data mixing.
+            return [];
         }
+
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(fileContent) as ActivityItem[];
         
-        // 2. From the relevant courses, find the relevant units and topics
-        for (const course of relevantCourses) {
-            for (const unit of course.units) {
-                // If a specific unit is chosen, only look at its topics
-                if (unitId && unitId !== 'all' && unit.id !== unitId) {
-                    continue;
-                }
-                
-                // Add all topics from the matching unit(s)
-                unit.topics.forEach((topic: { id: string }) => {
-                    topicIds.push(topic.id);
-                });
-            }
+    } catch (e: any) {
+        if (e.code === 'ENOENT') {
+            // This is expected if a course/unit has no activities.
+            console.warn(`No aggregated activity file found.`);
+            return [];
         }
-        
-        // Remove duplicates
-        const uniqueTopicIds = [...new Set(topicIds)];
-
-        // 3. Fetch activity data for the collected topic IDs
-        let allItems: ActivityItem[] = [];
-        const activityPromises = uniqueTopicIds.map(async (topicId) => {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-            try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                return JSON.parse(fileContent) as ActivityItem[];
-            } catch (error: any) {
-                if (error.code !== 'ENOENT') {
-                    console.warn(`Could not read or parse activity file for topic ${topicId}:`, error);
-                }
-                return [];
-            }
-        });
-
-        const results = await Promise.all(activityPromises);
-        allItems = results.flat();
-        
-        return allItems;
-    } catch (e) {
-        console.error("Major error in getStaticQuestionsForGame:", e);
+        console.error(`Major error in getStaticQuestionsForGame for`, e);
         return [];
     }
 }

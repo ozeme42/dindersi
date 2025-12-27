@@ -182,54 +182,31 @@ export async function exportAllData(
     const db = getAdminDb();
     const { classId, courseId, unitId, topicId } = filters;
     
-    // This is a simplified fetcher. It doesn't handle nested fetching based on higher-level IDs.
-    // It's a trade-off for simplicity. A more robust version would recursively find all sub-collection IDs.
-    const fetchCollection = async (collectionName: string) => {
+    // This function now returns data with its original IDs preserved for re-importing.
+    const fetchCollectionWithFilter = async (collectionName: string) => {
         let query: FirebaseFirestore.Query = db.collection(collectionName);
         
-        const allTopicIds: string[] = [];
-
-        // If a filter is applied, we need to gather all topic IDs under that filter.
-        if (topicId && topicId !== 'all') {
-            allTopicIds.push(topicId);
-        } else if (unitId && unitId !== 'all') {
-            const topicsSnap = await db.collection('courses').doc(courseId!).collection('units').doc(unitId).collection('topics').get();
-            topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
-        } else if (courseId && courseId !== 'all') {
-            const unitsSnap = await db.collection('courses').doc(courseId).collection('units').get();
-            for (const unitDoc of unitsSnap.docs) {
-                const topicsSnap = await unitDoc.ref.collection('topics').get();
-                topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
-            }
-        } else if (classId && classId !== 'all') {
-            const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
-            for (const courseDoc of coursesSnap.docs) {
-                const unitsSnap = await courseDoc.ref.collection('units').get();
-                for (const unitDoc of unitsSnap.docs) {
-                    const topicsSnap = await unitDoc.ref.collection('topics').get();
-                    topicsSnap.docs.forEach(doc => allTopicIds.push(doc.id));
-                }
+        const conditions = [];
+        if (topicId && topicId !== 'all') conditions.push({ field: 'topicId', op: '==', value: topicId });
+        else if (unitId && unitId !== 'all') conditions.push({ field: 'unitId', op: '==', value: unitId });
+        else if (courseId && courseId !== 'all') conditions.push({ field: 'courseId', op: '==', value: courseId });
+        else if (classId && classId !== 'all') {
+             const coursesSnap = await db.collection('courses').where('classId', '==', classId).get();
+             const courseIds = coursesSnap.docs.map(d => d.id);
+             if (courseIds.length > 0) {
+                 conditions.push({ field: 'courseId', op: 'in', value: courseIds });
+             } else {
+                 return []; // No courses for this class, so no data
+             }
+        }
+        
+        if (conditions.length > 0) {
+            // Handle 'in' query limitations (max 30 values) if necessary, for now it's simple
+            for (const cond of conditions) {
+                 query = query.where(cond.field, cond.op as any, cond.value);
             }
         }
-
-        if (allTopicIds.length > 0) {
-            // Firestore 'in' query supports up to 30 items. We need to chunk.
-            const chunks = [];
-            for (let i = 0; i < allTopicIds.length; i += 30) {
-                chunks.push(allTopicIds.slice(i, i + 30));
-            }
-            const queryPromises = chunks.map(chunk => 
-                query.where('topicId', 'in', chunk).get()
-            );
-            const querySnapshots = await Promise.all(queryPromises);
-            const results = querySnapshots.flatMap(snap => snap.docs.map(doc => serialize({ id: doc.id, ...doc.data() })));
-            return results;
-        } else if (filters.topicId || filters.unitId || filters.courseId || filters.classId) {
-             // A filter was selected, but no topics were found. Return empty.
-            return [];
-        }
-
-        // If no topic-based filter, run the original simple query
+       
         const snapshot = await query.get();
         return snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
     };
@@ -237,24 +214,15 @@ export async function exportAllData(
     let data;
     switch (dataType) {
         case 'users':
-            const usersData = await fetchCollection('users');
-            if (classId && classId !== 'all') {
-                const classesSnap = await db.collection('classes').get();
-                const classesMap = new Map(classesSnap.docs.map(doc => [doc.id, doc.data().name]));
-                const className = classesMap.get(classId);
-                data = usersData.filter(user => user.class?.startsWith(className));
-            } else {
-                data = usersData;
-            }
-            // Remove sensitive fields before exporting
-            return data.map((user: any) => {
-                const { password, ...rest } = user; // Example of removing a field
-                return rest;
-            });
+        case 'questions':
+        case 'examQuestions':
+        case 'activity-items':
+        case 'assignments':
+        case 'scoreEvents':
+             data = await fetchCollectionWithFilter(dataType);
+             return data;
             
         case 'curriculum':
-            // This case requires a more complex, recursive fetch which is outside
-            // the scope of this simplified exporter. We will return a placeholder.
             return { message: "Curriculum export needs a dedicated, recursive function." };
 
         case 'yazilacaklar':
@@ -287,14 +255,6 @@ export async function exportAllData(
                 }
             }
             return yazilacaklarData;
-            
-        case 'questions':
-        case 'examQuestions':
-        case 'activity-items':
-        case 'assignments':
-        case 'scoreEvents':
-             data = await fetchCollection(dataType);
-             return data;
         
         default:
             throw new Error(`Invalid data type: ${dataType}`);
@@ -455,11 +415,12 @@ export async function exportManifestAndContent() {
 
 /**
  * Stage 2: Exports activityItems for games. This can be a heavy operation.
+ * It now creates aggregated files for courses and units.
  */
 export async function exportActivityData() {
     const db = getAdminDb();
     const curriculumPath = path.join(process.cwd(), 'public', 'curriculum');
-    const exportPath = path.join(curriculumPath, 'activities');
+    const exportPath = path.join(curriculumPath, 'activity-items');
     const allDocsToWrite: { path: string, content: string }[] = [];
     const CHUNK_SIZE = 100;
 
@@ -467,19 +428,48 @@ export async function exportActivityData() {
         await fs.mkdir(exportPath, { recursive: true });
 
         const activitiesSnapshot = await db.collection('activityItems').get();
+        const allActivities = activitiesSnapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+
         const activitiesByTopic: { [key: string]: any[] } = {};
-        activitiesSnapshot.docs.forEach((doc) => {
-            const item = serialize({ id: doc.id, ...doc.data() });
+        const activitiesByUnit: { [key: string]: any[] } = {};
+        const activitiesByCourse: { [key: string]: any[] } = {};
+        
+        allActivities.forEach(item => {
             if (item.topicId) {
                 if (!activitiesByTopic[item.topicId]) activitiesByTopic[item.topicId] = [];
                 activitiesByTopic[item.topicId].push(item);
             }
+            if (item.unitId) {
+                if (!activitiesByUnit[item.unitId]) activitiesByUnit[item.unitId] = [];
+                activitiesByUnit[item.unitId].push(item);
+            }
+            if (item.courseId) {
+                if (!activitiesByCourse[item.courseId]) activitiesByCourse[item.courseId] = [];
+                activitiesByCourse[item.courseId].push(item);
+            }
         });
-        
+
+        // Write per-topic files
         for (const topicId in activitiesByTopic) {
             allDocsToWrite.push({
                 path: path.join(exportPath, `${topicId}.json`),
                 content: JSON.stringify(activitiesByTopic[topicId])
+            });
+        }
+        
+        // Write per-unit files
+        for (const unitId in activitiesByUnit) {
+            allDocsToWrite.push({
+                path: path.join(exportPath, `${unitId}.json`),
+                content: JSON.stringify(activitiesByUnit[unitId])
+            });
+        }
+        
+        // Write per-course files
+        for (const courseId in activitiesByCourse) {
+            allDocsToWrite.push({
+                path: path.join(exportPath, `${courseId}.json`),
+                content: JSON.stringify(activitiesByCourse[courseId])
             });
         }
         
@@ -488,11 +478,9 @@ export async function exportActivityData() {
             await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
         }
         
-        return { success: true, message: `${allDocsToWrite.length} konu için oyun verisi başarıyla oluşturuldu.` };
+        return { success: true, message: `${allDocsToWrite.length} dosya (konu, ünite, ders) için oyun verisi başarıyla oluşturuldu.` };
     } catch (e: any) {
         console.error("Error exporting activity data:", e);
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
-
-    
