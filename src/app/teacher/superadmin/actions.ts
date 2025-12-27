@@ -529,8 +529,7 @@ export async function exportManifestAndContent() {
                         }
                         if (hasYazilacaklarContent) {
                             const notes = topicData.writingContent?.notes || [];
-                            const defs = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').get();
-                            const conceptDefinitions = defs.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
+                            const conceptDefinitions = defsSnap.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
                             addFile(`yazilacaklar/${doc.id}.json`, JSON.stringify({ notes, conceptDefinitions }));
                         }
                          // Export topic steps (ders akışı)

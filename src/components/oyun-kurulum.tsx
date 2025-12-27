@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
@@ -10,13 +11,13 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection, type ClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
 
 // --- TİP TANIMLARI ---
-type Topic = EnrichedClassGroup['courses'][0]['units'][0]['topics'][0];
-type Unit = EnrichedClassGroup['courses'][0]['units'][0];
-type Course = EnrichedClassGroup['courses'][0];
+type Topic = ClassGroup['courses'][0]['units'][0]['topics'][0];
+type Unit = ClassGroup['courses'][0]['units'][0];
+type Course = ClassGroup['courses'][0];
 
 const ICONS = [Book, Sparkles, Book, Gamepad2];
 const getGradient = (index: number) => {
@@ -144,19 +145,20 @@ type OyunKurulumProps = {
     pageTitle?: string;
     gameName?: string;
     gamePath?: string;
-    gameIcon?: React.ElementType;
+    pageIcon?: React.ElementType;
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
+    isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
-  const [classGroups, setClassGroups] = useState<EnrichedClassGroup[]>([]);
+  const [classGroups, setClassGroups] = useState<ClassGroup[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -165,7 +167,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
 
   const finalGameName = gameName || searchParams.get('gameName') || pageTitle || "Etkinlik Kurulumu";
   const finalGamePath = gamePath || searchParams.get('gamePath') || "";
-  const isStatic = searchParams.get('isStatic') === 'true';
 
   const [selection, setSelection] = useState({
     courseId: "",
@@ -275,11 +276,13 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         const selectedCourse = courses.find(c => c.id === selection.courseId);
         const selectedUnit = selectedCourse?.units.find(u => u.id === unit.id);
         
-        // Düzeltme: `hasContent` yerine doğrudan içerik varlığını kontrol et
         const topicsWithContent = (selectedUnit?.topics || []).filter(topic => {
             if (dataType === 'games') return true;
             if (dataType === 'ozetler') return topic.hasOzetContent;
-            if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
+            // Kontrol doğrudan istemcide yapılıyor
+            if (dataType === 'yazilacaklar') {
+                return (topic.writingContent?.notes?.length || 0) > 0 || (topic.writingContent?.conceptDefinitions?.length || 0) > 0;
+            }
             return false;
         });
 
@@ -382,7 +385,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                                 subtitle="Genel Tekrar"
                                 icon={Sparkles}
                                 color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'} as Unit)}
+                                onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
                                 delay={0}
                             />
                         )}
@@ -459,7 +462,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
                     <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {finalGameName}
+                        {pageTitle || finalGameName}
                     </h1>
                 </div>
             </div>
@@ -514,9 +517,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                 </span>
                 
                 <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
-                    <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce"></div>
-                    <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:100ms]"></div>
-                    <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:200ms]"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:100ms]"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:200ms]"></div>
                 </div>
             </div>
         </GlassPanel>

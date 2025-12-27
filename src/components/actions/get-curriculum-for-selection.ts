@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -74,15 +75,14 @@ export async function getCurriculumForSelection(
                     const topicData = topicDoc.data() as Topic;
                     
                     let hasContent = false;
-                    if (dataType === 'yazilacaklar') {
-                        // Check if there are any definitions or notes for this topic.
-                        const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
-                        const definitionsSnapshot = await getDocs(definitionsQuery);
-                        hasContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
+                    if (dataType === 'games') {
+                       hasContent = (topicData.isPublished ?? true); 
                     } else if (dataType === 'ozetler') {
                        hasContent = !!topicData.htmlContent;
-                    } else if (dataType === 'games') {
-                       hasContent = (topicData.isPublished ?? true); 
+                    } else if (dataType === 'yazilacaklar') {
+                       const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
+                       const definitionsSnapshot = await getDocs(definitionsQuery);
+                       hasContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
                     }
 
                     return {
