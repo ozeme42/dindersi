@@ -139,7 +139,7 @@ function CoursePageContent() {
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast, completedTopics]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast]);
 
 
     useEffect(() => {
