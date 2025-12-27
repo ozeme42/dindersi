@@ -23,23 +23,10 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = [];
-
-        if (topicId && topicId !== 'all') {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-            try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                allItems = JSON.parse(fileContent);
-            } catch (fileError: any) {
-                if (fileError.code === 'ENOENT') {
-                    return { error: "Bu konu için etkinlik verisi bulunamadı.", concepts: null };
-                }
-                throw fileError;
-            }
-        } else if (topicId === 'all') {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId });
-        } else {
-            return { error: "Kelime Avı oynamak için bir konu seçmelisiniz.", concepts: null };
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        
+        if (allItems.length === 0) {
+            return { error: "Bu konu için oynanabilir veri bulunamadı.", concepts: null };
         }
 
         const allConcepts = allItems

@@ -35,21 +35,7 @@ export async function getConceptQuizAction(
     }
 
     try {
-        let itemsForTopic: ActivityItem[] = [];
-
-        if (topicId && topicId !== 'all') {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-            const fileContent = await fs.readFile(filePath, 'utf-8').catch(() => null);
-            if (!fileContent) {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: null };
-            }
-            itemsForTopic = JSON.parse(fileContent);
-        } else if (topicId === 'all') {
-            itemsForTopic = await getStaticQuestionsForGame({ courseId, unitId });
-        } else {
-            return { error: "Geçerli bir konu seçimi yapılmadı.", questions: null };
-        }
-
+        let itemsForTopic: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
         // Sadece 'definition' tipindeki verileri al
         const allDefinitions = itemsForTopic.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
@@ -81,8 +67,17 @@ export async function getConceptQuizAction(
             if (distractors.length < 3) { // Need at least 3 distractors for a 4-option question
                 continue; 
             }
-
-            const options = [...new Set([correctAnswer, ...distractors])].sort(() => 0.5 - Math.random());
+            
+            // Seçenekleri oluştururken Set kullanarak benzersizliği garantile
+            const optionsSet = new Set([correctAnswer, ...distractors.slice(0, 3)]);
+            const options = Array.from(optionsSet).sort(() => 0.5 - Math.random());
+            
+            // Eğer bir şekilde 4 seçenek oluşmadıysa (çok nadir), doldur
+            while(options.length < 4 && distractors.length > options.length -1) {
+                const nextDistractor = allTermsFromDefinitions.find(t => !options.includes(t));
+                if (nextDistractor) options.push(nextDistractor);
+                else break;
+            }
             
             gameQuestions.push({
                 definition,

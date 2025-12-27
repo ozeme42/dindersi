@@ -20,23 +20,10 @@ export async function getBalloonHunterDataAction(
 ): Promise<{ questions: BalloonHunterQuestion[]; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = [];
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        if (topicId && topicId !== 'all') {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-            try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                allItems = JSON.parse(fileContent);
-            } catch (fileError: any) {
-                if (fileError.code === 'ENOENT') {
-                    return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-                }
-                throw fileError;
-            }
-        } else if (topicId === 'all') {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId });
-        } else {
-             return { error: "Oyun oynamak için bir konu seçmelisiniz.", questions: [] };
+        if (allItems.length === 0) {
+             return { error: "Oyun oynamak için veri bulunamadı.", questions: [] };
         }
 
         const allDefinitions = allItems

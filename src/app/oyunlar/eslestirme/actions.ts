@@ -33,23 +33,10 @@ export async function getEslestirmeAction(
 ): Promise<{ pairs: MatchingPair[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = [];
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        if (topicId && topicId !== 'all') {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-             try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                allItems = JSON.parse(fileContent);
-            } catch (fileError: any) {
-                if (fileError.code === 'ENOENT') {
-                     return { error: "Bu konu için etkinlik verisi bulunamadı.", pairs: null };
-                }
-                throw fileError;
-            }
-        } else if (topicId === 'all') {
-            allItems = await getStaticQuestionsForGame({ courseId, unitId });
-        } else {
-             return { error: "Eşleştirme oynamak için belirli bir konu seçmelisiniz.", pairs: null };
+        if (allItems.length === 0) {
+             return { error: "Bu konu için oynanabilir veri bulunamadı.", pairs: null };
         }
 
         const validItems = allItems

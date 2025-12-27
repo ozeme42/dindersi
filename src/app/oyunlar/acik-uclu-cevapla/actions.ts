@@ -24,26 +24,13 @@ export async function getAcikUcluCevaplaAction(
 ): Promise<{ questions: Question[]; error?: string }> {
     noStore();
     try {
-        let staticItems: ActivityItem[] = [];
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        if (topicId && topicId !== 'all') {
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
-             try {
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                staticItems = JSON.parse(fileContent);
-            } catch (fileError: any) {
-                if (fileError.code === 'ENOENT') {
-                    return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-                }
-                throw fileError;
-            }
-        } else if (topicId === 'all') {
-             staticItems = await getStaticQuestionsForGame({ courseId, unitId });
-        } else {
-             return { error: "Açık Uçlu Cevaplama oynamak için belirli bir konu seçmelisiniz.", questions: [] };
+        if (allItems.length === 0) {
+             return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
         }
 
-        const allDefinitions = staticItems
+        const allDefinitions = allItems
             .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
         if (allDefinitions.length < 1) {
