@@ -239,7 +239,7 @@ function QuestionTest({
                                     onClick={() => handleAnswer(option)} 
                                     disabled={!!currentAnswer}
                                 >
-                                    <span className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors", 
+                                    <span className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border text-xs font-bold transition-colors", 
                                         currentAnswer && isCorrect ? "border-green-500 bg-green-500 text-white" : 
                                         currentAnswer && isSelected ? "border-red-500 bg-red-500 text-white" : 
                                         "border-white/10 bg-slate-900 text-slate-400 group-hover:border-cyan-500/50 group-hover:text-cyan-400"
@@ -253,9 +253,8 @@ function QuestionTest({
                         })}
                         
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
-                            const answerValue = option;
-                            const isCorrect = answerValue === currentQuestion.correctAnswer;
-                            const isSelected = currentAnswer === answerValue;
+                            const isSelected = currentAnswer === option;
+                            const isCorrect = option === currentQuestion.correctAnswer;
                              
                             let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
                              if (currentAnswer) {
@@ -639,7 +638,7 @@ function QuestionBankCoursePageComponent() {
                                     </Button>
                                     <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
                                         {course.title}
-                                        <Badge variant="secondary" className="ml-2 bg-blue-500/10 text-blue-300 border-blue-500/30">Soru Bankası</Badge>
+                                        <Badge className="ml-2 bg-blue-500/20 text-blue-300 border-blue-500/30">Soru Bankası</Badge>
                                         <Badge variant="outline" className="ml-2 border-green-500/20 text-green-400">Dosyadan</Badge>
                                     </h1>
                                 </div>
@@ -709,11 +708,3 @@ function QuestionBankCoursePageComponent() {
     );
 }
 
-export default function Page() {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
-            <QuestionBankCoursePageComponent />
-        </Suspense>
-    )
-}
-```
