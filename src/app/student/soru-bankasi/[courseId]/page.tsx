@@ -63,7 +63,7 @@ function QuestionTest({
             const result = await getQuestionsForTest(topic.id, difficulty, testIndex);
             if (result.error) {
                 setError(result.error);
-                toast({ title: 'Hata', description: result.error, variant: 'destructive'});
+                toast({ title: 'Hata', description: result.error, variant: "destructive"});
             } else {
                 setQuestions(result.questions);
             }
@@ -108,7 +108,7 @@ function QuestionTest({
             setIsFinished(true);
         }
     };
-
+    
     const finishTest = () => {
         const passed = (correctCount / questions.length) >= PASS_THRESHOLD;
         onComplete(difficulty, testIndex, score, passed, correctCount, questions.length);
@@ -223,7 +223,7 @@ function QuestionTest({
                                 if (isCorrect) {
                                     btnStyle += "bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] scale-[1.02] z-10";
                                 } else if (isSelected) {
-                                    btnStyle += "bg-red-500/20 border-red-500 text-red-100 opacity-80";
+                                    btnStyle += "bg-red-500/20 border-red-500 text-red-100 animate-shake";
                                 } else {
                                     btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
                                 }
@@ -247,14 +247,15 @@ function QuestionTest({
                                         {['A','B','C','D'][index]}
                                     </span>
                                     {option}
-                                    {currentAnswer && isCorrect && <CheckCircle2 className="ml-auto h-5 w-5 text-green-400 animate-in zoom-in" />}
+                                    {currentAnswer && isCorrect && <CheckCircle2 className="ml-auto h-5 w-5 text-green-400" />}
                                 </Button>
                             );
                         })}
                         
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
-                            const isSelected = currentAnswer === option;
-                            const isCorrect = option === currentQuestion.correctAnswer;
+                            const answerValue = option === 'Doğru';
+                            const isSelected = currentAnswer === String(answerValue);
+                            const isCorrect = (question.correctAnswer === 'Doğru') === answerValue;
                              
                             let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
                              if (currentAnswer) {
@@ -274,7 +275,7 @@ function QuestionTest({
                                     key={option} 
                                     variant="ghost"
                                     className={btnStyle}
-                                    onClick={() => handleAnswer(option)} 
+                                    onClick={() => handleAnswer(String(answerValue))} 
                                     disabled={!!currentAnswer}
                                 >
                                     {option}
@@ -283,7 +284,6 @@ function QuestionTest({
                         })}
                     </div>
                 </CardContent>
-                
                 <CardFooter className="flex justify-end pt-4 pb-6 px-6 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
@@ -708,3 +708,13 @@ function QuestionBankCoursePageComponent() {
     );
 }
 
+// Wrapper component to handle Suspense
+export default function Page() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
+            <QuestionBankCoursePageComponent />
+        </Suspense>
+    );
+}
+
+    
