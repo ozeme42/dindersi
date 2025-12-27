@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { getQuestionsForTest } from '@/lib/quiz-actions';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import { submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '@/app/student/soru-bankasi/actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -66,7 +66,8 @@ function QuestionTest({
                 topicId: topic.id, 
                 difficulty: [difficulty], 
                 questionCount: 10, // Test başına 10 soru
-                testIndex: testIndex // Hangi testi istediğimizi belirtiyoruz
+                testIndex: testIndex,
+                isStatic: true
             });
             if (result.error) {
                 setError(result.error);
@@ -86,8 +87,13 @@ function QuestionTest({
         newAnswers[currentQuestionIndex] = answer;
         setAnswers(newAnswers);
 
-        const question = questions[currentQuestionIndex];
-        const isCorrect = answer === question.correctAnswer || (question.type === 'Doğru/Yanlış' && (answer ? "Doğru" : "Yanlış") === question.correctAnswer);
+        const currentQuestion = questions[currentQuestionIndex];
+        let isCorrect;
+        if(currentQuestion.type === 'Doğru/Yanlış'){
+             isCorrect = answer === (currentQuestion.isTrue ?? currentQuestion.correctAnswer === 'Doğru')
+        } else {
+             isCorrect = answer === currentQuestion.correctAnswer
+        }
 
 
         if(isCorrect) {
@@ -96,8 +102,8 @@ function QuestionTest({
             setCorrectCount(c => c + 1);
         } else {
             playSound('incorrect');
-            if (user && user.role === 'student' && question.id && !question.id.startsWith('new-')) {
-                addQuestionToReviewList(user.uid, question as Question);
+            if (user && user.role === 'student' && currentQuestion.id && !currentQuestion.id.startsWith('new-')) {
+                addQuestionToReviewList(user.uid, currentQuestion as Question);
             }
         }
     };
@@ -220,7 +226,7 @@ function QuestionTest({
                                 const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                                 
                                 return (
-                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && isSelected && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && !isCorrect && isSelected && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
+                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
                                         {option}
                                     </Button>
                                 );
@@ -229,7 +235,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -648,4 +654,5 @@ export default function Page() {
         </Suspense>
     );
 }
+
 ```
