@@ -4,79 +4,76 @@
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
 import path from 'path';
 import fs from 'fs/promises';
+import { db } from "@/lib/firebase"; // Import db from firebase
+import { collection, query, where, getDocs, limit as firestoreLimit, Query } from "firebase/firestore"; // Import necessary firestore functions
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
-// Centralized function to fetch questions - STATIC ONLY
+// Centralized function to fetch questions - DYNAMIC DB-BASED
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes } = params;
 
     try {
-        let allQuestions: Question[] = [];
+        const collectionName = (questionTypes && (questionTypes.includes('definition') || questionTypes.includes('concept') || questionTypes.includes('sentence')))
+            ? "activityItems"
+            : "questions";
+
+        let q: Query = collection(db, collectionName);
+        let queryConstraints: any[] = [];
         
-        let fileToRead;
-        // Determine which pre-aggregated file to read.
         if (topicId && topicId !== 'all') {
-             fileToRead = `${topicId}.json`;
+            queryConstraints.push(where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
-            fileToRead = `${unitId}.json`;
+            queryConstraints.push(where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
-            fileToRead = `${courseId}.json`;
-        } else {
-             // Fallback or error for "all-all-all" which is too broad
-             return { questions: [], error: "Lütfen en azından bir ders seçin." };
+            queryConstraints.push(where("courseId", "==", courseId));
         }
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', fileToRead);
-
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            allQuestions = JSON.parse(fileContent) as Question[];
-        } catch (e: any) {
-            if (e.code === 'ENOENT') {
-                // It's not an error if a specific file doesn't exist, just means no questions for that scope.
-                return { questions: [] };
-            }
-            throw e; // Re-throw other errors
-        }
-        
         if (difficulty && difficulty.length > 0) {
-            allQuestions = allQuestions.filter(q => difficulty.includes(q.difficulty));
+            queryConstraints.push(where("difficulty", "in", difficulty));
         }
         if (questionTypes && questionTypes.length > 0) {
             const typeMap: { [key: string]: string } = { 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' };
             const mappedTypes = questionTypes.map(qt => typeMap[qt] || qt);
-            allQuestions = allQuestions.filter(q => mappedTypes.includes(q.type));
+            queryConstraints.push(where("type", "in", mappedTypes));
         }
+
+        if (queryConstraints.length > 0) {
+            q = query(q, ...queryConstraints);
+        }
+
+        const querySnapshot = await getDocs(q);
+        
+        const allQuestions = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            return { id: doc.id, ...data } as Question | ActivityItem;
+        });
 
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
         const selectedQuestions = shuffled.slice(0, questionCount);
         
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
-            const standardizedQuestion: Question = {
-                ...question,
-                text: question.text || (question as any).statement || '',
-                options: question.options || (question.type === 'Doğru/Yanlış' ? ['Doğru', 'Yanlış'] : []),
-                correctAnswer: question.correctAnswer || (question.type === 'Doğru/Yanlış' ? (question.isTrue ? 'Doğru' : 'Yanlış') : '')
-            };
-            if ((standardizedQuestion.type === 'Çoktan Seçmeli' || standardizedQuestion.type === 'Boşluk Doldurma') && standardizedQuestion.options) {
-                standardizedQuestion.options = [...standardizedQuestion.options].sort(() => Math.random() - 0.5);
+            if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
+                question.options = [...question.options].sort(() => Math.random() - 0.5);
             }
-            return standardizedQuestion;
+            return question;
         });
 
         if (questionsWithShuffledOptions.length === 0) {
-            return { questions: [], error: "Belirtilen kriterlere uygun soru bulunamadı." };
+            return { questions: [], error: "Belirtilen kriterlere uygun soru/veri bulunamadı." };
         }
 
         return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
 
     } catch (e: any) {
-        console.error("Error fetching questions from static files:", e);
-        return { questions: [], error: 'Sorular alınırken bir hata oluştu.' };
+        console.error("Error fetching questions from DB:", e);
+        if (e.code === 'failed-precondition') {
+             return { questions: [], error: `Veritabanı indeksi eksik veya oluşturuluyor. Hata: ${e.message}` };
+        }
+        return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
 }
 
@@ -100,10 +97,10 @@ export async function getStaticQuestionsForGame(params: {
             fileToRead = `${topicId}.json`;
         } else if (unitId && unitId !== 'all') {
             fileToRead = `${unitId}.json`;
-        } else if (courseId) { // courseId can be 'all' from some older flows, but we should rely on unitId or topicId for 'all'. If they are 'all', courseId must be specific.
+        } else if (courseId && courseId !== 'all') {
             fileToRead = `${courseId}.json`;
         } else {
-            console.warn("getStaticQuestionsForGame called without a specific enough context (course, unit, or topic).");
+            console.warn("getStaticQuestionsForGame called without a specific enough context (course, unit, or topic). It should have at least a courseId.");
             return [];
         }
 

@@ -3,8 +3,6 @@
 
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
-import fs from 'fs/promises';
-import path from 'path';
 import { db } from "@/lib/firebase";
 import { 
   collection, 
@@ -14,64 +12,36 @@ import {
   writeBatch, 
   doc, 
   serverTimestamp, 
-  increment 
+  increment,
+  getDocs
 } from 'firebase/firestore';
-
-// getStaticQuestionsForGame has been removed as it was causing issues.
-// Direct file reading is more reliable here.
+import { getQuestionsFromBank } from '@/lib/quiz-actions'; // Use the robust DB fetching function
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        const isAllTopics = topicId === 'all';
-        
-        let fileToRead;
-        // Determine the correct file to read based on selection
-        if (isAllTopics) {
-            if (!unitId) return { error: "Tüm konuları getirmek için bir ünite seçilmelidir.", questions: [] };
-            fileToRead = `${unitId}.json`;
-        } else {
-            if (!topicId) return { error: "Bir konu seçilmelidir.", questions: [] };
-            fileToRead = `${topicId}.json`;
-        }
+        // Use the centralized and robust getQuestionsFromBank function
+        const result = await getQuestionsFromBank({
+            courseId: courseId,
+            unitId: unitId,
+            topicId: topicId,
+            questionTypes: ['definition'], // Specify we only want definitions for this game
+            questionCount: 100, // Fetch a good amount
+        });
 
-        // CORRECTED: The path was pointing to 'activities' instead of 'activity-items'
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', fileToRead);
-        
-        let items: ActivityItem[];
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            items = JSON.parse(fileContent);
-        } catch (e: any) {
-             if (e.code === 'ENOENT') {
-                return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
-            }
-            throw e;
-        }
-
-        if (!items || items.length === 0) {
-            return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
-        }
-
-        // Filter for valid definition items robustly
-        const allDefinitions = items
-            .filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
-                item.type === 'definition' &&
-                !!item.content?.term &&
-                !!item.content?.definition
-            );
-
-        if (allDefinitions.length < 3) {
-            return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
+        if (result.error || result.questions.length < 3) {
+            return { questions: [], error: result.error || "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
         }
         
-        const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => ({
-            id: `${item.id || `item-${index}`}`,
-            text: item.content.definition!,
+        // The data from getQuestionsFromBank is already in a good format.
+        // We just need to ensure it fits the Partial<Question>[] type.
+        const gameQuestions: Partial<Question>[] = result.questions.map((item: any) => ({
+            id: item.id,
+            text: item.content.definition,
             type: 'Bil Bakalım',
-            correctAnswer: item.content.term!,
+            correctAnswer: item.content.term,
             difficulty: 'Orta',
         }));
 
