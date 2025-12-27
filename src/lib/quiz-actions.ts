@@ -4,8 +4,8 @@
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
 import path from 'path';
 import fs from 'fs/promises';
-import { db } from "@/lib/firebase"; // Import db from firebase
-import { collection, query, where, getDocs, limit as firestoreLimit, Query, and } from "firebase/firestore"; // Import necessary firestore functions
+import { db } from "@/lib/firebase"; 
+import { collection, query, where, getDocs, limit as firestoreLimit, Query, and } from "firebase/firestore";
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
@@ -17,30 +17,22 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes } = params;
 
     try {
-        const collectionName = (questionTypes && (questionTypes.includes('definition') || questionTypes.includes('concept') || questionTypes.includes('sentence')))
-            ? "activityItems"
-            : "questions";
+        const isActivity = questionTypes && (questionTypes.includes('definition') || questionTypes.includes('concept') || questionTypes.includes('sentence'));
+        const collectionName = isActivity ? "activityItems" : "questions";
 
         let q: Query = collection(db, collectionName);
         let queryConstraints: any[] = [];
-        
-        // HIERARCHICAL FILTERING LOGIC
-        // Start from the most specific context and build the query.
 
-        // 1. Topic Level (Most specific)
+        // HIERARCHICAL FILTERING LOGIC
+        // This is the corrected logic. It ensures that filters are applied in a strict hierarchy.
         if (topicId && topicId !== 'all') {
+            // Most specific: filter by topic. This implicitly filters by unit and course.
             queryConstraints.push(where("topicId", "==", topicId));
-        } 
-        // 2. Unit Level
-        else if (unitId && unitId !== 'all') {
+        } else if (unitId && unitId !== 'all') {
+            // Next specific: filter by unit. This implicitly filters by course.
             queryConstraints.push(where("unitId", "==", unitId));
-             // When a specific unit is chosen, it must also belong to the correct course.
-            if (courseId && courseId !== 'all') {
-                queryConstraints.push(where("courseId", "==", courseId));
-            }
-        } 
-        // 3. Course Level (Least specific)
-        else if (courseId && courseId !== 'all') {
+        } else if (courseId && courseId !== 'all') {
+            // Broadest category: filter by course.
             queryConstraints.push(where("courseId", "==", courseId));
         }
 
@@ -53,10 +45,9 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             const mappedTypes = questionTypes.map(qt => typeMap[qt] || qt);
             queryConstraints.push(where("type", "in", mappedTypes));
         }
-        
-        // Construct the final query only if there are constraints.
+
+        // Construct the final query if there are constraints.
         if (queryConstraints.length > 0) {
-            // Use and() to combine all where clauses
             q = query(q, and(...queryConstraints));
         }
         
@@ -67,9 +58,12 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             return { id: doc.id, ...data } as Question | ActivityItem;
         });
 
+        // Shuffle all found questions
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
+        // Take the requested number of questions
         const selectedQuestions = shuffled.slice(0, questionCount);
         
+        // Shuffle options for each question
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
                 // Create a shallow copy to avoid mutating the original array
@@ -136,4 +130,3 @@ export async function getStaticQuestionsForGame(params: {
         return [];
     }
 }
-
