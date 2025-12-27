@@ -3,8 +3,9 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
-import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
+import { getQuestionsForTest } from '@/lib/quiz-actions'; // GÜNCELLEME: Doğru action dosyasından import ediliyor
+import { submitSoruBankasiScore } from '../actions';
+import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ import { CourseSidebar } from '@/components/course-sidebar';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { Badge } from '@/components/ui/badge';
+import { getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 
@@ -60,12 +62,17 @@ function QuestionTest({
     useEffect(() => {
         async function fetchQuestions() {
             setIsLoading(true);
-            const result = await getQuestionsForTest(topic.id, difficulty, testIndex);
+            const result = await getQuestionsForTest({
+                topicId: topic.id, 
+                difficulty: [difficulty], 
+                questionCount: 10, // Test başına 10 soru
+                testIndex: testIndex // Hangi testi istediğimizi belirtiyoruz
+            });
             if (result.error) {
                 setError(result.error);
                 toast({ title: 'Hata', description: result.error, variant: "destructive"});
             } else {
-                setQuestions(result.questions);
+                setQuestions(result.questions as Question[]);
             }
             setIsLoading(false);
         }
@@ -76,18 +83,12 @@ function QuestionTest({
         if (answers[currentQuestionIndex] !== undefined && answers[currentQuestionIndex] !== null) return;
 
         const newAnswers = [...answers];
-        newAnswers[currentQuestionIndex] = String(answer);
+        newAnswers[currentQuestionIndex] = answer;
         setAnswers(newAnswers);
 
         const question = questions[currentQuestionIndex];
-        let isCorrect = false;
+        const isCorrect = answer === question.correctAnswer || (question.type === 'Doğru/Yanlış' && (answer ? "Doğru" : "Yanlış") === question.correctAnswer);
 
-        if (question.type === 'Doğru/Yanlış') {
-            const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
-            isCorrect = answer === correctAnswerBool;
-        } else {
-            isCorrect = answer === question.correctAnswer;
-        }
 
         if(isCorrect) {
             playSound('correct');
@@ -95,15 +96,15 @@ function QuestionTest({
             setCorrectCount(c => c + 1);
         } else {
             playSound('incorrect');
-            if (user) {
-              addQuestionToReviewList(user.uid, question);
+            if (user && user.role === 'student' && question.id && !question.id.startsWith('new-')) {
+                addQuestionToReviewList(user.uid, question as Question);
             }
         }
     };
 
     const handleNext = () => {
         if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(prev => prev + 1);
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
             playSound('win');
             setIsFinished(true);
@@ -181,13 +182,13 @@ function QuestionTest({
     if (!currentQuestion) return <div className="text-center text-slate-500 mt-10">Soru yüklenemedi.</div>;
 
     const currentAnswer = answers[currentQuestionIndex];
-    const progressPercentage = ((currentQuestionIndex + 1) / questions.length) * 100;
+    const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
     return (
         <div className="w-full min-h-full flex flex-col items-center justify-start md:justify-center p-4 pb-32 md:pb-8">
             
             <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative flex flex-col">
-                <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
+                <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }} />
                 
                 <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                      <div className="flex flex-col">
@@ -216,7 +217,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -224,11 +225,11 @@ function QuestionTest({
                         
                          {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                             const answerValue = option === 'Doğru';
-                            const isSelected = currentAnswer === String(answerValue);
+                            const isSelected = String(currentAnswer) === String(answerValue);
                             const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                             
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer !== null && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer !== null && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(answerValue)} disabled={currentAnswer !== null}>
                                     {option}
                                 </Button>
                             );
@@ -238,15 +239,15 @@ function QuestionTest({
                 <CardFooter className="flex justify-end pt-4 pb-6 px-6 bg-slate-900/95 sticky bottom-0 z-20">
                     <Button 
                         onClick={handleNext} 
-                        disabled={!currentAnswer}
+                        disabled={currentAnswer === null}
                         className={cn(
                             "h-12 px-8 rounded-xl font-bold transition-all duration-300 w-full md:w-auto",
-                            currentAnswer 
+                            currentAnswer !== null
                                 ? "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/20 hover:scale-105" 
                                 : "bg-slate-800 text-slate-500 cursor-not-allowed"
                         )}
                     >
-                        {currentQuestionIndex === questions.length - 1 ? 'Testi Bitir' : 'Sonraki'} 
+                        {isLastQuestion ? 'Testi Bitir' : 'Sonraki'} 
                         <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                 </CardFooter>
@@ -645,13 +646,94 @@ function QuestionBankCoursePageComponent() {
     );
 }
 
-function Page() {
+export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
             <QuestionBankCoursePageComponent />
         </Suspense>
     );
 }
-export default Page;
+```
+- src/hooks/use-local-storage.ts:
+```ts
+import { useState, useEffect } from 'react';
 
-    
+// Bu hook, bileşenin yeniden render olmasına neden olmadan localStorage'ı güvenli bir şekilde kullanır.
+// Özellikle sunucu tarafında render edilen bileşenlerde (SSR) "localStorage is not defined" hatasını önler.
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+  // State'i, tarayıcıda çalışıyorsa localStorage'dan, değilse başlangıç değerinden alır.
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    if (typeof window === 'undefined') {
+      return initialValue;
+    }
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(`Error reading localStorage key “${key}”:`, error);
+      return initialValue;
+    }
+  });
+
+  // State güncellendiğinde localStorage'ı da günceller.
+  const setValue = (value: T) => {
+    try {
+      // Allow value to be a function so we have same API as useState
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
+    } catch (error) {
+      console.error(`Error setting localStorage key “${key}”:`, error);
+    }
+  };
+  
+  // Bu useEffect, bileşen ilk render olduğunda ve localStorage değeri değiştiğinde state'i günceller.
+  // Bu, farklı sekmeler arasında senkronizasyonu sağlar.
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === key && e.newValue) {
+        setStoredValue(JSON.parse(e.newValue));
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [key]);
+
+  return [storedValue, setValue];
+}
+
+```
+- tsconfig.json:
+```json
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+```
