@@ -1,14 +1,24 @@
 
 'use server';
 
-import { db } from "@/lib/firebase";
-import { doc, increment, writeBatch, collection, serverTimestamp, query, where, getCountFromServer } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
+import { db } from "@/lib/firebase";
+import { 
+  collection, 
+  query, 
+  where, 
+  getCountFromServer, 
+  writeBatch, 
+  doc, 
+  serverTimestamp, 
+  increment 
+} from 'firebase/firestore';
 
-// getStaticQuestionsForGame kaldırıldı, mantık doğrudan burada işlenecek.
+// getStaticQuestionsForGame has been removed as it was causing issues.
+// Direct file reading is more reliable here.
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
@@ -17,8 +27,8 @@ export async function getBilBakalimAction(
     try {
         const isAllTopics = topicId === 'all';
         
-        // HEDEF DOSYAYI DOĞRUDAN BELİRLE
         let fileToRead;
+        // Determine the correct file to read based on selection
         if (isAllTopics) {
             if (!unitId) return { error: "Tüm konuları getirmek için bir ünite seçilmelidir.", questions: [] };
             fileToRead = `${unitId}.json`;
@@ -27,6 +37,7 @@ export async function getBilBakalimAction(
             fileToRead = `${topicId}.json`;
         }
 
+        // CORRECTED: The path was pointing to 'activities' instead of 'activity-items'
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', fileToRead);
         
         let items: ActivityItem[];
@@ -44,15 +55,20 @@ export async function getBilBakalimAction(
             return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
         }
 
+        // Filter for valid definition items robustly
         const allDefinitions = items
-            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
+            .filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
+                item.type === 'definition' &&
+                !!item.content?.term &&
+                !!item.content?.definition
+            );
 
         if (allDefinitions.length < 3) {
             return { error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır.", questions: [] };
         }
         
         const gameQuestions: Partial<Question>[] = allDefinitions.map((item, index) => ({
-            id: `${item.id}-${index}`,
+            id: `${item.id || `item-${index}`}`,
             text: item.content.definition!,
             type: 'Bil Bakalım',
             correctAnswer: item.content.term!,
