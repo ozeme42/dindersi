@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getCourseForSoruBankasi, getQuestionsForTest, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, submitSoruBankasiScore, getCourseLeaderboard, getPreviousTestAttemptCount } from '../actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult, UserProfile, QuestionBankStats } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -49,7 +50,7 @@ function QuestionTest({
     const router = useRouter();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState<(string | null)[]>([]);
+    const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
     const [isFinished, setIsFinished] = useState(false);
     
     const [score, setScore] = useState(0);
@@ -255,7 +256,7 @@ function QuestionTest({
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
                             const answerValue = option === 'Doğru';
                             const isSelected = currentAnswer === String(answerValue);
-                            const isCorrect = (question.correctAnswer === 'Doğru') === answerValue;
+                            const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                              
                             let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
                              if (currentAnswer) {
@@ -716,5 +717,3 @@ export default function Page() {
         </Suspense>
     );
 }
-
-    
