@@ -3,7 +3,7 @@
 
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
-import type { Topic, SchoolClass, Course, Unit, UserProfile } from "@/lib/types";
+import type { Topic, SchoolClass, Course, Unit, UserProfile, ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
@@ -70,35 +70,37 @@ export async function getCurriculumForSelection(
             for (const unitDoc of unitsSnapshot.docs) {
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
                 
-                const topicsWithFlag = topicsSnapshot.docs
-                    .map(topicDoc => {
-                        const topicData = topicDoc.data() as Topic;
-                        
-                        let hasContent = false;
-                        if (dataType === 'yazilacaklar') {
-                           hasContent = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
-                        } else if (dataType === 'ozetler') {
-                           hasContent = !!topicData.htmlContent;
-                        } else if (dataType === 'games') {
-                           // For games, a topic is valid if it's published and has at least one lesson step.
-                           hasContent = (topicData.isPublished ?? true) && (topicData.steps?.length || 0) > 0;
-                        }
+                const topicsWithFlags = await Promise.all(topicsSnapshot.docs.map(async (topicDoc) => {
+                    const topicData = topicDoc.data() as Topic;
+                    
+                    let hasContent = false;
+                    if (dataType === 'yazilacaklar') {
+                        // Check if there are any definitions or notes for this topic.
+                        const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
+                        const definitionsSnapshot = await getDocs(definitionsQuery);
+                        hasContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
+                    } else if (dataType === 'ozetler') {
+                       hasContent = !!topicData.htmlContent;
+                    } else if (dataType === 'games') {
+                       hasContent = (topicData.isPublished ?? true); 
+                    }
 
-                        return {
-                            id: topicDoc.id,
-                            ...topicData,
-                            hasContent: hasContent, // Generic content flag
-                        };
-                    })
-                    .filter(t => t.hasContent);
+                    return {
+                        id: topicDoc.id,
+                        ...topicData,
+                        hasContent: hasContent,
+                    };
+                }));
 
-                if (topicsWithFlag.length > 0) {
+                const validTopics = topicsWithFlags.filter(t => t.hasContent);
+
+                if (validTopics.length > 0) {
                     const unitData = unitDoc.data() as Unit;
                     enrichedUnits.push({
                         id: unitDoc.id,
                         title: unitData.title,
                         hasUnitOzet: !!unitData.htmlContent,
-                        topics: topicsWithFlag as any,
+                        topics: validTopics as any,
                     });
                 }
             }
