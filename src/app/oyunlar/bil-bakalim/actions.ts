@@ -17,34 +17,23 @@ import {
   Query,
   and
 } from 'firebase/firestore';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        let q: Query = collection(db, "activityItems");
-        
-        const conditions = [where("type", "==", "definition")];
+        // **DÜZELTME:** Diğer oyunlar gibi merkezi `getStaticQuestionsForGame` fonksiyonu kullanılıyor.
+        const allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        // Apply the most specific filter available, ensuring a strict hierarchy
-        if (topicId && topicId !== 'all') {
-            conditions.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            conditions.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            conditions.push(where("courseId", "==", courseId));
+        if (allItems.length === 0) {
+             return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };
         }
         
-        // Combine all conditions into a single query
-        q = query(q, and(...conditions));
-
-        const querySnapshot = await getDocs(q);
-
-        const validDefinitions = querySnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem))
-            .filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
-                !!item.content?.term && !!item.content?.definition
+        // **DÜZELTME:** Gelen veriyi doğru şekilde filtrele.
+        const validDefinitions = allItems.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
+                item.type === 'definition' && !!item.content?.term && !!item.content?.definition
             );
         
         if (validDefinitions.length < 3) {
