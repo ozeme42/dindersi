@@ -14,7 +14,7 @@ import { Card, CardHeader } from '@/components/ui/card';
 import { getFlowData } from './actions'; // Yeni eylem import edildi
 
 type EnrichedTopic = Topic & { questionCount?: number, hasFlowContent?: boolean };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[] };
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[], hasFlowContent?: boolean };
 type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 type CourseGroup = { title: string; courses: EnrichedCourse[] };
@@ -152,7 +152,7 @@ export default function DersAkisiPage() {
                                                         <AccordionContent className="p-6 md:p-8 bg-black/20">
                                                             <div className="space-y-6">
                                                                 {course.units?.map((unit, unitIndex) => {
-                                                                    const hasAnyContent = (unit.steps && unit.steps.length > 0) || unit.topics.some(t => t.hasFlowContent);
+                                                                    const hasAnyContent = unit.hasFlowContent || unit.topics.some(t => t.hasFlowContent);
                                                                     if (!hasAnyContent) return null;
 
                                                                     return (
@@ -173,7 +173,7 @@ export default function DersAkisiPage() {
                                                                                         {unit.topics && unit.topics.length > 0 ? (
                                                                                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                                                                                 {/* Ünite akış linki */}
-                                                                                                {(unit.steps && unit.steps.length > 0) && (
+                                                                                                {unit.hasFlowContent && (
                                                                                                      <div className="group relative aspect-[4/5] min-h-[14rem]">
                                                                                                         <Link 
                                                                                                             href={`/teacher/presentation?courseId=${course.id}&unitId=${unit.id}&courseName=${encodeURIComponent(course.title)}&unitName=${encodeURIComponent(unit.title)}`}
