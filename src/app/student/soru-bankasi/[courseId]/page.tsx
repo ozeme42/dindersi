@@ -639,9 +639,8 @@ function QuestionBankCoursePageComponent() {
                                     </Button>
                                     <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
                                         {course.title}
-                                        <Badge className="ml-2 bg-blue-500/20 text-blue-300 border-blue-500/30">Soru Bankası</Badge>
-                                        <Badge variant="outline" className="ml-2 border-green-500/20 text-green-400">Dosyadan</Badge>
                                     </h1>
+                                    <Badge variant="outline" className="border-green-500/20 text-green-400">Dosyadan</Badge>
                                 </div>
                                 <div className="flex items-center gap-2">
                                      <AccordionTrigger className="py-0 hover:no-underline pr-2">
