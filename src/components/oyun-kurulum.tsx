@@ -10,7 +10,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
+import type { ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+
 
 // --- TİP TANIMLARI ---
 type Topic = EnrichedClassGroup['courses'][0]['units'][0]['topics'][0];
@@ -181,10 +183,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
         { id: 2, name: "Ünite", icon: Library },
         { id: 3, name: "Konu", icon: ListTodo },
     ];
-    // For ozetler, we want to go up to the topic selection.
-    // The final step will render both unit and topic summaries.
     return allSteps;
-  }, [dataType]);
+  }, []);
 
   const getBackUrl = () => {
     if (targetPath?.startsWith('student')) return '/student';
@@ -206,10 +206,10 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setIsLoading(true);
     try {
         const isForStudent = !isStatic && !!user;
-        const res = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
-        if (res.error) throw new Error(res.error);
+        const result = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
+        if (result.error) throw new Error(result.error);
 
-        const classGroupsWithData = (res.classGroups || []).map((group, groupIndex) => ({
+        const classGroupsWithData = (result.classGroups || []).map((group, groupIndex) => ({
             ...group,
             courses: group.courses.map((course: any, courseIndex: number) => ({
                 ...course,
@@ -499,7 +499,7 @@ useEffect(() => {
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
                     <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {finalGameName}
+                        {pageTitle}
                     </h1>
                 </div>
             </div>
