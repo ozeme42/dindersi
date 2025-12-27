@@ -4,7 +4,7 @@
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
-import { submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard, getPreviousTestAttemptCount } from '@/app/student/soru-bankasi/actions';
+import { submitSoruBankasiScore, getCourseForSoruBankasi, getQuestionBankProgress, getQuestionCounts, updateTopicTestProgress, getCourseLeaderboard } from '@/app/student/soru-bankasi/actions';
 import type { Course, Topic, Unit, Question, QuestionBankProgress, TestResult } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
@@ -62,18 +62,28 @@ function QuestionTest({
     useEffect(() => {
         async function fetchQuestions() {
             setIsLoading(true);
-            const result = await getQuestionsForTest({
+            const result = await getQuestionsFromBank({
                 topicId: topic.id, 
                 difficulty: [difficulty], 
                 questionCount: 10, // Test başına 10 soru
-                testIndex: testIndex,
-                isStatic: true
+                isStatic: true,
+                // testIndex'i direkt olarak göndermiyoruz, çünkü fonksiyonumuz artık bunu içeride hallediyor
             });
-            if (result.error) {
-                setError(result.error);
-                toast({ title: 'Hata', description: result.error, variant: "destructive"});
+            
+            // Fonksiyonumuz artık tek bir testlik soru döndüreceği için slice mantığına gerek kalmadı.
+            // Fakat sıralamanın deterministik olması için sort işlemini burada yapabiliriz.
+             if (result.error || !result.questions) {
+                setError(result.error || "Sorular yüklenemedi.");
             } else {
-                setQuestions(result.questions as Question[]);
+                const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || ''));
+                const startIndex = testIndex * 10;
+                const selectedQuestions = allQuestions.slice(startIndex, startIndex + 10);
+                
+                if (selectedQuestions.length === 0) {
+                    setError("Bu test için soru bulunamadı. Lütfen daha sonra tekrar deneyin veya farklı bir test seçin.");
+                } else {
+                    setQuestions(selectedQuestions);
+                }
             }
             setIsLoading(false);
         }
@@ -90,9 +100,10 @@ function QuestionTest({
         const currentQuestion = questions[currentQuestionIndex];
         let isCorrect;
         if(currentQuestion.type === 'Doğru/Yanlış'){
-             isCorrect = answer === (currentQuestion.isTrue ?? currentQuestion.correctAnswer === 'Doğru')
+             const correctAnswerBool = (currentQuestion.correctAnswer === 'Doğru');
+             isCorrect = answer === correctAnswerBool;
         } else {
-             isCorrect = answer === currentQuestion.correctAnswer
+             isCorrect = answer === currentQuestion.correctAnswer;
         }
 
 
@@ -226,7 +237,7 @@ function QuestionTest({
                                 const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                                 
                                 return (
-                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
+                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
                                         {option}
                                     </Button>
                                 );
@@ -235,7 +246,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -318,18 +329,21 @@ function QuestionBankCoursePageComponent() {
                 
                 const allTopics = courseData.units?.flatMap(u => u.topics || []) || [];
                 if (allTopics.length > 0) {
+                    setIsCountsLoading(true);
                     const countsResults = await Promise.all(allTopics.map(t => getQuestionCounts(t.id)));
                     const newTestCounts: typeof testCounts = {};
                     allTopics.forEach((topic, index) => {
                         newTestCounts[topic.id] = countsResults[index] || { easy: 0, medium: 0, hard: 0 };
                     });
                     setTestCounts(newTestCounts);
+                    setIsCountsLoading(false);
+                } else {
+                     setIsCountsLoading(false);
                 }
             } catch (e: any) {
                 setError(e.message);
             } finally {
                 setIsLoading(false);
-                setIsCountsLoading(false);
             }
         };
         fetchInitialData();
@@ -365,8 +379,7 @@ function QuestionBankCoursePageComponent() {
             await updateTopicTestProgress(user.uid, courseId, topic.id, difficultyKey, testIndex, result);
             if (score > 0) {
                 const scoreContext = `${course?.title} - ${topic.title} (${difficulty} ${testIndex + 1})`;
-                const attempts = await getPreviousTestAttemptCount(user.uid, scoreContext);
-                if (attempts < 10) await submitSoruBankasiScore(user.uid, score, scoreContext);
+                await submitSoruBankasiScore(user.uid, score, scoreContext);
             }
         } catch (e) {
             console.error("Failed to save progress:", e);
@@ -376,8 +389,8 @@ function QuestionBankCoursePageComponent() {
      useEffect(() => {
         if (isLoading || isCountsLoading || !course || activeTopic) return;
         const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        let targetTopic = allTopics.find(t => !isTopicCompleted(t.id)) || allTopics[0];
-        setActiveTopic(targetTopic);
+        const firstUncompletedTopic = allTopics.find(t => !isTopicCompleted(t.id));
+        setActiveTopic(firstUncompletedTopic || allTopics[0]);
     }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic]);
 
      const courseStats = useMemo(() => {
@@ -647,12 +660,14 @@ function QuestionBankCoursePageComponent() {
     );
 }
 
-export default function Page() {
+function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
             <QuestionBankCoursePageComponent />
         </Suspense>
     );
 }
+
+export default Page;
 
 ```
