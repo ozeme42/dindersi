@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  devServer: {
+  experimental: {
     allowedDevOrigins: ["*.cloudworkstations.dev"],
   },
 };
