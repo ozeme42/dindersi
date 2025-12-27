@@ -24,14 +24,18 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         let conditions: any[] = [];
 
-        // Strict hierarchical filtering
+        // HIERARCHICAL FILTERING LOGIC
+        // Start from the most specific filter and move to the most general.
         if (topicId && topicId !== 'all') {
             conditions.push(where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
+            // If topicId is 'all', but unitId is specific, get all for that unit.
             conditions.push(where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
+            // If unitId is also 'all', but courseId is specific, get all for that course.
             conditions.push(where("courseId", "==", courseId));
         }
+        // If all are 'all' or undefined, no specific location filter is applied.
 
         if (difficulty && difficulty.length > 0) {
             conditions.push(where("difficulty", "in", difficulty));
@@ -41,7 +45,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             const mappedTypes = questionTypes.map(qt => typeMap[qt] || qt);
             conditions.push(where("type", "in", mappedTypes));
         }
-
+        
         if (conditions.length > 0) {
             q = query(q, and(...conditions));
         }
@@ -125,3 +129,4 @@ export async function getStaticQuestionsForGame(params: {
         return [];
     }
 }
+
