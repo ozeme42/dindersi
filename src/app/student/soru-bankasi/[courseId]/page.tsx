@@ -84,7 +84,8 @@ function QuestionTest({
         let isCorrect = false;
 
         if (question.type === 'Doğru/Yanlış') {
-            isCorrect = String(answer).toLowerCase() === String(question.correctAnswer).toLowerCase();
+            const correctAnswerBool = question.isTrue ?? (question.correctAnswer === 'Doğru');
+            isCorrect = answer === correctAnswerBool;
         } else {
             isCorrect = answer === question.correctAnswer;
         }
@@ -206,79 +207,29 @@ function QuestionTest({
                 
                 <CardContent className="py-6 space-y-8 flex-grow">
                     {/* Soru Metni */}
-                    <div className="text-center">
-                        <h3 className="text-xl md:text-2xl font-bold text-white leading-relaxed">
-                            {currentQuestion.text}
-                        </h3>
+                    <div className="text-center bg-slate-900/50 border-2 border-primary/20 p-6 rounded-lg shadow-inner min-h-[140px] flex items-center justify-center">
+                        <p className="text-xl md:text-2xl font-semibold text-white leading-relaxed">{currentQuestion.text}</p>
                     </div>
                     
                     {/* Seçenekler */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {(currentQuestion.type === 'Çoktan Seçmeli' || currentQuestion.type === 'Boşluk Doldurma') && currentQuestion.options?.map((option, index) => {
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                        {(currentQuestion.type === 'Çoktan Seçmeli' || currentQuestion.type === 'Boşluk Doldurma') && (currentQuestion.options || []).map(option => {
                             const isSelected = currentAnswer === option;
-                            const isCorrect = option === currentQuestion.correctAnswer;
-                            
-                            let btnStyle = "h-auto py-5 px-6 text-base font-bold rounded-2xl border-2 transition-all duration-200 relative overflow-hidden group text-left justify-start ";
-                            
-                            if (currentAnswer) {
-                                if (isCorrect) {
-                                    btnStyle += "bg-green-500/20 border-green-500 text-green-100 shadow-[0_0_20px_rgba(34,197,94,0.3)] scale-[1.02] z-10";
-                                } else if (isSelected) {
-                                    btnStyle += "bg-red-500/20 border-red-500 text-red-100 animate-shake";
-                                } else {
-                                    btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
-                                }
-                            } else {
-                                btnStyle += "bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white hover:shadow-lg active:scale-95";
-                            }
-
+                            const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button 
-                                    key={option} 
-                                    variant="ghost"
-                                    className={btnStyle}
-                                    onClick={() => handleAnswer(option)} 
-                                    disabled={!!currentAnswer}
-                                >
-                                    <span className={cn("mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border text-xs font-bold transition-colors", 
-                                        currentAnswer && isCorrect ? "border-green-500 bg-green-500 text-white" : 
-                                        currentAnswer && isSelected ? "border-red-500 bg-red-500 text-white" : 
-                                        "border-white/10 bg-slate-900 text-slate-400 group-hover:border-cyan-500/50 group-hover:text-cyan-400"
-                                    )}>
-                                        {['A','B','C','D'][index]}
-                                    </span>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
-                                    {currentAnswer && isCorrect && <CheckCircle2 className="ml-auto h-5 w-5 text-green-400" />}
                                 </Button>
                             );
                         })}
                         
-                        {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
+                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                             const answerValue = option === 'Doğru';
                             const isSelected = currentAnswer === String(answerValue);
-                            const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
-                             
-                            let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
-                             if (currentAnswer) {
-                                if (isCorrect) {
-                                     btnStyle += "bg-green-500/20 border-green-500 text-green-100";
-                                } else if (isSelected) {
-                                     btnStyle += "bg-red-500/20 border-red-500 text-red-100";
-                                } else {
-                                     btnStyle += "bg-slate-800/30 border-transparent text-slate-500 opacity-40";
-                                }
-                            } else {
-                                btnStyle += "bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-cyan-500/50 hover:text-white";
-                            }
-
+                            const isCorrect = (question.correctAnswer === 'Doğru') === answerValue;
+                            
                             return (
-                                <Button 
-                                    key={option} 
-                                    variant="ghost"
-                                    className={btnStyle}
-                                    onClick={() => handleAnswer(String(answerValue))} 
-                                    disabled={!!currentAnswer}
-                                >
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -315,11 +266,11 @@ function QuestionBankCoursePageComponent() {
 
     const [course, setCourse] = useState<Course | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isCountsLoading, setIsCountsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const [topicProgress, setTopicProgress] = useState<QuestionBankProgress>({});
     const [testCounts, setTestCounts] = useState<{ [topicId: string]: { easy: number; medium: number; hard: number; } }>({});
-    const [isCountsLoading, setIsCountsLoading] = useState(true);
     const [classRank, setClassRank] = useState<{rank: number; total: number} | null>(null);
 
     const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
