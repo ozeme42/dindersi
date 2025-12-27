@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, onSnapshot, writeBatch, serverTimestamp, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 type LocalProgress = {
@@ -24,7 +24,7 @@ type LocalProgress = {
 const EMPTY_TEST_COUNTS = {};
 const MemoizedSidebar = React.memo(CourseSidebar);
 
-function Page() {
+export default function Page() {
     const params = useParams();
     const searchParams = useSearchParams();
     const { user } = useAuth();
@@ -64,13 +64,12 @@ function Page() {
 
         try {
             if (user) {
-                // Since onSnapshot will handle updates, we can use getDoc for the initial load.
-                // This simplifies the logic slightly.
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                const progressSnap = await getDoc(progressRef);
-                if (progressSnap.exists()) {
-                    setCompletedTopics(progressSnap.data() as UserProgress);
-                }
+                onSnapshot(progressRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        setCompletedTopics(docSnap.data() as UserProgress);
+                    }
+                });
             }
             
             const manifestRes = await fetch('/curriculum/manifest.json');
@@ -112,16 +111,20 @@ function Page() {
             courseData.units = enrichedUnits;
             setCourse(courseData);
 
+            // Determine active content
             if (startTopicIdFromUrl) {
                 const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
                 setActiveContent(topic || null);
             } else if (unitIdFromUrl) {
                 const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
-                if (unit && unit.steps && unit.steps.length > 0) {
-                     setActiveContent(unit);
-                } else if (unit) {
-                     const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
-                     setActiveContent(firstUncompletedTopicInUnit || unit.topics[0] || null);
+                if (unit) {
+                    // Eğer doğrudan bir ünite akışı varsa onu göster, yoksa ilk konuyu göster
+                    if (unit.steps && unit.steps.length > 0) {
+                         setActiveContent(unit);
+                    } else {
+                         const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
+                         setActiveContent(firstUncompletedTopicInUnit || unit.topics[0] || null);
+                    }
                 }
             } else {
                 const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
@@ -135,7 +138,7 @@ function Page() {
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast, completedTopics]);
 
 
     useEffect(() => {
@@ -249,13 +252,7 @@ function Page() {
             
             await batch.commit();
     
-            setCompletedTopics(prev => ({
-                ...prev,
-                [contentId]: {
-                    completionCount: newCompletionCount,
-                    lastCompleted: new Date().toISOString()
-                }
-            }));
+            // No need to setCompletedTopics locally, onSnapshot will handle it.
             
             toast({ title: toastTitle, description: toastDescription, duration: 5000 });
         } catch(error) {
@@ -451,16 +448,4 @@ function Page() {
                     </div>
                 </main>
             </div>
-        </div>
-    )
-}
-
-export default function StudentCoursePage() {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-cyan-500" /></div>}>
-            <Page />
-        </Suspense>
-    )
-}
-
-    
+        
