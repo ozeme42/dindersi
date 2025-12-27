@@ -12,6 +12,7 @@ import { getExamCreationData } from '@/app/teacher/exams/actions';
 import type { Course, Unit, Topic, SchoolClass } from '@/lib/types';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils'; // Class birleştirme için eklendi (yoksa template literal kullanabilirsin)
 
 type EnrichedCourse = Course & { units: (Unit & { topics: Topic[] })[] };
 
@@ -47,6 +48,9 @@ export default function VeriEditoruPage() {
     const [activeData, setActiveData] = useState<any>(null);
     const [activeDataId, setActiveDataId] = useState<string | null>(null);
     
+    // --- YENİ: Editör aktif mi kontrolü ---
+    const isEditorActive = activeData !== null;
+
     useEffect(() => {
         const fetchCurriculum = async () => {
             const data = await getExamCreationData();
@@ -98,7 +102,7 @@ export default function VeriEditoruPage() {
 
         const targetId = id === 'all' ? (newSelection.unitId || newSelection.courseId || '') : id;
 
-        // Bitiş koşulları: Konu seçildiğinde veya özel "Tümü" seçeneği tıklandığında veriyi yükle.
+        // Bitiş koşulları
         if (level === 4 || id === 'all') {
             setIsDataLoading(true);
             const finalDataType = (dataType === 'activity-items' && id === 'all' && newSelection.unitId) ? 'activities' : dataType;
@@ -112,7 +116,7 @@ export default function VeriEditoruPage() {
                 setActiveDataId(targetId);
             } else {
                 console.error(result.error);
-                setActiveData(null); // Clear data on error
+                setActiveData(null); 
             }
             setIsDataLoading(false);
         } else {
@@ -122,7 +126,6 @@ export default function VeriEditoruPage() {
     
      const filteredCourses = useMemo(() => {
         if (!selection.classId || selection.classId === 'all') return allCourses;
-        // Artık herhangi bir sınıf seçildiğinde, hem o sınıfa özel hem de "Genel" dersler listelenir.
         return allCourses.filter(c => c.classId === selection.classId || !c.classId);
     }, [selection.classId, allCourses]);
 
@@ -139,21 +142,27 @@ export default function VeriEditoruPage() {
     }, [selection.unitId, filteredUnits]);
     
     const renderContent = () => {
-        if(isDataLoading || isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>;
+        if(isDataLoading || isLoading) return <div className="flex h-full w-full items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-purple-400"/></div>;
 
-        if (activeData !== null && activeDataId && dataType) {
-             if (dataType === 'ozetler' || dataType === 'flows') {
-                return <TextDataEditor
-                    fileName={`${selectionName} (${dataType})`}
-                    initialContent={activeData}
-                    saveAction={(content) => saveStaticHtmlContent(dataType, activeDataId, content)}
-                />;
-            }
-            return <JsonDataEditor 
-                        fileName={`${selectionName} (${dataType})`}
-                        initialData={activeData}
-                        saveAction={(data) => saveStaticData(dataType!, activeDataId, data)}
-                   />;
+        if (isEditorActive && activeDataId && dataType) {
+             // Editor wrapper div eklendi: w-full h-full
+             return (
+                <div className="w-full h-full flex flex-col">
+                    {dataType === 'ozetler' || dataType === 'flows' ? (
+                        <TextDataEditor
+                            fileName={`${selectionName} (${dataType})`}
+                            initialContent={activeData}
+                            saveAction={(content) => saveStaticHtmlContent(dataType, activeDataId, content)}
+                        />
+                    ) : (
+                        <JsonDataEditor 
+                            fileName={`${selectionName} (${dataType})`}
+                            initialData={activeData}
+                            saveAction={(data) => saveStaticData(dataType!, activeDataId, data)}
+                        />
+                    )}
+                </div>
+             );
         }
 
         switch(step) {
@@ -175,28 +184,40 @@ export default function VeriEditoruPage() {
     
     return (
          <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden flex flex-col">
-            <div className="max-w-7xl mx-auto w-full relative z-10 space-y-8 flex-grow flex flex-col">
-                <div className="text-center mb-8">
+            {/* DEĞİŞİKLİK 1: Container genişliği 
+                Editor aktifse max-w-[98vw], değilse max-w-7xl
+            */}
+            <div className={`mx-auto w-full relative z-10 space-y-4 flex-grow flex flex-col transition-all duration-500 ${isEditorActive ? 'max-w-[98vw]' : 'max-w-7xl space-y-8'}`}>
+                
+                {/* Başlık kısmı editor açıkken biraz daha kompakt olsun diye mb değerini düşürebiliriz */}
+                <div className={`text-center ${isEditorActive ? 'mb-2' : 'mb-8'}`}>
                   <h1 className="text-3xl font-black font-headline text-white tracking-tight uppercase drop-shadow-lg flex items-center justify-center gap-3">
-                     <FileJson className="h-8 w-8 text-purple-400"/> 
-                     <div>
+                      <FileJson className="h-8 w-8 text-purple-400"/> 
+                      <div>
                         Veri Editörü
                         <Badge className="ml-3 bg-pink-500/20 text-pink-300 border-pink-500/30">STATİK DOSYA</Badge>
-                     </div>
+                      </div>
                   </h1>
-                  <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>
+                  {!isEditorActive && <p className="text-slate-400 mt-1">Uygulamanın statik JSON dosyalarını doğrudan düzenleyin.</p>}
                 </div>
                 
-                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col flex-grow min-h-[70vh]">
-                    <CardHeader className="border-b border-white/5 pb-4">
+                 {/* DEĞİŞİKLİK 2: Card yüksekliği ve padding 
+                    Editor aktifse h-[85vh] (sabit yüksek, scroll içeride), değilse min-h-[70vh]
+                 */}
+                 <Card className={`bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col flex-grow transition-all duration-500 ${isEditorActive ? 'h-[85vh]' : 'min-h-[70vh]'}`}>
+                    <CardHeader className="border-b border-white/5 pb-4 py-3">
                         <div className="flex items-center justify-between">
-                            <CardTitle className="text-xl text-white">
+                            <CardTitle className="text-xl text-white truncate max-w-[80%]">
                                 {activeData !== null ? `Düzenleniyor: ${selectionName}` : `Adım ${step}: Seçim Yapın`}
                             </CardTitle>
-                            <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
+                            <Button variant="ghost" onClick={handleBack} className="text-slate-400 hover:text-white hover:bg-white/10 shrink-0"><ArrowLeft className="mr-2 h-4 w-4" /> Geri</Button>
                         </div>
                     </CardHeader>
-                    <CardContent className="flex-grow flex justify-center items-start p-6 overflow-y-auto">
+                    {/* DEĞİŞİKLİK 3: Content padding 
+                        Editor aktifse p-1 (neredeyse sıfır padding), değilse p-6
+                        items-start yerine flex-col ve w-full kullanarak içeriğin yayılmasını sağladık.
+                    */}
+                    <CardContent className={`flex-grow flex flex-col overflow-y-auto ${isEditorActive ? 'p-1' : 'justify-center items-start p-6'}`}>
                         {renderContent()}
                     </CardContent>
                 </Card>

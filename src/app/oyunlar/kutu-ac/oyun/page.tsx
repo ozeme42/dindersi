@@ -331,11 +331,10 @@ function KutuAcGame() {
     // teamConfig yoksa hata vermemesi için fallback ekliyoruz
     const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
 
-    // 3. OYUN EKRANI - FULL SCREEN AYARI BURADA
+    // 3. OYUN EKRANI - TAKIMLAR ORTALANDI
     return (
         <div className={cn(
             "w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col relative overflow-hidden transition-all",
-            // Kenar boşlukları minimuma indirildi (px-2)
             isFullscreen ? "p-0" : "p-2 sm:p-2 md:p-4"
         )}>
             {/* Arka Plan */}
@@ -350,7 +349,6 @@ function KutuAcGame() {
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* w-full yaptık ve max-w sınırını kaldırdık */}
             <div className="w-full h-full mx-auto relative z-10 flex-grow flex flex-col">
                 
                 {/* HEADER */}
@@ -374,11 +372,11 @@ function KutuAcGame() {
                     </div>
                 </header>
 
-                {/* --- SKOR TABLOSU (ÜSTTE VE ORTALI) --- */}
+                {/* --- SKOR TABLOSU (ORTALI & FLEX) --- */}
                 <div className="w-full flex justify-center mb-4 px-2">
-                    {/* ÇOKLU OYUNCU (TAKIMLAR) */}
+                    {/* ÇOKLU OYUNCU (TAKIMLAR) - Flex ve Justify Center ile Ortalı */}
                     {playerCount && playerCount > 1 && (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                        <div className="flex flex-wrap justify-center gap-4 w-full">
                             {players.map((p, i) => {
                                 const isActive = i === activePlayerIndex;
                                 const config = p.teamConfig || TEAMS[i % TEAMS.length];
@@ -387,9 +385,9 @@ function KutuAcGame() {
                                     <div 
                                         key={p.id} 
                                         className={cn(
-                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center w-full",
+                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center flex-1 min-w-[160px] max-w-[280px]",
                                             isActive 
-                                                ? `bg-slate-900 ${config.border} shadow-[0_0_25px_-5px_rgba(0,0,0,0.5)] ${config.shadow} z-10 scale-[1.02]` 
+                                                ? `bg-slate-900 ${config.border} shadow-[0_0_25px_-5px_rgba(0,0,0,0.5)] ${config.shadow} z-10 scale-[1.05]` 
                                                 : "bg-slate-900/40 border-white/5 opacity-60 grayscale-[0.5]"
                                         )}
                                     >
@@ -417,9 +415,9 @@ function KutuAcGame() {
                         </div>
                     )}
 
-                    {/* TEK KİŞİLİK SKOR */}
+                    {/* TEK KİŞİLİK SKOR (Ortalı, sınırlı genişlik) */}
                     {playerCount === 1 && (
-                         <div className="w-full bg-slate-900/60 backdrop-blur-xl border border-purple-500/30 rounded-xl px-6 py-3 text-center shadow-xl relative overflow-hidden flex items-center justify-between gap-6">
+                         <div className="w-full max-w-xl bg-slate-900/60 backdrop-blur-xl border border-purple-500/30 rounded-xl px-6 py-3 text-center shadow-xl relative overflow-hidden flex items-center justify-between gap-6">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
                             <div className="flex items-center gap-4">
                                 <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Yarışmacı</span>
@@ -451,7 +449,6 @@ function KutuAcGame() {
                             )}
                         </CardHeader>
                         <CardContent className="p-2 sm:p-4 overflow-y-auto flex-grow">
-                            {/* Grid kolon sayılarını ekran genişliğine göre artırdık */}
                             <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
                                 {questions.map((q, i) => {
                                     const questionNumber = i + 1;
