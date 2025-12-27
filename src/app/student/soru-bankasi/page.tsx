@@ -1,18 +1,19 @@
 
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/context/auth-context";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
-import type { Course, SchoolClass, UserProgress } from "@/lib/types";
+import { collection, getDocs, doc, getDoc, query, orderBy, where } from "firebase/firestore";
+import type { Course, SchoolClass, UserProgress, TestResult } from "@/lib/types";
 import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Star, Target } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Sparkles, Target, Book } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 // --- TİP TANIMLAMALARI ---
 type CourseWithAllProgress = Course & {
@@ -82,7 +83,7 @@ const CourseCardWithProgress = ({ course }: { course: CourseWithAllProgress }) =
                     colorClass="bg-cyan-500" 
                     label="Konu Anlatımı"
                     subLabel={`${course.completedTopicsCount || 0}/${course.topicsCount || 0} Konu Tamamlandı`}
-                    icon={Star}
+                    icon={BookOpen}
                 />
                 <CyberProgress 
                     value={course.questionBankProgress || 0} 
@@ -164,11 +165,7 @@ export default function SoruBankasiPage() {
                     let completedTopicsCount = 0;
                     if(progressSnap.exists()){
                         const progressData = progressSnap.data() as UserProgress;
-                        Object.values(progressData).forEach(topicProgress => {
-                            if(topicProgress.completionCount > 0) {
-                                completedTopicsCount++;
-                            }
-                        })
+                        completedTopicsCount = Object.keys(progressData).filter(topicId => progressData[topicId]?.completionCount > 0).length;
                     }
                     
                     const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -275,5 +272,3 @@ export default function SoruBankasiPage() {
         </div>
     );
 }
-
-```
