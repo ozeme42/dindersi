@@ -14,8 +14,7 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        // Eğer "Tüm Konular" seçildiyse, topicId'yi null yapıp unitId'yi kullan
-        // getStaticQuestionsForGame bu duruma göre doğru dosyayı seçecektir.
+        // If "All Topics" is selected, use the unitId to fetch the aggregated data.
         const items = await getStaticQuestionsForGame({ 
             courseId, 
             unitId, 
