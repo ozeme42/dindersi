@@ -64,12 +64,15 @@ function CoursePageContent() {
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
+            // Öğrenci ilerlemesi her zaman Firestore'dan okunur
             const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
             const progressSnap = await getDoc(progressRef);
             const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
             setCompletedTopics(currentProgress);
 
+            // Müfredat ve içerik statik manifest.json dosyasından okunur
             const manifestRes = await fetch('/curriculum/manifest.json');
+            if (!manifestRes.ok) throw new Error("Müfredat manifestosu bulunamadı.");
             const manifest = await manifestRes.json();
 
             let courseData: Course | undefined;
@@ -82,19 +85,21 @@ function CoursePageContent() {
             }
 
             if (!courseData) {
-                console.error("Course not found in manifest!");
+                console.error("Ders manifest dosyası içinde bulunamadı!");
                 setIsLoading(false);
                 return;
             }
             
-            // Populate steps from static JSON files
+            // Ders akış adımlarını (steps) ilgili JSON dosyalarından çek
             for (const unit of courseData.units || []) {
+                // Ünite seviyesinde akış varsa
                 if (unit.steps && unit.steps.length > 0) {
                      const flowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
                      if(flowRes.ok) unit.steps = await flowRes.json();
                 }
+                // Konu seviyesinde akış varsa
                 for (const topic of unit.topics || []) {
-                    if ((topic as any).hasFlowContent) {
+                    if ((topic as any).hasFlowContent) { // manifest.json'daki işarete bak
                         const flowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
                         if (flowRes.ok) topic.steps = await flowRes.json();
                     }
@@ -112,7 +117,7 @@ function CoursePageContent() {
                 setActiveUnit(unit || null);
                 setActiveTopic(null);
             } else {
-                 const allTopics = courseData.units.flatMap(u => u.topics || []);
+                const allTopics = courseData.units.flatMap(u => u.topics || []);
                 const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
                 
                 if (firstUncompletedTopic) {
@@ -121,12 +126,14 @@ function CoursePageContent() {
                     setActiveTopic(allTopics[allTopics.length - 1] || null);
                 }
             }
-        } catch (error) {
-            console.error("Failed to fetch course data:", error);
+        } catch (error: any) {
+            console.error("Ders verisi alınırken hata:", error);
+            toast({ title: "Veri Hatası", description: error.message, variant: "destructive" });
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast]);
+
 
     useEffect(() => {
         fetchCourseData();

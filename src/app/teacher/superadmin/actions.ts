@@ -476,7 +476,7 @@ export async function exportManifestAndContent() {
 
                         // Export unit steps (ders akışı)
                         if (unitData.steps && unitData.steps.length > 0) {
-                            addFile(`flows/${unitDoc.id}.json`, unitData.steps.filter((s: LessonStep) => s.isPublished ?? true));
+                            addFile(`flows/${unitDoc.id}.json`, JSON.stringify(unitData.steps.filter((s: LessonStep) => s.isPublished ?? true)));
                         }
 
                         const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
@@ -487,7 +487,7 @@ export async function exportManifestAndContent() {
                              return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                         });
 
-                        return hasAnyVisibleContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, steps: unitData.steps, topics: [] } : null;
+                        return hasAnyVisibleContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).length > 0, steps: unitData.steps, topics: [] } : null;
                     }));
 
                     const validUnits = units.filter(Boolean);
@@ -522,11 +522,11 @@ export async function exportManifestAndContent() {
                             const notes = topicData.writingContent?.notes || [];
                             const defs = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').get();
                             const conceptDefinitions = defs.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
-                            addFile(`yazilacaklar/${doc.id}.json`, { notes, conceptDefinitions });
+                            addFile(`yazilacaklar/${doc.id}.json`, JSON.stringify({ notes, conceptDefinitions }));
                         }
                         // Export topic steps (ders akışı)
                         if (topicData.steps && topicData.steps.length > 0) {
-                            addFile(`flows/${doc.id}.json`, topicData.steps.filter((s: LessonStep) => s.isPublished ?? true));
+                            addFile(`flows/${doc.id}.json`, JSON.stringify(topicData.steps.filter((s: LessonStep) => s.isPublished ?? true)));
                         }
                         
                         const hasOzetContent = !!topicData.htmlContent;
