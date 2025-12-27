@@ -340,7 +340,13 @@ useEffect(() => {
       let finalUrl = `/${basePath}/${finalGamePath}/oyun?${params.toString()}`;
       
       if(dataType === 'yazilacaklar') {
-          finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
+          const hasYazilacaklarContent = topics.find(t => t.id === topicId)?.hasYazilacaklarContent;
+          if (hasYazilacaklarContent) {
+              finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
+          } else {
+              alert("Bu konu için yazılacaklar içeriği bulunmuyor.");
+              return;
+          }
       }
       if(dataType === 'ozetler') {
             finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
@@ -408,7 +414,7 @@ useEffect(() => {
                                 subtitle="Genel Tekrar"
                                 icon={Sparkles}
                                 color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
+                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'}, false)}
                                 delay={0}
                             />
                         )}
@@ -419,7 +425,7 @@ useEffect(() => {
                                 subtitle={selection.courseName}
                                 icon={Library}
                                 color={selection.courseColor}
-                                onClick={() => handleSelectUnit(unit as Unit)}
+                                onClick={() => handleSelectUnit(unit as Unit, false)}
                                 delay={(idx + (dataType === 'games' ? 1 : 0)) * 50}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
@@ -429,17 +435,15 @@ useEffect(() => {
           case 3:
             const filteredTopics = filterItems(topics);
             
-            // Check if topics have content for specific dataTypes
             const topicsWithContent = filteredTopics.filter(topic => {
                 if(dataType === 'ozetler') return (topic as any).hasOzetContent;
-                if(dataType === 'yazilacaklar') {
-                     // Check for a specific flag or if writingContent exists
-                    const writingContent = (topic as any).writingContent;
-                    return writingContent && (writingContent.notes?.length > 0 || writingContent.conceptDefinitions?.length > 0);
+                 if(dataType === 'yazilacaklar') {
+                    // Check if there are any definitions or notes for this topic.
+                    const hasContent = (topic as any).hasYazilacaklarContent;
+                    return hasContent;
                 }
-                return true; // For 'games', assume all topics are valid for now
+                return true; // For 'games', assume all topics are valid
             });
-
 
             return (
                 <>
@@ -470,7 +474,7 @@ useEffect(() => {
                             />
                         )) : (
                             <p className="col-span-full text-center text-slate-500 py-10">
-                                Bu ünite için görüntülenecek {dataType === 'ozetler' ? 'özet' : 'yazılacaklar'} içeriği bulunamadı.
+                                Bu ünite için görüntülenecek {dataType === 'ozetler' ? 'özet' : (dataType === 'yazilacaklar' ? 'yazılacaklar' : 'etkinlik')} içeriği bulunamadı.
                             </p>
                         )}
                     </div>
@@ -497,7 +501,7 @@ useEffect(() => {
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
                     <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {pageTitle}
+                        {finalGameName}
                     </h1>
                 </div>
             </div>
@@ -512,7 +516,7 @@ useEffect(() => {
                     style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
                 ></div>
 
-                {stepsToDisplay.map((step) => {
+                {stepsToDisplay.slice(0, 3).map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -565,134 +569,450 @@ useEffect(() => {
 }
 
 ```
-- src/hooks/use-copy-to-clipboard.ts:
+- src/lib/placeholders.ts:
 ```ts
-'use client';
-
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-
-export function useCopyToClipboard() {
-  const [copied, setCopied] = useState(false);
-  const { toast } = useToast();
-
-  const copy = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      toast({ title: "Kopyalandı!", description: "İçerik panoya kopyalandı." });
-      setTimeout(() => setCopied(false), 2000);
-    }, (err) => {
-      console.error('Could not copy text: ', err);
-      toast({ title: "Hata!", description: "İçerik kopyalanamadı.", variant: "destructive" });
-    });
-  };
-
-  return { copied, copy };
-}
-
+export const getPlaceholderAvatar = (seed: string) => `https://api.dicebear.com/8.x/bottts-neutral/svg?seed=${seed}`
 ```
-- src/hooks/use-is-mobile.ts:
+- src/lib/quiz-config.ts:
 ```ts
-'use client';
 
-import { useState, useEffect } from 'react';
+export const QUESTION_TYPES = [
+    { id: 'mcq', name: 'Çoktan Seçmeli' },
+    { id: 'tf', name: 'Doğru/Yanlış' },
+    { id: 'fitb', name: 'Boşluk Doldurma' },
+] as const;
 
-export function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
+export const DIFFICULTY_LEVELS = ['Kolay', 'Orta', 'Zor'] as const;
 
-  useEffect(() => {
-    // Check if window is defined (for server-side rendering)
-    if (typeof window !== 'undefined') {
-        const checkScreenSize = () => {
-            setIsMobile(window.innerWidth < breakpoint);
-        };
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
-        return () => window.removeEventListener('resize', checkScreenSize);
+export const GAME_SETTINGS = {
+    // Sadece öğretmen tarafından başlatılan Akıllı Tahta oyunları
+    smartboard: {
+        bireyselYarisma: {
+            questionCount: { min: 5, max: 50, default: 20, step: 1 },
+            finishScore: { default: 100, min: 0, step: 10 },
+            streakBonus: { default: true },
+            questionTimer: { default: 0, min: 0, max: 60, step: 5 },
+            displayModes: {
+                random: { id: 'random', name: 'Kapalı Kutu (Rastgele)' },
+                sequential: { id: 'sequential', name: 'Açık Sıralı' },
+                default: 'random'
+            },
+            difficulty: { default: ['Kolay', 'Orta', 'Zor'] },
+            questionTypes: { default: ['mcq', 'tf', 'fitb'] },
+            points: { 
+                mcq: { Kolay: 10, Orta: 15, Zor: 20 },
+                tf: { Kolay: 5, Orta: 10, Zor: 15 },
+                fitb: { Kolay: 10, Orta: 15, Zor: 20 },
+            },
+             penalty: { 
+                mcq: { Kolay: 5, Orta: 8, Zor: 10 },
+                tf: { Kolay: 3, Orta: 5, Zor: 8 },
+                fitb: { Kolay: 5, Orta: 8, Zor: 10 },
+            },
+        },
+        takimYarismasi: {
+            questionCount: { min: 10, max: 80, default: 40, step: 5 },
+            questionTimer: { default: 0, min: 0, max: 60, step: 5 },
+            finishScore: { default: 150, min: 0, step: 10 },
+        },
+        duello: {
+            questionCount: { min: 10, max: 50, default: 20, step: 2 },
+            questionTimer: { default: 0, min: 0, max: 60, step: 5 },
+            pullStrength: { Kolay: 10, Orta: 15, Zor: 20 },
+        }
+    },
+    // Öğrencilerin kendilerinin başlattığı oyun/aktiviteler
+    student: {
+        soruCoz: {
+            questionCount: { min: 5, max: 20, default: 10, step: 1 },
+            difficulty: { default: ['Orta'] },
+            questionTypes: { default: ['mcq'] },
+        }
     }
-  }, [breakpoint]);
-
-  return isMobile;
-}
-```
-- src/middleware.ts:
-```ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-// This function can be marked `async` if using `await` inside
-export function middleware(request: NextRequest) {
-  // We don't need any middleware logic for this app.
-  // We can just pass through.
-  return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+```
+- src/app/layout.tsx:
+```tsx
+'use client';
+
+import type { Metadata } from 'next';
+import { Toaster } from "@/components/ui/toaster"
+import './globals.css';
+import { Providers } from '@/components/providers';
+import { BottomNavBar } from '@/components/bottom-nav-bar';
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
+
+
+// Metadata can still be exported from a client component layout in Next.js 13+
+// but it's often better to move it to the page level if the layout is client-side.
+// For now, we'll keep it here as it might still work depending on the Next.js version.
+// export const metadata: Metadata = {
+//   title: 'Değerler Oyunu',
+//   description: 'Değerler Oyunu - Eğlenerek Değerlerimizi Öğrenelim',
+// };
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="tr" suppressHydrationWarning>
+      <head>
+        <title>Değerler Oyunu</title>
+        <meta name="description" content="Değerler Oyunu - Eğlenerek Değerlerimizi Öğrenelim" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+      </head>
+      <body className="antialiased font-body">
+          <Providers>
+              {children}
+              <Analytics />
+              <Toaster />
+              <Suspense fallback={null}>
+                <BottomNavBar />
+              </Suspense>
+          </Providers>
+      </body>
+    </html>
+  );
 }
-```
-- src/next-env.d.ts:
-```ts
-/// <reference types="next" />
-/// <reference types="next/image-types/global" />
-
-// NOTE: This file should not be edited
-// see https://nextjs.org/docs/basic-features/typescript for more information.
 
 ```
-- src/paths.ts:
-```ts
-export const paths = {
-  home: '/',
-  dashboard: '/dashboard',
-  login: '/login',
-  register: '/register',
-  profile: '/profile',
-  studentDashboard: '/student',
-  teacherDashboard: '/teacher',
-  soruBankasi: '/student/soru-bankasi',
-  oyunlar: '/oyunlar',
-  leaderboard: '/leaderboard',
-  // ... diğer yollar
+- src/app/teacher/smartboard/page.tsx:
+```tsx
+'use client';
+
+import Link from 'next/link';
+import React, { type ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
+import { 
+  MonitorPlay, Workflow, Gamepad2, FileJson, Trophy, 
+  Settings, UserCog, Zap, Columns, LayoutTemplate, 
+  GitBranch, Swords, User, Users, BrainCircuit, Wind, 
+  Package, BookOpen, Coins, ClipboardCheck, ArrowRight, Home
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+
+const FeatureButton = ({ href, title, description, icon, colorClass }: { href: string, title: string, description: string, icon: ReactNode, colorClass: string }) => {
+    return (
+        <Link href={href} className="block group h-full">
+            <div className={cn(
+                "h-full w-full rounded-[2rem] p-6 md:p-8 flex flex-col items-center justify-center text-center shadow-2xl transition-all duration-300 transform border-b-8 group-hover:border-b-0 group-hover:translate-y-2 relative overflow-hidden",
+                colorClass
+            )}>
+                <div className="absolute inset-0 opacity-20 blur-3xl group-hover:opacity-40 transition-opacity bg-white"></div>
+                <div className="p-4 rounded-3xl bg-white/10 mb-6 border border-white/20 relative z-10 group-hover:scale-110 transition-transform shadow-lg backdrop-blur-sm">
+                    {React.cloneElement(icon as React.ReactElement, { className: "h-12 w-12 text-white" })}
+                </div>
+                <h3 className="font-black text-2xl md:text-3xl mt-1 text-white drop-shadow-md relative z-10 uppercase tracking-tight leading-tight">{title}</h3>
+                <p className="mt-3 text-white/80 text-base font-medium relative z-10 leading-snug">{description}</p>
+                <div className="flex-grow" />
+                <div className="mt-8 flex items-center text-lg font-bold text-white relative z-10 bg-black/20 px-6 py-3 rounded-full border-2 border-white/10 group-hover:bg-white/30 transition-colors">
+                    BAŞLAT <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
+                </div>
+            </div>
+        </Link>
+    )
 };
+
+
+export default function SmartboardPage() {
+    const { user } = useAuth();
+  
+    const mainButtons = [
+        {
+            key: 'dersAkisi',
+            href: '/teacher/ders-akisi',
+            title: 'Ders Akışı',
+            description: 'Konu anlatımlarını ve ders adımlarını yansıtın.',
+            icon: <Workflow />,
+            colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500',
+        },
+        {
+            key: 'yazilacaklar',
+            href: "/teacher/smartboard/yazilacaklar",
+            title: "Yazılacaklar",
+            description: "Kavramları ve önemli notları tahtaya yansıtın.",
+            icon: <Columns />,
+            colorClass: "bg-amber-600 border-amber-800 hover:bg-amber-500",
+        },
+        {
+            key: 'ozetler',
+            href: "/teacher/smartboard/ozetler",
+            title: "İnteraktif Özet",
+            description: "HTML ile zenginleştirilmiş özetleri sunun.",
+            icon: <LayoutTemplate />,
+            colorClass: "bg-rose-600 border-rose-800 hover:bg-rose-500",
+        },
+        {
+            key: 'sanalTahta',
+            href: "/teacher/smartboard/sanal-tahta",
+            title: "Sanal Tahta",
+            description: "Ders anlatımı için dijital beyaz tahta.",
+            icon: <Lightbulb />,
+            colorClass: "bg-blue-600 border-blue-800 hover:bg-blue-500",
+        },
+        {
+            key: 'anlikGeriBildirim',
+            href: "/teacher/smartboard/anlik-geri-bildirim",
+            title: "Anlık Geri Bildirim",
+            description: "Evet/Hayır, trafik ışıkları veya şıklı testlerle sınıfın nabzını ölçün.",
+            icon: <Zap />,
+            colorClass: "bg-slate-700 border-slate-900 hover:bg-slate-600",
+        },
+    ];
+
+    const competitionButtons = [
+        {
+            key: 'bireysel',
+            href: '/teacher/smartboard/bireysel',
+            title: 'Bireysel Yarışma',
+            description: 'Tüm sınıfın bireysel olarak yarıştığı mod.',
+            icon: <User />,
+            colorClass: 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500',
+        },
+        {
+            key: 'takim',
+            href: '/teacher/smartboard/takim',
+            title: 'Takım Yarışması',
+            description: 'Sınıfı gruplara ayırarak takım ruhuyla yarıştırın.',
+            icon: <Users />,
+            colorClass: 'bg-cyan-600 border-cyan-800 hover:bg-cyan-500',
+        },
+         {
+            key: 'duello',
+            href: '/teacher/smartboard/duello',
+            title: 'Düello',
+            description: 'İki öğrenciyi teke tek, heyecanlı bir bilgi mücadelesine davet edin.',
+            icon: <Swords />,
+            colorClass: 'bg-red-600 border-red-800 hover:bg-red-500',
+        },
+        {
+            key: 'kavram_duellosu',
+            href: "/teacher/smartboard/kavram-duellosu",
+            title: "Kavram Düellosu",
+            description: "İki takım arasında hızlı ve tempolu kavram-tanım eşleştirme oyunu.",
+            icon: <BrainCircuit />,
+            colorClass: "bg-fuchsia-600 border-fuchsia-800 hover:bg-fuchsia-500",
+        },
+        {
+            key: 'fetih_oyunu',
+            href: "/teacher/smartboard/fetih-oyunu",
+            title: "Fetih Oyunu",
+            description: "Takımca soruları doğru cevaplayarak haritadaki tüm bölgeleri fethedin.",
+            icon: <GitBranch />,
+            colorClass: "bg-emerald-600 border-emerald-800 hover:bg-emerald-500",
+        },
+        {
+            key: 'tornado',
+            href: "/teacher/smartboard/tornado",
+            title: "Tornado",
+            description: "Şans ve bilginin birleştiği, sürprizlerle dolu kutu açma oyunu.",
+            icon: <Wind />,
+            colorClass: "bg-sky-600 border-sky-800 hover:bg-sky-500",
+        },
+        {
+            key: 'kutu_ac',
+            href: "/teacher/smartboard/kutu-ac",
+            title: "Kutu Aç",
+            description: "Kutuları açarak puan topla ve lider ol.",
+            icon: <Package />,
+            colorClass: "bg-purple-600 border-purple-800 hover:bg-purple-500",
+        },
+    ];
+
+  return (
+    <div className="flex flex-col items-center p-6 sm:p-8 space-y-12 min-h-screen bg-slate-950 text-white font-sans relative overflow-hidden">
+            
+             {/* Arka Plan Efektleri */}
+             <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[100px]" />
+            </div>
+
+            {/* Ana Başlık */}
+            <div className="text-center relative z-10 space-y-4 pt-4">
+                <div className="inline-flex items-center justify-center p-4 bg-white/5 rounded-full mb-2 border border-white/10 shadow-2xl backdrop-blur-md">
+                    <MonitorPlay className="h-10 w-10 text-cyan-400"/>
+                </div>
+                <h1 className="font-black text-4xl md:text-6xl tracking-tight text-white drop-shadow-2xl">AKILLI <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">TAHTA</span></h1>
+                <p className="text-slate-400 text-lg md:text-xl font-medium max-w-2xl mx-auto">Sınıf içi etkileşimi artırmak için bir mod seçin.</p>
+            </div>
+            
+            <div className="w-full max-w-[1600px] space-y-12 relative z-10">
+                
+                 {/* Yarışmalar Bölümü */}
+                <section>
+                    <h2 className="text-2xl font-black text-center mb-8 text-white flex items-center justify-center gap-4">
+                        <div className="h-px w-10 bg-gradient-to-r from-transparent to-indigo-500"></div>
+                        <span className="bg-indigo-500/10 px-4 py-1.5 rounded-lg border border-indigo-500/30 text-indigo-300 uppercase tracking-widest text-sm flex items-center gap-2">
+                           <Trophy className="h-5 w-5" /> Yarışma Modları
+                        </span>
+                        <div className="h-px w-10 bg-gradient-to-l from-transparent to-indigo-500"></div>
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {competitionButtons.map(({ key, ...buttonProps }) => (
+                            <div key={key} className="aspect-[4/5] min-h-[340px]">
+                                <FeatureButton {...buttonProps} />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+                
+                <section>
+                    <h2 className="text-2xl font-black text-center mb-8 text-white flex items-center justify-center gap-4">
+                        <div className="h-px w-10 bg-gradient-to-r from-transparent to-rose-500"></div>
+                        <span className="bg-rose-500/10 px-4 py-1.5 rounded-lg border border-rose-500/30 text-rose-300 uppercase tracking-widest text-sm flex items-center gap-2">
+                           <MonitorPlay className="h-5 w-5" /> Sunum ve Araçlar
+                        </span>
+                        <div className="h-px w-10 bg-gradient-to-l from-transparent to-rose-500"></div>
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {mainButtons.map(({ key, ...buttonProps }) => (
+                            <div key={key} className="aspect-[4/5] min-h-[340px]">
+                                <FeatureButton {...buttonProps} />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+                
+            </div>
+
+            {/* Yönetim Butonları */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 w-full max-w-4xl relative z-10 p-5 rounded-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl mt-10">
+                <Button asChild className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-base font-bold shadow-lg shadow-amber-900/40 h-12 px-6 rounded-xl transition-all border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 w-full md:w-auto">
+                    <Link href="/teacher/smartboard/leaderboard">
+                        <Trophy className="mr-2 h-5 w-5" />
+                        Turnuva Liderliği
+                    </Link>
+                </Button>
+                <div className="h-px w-full md:w-px md:h-8 bg-white/10"></div>
+                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/5 text-base font-bold h-12 px-5 rounded-lg w-full md:w-auto justify-start md:justify-center">
+                    <Link href="/teacher/smartboard/ayarlar">
+                        <UserCog className="mr-2 h-5 w-5 text-cyan-400" />
+                        Misafir Oyuncular
+                    </Link>
+                </Button>
+                <Button asChild variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10 text-base font-bold h-12 px-5 rounded-lg w-full md:w-auto justify-start md:justify-center">
+                    <Link href="/teacher/game-settings">
+                        <Settings className="mr-2 h-5 w-5 text-purple-400" />
+                        Oyun Ayarları
+                    </Link>
+                </Button>
+            </div>
+            
+        </div>
+    );
+}
 ```
-- tsconfig.json:
+- tailwind.config.js:
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+    },
+  },
+  plugins: [],
+}
+
+```
+- .eslintrc.json:
 ```json
 {
-  "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+  "extends": "next/core-web-vitals"
+}
+
+```
+- .gitignore:
+```
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# genkit
+.genkit/
+.genkit-cache/
+genkit.log
+
+```
+- postcss.config.js:
+```js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+}
+
+```
+- next.config.js:
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {}
+
+module.exports = nextConfig
+
+```
+- firebase.json:
+```json
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
 }
 ```
