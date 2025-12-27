@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { getQuestionsFromBank } from '@/lib/quiz-actions';
-import type { Question } from '@/lib/types';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import Link from 'next/link';
+import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import type { Question } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 function ClimbingDuelGame() {
     const searchParams = useSearchParams();
@@ -263,7 +266,7 @@ function ClimbingDuelGame() {
           .top_btn_grp { position: absolute; top: 10px; right: 10px; z-index: 500; display:flex; gap:10px; }
           .top_btn { cursor: pointer; background: rgba(255,255,255,0.8); border: 1px solid #999; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: #333; display: flex; align-items:center; gap: 5px; font-size: 0.8rem; transition: background 0.2s; }
           .top_btn:hover { background: #fff; }
-          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } .game_img { max-width: 180px; margin-bottom: 5px; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
+          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
         `}</style>
       </>
     );
