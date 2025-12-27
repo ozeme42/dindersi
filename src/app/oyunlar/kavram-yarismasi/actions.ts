@@ -30,10 +30,6 @@ export async function getConceptQuizAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string; unitId?: string; }
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
-    if (!topicId && !courseId && !unitId) {
-        return { error: "Oynamak için bir ders, ünite veya konu seçmelisiniz.", questions: null };
-    }
-
     try {
         let itemsForTopic: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 

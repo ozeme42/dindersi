@@ -15,6 +15,7 @@ import {
   increment,
   getDocs
 } from 'firebase/firestore';
+import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
 
 
 export async function getConceptHuntAction({ 
@@ -28,23 +29,10 @@ export async function getConceptHuntAction({
 }): Promise<{ questions: Anagram[] | null; error?: string }> {
     noStore();
     try {
-        if (!topicId && !unitId && !courseId) {
-            return { error: "Oynamak için bir ders, ünite veya konu seçmelisiniz.", questions: null };
-        }
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
-        let q = query(collection(db, "activityItems"), where("type", "==", "definition"));
-
-        if (topicId && topicId !== 'all') {
-            q = query(q, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            q = query(q, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            q = query(q, where("courseId", "==", courseId));
-        }
-        
-        const querySnapshot = await getDocs(q);
-
-        const validItems = querySnapshot.docs.map(doc => doc.data() as ActivityItem).filter(item => 
+        const validItems = allItems.filter(item => 
+            item.type === 'definition' && 
             item.content?.term && 
             item.content?.definition &&
             item.content.term.trim().length > 2 &&

@@ -33,11 +33,15 @@ export async function getBalloonHunterDataAction(
             return { error: "Bu oyun için en az 5 farklı tanım/kavram gereklidir.", questions: [] };
         }
         
-        const allTerms = allDefinitions.map(item => item.content.term!);
+        const allTerms = allItems
+            .filter(item => item.type === 'definition' || item.type === 'concept')
+            .map(item => item.content.term || item.content.text!)
+            .filter(Boolean);
+        const uniqueTerms = [...new Set(allTerms)];
         
         const gameQuestions: BalloonHunterQuestion[] = allDefinitions.map(item => {
             const correctAnswer = item.content.term!;
-            const distractors = allTerms
+            const distractors = uniqueTerms
                 .filter(term => term !== correctAnswer)
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 4);

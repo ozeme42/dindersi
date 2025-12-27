@@ -10,35 +10,6 @@ function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
-// This function is now OBSOLETE as we will fetch directly from aggregated files.
-// Kept for reference but will not be used by getStaticQuestionsForGame.
-async function getAllTopicIdsForContext(courseId?: string, unitId?: string): Promise<string[]> {
-    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-    try {
-        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-        const manifest = JSON.parse(manifestContent);
-
-        let topicIds: string[] = [];
-        
-        const coursesToSearch = courseId ? manifest.classGroups.flatMap((g: any) => g.courses).filter((c: any) => c.id === courseId) : manifest.classGroups.flatMap((g: any) => g.courses);
-
-        for (const course of coursesToSearch) {
-                for (const unit of course.units) {
-                    if (unitId && unit.id !== unitId) continue;
-                    
-                    unit.topics.forEach((topic: { id: string }) => {
-                        topicIds.push(topic.id);
-                    });
-                }
-            }
-        return [...new Set(topicIds)];
-    } catch (e) {
-        console.error("Failed to read or parse manifest for topic IDs:", e);
-        return [];
-    }
-}
-
-
 // Centralized function to fetch questions - STATIC ONLY
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes } = params;
@@ -123,21 +94,17 @@ export async function getStaticQuestionsForGame(params: {
 
     try {
         let fileToRead;
-        // Determine which pre-aggregated file to read based on the selection.
+
+        // Determine which pre-aggregated file to read based on the most specific ID available.
         if (topicId && topicId !== 'all') {
             fileToRead = `${topicId}.json`;
         } else if (unitId && unitId !== 'all') {
             fileToRead = `${unitId}.json`;
-        } else if (courseId && courseId !== 'all') {
+        } else if (courseId) { // courseId can be 'all' from some older flows, but we should rely on unitId or topicId for 'all'. If they are 'all', courseId must be specific.
             fileToRead = `${courseId}.json`;
         } else {
-             // Broadest selection, should point to a course if context is available.
-             if (courseId) {
-                fileToRead = `${courseId}.json`;
-             } else {
-                console.warn("getStaticQuestionsForGame called without specific context. This might lead to fetching too much data or errors.");
-                return [];
-             }
+            console.warn("getStaticQuestionsForGame called without a specific enough context (course, unit, or topic).");
+            return [];
         }
 
         const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', fileToRead);
@@ -146,7 +113,7 @@ export async function getStaticQuestionsForGame(params: {
         
     } catch (e: any) {
         if (e.code === 'ENOENT') {
-            console.warn(`No aggregated activity file found for the selection.`);
+            console.warn(`No aggregated activity file found for the selection. Path: public/curriculum/activity-items/${params.topicId || params.unitId || params.courseId}.json`);
             return [];
         }
         console.error(`Major error in getStaticQuestionsForGame:`, e);
