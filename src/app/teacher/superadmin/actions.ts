@@ -487,7 +487,7 @@ export async function exportManifestAndContent() {
                              return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                         });
 
-                        return hasAnyVisibleContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).length > 0, steps: unitData.steps, topics: [] } : null;
+                        return hasAnyVisibleContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).length > 0, topics: [] } : null;
                     }));
 
                     const validUnits = units.filter(Boolean);

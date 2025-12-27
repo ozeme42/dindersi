@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -6,7 +7,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { LessonContentViewer } from "@/components/lesson-content-viewer";
 import { BookOpen, Loader2, ArrowLeft, Menu, Map } from "lucide-react";
-import type { Course, Topic, Unit, UserProgress } from "@/lib/types";
+import type { Course, Topic, Unit, UserProgress, LessonStep } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, orderBy, query, setDoc, updateDoc, increment, writeBatch, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "@/context/auth-context";
@@ -35,8 +36,7 @@ function CoursePageContent() {
     const [course, setCourse] = useState<Course | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     
-    const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
-    const [activeUnit, setActiveUnit] = useState<Unit | null>(null);
+    const [activeContent, setActiveContent] = useState<Topic | Unit | null>(null);
 
     const [completedTopics, setCompletedTopics] = useState<UserProgress>({});
     const [view, setView] = useState<'map' | 'content'>('map');
@@ -59,17 +59,20 @@ function CoursePageContent() {
     }, []);
 
     const fetchCourseData = useCallback(async () => {
-        if (!courseId || !user) return;
+        if (!courseId) return;
         setIsLoading(true);
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
-            // Öğrenci ilerlemesi her zaman Firestore'dan okunur
-            const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-            const progressSnap = await getDoc(progressRef);
-            const currentProgress = progressSnap.exists() ? progressSnap.data() as UserProgress : {};
-            setCompletedTopics(currentProgress);
-
+            // Öğrenci ilerlemesi (varsa) her zaman Firestore'dan okunur
+            if (user) {
+                const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
+                const progressSnap = await getDoc(progressRef);
+                if (progressSnap.exists()) {
+                    setCompletedTopics(progressSnap.data() as UserProgress);
+                }
+            }
+            
             // Müfredat ve içerik statik manifest.json dosyasından okunur
             const manifestRes = await fetch('/curriculum/manifest.json');
             if (!manifestRes.ok) throw new Error("Müfredat manifestosu bulunamadı.");
@@ -91,48 +94,52 @@ function CoursePageContent() {
             }
             
             // Ders akış adımlarını (steps) ilgili JSON dosyalarından çek
-            for (const unit of courseData.units || []) {
-                // Ünite seviyesinde akış varsa
-                if (unit.steps && unit.steps.length > 0) {
-                     const flowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
-                     if(flowRes.ok) unit.steps = await flowRes.json();
+            const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
+                let unitSteps: LessonStep[] = [];
+                if (unit.hasFlowContent) {
+                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                    if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
                 }
-                // Konu seviyesinde akış varsa
-                for (const topic of unit.topics || []) {
-                    if ((topic as any).hasFlowContent) { // manifest.json'daki işarete bak
-                        const flowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
-                        if (flowRes.ok) topic.steps = await flowRes.json();
+                const enrichedTopics = await Promise.all((unit.topics || []).map(async (topic: any) => {
+                    let topicSteps: LessonStep[] = [];
+                    if (topic.hasFlowContent) {
+                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                        if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
                     }
-                }
-            }
+                    return { ...topic, steps: topicSteps };
+                }));
+                return { ...unit, steps: unitSteps, topics: enrichedTopics };
+            }));
 
+            courseData.units = enrichedUnits;
             setCourse(courseData);
 
             if (startTopicIdFromUrl) {
                 const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
-                setActiveTopic(topic || null);
-                setActiveUnit(null); 
+                setActiveContent(topic || null);
             } else if (unitIdFromUrl) {
                 const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
-                setActiveUnit(unit || null);
-                setActiveTopic(null);
-            } else {
-                const allTopics = courseData.units.flatMap(u => u.topics || []);
-                const firstUncompletedTopic = allTopics.find(t => !currentProgress[t.id] || currentProgress[t.id].completionCount < 1);
-                
-                if (firstUncompletedTopic) {
-                    setActiveTopic(firstUncompletedTopic);
-                } else if (allTopics.length > 0) {
-                    setActiveTopic(allTopics[allTopics.length - 1] || null);
+                if (unit && unit.steps && unit.steps.length > 0) {
+                     setActiveContent(unit);
+                } else if (unit) {
+                    // Ünite akışı yoksa ilk konuyu aç
+                     const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
+                     setActiveContent(firstUncompletedTopicInUnit || unit.topics[0] || null);
                 }
+            } else {
+                 // Başlangıç konusu/ünitesi yoksa ilk tamamlanmamış konuyu bul
+                const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
+                const firstUncompletedTopic = allTopics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
+                setActiveContent(firstUncompletedTopic || allTopics[0] || null);
             }
+
         } catch (error: any) {
             console.error("Ders verisi alınırken hata:", error);
             toast({ title: "Veri Hatası", description: error.message, variant: "destructive" });
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast]);
+    }, [courseId, user, startTopicIdFromUrl, unitIdFromUrl, toast, completedTopics]);
 
 
     useEffect(() => {
@@ -140,24 +147,35 @@ function CoursePageContent() {
     }, [fetchCourseData]);
     
     const activeContentData = useMemo(() => {
-        if (!course) return null;
-        if (activeTopic) {
-            for (const unit of course.units ?? []) {
-                if (unit.topics?.find(t => t.id === activeTopic.id)) {
-                    return { type: 'topic', data: activeTopic, unitId: unit.id, courseTitle: course.title, unitTitle: unit.title } as const;
-                }
-            }
+        if (!course || !activeContent) return null;
+        
+        const isUnit = 'topics' in activeContent;
+        
+        let unitId: string;
+        let unitTitle: string;
+
+        if (isUnit) {
+            unitId = activeContent.id;
+            unitTitle = activeContent.title;
+        } else {
+             const parentUnit = course.units?.find(u => u.topics?.some(t => t.id === activeContent.id));
+             unitId = parentUnit?.id || '';
+             unitTitle = parentUnit?.title || '';
         }
-        if (activeUnit) {
-            return { type: 'unit', data: activeUnit, unitId: activeUnit.id, courseTitle: course.title, unitTitle: activeUnit.title } as const;
-        }
-        return null;
-    }, [course, activeTopic?.id, activeUnit?.id]);
+
+        return { 
+            type: isUnit ? 'unit' : 'topic', 
+            data: activeContent, 
+            unitId: unitId, 
+            courseTitle: course.title, 
+            unitTitle: unitTitle 
+        } as const;
+
+    }, [course, activeContent]);
 
 
     const handleSelectTopic = useCallback((topic: Topic) => {
-        setActiveTopic(topic);
-        setActiveUnit(null);
+        setActiveContent(topic);
         setView('content');
         if (window.innerWidth < 768) {
              window.scrollTo(0,0);
@@ -165,8 +183,7 @@ function CoursePageContent() {
     }, []);
     
      const handleSelectUnitFlow = (unit: Unit) => {
-        setActiveUnit(unit);
-        setActiveTopic(null);
+        setActiveContent(unit);
         setView('content');
          if (window.innerWidth < 768) {
              window.scrollTo(0,0);
@@ -265,8 +282,7 @@ function CoursePageContent() {
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
              if (isTopicUnlocked(nextTopic.id)) {
-                 setActiveTopic(nextTopic);
-                 setActiveUnit(null); // Make sure unit flow is deactivated
+                 setActiveContent(nextTopic);
                  return; 
              }
         }
@@ -374,7 +390,7 @@ function CoursePageContent() {
                 )}>
                     <MemoizedSidebar
                         course={course}
-                        activeTopic={activeTopic}
+                        activeTopic={activeContentData?.type === 'topic' ? activeContent : null}
                         onSelectTopic={handleSelectTopic}
                         onSelectUnitFlow={handleSelectUnitFlow}
                         isTopicUnlocked={(topicIndex, unitIndex) => {
