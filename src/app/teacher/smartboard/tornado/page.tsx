@@ -1,23 +1,19 @@
-
 'use client';
 
-import { getGameSettings } from "@/app/teacher/game-settings/actions";
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
 import { SmartboardBireyselClientPage } from "@/app/teacher/smartboard/bireysel/client-page";
-import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
+import { getGameSettings } from "@/app/teacher/game-settings/actions";
 
-// This is a new async component to fetch settings on the server
-async function TornadoSetup() {
+// Bu bileşen artık doğrudan `default` olarak export edilecek ve sunucu tarafında çalışacak.
+export default async function TornadoSetupPage() {
     const settings = await getGameSettings();
-    // We reuse the Bireysel Yarışma client page as it provides the necessary setup flow.
-    // The actual game logic is determined by the URL generated in the client page.
-    return <SmartboardBireyselClientPage gameConfig={settings.teacherBireysel} gamePath="tornado" gameName="Tornado" />;
-}
+    const gameConfig = settings.teacherBireysel;
 
-export default function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-[#0f172a]"><Loader2 className="h-12 w-12 animate-spin text-white" /></div>}>
-            <TornadoSetup />
+            {/* Veriyi istemci bileşenine prop olarak iletiyoruz */}
+            <SmartboardBireyselClientPage gameConfig={gameConfig} gamePath="tornado" gameName="Tornado" />
         </Suspense>
     );
 }
