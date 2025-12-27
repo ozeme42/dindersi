@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
@@ -6,14 +7,16 @@ import { useSearchParams } from 'next/navigation';
 import { Loader2, ArrowLeft, Presentation } from 'lucide-react';
 import { doc, getDoc, collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { Topic, Unit } from '@/lib/types';
+import type { Topic, Unit, LessonStep } from '@/lib/types';
 import { LessonContentViewer } from '@/components/lesson-content-viewer';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
 
 function PresentationPageContent() {
+    const { user } = useAuth();
     const searchParams = useSearchParams();
     const courseId = searchParams.get('courseId');
     const unitId = searchParams.get('unitId');
@@ -21,7 +24,7 @@ function PresentationPageContent() {
     const courseName = searchParams.get('courseName');
     const unitName = searchParams.get('unitName');
 
-    const [topic, setTopic] = useState<Topic | null>(null);
+    const [content, setContent] = useState<(Topic | Unit) & { steps?: LessonStep[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const mainContentRef = useRef<HTMLElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -65,19 +68,33 @@ function PresentationPageContent() {
                  }
                  
                  // If static flow files exist, fetch them.
-                 const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
-                 if (flowRes.ok) {
-                     steps = await flowRes.json();
+                 // In teacher mode, we prefer DB data, but this can be a fallback.
+                 try {
+                     const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
+                     if (flowRes.ok) {
+                         const staticSteps = await flowRes.json();
+                         if (staticSteps.length > 0 && steps.length === 0) {
+                            steps = staticSteps;
+                         }
+                     }
+                 } catch (e) {
+                     // It's okay if flow file doesn't exist.
                  }
+                
+                let finalSteps = steps;
+                // If user is not a teacher, filter out unpublished steps
+                if (user?.role !== 'teacher' && user?.role !== 'superadmin') {
+                    finalSteps = steps.filter((s: any) => s.isPublished ?? true);
+                }
 
-                 setTopic({ id: contentId, title: data.title, steps: steps.filter((s: any) => s.isPublished ?? true) });
+                 setContent({ id: contentId, title: data.title, steps: finalSteps });
             }
         } catch (error) {
             console.error("Error fetching content for presentation:", error);
         } finally {
             setIsLoading(false);
         }
-    }, [courseId, unitId, topicId]);
+    }, [courseId, unitId, topicId, user]);
 
     useEffect(() => {
         fetchContent();
@@ -91,7 +108,7 @@ function PresentationPageContent() {
         );
     }
     
-    if (!topic) {
+    if (!content) {
         return (
             <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
                 <div className="text-center">
@@ -132,7 +149,7 @@ function PresentationPageContent() {
                     </div>
                     <div className="overflow-hidden">
                         <h1 className={cn("font-black tracking-tight text-white uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
-                            {topic.title}
+                            {content.title}
                         </h1>
                         {!isFullscreen && <p className="text-xs text-slate-400 font-medium mt-1 truncate">{courseName} • {unitName}</p>}
                     </div>
@@ -154,7 +171,7 @@ function PresentationPageContent() {
                     isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white dark:bg-slate-900 ring-1 ring-white/10"
                 )}>
                     <LessonContentViewer
-                        topic={topic}
+                        topic={content as Topic}
                         courseId={courseId!}
                         unitId={unitId!}
                         courseTitle={courseName!}

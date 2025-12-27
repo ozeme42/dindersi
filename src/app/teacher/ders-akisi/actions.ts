@@ -4,11 +4,11 @@
 
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, Timestamp, collectionGroup } from "firebase/firestore";
-import type { Topic, Unit, Course, SchoolClass, Question } from "@/lib/types";
+import type { Topic, Unit, Course, SchoolClass, Question, LessonStep } from "@/lib/types";
 
 // Tip tanımlarını Enriched versiyonları için genişletelim
 type EnrichedTopic = Topic & { questionCount?: number, hasFlowContent?: boolean };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[] };
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, htmlContent?: string, steps?: any[], hasFlowContent?: boolean };
 type EnrichedCourse = Course & { units: EnrichedUnit[], className?: string };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
@@ -54,7 +54,7 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
                 if (!topicsByUnit.has(unitId)) {
                     topicsByUnit.set(unitId, []);
                 }
-                const hasFlow = (topic.steps || []).filter(s => s.isPublished !== false).length > 0;
+                const hasFlow = (topic.steps || []).length > 0;
                 topicsByUnit.get(unitId)!.push({ ...topic, hasFlowContent: hasFlow });
             }
         });
@@ -69,7 +69,7 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
                     unitsByCourse.set(courseId, []);
                 }
                 const topicsForUnit = (topicsByUnit.get(unit.id) || []).sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
-                const hasUnitFlow = (unit.steps || []).filter(s => s.isPublished !== false).length > 0;
+                const hasUnitFlow = (unit.steps || []).length > 0;
                 unitsByCourse.get(courseId)!.push({
                     ...unit,
                     hasFlowContent: hasUnitFlow,
