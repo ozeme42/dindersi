@@ -231,7 +231,7 @@ export default function StudentDashboard() {
                                 
                                 <div className="bg-black/30 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center gap-4 min-w-[140px] relative">
                                     <div className="p-3 bg-orange-500/20 rounded-xl border border-orange-500/30 relative"><Flame className="h-6 w-6 text-orange-500 fill-orange-500 animate-[bounce_2s_infinite]" /></div>
-                                    <div className="text-left"><p className="text-xs text-orange-200/70 font-bold uppercase tracking-wider">Seri</p><p className="text-2xl font-black text-white tabular-nums">{user?.currentStreak || 0} Gün</p></div>
+                                    <div className="text-left"><p className="text-xs text-orange-200/70 font-bold uppercase tracking-wider">Seri</p><p className="text-xl md:text-2xl font-black text-white tabular-nums">{user?.currentStreak || 0} Gün</p></div>
                                 </div>
                             </div>
                         </div>
