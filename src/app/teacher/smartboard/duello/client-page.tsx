@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Swords, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Swords, Loader2, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -16,10 +16,11 @@ import { SelectionGrid } from "@/components/selection-grid";
 import { useToast } from "@/hooks/use-toast";
 
 const steps = [
-  { id: 1, name: "Ders", icon: <Book className="h-5 w-5" /> },
-  { id: 2, name: "Ünite", icon: <Library className="h-5 w-5" /> },
-  { id: 3, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
-  { id: 4, name: "Başlat", icon: <Check className="h-5 w-5" /> },
+  { id: 1, name: "Sınıf", icon: <Users className="h-5 w-5" /> },
+  { id: 2, name: "Ders", icon: <Book className="h-5 w-5" /> },
+  { id: 3, name: "Ünite", icon: <Library className="h-5 w-5" /> },
+  { id: 4, name: "Konu", icon: <ListTodo className="h-5 w-5" /> },
+  { id: 5, name: "Başlat", icon: <Check className="h-5 w-5" /> },
 ];
 
 export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: any }) {
@@ -29,11 +30,15 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
   
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
   const [selection, setSelection] = useState({
+    classId: "",
+    className: "",
     courseId: "",
     courseName: "",
     unitId: "",
@@ -46,27 +51,44 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
     const fetchInitialData = async () => {
       setIsLoading(true);
       try {
-        const allCoursesSnapshot = await getDocs(query(collection(db, "courses"), orderBy("title")));
-        const finalCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
-        setCourses(finalCourses);
+        const [coursesSnapshot, classesSnapshot] = await Promise.all([
+          getDocs(query(collection(db, "courses"), orderBy("title"))),
+          getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc")))
+        ]);
+        setAllCourses(coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course)));
+        setAllClasses(classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
       } catch (error) {
-        console.error("Error fetching filtered courses:", error);
-        toast({ title: "Hata", description: "Dersler getirilirken bir hata oluştu.", variant: "destructive" });
+        console.error("Error fetching initial data: ", error);
+        toast({ title: "Hata", description: "Veriler getirilirken bir sorun oluştu.", variant: "destructive" });
       } finally {
         setIsLoading(false);
       }
     };
     fetchInitialData();
   }, [toast]);
-
+  
   const handleNext = () => currentStep < steps.length && setCurrentStep(currentStep + 1);
   const handleBack = () => {
     if (currentStep > 1) {
-        if (currentStep === 2) setSelection(s => ({...s, courseId: '', courseName: ''}));
-        if (currentStep === 3) setSelection(s => ({...s, unitId: '', unitName: ''}));
-        if (currentStep === 4) setSelection(s => ({...s, topicId: '', topicName: ''}));
+        if (currentStep === 2) setSelection(s => ({...s, classId: '', className: ''}));
+        if (currentStep === 3) setSelection(s => ({...s, courseId: '', courseName: ''}));
+        if (currentStep === 4) setSelection(s => ({...s, unitId: '', unitName: ''}));
+        if (currentStep === 5) setSelection(s => ({...s, topicId: '', topicName: ''}));
         setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handleSelectClass = async (classId: string, className: string) => {
+    setSelection(prev => ({ ...prev, classId, className, courseId: '', courseName: '', unitId: '', unitName: '', topicId: '' }));
+    
+    const firstClassId = allClasses.length > 0 ? allClasses[0].id : null;
+    const isFirstClass = classId === firstClassId;
+    const applicableCourses = allCourses.filter(course => course.isSummerSchool !== true && (course.classId === classId || (!course.classId && isFirstClass)));
+    setCourses(applicableCourses);
+    setUnits([]);
+    setTopics([]);
+    
+    handleNext();
   };
 
   const handleSelectCourse = async (courseId: string, courseName: string) => {
@@ -112,15 +134,20 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
   }
 
   const renderContent = () => {
-    if (isLoading && currentStep > 0) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
+    if (isLoading && currentStep > 0) return <div className="flex justify-center items-center h-64"><Loader2 className="h-12 w-12 animate-spin text-rose-500"/></div>
     
     const loadingProp = isDataLoading;
 
     switch(currentStep) {
-        case 1: return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} />;
-        case 2: return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />
-        case 3: return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />
+        case 1:
+            return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
+        case 2:
+            return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={loadingProp}/>;
+        case 3:
+            return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{ id: 'all', name: 'Tüm Üniteler' }]} disabled={!selection.courseId} titleKey="title" isLoading={loadingProp} />
         case 4:
+            return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{ id: 'all', name: 'Tüm Konular' }]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={loadingProp} />
+        case 5:
             return (
                 <div className="w-full max-w-lg mx-auto">
                     <Card className="bg-slate-900 border-white/10 overflow-hidden shadow-2xl">
@@ -132,12 +159,13 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
                         </CardHeader>
                          <CardContent className="space-y-6 pt-4">
                              <div className="space-y-2 text-sm text-slate-300">
+                                 <div className="flex justify-between border-b border-white/5 pb-2"><span>Sınıf:</span> <span className="text-white font-medium">{selection.className}</span></div>
                                  <div className="flex justify-between border-b border-white/5 pb-2"><span>Ders:</span> <span className="text-white font-medium">{selection.courseName}</span></div>
                                  <div className="flex justify-between border-b border-white/5 pb-2"><span>Ünite:</span> <span className="text-white font-medium">{selection.unitName}</span></div>
                                  <div className="flex justify-between"><span>Konu:</span> <span className="text-white font-medium">{selection.topicName}</span></div>
                              </div>
                         </CardContent>
-                         <CardFooter>
+                        <CardFooter>
                             <Button asChild className="w-full h-16 text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 shadow-[0_0_20px_rgba(220,38,38,0.4)]">
                                 <Link href={getGameUrl()}>
                                     <Swords className="mr-3 h-6 w-6"/> Yarışı Başlat
@@ -165,7 +193,7 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
           <p className="text-slate-400 mt-1">Yarışmayı başlatmak için adımları takip edin.</p>
         </div>
         
-        <div className="flex justify-center items-center mb-8 px-4">
+         <div className="flex justify-center items-center mb-8 px-4">
           <div className="relative flex items-center justify-between w-full max-w-2xl">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
               <div 
@@ -213,9 +241,10 @@ export function SmartboardDuelloSetupClientPage({ gameConfig }: { gameConfig: an
 
             {currentStep < steps.length && (
                 <Button onClick={handleNext} disabled={
-                    (currentStep === 1 && !selection.courseId) ||
-                    (currentStep === 2 && !selection.unitId) ||
-                    (currentStep === 3 && !selection.topicId)
+                    (currentStep === 1 && !selection.classId) ||
+                    (currentStep === 2 && !selection.courseId) ||
+                    (currentStep === 3 && !selection.unitId) ||
+                    (currentStep === 4 && !selection.topicId)
                 } className="bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-900/20 px-8">
                     İleri <ArrowRight className="ml-2 h-4 w-4" />
                 </Button> 
