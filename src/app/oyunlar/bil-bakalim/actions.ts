@@ -7,7 +7,8 @@ import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem, Question } from '@/lib/types';
 import fs from 'fs/promises';
 import path from 'path';
-import { getStaticQuestionsForGame } from '@/lib/quiz-actions';
+
+// getStaticQuestionsForGame kaldırıldı, mantık doğrudan burada işlenecek.
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
@@ -15,16 +16,31 @@ export async function getBilBakalimAction(
     noStore();
     try {
         const isAllTopics = topicId === 'all';
-        // When "All Topics" is selected, we must fetch data based on the UNIT.
-        // The `getStaticQuestionsForGame` function knows that if only unitId is provided,
-        // it should read the aggregated `{unitId}.json` file.
-        const items = await getStaticQuestionsForGame({
-            courseId,
-            unitId: isAllTopics ? unitId : undefined,
-            topicId: isAllTopics ? undefined : topicId,
-        });
         
-        if (items.length === 0) {
+        // HEDEF DOSYAYI DOĞRUDAN BELİRLE
+        let fileToRead;
+        if (isAllTopics) {
+            if (!unitId) return { error: "Tüm konuları getirmek için bir ünite seçilmelidir.", questions: [] };
+            fileToRead = `${unitId}.json`;
+        } else {
+            if (!topicId) return { error: "Bir konu seçilmelidir.", questions: [] };
+            fileToRead = `${topicId}.json`;
+        }
+
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', fileToRead);
+        
+        let items: ActivityItem[];
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            items = JSON.parse(fileContent);
+        } catch (e: any) {
+             if (e.code === 'ENOENT') {
+                return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
+            }
+            throw e;
+        }
+
+        if (!items || items.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", questions: [] };
         }
 
