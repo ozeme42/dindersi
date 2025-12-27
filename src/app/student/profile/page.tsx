@@ -4,8 +4,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db, auth } from '@/lib/firebase';
-import { doc, updateDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import type { UserProfile, SchoolClass, Achievement } from '@/lib/types';
+import { doc, updateDoc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import type { UserProfile, SchoolClass } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,7 +21,6 @@ import { UserAvatar } from '@/components/user-avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { getStudentAchievements } from './actions';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -74,7 +73,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
 
     return (
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 bg-slate-900/50 rounded-xl border border-white/5 backdrop-blur-md"> 
-            <div className="space-y-2">
+            <div className="space-y-2 group">
                 <Label htmlFor="displayName" className="text-slate-300 font-medium">Ad Soyad</Label>
                 <Input 
                     id="displayName" 
@@ -235,38 +234,19 @@ function ProfilePage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [ranks, setRanks] = useState<{ classRank: number; generalRank: number }>({ classRank: 0, generalRank: 0 });
 
-  // Fetch classes and ranks
+  // Fetch classes
   useEffect(() => {
     async function fetchData() {
         if (!user) return;
         try {
-            const classesQuery = query(collection(db, "classes"), where("name", "!=", ""));
-            const studentsQuery = query(collection(db, "users"), where("role", "==", "student"));
+            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
             
-            const [classesSnapshot, studentsSnapshot] = await Promise.all([
-                getDocs(classesQuery),
-                getDocs(studentsQuery)
-            ]);
+            const classesSnapshot = await getDocs(classesQuery);
 
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(classesData);
-
-            // Rank calculation
-            const allStudents = studentsSnapshot.docs.map(doc => ({ uid: doc.id, score: doc.data().score || 0, class: doc.data().class }));
-            allStudents.sort((a, b) => b.score - a.score);
-            
-            const generalRank = allStudents.findIndex(s => s.uid === user.uid) + 1;
-            
-            let classRank = 0;
-            if (user.class) {
-                 const gradeName = user.class.split(' - ')[0]; 
-                 const classStudents = allStudents.filter(s => s.class?.startsWith(gradeName)); 
-                 classRank = classStudents.findIndex(s => s.uid === user.uid) + 1;
-            }
-            setRanks({ generalRank, classRank });
 
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -377,17 +357,13 @@ function ProfilePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                {/* 2. Sol Kolon: Profil Kartı ve İşlemler */}
                 <div className="lg:col-span-1 space-y-8">
                      
-                     {/* KAHRAMAN PROFİL KARTI */}
                      <Card className="overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
-                        {/* Üst Dekorasyon */}
                         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full p-1 bg-gradient-to-br from-cyan-500 via-violet-500 to-fuchsia-500 shadow-[0_0_50px_rgba(139,92,246,0.4)] z-20 group-hover:scale-105 transition-transform duration-500">
                              <div className="w-full h-full rounded-full bg-slate-900 p-1">
                                 <UserAvatar user={user} className="w-full h-full text-4xl rounded-full" />
                              </div>
-                             {/* Rozet Simgesi */}
                              <div className="absolute bottom-0 right-0 bg-slate-900 rounded-full p-2 border border-white/10 shadow-lg">
                                 <ShieldCheck className="h-5 w-5 text-emerald-400" />
                              </div>
@@ -432,7 +408,6 @@ function ProfilePage() {
                         </CardContent>
                      </Card>
 
-                     {/* İşlemler Kartı */}
                      <Card className="bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-3xl shadow-lg overflow-hidden">
                         <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
                         <CardHeader className="pb-3 border-b border-white/5">
@@ -445,31 +420,9 @@ function ProfilePage() {
                         </CardContent>
                      </Card>
                 </div>
-
-                {/* 3. Sağ Kolon: İstatistikler ve Başarılar */}
+                
                 <div className="lg:col-span-2 space-y-8">
-                    
-                    {/* Hızlı İstatistikler */}
-                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
-                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-orange-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
-                             <div className="p-3 bg-orange-500/10 rounded-2xl mb-3 group-hover:bg-orange-500/20 transition-colors border border-orange-500/20">
-                                <Award className="h-7 w-7 text-orange-400" />
-                            </div>
-                            <div className="text-3xl font-black text-white tracking-tight">#{ranks.classRank || '-'}</div> 
-                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Sınıf Sırası</div>
-                        </div>
-
-                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-yellow-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
-                             <div className="p-3 bg-yellow-500/10 rounded-2xl mb-3 group-hover:bg-yellow-500/20 transition-colors border border-yellow-500/20">
-                                <Crown className="h-7 w-7 text-yellow-400" />
-                            </div>
-                            <div className="text-3xl font-black text-white tracking-tight">#{ranks.generalRank || '-'}</div> 
-                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Genel Sıra</div>
-                        </div>
-                    </div>
-                    
-                    <ReviewQuestionsCard userId={user.uid} />
-
+                     <ReviewQuestionsCard userId={user.uid} />
                 </div>
             </div>
         </div>
@@ -484,5 +437,3 @@ export default function ProfilePageSuspense() {
         </Suspense>
     )
 }
-
-    
