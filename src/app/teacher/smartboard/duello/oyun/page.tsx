@@ -1,420 +1,278 @@
 'use client';
 
-import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowLeft, Swords, Repeat, Award, PartyPopper, Check, Home, MonitorPlay, Zap, Shield, Crown } from "lucide-react";
-import Link from "next/link";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
-import { playSound } from "@/lib/audio-service";
-import { FullscreenToggle } from "@/components/fullscreen-toggle";
-import { QuestionDialog } from "@/components/question-dialog";
-import { Loader2 } from "lucide-react";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import type { GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { updateMultipleStudentScores } from '@/app/teacher/smartboard/actions';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
+import type { Question } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
-type GameQuestion = GetQuizOutput['questions'][0];
-type Player = { id: string; name: string; isGuest: boolean; };
-
-function DuelGameComponent() {
+function ClimbingDuelGame() {
     const searchParams = useSearchParams();
-    const { toast } = useToast();
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
+    const [questions, setQuestions] = useState<Question[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [isFullscreen, setIsFullscreen] = useState(false);
-
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
     
-    const [duelists, setDuelists] = useState<{ p1: Player, p2: Player } | null>(null);
-    const [activePlayer, setActivePlayer] = useState<Player | null>(null);
-    const [tugProgress, setTugProgress] = useState(0); // -100 (p2 wins) to 100 (p1 wins)
+    // Oyun durumu için state'ler
+    const [gameState, setGameState] = useState<'home' | 'game' | 'win'>('home');
+    const [scores, setScores] = useState({ p1: 0, p2: 0 });
+    const [p1Question, setP1Question] = useState<Question | null>(null);
+    const [p2Question, setP2Question] = useState<Question | null>(null);
+    const [winnerText, setWinnerText] = useState('');
+    const [sunRotation, setSunRotation] = useState(-90);
+    const [containerClass, setContainerClass] = useState('sky_morning');
+    const [sunClass, setSunClass] = useState('');
+    const [isSoundOn, setIsSoundOn] = useState(true);
 
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: GameQuestion } | null>(null);
-    const [answeredQuestions, setAnsweredQuestions] = useState<number[]>([]);
-    const [winner, setWinner] = useState<Player | 'draw' | null>(null);
+    const audioCtxRef = useRef<AudioContext | null>(null);
 
-    const questionTimer = parseInt(searchParams.get('questionTimer') || '0');
+    const playTone = (freq: number, type: OscillatorType, duration: number, vol = 0.1) => {
+        if(!isSoundOn || !audioCtxRef.current) return;
+        const osc = audioCtxRef.current.createOscillator();
+        const gain = audioCtxRef.current.createGain();
+        osc.type = type; osc.frequency.value = freq;
+        osc.connect(gain); gain.connect(audioCtxRef.current.destination);
+        osc.start();
+        gain.gain.setValueAtTime(vol, audioCtxRef.current.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtxRef.current.currentTime + duration);
+        osc.stop(audioCtxRef.current.currentTime + duration);
+    };
+
+    const sfxCorrect = () => {
+        if(!isSoundOn) return;
+        playTone(600, 'sine', 0.6, 0.2);
+        setTimeout(() => playTone(900, 'sine', 0.8, 0.1), 100);
+    };
+
+    const sfxWrong = () => {
+        if(!isSoundOn) return;
+        playTone(150, 'triangle', 0.3, 0.2);
+    };
     
-    // Configs
-    const pullStrengthConfig = useMemo(() => {
-        const param = searchParams.get('pullStrength');
-        try { return param ? JSON.parse(param) : { Kolay: 10, Orta: 15, Zor: 20 }; } catch { return { Kolay: 10, Orta: 15, Zor: 20 }; }
-    }, [searchParams]);
+    const sfxWin = () => {
+        if(!isSoundOn) return;
+        let notes = [523, 659, 783, 1046];
+        notes.forEach((n, i) => setTimeout(() => playTone(n, 'sine', 0.4, 0.2), i * 150));
+    };
 
-    const pointsConfig = useMemo(() => {
-        // Düelloda puan yerine çekme gücü kullanılıyor ama QuestionDialog için gerekli olabilir.
-        // Burada dummy bir config veriyoruz veya pullStrength'i points olarak geçiyoruz.
-        return { 
-            default: { points: 0 }, // Specific types will override
-            mcq: pullStrengthConfig,
-            tf: pullStrengthConfig,
-            fitb: pullStrengthConfig 
+    const fetchQuestions = useCallback(async () => {
+        setIsLoading(true);
+        const params = {
+            courseId: searchParams.get('courseId') || undefined,
+            unitId: searchParams.get('unitId') || undefined,
+            topicId: searchParams.get('topicId') || undefined,
+            questionCount: 50,
+            questionTypes: ['mcq'],
         };
-    }, [pullStrengthConfig]);
-
-    useEffect(() => {
-        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }, []);
-
-    const fetchGameData = useCallback(async () => {
-        const p1Id = searchParams.get('p1');
-        const p2Id = searchParams.get('p2');
-        
-        if (!p1Id || !p2Id) {
-            setError("Savaşçı bilgileri eksik. Lütfen kurulum ekranına geri dönün.");
-            setIsLoading(false);
-            return;
+        const result = await getQuestionsFromBank(params as any);
+        if (result.error || result.questions.length < 5) {
+            setError(result.error || "Bu oyun için yeterli soru bulunamadı.");
+        } else {
+            setQuestions(result.questions as Question[]);
         }
-
-        try {
-            const [p1Doc, p2Doc] = await Promise.all([ getDoc(doc(db, "users", p1Id)), getDoc(doc(db, "users", p2Id)) ]);
-            
-            if (!p1Doc.exists() || !p2Doc.exists()) throw new Error("Savaşçılar bulunamadı.");
-
-            const player1Data = p1Doc.data();
-            const player2Data = p2Doc.data();
-            
-            const p1 = { id: p1Doc.id, name: player1Data.displayName, isGuest: player1Data.role === 'guest' };
-            const p2 = { id: p2Doc.id, name: player2Data.displayName, isGuest: player2Data.role === 'guest' };
-
-            setDuelists({ p1, p2 });
-            setActivePlayer(p1);
-
-            const params: GetQuizInput = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-                questionCount: parseInt(searchParams.get('questionCount') || '20'),
-                difficulty: ['Kolay', 'Orta', 'Zor'],
-                questionTypes: ['mcq', 'tf', 'fitb'],
-            };
-            const questionResult = await getQuestionsFromBank(params);
-            
-            if ('error' in questionResult) throw new Error(questionResult.error);
-            if (!questionResult.questions || questionResult.questions.length === 0) throw new Error("Soru bulunamadı.");
-            
-            setQuestions(questionResult.questions as GameQuestion[]);
-            setGameState('playing');
-
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
     }, [searchParams]);
 
     useEffect(() => {
-        fetchGameData();
-    }, [fetchGameData]);
+        fetchQuestions();
+    }, [fetchQuestions]);
 
-    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
-        if (gameState !== 'playing' || !activePlayer || !duelists) return;
-        
-        // scoreChange burada çekme gücü (pullStrength) olarak geliyor
-        // P1 için pozitif, P2 için negatif etki yapmalı
-        const direction = activePlayer.id === duelists.p1.id ? 1 : -1;
-        const impact = isCorrect ? scoreChange : -scoreChange; // Yanlışsa geri teper (opsiyonel, şimdilik sadece doğru sayalım veya geri tepme ekleyelim)
-        
-        // Basit mod: Sadece doğru cevapta çeksin, yanlışta nötr kalsın veya hafif geri kaysın
-        // Şu anki QuestionDialog mantığı: Doğruysa +Puan, Yanlışsa -Ceza döndürüyor.
-        // Biz burada gelen değeri direkt kullanıyoruz.
-        
-        let newTugProgress = tugProgress + (direction * impact);
-        newTugProgress = Math.max(-100, Math.min(100, newTugProgress));
-        
-        setTugProgress(newTugProgress);
-        setAnsweredQuestions(prev => [...prev, questionNumber]);
-        setOpenedQuestion(null);
+    const askQuestion = (player: 1 | 2) => {
+        if (questions.length === 0) return;
+        const randomQ = questions[Math.floor(Math.random() * questions.length)];
+        const questionWithOptions = {
+            ...randomQ,
+            options: [...(randomQ.options || [])].sort(() => 0.5 - 0.5)
+        };
+        if (player === 1) setP1Question(questionWithOptions);
+        else setP2Question(questionWithOptions);
+    };
 
-        if (newTugProgress >= 100) { 
-            setWinner(duelists.p1); 
-            setGameState('finished'); 
-            playSound('win');
-        } else if (newTugProgress <= -100) { 
-            setWinner(duelists.p2); 
-            setGameState('finished'); 
-            playSound('win');
-        } else if (answeredQuestions.length + 1 === questions.length) {
-            // Sorular bitti, kim öndeyse o kazanır
-            if (newTugProgress > 0) setWinner(duelists.p1);
-            else if (newTugProgress < 0) setWinner(duelists.p2);
-            else setWinner('draw');
-            setGameState('finished');
+    const startGame = () => {
+        if (questions.length < 2) return;
+        setScores({ p1: 0, p2: 0 });
+        askQuestion(1);
+        askQuestion(2);
+        setGameState('game');
+    };
+    
+    const checkAnswer = (player: 1 | 2, choice: string) => {
+        const question = player === 1 ? p1Question : p2Question;
+        if (!question) return;
+
+        const isCorrect = choice === question.correctAnswer;
+        
+        if (isCorrect) {
+            sfxCorrect();
+            const newScore = (scores[player === 1 ? 'p1' : 'p2'] || 0) + 10;
+            const updatedScores = { ...scores, [player === 1 ? 'p1' : 'p2']: Math.min(100, newScore) };
+            setScores(updatedScores);
+            
+            if (newScore >= 100) {
+                setWinnerText(player === 1 ? "Mavi Takım" : "Kırmızı Takım");
+                sfxWin();
+                setGameState('win');
+            } else {
+                 setTimeout(() => askQuestion(player), 500);
+            }
         } else {
-            // Sıra diğer oyuncuya geçer
-            setActivePlayer(activePlayer.id === duelists.p1.id ? duelists.p2 : duelists.p1);
+            sfxWrong();
+            const newScore = (scores[player === 1 ? 'p1' : 'p2'] || 0) - 10;
+            setScores({ ...scores, [player === 1 ? 'p1' : 'p2']: Math.max(0, newScore) });
         }
     };
     
-    // Oyun bittiğinde skorları kaydet (Opsiyonel)
     useEffect(() => {
-        if (gameState === 'finished' && winner && winner !== 'draw' && duelists) {
-            const winnerId = winner.id;
-            const loserId = winnerId === duelists.p1.id ? duelists.p2.id : duelists.p1.id;
+        let maxScore = Math.max(scores.p1, scores.p2);
+        let rotation = (maxScore * 1.8) - 90;
+        setSunRotation(rotation);
 
-            const scoreUpdates = [
-                { userId: winnerId, points: 50, gameType: 'smartboard_duello' as const, context: 'Düello Galibiyeti' },
-                { userId: loserId, points: 10, gameType: 'smartboard_duello' as const, context: 'Düello Katılımı' },
-            ].filter(update => !duelists.p1.isGuest && !duelists.p2.isGuest); // Misafirler kaydedilmez
-            
-            if(scoreUpdates.length > 0) {
-                updateMultipleStudentScores(scoreUpdates);
-            }
-        }
-    }, [gameState, winner, duelists]);
-    
-    if (isLoading) return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500"/></div>
-    if (error) return (
-        <div className="flex h-screen items-center justify-center bg-slate-950">
-            <Alert variant="destructive" className="max-w-lg bg-red-950/50 border-red-900 text-red-200">
-                <AlertTitle>Hata!</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50">
-                    <Link href="/teacher/smartboard/duello"><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
-                </Button>
-            </Alert>
-        </div>
-    );
+        if(maxScore < 30) { setContainerClass('sky_morning'); setSunClass(''); }
+        else if(maxScore < 70) { setContainerClass('sky_noon'); setSunClass('sun_hot'); }
+        else if(maxScore < 90) { setContainerClass('sky_afternoon'); setSunClass('sun_hot'); }
+        else { setContainerClass('sky_sunset'); setSunClass('sun_setting'); }
+    }, [scores]);
 
-    if (gameState === 'finished' && duelists) {
-         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
-                <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-slate-950 to-slate-950" />
-                <Card className="w-full max-w-4xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[3rem] shadow-2xl relative z-10 overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500" />
-                    
-                    <CardHeader className="text-center pt-12 pb-6">
-                         <div className="mx-auto bg-slate-800 p-6 rounded-full mb-6 shadow-xl ring-8 ring-slate-800/50 inline-block animate-bounce">
-                             <Swords className="h-20 w-20 text-red-500 fill-red-500/20" />
-                        </div>
-                        <CardTitle className="text-5xl font-black text-white uppercase tracking-tight drop-shadow-lg">Düello Bitti!</CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent className="flex flex-col items-center gap-8 pb-12">
-                        {winner === 'draw' ? (
-                            <div className="text-center">
-                                <Award className="h-32 w-32 text-slate-400 mx-auto mb-4"/>
-                                <p className="text-4xl font-black text-slate-200">BERABERE!</p>
-                            </div>
-                        ) : winner ? (
-                            <div className="flex flex-col items-center">
-                                <div className="relative mb-6">
-                                    <div className="absolute -top-10 -right-10 text-6xl animate-bounce delay-100">👑</div>
-                                    <div className={cn("border-4 px-12 py-8 rounded-[2rem] shadow-2xl relative overflow-hidden", winner.id === duelists.p1.id ? "bg-blue-900/40 border-blue-500" : "bg-red-900/40 border-red-500")}>
-                                        <div className={cn("absolute inset-0 opacity-20", winner.id === duelists.p1.id ? "bg-blue-500" : "bg-red-500")}/>
-                                        <h3 className="text-6xl font-black text-white uppercase relative z-10">{winner.name}</h3>
-                                        <p className={cn("text-xl font-bold mt-2 tracking-widest text-center relative z-10", winner.id === duelists.p1.id ? "text-blue-300" : "text-red-300")}>KAZANAN</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p className="text-slate-400">Sonuçlar hesaplanıyor...</p> }
-                    </CardContent>
-                    <CardFooter className="bg-slate-900 border-t border-white/5 p-8 flex justify-center gap-6">
-                        <Button size="lg" onClick={() => window.location.reload()} className="h-16 px-8 text-xl rounded-2xl bg-white text-slate-900 hover:bg-slate-200 font-bold shadow-lg">
-                            <Repeat className="mr-3 h-6 w-6"/> Rövanş
-                        </Button>
-                        <Button asChild size="lg" variant="outline" className="h-16 px-8 text-xl rounded-2xl border-white/10 text-slate-300 hover:text-white hover:bg-white/5">
-                            <Link href="/teacher/smartboard"><Home className="mr-3 h-6 w-6"/> Çıkış</Link>
-                        </Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        )
+    const toggleSound = () => {
+      if(!audioCtxRef.current) audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      if(audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
+      setIsSoundOn(!isSoundOn);
     }
 
-    // --- OYUN EKRANI ---
+    if (isLoading) return <div className="flex h-screen items-center justify-center bg-[#263238]"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>
+    if (error) return <div className="flex h-screen items-center justify-center bg-[#263238] text-red-400 p-8">{error}</div>
+
     return (
-        <div className={cn("flex flex-col h-screen bg-slate-950 text-white overflow-hidden relative selection:bg-red-500/30 font-sans", isFullscreen ? "" : "p-4 md:p-6")}>
-            
-            {/* Arka Plan */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-blue-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[150px]" />
-            </div>
-
-            {/* Üst Bar */}
-            <header className={cn("flex-shrink-0 flex items-center justify-between z-20 mb-2 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-2 shadow-lg", isFullscreen && "rounded-none border-x-0 border-t-0 mb-0")}>
-                <div className="flex items-center gap-4">
-                    <div className="p-2 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl shadow-lg"><Swords className="h-5 w-5 text-white"/></div>
-                    <div>
-                        <h1 className="text-lg font-black tracking-tight text-white uppercase leading-none">Düello</h1>
-                        <p className="text-[10px] text-slate-400 font-medium mt-0.5">{searchParams.get('courseName')} • {searchParams.get('topicName')}</p>
-                    </div>
+      <>
+        <div id="sp11_wrapper">
+            <div id="sp11_container" className={containerClass}>
+                <div className="top_btn_grp">
+                    <button className="top_btn" id="sound_toggle" onClick={toggleSound}>
+                        {isSoundOn ? "🔊 Ses: Açık" : "🔇 Ses: Kapalı"}
+                    </button>
                 </div>
-
-                <div className="flex items-center gap-2">
-                    <FullscreenToggle className="bg-slate-800 text-slate-300 hover:text-white border-0 h-8 w-8 rounded-lg" />
-                    {!isFullscreen && <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-8 w-8"><Link href="/teacher/smartboard/duello"><ArrowLeft className="h-4 w-4" /></Link></Button>}
+                <div id="sun_pivot" style={{ transform: `rotate(${sunRotation}deg)` }}>
+                    <div id="theSun" className={cn("sp11_sun", sunClass)}></div>
                 </div>
-            </header>
+                <div className="sp11_bird bird1"></div>
+                <div className="sp11_bird bird2"></div>
+                <div className="sp11_cloud" style={{width:'80px', height:'80px', top:'10%', left:'-10%', borderRadius:'50%'}}></div>
+                <div className="sp11_cloud" style={{width:'100px', height:'60px', top:'20%', left:'-20%', animationDuration:'45s', borderRadius:'40%'}}></div>
+                <div className="sp11_sea"><div className="wave"></div><div className="wave"></div></div>
 
-            {/* Ana İçerik */}
-            <main className="flex-1 flex flex-col gap-6 overflow-hidden relative z-10 h-full p-2">
-                
-                {/* 1. ÜST: SAVAŞ ALANI (TUG OF WAR) */}
-                {duelists && (
-                    <div className="flex-shrink-0 flex flex-col gap-6 justify-center min-h-[250px] relative">
-                        
-                        {/* Oyuncular */}
-                        <div className="flex justify-between items-center w-full px-4 md:px-12 relative z-10">
-                            {/* Oyuncu 1 (Mavi) */}
-                            <div className={cn(
-                                "flex flex-col items-center gap-2 transition-all duration-300 transform",
-                                activePlayer?.id === duelists.p1.id ? "scale-110 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" : "opacity-70 scale-95"
-                            )}>
-                                <div className={cn("p-1 rounded-full", activePlayer?.id === duelists.p1.id ? "bg-blue-500 animate-pulse" : "bg-slate-700")}>
-                                    <Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900">
-                                        <AvatarFallback className="bg-blue-600 text-white font-black text-2xl">{duelists.p1.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                </div>
-                                <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activePlayer?.id === duelists.p1.id ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-400")}>
-                                    {duelists.p1.name}
-                                </div>
+                {gameState === 'home' && (
+                    <div id="p_home" className="sp11_screen sp11_active">
+                        <div className="home_layout">
+                            <div className="home_right">
+                                <h1 style={{color:'#009688', margin: '5px 0'}}>{searchParams.get('courseName')} - {searchParams.get('unitName')}</h1>
+                                <div style={{fontSize:'30px', marginBottom:'10px'}}>🧗 Tırmanma Yarışı</div>
+                                <ul className="rules_list">
+                                    <li><strong>Oyun Kuralları:</strong></li>
+                                    <li>Sınıf 2 takıma ayrılır (Mavi ve Kırmızı).</li>
+                                    <li>Doğru bildikçe karakterler tırmanır.</li>
+                                    <li><strong>Dikkat:</strong> Yanlış yapan 1 adım geri gider!</li>
+                                    <li>Zirveye ilk ulaşan bayrağı kapar!</li>
+                                </ul>
+                                <button className="sp11_btn bg_orange" onClick={startGame}>YARIŞA BAŞLA</button>
                             </div>
-
-                            {/* VS Badge */}
-                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                                <div className="w-16 h-16 bg-slate-900 rounded-full border-4 border-white/10 flex items-center justify-center shadow-2xl">
-                                    <span className="font-black text-2xl text-slate-500 italic">VS</span>
-                                </div>
-                            </div>
-
-                            {/* Oyuncu 2 (Kırmızı) */}
-                            <div className={cn(
-                                "flex flex-col items-center gap-2 transition-all duration-300 transform",
-                                activePlayer?.id === duelists.p2.id ? "scale-110 drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]" : "opacity-70 scale-95"
-                            )}>
-                                <div className={cn("p-1 rounded-full", activePlayer?.id === duelists.p2.id ? "bg-red-500 animate-pulse" : "bg-slate-700")}>
-                                    <Avatar className="h-20 w-20 md:h-24 md:w-24 border-4 border-slate-900">
-                                        <AvatarFallback className="bg-red-600 text-white font-black text-2xl">{duelists.p2.name.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                </div>
-                                <div className={cn("px-4 py-1 rounded-lg font-black text-lg uppercase tracking-wider", activePlayer?.id === duelists.p2.id ? "bg-red-600 text-white" : "bg-slate-800 text-slate-400")}>
-                                    {duelists.p2.name}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Halat (Progress Bar) */}
-                        <div className="w-full px-8 relative">
-                             <div className="h-8 w-full bg-slate-800 rounded-full overflow-hidden border-4 border-slate-700 shadow-inner relative">
-                                 {/* Mavi Taraf */}
-                                 <div 
-                                    className="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-blue-800 to-blue-500 transition-all duration-700 ease-out shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-                                    style={{ width: `${50 + tugProgress / 2}%` }}
-                                 />
-                                 {/* Kırmızı Taraf (Arkaplan zaten koyu ama efekt için) */}
-                                 <div 
-                                    className="absolute right-0 top-0 bottom-0 bg-gradient-to-l from-red-800 to-red-500 transition-all duration-700 ease-out shadow-[0_0_20px_rgba(239,68,68,0.5)]"
-                                    style={{ width: `${50 - tugProgress / 2}%` }}
-                                 />
-                                 
-                                 {/* Kılıç (Ortadaki İşaretçi) */}
-                                 <div 
-                                    className="absolute top-1/2 -translate-y-1/2 z-30 transition-all duration-700 ease-out"
-                                    style={{ left: `${50 + tugProgress / 2}%`, transform: 'translate(-50%, -50%)' }}
-                                 >
-                                     <div className="w-12 h-12 bg-white rounded-full border-4 border-slate-900 shadow-xl flex items-center justify-center">
-                                         <Swords className={cn("h-6 w-6", tugProgress > 0 ? "text-blue-600" : tugProgress < 0 ? "text-red-600" : "text-slate-400")} />
-                                     </div>
-                                 </div>
-                             </div>
-                             {/* Orta Çizgi */}
-                             <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-white/20 -translate-x-1/2 h-12 -mt-2 z-0" />
-                        </div>
-                        
-                        <div className="text-center">
-                             <p className="text-slate-400 text-sm font-bold uppercase tracking-widest animate-pulse">
-                                 Sıra: <span className={cn("text-lg", activePlayer?.id === duelists.p1.id ? "text-blue-400" : "text-red-400")}>{activePlayer?.name}</span>
-                             </p>
                         </div>
                     </div>
                 )}
 
-                {/* 2. ALT: SORU PANELİ */}
-                <div className="flex-1 min-h-0 pb-2">
-                     <div className="h-full w-full bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-[2.5rem] p-6 shadow-inner overflow-hidden flex flex-col">
-                        
-                        {/* Soru Grid */}
-                        <div className="flex-1 overflow-hidden relative">
-                             <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-2">
-                                <div className={cn(
-                                    "grid gap-3",
-                                    isFullscreen ? "grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14" : "grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
-                                )}>
-                                    {questions.map((q, i) => {
-                                        const questionNumber = i + 1;
-                                        const isAnswered = answeredQuestions.includes(questionNumber);
-                                        const index = i % 8; 
-                                        const colorClass = [
-                                            "bg-blue-600 hover:bg-blue-500 border-blue-800", 
-                                            "bg-red-600 hover:bg-red-500 border-red-800", 
-                                            "bg-amber-600 hover:bg-amber-500 border-amber-800", 
-                                            "bg-indigo-600 hover:bg-indigo-500 border-indigo-800", 
-                                            "bg-pink-600 hover:bg-pink-500 border-pink-800", 
-                                            "bg-cyan-600 hover:bg-cyan-500 border-cyan-800", 
-                                            "bg-emerald-600 hover:bg-emerald-500 border-emerald-800", 
-                                            "bg-violet-600 hover:bg-violet-500 border-violet-800"
-                                        ][index];
-
-                                        return (
-                                            <button
-                                                key={i}
-                                                disabled={isAnswered}
-                                                onClick={() => !isAnswered && setOpenedQuestion({ number: questionNumber, question: q })}
-                                                className={cn(
-                                                    "rounded-xl flex items-center justify-center font-black transition-all duration-300 relative overflow-hidden group border-b-4 active:border-b-0 active:translate-y-1 h-full w-full min-h-[3rem]",
-                                                    isFullscreen ? "text-3xl" : "text-xl",
-                                                    isAnswered 
-                                                        ? "bg-slate-800/40 text-slate-700 border-slate-800/50 cursor-not-allowed grayscale border-b-0" 
-                                                        : cn("text-white shadow-lg", colorClass)
-                                                )}
-                                            >
-                                                {!isAnswered && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                                                {isAnswered ? <Check className="h-8 w-8 opacity-20" /> : <span className="drop-shadow-md z-10">{questionNumber}</span>}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
+                {gameState === 'game' && (
+                    <div id="p_game" className="sp11_screen sp11_active">
+                        <div id="sp11_play_area">
+                            <div className="sp11_col"><div className="sp11_ctrl"><div className="head_p1"><div className="sp11_q">{p1Question?.text}</div></div><div className="sp11_options">{p1Question?.options?.map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(1, opt)}>{opt}</button>))}</div></div></div>
+                            <div id="sp11_stage">
+                                <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c1" className="sp11_char" style={{ bottom: `${scores.p1 * 0.9}%`, transform: scores.p1 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p1 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g></svg></div></div>
+                                <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c2" className="sp11_char" style={{ bottom: `${scores.p2 * 0.9}%`, transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p2 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g></svg></div></div>
                             </div>
+                            <div className="sp11_col"><div className="sp11_ctrl"><div className="head_p2"><div className="sp11_q">{p2Question?.text}</div></div><div className="sp11_options">{p2Question?.options?.map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(2, opt)}>{opt}</button>))}</div></div></div>
                         </div>
-                     </div>
-                </div>
+                    </div>
+                )}
 
-            </main>
-
-            {/* Modal */}
-            {openedQuestion && (
-                <QuestionDialog
-                    isFullscreen={isFullscreen}
-                    isOpen={!!openedQuestion}
-                    onClose={() => setOpenedQuestion(null)}
-                    questionData={openedQuestion}
-                    onAnswer={handleAnswerQuestion}
-                    timerDuration={questionTimer}
-                    pointsConfig={pointsConfig}
-                    pullStrengthConfig={pullStrengthConfig} // Özel config geçiyoruz
-                    penaltyConfig={{}} // Düelloda ceza yok, sadece geri itme var
-                />
-            )}
+                {gameState === 'win' && (
+                    <div id="p_win" className="sp11_screen sp11_active">
+                        <div className="result_card">
+                            <h2 style={{color:'#FF9800', margin:0}}>YARIŞ BİTTİ</h2>
+                            <h3 style={{color:'#333', margin:'5px 0 15px 0'}}>{winnerText} Kazandı!</h3>
+                            <div style={{fontSize:'50px'}}>🏆</div>
+                            <button className="sp11_btn bg_blue" onClick={() => setGameState('home')} style={{width:'200px', margin: '0 auto 20px auto'}}>Tekrar Oyna</button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
+        <style jsx global>{`
+          /* Copied styles from user's HTML */
+          body { margin: 0; padding: 0; background-color: #263238; font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
+          #sp11_wrapper { width: 100%; max-width: 1000px; margin: 0 auto; }
+          #sp11_container { font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif; width: 100%; height: 95vh; max-height: 800px; min-height: 600px; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; -webkit-user-select: none; color: #333; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: background 1.5s ease; background: #81d4fa; }
+          #sp11_container * { box-sizing: border-box; touch-action: manipulation; }
+          .sky_morning { background: linear-gradient(to bottom, #81d4fa 0%, #e1f5fe 100%); }
+          .sky_noon { background: linear-gradient(to bottom, #29b6f6 0%, #b3e5fc 100%); }
+          .sky_afternoon{ background: linear-gradient(to bottom, #ffb74d 0%, #fff9c4 100%); }
+          .sky_sunset { background: linear-gradient(to bottom, #ff7043 0%, #3e2723 100%); }
+          #sun_pivot { position: absolute; bottom: -20%; left: 50%; width: 10px; height: 110%; transform-origin: bottom center; transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; pointer-events: none; }
+          .sp11_sun { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: radial-gradient(circle, #fff 20%, #ffeb3b 100%); border-radius: 50%; box-shadow: 0 0 40px #ff9800, 0 0 80px #ff5722; transition: all 0.5s; }
+          .sun_hot { background: radial-gradient(circle, #fff 20%, #ffca28 100%); box-shadow: 0 0 50px #ff6f00; }
+          .sun_setting { background: radial-gradient(circle, #fff 10%, #ff5722 100%); box-shadow: 0 0 30px #bf360c; transform: translate(-50%, -50%) scale(0.9); }
+          .sp11_bird { position: absolute; width: 30px; height: 15px; border-top: 3px solid #333; border-right: 3px solid #333; border-radius: 50% 50% 0 0; transform: rotate(45deg); z-index: 2; opacity: 0.6; }
+          .bird1 { top: 15%; left: -10%; animation: fly 25s linear infinite; }
+          .bird2 { top: 25%; left: -10%; animation: fly 30s linear infinite 5s; width: 20px; height: 10px; }
+          @keyframes fly { 0% { left: -10%; transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(-30px); } 100% { left: 110%; transform: rotate(45deg) translateY(0); } }
+          .sp11_sea { position: absolute; bottom: 0; width: 100%; height: 15%; background: rgba(0, 50, 90, 0.5); z-index: 2; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.3); }
+          .wave { position: absolute; bottom: 0; width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C300,100 600,0 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.2)"/></svg>') repeat-x; background-size: 50% 100%; animation: wave_move 12s linear infinite; }
+          .wave:nth-child(2) { bottom: 10px; opacity: 0.6; animation: wave_move 8s linear infinite reverse; }
+          @keyframes wave_move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          .sp11_cloud { position: absolute; background: rgba(255,255,255,0.6); border-radius: 50%; animation: sp11_float 80s linear infinite; z-index: 1; filter: blur(3px); }
+          @keyframes sp11_float { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
+          .sp11_screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(3px); overflow-y: auto; padding: 10px; }
+          .sp11_active { display: flex; animation: sp11_zoom 0.3s ease-out; }
+          @keyframes sp11_zoom { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+          .home_layout { display: flex; flex-direction: column; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); padding: 25px; max-width: 900px; width: 98%; align-items: center; gap: 20px; border: 1px solid #ddd; }
+          .home_right { text-align: center; }
+          .rules_list { text-align: left; font-size: 1rem; color: #444; margin: 15px 0; padding: 15px; list-style-type: none; background: #e0f2f1; border-radius: 10px; border-left: 5px solid #009688; }
+          .rules_list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
+          .rules_list li::before { content: '🕌'; position: absolute; left: 0; font-size:12px; top:3px;}
+          .sp11_btn { width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.2); transition: transform 0.1s; }
+          .sp11_btn:active { transform: translateY(3px); box-shadow: none; }
+          .bg_blue { background: #009688; } .bg_orange { background: #FF9800; }
+          #sp11_play_area { display: flex; width: 100%; height: 100%; align-items: center; z-index: 10; overflow: hidden; }
+          .sp11_col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; z-index: 20; height:100%; }
+          .sp11_ctrl { background: transparent; border: none; box-shadow: none; padding: 0; width: 98%; max-width: 450px; display: flex; flex-direction: column; height: 95%; justify-content: center; }
+          .head_p1 { background: linear-gradient(135deg, rgba(38, 198, 218, 0.95), rgba(0, 151, 167, 0.95)); color:white; padding:15px; border-radius:15px; margin-bottom:0; text-align:center; min-height: 110px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5);}
+          .head_p2 { background: linear-gradient(135deg, rgba(239, 83, 80, 0.95), rgba(198, 40, 40, 0.95)); color:white; padding:15px; border-radius:15px; margin-bottom:0; text-align:center; min-height: 110px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5);}
+          .sp11_q { font-size: 1.2rem; font-weight: 600; line-height: 1.3; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+          .sp11_options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 20px; margin-bottom: 20px; }
+          .option_btn { background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); border: 2px solid rgba(255,255,255,0.6); border-radius: 12px; width: 100%; height: 65px; font-size: 0.95rem; font-weight: bold; color: #2c3e50; cursor: pointer; transition: all 0.2s; text-align: center; box-shadow: 0 4px 0 rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; padding: 5px; word-wrap: break-word; line-height: 1.1; }
+          .option_btn:active { transform: translateY(4px); box-shadow: none; }
+          .option_btn:hover { background: #fff; border-color: #fff; transform: scale(1.02); }
+          #sp11_stage { flex: 0.8; height: 100%; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 0; padding-top: 60px; }
+          .sp11_lane { position: relative; width: 80px; height: 100%; margin: 0 5px; display: flex; justify-content: center; }
+          .sp11_rope { width: 12px; height: 100%; background: repeating-linear-gradient(45deg, #8d6e63, #8d6e63 6px, #5d4037 6px, #5d4037 12px); z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.5); position: relative; }
+          .sp11_rope::before { content:''; position:absolute; top:0; left:-10px; width:32px; height:10px; background:#3e2723; border-radius:4px; }
+          .sp11_flag { position: absolute; top: -40px; font-size: 30px; z-index: 1; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3)); transition: opacity 0.3s; }
+          .sp11_char { width: 60px; height: 80px; position: absolute; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1), left 0.5s ease-in-out; z-index: 20; }
+          .sp11_char svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+          .sp11_char.winner { z-index: 100; animation: char_celebrate 0.6s ease-in-out infinite alternate; }
+          .sp11_char.winner::after { content: '🚩'; font-size: 40px; position: absolute; top: -25px; right: -20px; transform-origin: bottom left; animation: flag_wave 0.4s ease-in-out infinite alternate; filter: drop-shadow(0 0 10px gold); }
+          @keyframes char_celebrate { from { transform: translateX(-50%) rotate(-5deg); } to { transform: translateX(-50%) rotate(5deg); } }
+          @keyframes flag_wave { from { transform: rotate(-10deg); } to { transform: rotate(20deg); } }
+          .result_card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; width: 95%; max-width: 850px; max-height: 90vh; overflow-y: auto; }
+          .top_btn_grp { position: absolute; top: 10px; right: 10px; z-index: 500; display:flex; gap:10px; }
+          .top_btn { cursor: pointer; background: rgba(255,255,255,0.8); border: 1px solid #999; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: #333; display: flex; align-items:center; gap: 5px; font-size: 0.8rem; transition: background 0.2s; }
+          .top_btn:hover { background: #fff; }
+          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } .game_img { max-width: 180px; margin-bottom: 5px; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
+        `}</style>
+      </>
     );
 }
 
-export default function SmartboardDuelloOyunPage() {
-  return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-red-500" /></div>}>
-        <DuelGameComponent />
-    </Suspense>
-  )
+export default function SmartboardClimbingDuelPage() {
+    return (
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-[#263238]"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>}>
+            <ClimbingDuelGame />
+        </Suspense>
+    );
 }
