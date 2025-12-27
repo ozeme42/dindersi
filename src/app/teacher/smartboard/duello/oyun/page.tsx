@@ -8,21 +8,21 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, Gamepad2 } from "lucide-react";
 import Link from "next/link";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import type { GetQuizOutput, Question } from "@/lib/types";
+import { getQuestionsFromBank, type GetQuizOutput } from "@/lib/quiz-actions";
 import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { QuestionDialog } from "@/components/question-dialog";
 import { Badge } from "@/components/ui/badge";
 import { updateMultipleStudentScores } from "../../../../teacher/smartboard/actions";
-import type { UserProfile, GetQuizInput } from "@/lib/types";
+import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from 'firebase/firestore';
 import { playSound, stopSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
 
 type GameQuestion = GetQuizOutput['questions'][0] & {text: string};
+type Player = { id: string; name: string; isGuest: boolean; };
 
 function CompetitionLoadingSkeleton() {
     return (
@@ -34,11 +34,12 @@ function CompetitionLoadingSkeleton() {
 
 function ClimbingDuelGame() {
     const searchParams = useSearchParams();
-    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    const [gameState, setGameState] = useState<'home' | 'game' | 'win'>('home');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [gameState, setGameState] = useState<'home' | 'game' | 'win'>('home');
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    
     const [scores, setScores] = useState({ p1: 0, p2: 0 });
     const [p1Question, setP1Question] = useState<Question | null>(null);
     const [p2Question, setP2Question] = useState<Question | null>(null);
@@ -186,7 +187,6 @@ function ClimbingDuelGame() {
     if (error) return <div className="flex h-screen items-center justify-center bg-[#263238] text-red-400 p-8">{error}</div>
 
     return (
-      <>
         <div id="sp11_wrapper">
             <div id="sp11_container" className={containerClass}>
                 <div className="top_btn_grp">
@@ -243,70 +243,7 @@ function ClimbingDuelGame() {
 
             </div>
         </div>
-        <style jsx global>{`
-          /* Copied styles from user's HTML */
-          body { margin: 0; padding: 0; background-color: #263238; font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; }
-          #sp11_wrapper { width: 100%; max-width: 1000px; margin: 0 auto; }
-          #sp11_container { font-family: 'Segoe UI', 'Roboto', 'Helvetica', sans-serif; width: 100%; height: 95vh; max-height: 800px; min-height: 600px; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; -webkit-user-select: none; color: #333; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: background 1.5s ease; background: #81d4fa; }
-          #sp11_container * { box-sizing: border-box; touch-action: manipulation; }
-          .sky_morning { background: linear-gradient(to bottom, #81d4fa 0%, #e1f5fe 100%); }
-          .sky_noon { background: linear-gradient(to bottom, #29b6f6 0%, #b3e5fc 100%); }
-          .sky_afternoon{ background: linear-gradient(to bottom, #ffb74d 0%, #fff9c4 100%); }
-          .sky_sunset { background: linear-gradient(to bottom, #ff7043 0%, #3e2723 100%); }
-          #sun_pivot { position: absolute; bottom: -20%; left: 50%; width: 10px; height: 110%; transform-origin: bottom center; transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; pointer-events: none; }
-          .sp11_sun { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: radial-gradient(circle, #fff 20%, #ffeb3b 100%); border-radius: 50%; box-shadow: 0 0 40px #ff9800, 0 0 80px #ff5722; transition: all 0.5s; }
-          .sun_hot { background: radial-gradient(circle, #fff 20%, #ffca28 100%); box-shadow: 0 0 50px #ff6f00; }
-          .sun_setting { background: radial-gradient(circle, #fff 10%, #ff5722 100%); box-shadow: 0 0 30px #bf360c; transform: translate(-50%, -50%) scale(0.9); }
-          .sp11_bird { position: absolute; width: 30px; height: 15px; border-top: 3px solid #333; border-right: 3px solid #333; border-radius: 50% 50% 0 0; transform: rotate(45deg); z-index: 2; opacity: 0.6; }
-          .bird1 { top: 15%; left: -10%; animation: fly 25s linear infinite; }
-          .bird2 { top: 25%; left: -10%; animation: fly 30s linear infinite 5s; width: 20px; height: 10px; }
-          @keyframes fly { 0% { left: -10%; transform: rotate(45deg) translateY(0); } 50% { transform: rotate(45deg) translateY(-30px); } 100% { left: 110%; transform: rotate(45deg) translateY(0); } }
-          .sp11_sea { position: absolute; bottom: 0; width: 100%; height: 15%; background: rgba(0, 50, 90, 0.5); z-index: 2; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.3); }
-          .wave { position: absolute; bottom: 0; width: 200%; height: 100%; background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"><path d="M0,60 C300,100 600,0 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.2)"/></svg>') repeat-x; background-size: 50% 100%; animation: wave_move 12s linear infinite; }
-          .wave:nth-child(2) { bottom: 10px; opacity: 0.6; animation: wave_move 8s linear infinite reverse; }
-          @keyframes wave_move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-          .sp11_cloud { position: absolute; background: rgba(255,255,255,0.6); border-radius: 50%; animation: sp11_float 80s linear infinite; z-index: 1; filter: blur(3px); }
-          @keyframes sp11_float { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
-          .sp11_screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(3px); overflow-y: auto; padding: 10px; }
-          .sp11_active { display: flex; animation: sp11_zoom 0.3s ease-out; }
-          @keyframes sp11_zoom { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-          .home_layout { display: flex; flex-direction: row; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); padding: 25px; max-width: 900px; width: 98%; align-items: center; gap: 20px; border: 1px solid #ddd; }
-          .home_right { flex: 1.2; text-align: center; }
-          .rules_list { text-align: left; font-size: 1rem; color: #444; margin: 15px 0; padding: 15px; list-style-type: none; background: #e0f2f1; border-radius: 10px; border-left: 5px solid #009688; }
-          .rules_list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
-          .rules_list li::before { content: '🕌'; position: absolute; left: 0; font-size:12px; top:3px;}
-          .sp11_btn { width: 100%; padding: 15px; margin: 8px 0; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; color: white; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.2); transition: transform 0.1s; }
-          .sp11_btn:active { transform: translateY(3px); box-shadow: none; }
-          .bg_blue { background: #009688; } .bg_orange { background: #FF9800; }
-          #sp11_play_area { display: flex; width: 100%; height: 100%; align-items: center; z-index: 10; overflow: hidden; }
-          .sp11_col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; z-index: 20; height:100%; }
-          .sp11_ctrl { background: transparent; border: none; box-shadow: none; padding: 0; width: 98%; max-width: 450px; display: flex; flex-direction: column; height: 95%; justify-content: center; }
-          .head_p1 { background: linear-gradient(135deg, rgba(38, 198, 218, 0.95), rgba(0, 151, 167, 0.95)); color:white; padding:15px; border-radius:15px; margin-bottom:0; text-align:center; min-height: 110px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5);}
-          .head_p2 { background: linear-gradient(135deg, rgba(239, 83, 80, 0.95), rgba(198, 40, 40, 0.95)); color:white; padding:15px; border-radius:15px; margin-bottom:0; text-align:center; min-height: 110px; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); width: 100%; border: 2px solid rgba(255,255,255,0.5);}
-          .sp11_q { font-size: 1.2rem; font-weight: 600; line-height: 1.3; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-          .sp11_options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 20px; margin-bottom: 20px; }
-          .option_btn { background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); border: 2px solid rgba(255,255,255,0.6); border-radius: 12px; width: 100%; height: 65px; font-size: 0.95rem; font-weight: bold; color: #2c3e50; cursor: pointer; transition: all 0.2s; text-align: center; box-shadow: 0 4px 0 rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; padding: 5px; word-wrap: break-word; line-height: 1.1; }
-          .option_btn:active { transform: translateY(4px); box-shadow: none; }
-          .option_btn:hover { background: #fff; border-color: #fff; transform: scale(1.02); }
-          #sp11_stage { flex: 0.8; height: 100%; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 0; padding-top: 60px; }
-          .sp11_lane { position: relative; width: 80px; height: 100%; margin: 0 5px; display: flex; justify-content: center; }
-          .sp11_rope { width: 12px; height: 100%; background: repeating-linear-gradient(45deg, #8d6e63, #8d6e63 6px, #5d4037 6px, #5d4037 12px); z-index: 5; box-shadow: 2px 0 5px rgba(0,0,0,0.5); position: relative; }
-          .sp11_rope::before { content:''; position:absolute; top:0; left:-10px; width:32px; height:10px; background:#3e2723; border-radius:4px; }
-          .sp11_flag { position: absolute; top: -40px; font-size: 30px; z-index: 1; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3)); transition: opacity 0.3s; }
-          .sp11_char { width: 60px; height: 80px; position: absolute; transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1), left 0.5s ease-in-out; z-index: 20; }
-          .sp11_char svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
-          .sp11_char.winner { z-index: 100; animation: char_celebrate 0.6s ease-in-out infinite alternate; }
-          .sp11_char.winner::after { content: '🚩'; font-size: 40px; position: absolute; top: -25px; right: -20px; transform-origin: bottom left; animation: flag_wave 0.4s ease-in-out infinite alternate; filter: drop-shadow(0 0 10px gold); }
-          @keyframes char_celebrate { from { transform: translateX(-50%) rotate(-5deg); } to { transform: translateX(-50%) rotate(5deg); } }
-          @keyframes flag_wave { from { transform: rotate(-10deg); } to { transform: rotate(20deg); } }
-          .result_card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; width: 95%; max-width: 850px; max-height: 90vh; overflow-y: auto; }
-          .top_btn_grp { position: absolute; top: 10px; right: 10px; z-index: 500; display:flex; gap:10px; }
-          .top_btn { cursor: pointer; background: rgba(255,255,255,0.8); border: 1px solid #999; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: #333; display: flex; align-items:center; gap: 5px; font-size: 0.8rem; transition: background 0.2s; }
-          .top_btn:hover { background: #fff; }
-          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } .game_img { max-width: 180px; margin-bottom: 5px; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
-        `}</style>
-      </>
-    );
+    )
 }
 
 export default function SmartboardClimbingDuelPage() {
@@ -316,4 +253,3 @@ export default function SmartboardClimbingDuelPage() {
         </Suspense>
     );
 }
-```
