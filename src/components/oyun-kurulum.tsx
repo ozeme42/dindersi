@@ -309,12 +309,7 @@ useEffect(() => {
     setSearchQuery("");
     setTimeout(() => {
         const selectedUnit = units.find(u => u.id === unit.id);
-        const availableTopics = (selectedUnit?.topics || []).filter(topic => {
-            if (dataType === 'yazilacaklar') return (topic as any).hasYazilacaklarContent;
-            if (dataType === 'ozetler') return (topic as any).hasOzetContent;
-            return true;
-        });
-        setTopics(availableTopics);
+        setTopics(selectedUnit?.topics || []);
         setIsLoading(false);
         if(!fromUrl) setCurrentStep(3);
     }, 300);
@@ -433,9 +428,18 @@ useEffect(() => {
             );
           case 3:
             const filteredTopics = filterItems(topics);
-            const selectedUnit = units.find(u => u.id === selection.unitId);
+            
+            // Check if topics have content for specific dataTypes
+            const topicsWithContent = filteredTopics.filter(topic => {
+                if(dataType === 'ozetler') return (topic as any).hasOzetContent;
+                if(dataType === 'yazilacaklar') {
+                     // Check for a specific flag or if writingContent exists
+                    const writingContent = (topic as any).writingContent;
+                    return writingContent && (writingContent.notes?.length > 0 || writingContent.conceptDefinitions?.length > 0);
+                }
+                return true; // For 'games', assume all topics are valid for now
+            });
 
-            const hasUnitOzet = dataType === 'ozetler' && selectedUnit && (selectedUnit as any).hasUnitOzet;
 
             return (
                 <>
@@ -452,17 +456,8 @@ useEffect(() => {
                                 delay={0}
                             />
                         )}
-                        {hasUnitOzet && !searchQuery && (
-                            <SelectionCard 
-                                key="unit-summary"
-                                title={`${selection.unitName} (Ünite Özeti)`}
-                                icon={BookOpen}
-                                color="from-purple-600 to-indigo-500"
-                                onClick={() => handleSelectTopic(selection.unitId, `${selection.unitName} (Ünite Özeti)`)}
-                                delay={0}
-                            />
-                        )}
-                        {filteredTopics.length > 0 ? filteredTopics.map((topic, idx) => (
+                        
+                        {topicsWithContent.length > 0 ? topicsWithContent.map((topic, idx) => (
                             <SelectionCard 
                                 key={topic.id}
                                 title={topic.title}
@@ -471,9 +466,12 @@ useEffect(() => {
                                 color={selection.courseColor}
                                 onClick={() => handleSelectTopic(topic.id, topic.title)}
                                 delay={(idx + 1) * 50}
+                                hasContent={true}
                             />
-                        )) : (hasUnitOzet || (dataType === 'games' && !searchQuery)) ? null : (
-                            <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde konu bulunamadı.</p>
+                        )) : (
+                            <p className="col-span-full text-center text-slate-500 py-10">
+                                Bu ünite için görüntülenecek {dataType === 'ozetler' ? 'özet' : 'yazılacaklar'} içeriği bulunamadı.
+                            </p>
                         )}
                     </div>
                 </>
@@ -494,7 +492,7 @@ useEffect(() => {
                 <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
             </button>
             <div className="text-center mx-2 overflow-hidden flex-1">
-                <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center justify-center gap-2">
                     <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl">
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
@@ -565,3 +563,136 @@ useEffect(() => {
     </div>
   );
 }
+
+```
+- src/hooks/use-copy-to-clipboard.ts:
+```ts
+'use client';
+
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+
+export function useCopyToClipboard() {
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  const copy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      toast({ title: "Kopyalandı!", description: "İçerik panoya kopyalandı." });
+      setTimeout(() => setCopied(false), 2000);
+    }, (err) => {
+      console.error('Could not copy text: ', err);
+      toast({ title: "Hata!", description: "İçerik kopyalanamadı.", variant: "destructive" });
+    });
+  };
+
+  return { copied, copy };
+}
+
+```
+- src/hooks/use-is-mobile.ts:
+```ts
+'use client';
+
+import { useState, useEffect } from 'react';
+
+export function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if window is defined (for server-side rendering)
+    if (typeof window !== 'undefined') {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < breakpoint);
+        };
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }
+  }, [breakpoint]);
+
+  return isMobile;
+}
+```
+- src/middleware.ts:
+```ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+// This function can be marked `async` if using `await` inside
+export function middleware(request: NextRequest) {
+  // We don't need any middleware logic for this app.
+  // We can just pass through.
+  return NextResponse.next()
+}
+
+// See "Matching Paths" below to learn more
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+}
+```
+- src/next-env.d.ts:
+```ts
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/basic-features/typescript for more information.
+
+```
+- src/paths.ts:
+```ts
+export const paths = {
+  home: '/',
+  dashboard: '/dashboard',
+  login: '/login',
+  register: '/register',
+  profile: '/profile',
+  studentDashboard: '/student',
+  teacherDashboard: '/teacher',
+  soruBankasi: '/student/soru-bankasi',
+  oyunlar: '/oyunlar',
+  leaderboard: '/leaderboard',
+  // ... diğer yollar
+};
+```
+- tsconfig.json:
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+```
