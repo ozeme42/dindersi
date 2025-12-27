@@ -24,12 +24,20 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         let q: Query = collection(db, collectionName);
         let queryConstraints: any[] = [];
         
-        if (topicId && topicId !== 'all') {
-            queryConstraints.push(where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            queryConstraints.push(where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
+        // HIERARCHICAL FILTERING: Start from the most specific to the least specific.
+        // The most important change is to always filter by courseId if it exists.
+
+        if (courseId && courseId !== 'all') {
             queryConstraints.push(where("courseId", "==", courseId));
+        }
+
+        if (unitId && unitId !== 'all') {
+            queryConstraints.push(where("unitId", "==", unitId));
+        }
+        
+        if (topicId && topicId !== 'all') {
+            // This will override unit/course selections for the same field, which is fine.
+             queryConstraints.push(where("topicId", "==", topicId));
         }
 
         if (difficulty && difficulty.length > 0) {
@@ -40,11 +48,11 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             const mappedTypes = questionTypes.map(qt => typeMap[qt] || qt);
             queryConstraints.push(where("type", "in", mappedTypes));
         }
-
+        
         if (queryConstraints.length > 0) {
             q = query(q, ...queryConstraints);
         }
-
+        
         const querySnapshot = await getDocs(q);
         
         const allQuestions = querySnapshot.docs.map(doc => {
@@ -76,6 +84,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
     }
 }
+
 
 /**
  * Fetches all activity items for a given course or unit when "all" is selected.
