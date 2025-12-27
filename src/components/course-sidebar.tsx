@@ -15,6 +15,7 @@ interface CourseSidebarProps {
     course: Course;
     activeTopic: Topic | null;
     onSelectTopic: (topic: Topic) => void;
+    onSelectUnitFlow?: (unit: Unit) => void; // Make this optional for reuse
     isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
     // Aşağıdaki proplar opsiyoneldir, soru bankasında kullanılabilir ama ders anlatımında boş gelebilir
@@ -26,6 +27,7 @@ export function CourseSidebar({
     course,
     activeTopic,
     onSelectTopic,
+    onSelectUnitFlow, // Added prop
     isTopicUnlocked,
     isTopicCompleted,
 }: CourseSidebarProps) {
@@ -69,22 +71,25 @@ export function CourseSidebar({
                                 </AccordionTrigger>
 
                                 <AccordionContent className="pt-0 pb-2 pl-2">
-                                     {/* Ünite Akışı Butonu */}
-                                    {unit.steps && unit.steps.length > 0 && (
+                                     {/* Ünite Akışı Butonu (Eğer varsa) */}
+                                    {onSelectUnitFlow && unit.steps && unit.steps.length > 0 && (
                                         <div className="relative pl-6 pb-2 mb-2">
                                              <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
                                                 <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
                                             </div>
-                                            <Link href={`/student/ders/${course.id}/${unit.id}`} className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80">
+                                            <button 
+                                                onClick={() => onSelectUnitFlow(unit)}
+                                                className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-purple-900/20 border-purple-500/50 hover:bg-purple-800/40 hover:border-purple-400/80"
+                                            >
                                                 <div className="flex items-center gap-3 min-w-0">
-                                                        <div className="shrink-0 text-purple-400">
+                                                    <div className="shrink-0 text-purple-400">
                                                         <Workflow className="w-4 h-4" />
-                                                        </div>
-                                                        <span className="text-sm font-bold truncate text-white">
+                                                    </div>
+                                                    <span className="text-sm font-bold truncate text-white">
                                                         Ünite Akışını Başlat
                                                     </span>
                                                 </div>
-                                            </Link>
+                                            </button>
                                         </div>
                                     )}
 
