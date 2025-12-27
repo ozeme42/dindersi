@@ -1,21 +1,43 @@
+
 'use client';
 
-import React, { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
+import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, Gamepad2 } from "lucide-react";
+import Link from "next/link";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
-import type { Question } from "@/lib/types";
+import type { GetQuizOutput, Question } from "@/lib/types";
+import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { QuestionDialog } from "@/components/question-dialog";
+import { Badge } from "@/components/ui/badge";
+import { updateMultipleStudentScores } from "../../../../teacher/smartboard/actions";
+import type { UserProfile, GetQuizInput } from "@/lib/types";
+import { db } from "@/lib/firebase";
+import { doc, getDoc } from 'firebase/firestore';
+import { playSound, stopSound } from "@/lib/audio-service";
+import Confetti from 'react-dom-confetti';
+
+type GameQuestion = GetQuizOutput['questions'][0] & {text: string};
+
+function CompetitionLoadingSkeleton() {
+    return (
+      <div className="flex h-screen items-center justify-center bg-slate-950">
+        <Loader2 className="h-16 w-16 animate-spin text-rose-500" />
+      </div>
+    );
+}
 
 function ClimbingDuelGame() {
     const searchParams = useSearchParams();
-    const [questions, setQuestions] = useState<Question[]>([]);
+    const [questions, setQuestions] = useState<GameQuestion[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    
-    // Oyun durumu için state'ler
+
     const [gameState, setGameState] = useState<'home' | 'game' | 'win'>('home');
     const [scores, setScores] = useState({ p1: 0, p2: 0 });
     const [p1Question, setP1Question] = useState<Question | null>(null);
@@ -90,13 +112,19 @@ function ClimbingDuelGame() {
         else setP2Question(questionWithOptions);
     };
 
-    const startGame = () => {
+    const startGame = useCallback(() => {
         if (questions.length < 2) return;
         setScores({ p1: 0, p2: 0 });
         askQuestion(1);
         askQuestion(2);
         setGameState('game');
-    };
+    }, [questions]);
+    
+    useEffect(() => {
+        if (gameState === 'home' && !isLoading && questions.length > 0) {
+            startGame();
+        }
+    }, [gameState, isLoading, questions, startGame]);
     
     const checkAnswer = (player: 1 | 2, choice: string) => {
         const question = player === 1 ? p1Question : p2Question;
@@ -140,6 +168,19 @@ function ClimbingDuelGame() {
       if(audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
       setIsSoundOn(!isSoundOn);
     }
+    
+    const nav = (targetId: 'home' | 'game' | 'win') => {
+        if (targetId === 'home') {
+            resetGameVisuals();
+            fetchQuestions(); // Refetch questions for a new game
+        }
+        setGameState(targetId);
+    }
+    
+    const resetGameVisuals = () => {
+        setSunRotation(-90);
+        setContainerClass('sky_morning');
+    };
 
     if (isLoading) return <div className="flex h-screen items-center justify-center bg-[#263238]"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>
     if (error) return <div className="flex h-screen items-center justify-center bg-[#263238] text-red-400 p-8">{error}</div>
@@ -162,34 +203,29 @@ function ClimbingDuelGame() {
                 <div className="sp11_cloud" style={{width:'100px', height:'60px', top:'20%', left:'-20%', animationDuration:'45s', borderRadius:'40%'}}></div>
                 <div className="sp11_sea"><div className="wave"></div><div className="wave"></div></div>
 
-                {gameState === 'home' && (
-                    <div id="p_home" className="sp11_screen sp11_active">
-                        <div className="home_layout">
-                            <div className="home_right">
-                                <h1 style={{color:'#009688', margin: '5px 0'}}>{searchParams.get('courseName')} - {searchParams.get('unitName')}</h1>
-                                <div style={{fontSize:'30px', marginBottom:'10px'}}>🧗 Tırmanma Yarışı</div>
-                                <ul className="rules_list">
-                                    <li><strong>Oyun Kuralları:</strong></li>
-                                    <li>Sınıf 2 takıma ayrılır (Mavi ve Kırmızı).</li>
-                                    <li>Doğru bildikçe karakterler tırmanır.</li>
-                                    <li><strong>Dikkat:</strong> Yanlış yapan 1 adım geri gider!</li>
-                                    <li>Zirveye ilk ulaşan bayrağı kapar!</li>
-                                </ul>
-                                <button className="sp11_btn bg_orange" onClick={startGame}>YARIŞA BAŞLA</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
                 {gameState === 'game' && (
-                    <div id="p_game" className="sp11_screen sp11_active">
+                    <div id="p_game" className="sp11_screen sp11_active" style={{background:'transparent', backdropFilter:'none', padding:0, overflow:'hidden'}}>
                         <div id="sp11_play_area">
-                            <div className="sp11_col"><div className="sp11_ctrl"><div className="head_p1"><div className="sp11_q">{p1Question?.text}</div></div><div className="sp11_options">{p1Question?.options?.map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(1, opt)}>{opt}</button>))}</div></div></div>
+                            <div className="sp11_col">
+                                <div className="sp11_ctrl">
+                                    <div className="head_p1"><div id="q1" className="sp11_q">{p1Question?.text}</div></div>
+                                    <div className="sp11_options">
+                                        {(p1Question?.options || []).map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(1, opt)}>{opt}</button>))}
+                                    </div>
+                                </div>
+                            </div>
                             <div id="sp11_stage">
                                 <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c1" className="sp11_char" style={{ bottom: `${scores.p1 * 0.9}%`, transform: scores.p1 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p1 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g></svg></div></div>
                                 <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c2" className="sp11_char" style={{ bottom: `${scores.p2 * 0.9}%`, transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p2 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g></svg></div></div>
                             </div>
-                            <div className="sp11_col"><div className="sp11_ctrl"><div className="head_p2"><div className="sp11_q">{p2Question?.text}</div></div><div className="sp11_options">{p2Question?.options?.map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(2, opt)}>{opt}</button>))}</div></div></div>
+                            <div className="sp11_col">
+                                <div className="sp11_ctrl">
+                                    <div className="head_p2"><div id="q2" className="sp11_q">{p2Question?.text}</div></div>
+                                    <div className="sp11_options">
+                                        {(p2Question?.options || []).map((opt, i) => (<button key={i} className="option_btn" onClick={() => checkAnswer(2, opt)}>{opt}</button>))}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -198,12 +234,13 @@ function ClimbingDuelGame() {
                     <div id="p_win" className="sp11_screen sp11_active">
                         <div className="result_card">
                             <h2 style={{color:'#FF9800', margin:0}}>YARIŞ BİTTİ</h2>
-                            <h3 style={{color:'#333', margin:'5px 0 15px 0'}}>{winnerText} Kazandı!</h3>
+                            <h3 id="wtxt" style={{color:'#333', margin:'5px 0 15px 0'}}>{winnerText} Kazandı!</h3>
                             <div style={{fontSize:'50px'}}>🏆</div>
-                            <button className="sp11_btn bg_blue" onClick={() => setGameState('home')} style={{width:'200px', margin: '0 auto 20px auto'}}>Tekrar Oyna</button>
+                            <button className="sp11_btn bg_blue" onClick={() => nav('home')} style={{width:'200px', margin: '0 auto 20px auto'}}>Tekrar Oyna</button>
                         </div>
                     </div>
                 )}
+
             </div>
         </div>
         <style jsx global>{`
@@ -233,8 +270,8 @@ function ClimbingDuelGame() {
           .sp11_screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(3px); overflow-y: auto; padding: 10px; }
           .sp11_active { display: flex; animation: sp11_zoom 0.3s ease-out; }
           @keyframes sp11_zoom { from { transform: scale(0.98); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-          .home_layout { display: flex; flex-direction: column; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); padding: 25px; max-width: 900px; width: 98%; align-items: center; gap: 20px; border: 1px solid #ddd; }
-          .home_right { text-align: center; }
+          .home_layout { display: flex; flex-direction: row; background: rgba(255,255,255,0.95); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); padding: 25px; max-width: 900px; width: 98%; align-items: center; gap: 20px; border: 1px solid #ddd; }
+          .home_right { flex: 1.2; text-align: center; }
           .rules_list { text-align: left; font-size: 1rem; color: #444; margin: 15px 0; padding: 15px; list-style-type: none; background: #e0f2f1; border-radius: 10px; border-left: 5px solid #009688; }
           .rules_list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
           .rules_list li::before { content: '🕌'; position: absolute; left: 0; font-size:12px; top:3px;}
@@ -266,7 +303,7 @@ function ClimbingDuelGame() {
           .top_btn_grp { position: absolute; top: 10px; right: 10px; z-index: 500; display:flex; gap:10px; }
           .top_btn { cursor: pointer; background: rgba(255,255,255,0.8); border: 1px solid #999; padding: 5px 12px; border-radius: 20px; font-weight: bold; color: #333; display: flex; align-items:center; gap: 5px; font-size: 0.8rem; transition: background 0.2s; }
           .top_btn:hover { background: #fff; }
-          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
+          @media (max-width: 900px) { #sp11_container { height: 98vh; border-radius: 0; } .home_layout { flex-direction: column; padding: 10px; border:none; box-shadow:none; } .game_img { max-width: 180px; margin-bottom: 5px; } h1 { font-size: 1.3rem !important; margin: 5px 0 !important; } #sp11_play_area { flex-direction: row; } .sp11_ctrl { width: 100%; padding: 0; background: transparent; margin: 0; border: none; box-shadow: none; } .sp11_col { padding: 2px; flex: 1.2; } #sp11_stage { flex: 0.6; padding-top: 40px; } .sp11_q { font-size: 0.85rem; } .head_p1, .head_p2 { min-height: 70px; padding: 5px; border-radius:10px; } .sp11_options { gap: 6px; margin-top: 10px; margin-bottom: 10px; } .option_btn { height: 50px; font-size: 0.8rem; padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.9); } .sp11_lane { width: 40px; margin: 0; } .sp11_char { width: 35px; height: 50px; } .sp11_flag { font-size: 20px; top: -30px; } .sp11_char.winner::after { font-size: 25px; top: -15px; right: -10px; } .result_card { width: 98%; padding: 10px; } }
         `}</style>
       </>
     );
@@ -279,3 +316,4 @@ export default function SmartboardClimbingDuelPage() {
         </Suspense>
     );
 }
+```
