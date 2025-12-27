@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
-import type { ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection, type ClassGroup as EnrichedClassGroup } from '@/components/actions/get-curriculum-for-selection';
 
 
 // --- TİP TANIMLARI ---
@@ -148,17 +147,17 @@ type OyunKurulumProps = {
     gameIcon?: React.ElementType;
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
-    isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon = Gamepad2, targetPath, dataType }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   
-  const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [classGroups, setClassGroups] = useState<EnrichedClassGroup[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
   
@@ -166,6 +165,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
 
   const finalGameName = gameName || searchParams.get('gameName') || pageTitle || "Etkinlik Kurulumu";
   const finalGamePath = gamePath || searchParams.get('gamePath') || "";
+  const isStatic = searchParams.get('isStatic') === 'true';
 
   const [selection, setSelection] = useState({
     courseId: "",
@@ -218,53 +218,20 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             }))
         }));
         
-        const allCourses = classGroupsWithData.flatMap(group => group.courses);
-      
-        setAllCourses(allCourses);
-
-        return { allCourses };
+        setClassGroups(classGroupsWithData);
+        setCourses(classGroupsWithData.flatMap(group => group.courses));
     } catch (error) {
         console.error(error);
-        return { allCourses: [] };
     } finally {
         setIsLoading(false);
     }
   }, [user, dataType, isStatic]);
 
   useEffect(() => {
-    const processUrlParams = async () => {
-        const { allCourses: fetchedCourses } = await fetchManifest();
+    fetchManifest();
+  }, [fetchManifest]);
 
-        const courseIdFromUrl = searchParams.get('courseId');
-        const unitIdFromUrl = searchParams.get('unitId');
-        const topicIdFromUrl = searchParams.get('topicId');
-        
-        if (courseIdFromUrl) {
-            const foundCourse = fetchedCourses.find(c => c.id === courseIdFromUrl);
-            if (foundCourse) {
-                handleSelectCourse(foundCourse, true);
-
-                if (unitIdFromUrl) {
-                    const courseUnits = (foundCourse as any).units || [];
-                    const foundUnit = courseUnits.find((u: Unit) => u.id === unitIdFromUrl);
-                    if (foundUnit) {
-                        handleSelectUnit(foundUnit, true);
-                        
-                        if (topicIdFromUrl) {
-                            const foundTopic = (foundUnit.topics || []).find((t:Topic) => t.id === topicIdFromUrl);
-                            if (foundTopic) {
-                                handleSelectTopic(foundTopic.id, foundTopic.title || '');
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    processUrlParams();
-  }, [searchParams, fetchManifest]); 
-
-  const handleSelectCourse = (course: Course, fromUrl: boolean = false) => {
+  const handleSelectCourse = (course: Course) => {
     setSelection({ 
         ...selection, 
         courseId: course.id, 
@@ -274,22 +241,21 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     });
     
     setIsLoading(true);
-    setSearchQuery(""); // İleri gidince aramayı temizle
+    setSearchQuery("");
     setTimeout(() => {
         setUnits((course as any).units || []);
         setIsLoading(false);
-        if(!fromUrl) setCurrentStep(2);
+        setCurrentStep(2);
     }, 300);
   };
 
-  const handleSelectUnit = (unit: Unit, fromUrl: boolean = false) => {
+  const handleSelectUnit = (unit: Unit) => {
     setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
     
     if (dataType === 'games' && unit.id === 'all') {
-        const gamePath = new URLSearchParams(window.location.search).get('gamePath') || '';
         const params = new URLSearchParams({
             gameName: finalGameName,
-            gamePath,
+            gamePath: finalGamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
             unitId: 'all',
@@ -306,11 +272,20 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     setIsLoading(true);
     setSearchQuery("");
     setTimeout(() => {
-        const selectedCourse = allCourses.find(c => c.id === selection.courseId);
+        const selectedCourse = courses.find(c => c.id === selection.courseId);
         const selectedUnit = selectedCourse?.units.find(u => u.id === unit.id);
-        setTopics(selectedUnit?.topics || []);
+        
+        // Düzeltme: `hasContent` yerine doğrudan içerik varlığını kontrol et
+        const topicsWithContent = (selectedUnit?.topics || []).filter(topic => {
+            if (dataType === 'games') return true;
+            if (dataType === 'ozetler') return topic.hasOzetContent;
+            if (dataType === 'yazilacaklar') return topic.hasYazilacaklarContent;
+            return false;
+        });
+
+        setTopics(topicsWithContent);
         setIsLoading(false);
-        if(!fromUrl) setCurrentStep(3);
+        setCurrentStep(3);
     }, 300);
   };
   
@@ -375,7 +350,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
       
       switch(currentStep) {
           case 1:
-            const filteredCourses = filterItems(allCourses);
+            const filteredCourses = filterItems(courses);
             return (
                 <>
                     <SearchInput value={searchQuery} onChange={setSearchQuery} />
@@ -407,7 +382,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                                 subtitle="Genel Tekrar"
                                 icon={Sparkles}
                                 color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'}, false)}
+                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'} as Unit)}
                                 delay={0}
                             />
                         )}
@@ -418,7 +393,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                                 subtitle={selection.courseName}
                                 icon={Library}
                                 color={selection.courseColor}
-                                onClick={() => handleSelectUnit(unit as Unit, false)}
+                                onClick={() => handleSelectUnit(unit as Unit)}
                                 delay={(idx + (dataType === 'games' ? 1 : 0)) * 50}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
@@ -427,12 +402,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
             );
           case 3:
             const filteredTopics = filterItems(topics);
-            
-            const topicsWithContent = filteredTopics.filter(topic => {
-                if (dataType === 'games') return true;
-                const hasContent = topic.htmlContent || (topic.writingContent && (topic.writingContent.notes.length > 0 || topic.writingContent.conceptDefinitions.length > 0));
-                return hasContent;
-            });
             
             return (
                 <>
@@ -450,7 +419,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                             />
                         )}
                         
-                        {topicsWithContent.length > 0 ? topicsWithContent.map((topic, idx) => (
+                        {filteredTopics.length > 0 ? filteredTopics.map((topic, idx) => (
                             <SelectionCard 
                                 key={topic.id}
                                 title={topic.title}
@@ -463,7 +432,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                             />
                         )) : (
                             <p className="col-span-full text-center text-slate-500 py-10">
-                                Bu ünite için görüntülenecek {dataType === 'ozetler' ? 'özet' : (dataType === 'yazilacaklar' ? 'yazılacaklar' : 'etkinlik')} içeriği bulunamadı.
+                                Bu ünite için görüntülenecek içerik bulunamadı.
                             </p>
                         )}
                     </div>
@@ -544,7 +513,6 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
                     {currentStep === 3 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.unitName} seçildi. Son olarak, bir konu seç.</span>}
                 </span>
                 
-                {/* Animasyonlu noktalar */}
                 <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
                     <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce"></div>
                     <div className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:100ms]"></div>
@@ -556,39 +524,3 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, gameIcon: PageIcon 
     </div>
   );
 }
-```
-- src/lib/placeholders.ts:
-```ts
-export const getPlaceholderAvatar = (seed: string) => `https://api.dicebear.com/8.x/bottts-neutral/svg?seed=${seed}`
-```
-- src/lib/quiz-config.ts:
-```ts
-export const QUESTION_TYPES = [
-    { id: 'mcq', name: 'Çoktan Seçmeli' },
-    { id: 'tf', name: 'Doğru/Yanlış' },
-    { id: 'fitb', name: 'Boşluk Doldurma' },
-] as const;
-
-export const DIFFICULTY_LEVELS = ['Kolay', 'Orta', 'Zor'] as const;
-
-```
-- src/next.config.js:
-```js
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    typescript: {
-        ignoreBuildErrors: true,
-    },
-    images: {
-        remotePatterns: [
-            {
-                protocol: "https",
-                hostname: "placehold.co",
-            },
-        ],
-    },
-};
-
-module.exports = nextConfig;
-
-```
