@@ -21,34 +21,29 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         const collectionName = isActivity ? "activityItems" : "questions";
 
         let q: Query = collection(db, collectionName);
-        let queryConstraints: any[] = [];
+        
+        let conditions: any[] = [];
 
-        // HIERARCHICAL FILTERING LOGIC
-        // This is the corrected logic. It ensures that filters are applied in a strict hierarchy.
+        // Strict hierarchical filtering
         if (topicId && topicId !== 'all') {
-            // Most specific: filter by topic. This implicitly filters by unit and course.
-            queryConstraints.push(where("topicId", "==", topicId));
+            conditions.push(where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
-            // Next specific: filter by unit. This implicitly filters by course.
-            queryConstraints.push(where("unitId", "==", unitId));
+            conditions.push(where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
-            // Broadest category: filter by course.
-            queryConstraints.push(where("courseId", "==", courseId));
+            conditions.push(where("courseId", "==", courseId));
         }
 
-        // Apply additional filters for difficulty and type
         if (difficulty && difficulty.length > 0) {
-            queryConstraints.push(where("difficulty", "in", difficulty));
+            conditions.push(where("difficulty", "in", difficulty));
         }
         if (questionTypes && questionTypes.length > 0) {
             const typeMap: { [key: string]: string } = { 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' };
             const mappedTypes = questionTypes.map(qt => typeMap[qt] || qt);
-            queryConstraints.push(where("type", "in", mappedTypes));
+            conditions.push(where("type", "in", mappedTypes));
         }
 
-        // Construct the final query if there are constraints.
-        if (queryConstraints.length > 0) {
-            q = query(q, and(...queryConstraints));
+        if (conditions.length > 0) {
+            q = query(q, and(...conditions));
         }
         
         const querySnapshot = await getDocs(q);
@@ -65,7 +60,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         // Shuffle options for each question
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
-            if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
+            if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && 'options' in question && question.options) {
                 // Create a shallow copy to avoid mutating the original array
                 const newOptions = [...question.options];
                 newOptions.sort(() => Math.random() - 0.5);
