@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -65,8 +66,8 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
         const snapshot = await getDocs(q);
         const allQuestions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
         
-        // This is not perfectly random but good enough for client-side slicing
-        allQuestions.sort(() => Math.random() - 0.5); 
+        // This makes the question order deterministic for each test.
+        allQuestions.sort((a, b) => a.text.localeCompare(b.text, 'tr'));
         
         const startIndex = testIndex * 10;
         const endIndex = startIndex + 10;
