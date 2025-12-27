@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -23,6 +24,7 @@ import { playSound } from '@/lib/audio-service';
 import { CourseSidebar } from '@/components/course-sidebar';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { Badge } from '@/components/ui/badge';
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 
@@ -87,7 +89,7 @@ function QuestionTest({
             isCorrect = answer === question.correctAnswer;
         }
 
-        if (isCorrect) {
+        if(isCorrect) {
             playSound('correct');
             setScore(s => s + 10);
             setCorrectCount(c => c + 1);
@@ -247,14 +249,14 @@ function QuestionTest({
                                     </span>
                                     {option}
                                     {currentAnswer && isCorrect && <CheckCircle2 className="ml-auto h-5 w-5 text-green-400 animate-in zoom-in" />}
-                                    {currentAnswer && isSelected && !isCorrect && <XCircle className="ml-auto h-5 w-5 text-red-400 animate-in zoom-in" />}
                                 </Button>
                             );
                         })}
                         
                         {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map((option) => {
-                            const isCorrect = option === currentQuestion.correctAnswer;
-                            const isSelected = currentAnswer === option;
+                            const answerValue = option === 'Doğru' ? 'Doğru' : 'Yanlış';
+                            const isCorrect = answerValue === currentQuestion.correctAnswer;
+                            const isSelected = currentAnswer === answerValue;
                              
                             let btnStyle = "h-auto py-5 px-6 text-lg font-bold rounded-2xl border-2 transition-all duration-200 text-center justify-center ";
                              if (currentAnswer) {
@@ -636,7 +638,7 @@ function QuestionBankCoursePageComponent() {
                                     <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white rounded-xl">
                                         <Link href="/student/soru-bankasi"><ArrowLeft className="h-5 w-5"/></Link>
                                     </Button>
-                                    <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">{course.title}</h1>
+                                    <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">{course.title} <Badge variant="secondary" className="ml-2">Dosya</Badge></h1>
                                 </div>
                                 <div className="flex items-center gap-2">
                                      <AccordionTrigger className="py-0 hover:no-underline pr-2">
@@ -711,3 +713,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+```
