@@ -65,17 +65,14 @@ function QuestionTest({
             const result = await getQuestionsFromBank({
                 topicId: topic.id, 
                 difficulty: [difficulty], 
-                questionCount: 10, // Test başına 10 soru
+                questionCount: 100, // Fetch a large number to sort and slice
                 isStatic: true,
-                // testIndex'i direkt olarak göndermiyoruz, çünkü fonksiyonumuz artık bunu içeride hallediyor
             });
             
-            // Fonksiyonumuz artık tek bir testlik soru döndüreceği için slice mantığına gerek kalmadı.
-            // Fakat sıralamanın deterministik olması için sort işlemini burada yapabiliriz.
              if (result.error || !result.questions) {
                 setError(result.error || "Sorular yüklenemedi.");
             } else {
-                const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || ''));
+                const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
                 const startIndex = testIndex * 10;
                 const selectedQuestions = allQuestions.slice(startIndex, startIndex + 10);
                 
@@ -237,7 +234,7 @@ function QuestionTest({
                                 const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                                 
                                 return (
-                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && "opacity-50")} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
+                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && "opacity-50" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
                                         {option}
                                     </Button>
                                 );
@@ -246,7 +243,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50")} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -670,4 +667,4 @@ function Page() {
 
 export default Page;
 
-```
+    
