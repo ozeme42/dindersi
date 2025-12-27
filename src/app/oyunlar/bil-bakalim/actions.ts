@@ -14,11 +14,14 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        // If "All Topics" is selected, use the unitId to fetch the aggregated data.
-        const items = await getStaticQuestionsForGame({ 
-            courseId, 
-            unitId, 
-            topicId: topicId === 'all' ? undefined : topicId 
+        const isAllTopics = topicId === 'all';
+        // When "All Topics" is selected, we must fetch data based on the UNIT.
+        // The `getStaticQuestionsForGame` function knows that if only unitId is provided,
+        // it should read the aggregated `{unitId}.json` file.
+        const items = await getStaticQuestionsForGame({
+            courseId,
+            unitId: isAllTopics ? unitId : undefined,
+            topicId: isAllTopics ? undefined : topicId,
         });
         
         if (items.length === 0) {
