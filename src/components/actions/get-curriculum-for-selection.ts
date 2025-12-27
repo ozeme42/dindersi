@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -74,30 +72,26 @@ export async function getCurriculumForSelection(
                 const topicsWithFlags = await Promise.all(topicsSnapshot.docs.map(async (topicDoc) => {
                     const topicData = topicDoc.data() as Topic;
                     
-                    let hasContent = false;
-                    if (dataType === 'games') {
-                       hasContent = (topicData.isPublished ?? true); 
-                    } else if (dataType === 'ozetler') {
-                       hasContent = !!topicData.htmlContent;
-                    } else if (dataType === 'yazilacaklar') {
-                       const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
-                       const definitionsSnapshot = await getDocs(definitionsQuery);
-                       hasContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
-                    }
-
+                    let hasYazilacaklarContent = false;
+                    const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
+                    const definitionsSnapshot = await getDocs(definitionsQuery);
+                    hasYazilacaklarContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
+                    
                     return {
                         id: topicDoc.id,
                         ...topicData,
-                        hasContent: hasContent,
+                        hasOzetContent: !!topicData.htmlContent,
+                        hasYazilacaklarContent,
                     };
                 }));
 
-                const validTopics = topicsWithFlags.filter(t => t.hasContent);
+                const validTopics = topicsWithFlags.filter(t => (t.isPublished ?? true));
                 const unitData = unitDoc.data() as Unit;
                 
-                // Ünitenin kendisinin özeti varsa veya alt konularından herhangi birinin içeriği varsa üniteyi ekle
-                const unitHasOzet = dataType === 'ozetler' && !!unitData.htmlContent;
-                if (validTopics.length > 0 || unitHasOzet) {
+                const unitHasOzet = !!unitData.htmlContent;
+                const unitHasTopicsWithContent = validTopics.some(t => t.hasOzetContent || t.hasYazilacaklarContent || dataType === 'games');
+                
+                if (unitHasTopicsWithContent || unitHasOzet) {
                     enrichedUnits.push({
                         id: unitDoc.id,
                         title: unitData.title,
