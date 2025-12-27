@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -231,8 +232,6 @@ function ProfilePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isLoadingAchievements, setIsLoadingAchievements] = useState(true);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -276,29 +275,6 @@ function ProfilePage() {
     
     if (user) {
         fetchData();
-    }
-  }, [user]);
-
-  // Fetch achievements
-  useEffect(() => {
-    async function fetchAchievements() {
-        if (!user) return;
-        setIsLoadingAchievements(true);
-        try {
-            const result = await getStudentAchievements(user.uid, user.createdAt || null);
-            if (result.success && result.achievements) {
-                result.achievements.sort((a, b) => b.score - a.score); 
-                setAchievements(result.achievements);
-            }
-        } catch (error) {
-             console.error("Error fetching achievements:", error);
-        } finally {
-            setIsLoadingAchievements(false);
-        }
-    }
-    
-    if (user) {
-        fetchAchievements();
     }
   }, [user]);
 
@@ -348,14 +324,6 @@ function ProfilePage() {
     );
   }
 
-  const rankIcon = (rank: number) => {
-    const defaultClasses = "h-6 w-6";
-    if (rank === 1) return <Crown className={`${defaultClasses} text-yellow-500 fill-yellow-500/20`} />;
-    if (rank === 2) return <Medal className={`${defaultClasses} text-slate-400 fill-slate-400/20`} />;
-    if (rank === 3) return <Medal className={`${defaultClasses} text-amber-700 fill-amber-700/20`} />;
-    return <Trophy className={`${defaultClasses} text-slate-600`} />;
-  }
-
   return (
     <div className="min-h-screen bg-slate-950 pb-24 md:pb-12 text-slate-100 relative overflow-hidden font-sans selection:bg-indigo-500/30">
         
@@ -399,8 +367,8 @@ function ProfilePage() {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg">İptal</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleLogout} className="bg-red-600 text-white hover:bg-red-500 rounded-lg">Evet, Çıkış Yap</AlertDialogAction>
+                                <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleLogout} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Çıkış Yap</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
@@ -482,15 +450,7 @@ function ProfilePage() {
                 <div className="lg:col-span-2 space-y-8">
                     
                     {/* Hızlı İstatistikler */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-cyan-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
-                            <div className="p-3 bg-cyan-500/10 rounded-2xl mb-3 group-hover:bg-cyan-500/20 transition-colors border border-cyan-500/20">
-                                <Trophy className="h-7 w-7 text-cyan-400" />
-                            </div>
-                            <div className="text-3xl font-black text-white tracking-tight">{achievements.length}</div>
-                            <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Rozet</div>
-                        </div>
-
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                         <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-orange-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
                              <div className="p-3 bg-orange-500/10 rounded-2xl mb-3 group-hover:bg-orange-500/20 transition-colors border border-orange-500/20">
                                 <Award className="h-7 w-7 text-orange-400" />
@@ -499,7 +459,7 @@ function ProfilePage() {
                             <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Sınıf Sırası</div>
                         </div>
 
-                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-yellow-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg col-span-2 sm:col-span-1">
+                        <div className="bg-slate-900/60 backdrop-blur border border-white/10 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center hover:border-yellow-500/30 transition-all group duration-300 hover:-translate-y-1 shadow-lg">
                              <div className="p-3 bg-yellow-500/10 rounded-2xl mb-3 group-hover:bg-yellow-500/20 transition-colors border border-yellow-500/20">
                                 <Crown className="h-7 w-7 text-yellow-400" />
                             </div>
@@ -507,71 +467,8 @@ function ProfilePage() {
                             <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Genel Sıra</div>
                         </div>
                     </div>
-
-                    {/* Başarılar Listesi */}
-                    <Card className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-[2.5rem] shadow-xl overflow-hidden relative">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
-                        
-                        <CardHeader className="border-b border-white/5 bg-slate-900/50 p-6 md:p-8">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <CardTitle className="text-2xl font-black flex items-center gap-3 text-white">
-                                        <div className="p-2 bg-purple-500/20 rounded-lg">
-                                            <Medal className="h-6 w-6 text-purple-400"/> 
-                                        </div>
-                                        Sıralama Başarıları
-                                    </CardTitle>
-                                    <CardDescription className="text-slate-400 mt-2 ml-1">Kazandığın en son dereceler.</CardDescription>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="p-6 md:p-8">
-                            {isLoadingAchievements ? (
-                                <div className="flex justify-center py-12"><Loader2 className="h-10 w-10 animate-spin text-indigo-500"/></div>
-                            ) : achievements.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    {achievements.slice(0, 6).map((ach, i) => ( 
-                                        <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-950/50 border border-white/5 hover:border-white/10 hover:bg-slate-900 transition-all group">
-                                            <div className="p-3 rounded-full bg-slate-900 border border-white/5 shadow-md group-hover:scale-110 transition-transform">
-                                                {rankIcon(ach.rank)}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="font-bold text-base truncate text-slate-200">{ach.periodName}</p>
-                                                <div className="flex items-center gap-2 mt-1.5">
-                                                    <Badge variant={ach.periodType === 'monthly' ? 'default' : 'secondary'} className="text-[10px] px-2 h-5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/5">
-                                                        {ach.periodType === 'monthly' ? 'Aylık' : 'Haftalık'}
-                                                    </Badge>
-                                                    <span className="text-xs font-bold text-cyan-400">#{ach.rank}. Sıra</span>
-                                                </div>
-                                            </div>
-                                            <div className="text-right pl-3 border-l border-white/5">
-                                                <span className="block font-black text-lg text-white tracking-tight">{ach.score.toLocaleString()}</span>
-                                                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Puan</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-16 bg-slate-950/30 rounded-3xl border border-dashed border-white/10">
-                                    <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
-                                        <Trophy className="h-8 w-8 text-slate-600" />
-                                    </div>
-                                    <p className="text-slate-400 font-bold text-lg">Henüz listelenecek bir başarınız yok.</p>
-                                    <p className="text-sm text-slate-600 mt-2">Sınavlara katılarak puan toplayın!</p>
-                                </div>
-                            )}
-                        </CardContent>
-                        
-                         <CardFooter className="bg-slate-950/30 border-t border-white/5 p-6 flex justify-center">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                                <Button asChild variant="outline" className="h-12 border-white/10 hover:bg-white/5 text-slate-300 hover:text-white rounded-xl px-6 group transition-all hover:border-indigo-500/30 w-full">
-                                    <Link href="/student/tekrar-et">
-                                        <BookOpen className="mr-2 h-4 w-4 group-hover:text-indigo-400 transition-colors"/> Yanlışlarımı Tekrar Et
-                                    </Link>
-                                </Button>
-                            </div>
-                        </CardFooter>
-                    </Card>
+                    
+                    <ReviewQuestionsCard userId={user.uid} />
 
                 </div>
             </div>
@@ -587,3 +484,5 @@ export default function ProfilePageSuspense() {
         </Suspense>
     )
 }
+
+    
