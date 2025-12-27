@@ -5,7 +5,7 @@ import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/
 import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; // Import db from firebase
-import { collection, query, where, getDocs, limit as firestoreLimit, Query } from "firebase/firestore"; // Import necessary firestore functions
+import { collection, query, where, getDocs, limit as firestoreLimit, Query, and } from "firebase/firestore"; // Import necessary firestore functions
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
@@ -24,22 +24,27 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         let q: Query = collection(db, collectionName);
         let queryConstraints: any[] = [];
         
-        // HIERARCHICAL FILTERING: Start from the most specific to the least specific.
-        // The most important change is to always filter by courseId if it exists.
+        // HIERARCHICAL FILTERING LOGIC
+        // Start from the most specific context and build the query.
 
-        if (courseId && courseId !== 'all') {
+        // 1. Topic Level (Most specific)
+        if (topicId && topicId !== 'all') {
+            queryConstraints.push(where("topicId", "==", topicId));
+        } 
+        // 2. Unit Level
+        else if (unitId && unitId !== 'all') {
+            queryConstraints.push(where("unitId", "==", unitId));
+             // When a specific unit is chosen, it must also belong to the correct course.
+            if (courseId && courseId !== 'all') {
+                queryConstraints.push(where("courseId", "==", courseId));
+            }
+        } 
+        // 3. Course Level (Least specific)
+        else if (courseId && courseId !== 'all') {
             queryConstraints.push(where("courseId", "==", courseId));
         }
 
-        if (unitId && unitId !== 'all') {
-            queryConstraints.push(where("unitId", "==", unitId));
-        }
-        
-        if (topicId && topicId !== 'all') {
-            // This will override unit/course selections for the same field, which is fine.
-             queryConstraints.push(where("topicId", "==", topicId));
-        }
-
+        // Apply additional filters for difficulty and type
         if (difficulty && difficulty.length > 0) {
             queryConstraints.push(where("difficulty", "in", difficulty));
         }
@@ -49,8 +54,10 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             queryConstraints.push(where("type", "in", mappedTypes));
         }
         
+        // Construct the final query only if there are constraints.
         if (queryConstraints.length > 0) {
-            q = query(q, ...queryConstraints);
+            // Use and() to combine all where clauses
+            q = query(q, and(...queryConstraints));
         }
         
         const querySnapshot = await getDocs(q);
@@ -65,7 +72,10 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && question.options) {
-                question.options = [...question.options].sort(() => Math.random() - 0.5);
+                // Create a shallow copy to avoid mutating the original array
+                const newOptions = [...question.options];
+                newOptions.sort(() => Math.random() - 0.5);
+                return { ...question, options: newOptions };
             }
             return question;
         });
@@ -126,3 +136,4 @@ export async function getStaticQuestionsForGame(params: {
         return [];
     }
 }
+
