@@ -126,13 +126,15 @@ export async function getStaticQuestionsForGame(params: {
     const manifest = JSON.parse(manifestContent);
 
     let topicIds: string[] = [];
+    let courseFound = false; // Flag to stop searching after the correct course is found
 
-    // Find all topics under the specified course or unit
     for (const group of manifest.classGroups) {
         for (const course of group.courses) {
             // If a specific course is selected, skip others
             if (courseId && course.id !== courseId) continue;
             
+            courseFound = true; // Mark that we are processing the correct course
+
             for (const unit of course.units) {
                 // If a specific unit is selected (and not 'all'), only process that unit.
                 // If 'all' units are selected, this condition is skipped, processing all units in the course.
@@ -148,7 +150,7 @@ export async function getStaticQuestionsForGame(params: {
             // If a specific course was targeted, we are done with all groups.
             if (courseId && course.id === courseId) break;
         }
-        if (courseId && topicIds.length > 0) break; 
+        if (courseFound) break; // Exit the outer loop once the relevant course has been processed
     }
     
     // Remove duplicates
