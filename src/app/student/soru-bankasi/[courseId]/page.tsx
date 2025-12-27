@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -217,7 +216,7 @@ function QuestionTest({
                             const isSelected = currentAnswer === option;
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -229,7 +228,7 @@ function QuestionTest({
                             const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                             
                             return (
-                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect ? "bg-green-100 border-green-500 text-green-800" : "", currentAnswer && isSelected && !isCorrect ? "bg-red-100 border-red-500 text-red-800" : "" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
+                                <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(String(answerValue))} disabled={!!currentAnswer}>
                                     {option}
                                 </Button>
                             );
@@ -383,38 +382,25 @@ function QuestionBankCoursePageComponent() {
          if (isCountsLoading || !course) return { totalTests: 0, completedTests: 0, passedTests: 0, completionPercentage: 0, totalCorrect: 0, totalIncorrect: 0, totalScore: 0, classRank: 0, classTotal: 0 };
         
         let totalTests = 0;
-        let completedTests = 0;
         let passedTests = 0;
-        let totalCorrect = 0;
-        let totalIncorrect = 0;
         let totalScore = 0;
 
         for (const topicId in testCounts) {
             const counts = testCounts[topicId];
+            totalTests += Math.ceil((counts?.easy || 0) / 10) + Math.ceil((counts?.medium || 0) / 10) + Math.ceil((counts?.hard || 0) / 10);
+            
             const progress = topicProgress[topicId];
-
-            const easyTests = Math.ceil((counts?.easy || 0) / 10);
-            const mediumTests = Math.ceil((counts?.medium || 0) / 10);
-            const hardTests = Math.ceil((counts?.hard || 0) / 10);
-            totalTests += easyTests + mediumTests + hardTests;
-
             if (progress) {
-                const allTestResults = [
-                    ...Object.values(progress.easy || {}),
-                    ...Object.values(progress.medium || {}),
-                    ...Object.values(progress.hard || {})
-                ] as TestResult[];
-                
-                completedTests += allTestResults.length;
-                passedTests += allTestResults.filter(res => res.status === 'passed').length;
-                totalCorrect += allTestResults.reduce((sum, res) => sum + res.correct, 0);
-                totalIncorrect += allTestResults.reduce((sum, res) => sum + (res.total - res.correct), 0);
-                totalScore += allTestResults.reduce((sum, res) => sum + res.score, 0);
+                 passedTests += Object.values(progress.easy || {}).filter(res => res.status === 'passed').length;
+                 passedTests += Object.values(progress.medium || {}).filter(res => res.status === 'passed').length;
+                 passedTests += Object.values(progress.hard || {}).filter(res => res.status === 'passed').length;
+                 
+                 totalScore += [...Object.values(progress.easy || {}), ...Object.values(progress.medium || {}), ...Object.values(progress.hard || {})].reduce((sum, res) => sum + res.score, 0);
             }
         }
         
         const completionPercentage = totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0;
-        return { totalTests, completedTests, passedTests, completionPercentage, totalCorrect, totalIncorrect, totalScore, classRank: classRank?.rank || 0, classTotal: classRank?.total || 0 };
+        return { totalTests, passedTests, completionPercentage, totalScore, classRank: classRank?.rank || 0 };
 
     }, [isCountsLoading, course, testCounts, topicProgress, classRank]);
 
@@ -591,7 +577,7 @@ function QuestionBankCoursePageComponent() {
                                     <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
                                         {course.title}
                                     </h1>
-                                    <Badge variant="outline" className="border-green-500/20 text-green-400">Dosyadan</Badge>
+                                     <Badge variant="outline" className="border-green-500/20 text-green-400">Dosyadan</Badge>
                                 </div>
                                 <div className="flex items-center gap-2">
                                      <AccordionTrigger className="py-0 hover:no-underline pr-2">
@@ -659,12 +645,13 @@ function QuestionBankCoursePageComponent() {
     );
 }
 
-// Wrapper component to handle Suspense
-export default function Page() {
+function Page() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
             <QuestionBankCoursePageComponent />
         </Suspense>
     );
 }
-```
+export default Page;
+
+    
