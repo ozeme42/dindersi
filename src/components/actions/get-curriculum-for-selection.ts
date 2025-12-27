@@ -93,13 +93,15 @@ export async function getCurriculumForSelection(
                 }));
 
                 const validTopics = topicsWithFlags.filter(t => t.hasContent);
-
-                if (validTopics.length > 0) {
-                    const unitData = unitDoc.data() as Unit;
+                const unitData = unitDoc.data() as Unit;
+                
+                // Ünitenin kendisinin özeti varsa veya alt konularından herhangi birinin içeriği varsa üniteyi ekle
+                const unitHasOzet = dataType === 'ozetler' && !!unitData.htmlContent;
+                if (validTopics.length > 0 || unitHasOzet) {
                     enrichedUnits.push({
                         id: unitDoc.id,
                         title: unitData.title,
-                        hasUnitOzet: !!unitData.htmlContent,
+                        hasUnitOzet: unitHasOzet,
                         topics: validTopics as any,
                     });
                 }

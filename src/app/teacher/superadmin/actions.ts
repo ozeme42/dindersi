@@ -494,9 +494,11 @@ export async function exportManifestAndContent() {
                         return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                     });
 
-                    const hasContent = (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
-                    
-                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).some(s => s.isPublished ?? true), topics: [] } : null;
+                    const unitHasOzet = !!unitData.htmlContent;
+                    const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
+                    const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
+
+                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
                 }));
 
                     const validUnits = units.filter(Boolean);
@@ -522,6 +524,7 @@ export async function exportManifestAndContent() {
                         if (!(topicData.isPublished ?? true)) return null;
 
                         const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').limit(1).get();
+                        
                         const hasYazilacaklarContent = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
 
                         if (topicData.htmlContent) {
