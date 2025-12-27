@@ -22,22 +22,31 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        // Use the centralized and robust getQuestionsFromBank function
         const result = await getQuestionsFromBank({
             courseId: courseId,
             unitId: unitId,
             topicId: topicId,
-            questionTypes: ['definition'], // Specify we only want definitions for this game
-            questionCount: 100, // Fetch a good amount
+            questionTypes: ['definition', 'concept'], // Fetch both to be safe
+            questionCount: 200, 
         });
 
-        if (result.error || result.questions.length < 3) {
-            return { questions: [], error: result.error || "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
+        if (result.error) {
+            return { questions: [], error: result.error };
+        }
+
+        // Filter for valid definitions *after* fetching
+        const validDefinitions = (result.questions as ActivityItem[]).filter(
+            (item): item is ActivityItem & { content: { term: string, definition: string } } => 
+            item.type === 'definition' &&
+            !!item.content?.term &&
+            !!item.content?.definition
+        );
+        
+        if (validDefinitions.length < 3) {
+            return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
         }
         
-        // The data from getQuestionsFromBank is already in a good format.
-        // We just need to ensure it fits the Partial<Question>[] type.
-        const gameQuestions: Partial<Question>[] = result.questions.map((item: any) => ({
+        const gameQuestions: Partial<Question>[] = validDefinitions.map((item: any) => ({
             id: item.id,
             text: item.content.definition,
             type: 'Bil Bakalım',
