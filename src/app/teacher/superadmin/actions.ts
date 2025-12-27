@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -371,21 +370,37 @@ export async function exportAllData(
 
                 const units = await Promise.all(unitsInCourse.map(async (unitDoc) => {
                     const unitData = unitDoc.data() as Unit;
-                    if (!(unitData.isPublished ?? true)) return null;
+                     if (!(unitData.isPublished ?? true)) return null;
+
+                    // Create ozetler file for unit if content exists
+                    if (unitData.htmlContent) {
+                        addFile(`ozetler/${unitDoc.id}.html`, unitData.htmlContent);
+                    }
+
+                    // Export unit steps (ders akışı)
+                    if (unitData.steps && unitData.steps.length > 0) {
+                        const publishedSteps = unitData.steps.filter((s: LessonStep) => s.isPublished ?? true);
+                        if (publishedSteps.length > 0) {
+                            addFile(`flows/${unitDoc.id}.json`, JSON.stringify(publishedSteps));
+                        }
+                    }
                     
                     const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
                     
                     const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
                         const topicData = topicDoc.data() as Topic;
-                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        const defsSnap = db.collection('activityItems').where('topicId', '==', topicDoc.id).where('type', '==', 'definition').limit(1).get();
+                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
                         return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                     });
 
-                    const hasContent = !!unitData.htmlContent || (unitData.steps && unitData.steps.length > 0 && unitData.steps.some(s => s.isPublished ?? true)) || hasVisibleTopics;
-                    
-                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: (unitData.steps || []).some(s => s.isPublished ?? true), topics: [] } : null;
+                    const unitHasOzet = !!unitData.htmlContent;
+                    const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
+                    const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
+
+                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
                 }));
-                    
+
                 const validUnits = units.filter(Boolean);
                 return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
             }));
@@ -490,7 +505,8 @@ export async function exportManifestAndContent() {
                     
                     const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
                         const topicData = topicDoc.data() as Topic;
-                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || (topicData.writingContent?.conceptDefinitions?.length || 0) > 0;
+                        const defsSnap = db.collection('activityItems').where('topicId', '==', topicDoc.id).where('type', '==', 'definition').limit(1).get();
+                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
                         return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
                     });
 
@@ -523,14 +539,13 @@ export async function exportManifestAndContent() {
                         const topicData = doc.data() as Topic;
                         if (!(topicData.isPublished ?? true)) return null;
 
-                        const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').limit(1).get();
-                        
-                        const hasYazilacaklarContent = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
+                        const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').get();
+                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
 
                         if (topicData.htmlContent) {
                             addFile(`ozetler/${doc.id}.html`, topicData.htmlContent);
                         }
-                        if (hasYazilacaklarContent) {
+                        if (hasYazilacaklar) {
                             const notes = topicData.writingContent?.notes || [];
                             const conceptDefinitions = defsSnap.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
                             addFile(`yazilacaklar/${doc.id}.json`, JSON.stringify({ notes, conceptDefinitions }));
@@ -546,8 +561,8 @@ export async function exportManifestAndContent() {
                         const hasOzetContent = !!topicData.htmlContent;
                         const hasFlowContent = (topicData.steps || []).some(s => s.isPublished ?? true);
 
-                        if (hasOzetContent || hasYazilacaklarContent || hasFlowContent) {
-                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent, hasOzetContent, hasFlowContent };
+                        if (hasOzetContent || hasYazilacaklar || hasFlowContent) {
+                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent, hasFlowContent };
                         }
                         return null;
                     });
@@ -622,3 +637,5 @@ export async function exportActivityData() {
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
+
+    
