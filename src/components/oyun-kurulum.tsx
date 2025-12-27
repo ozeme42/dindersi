@@ -14,9 +14,9 @@ import { getCurriculumForSelection, type ClassGroup } from '@/components/actions
 
 
 // --- TİP TANIMLARI ---
-type Topic = ClassGroup['courses'][0]['units'][0]['topics'][0];
-type Unit = ClassGroup['courses'][0]['units'][0];
-type Course = ClassGroup['courses'][0];
+type Topic = { id: string; title: string; hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; isPublished?: boolean };
+type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean; isPublished?: boolean };
+type Course = { id: string; title: string; units?: Unit[]; className?: string; icon?: any; color?: string; };
 
 const ICONS = [Book, Sparkles, Book, Gamepad2];
 const getGradient = (index: number) => {
@@ -204,7 +204,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const fetchManifest = useCallback(async () => {
     setIsLoading(true);
     try {
-        const isForStudent = !isStatic && !!user;
+        const isForStudent = !isStatic && user?.role === 'student';
         const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
         
         if (error) {
@@ -293,7 +293,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     setSearchQuery("");
     setTimeout(() => {
         const selectedCourse = courses.find(c => c.id === selection.courseId);
-        const selectedUnit = selectedCourse?.units.find(u => u.id === unit.id);
+        const selectedUnit = selectedCourse?.units?.find(u => u.id === unit.id);
         
         let topicsWithContent: Topic[] = [];
         if (selectedUnit?.topics) {
@@ -315,8 +315,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const handleSelectTopic = (topicId: string, topicName: string) => {
       setSelection({...selection, topicName});
       
-      const pathPrefix = isStatic ? '' : '/student';
+      const pathPrefix = isStatic ? '' : (user?.role === 'teacher' ? '/teacher/smartboard' : '/student');
       let basePath = targetPath;
+      
       if (!basePath) {
           basePath = dataType === 'games' ? 'oyunlar' : dataType;
       }
@@ -340,7 +341,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
           finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
       if(dataType === 'ozetler') {
-            finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+          finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
 
       router.push(finalUrl);
@@ -382,9 +383,9 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                             <SelectionCard 
                                 key={course.id}
                                 title={course.title}
-                                subtitle={(course as any).className}
-                                icon={(course as any).icon || Book}
-                                color={(course as any).color || getGradient(idx)}
+                                subtitle={course.className}
+                                icon={course.icon || Book}
+                                color={course.color || getGradient(idx)}
                                 onClick={() => handleSelectCourse(course as Course)}
                                 delay={idx * 50}
                             />
@@ -418,7 +419,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                                 color={selection.courseColor}
                                 onClick={() => handleSelectUnit(unit as Unit)}
                                 delay={(idx + 1) * 50}
-                                hasContent={dataType === 'games' || unit.hasUnitOzet || (unit.topics && unit.topics.some((t: any) => t.hasOzetContent || t.hasYazilacaklarContent))}
+                                hasContent={dataType === 'games' || (unit as any).hasUnitOzet || (unit.topics && unit.topics.some((t: any) => t.hasOzetContent || t.hasYazilacaklarContent))}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
                     </div>
@@ -548,5 +549,5 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     </div>
   );
 }
+```
 
-    
