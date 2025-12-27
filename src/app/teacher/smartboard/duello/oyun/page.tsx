@@ -18,6 +18,7 @@ function ClimbingDuelGame() {
     const [gameState, setGameState] = useState<'loading' | 'home' | 'playing' | 'win'>('loading');
     const [questions, setQuestions] = useState<Question[]>([]);
     const [error, setError] = useState<string|null>(null);
+    const [isLoading, setIsLoading] = useState(true); // EKLENDİ: Eksik state tanımı
 
     // Player & Game Logic State
     const [scores, setScores] = useState({ p1: 0, p2: 0 });
@@ -38,11 +39,11 @@ function ClimbingDuelGame() {
         const osc = audioCtxRef.current.createOscillator();
         const gain = audioCtxRef.current.createGain();
         osc.type = type; osc.frequency.value = freq;
-        osc.connect(gain); gain.connect(audioCtxRef.current.destination);
+        osc.connect(gain); gain.connect(actx.destination);
         osc.start();
         gain.gain.setValueAtTime(vol, audioCtxRef.current.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtxRef.current.currentTime + duration);
-        osc.stop(audioCtxRef.current.currentTime + duration);
+        osc.stop(actx.currentTime + duration);
     };
 
     const sfxCorrect = () => { if(soundOn) { playTone(600, 'sine', 0.6, 0.2); setTimeout(() => playTone(900, 'sine', 0.8, 0.1), 100); }};
@@ -50,7 +51,7 @@ function ClimbingDuelGame() {
     const sfxWin = () => { if(soundOn) { let notes = [523, 659, 783, 1046]; notes.forEach((n, i) => setTimeout(() => playTone(n, 'sine', 0.4, 0.2), i * 150)); }};
 
     const fetchGameData = useCallback(async () => {
-        setIsLoading(true);
+        setIsLoading(true); // GÜNCELLENDİ
         const params = {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
@@ -66,7 +67,7 @@ function ClimbingDuelGame() {
             setQuestions(result.questions);
             setGameState('home');
         }
-        setIsLoading(false);
+        setIsLoading(false); // GÜNCELLENDİ
     }, [searchParams]);
 
     useEffect(() => {
@@ -95,7 +96,6 @@ function ClimbingDuelGame() {
     
     useEffect(() => {
         if(gameState === 'home' && !isLoading && questions.length > 0) {
-            // Automatically start after a brief moment on the home screen
              setTimeout(() => {
                 startGame();
             }, 1000); // 1 saniye sonra oyunu başlat
@@ -187,7 +187,7 @@ function ClimbingDuelGame() {
             <div id="sp11_container" className={containerClass}>
                 <div id="confetti_layer"></div>
                 <div className="top_btn_grp">
-                    <button className="top_btn" onClick={toggleSound}>{soundOn ? "🔊 Ses: Açık" : "🔇 Ses: Kapalı"}</button>
+                    <button className="top_btn" id="sound_toggle" onClick={toggleSound}>{soundOn ? "🔊 Ses: Açık" : "🔇 Ses: Kapalı"}</button>
                     <button className="top_btn" onClick={toggleFS}>&#9974; Tam Ekran</button>
                 </div>
 
@@ -204,14 +204,7 @@ function ClimbingDuelGame() {
                         <div className="home_layout">
                             <div className="home_right">
                                 <h1 style={{color:'#009688', margin: '5px 0'}}>Tırmanma Yarışı</h1>
-                                <div style={{fontSize:'30px', marginBottom:'10px'}}>🏁</div>
-                                <ul className="rules_list">
-                                    <li>İki takım aynı anda yarışır.</li>
-                                    <li>Doğru cevaplar sizi zirveye taşır.</li>
-                                    <li>Yanlış cevaplar 1 adım geri götürür!</li>
-                                    <li>Zirveye ilk ulaşan kazanır!</li>
-                                </ul>
-                                <Button className="sp11_btn bg_orange" onClick={startGame}>YARIŞA BAŞLA</Button>
+                                <button className="sp11_btn bg_orange" onClick={startGame}>YARIŞA BAŞLA</button>
                             </div>
                         </div>
                     </div>
@@ -228,7 +221,7 @@ function ClimbingDuelGame() {
                             </div>
                             <div id="sp11_stage">
                                 <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c1" className="sp11_char" style={{ bottom: `${scores.p1 * 0.9}%`, transform: scores.p1 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p1 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g><g className="view_back"><path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#0097a7" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><circle cx="50" cy="22" r="20" fill="#3e2723" /></g></svg></div></div>
-                                <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c2" className="sp11_char" style={{ bottom: `${scores.p2 * 0.9}%`, transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p2 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g><g className="view_back"><path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><circle cx="50"cy="22" r="20" fill="#3e2723" /></g></svg></div></div>
+                                <div className="sp11_lane"><div className="sp11_flag">🚩</div><div className="sp11_rope"></div><div id="c2" className="sp11_char" style={{ bottom: `${scores.p2 * 0.9}%`, transform: scores.p2 > 0 ? 'translateX(-50%)' : 'translateX(0)', left: scores.p2 > 0 ? '50%' : '-60px' }}><svg viewBox="0 0 100 130"><g className="view_front"><path d="M10 55 L 30 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M90 55 L 70 45" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 35 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 65 125" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><path d="M30 15 Q 50 5 70 15" fill="#3e2723" stroke="#3e2723" strokeWidth="5" strokeLinecap="round"/><circle cx="42" cy="25" r="2" fill="#333"/> <circle cx="58" cy="25" r="2" fill="#333"/><path d="M45 35 Q 50 40 55 35" stroke="#333" strokeWidth="2" fill="none"/></g><g className="view_back"><path d="M30 50 L 50 20" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M70 50 L 50 30" stroke="#ffcc80" strokeWidth="10" strokeLinecap="round" /><path d="M35 100 L 45 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><path d="M65 100 L 55 115" stroke="#333" strokeWidth="10" strokeLinecap="round" /><rect x="25" y="45" width="50" height="55" rx="8" fill="#e53935" /><rect x="25" y="90" width="50" height="15" fill="#37474f" /><circle cx="50" cy="25" r="20" fill="#ffcc80" /><circle cx="50" cy="22" r="20" fill="#3e2723" /></g></svg></div></div>
                             </div>
                             <div className="sp11_col">
                                 <div className="sp11_ctrl">
@@ -255,6 +248,7 @@ function ClimbingDuelGame() {
         </div>
     );
 }
+
 
 export default function SmartboardClimbingDuelPage() {
     return (
