@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
@@ -206,7 +205,13 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     setIsLoading(true);
     try {
         const isForStudent = !isStatic && !!user;
-        const { classGroups: fetchedClassGroups } = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
+        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
+        
+        if (error) {
+            console.error(error);
+            setClassGroups([]);
+            return;
+        }
         
         const classGroupsWithData = (fetchedClassGroups || []).map((group, groupIndex) => ({
             ...group,
@@ -243,12 +248,14 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     setIsLoading(true);
     setSearchQuery("");
     setTimeout(() => {
-        const unitsWithContent = (course as any).units.filter((unit: Unit) => {
-             if (dataType === 'games') return true;
-             if (dataType === 'ozetler') return unit.hasUnitOzet || unit.topics.some((t: Topic) => t.hasOzetContent);
-             if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => t.hasYazilacaklarContent);
-             return false;
-        });
+        let unitsWithContent = (course as any).units;
+        if (dataType !== 'games') {
+             unitsWithContent = (course as any).units.filter((unit: Unit) => {
+                if (dataType === 'ozetler') return unit.hasUnitOzet || unit.topics.some((t: Topic) => t.hasOzetContent);
+                if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => t.hasYazilacaklarContent);
+                return false;
+             });
+        }
         setUnits(unitsWithContent || []);
         setIsLoading(false);
         setCurrentStep(2);
@@ -275,7 +282,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
         return;
     }
 
-    if (dataType === 'ozetler' && unit.hasUnitOzet && !unit.topics.some(t => t.hasOzetContent)) {
+    if (dataType === 'ozetler' && unit.hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
         const pathPrefix = isStatic ? '' : '/student';
         const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
         router.push(url);
@@ -411,7 +418,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                                 color={selection.courseColor}
                                 onClick={() => handleSelectUnit(unit as Unit)}
                                 delay={(idx + 1) * 50}
-                                hasContent={dataType === 'games' || unit.hasUnitOzet || unit.topics.length > 0}
+                                hasContent={dataType === 'games' || unit.hasUnitOzet || (unit.topics && unit.topics.some((t: any) => t.hasOzetContent || t.hasYazilacaklarContent))}
                             />
                         )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
                     </div>
@@ -491,7 +498,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                     style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
                 ></div>
 
-                {stepsToDisplay.slice(0, 3).map((step) => {
+                {stepsToDisplay.map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
@@ -542,145 +549,4 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   );
 }
 
-```
-  </change>
-  <change>
-    <file>src/components/actions/get-curriculum-for-selection.ts</file>
-    <content><![CDATA[
-
-'use server';
-
-import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, query, where, getDocs, orderBy, Timestamp } from "firebase/firestore";
-import type { Topic, SchoolClass, Course, Unit, UserProfile, ActivityItem } from "@/lib/types";
-import { unstable_noStore as noStore } from 'next/cache';
-import fs from 'fs/promises';
-import path from 'path';
-
-export type EnrichedCourse = Course & {
-    units: (Omit<Unit, 'topics'> & {
-        topics: (Topic & { hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; })[]
-    })[]
-};
-
-export type ClassGroup = { 
-    name: string; 
-    courses: EnrichedCourse[] 
-};
-
-export async function getCurriculumForSelection(
-    dataType: 'games' | 'yazilacaklar' | 'ozetler',
-    isStatic: boolean,
-    userId?: string
-): Promise<{ classGroups: ClassGroup[], error?: string }> {
-    noStore();
-    try {
-        if (isStatic) {
-            // For static pages, read from the generated manifest.json
-            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const data = JSON.parse(fileContent);
-            return { classGroups: data.classGroups || [] };
-        }
-
-        if (!userId) {
-            return { classGroups: [], error: "Kullanıcı bilgisi gerekli." };
-        }
-
-        // Logic for authenticated users
-        const userDoc = await getDoc(doc(db, "users", userId));
-        if (!userDoc.exists()) {
-            return { classGroups: [], error: "Öğrenci bulunamadı." };
-        }
-        const student = userDoc.data() as UserProfile;
-        const studentClassName = student.class?.split(' - ')[0];
-
-        const [classesSnap, coursesSnap] = await Promise.all([
-            getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-            getDocs(collection(db, "courses"))
-        ]);
-        
-        const allCourses = coursesSnap.docs.map(d => ({ id: d.id, ...d.data() } as Course));
-        const allClasses = classesSnap.docs.map(d => ({ id: d.id, ...d.data() } as SchoolClass));
-
-        let relevantCourses: Course[];
-        if (studentClassName) {
-            const studentClass = allClasses.find(c => c.name === studentClassName);
-            relevantCourses = allCourses.filter(c => !c.isTeacherOnly && (c.classId === studentClass?.id || !c.classId));
-        } else {
-            relevantCourses = allCourses.filter(c => !c.isTeacherOnly && !c.classId);
-        }
-
-        const enrichedCourses: EnrichedCourse[] = [];
-        for (const course of relevantCourses) {
-            const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`), orderBy("title")));
-            const enrichedUnits: EnrichedCourse['units'] = [];
-
-            for (const unitDoc of unitsSnapshot.docs) {
-                const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`), orderBy("title")));
-                
-                const topicsWithFlags = await Promise.all(topicsSnapshot.docs.map(async (topicDoc) => {
-                    const topicData = topicDoc.data() as Topic;
-                    
-                    let hasYazilacaklarContent = false;
-                    const definitionsQuery = query(collection(db, "activityItems"), where("topicId", "==", topicDoc.id), where("type", "==", "definition"));
-                    const definitionsSnapshot = await getDocs(definitionsQuery);
-                    hasYazilacaklarContent = !definitionsSnapshot.empty || (topicData.writingContent?.notes?.length || 0) > 0;
-                    
-                    return {
-                        id: topicDoc.id,
-                        ...topicData,
-                        hasOzetContent: !!topicData.htmlContent,
-                        hasYazilacaklarContent,
-                    };
-                }));
-
-                const validTopics = topicsWithFlags.filter(t => (t.isPublished ?? true));
-                const unitData = unitDoc.data() as Unit;
-                
-                const unitHasOzet = !!unitData.htmlContent;
-                const unitHasTopicsWithContent = validTopics.some(t => t.hasOzetContent || t.hasYazilacaklarContent || dataType === 'games');
-                
-                if (unitHasTopicsWithContent || unitHasOzet) {
-                    enrichedUnits.push({
-                        id: unitDoc.id,
-                        title: unitData.title,
-                        hasUnitOzet: unitHasOzet,
-                        topics: validTopics as any,
-                    });
-                }
-            }
-
-            if (enrichedUnits.length > 0) {
-                enrichedCourses.push({
-                    ...course,
-                    className: student.class || 'Genel',
-                    units: enrichedUnits,
-                });
-            }
-        }
-        
-        enrichedCourses.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
-
-        // Group by class name for the final structure
-        const groupedByClass: {[key: string]: Course[]} = {};
-        enrichedCourses.forEach(course => {
-            const className = course.className || 'Genel';
-            if (!groupedByClass[className]) {
-                groupedByClass[className] = [];
-            }
-            groupedByClass[className].push(course);
-        });
-
-        const classGroups: ClassGroup[] = Object.keys(groupedByClass).map(name => ({
-            name,
-            courses: groupedByClass[name]
-        }));
-        
-        return { classGroups: JSON.parse(JSON.stringify(classGroups)) };
-        
-    } catch (e: any) {
-        console.error("Error getting curriculum for selection: ", e);
-        return { classGroups: [], error: "Veri alınırken bir hata oluştu." };
-    }
-}
+    
