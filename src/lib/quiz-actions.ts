@@ -13,55 +13,77 @@ function isQuestion(obj: any): obj is Question {
     return obj && typeof obj.type === 'string';
 }
 
-const isStaticBuild = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
+async function getAllTopicIdsForContext(courseId?: string, unitId?: string): Promise<string[]> {
+    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+    try {
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        const manifest = JSON.parse(manifestContent);
 
-// Centralized function to fetch questions
+        let topicIds: string[] = [];
+
+        for (const group of manifest.classGroups) {
+            for (const course of group.courses) {
+                if (courseId && course.id !== courseId) continue;
+                
+                for (const unit of course.units) {
+                    if (unitId && unit.id !== unitId) continue;
+                    
+                    unit.topics.forEach((topic: { id: string }) => {
+                        topicIds.push(topic.id);
+                    });
+                }
+            }
+        }
+        return [...new Set(topicIds)];
+    } catch (e) {
+        console.error("Failed to read or parse manifest for topic IDs:", e);
+        return [];
+    }
+}
+
+
+// Centralized function to fetch questions - NOW STATIC ONLY for students
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 10, difficulty, questionTypes } = params;
 
     try {
         let allQuestions: Question[] = [];
+        let topicIdsToFetch: string[] = [];
 
-        // In a static build, we can only fetch by topicId from a pre-generated file.
-        // If no topicId is provided, we cannot fetch data.
-        if (isStaticBuild) {
-            if (topicId && topicId !== 'all') {
-                 try {
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/questions/${topicId}.json`);
-                    if (res.ok) {
-                        allQuestions = await res.json();
-                    } else if (res.status !== 404) {
-                        console.warn(`Static question data for topic ${topicId} not found or failed to load. Status: ${res.status}`);
-                    }
-                 } catch(e) {
-                     console.warn(`Could not fetch static questions for ${topicId}:`, e);
-                 }
-            } else {
-                // In static mode, if no topicId is given, we can't fetch questions.
-                // This is a limitation of the static build approach.
-                // The UI should ideally prevent this state.
-                return { questions: [], error: "Statik modda, soru getirmek için bir konu seçimi zorunludur." };
-            }
-        } else if (!isStaticBuild) {
-            // In dynamic mode, query Firestore.
-            let conditions = [];
-            if (topicId && topicId !== 'all') {
-                conditions.push(where("topicId", "==", topicId));
-            } else if (unitId && unitId !== 'all') {
-                conditions.push(where("unitId", "==", unitId));
-            } else if (courseId && courseId !== 'all') {
-                conditions.push(where("courseId", "==", courseId));
-            }
-
-            const questionsRef = collection(db, "questions");
-            const finalQuery = conditions.length > 0 
-                ? query(questionsRef, ...conditions) 
-                : query(questionsRef, firestoreLimit(100)); // Limit open queries
-            
-            const querySnapshot = await getDocs(finalQuery);
-            allQuestions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
+        if (topicId && topicId !== 'all') {
+            topicIdsToFetch = [topicId];
+        } else if (unitId && unitId !== 'all') {
+            topicIdsToFetch = await getAllTopicIdsForContext(courseId, unitId);
+        } else if (courseId && courseId !== 'all') {
+            topicIdsToFetch = await getAllTopicIdsForContext(courseId);
+        } else {
+             // If no specific context, it implies a broader scope not suitable for static fetching without a starting point.
+             // However, if the intent is "all questions ever", that's a different, very heavy operation.
+             // For now, we'll assume a context is usually provided for games.
+             // For general question bank, it should be filtered by course at least.
+             return { questions: [], error: "Lütfen bir ders veya ünite seçin." };
         }
 
+        if (topicIdsToFetch.length === 0) {
+             return { questions: [], error: "Seçilen kritere uygun konu bulunamadı." };
+        }
+
+        const questionPromises = topicIdsToFetch.map(async (tId) => {
+            const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${tId}.json`);
+            try {
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                return JSON.parse(fileContent) as Question[];
+            } catch (e: any) {
+                // ENOENT is file not found, which is fine, just means no questions for this topic.
+                if (e.code !== 'ENOENT') {
+                    console.warn(`Could not read/parse questions for topic ${tId}:`, e.message);
+                }
+                return [];
+            }
+        });
+
+        allQuestions = (await Promise.all(questionPromises)).flat();
+        
         // Apply client-side filtering for difficulty and type after fetching
         if (difficulty && difficulty.length > 0) {
             allQuestions = allQuestions.filter(q => difficulty.includes(q.difficulty));
@@ -97,13 +119,11 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         return { questions: JSON.parse(JSON.stringify(questionsWithShuffledOptions)) };
 
     } catch (e: any) {
-        console.error("Error fetching questions:", e);
-        if (e.code === 'failed-precondition') {
-            return { questions: [], error: `Veritabanı indeksi eksik. Geliştirici konsolundaki linki kullanarak indeksi oluşturun. Hata: ${e.message}` };
-        }
-        return { questions: [], error: 'Sorular alınırken bir veritabanı hatası oluştu.' };
+        console.error("Error fetching questions from static files:", e);
+        return { questions: [], error: 'Sorular alınırken bir hata oluştu.' };
     }
 }
+
 
 /**
  * Fetches all activity items for a given course or unit when "all" is selected.
