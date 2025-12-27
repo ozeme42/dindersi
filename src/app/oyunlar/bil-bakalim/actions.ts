@@ -13,34 +13,41 @@ import {
   doc, 
   serverTimestamp, 
   increment,
-  getDocs
+  getDocs,
+  Query,
+  and
 } from 'firebase/firestore';
-import { getQuestionsFromBank } from '@/lib/quiz-actions'; // Use the robust DB fetching function
 
 export async function getBilBakalimAction(
     { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        const result = await getQuestionsFromBank({
-            courseId: courseId,
-            unitId: unitId,
-            topicId: topicId,
-            questionTypes: ['definition', 'concept'], // Fetch both to be safe
-            questionCount: 200, 
-        });
+        let q: Query = collection(db, "activityItems");
+        
+        const conditions = [where("type", "==", "definition")];
 
-        if (result.error) {
-            return { questions: [], error: result.error };
+        if (topicId && topicId !== 'all') {
+            conditions.push(where("topicId", "==", topicId));
+        } else if (unitId && unitId !== 'all') {
+            conditions.push(where("unitId", "==", unitId));
+        } else if (courseId && courseId !== 'all') {
+            conditions.push(where("courseId", "==", courseId));
+        }
+        
+        if (conditions.length > 1) {
+            q = query(q, and(...conditions));
+        } else {
+            q = query(q, conditions[0]);
         }
 
-        // Filter for valid definitions *after* fetching
-        const validDefinitions = (result.questions as ActivityItem[]).filter(
-            (item): item is ActivityItem & { content: { term: string, definition: string } } => 
-            item.type === 'definition' &&
-            !!item.content?.term &&
-            !!item.content?.definition
-        );
+        const querySnapshot = await getDocs(q);
+
+        const validDefinitions = querySnapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() } as ActivityItem))
+            .filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
+                !!item.content?.term && !!item.content?.definition
+            );
         
         if (validDefinitions.length < 3) {
             return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
