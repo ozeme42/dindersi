@@ -24,14 +24,14 @@ export async function getBilBakalimAction(
 ): Promise<{ questions: Partial<Question>[]; error?: string }> {
     noStore();
     try {
-        // **DÜZELTME:** Diğer oyunlar gibi merkezi `getStaticQuestionsForGame` fonksiyonu kullanılıyor.
+        // Use the centralized, corrected function to get data
         const allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
 
         if (allItems.length === 0) {
              return { questions: [], error: "Bu konu için etkinlik verisi bulunamadı." };
         }
         
-        // **DÜZELTME:** Gelen veriyi doğru şekilde filtrele.
+        // Correctly filter for definition items from the potentially mixed pool
         const validDefinitions = allItems.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 
                 item.type === 'definition' && !!item.content?.term && !!item.content?.definition
             );
@@ -40,12 +40,13 @@ export async function getBilBakalimAction(
             return { questions: [], error: "Bil Bakalım oynamak için bu konuda en az 3 farklı tanım bulunmalıdır." };
         }
         
-        const gameQuestions: Partial<Question>[] = validDefinitions.map((item: any) => ({
+        // Map the valid items to the game question format
+        const gameQuestions: Partial<Question>[] = validDefinitions.map((item) => ({
             id: item.id,
             text: item.content.definition,
             type: 'Bil Bakalım',
             correctAnswer: item.content.term,
-            difficulty: 'Orta',
+            difficulty: 'Orta', // or derive from item if available
         }));
 
         return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
