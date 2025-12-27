@@ -549,5 +549,3 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     </div>
   );
 }
-```
-
