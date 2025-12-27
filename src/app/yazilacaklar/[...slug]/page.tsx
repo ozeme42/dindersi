@@ -200,7 +200,12 @@ export function YazilacaklarDisplayPage() {
             <div className="sticky top-0 z-30 w-full border-b border-white/5 bg-slate-950/80 backdrop-blur-xl transition-all pt-4">
                 <div className="container mx-auto px-4 pb-4">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topicTitle || 'Yazılacaklar'}</h1>
+                        <div className="flex items-center gap-2">
+                             <Button variant="ghost" size="icon" asChild className="h-10 w-10 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl flex-shrink-0">
+                                <Link href={backUrl}><ArrowLeft className="h-5 w-5"/></Link>
+                             </Button>
+                             <h1 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 truncate">{topicTitle || 'Yazılacaklar'}</h1>
+                        </div>
                         <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
                             <div className="flex items-center gap-2 min-w-max px-1">
                                 <div className="flex items-center bg-slate-900/80 border border-white/10 rounded-xl p-1">
