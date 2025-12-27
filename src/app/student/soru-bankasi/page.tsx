@@ -145,22 +145,20 @@ export default function SoruBankasiPage() {
                 let filteredCourses: Course[] = [];
                 const studentClass = allClasses.find(c => studentClassName && c.name === studentClassName);
                 
-                // Öğrencinin sınıfına atanmış, genel (classId'si olmayan) veya yaz okulu derslerini al
                 filteredCourses = allCourses.filter(course => 
                     !course.isTeacherOnly && (
-                        (studentClass && course.classId === studentClass.id) || // Öğrencinin sınıfına ait
-                        !course.classId                                       // Genel dersler
+                        (studentClass && course.classId === studentClass.id) || 
+                        !course.classId                                       
                     )
                 );
 
-
                 const coursesData = await Promise.all(filteredCourses.map(async (course) => {
                     const progressRef = doc(db, 'users', user.uid, 'progress', course.id);
-                    const qbStats = getCourseQuestionBankStats(course.id, user.uid);
+                    const qbStatsPromise = getCourseQuestionBankStats(course.id, user.uid);
                     
                     const [progressSnap, questionBankStats] = await Promise.all([
                         getDoc(progressRef),
-                        qbStats
+                        qbStatsPromise
                     ]);
                     
                     let completedTopicsCount = 0;
@@ -208,7 +206,11 @@ export default function SoruBankasiPage() {
                 setIsLoading(false);
             }
         }
-        fetchCoursesAndProgress();
+        if(user) {
+            fetchCoursesAndProgress();
+        } else {
+            setIsLoading(false);
+        }
     }, [user]);
 
     return (
@@ -273,3 +275,5 @@ export default function SoruBankasiPage() {
         </div>
     );
 }
+
+```
