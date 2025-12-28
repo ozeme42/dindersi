@@ -61,11 +61,10 @@ function PageContent() {
         if (!courseId) return;
         setIsLoading(true);
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
-        const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
 
         try {
             // Canlı modda Firestore'dan ilerlemeyi çek
-            if (user && !isStatic) {
+            if (user) {
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
                 const progressSnap = await getDoc(progressRef);
                 if (progressSnap.exists()) {
@@ -95,31 +94,19 @@ function PageContent() {
             // Ünite ve Konu adımlarını manifest veya canlı veriden zenginleştir
             const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
                 let unitSteps: LessonStep[] = [];
-                 if (unit.hasFlowContent) {
-                    if(isStatic) {
-                        try {
-                            const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
-                            if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
-                        } catch (e) { console.warn(`No static flow file for unit ${unit.id}`) }
-                    } else {
-                        const unitDoc = await getDoc(doc(db, `courses/${courseId}/units`, unit.id));
-                        unitSteps = unitDoc.data()?.steps || [];
-                    }
-                }
+                // ALWAYS FETCH FROM STATIC FILE FOR STUDENT VIEW
+                try {
+                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                    if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
+                } catch (e) { console.warn(`No static flow file for unit ${unit.id}`) }
 
                 const enrichedTopics = await Promise.all((unit.topics || []).map(async (topic: any) => {
                     let topicSteps: LessonStep[] = [];
-                    if (topic.hasFlowContent) {
-                         if(isStatic) {
-                             try {
-                                const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
-                                if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
-                             } catch(e) { console.warn(`No static flow file for topic ${topic.id}`) }
-                         } else {
-                            const topicDoc = await getDoc(doc(db, `courses/${courseId}/units/${unit.id}/topics`, topic.id));
-                            topicSteps = topicDoc.data()?.steps || [];
-                         }
-                    }
+                    // ALWAYS FETCH FROM STATIC FILE FOR STUDENT VIEW
+                     try {
+                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                        if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
+                     } catch(e) { console.warn(`No static flow file for topic ${topic.id}`) }
                     return { ...topic, steps: topicSteps };
                 }));
                 return { ...unit, steps: unitSteps, topics: enrichedTopics };
