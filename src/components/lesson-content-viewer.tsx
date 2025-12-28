@@ -9,7 +9,8 @@ import {
     Check, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon, Puzzle, Skull, Crosshair, 
     Shuffle, FolderKanban, MousePointerClick, Trophy, BrainCircuit, Video, Loader2, 
     CheckCircle, ArrowDownUp, Search, Coins, ClipboardCheck, Minus, Plus, X, History,
-    Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock
+    Maximize2, Maximize, Minimize, AlertTriangle, FastForward, Lock, Crown, Gem, Flame, Quote,
+    PenTool, Eraser, Highlighter, Undo, Trash2, ChevronUp, ChevronDown
 } from 'lucide-react';
 import type { 
     LessonStep, AnagramStep, SentenceScrambleStep, FitbStep, AccordionStep, IframeStep, 
@@ -124,9 +125,19 @@ const TypewriterText = ({ content, onComplete, speed = 40 }: { content: string, 
     return <div dangerouslySetInnerHTML={{ __html: displayedContent }} />;
 };
 
-// --- ALT BİLEŞENLER ---
+// --- ORTAK RENK TEMALARI ---
+const FLASHCARD_THEMES = [
+    { front: 'bg-rose-50 border-rose-200 text-rose-900', back: 'bg-rose-500 border-rose-600 text-white' },
+    { front: 'bg-blue-50 border-blue-200 text-blue-900', back: 'bg-blue-500 border-blue-600 text-white' },
+    { front: 'bg-emerald-50 border-emerald-200 text-emerald-900', back: 'bg-emerald-500 border-emerald-600 text-white' },
+    { front: 'bg-amber-50 border-amber-200 text-amber-900', back: 'bg-amber-500 border-amber-600 text-white' },
+    { front: 'bg-purple-50 border-purple-200 text-purple-900', back: 'bg-purple-500 border-purple-600 text-white' },
+    { front: 'bg-cyan-50 border-cyan-200 text-cyan-900', back: 'bg-cyan-500 border-cyan-600 text-white' },
+    { front: 'bg-indigo-50 border-indigo-200 text-indigo-900', back: 'bg-indigo-500 border-indigo-600 text-white' },
+    { front: 'bg-orange-50 border-orange-200 text-orange-900', back: 'bg-orange-500 border-orange-600 text-white' },
+];
 
-// 1. VisualPlayer
+// --- 1. VisualPlayer ---
 function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualStep, isMaximized: boolean, onToggleMaximize: () => void }) {
     
     useEffect(() => {
@@ -142,18 +153,21 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
     return (
         <div 
             className={cn(
-                "relative flex flex-col items-center justify-center bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 transition-all duration-500 ease-in-out",
+                "relative flex flex-col items-center justify-center bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 transition-all duration-500 ease-in-out",
                 isMaximized 
-                    ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0"
+                    ? "fixed inset-0 z-[40] w-screen h-screen rounded-none border-0 bg-black" 
                     : "w-full h-full"
             )}
         >
             <div className="absolute top-4 right-4 z-50">
                 <Button
-                    onClick={onToggleMaximize}
+                    onClick={(e) => {
+                        e.stopPropagation(); 
+                        onToggleMaximize();
+                    }}
                     variant="secondary"
                     size="icon"
-                    className="bg-black/50 hover:bg-black/70 text-white backdrop-blur-md border border-white/20 rounded-full w-12 h-12 shadow-lg transition-transform hover:scale-110"
+                    className="bg-white/80 hover:bg-white text-slate-800 backdrop-blur-md border border-slate-200 rounded-full w-12 h-12 shadow-lg transition-transform hover:scale-110"
                     title={isMaximized ? "Küçült" : "Tam Ekran Yap"}
                 >
                     {isMaximized ? <Minimize className="h-6 w-6" /> : <Maximize className="h-6 w-6" />}
@@ -176,12 +190,11 @@ function VisualPlayer({ step, isMaximized, onToggleMaximize }: { step: VisualSte
     );
 }
 
-// 2. InteractiveTrueFalseList
+// --- 2. InteractiveTrueFalseList ---
 function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAllAnswered }: { step: TrueFalseListStep, isFullscreen: boolean, answers: any, onAnswer: (index: number, val: boolean) => void, onAllAnswered: () => void }) {
     const isTeacher = useTeacherMode();
     const allAnswered = step.questions.every((_, index) => answers && answers[index] !== undefined);
     
-    // Zaten tamamlandı mı kontrolü
     const isCompleted = answers?.completed;
 
     useEffect(() => {
@@ -191,22 +204,22 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
     }, [allAnswered, isCompleted, onAllAnswered]);
 
     const colorThemes = [
-        { card: 'border-cyan-500/50 bg-cyan-500/5 hover:bg-cyan-500/10', number: 'text-cyan-400' },
-        { card: 'border-purple-500/50 bg-purple-500/5 hover:bg-purple-500/10', number: 'text-purple-400' },
-        { card: 'border-amber-500/50 bg-amber-500/5 hover:bg-amber-500/10', number: 'text-amber-400' },
-        { card: 'border-rose-500/50 bg-rose-500/5 hover:bg-rose-500/10', number: 'text-rose-400' },
-        { card: 'border-lime-500/50 bg-lime-500/5 hover:bg-lime-500/10', number: 'text-lime-400' },
-        { card: 'border-indigo-500/50 bg-indigo-500/5 hover:bg-indigo-500/10', number: 'text-indigo-400' },
+        { card: 'border-cyan-200 bg-cyan-50 hover:bg-cyan-100', number: 'text-cyan-600' },
+        { card: 'border-purple-200 bg-purple-50 hover:bg-purple-100', number: 'text-purple-600' },
+        { card: 'border-amber-200 bg-amber-50 hover:bg-amber-100', number: 'text-amber-600' },
+        { card: 'border-rose-200 bg-rose-50 hover:bg-rose-100', number: 'text-rose-600' },
+        { card: 'border-lime-200 bg-lime-50 hover:bg-lime-100', number: 'text-lime-600' },
+        { card: 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100', number: 'text-indigo-600' },
     ];
 
     return (
         <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-4xl mx-auto")}>
              <div className={cn(
-                "p-4 rounded-3xl shadow-lg bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 w-full text-center", 
+                "p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 w-full text-center", 
                 isTeacher ? "py-4 mb-6 mt-2" : "p-3 md:p-6 mb-4"
             )}>
-                <h2 className={cn("font-black text-white drop-shadow-lg", 
-                    isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl")
+                <h2 className={cn("font-black text-slate-800", 
+                    isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl")
                 )}>{step.title}</h2>
             </div>
 
@@ -220,17 +233,17 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
 
                     return (
                         <div key={index} className={cn(
-                            "rounded-3xl border-4 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
-                            isTeacher ? "p-6 min-h-[16rem]" : "p-4 min-h-[10rem]",
+                            "rounded-3xl border-2 shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden backdrop-blur-md",
+                            isTeacher ? "p-6 min-h-[14rem]" : "p-4 min-h-[10rem]",
                             isAnswered 
-                                ? (isCorrect ? "border-emerald-500 bg-emerald-500/10" : "border-red-500 bg-red-500/10") 
-                                : `border-white/10 ${theme.card}`
+                                ? (isCorrect ? "border-emerald-400 bg-emerald-50" : "border-red-400 bg-red-50") 
+                                : `border-slate-100 ${theme.card}`
                         )}>
                             <div className="flex gap-4 mb-6">
-                                <span className={cn("font-black", isTeacher ? "text-3xl" : "text-xl", isAnswered ? "text-white" : theme.number)}>
+                                <span className={cn("font-black", isTeacher ? "text-2xl" : "text-xl", isAnswered ? "text-slate-800" : theme.number)}>
                                     {index + 1}.
                                 </span>
-                                <p className={cn("font-bold text-white leading-relaxed", isTeacher ? "text-3xl" : "text-lg")}>
+                                <p className={cn("font-bold text-slate-700 leading-relaxed", isTeacher ? "text-2xl" : "text-base")}>
                                     {q.statement}
                                 </p>
                             </div>
@@ -240,29 +253,29 @@ function InteractiveTrueFalseList({ step, isFullscreen, answers, onAnswer, onAll
                                     onClick={() => !isAnswered && onAnswer(index, true)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all",
-                                        isTeacher ? "h-20 text-2xl" : "h-12 text-lg",
+                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
+                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
                                         isAnswered && userAnswer.answer === true 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-600 opacity-100" : "bg-red-600 hover:bg-red-600 opacity-100")
-                                            : "bg-slate-700 hover:bg-slate-600 text-white",
-                                        isAnswered && userAnswer.answer !== true && "opacity-30"
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
+                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
+                                        isAnswered && userAnswer.answer !== true && "opacity-30 grayscale"
                                     )}
                                 >
-                                    <CheckCircle className={cn("mr-2", isTeacher ? "h-8 w-8" : "h-5 w-5")} /> Doğru
+                                    <CheckCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Doğru
                                 </Button>
                                 <Button
                                     onClick={() => !isAnswered && onAnswer(index, false)}
                                     disabled={isAnswered}
                                     className={cn(
-                                        "flex-1 font-bold rounded-xl transition-all",
-                                        isTeacher ? "h-20 text-2xl" : "h-12 text-lg",
+                                        "flex-1 font-bold rounded-xl transition-all shadow-sm",
+                                        isTeacher ? "h-16 text-xl" : "h-10 text-base",
                                         isAnswered && userAnswer.answer === false 
-                                            ? (userAnswer.isCorrect ? "bg-emerald-600 hover:bg-emerald-600 opacity-100" : "bg-red-600 hover:bg-red-600 opacity-100")
-                                            : "bg-slate-700 hover:bg-slate-600 text-white",
-                                        isAnswered && userAnswer.answer !== false && "opacity-30"
+                                            ? (userAnswer.isCorrect ? "bg-emerald-500 hover:bg-emerald-600 opacity-100 text-white" : "bg-red-500 hover:bg-red-600 opacity-100 text-white")
+                                            : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200",
+                                        isAnswered && userAnswer.answer !== false && "opacity-30 grayscale"
                                     )}
                                 >
-                                    <XCircle className={cn("mr-2", isTeacher ? "h-8 w-8" : "h-5 w-5")} /> Yanlış
+                                    <XCircle className={cn("mr-2", isTeacher ? "h-6 w-6" : "h-4 w-4")} /> Yanlış
                                 </Button>
                             </div>
                         </div>
@@ -288,6 +301,7 @@ function ContentListPlayer({
     onAnimationEnd?: () => void
 }) {
     const isTeacher = useTeacherMode();
+    const scrollRef = useRef<HTMLDivElement>(null);
       
     const sentences = useMemo(() => {
         let items: string[] = [];
@@ -309,15 +323,29 @@ function ContentListPlayer({
     }, [step]);
       
     const visibleSentences = sentences.slice(0, revealedSentencesCount);
-    const summaryIcons = [Star, CheckCircle, Target, Zap, Sparkles, Feather, Leaf, Sun, Moon];
-    const summaryColorClasses = [
-        'bg-blue-600/20 border-blue-500/50 text-blue-100', 
-        'bg-emerald-600/20 border-emerald-500/50 text-emerald-100', 
-        'bg-purple-600/20 border-purple-500/50 text-purple-100', 
-        'bg-rose-600/20 border-rose-500/50 text-rose-100', 
-        'bg-amber-600/20 border-amber-500/50 text-amber-100', 
-        'bg-indigo-600/20 border-indigo-500/50 text-indigo-100', 
-        'bg-teal-600/20 border-teal-500/50 text-teal-100'
+    
+    // Dekoratif İkonlar
+    const decoIcons = [
+        { left: Sparkles, right: Sparkles },
+        { left: Star, right: Star },
+        { left: Zap, right: Zap },
+        { left: Crown, right: Crown },
+        { left: Gem, right: Gem },
+        { left: Flame, right: Flame },
+        { left: Feather, right: Feather },
+        { left: Quote, right: Quote }
+    ];
+
+    // Renk Temaları
+    const styles = [
+        { bg: 'bg-blue-50/90', border: 'border-blue-100', circleBorder: 'border-blue-400', numberColor: 'text-blue-600', textColor: 'text-blue-700', iconColor: 'text-blue-400' },
+        { bg: 'bg-rose-50/90', border: 'border-rose-100', circleBorder: 'border-rose-400', numberColor: 'text-rose-600', textColor: 'text-rose-700', iconColor: 'text-rose-400' },
+        { bg: 'bg-amber-50/90', border: 'border-amber-100', circleBorder: 'border-amber-400', numberColor: 'text-amber-600', textColor: 'text-amber-700', iconColor: 'text-amber-400' },
+        { bg: 'bg-emerald-50/90', border: 'border-emerald-100', circleBorder: 'border-emerald-400', numberColor: 'text-emerald-600', textColor: 'text-emerald-700', iconColor: 'text-emerald-400' },
+        { bg: 'bg-purple-50/90', border: 'border-purple-100', circleBorder: 'border-purple-400', numberColor: 'text-purple-600', textColor: 'text-purple-700', iconColor: 'text-purple-400' },
+        { bg: 'bg-cyan-50/90', border: 'border-cyan-100', circleBorder: 'border-cyan-400', numberColor: 'text-cyan-600', textColor: 'text-cyan-700', iconColor: 'text-cyan-400' },
+        { bg: 'bg-indigo-50/90', border: 'border-indigo-100', circleBorder: 'border-indigo-400', numberColor: 'text-indigo-600', textColor: 'text-indigo-700', iconColor: 'text-indigo-400' },
+        { bg: 'bg-orange-50/90', border: 'border-orange-100', circleBorder: 'border-orange-400', numberColor: 'text-orange-600', textColor: 'text-orange-700', iconColor: 'text-orange-400' },
     ];
 
     useEffect(() => {
@@ -326,52 +354,122 @@ function ContentListPlayer({
         }
     }, [visibleSentences.length, isTeacher, onAnimationStart]);
 
+    useEffect(() => {
+        if (revealedSentencesCount > 1 && scrollRef.current) {
+            setTimeout(() => {
+                scrollRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 100);
+        }
+    }, [revealedSentencesCount]);
+
     return (
-        <div className={cn("w-full h-full flex flex-col gap-6 items-center justify-start p-2", isTeacher ? "max-w-[95%] mx-auto" : "max-w-4xl mx-auto justify-center")}>
+        <div className={cn("w-full h-full flex flex-col items-center justify-start p-2", isTeacher ? "max-w-full" : "max-w-7xl mx-auto")}>
+            {/* BAŞLIK */}
             <div className={cn(
-                "p-4 rounded-3xl shadow-lg bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 w-full text-center", 
-                isTeacher ? "py-4 mb-4 mt-2" : "p-3 md:p-6"
+                "relative z-20 p-6 rounded-3xl shadow-lg bg-white border border-slate-100 flex-shrink-0 w-full max-w-4xl text-center mb-8 overflow-hidden", 
+                isTeacher ? "py-6 mt-2" : "p-4 md:p-8"
             )}>
-                <h2 className={cn("font-black text-white drop-shadow-lg", 
-                    isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl")
-                )}>{step.title}</h2>
+                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"></div>
+                 <div className="flex items-center justify-center gap-4">
+                    <Sparkles className="text-yellow-400 h-6 w-6 md:h-8 md:w-8 animate-pulse" />
+                    <h2 className={cn("font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600", 
+                        isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl")
+                    )}>{step.title}</h2>
+                    <Sparkles className="text-yellow-400 h-6 w-6 md:h-8 md:w-8 animate-pulse" />
+                </div>
+                <div className="absolute left-6 md:left-1/2 bottom-[-10px] w-4 h-4 bg-slate-300 rounded-full md:-translate-x-1/2 border-2 border-white z-20"></div>
             </div>
               
              <div className={cn(
-                 "w-full gap-6 md:gap-8", 
-                 isTeacher 
-                    ? "grid grid-cols-2 auto-rows-min content-start pb-32" 
-                    : "grid grid-cols-1 pb-16 md:pb-0"
+                 "relative w-full pb-24", 
+                 isTeacher ? "pb-32" : "pb-16"
              )}>
-                {visibleSentences.map((sentence, index) => {
-                    const Icon = summaryIcons[index % summaryIcons.length];
-                    const colorClass = summaryColorClasses[index % summaryColorClasses.length];
-                      
-                    const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
+                <div className="absolute left-[29px] md:left-1/2 -top-6 bottom-0 w-1.5 bg-gradient-to-b from-slate-300 via-slate-300 to-transparent md:-translate-x-1/2 z-0 rounded-full" />
 
-                    return (
-                        <div key={index} className={cn(
-                            "rounded-3xl border-4 shadow-xl transition-all duration-500 flex items-center gap-6", 
-                            colorClass,
-                            isTeacher ? "p-8 animate-in zoom-in slide-in-from-bottom-4" : "p-4 animate-in slide-in-from-bottom-2"
-                        )}>
-                            <div className={cn("p-4 bg-white/10 rounded-2xl shadow-inner flex-shrink-0")}>
-                                <Icon className={cn("text-white", isTeacher ? "h-12 w-12" : (isFullscreen ? "h-6 w-6 md:h-8 md:w-8" : "h-5 w-5 md:h-6 md:w-6"))} />
+                <div className={cn(
+                    "grid gap-8",
+                    "grid-cols-1 md:grid-cols-2"
+                )}>
+                    {visibleSentences.map((sentence, index) => {
+                        const style = styles[index % styles.length]; 
+                        const icons = decoIcons[index % decoIcons.length];
+                        const LeftIcon = icons.left;
+                        const RightIcon = icons.right;
+
+                        const shouldAnimate = isTeacher && index === visibleSentences.length - 1; 
+                        const isLeft = index % 2 === 0;
+                        const isLastItem = index === visibleSentences.length - 1;
+
+                        return (
+                            <div 
+                                key={index} 
+                                ref={isLastItem ? scrollRef : null}
+                                className={cn(
+                                "relative flex items-center w-full",
+                                isTeacher ? "animate-in zoom-in slide-in-from-bottom-4 duration-500" : "animate-in slide-in-from-bottom-2 duration-500",
+                                isLeft ? "md:flex-row md:justify-end" : "md:flex-row-reverse md:justify-end",
+                                "flex-row justify-start" 
+                            )}>
+                                <div className={cn(
+                                    "absolute h-1 bg-slate-300 z-0 hidden md:block",
+                                    isLeft ? "right-[-20px] w-12" : "left-[-20px] w-12"
+                                )}></div>
+
+                                <div className={cn(
+                                    "flex-shrink-0 flex items-center justify-center rounded-full bg-white border-[4px] shadow-sm z-20 w-14 h-14 md:w-16 md:h-16 transition-transform duration-300 group-hover:scale-110 relative",
+                                    style.circleBorder, 
+                                    "mr-4",
+                                    !isTeacher && (isLeft 
+                                        ? "md:mr-[-32px] md:translate-x-[50%]" 
+                                        : "md:ml-[-32px] md:translate-x-[-50%]" 
+                                    )
+                                )}>
+                                    <span className={cn("font-black text-xl md:text-2xl", style.numberColor)}>
+                                        {index + 1}
+                                    </span>
+                                </div>
+
+                                <div className={cn(
+                                    "relative flex-1 p-5 md:p-6 rounded-3xl border shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full flex items-center",
+                                    style.bg, style.border,
+                                    !isTeacher && (isLeft ? "md:mr-12" : "md:ml-12")
+                                )}>
+                                    <div className={cn(
+                                        "absolute top-1/2 -translate-y-1/2 w-5 h-5 rotate-45 border-b border-l",
+                                        style.bg, style.border,
+                                        "left-[-10px] border-r-0 border-t-0",
+                                        !isTeacher && (isLeft 
+                                            ? "md:left-auto md:right-[-10px] md:border-l-0 md:border-b-0 md:border-r md:border-t"
+                                            : "md:left-[-10px] md:border-r-0 md:border-t-0"
+                                        )
+                                    )}></div>
+
+                                    <div className={cn(
+                                        "leading-relaxed font-black break-words w-full flex items-center gap-3", 
+                                        style.textColor, 
+                                        isTeacher ? "text-3xl" : "text-base md:text-lg lg:text-xl" 
+                                    )}>
+                                        <LeftIcon className={cn("w-5 h-5 md:w-6 md:h-6 flex-shrink-0 opacity-60", style.iconColor)} />
+                                        
+                                        <span className="flex-1">
+                                            {shouldAnimate ? (
+                                                <TypewriterText 
+                                                    content={sentence} 
+                                                    onComplete={() => onAnimationEnd?.()} 
+                                                    speed={40} 
+                                                />
+                                            ) : (
+                                                <div dangerouslySetInnerHTML={{ __html: sentence }} />
+                                            )}
+                                        </span>
+
+                                        <RightIcon className={cn("w-5 h-5 md:w-6 md:h-6 flex-shrink-0 opacity-60", style.iconColor)} />
+                                    </div>
+                                </div>
                             </div>
-                            <div className={cn("flex-1 break-words leading-relaxed", isTeacher ? "text-3xl font-medium" : (isFullscreen ? "text-lg md:text-xl font-bold" : "text-sm md:text-lg font-bold"))}>
-                                {shouldAnimate ? (
-                                    <TypewriterText 
-                                        content={sentence} 
-                                        onComplete={() => onAnimationEnd?.()} 
-                                        speed={40} 
-                                    />
-                                ) : (
-                                    <div dangerouslySetInnerHTML={{ __html: sentence }} />
-                                )}
-                            </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })}
+                </div>
             </div>
         </div>
     );
@@ -381,11 +479,20 @@ function ContentListPlayer({
 function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { concept: string, definition: string }[], isFullscreen: boolean, title: string }) {
     if (!items || items.length === 0) return null;
     const isTeacher = useTeacherMode();
-      
+    
+    const cardStyles = [
+        { bg: 'bg-white hover:bg-blue-50', border: 'border-blue-100', title: 'text-blue-600', hoverBorder: 'hover:border-blue-300' },
+        { bg: 'bg-white hover:bg-rose-50', border: 'border-rose-100', title: 'text-rose-600', hoverBorder: 'hover:border-rose-300' },
+        { bg: 'bg-white hover:bg-amber-50', border: 'border-amber-100', title: 'text-amber-600', hoverBorder: 'hover:border-amber-300' },
+        { bg: 'bg-white hover:bg-emerald-50', border: 'border-emerald-100', title: 'text-emerald-600', hoverBorder: 'hover:border-emerald-300' },
+        { bg: 'bg-white hover:bg-purple-50', border: 'border-purple-100', title: 'text-purple-600', hoverBorder: 'hover:border-purple-300' },
+        { bg: 'bg-white hover:bg-cyan-50', border: 'border-cyan-100', title: 'text-cyan-600', hoverBorder: 'hover:border-cyan-300' },
+    ];
+
     return (
         <div className={cn('flex flex-col h-full w-full items-center justify-start p-2', isTeacher ? "max-w-[98%] mx-auto pt-4" : "max-w-6xl mx-auto justify-center")}>
-            <div className={cn("p-4 rounded-3xl shadow-lg bg-slate-900/90 backdrop-blur-xl border border-white/20 flex-shrink-0 mb-8 w-full text-center")}>
-                <h2 className={cn("font-black text-white", isTeacher ? "text-4xl md:text-5xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-3xl"))}>{title}</h2>
+            <div className={cn("p-4 rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 flex-shrink-0 mb-8 w-full text-center")}>
+                <h2 className={cn("font-black text-slate-800", isTeacher ? "text-3xl md:text-4xl" : (isFullscreen ? "text-xl md:text-3xl" : "text-lg md:text-2xl"))}>{title}</h2>
             </div>
              
             <div className={cn(
@@ -394,16 +501,25 @@ function ConceptExplanationPlayer({ items, isFullscreen, title }: { items: { con
                     ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 content-start" 
                     : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             )}>
-                {items.map((item, index) => (
-                    <Card key={index} className={cn("bg-slate-800/80 backdrop-blur-md border-2 border-white/10 hover:border-cyan-400 hover:bg-slate-800 transition-all duration-300 group shadow-2xl hover:scale-105", isTeacher ? 'min-h-[220px]' : (isFullscreen ? 'min-h-[220px]' : 'min-h-[140px]'))}>
-                        <CardHeader className={cn("border-b-2 border-white/10", isTeacher ? "p-6" : "p-3 md:p-6 pb-2 md:pb-4")}>
-                            <CardTitle className={cn("font-black text-cyan-300 group-hover:text-cyan-100 transition-colors uppercase tracking-wider", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl md:text-2xl" : "text-lg md:text-xl"))}>{item.concept}</CardTitle>
-                        </CardHeader>
-                        <CardContent className={cn("text-slate-100 font-medium leading-relaxed", isTeacher ? "text-2xl p-6 pt-6" : "pt-3 md:pt-6 p-3 md:p-6 text-sm md:text-base")}>
-                            {item.definition}
-                        </CardContent>
-                    </Card>
-                ))}
+                {items.map((item, index) => {
+                    const style = cardStyles[index % cardStyles.length];
+                    return (
+                        <Card key={index} className={cn(
+                            "border-2 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-105", 
+                            style.bg,
+                            style.border,
+                            style.hoverBorder,
+                            isTeacher ? 'min-h-[180px]' : (isFullscreen ? 'min-h-[180px]' : 'min-h-[120px]')
+                        )}>
+                            <CardHeader className={cn("border-b", style.border, isTeacher ? "p-4" : "p-3 md:p-4 pb-2 md:pb-3")}>
+                                <CardTitle className={cn("font-black uppercase tracking-wider transition-colors", style.title, isTeacher ? "text-2xl" : (isFullscreen ? "text-lg md:text-xl" : "text-base md:text-lg"))}>{item.concept}</CardTitle>
+                            </CardHeader>
+                            <CardContent className={cn("text-slate-700 font-bold leading-relaxed", isTeacher ? "text-xl p-4 pt-4" : "pt-3 md:pt-4 p-3 md:p-4 text-sm md:text-base")}>
+                                {item.definition}
+                            </CardContent>
+                        </Card>
+                    )
+                })}
             </div>
         </div>
     );
@@ -417,21 +533,12 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     isFullscreen: boolean 
 }) {
     const isTeacher = useTeacherMode();
-    const cardColors = [
-        'bg-rose-600 border-rose-800 text-white', 
-        'bg-fuchsia-600 border-fuchsia-800 text-white', 
-        'bg-cyan-600 border-cyan-800 text-white', 
-        'bg-teal-600 border-teal-800 text-white', 
-        'bg-lime-600 border-lime-800 text-white', 
-        'bg-orange-600 border-orange-800 text-white'
-    ];
-
     const getDynamicFontSize = (text: string) => {
-        const baseSize = isTeacher ? 3.5 : (isFullscreen ? 2.5 : 1.75); 
+        const baseSize = isTeacher ? 3.0 : (isFullscreen ? 2.0 : 1.5); 
         const maxLength = 8;
         if (text.length > maxLength) {
             const reductionFactor = Math.min(1.5, (text.length - maxLength) / 3);
-            return `${Math.max(1.5, baseSize - reductionFactor)}rem`;
+            return `${Math.max(1.2, baseSize - reductionFactor)}rem`;
         }
         return `${baseSize}rem`;
     };
@@ -439,48 +546,52 @@ function AnagramFlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
              <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                 <h2 className={cn("font-black text-center text-white drop-shadow-lg tracking-wide uppercase", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"))}>{step.title}</h2>
+                 <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wide", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
              </div>
             <div className={cn("grid gap-6 pb-32", isTeacher ? "grid-cols-3 lg:grid-cols-4 gap-8" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5")}>
-                {step.cards.map((card, index) => (
-                    <div
-                        key={index}
-                        className={cn(
-                            "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
-                            isTeacher ? "min-h-[16rem]" : (isFullscreen ? "min-h-[14rem]" : "min-h-[10rem]")
-                        )}
-                        onClick={() => onCardFlip(index, 'anagramFlashcard')}
-                    >
+                {step.cards.map((card, index) => {
+                    const theme = FLASHCARD_THEMES[index % FLASHCARD_THEMES.length];
+                    return (
                         <div
+                            key={index}
                             className={cn(
-                                "relative w-full h-full text-center transition-transform duration-700 [transform-style:preserve-3d]",
-                                flippedCards.has(index) && "[transform:rotateY(180deg)]"
+                                "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
+                                isTeacher ? "min-h-[14rem]" : (isFullscreen ? "min-h-[12rem]" : "min-h-[9rem]")
                             )}
+                            onClick={() => onCardFlip(index, 'anagramFlashcard')}
                         >
-                            {/* Front */}
-                            <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-xl border-b-8 flex flex-wrap items-center justify-center p-4 backdrop-blur-md", cardColors[index % cardColors.length])}>
-                                <h3 
-                                    className="font-black tracking-widest break-all drop-shadow-md uppercase"
-                                    style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
-                                >
-                                    {card.scrambledWord}
-                                </h3>
-                            </div>
+                            <div
+                                className={cn(
+                                    "relative w-full h-full text-center transition-transform duration-700 [transform-style:preserve-3d]",
+                                    flippedCards.has(index) && "[transform:rotateY(180deg)]"
+                                )}
+                            >
+                                {/* Front */}
+                                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-xl border-b-8 flex flex-wrap items-center justify-center p-4 backdrop-blur-md", theme.front)}>
+                                    <h3 
+                                        className="font-black tracking-widest break-all drop-shadow-sm uppercase text-slate-700"
+                                        style={{ fontSize: getDynamicFontSize(card.scrambledWord) }}
+                                    >
+                                        {card.scrambledWord}
+                                    </h3>
+                                </div>
 
-                            {/* Back */}
-                            <div className={cn(
-                                "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-xl border-b-8 border-emerald-800 flex flex-wrap items-center justify-center p-4 bg-emerald-600 text-white break-words overflow-hidden"
-                            )}>
-                                <h3 
-                                    className="font-black break-all drop-shadow-md uppercase"
-                                    style={{ fontSize: getDynamicFontSize(card.correctAnswer) }}
-                                >
-                                    {card.correctAnswer}
-                                </h3>
+                                {/* Back */}
+                                <div className={cn(
+                                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-xl border-b-8 flex flex-wrap items-center justify-center p-4 break-words overflow-hidden",
+                                    theme.back
+                                )}>
+                                    <h3 
+                                        className="font-black break-all drop-shadow-md uppercase"
+                                        style={{ fontSize: getDynamicFontSize(card.correctAnswer) }}
+                                    >
+                                        {card.correctAnswer}
+                                    </h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );
@@ -494,16 +605,11 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     isFullscreen: boolean 
 }) {
     const isTeacher = useTeacherMode();
-    const cardColors = [
-        'bg-indigo-600 border-indigo-800 text-white', 
-        'bg-violet-600 border-violet-800 text-white', 
-        'bg-blue-600 border-blue-800 text-white'
-    ];
 
     return (
         <div className={cn("w-full p-4 flex flex-col justify-start", isTeacher ? "max-w-full pt-6" : "max-w-6xl mx-auto justify-center")}>
             <div className={cn("text-center mb-8", isTeacher ? "py-4" : "mb-8")}>
-                <h2 className={cn("font-black text-center text-white drop-shadow-lg uppercase tracking-wider", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"))}>{step.title}</h2>
+                <h2 className={cn("font-black text-center text-slate-800 drop-shadow-sm uppercase tracking-wider", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl md:text-4xl" : "text-xl md:text-2xl"))}>{step.title}</h2>
             </div>
             <div className={cn("grid gap-8 pb-32", isTeacher ? "grid-cols-2 lg:grid-cols-3" : (isFullscreen ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"))}>
                 {step.cards.map((card, index) => (
@@ -513,7 +619,7 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
                         definition={card.definition}
                         isFlipped={flippedCards.has(index)}
                         onFlip={() => onCardFlip(index, 'flashcard')}
-                        colorClass={cardColors[index % cardColors.length]}
+                        theme={FLASHCARD_THEMES[index % FLASHCARD_THEMES.length]}
                         isFullscreen={isFullscreen}
                         isTeacher={isTeacher}
                     />
@@ -523,12 +629,12 @@ function FlashcardPlayer({ step, flippedCards, onCardFlip, isFullscreen }: {
     );
 }
 
-const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, colorClass: string, isFullscreen?: boolean, isTeacher?: boolean }) => {
+const FlashcardItem = ({ term, definition, isFlipped, onFlip, theme, isFullscreen, isTeacher }: { term: string, definition: string, isFlipped: boolean, onFlip: () => void, theme: any, isFullscreen?: boolean, isTeacher?: boolean }) => {
     return (
         <div
             className={cn(
                 "rounded-3xl [perspective:1000px] cursor-pointer group hover:scale-105 transition-transform duration-300",
-                isTeacher ? "min-h-[22rem]" : "min-h-[14rem]"
+                isTeacher ? "min-h-[20rem]" : "min-h-[12rem]"
             )}
             onClick={onFlip}
         >
@@ -539,17 +645,17 @@ const FlashcardItem = ({ term, definition, isFlipped, onFlip, colorClass, isFull
                 )}
             >
                 {/* Front */}
-                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-b-8 flex flex-col items-center justify-center p-6 backdrop-blur-md transition-all", colorClass)}>
-                    <h3 className={cn("font-black uppercase drop-shadow-lg", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{term}</h3>
-                    {!isTeacher && <p className="mt-4 text-[10px] md:text-sm opacity-80 uppercase tracking-widest font-bold border-t border-white/30 pt-2 w-full">Çevir</p>}
+                <div className={cn("absolute w-full h-full [backface-visibility:hidden] rounded-3xl shadow-xl border-b-8 flex flex-col items-center justify-center p-6 backdrop-blur-md transition-all", theme.front)}>
+                    <h3 className={cn("font-black uppercase", isTeacher ? "text-4xl" : (isFullscreen ? "text-2xl" : "text-xl"))}>{term}</h3>
+                    {!isTeacher && <p className="mt-4 text-[10px] md:text-xs opacity-60 uppercase tracking-widest font-bold border-t border-current pt-2 w-full">Çevir</p>}
                 </div>
 
                 {/* Back */}
                 <div className={cn(
-                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-[0_15px_30px_rgba(0,0,0,0.5)] border-b-8 flex flex-col items-center justify-center p-6",
-                    colorClass 
+                    "absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-3xl shadow-xl border-b-8 flex flex-col items-center justify-center p-6",
+                    theme.back 
                 )}>
-                    <p className={cn("font-bold leading-relaxed", isTeacher ? "text-3xl" : (isFullscreen ? "text-xl" : "text-base md:text-lg"))}>{definition}</p>
+                    <p className={cn("font-bold leading-relaxed", isTeacher ? "text-2xl" : (isFullscreen ? "text-lg" : "text-sm md:text-base"))}>{definition}</p>
                 </div>
             </div>
         </div>
@@ -571,21 +677,14 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
     const [shakingLetterId, setShakingLetterId] = useState<number | null>(null);
 
     const letterColors = [
-        "bg-red-500 border-red-700",
-        "bg-orange-500 border-orange-700",
-        "bg-amber-500 border-amber-700",
-        "bg-green-500 border-green-700",
-        "bg-emerald-500 border-emerald-700",
-        "bg-teal-500 border-teal-700",
-        "bg-cyan-500 border-cyan-700",
-        "bg-sky-500 border-sky-700",
-        "bg-blue-500 border-blue-700",
-        "bg-indigo-500 border-indigo-700",
-        "bg-violet-500 border-violet-700",
-        "bg-purple-500 border-purple-700",
-        "bg-fuchsia-500 border-fuchsia-700",
-        "bg-pink-500 border-pink-700",
-        "bg-rose-500 border-rose-700"
+        "bg-white text-rose-600 border-rose-200 hover:border-rose-400",
+        "bg-white text-orange-600 border-orange-200 hover:border-orange-400",
+        "bg-white text-amber-600 border-amber-200 hover:border-amber-400",
+        "bg-white text-emerald-600 border-emerald-200 hover:border-emerald-400",
+        "bg-white text-cyan-600 border-cyan-200 hover:border-cyan-400",
+        "bg-white text-blue-600 border-blue-200 hover:border-blue-400",
+        "bg-white text-indigo-600 border-indigo-200 hover:border-indigo-400",
+        "bg-white text-purple-600 border-purple-200 hover:border-purple-400",
     ];
 
     useEffect(() => {
@@ -630,13 +729,13 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
             "space-y-4 md:space-y-8 flex flex-col items-center mx-auto p-4 w-full",
             isTeacher ? "max-w-full justify-center" : "max-w-5xl justify-center"
         )}>
-            <div className="bg-slate-800/50 p-4 md:p-10 rounded-3xl border-2 border-white/10 backdrop-blur-md w-full max-w-5xl text-center">
-                 <p className={cn("font-bold italic text-cyan-100", isTeacher ? "text-4xl leading-snug" : "text-lg md:text-3xl")}>"{step.definition}"</p>
+            <div className="bg-white/60 p-4 md:p-10 rounded-3xl border border-white shadow-xl backdrop-blur-md w-full max-w-5xl text-center">
+                 <p className={cn("font-bold italic text-slate-700", isTeacher ? "text-3xl leading-snug" : "text-lg md:text-2xl")}>"{step.definition}"</p>
             </div>
              
             {/* CEVAP ALANI */}
             <div className={cn(
-                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-slate-900/50 border-2 border-white/5 w-full max-w-6xl", 
+                "flex flex-wrap justify-center items-center gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 p-4 md:p-8 rounded-3xl bg-white/40 border border-white/50 shadow-inner w-full max-w-6xl", 
                 isTeacher ? "min-h-[12rem]" : "min-h-[8rem]"
             )}>
                 {targetWords.map((word, wordIndex) => (
@@ -651,10 +750,10 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                     onClick={() => letterObj && !isAnswerRevealed && handleConstructedClick(letterObj)} 
                                     className={cn(
                                         "rounded-lg md:rounded-xl flex items-center justify-center font-black cursor-pointer shadow-md transition-all border-b-2 md:border-b-4",
-                                        isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-16 md:w-12 md:text-3xl md:border-b-4 text-sm",
+                                        isTeacher ? "h-20 w-16 text-4xl border-b-8" : "h-10 w-8 text-lg md:h-14 md:w-10 md:text-2xl md:border-b-4 text-sm",
                                         letterObj 
-                                            ? "bg-white text-slate-900 border-slate-300 active:translate-y-1 active:border-b-0"
-                                            : "bg-white/5 border-white/10 text-white/20 border-dashed border-2"
+                                            ? "bg-white text-indigo-600 border-indigo-200 active:translate-y-1 active:border-b-0"
+                                            : "bg-slate-200/50 border-slate-300 text-transparent border-dashed border-2"
                                     )}
                                 >
                                     {letterObj ? letterObj.letter : (isAnswerRevealed ? char : '')}
@@ -675,10 +774,10 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                                 key={item.id} 
                                 onClick={() => handleLetterClick(item)} 
                                 className={cn(
-                                    "font-black text-white border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100",
+                                    "font-black border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg",
                                     colorClass,
                                     isTeacher ? "h-20 w-16 text-4xl rounded-2xl border-b-8" : "h-12 w-10 text-xl md:h-16 md:w-14 md:text-3xl md:border-b-8",
-                                    shakingLetterId === item.id && "animate-shake bg-red-600 border-red-800 hover:bg-red-600 !bg-none"
+                                    shakingLetterId === item.id && "animate-shake bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
                                 )}
                             >
                                 {item.letter}
@@ -688,7 +787,7 @@ function AnagramGame({ step, onAnswer, answer, isAnswerRevealed, onCorrectAndNex
                 </div>
             ) : (
                  <div className="text-center mt-6 animate-in slide-in-from-bottom-4">
-                    <Button onClick={onCorrectAndNext} className={cn("font-bold text-white transition-all transform hover:scale-105 bg-emerald-600 hover:bg-emerald-500 shadow-lg", isTeacher ? "h-20 px-12 text-2xl rounded-2xl" : "h-14 px-8 text-lg rounded-xl")}>
+                    <Button onClick={onCorrectAndNext} className={cn("font-bold text-white transition-all transform hover:scale-105 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200/50 shadow-lg", isTeacher ? "h-16 px-10 text-xl rounded-2xl" : "h-12 px-6 text-lg rounded-xl")}>
                         Harika! Sonraki <ArrowRight className="ml-3 h-5 w-5"/>
                     </Button>
                  </div>
@@ -705,8 +804,8 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
     if (!step.cards || step.cards.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center h-full text-center p-6">
-                <div className="bg-red-500/20 border-2 border-red-500 text-red-100 p-8 rounded-3xl backdrop-blur-md">
-                    <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-red-400" />
+                <div className="bg-red-50 border-2 border-red-200 text-red-600 p-8 rounded-3xl backdrop-blur-md">
+                    <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-red-500" />
                     <h3 className="text-2xl font-bold mb-2">Veri Hatası</h3>
                     <p className="text-lg">Bu adım için kelime kartları bulunamadı.</p>
                 </div>
@@ -736,7 +835,7 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
 
     if (isFinished) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-center text-white">
+            <div className="flex flex-col items-center justify-center h-full text-center text-slate-800">
                 <CheckCircle2 className="h-16 w-16 text-emerald-500 mb-4"/>
                 <h3 className="text-2xl font-bold">Tüm kelimeler tamamlandı!</h3>
             </div>
@@ -748,7 +847,7 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
     return (
         <div className="w-full h-full flex flex-col justify-center relative">
              <div className="flex justify-between items-center px-4 mb-2 md:mb-4">
-                 <div className="text-slate-400 font-bold uppercase tracking-widest text-xs md:text-sm">
+                 <div className="text-slate-500 font-bold uppercase tracking-widest text-xs md:text-sm bg-white/50 px-3 py-1 rounded-full">
                     Kelime {currentCardIndex + 1} / {step.cards.length}
                 </div>
                 {isTeacher && !answerState[currentCardIndex] && (
@@ -756,14 +855,14 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
                         onClick={handleSkip} 
                         variant="ghost" 
                         size="sm" 
-                        className="text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10"
+                        className="text-amber-500 hover:text-amber-600 hover:bg-amber-50"
                     >
                         <FastForward className="w-4 h-4 mr-2" /> Atla
                     </Button>
                 )}
              </div>
             
-            <AnagramGame
+            <AnagramGame 
                 step={{...currentCard, title: step.title}} 
                 onAnswer={handleAnswer}
                 answer={answerState[currentCardIndex]}
@@ -776,7 +875,7 @@ function AnagramGamePlayer({ step, onAnswered, isTeacher, isFullscreen }: { step
     )
 }
 
-// 8. SentenceScrambleGame
+// 8. SentenceScrambleGame (GÜNCELLENDİ: BİTİŞ KONTROLÜ)
 function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnswerRevealed }: { step: SentenceScrambleStep, onAnswer: (answer: string) => void, onCorrectAndNext: () => void, answer?: { answer: string, isCorrect: boolean } | null, isAnswerRevealed: boolean }) {
     const isTeacher = useTeacherMode();
     const initialWords = useMemo(() => step.scrambledSentence.split(' ').map((word, index) => ({ id: index, word })), [step.scrambledSentence]);
@@ -785,14 +884,12 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
     const [mistakenWordId, setMistakenWordId] = useState<number | null>(null);
 
     const wordColors = [
-        'bg-gradient-to-br from-rose-500 to-pink-600 border-pink-800 shadow-pink-500/30',
-        'bg-gradient-to-br from-indigo-500 to-blue-600 border-blue-800 shadow-blue-500/30',
-        'bg-gradient-to-br from-emerald-500 to-green-600 border-green-800 shadow-green-500/30',
-        'bg-gradient-to-br from-amber-500 to-orange-600 border-orange-800 shadow-orange-500/30',
-        'bg-gradient-to-br from-cyan-500 to-sky-600 border-sky-800 shadow-sky-500/30',
-        'bg-gradient-to-br from-fuchsia-500 to-purple-600 border-purple-800 shadow-purple-500/30',
-        'bg-gradient-to-br from-lime-500 to-green-500 border-green-700 shadow-lime-500/30',
-        'bg-gradient-to-br from-violet-500 to-indigo-500 border-indigo-700 shadow-violet-500/30'
+        'bg-white text-rose-600 border-rose-200',
+        'bg-white text-blue-600 border-blue-200',
+        'bg-white text-green-600 border-green-200',
+        'bg-white text-orange-600 border-orange-200',
+        'bg-white text-sky-600 border-sky-200',
+        'bg-white text-purple-600 border-purple-200',
     ];
 
     useEffect(() => {
@@ -826,36 +923,36 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
 
     useEffect(() => {
         if (answer?.isCorrect) {
-            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1200);
+            const timeoutId = setTimeout(() => { onCorrectAndNext(); }, 1500); // Süre biraz uzatıldı
             return () => clearTimeout(timeoutId);
         }
     }, [answer, onCorrectAndNext]);
 
     return (
         <div className={cn("space-y-8 text-center mx-auto p-4", isTeacher ? "max-w-full justify-start pt-10" : "max-w-4xl justify-center")}>
-            <p className={cn("text-slate-400 font-medium", isTeacher ? "text-3xl" : "text-lg md:text-xl")}>Kelimeleri doğru sıraya dizerek cümleyi oluşturun.</p>
+            <p className={cn("text-slate-500 font-medium", isTeacher ? "text-2xl" : "text-lg md:text-xl")}>Kelimeleri doğru sıraya dizerek cümleyi oluşturun.</p>
              
-             <div className={cn("flex flex-wrap justify-center items-center gap-4 bg-slate-900/50 border-2 border-white/10 p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]")}>
+             <div className={cn("flex flex-wrap justify-center items-center gap-4 bg-white/50 border border-white shadow-inner p-8 rounded-3xl", isTeacher ? "min-h-[12rem]" : "min-h-[6rem] md:min-h-[10rem]")}>
                 {constructedWords.map((wordObj, i) => (
                     <div 
                         key={wordObj.id} 
                         className={cn(
-                            "rounded-xl font-bold shadow-lg animate-in zoom-in duration-300 text-white border-b-4",
+                            "rounded-xl font-bold shadow-md animate-in zoom-in duration-300 border-b-4",
                             wordColors[wordObj.id % wordColors.length], 
-                            isTeacher ? "text-3xl px-8 py-4 rounded-2xl border-b-8" : "px-4 py-2 md:px-8 md:py-4 md:text-lg md:rounded-2xl md:border-b-4 text-sm"
+                            isTeacher ? "text-2xl px-6 py-3 rounded-2xl border-b-8" : "px-4 py-2 md:px-6 md:py-3 md:text-lg md:rounded-2xl md:border-b-4 text-sm"
                         )}
                     >
                         {wordObj.word}
                     </div>
                 ))}
-                {constructedWords.length === 0 && <span className={cn("text-slate-600 italic", isTeacher ? "text-2xl" : "text-sm md:text-base")}>Cümleniz burada görünecek...</span>}
+                {constructedWords.length === 0 && <span className={cn("text-slate-400 italic", isTeacher ? "text-xl" : "text-sm md:text-base")}>Cümleniz burada görünecek...</span>}
             </div>
 
             {isAnswerRevealed ? (
                  <div className="text-center mt-10 animate-in slide-in-from-bottom-4">
-                    <div className={cn("inline-flex items-center gap-4 bg-emerald-500/20 text-emerald-400 rounded-full border-2 border-emerald-500/50", isTeacher ? "px-10 py-6" : "px-6 py-3 md:px-10 md:py-5")}>
-                        <CheckCircle2 className={cn(isTeacher ? "h-12 w-12" : "h-6 w-6")}/>
-                        <span className={cn("font-bold", isTeacher ? "text-3xl" : "text-lg")}>Harika, doğru cümle!</span>
+                    <div className={cn("inline-flex items-center gap-4 bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200", isTeacher ? "px-8 py-4" : "px-6 py-3 md:px-8 md:py-4")}>
+                        <CheckCircle2 className={cn(isTeacher ? "h-10 w-10" : "h-6 w-6")}/>
+                        <span className={cn("font-bold", isTeacher ? "text-2xl" : "text-lg")}>Harika, doğru cümle!</span>
                     </div>
                 </div>
             ) : (
@@ -865,10 +962,10 @@ function SentenceScrambleGame({ step, onAnswer, onCorrectAndNext, answer, isAnsw
                             key={item.id}
                             onClick={() => handleWordClick(item)}
                             className={cn(
-                                "font-bold rounded-2xl transition-all duration-200 border-b-8 active:border-b-0 active:translate-y-2 text-white shadow-xl cursor-pointer flex items-center justify-center",
+                                "font-bold rounded-2xl transition-all duration-200 border-b-8 active:border-b-0 active:translate-y-2 shadow-lg cursor-pointer flex items-center justify-center hover:-translate-y-1",
                                 wordColors[item.id % wordColors.length],
-                                isTeacher ? "text-3xl h-24 px-8" : "text-lg h-16 px-6 md:text-xl md:h-20 md:px-8",
-                                mistakenWordId === item.id && "animate-shake bg-red-600 border-red-800 hover:bg-red-600 !bg-none"
+                                isTeacher ? "text-2xl h-20 px-6" : "text-lg h-16 px-6 md:text-xl md:h-16 md:px-8",
+                                mistakenWordId === item.id && "animate-shake bg-red-500 border-red-700 text-white hover:bg-red-600 !bg-none"
                             )}
                         >
                             {mistakenWordId === item.id && <X className="h-8 w-8 mr-2" />}
@@ -933,20 +1030,42 @@ function HtmlSlidePlayer({ step, onSlideScrolledToEnd }: { step: HtmlSlideStep, 
     );
 }
 
-// 10. DrawingCanvas
-function DrawingCanvas() {
+// 10. DrawingCanvas (GELİŞMİŞ - TEK TANIM)
+function DrawingCanvas({ stepIndex }: { stepIndex: number }) {
     const isTeacher = useTeacherMode();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isPenMode, setIsPenMode] = useState(false);
-    const [color, setColor] = useState('#facc15'); 
+    
+    // Araçlar: 'pen', 'highlighter', 'eraser'
+    const [tool, setTool] = useState<'pen' | 'highlighter' | 'eraser'>('pen');
+    const [color, setColor] = useState('#facc15'); // Varsayılan Kırmızı
+    const [lineWidth, setLineWidth] = useState(4); // Varsayılan orta kalınlık
+    const [history, setHistory] = useState<ImageData[]>([]);
+    
+    // Sayfa bazlı hafıza
+    const savedDrawings = useRef<{ [key: number]: ImageData }>({});
+    const prevStepIndexRef = useRef(stepIndex);
+    
     const [isDrawing, setIsDrawing] = useState(false);
     const lastPos = useRef<{ x: number, y: number } | null>(null);
 
+    // Canvas Boyutlandırma
     useEffect(() => {
         const handleResize = () => {
             if (canvasRef.current) {
-                canvasRef.current.width = window.innerWidth;
-                canvasRef.current.height = window.innerHeight;
+                const canvas = canvasRef.current;
+                const context = canvas.getContext('2d');
+                let savedData = null;
+                if(context) {
+                    try { savedData = context.getImageData(0,0, canvas.width, canvas.height); } catch(e){}
+                }
+
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                if (savedData && context) {
+                    context.putImageData(savedData, 0, 0);
+                }
             }
         };
         window.addEventListener('resize', handleResize);
@@ -954,51 +1073,65 @@ function DrawingCanvas() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const clearCanvas = () => {
-        if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext('2d');
-            ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        }
-    };
-
+    // Sayfa Değişimi Yönetimi
     useEffect(() => {
-        if (!isPenMode) {
-            clearCanvas();
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+        if (canvas && ctx) {
+            // 1. Önceki sayfanın çizimini kaydet
+            savedDrawings.current[prevStepIndexRef.current] = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // 2. Ekranı temizle
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            setHistory([]); // Yeni sayfa için undo geçmişini sıfırla
+
+            // 3. Yeni sayfanın çizimi varsa geri yükle
+            if (savedDrawings.current[stepIndex]) {
+                ctx.putImageData(savedDrawings.current[stepIndex], 0, 0);
+                // Geri yüklenen hali history'nin ilk elemanı yap
+                setHistory([savedDrawings.current[stepIndex]]);
+            }
+
+            prevStepIndexRef.current = stepIndex;
         }
-    }, [isPenMode]);
+    }, [stepIndex]);
 
 
-    const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
-        if (!isPenMode) return;
-        const { x, y } = getCoords(e);
-        setIsDrawing(true);
-        lastPos.current = { x, y };
-    };
-
-    const draw = (e: React.MouseEvent | React.TouchEvent) => {
-        if (!isDrawing || !isPenMode || !lastPos.current || !canvasRef.current) return;
-        e.preventDefault();
-        const ctx = canvasRef.current.getContext('2d');
+    const saveHistory = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        const { x, y } = getCoords(e);
-
-        ctx.beginPath();
-        ctx.moveTo(lastPos.current.x, lastPos.current.y);
-        ctx.lineTo(x, y);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 3;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
-
-        lastPos.current = { x, y };
+        // Maksimum 10 adım geri alma
+        if (history.length > 10) {
+            setHistory(prev => [...prev.slice(1), ctx.getImageData(0, 0, canvas.width, canvas.height)]);
+        } else {
+            setHistory(prev => [...prev, ctx.getImageData(0, 0, canvas.width, canvas.height)]);
+        }
     };
 
-    const stopDrawing = () => {
-        setIsDrawing(false);
-        lastPos.current = null;
+    const handleUndo = () => {
+        const canvas = canvasRef.current;
+        if (!canvas || history.length === 0) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const previousState = history[history.length - 1];
+        ctx.putImageData(previousState, 0, 0);
+        setHistory(prev => prev.slice(0, -1));
     };
+
+    const clearCanvas = () => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            saveHistory(); // Temizlemeden önce kaydet
+            const ctx = canvas.getContext('2d');
+            ctx?.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    };
+
+    // --- ÇİZİM MANTIĞI ---
 
     const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
         if ('touches' in e) {
@@ -1008,10 +1141,95 @@ function DrawingCanvas() {
         }
     };
 
+    const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!isPenMode) return;
+        
+        // Geçmişi kaydet
+        saveHistory();
+
+        const { x, y } = getCoords(e);
+        setIsDrawing(true);
+        lastPos.current = { x, y };
+
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext('2d');
+        if (canvas && ctx) {
+            // NOKTA KOYMA: Tıklanır tıklanmaz oraya bir daire çiz
+            ctx.beginPath();
+            ctx.arc(x, y, lineWidth / 2, 0, Math.PI * 2);
+            
+            if (tool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.fillStyle = 'rgba(0,0,0,1)';
+                ctx.globalAlpha = 1.0;
+            } else if (tool === 'highlighter') {
+                ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem için multiply
+                ctx.fillStyle = color;
+                ctx.globalAlpha = 0.5; // Şeffaflık
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.fillStyle = color;
+                ctx.globalAlpha = 1.0;
+            }
+            
+            ctx.fill();
+            ctx.closePath();
+            
+            // Çizgi devamı için path başlat
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+    };
+
+    const draw = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!isDrawing || !isPenMode || !lastPos.current || !canvasRef.current) return;
+        e.preventDefault(); // Kaydırmayı engelle
+        const ctx = canvasRef.current.getContext('2d');
+        if (!ctx) return;
+
+        const { x, y } = getCoords(e);
+
+        // Araç Ayarları
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = lineWidth;
+
+        if (tool === 'eraser') {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.globalAlpha = 1.0;
+        } else if (tool === 'highlighter') {
+            ctx.globalCompositeOperation = 'multiply'; // Fosforlu kalem
+            ctx.strokeStyle = color;
+            ctx.globalAlpha = 0.5; 
+            ctx.lineWidth = lineWidth * 3; // Highlighter daha kalın olsun
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = color;
+            ctx.globalAlpha = 1.0;
+        }
+
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        lastPos.current = { x, y };
+    };
+
+    const stopDrawing = () => {
+        setIsDrawing(false);
+        lastPos.current = null;
+        const ctx = canvasRef.current?.getContext('2d');
+        if(ctx) {
+             ctx.globalCompositeOperation = 'source-over'; // Reset
+             ctx.globalAlpha = 1.0; // Reset alpha
+             ctx.closePath();
+        }
+    };
+
     if (!isTeacher) return null;
 
     return (
         <>
+            {/* Canvas Katmanı */}
             <canvas
                 ref={canvasRef}
                 className={cn(
@@ -1027,31 +1245,93 @@ function DrawingCanvas() {
                 onTouchEnd={stopDrawing}
             />
 
-            <div className="fixed bottom-24 right-6 z-[101] flex flex-col items-end gap-3">
+            {/* Araç Çubuğu - YUKARI TAŞINDI VE KÜÇÜLTÜLDÜ */}
+            <div className="fixed bottom-32 right-4 z-[101] flex flex-col items-end gap-3">
+                
                 {isPenMode && (
-                    <div className="flex flex-col gap-2 bg-slate-800/90 p-3 rounded-full border border-slate-600 backdrop-blur animate-in slide-in-from-bottom-5 fade-in zoom-in">
-                        <button onClick={() => setColor('#facc15')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#facc15' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#facc15' }} />
-                        <button onClick={() => setColor('#ef4444')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#ef4444' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#ef4444' }} />
-                        <button onClick={() => setColor('#22c55e')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#22c55e' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#22c55e' }} />
-                        <button onClick={() => setColor('#3b82f6')} className={cn("w-8 h-8 rounded-full border-2 border-white transition-transform hover:scale-110", color === '#3b82f6' && "scale-125 ring-2 ring-white")} style={{ backgroundColor: '#3b82f6' }} />
-                        <button onClick={() => setColor('#ffffff')} className={cn("w-8 h-8 rounded-full border-2 border-slate-400 transition-transform hover:scale-110", color === '#ffffff' && "scale-125 ring-2 ring-slate-400")} style={{ backgroundColor: '#ffffff' }} />
-                        <div className="h-[1px] w-full bg-slate-500 my-1"></div>
-                        <button onClick={clearCanvas} className="w-8 h-8 flex items-center justify-center text-white hover:text-red-400 transition-colors" title="Temizle">
-                            <X className="w-5 h-5" />
-                        </button>
+                    <div className="flex flex-col items-center gap-2 bg-white/95 p-2 rounded-xl border border-slate-200 shadow-xl animate-in slide-in-from-bottom-5 fade-in zoom-in backdrop-blur-sm w-40">
+                        
+                        {/* Renk Seçimi */}
+                        <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-lg mb-1 w-full">
+                            {['#000000', '#ef4444', '#22c55e', '#3b82f6', '#facc15', '#a855f7'].map((c) => (
+                                <button
+                                    key={c}
+                                    onClick={() => { setColor(c); setTool('pen'); }}
+                                    className={cn(
+                                        "w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 mx-auto",
+                                        color === c && tool !== 'eraser' ? "ring-2 ring-offset-1 ring-slate-400 scale-110 border-white" : "border-transparent"
+                                    )}
+                                    style={{ backgroundColor: c }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Kalınlık Ayarı */}
+                        <div className="flex gap-2 items-center justify-center w-full pb-2 border-b border-slate-200">
+                             <button onClick={() => setLineWidth(4)} className={cn("w-5 h-5 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 4 && "bg-slate-700")}>
+                                <div className="w-1 h-1 bg-white rounded-full" />
+                             </button>
+                             <button onClick={() => setLineWidth(8)} className={cn("w-7 h-7 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 8 && "bg-slate-700")}>
+                                <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                             </button>
+                             <button onClick={() => setLineWidth(16)} className={cn("w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center", lineWidth === 16 && "bg-slate-700")}>
+                                <div className="w-4 h-4 bg-white rounded-full" />
+                             </button>
+                        </div>
+
+                        {/* Araçlar */}
+                        <div className="flex flex-col gap-1.5 w-full">
+                             <Button 
+                                variant={tool === 'pen' ? 'default' : 'ghost'} 
+                                size="sm" 
+                                onClick={() => setTool('pen')}
+                                className="w-full justify-start h-8 text-xs"
+                            >
+                                <PenTool className="w-3 h-3 mr-2" /> Kalem
+                             </Button>
+                             <Button 
+                                variant={tool === 'highlighter' ? 'default' : 'ghost'} 
+                                size="sm" 
+                                onClick={() => setTool('highlighter')}
+                                className={cn("w-full justify-start h-8 text-xs", tool === 'highlighter' && "bg-yellow-100 text-yellow-800 hover:bg-yellow-200")}
+                            >
+                                <Highlighter className="w-3 h-3 mr-2" /> Fosforlu
+                             </Button>
+                             <Button 
+                                variant={tool === 'eraser' ? 'default' : 'ghost'} 
+                                size="sm" 
+                                onClick={() => setTool('eraser')}
+                                className="w-full justify-start h-8 text-xs"
+                            >
+                                <Eraser className="w-3 h-3 mr-2" /> Silgi
+                             </Button>
+                        </div>
+
+                        <div className="h-[1px] w-full bg-slate-200"></div>
+
+                        {/* Aksiyonlar */}
+                        <div className="flex gap-2 w-full justify-between px-1">
+                            <Button variant="outline" size="icon" className="h-8 w-8" onClick={handleUndo} title="Geri Al" disabled={history.length === 0}>
+                                <Undo className="w-3 h-3" />
+                            </Button>
+                            <Button variant="destructive" size="icon" className="h-8 w-8" onClick={clearCanvas} title="Temizle">
+                                <Trash2 className="w-3 h-3" />
+                            </Button>
+                        </div>
                     </div>
                 )}
 
+                {/* Ana Toggle Butonu - KÜÇÜLTÜLDÜ */}
                 <Button
                     onClick={() => setIsPenMode(!isPenMode)}
                     className={cn(
-                        "w-14 h-14 rounded-full shadow-2xl border-2 transition-all hover:scale-110 flex items-center justify-center",
+                        "w-12 h-12 rounded-full shadow-lg border-2 transition-all hover:scale-105 flex items-center justify-center",
                         isPenMode 
-                            ? "bg-yellow-500 text-slate-900 border-white hover:bg-yellow-400" 
-                            : "bg-slate-700 text-slate-200 border-slate-500 hover:bg-slate-600"
+                            ? "bg-rose-500 text-white border-rose-200 hover:bg-rose-600" 
+                            : "bg-slate-800 text-white border-slate-600 hover:bg-slate-700"
                     )}
                 >
-                    {isPenMode ? <X className="w-6 h-6" /> : <Feather className="w-6 h-6" />}
+                    {isPenMode ? <X className="w-6 h-6" /> : <PenTool className="w-6 h-6" />}
                 </Button>
             </div>
         </>
@@ -1072,10 +1352,10 @@ export function StepContent({
     const renderContent = () => {
         if(step.isPublished === false && !isTeacher) {
             return (
-                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900 text-white">
-                    <Lock className="h-16 w-16 text-slate-500 mb-4" />
+                <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-50 text-slate-800">
+                    <Lock className="h-16 w-16 text-slate-400 mb-4" />
                     <h2 className="text-2xl font-bold mb-2">Bu İçerik Henüz Aktif Değil</h2>
-                    <p className="text-slate-400">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
+                    <p className="text-slate-500">Bu adım henüz öğretmeniniz tarafından yayınlanmadı.</p>
                 </div>
             );
         }
@@ -1099,7 +1379,7 @@ export function StepContent({
                       </div>
                 );
             case 'iframe':
-                 return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-2xl bg-white", "h-full")} allowFullScreen></iframe></div>
+                 return <div className="h-full p-4"><iframe src={(step as IframeStep).url} title={step.title} className={cn("w-full border-0 rounded-3xl shadow-xl bg-white border border-slate-200", "h-full")} allowFullScreen></iframe></div>
             
             case 'htmlSlide':
                  return <HtmlSlidePlayer step={step} onSlideScrolledToEnd={onSlideScrolledToEnd} />
@@ -1118,11 +1398,11 @@ export function StepContent({
                 });
                 const activityUrl = `${activityStep.activityType}?${params.toString()}`;
                 return (
-                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-950">
+                    <div className="absolute inset-0 w-full h-full z-40 bg-slate-50">
                           <iframe
                              src={activityUrl}
                              title={activityStep.activityLabel}
-                             className="w-full h-full border-0 bg-slate-900"
+                             className="w-full h-full border-0 bg-white"
                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                              allowFullScreen
                              loading="lazy"
@@ -1143,7 +1423,7 @@ export function StepContent({
                 const embedUrl = getEmbedUrl(videoStep.url);
                 return (
                     <div className="w-full h-full flex flex-col items-center justify-center p-4">
-                        <div className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-800 bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
+                        <div className={cn("w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black", isTeacher ? "max-w-5xl" : "max-w-6xl")}>
                             <iframe 
                                 src={embedUrl} 
                                 title={videoStep.title} 
@@ -1152,18 +1432,23 @@ export function StepContent({
                                 className="w-full h-full"
                             ></iframe>
                         </div>
-                         {videoStep.description && <p className={cn("mt-6 text-center text-slate-400 font-medium max-w-5xl", isTeacher ? "text-3xl" : "text-lg")}>{videoStep.description}</p>}
+                         {videoStep.description && <p className={cn("mt-6 text-center text-slate-600 font-medium max-w-5xl", isTeacher ? "text-3xl" : "text-lg")}>{videoStep.description}</p>}
                     </div>
                 );
             }
             case 'mcq': {
                 const mcqStep = step as McqStep;
-                const optionColors = ['border-cyan-500/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-100', 'border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-100', 'border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-100', 'border-rose-500/50 bg-rose-500/10 hover:bg-rose-500/20 text-rose-100'];
+                const optionColors = [
+                    'border-cyan-200 bg-cyan-50 hover:bg-cyan-100 text-cyan-700', 
+                    'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', 
+                    'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700', 
+                    'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'
+                ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4", isTeacher ? "max-w-full pt-8" : "max-w-3xl justify-center")}>
-                        <div className={cn("rounded-3xl shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
-                           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 to-blue-500" />
-                          <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
+                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-8 text-center relative overflow-hidden", isTeacher ? "p-8" : "p-10")}>
+                           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-400 to-blue-500" />
+                          <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-4xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{mcqStep.question}</h3>
                         </div>
                         <div className={cn("grid gap-6", isTeacher ? "grid-cols-2" : "grid-cols-1")}>
                             {mcqStep.options.map((option, index) => {
@@ -1177,13 +1462,13 @@ export function StepContent({
                                         variant="default"
                                         className={cn(
                                             "h-auto justify-start text-left whitespace-normal rounded-2xl border-2 transition-all duration-300 transform",
-                                            "font-medium",
+                                            "font-medium shadow-sm",
                                             isTeacher ? "text-3xl p-8" : (isFullscreen ? "p-6 text-xl" : "p-6 text-lg"),
                                             !answer ? colorClass : "",
                                             !answer && "hover:scale-[1.01] hover:shadow-lg",
-                                            answer && isCorrect ? "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10" : "",
-                                            answer && isSelected && !isCorrect ? "bg-red-600 border-red-400 text-white animate-shake" : "",
-                                            answer && !isSelected && !isCorrect ? "bg-slate-900/50 border-transparent text-slate-600 opacity-30" : ""
+                                            answer && isCorrect ? "bg-emerald-500 border-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] scale-[1.02] z-10" : "",
+                                            answer && isSelected && !isCorrect ? "bg-red-500 border-red-600 text-white animate-shake" : "",
+                                            answer && !isSelected && !isCorrect ? "bg-slate-50 border-transparent text-slate-400 opacity-50" : ""
                                         )}
                                         onClick={() => onAnswer(option)}
                                         disabled={!!answer}
@@ -1191,7 +1476,7 @@ export function StepContent({
                                             <span className={cn(
                                                 "flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", 
                                                 isTeacher ? "h-14 w-14 text-2xl" : "h-8 w-8 text-sm",
-                                                !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20"
+                                                !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20"
                                             )}>
                                                 {String.fromCharCode(65 + index)}
                                             </span>
@@ -1208,15 +1493,14 @@ export function StepContent({
                 const correctOption = tfStep.isTrue ? "Doğru" : "Yanlış";
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-5xl pt-10" : "max-w-4xl justify-center")}>
-                         <div className={cn(
-                             "rounded-3xl shadow-2xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
-                             "bg-gradient-to-br from-purple-500/20 to-pink-500/20",
-                             "border-4 border-purple-500/50",
-                             "shadow-[0_0_30px_rgba(168,85,247,0.3)]",
+                          <div className={cn(
+                             "rounded-3xl shadow-xl backdrop-blur-xl mb-10 relative overflow-hidden transition-all duration-500",
+                             "bg-white border-2 border-slate-100",
+                             "shadow-[0_0_30px_rgba(168,85,247,0.1)]",
                              isTeacher ? "p-10" : "p-10"
-                          )}>
-                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 to-pink-500" />
-                             <h3 className={cn("font-bold text-white leading-relaxed drop-shadow-md", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
+                           )}>
+                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-500" />
+                             <h3 className={cn("font-bold text-slate-800 leading-relaxed drop-shadow-sm", isTeacher ? "text-5xl" : (isFullscreen ? "text-3xl" : "text-2xl"))}>{tfStep.statement}</h3>
                         </div>
                         <div className="flex gap-8 justify-center">
                             {["Doğru", "Yanlış"].map((option) => {
@@ -1226,9 +1510,9 @@ export function StepContent({
                                     <Button
                                         key={option}
                                         className={cn(
-                                            "font-bold rounded-[2rem] transition-all duration-300 transform shadow-xl border-b-8 active:border-b-0 active:translate-y-2",
+                                            "font-bold rounded-[2rem] transition-all duration-300 transform shadow-lg border-b-8 active:border-b-0 active:translate-y-2",
                                             isTeacher ? "h-40 w-64 text-4xl" : "h-32 w-48 text-2xl border-b-8",
-                                            !answer && (option === "Doğru" ? "bg-slate-800 border-slate-950 text-green-400 hover:bg-slate-700" : "bg-slate-800 border-slate-950 text-red-400 hover:bg-slate-700"),
+                                            !answer && (option === "Doğru" ? "bg-white border-slate-200 text-green-600 hover:bg-green-50" : "bg-white border-slate-200 text-red-600 hover:bg-red-50"),
                                             answer && isCorrect && "bg-green-500 border-green-700 text-white scale-105 z-10 shadow-[0_0_30px_rgba(34,197,94,0.4)]",
                                             answer && isSelected && !isCorrect && "bg-red-500 border-red-700 text-white animate-shake",
                                             answer && !isSelected && !isCorrect && "opacity-30 grayscale scale-95"
@@ -1236,10 +1520,10 @@ export function StepContent({
                                         onClick={() => onAnswer(option)}
                                         disabled={!!answer}
                                     >
-                                        <div className="flex flex-col items-center gap-4">
-                                            {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
-                                            {option}
-                                        </div>
+                                            <div className="flex flex-col items-center gap-4">
+                                                {option === "Doğru" ? <CheckCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/> : <XCircle className={cn(isTeacher ? "h-12 w-12" : "h-8 w-8")}/>}
+                                                {option}
+                                            </div>
                                     </Button>
                                 );
                             })}
@@ -1249,12 +1533,17 @@ export function StepContent({
             }
             case 'fitb': {
                 const fitbStep = step as FitbStep;
-                const optionColors = ['border-cyan-500/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-100', 'border-purple-500/50 bg-purple-500/10 hover:bg-purple-500/20 text-purple-100', 'border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 text-amber-100', 'border-rose-500/50 bg-rose-500/10 hover:bg-rose-500/20 text-rose-100'];
+                const optionColors = [
+                    'border-cyan-200 bg-cyan-50 hover:bg-cyan-100 text-cyan-700', 
+                    'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', 
+                    'border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-700', 
+                    'border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700'
+                ];
                 return (
                     <div className={cn("w-full mx-auto flex flex-col justify-start min-h-[60vh] p-4 text-center", isTeacher ? "max-w-6xl pt-10" : "max-w-5xl justify-center")}>
-                        <div className={cn("rounded-3xl shadow-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
+                        <div className={cn("rounded-3xl shadow-xl bg-white/80 backdrop-blur-xl border border-slate-200 mb-10 relative overflow-hidden", isTeacher ? "p-10" : "p-10")}>
                              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-amber-400 to-orange-500" />
-                          <h3 className={cn("font-bold text-white leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-4xl" : "text-2xl md:text-3xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
+                          <h3 className={cn("font-bold text-slate-800 leading-relaxed tracking-wide", isTeacher ? "text-5xl" : (isFullscreen ? "text-4xl" : "text-2xl md:text-3xl"))}>{fitbStep.sentenceWithBlank?.replace('___', '________')}</h3>
                         </div>
                         <div className={cn("grid gap-6", isTeacher ? "grid-cols-2 gap-8" : "grid-cols-1 sm:grid-cols-2 gap-6")}>
                             {(fitbStep.options || []).map((option, index) => {
@@ -1262,8 +1551,8 @@ export function StepContent({
                                 const isSelected = answer?.answer === option;
                                 const colorClass = optionColors[index % optionColors.length];
                                 return (
-                                    <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-600 border-emerald-800 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-600 border-red-800 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-900/50 border-transparent text-slate-600 opacity-30" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
-                                            <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-black/20 border-white/20" : "bg-black/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
+                                    <Button key={index} variant="default" className={cn("font-bold rounded-2xl border-2 active:border-b-0 active:translate-y-1 transition-all duration-200 transform shadow-sm", isTeacher ? "h-24 text-3xl" : "h-20 text-xl", !answer ? colorClass : "", !answer && "hover:scale-[1.01] hover:shadow-lg", answer && isCorrect ? "bg-emerald-500 border-emerald-700 text-white shadow-lg scale-[1.01] z-10" : "", answer && isSelected && !isCorrect ? "bg-red-500 border-red-700 text-white animate-shake" : "", answer && !isSelected && !isCorrect ? "bg-slate-100 border-transparent text-slate-400 opacity-50" : "")} onClick={() => onAnswer(option)} disabled={!!answer}>
+                                            <span className={cn("flex shrink-0 items-center justify-center rounded-xl font-bold border mr-4", isTeacher ? "h-12 w-12 text-xl" : "h-8 w-8 text-sm", !answer ? "bg-white/50 border-black/5" : "bg-white/20 border-white/20")}>{String.fromCharCode(65 + index)}</span>
                                             {option}
                                     </Button>
                                 );
@@ -1285,11 +1574,11 @@ export function StepContent({
             default: 
                 // Bilinmeyen tip gelirse beyaz ekran yerine uyarı basar
                 return (
-                    <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-900 text-white">
+                    <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-slate-50 text-slate-800">
                         <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
                         <h2 className="text-2xl font-bold mb-2">İçerik Tipi Tanınamadı</h2>
-                        <div className="bg-black/50 p-4 rounded-xl border border-white/10 font-mono text-sm">
-                             Gelen Tip: <span className="text-yellow-400">"{step.type}"</span>
+                        <div className="bg-white p-4 rounded-xl border border-slate-200 font-mono text-sm text-slate-600 shadow-sm">
+                             Gelen Tip: <span className="text-rose-500 font-bold">"{step.type}"</span>
                         </div>
                     </div>
                 );
@@ -1336,14 +1625,20 @@ export function LessonContentViewer({
       
     const [showResumeDialog, setShowResumeDialog] = useState(false);
     const [savedStepIndex, setSavedStepIndex] = useState<number | null>(null);
+    const [hideUI, setHideUI] = useState(false); // UI Gizleme State'i
 
+    // Steps ve CurrentStep tanımları
     const steps = useMemo(() => {
         if (!topic) return [];
         return topic.steps?.filter(s => (s.isPublished ?? true) || isTeacher) || [];
     }, [topic, isTeacher]);
 
     const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
-    
+
+    // Görsel veya HTML Slide adımı mı?
+    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
+    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
+
     useEffect(() => {
         if (currentStep?.type === 'visual') {
             setIsVisualMaximized(true);
@@ -1352,10 +1647,9 @@ export function LessonContentViewer({
         }
     }, [currentStep, isVisualMaximized]);
 
-
+    // Resume Dialog Mantığı
     useEffect(() => {
         if (topic) {
-            // LocalStorage'dan kontrol et
             const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
             const savedData = localStorage.getItem(storageKey);
               
@@ -1377,7 +1671,7 @@ export function LessonContentViewer({
             setFlippedCards(new Set());
             setFlippedAnagramCards(new Set());
             setIsAnimating(false);
-            setIsVisualMaximized(false); // Reset
+            setIsVisualMaximized(false);
         }
     }, [topic, user?.uid, steps.length]);
 
@@ -1387,6 +1681,11 @@ export function LessonContentViewer({
             localStorage.setItem(storageKey, currentStepIndex.toString());
         }
     }, [currentStepIndex, topic, user?.uid]);
+
+    // UI Gizleme/Gösterme Efekti: Her adım değişiminde GÖRÜNÜR yap
+    useEffect(() => {
+        setHideUI(false); 
+    }, [currentStepIndex]);
 
     const handleResume = () => {
         if (savedStepIndex !== null) {
@@ -1413,7 +1712,7 @@ export function LessonContentViewer({
                     if (!currentAnswers.completed) {
                         const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true, score: score } };
                         setInternalProgress(prev => ({ score: prev.score + (score > 0 ? score : 50), answers: newAnswers }));
-                        toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-600 border-none text-white" });
+                        toast({ title: "Tebrikler!", description: `Puanın: ${score}`, className: "bg-green-500 border-none text-white" });
                         playSound('win');
                     }
                 } else {
@@ -1427,29 +1726,25 @@ export function LessonContentViewer({
 
     useEffect(() => { if (topic) onProgressUpdate(topic.id, internalProgress); }, [internalProgress, onProgressUpdate, topic]);
 
-      
     // --- KONTROL MANTIĞI ---
     const isActivityStep = currentStep?.type === 'activityLink';
-    const isHtmlSlideStep = currentStep?.type === 'htmlSlide';
     
-    // Görsel tam ekran yapıldığında da 'FullWidth' moduna geç
     const isFullWidthStep = isActivityStep || isHtmlSlideStep || (currentStep?.type === 'visual' && isVisualMaximized);
       
     const isStepCompleted = internalProgress.answers[currentStepIndex]?.completed;
 
     const isNextButtonEnabled = useMemo(() => {
         if (!currentStep) return false;
+        
         if (isTeacher) return true;
-          
-        // HTML Slide için her zaman aktif
-        if (isHtmlSlideStep) return true;
 
-        // Oyun için: Sadece completed true ise aktif
+        if (isHtmlSlideStep) return true;
         if (isActivityStep) return !!isStepCompleted;
 
         const isPassiveStep = ['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation'].includes(currentStep.type);
         if (isPassiveStep) return true;
-        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true;
+
+        if (['content', 'objectiveList', 'accordion'].includes(currentStep.type)) return true; 
 
         const isCardStep = ['flashcard', 'anagramFlashcard'].includes(currentStep.type);
         if (isCardStep) {
@@ -1457,17 +1752,17 @@ export function LessonContentViewer({
             const cardSet = currentStep.type === 'flashcard' ? flippedCards : flippedAnagramCards;
             return cardSet.size === cards.length;
         }
-          
+
         const answer = internalProgress.answers[currentStepIndex];
         if (currentStep.type === 'trueFalseList') return !!answer?.completed;
-          
+
         return answer !== undefined && answer !== null;
+
     }, [currentStep, internalProgress.answers, currentStepIndex, flippedCards, flippedAnagramCards, isTeacher, isActivityStep, isHtmlSlideStep, isStepCompleted]);
 
     const handleNext = useCallback(() => {
         if (!currentStep) return;
           
-        // Bitirince LocalStorage'ı temizle
         if (currentStepIndex === steps.length - 1) {
              if (topic) {
                 const storageKey = `lesson_progress_${user?.uid || 'guest'}_${topic.id}`;
@@ -1475,7 +1770,6 @@ export function LessonContentViewer({
             }
         }
 
-        // Pasif adımları otomatik tamamla
         if (['visual', 'iframe', 'conceptMap', 'video', 'conceptExplanation', 'htmlSlide'].includes(currentStep.type)) {
             if (internalProgress.answers[currentStepIndex] === undefined) {
                 const newAnswers = { ...internalProgress.answers, [currentStepIndex]: { completed: true } };
@@ -1488,7 +1782,7 @@ export function LessonContentViewer({
             setFlippedCards(new Set());
             setFlippedAnagramCards(new Set());
             setIsAnimating(false);
-            setIsVisualMaximized(false); // Adım değişince büyütmeyi kapat 
+            setIsVisualMaximized(false); 
         } else {
             setIsFinished(true);
             playSound('win');
@@ -1565,7 +1859,9 @@ export function LessonContentViewer({
         setInternalProgress(prev => ({ ...prev, score: prev.score + points, answers: newAnswers }));
     }
 
-    const handleContinueOrNext = () => {
+    const handleContinueOrNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
           if (!currentStep) return;
         const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
         if (isContentList) {
@@ -1584,22 +1880,20 @@ export function LessonContentViewer({
         }
     };
 
-    // --- RENDER ---
-
     if (isFinished) {
          return (
-             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-950 text-white gap-6">
-                 <PartyPopper className="h-20 w-20 text-yellow-400 animate-bounce" />
-                 <h1 className="text-4xl font-bold">Ders Tamamlandı!</h1>
-                 <p className="text-2xl text-cyan-400 font-bold">Toplam Puan: {internalProgress.score}</p>
-                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-xl px-10 py-6 rounded-2xl">
+             <div className="h-full flex flex-col items-center justify-center p-4 bg-slate-50 text-slate-800 gap-6">
+                 <PartyPopper className="h-20 w-20 text-yellow-500 animate-bounce" />
+                 <h1 className="text-4xl font-black">Ders Tamamlandı!</h1>
+                 <p className="text-2xl text-cyan-600 font-bold">Toplam Puan: {internalProgress.score}</p>
+                 <Button onClick={() => onTopicComplete(topic!.id, internalProgress.score)} className="bg-cyan-600 hover:bg-cyan-500 text-white text-xl px-10 py-6 rounded-2xl shadow-lg">
                      {completeButtonText || 'Bitir'}
                  </Button>
              </div>
          )
     }
       
-    if (!currentStep) return <div className="text-white flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
+    if (!currentStep) return <div className="text-slate-500 flex justify-center items-center h-full"><Loader2 className="animate-spin mr-2"/> Yükleniyor...</div>;
 
     const isContentList = ['content', 'objectiveList', 'accordion'].includes(currentStep.type);
     let showContinueButton = false;
@@ -1616,41 +1910,37 @@ export function LessonContentViewer({
     }
 
     const showFloatingButton = isFullWidthStep && (
-        (isActivityStep && (isStepCompleted || isTeacher)) || 
-        (currentStep?.type === 'visual' && isVisualMaximized) ||
-        isHtmlSlideStep
+        (isActivityStep && (isStepCompleted || isTeacher))
     );
     
     const isStudentInActivity = isActivityStep && !isTeacher;
 
-    const isImmersiveStep = ['visual', 'htmlSlide'].includes(currentStep?.type || '');
-
     return (
-      <div className="h-full w-full flex flex-col bg-slate-950 overflow-hidden relative">
+      <div className="h-full w-full flex flex-col bg-slate-50 overflow-hidden relative">
         
-        <DrawingCanvas />
+        <DrawingCanvas stepIndex={currentStepIndex} />
 
         {showResumeDialog && (
-            <div className="absolute inset-0 z-[60] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-                <Card className="w-full max-w-sm bg-slate-900 border-slate-800 text-white animate-in zoom-in-95">
+            <div className="absolute inset-0 z-[60] bg-white/60 backdrop-blur-md flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+                <Card className="w-full max-w-sm bg-white border-slate-200 text-slate-800 shadow-2xl animate-in zoom-in-95">
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-400" />Kaldığın Yerden Devam Et</CardTitle>
+                        <CardTitle className="flex items-center gap-2 text-xl"><History className="h-6 w-6 text-cyan-500" />Kaldığın Yerden Devam Et</CardTitle>
                         <CardDescription>Daha önce bu konuda <strong>{savedStepIndex! + 1}. adıma</strong> kadar gelmişsin.</CardDescription>
                     </CardHeader>
                     <CardFooter className="flex flex-col gap-3">
-                        <Button onClick={handleResume} className="w-full bg-cyan-600 hover:bg-cyan-500 text-lg py-6 rounded-xl">Evet, Devam Et</Button>
-                        <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-400 hover:text-white">Hayır, Baştan Başla</Button>
+                        <Button onClick={handleResume} className="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg py-6 rounded-xl shadow-md">Evet, Devam Et</Button>
+                        <Button onClick={handleRestart} variant="ghost" className="w-full text-slate-500 hover:text-slate-800 hover:bg-slate-100">Hayır, Baştan Başla</Button>
                     </CardFooter>
                 </Card>
             </div>
         )}
 
         {/* --- İÇERİK ALANI --- */}
-        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
+        <div className={cn("flex-1 relative w-full", isFullWidthStep ? "overflow-hidden" : `overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent ${isTeacher && isFullscreen && !isImmersiveStep ? 'pb-32' : 'pb-24'}`)}>
              {!isFullWidthStep && (
                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
-                     <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-cyan-500/5 rounded-full blur-[80px]" />
-                     <div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-500/5 rounded-full blur-[80px]" />
+                     <div className="absolute top-[20%] left-[20%] w-64 h-64 bg-blue-300/30 rounded-full blur-[80px]" />
+                     <div className="absolute bottom-[20%] right-[20%] w-64 h-64 bg-purple-300/30 rounded-full blur-[80px]" />
                  </div>
              )}
 
@@ -1682,97 +1972,127 @@ export function LessonContentViewer({
            </div>
         </div>
         
+        {/* HTML/Görsel Adımı için AÇMA TUŞU (Bar gizliyken görünür) */}
+        {isTeacher && isImmersiveStep && hideUI && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in">
+                 <Button 
+                    onClick={(e) => {
+                         e.stopPropagation();
+                         setHideUI(false);
+                    }}
+                    size="icon"
+                    className="rounded-full w-12 h-12 bg-white/90 shadow-xl border border-slate-200 hover:bg-white text-slate-700 hover:scale-110 transition-all"
+                 >
+                    <ChevronUp className="w-6 h-6" />
+                 </Button>
+            </div>
+        )}
+
         {!isStudentInActivity && (
             <div className={cn(
-                "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300",
-                isFullWidthStep 
-                    ? "absolute bottom-0 left-0 right-0 h-16 px-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 hover:opacity-100" 
-                    : (isTeacher && isFullscreen 
-                        ? (isImmersiveStep 
-                            ? "absolute bottom-0 left-0 right-0 h-24 px-8 opacity-0 hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 to-transparent border-none"
-                            : "absolute bottom-0 left-0 right-0 h-24 px-8 bg-slate-950/90 border-t-2 border-white/10"
-                        )
-                        : (isFullscreen 
-                            ? "absolute bottom-0 left-0 right-0 h-16 px-4 opacity-0 hover:opacity-100 focus-within:opacity-100 transition-opacity" 
-                            : "relative h-16 px-4 bg-slate-900/90 border-t border-white/5 backdrop-blur-md"
-                        )
-                    )
-            )}>
-                <div className="flex items-center gap-4 flex-1">
+                "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
+                // GİZLEME CLASS MANTIĞI:
+                hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-12 px-4 opacity-100",
+                // GLASSMORPHISM & STYLE:
+                !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
+                // POSITION:
+                "relative"
+            )} onClick={(e) => e.stopPropagation()}>
+                
+                {/* GİZLEME BUTONU (Sadece Öğretmen & Immersive & Bar Açıkken) */}
+                {isTeacher && isImmersiveStep && !hideUI && (
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
+                        <Button 
+                            onClick={() => setHideUI(true)}
+                            size="sm"
+                            className="h-6 w-10 rounded-t-lg rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
+                        >
+                            <ChevronDown className="h-4 w-4 text-slate-500" />
+                        </Button>
+                    </div>
+                )}
+
+                {/* SOL: Geri Butonu + İlerleme */}
+                <div className="flex items-center gap-3 flex-1">
                     <Button 
-                        variant="outline" 
-                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        variant="ghost" 
+                        size="sm" 
                         onClick={handlePrev} 
                         disabled={currentStepIndex === 0} 
                         className={cn(
-                            "border-white/10 hover:bg-white/5 text-slate-300 hover:text-white",
-                            isTeacher && isFullscreen && "text-lg font-bold border-2"
+                            "rounded-full h-8 px-4 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0", 
+                            "font-medium text-xs md:text-sm"
                         )}
                     >
-                        <ArrowLeft className={cn("mr-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                        <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
                         Geri
                     </Button>
                     
                     <div className="hidden md:flex items-center gap-2">
-                        <span className="text-slate-400 text-xs">{currentStepIndex + 1} / {steps.length}</span>
-                        <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-500" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div></div>
+                        <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
+                        </div>
+                        <span className="text-slate-400 text-[10px] font-bold">{currentStepIndex + 1}/{steps.length}</span>
                     </div>
                 </div>
 
-                <div className="text-white text-xs font-bold">{internalProgress.score} Puan</div>
+                {/* ORTA: Puan Rozeti */}
+                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                    <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm">
+                        <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                        <span className="text-xs font-black tracking-tight">{internalProgress.score}</span>
+                    </div>
+                </div>
 
-                <div className="flex gap-4 md:gap-6 flex-1 justify-end items-center">
+                {/* SAĞ: Aksiyonlar */}
+                <div className="flex gap-3 flex-1 justify-end items-center">
                     
                     {isTeacher && (
                         <Button 
                             variant="ghost" 
-                            size={isTeacher && isFullscreen ? "default" : "sm"}
+                            size="sm" 
                             onClick={handleNext} 
-                            className={cn(
-                                "text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 transition-colors",
-                                isTeacher && isFullscreen && "text-base font-semibold"
-                            )}
-                            title="Bu adımı zorla geç (Puan verilmez)"
+                            className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-8 px-3 rounded-full text-xs font-medium"
+                            title="Bu adımı zorla geç"
                         >
-                            <FastForward className={cn("mr-2", isTeacher && isFullscreen ? "h-5 w-5" : "h-4 w-4")} /> 
                             Atla
                         </Button>
                     )}
 
                     <Button 
-                        size={isTeacher && isFullscreen ? "lg" : "sm"}
+                        size="sm" 
                         onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled || isAnimating}
+                        disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
                         className={cn(
-                            "bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-900/30 transition-all",
-                            showContinueButton ? "px-6" : "px-4",
-                            isTeacher && isFullscreen && "text-xl px-8 h-14 rounded-xl"
+                            "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all h-8 rounded-full transform hover:-translate-y-0.5 active:translate-y-0", 
+                            showContinueButton ? "px-5" : "px-5",
+                            "text-xs md:text-sm font-bold tracking-wide"
                         )}
                     >
-                        {showContinueButton ? "Devam Et" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Konuyu Bitir") : "İleri")}
-                        <ArrowRight className={cn("ml-2", isTeacher && isFullscreen ? "h-6 w-6" : "h-4 w-4")} />
+                        {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
+                        <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80" />
                     </Button>
                 </div>
             </div>
         )}
 
         {showFloatingButton && (
-            <div className="absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500">
+            <div className={cn("absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500 transition-all ease-in-out", hideUI ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0")} onClick={(e) => e.stopPropagation()}>
                 <Button 
                     size="lg" 
                     onClick={handleNext}
                     className={cn(
-                        "text-white border-4 rounded-2xl h-16 px-8 text-xl font-black uppercase tracking-widest shadow-xl transition-all",
+                        "text-white border-4 rounded-2xl h-14 px-6 text-lg font-black uppercase tracking-widest shadow-xl transition-all transform hover:scale-105 active:scale-95", 
                         (isActivityStep && isStepCompleted) 
-                            ? "bg-green-600 hover:bg-green-500 border-green-800/50 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.6)]" 
+                            ? "bg-green-500 hover:bg-green-600 border-green-200 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.4)]" 
                             : (isTeacher && isActivityStep
-                                ? "bg-amber-600 hover:bg-amber-500 border-amber-800/50 shadow-amber-900/30"
-                                : "bg-cyan-600 hover:bg-cyan-500 border-cyan-800/50 shadow-cyan-900/30"
+                                ? "bg-amber-500 hover:bg-amber-600 border-amber-200 shadow-amber-200/50"
+                                : "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 border-indigo-200 shadow-indigo-300/50"
                             )
                     )}
                 >
                     {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
-                    <ArrowRight className="ml-2 h-6 w-6" />
+                    <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
             </div>
         )}

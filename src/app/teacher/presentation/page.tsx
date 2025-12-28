@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { Suspense, useEffect, useState, useRef, useCallback } from 'react';
@@ -67,8 +65,7 @@ function PresentationPageContent() {
                      steps = topicsSnapshot.docs.flatMap(doc => (doc.data().steps || []));
                  }
                  
-                 // If static flow files exist, fetch them.
-                 // In teacher mode, we prefer DB data, but this can be a fallback.
+                 // Static flow fallback
                  try {
                      const flowRes = await fetch(`/curriculum/flows/${contentId}.json`);
                      if (flowRes.ok) {
@@ -102,18 +99,18 @@ function PresentationPageContent() {
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-950">
-                <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
+            <div className="flex h-screen items-center justify-center bg-slate-50">
+                <Loader2 className="h-12 w-12 animate-spin text-purple-600" />
             </div>
         );
     }
     
     if (!content) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
+            <div className="flex h-screen items-center justify-center bg-slate-50 text-slate-500">
                 <div className="text-center">
-                    <p className="text-xl font-bold mb-4">Sunum içeriği bulunamadı.</p>
-                    <Button asChild variant="outline" className="border-white/10 text-white hover:bg-white/5">
+                    <p className="text-xl font-bold mb-4 text-slate-800">Sunum içeriği bulunamadı.</p>
+                    <Button asChild variant="outline" className="border-slate-300 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
                         <Link href="/teacher/ders-akisi">Geri Dön</Link>
                     </Button>
                 </div>
@@ -128,47 +125,53 @@ function PresentationPageContent() {
         <main 
             ref={mainContentRef} 
             className={cn(
-                "h-screen w-screen bg-slate-950 text-white overflow-hidden flex flex-col font-sans relative",
+                "h-screen w-screen bg-slate-50 text-slate-900 overflow-hidden flex flex-col font-sans relative transition-colors duration-500",
                 !isFullscreen && "p-4 md:p-6"
             )}
         >
+             {/* Arka Plan Efektleri (Light Mode Uyumlu) */}
              <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-900/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
+                <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-purple-300/20 rounded-full blur-[150px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-300/20 rounded-full blur-[150px]" />
             </div>
 
+            {/* Header / Üst Bar */}
             <header className={cn(
                 "flex-shrink-0 z-20 flex items-center justify-between transition-all duration-300",
                 isFullscreen 
-                    ? "absolute top-0 left-0 right-0 p-2 bg-slate-900/80 backdrop-blur-md border-b border-white/10 opacity-0 hover:opacity-100 focus-within:opacity-100" 
-                    : "mb-4 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-lg"
+                    ? "absolute top-0 left-0 right-0 p-2 bg-white/80 backdrop-blur-md border-b border-slate-200 opacity-0 hover:opacity-100 focus-within:opacity-100 shadow-sm" 
+                    : "mb-4 bg-white/60 backdrop-blur-xl border border-slate-200 rounded-2xl p-4 shadow-sm"
             )}>
                 <div className="flex items-center gap-4 overflow-hidden">
-                    <div className={cn("p-2.5 rounded-xl shadow-lg flex-shrink-0", isFullscreen ? "bg-transparent p-0" : "bg-gradient-to-br from-purple-500 to-indigo-600")}>
-                        <Presentation className={cn("text-white", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
+                    <div className={cn("p-2.5 rounded-xl shadow-md flex-shrink-0 transition-all", isFullscreen ? "bg-transparent shadow-none p-0" : "bg-white border border-slate-100")}>
+                        <Presentation className={cn("text-purple-600", isFullscreen ? "h-5 w-5" : "h-6 w-6")}/>
                     </div>
                     <div className="overflow-hidden">
-                        <h1 className={cn("font-black tracking-tight text-white uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
+                        <h1 className={cn("font-black tracking-tight text-slate-800 uppercase truncate leading-none", isFullscreen ? "text-lg" : "text-2xl")}>
                             {content.title}
                         </h1>
-                        {!isFullscreen && <p className="text-xs text-slate-400 font-medium mt-1 truncate">{courseName} • {unitName}</p>}
+                        {!isFullscreen && <p className="text-xs text-slate-500 font-bold mt-1 truncate tracking-wide">{courseName} • {unitName}</p>}
                     </div>
                 </div>
                  
-                 <div className="flex items-center gap-2 flex-shrink-0">
-                    <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 text-slate-300 hover:text-white border-0 h-9 w-9 rounded-lg" />
+                 <div className="flex items-center gap-3 flex-shrink-0">
+                    <FullscreenToggle elementRef={mainContentRef} className="bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 h-10 w-10 rounded-xl shadow-sm" />
                     {!isFullscreen && (
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-lg h-9 w-9">
+                        <Button asChild variant="ghost" size="icon" className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl h-10 w-10">
                             <Link href="/teacher/ders-akisi"><ArrowLeft className="h-5 w-5" /></Link>
                         </Button>
                     )}
                  </div>
             </header>
             
+            {/* İçerik Alanı */}
             <div className="flex-grow flex flex-col min-h-0 relative z-10">
                  <div className={cn(
                     "w-full h-full overflow-hidden transition-all duration-300",
-                    isFullscreen ? "rounded-none" : "rounded-2xl border-4 border-slate-800 shadow-2xl bg-white dark:bg-slate-900 ring-1 ring-white/10"
+                    // Fullscreen değilse kağıt/kart efekti ver
+                    isFullscreen 
+                        ? "rounded-none bg-white" 
+                        : "rounded-3xl border-4 border-white shadow-2xl bg-white ring-1 ring-slate-200/50"
                 )}>
                     <LessonContentViewer
                         topic={content as Topic}
@@ -192,7 +195,7 @@ function PresentationPageContent() {
 
 export default function PresentationPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-purple-600" /></div>}>
             <PresentationPageContent />
         </Suspense>
     )

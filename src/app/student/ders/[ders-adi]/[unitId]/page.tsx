@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -62,9 +61,11 @@ function PageContent() {
         if (!courseId) return;
         setIsLoading(true);
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
+        const isStatic = process.env.NEXT_PUBLIC_STATIC_BUILD === 'true';
 
         try {
-            if (user) {
+            // Canlı modda Firestore'dan ilerlemeyi çek
+            if (user && !isStatic) {
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
                 const progressSnap = await getDoc(progressRef);
                 if (progressSnap.exists()) {
@@ -91,22 +92,33 @@ function PageContent() {
                 return;
             }
             
+            // Ünite ve Konu adımlarını manifest veya canlı veriden zenginleştir
             const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
                 let unitSteps: LessonStep[] = [];
-                // Check for both direct flow content and existence in the flows directory
-                if (unit.hasFlowContent) {
-                     try {
-                        const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
-                        if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
-                     } catch (e) { console.warn(`No flow file for unit ${unit.id}`) }
+                 if (unit.hasFlowContent) {
+                    if(isStatic) {
+                        try {
+                            const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                            if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
+                        } catch (e) { console.warn(`No static flow file for unit ${unit.id}`) }
+                    } else {
+                        const unitDoc = await getDoc(doc(db, `courses/${courseId}/units`, unit.id));
+                        unitSteps = unitDoc.data()?.steps || [];
+                    }
                 }
+
                 const enrichedTopics = await Promise.all((unit.topics || []).map(async (topic: any) => {
                     let topicSteps: LessonStep[] = [];
                     if (topic.hasFlowContent) {
-                         try {
-                            const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
-                            if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
-                         } catch(e) { console.warn(`No flow file for topic ${topic.id}`) }
+                         if(isStatic) {
+                             try {
+                                const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                                if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
+                             } catch(e) { console.warn(`No static flow file for topic ${topic.id}`) }
+                         } else {
+                            const topicDoc = await getDoc(doc(db, `courses/${courseId}/units/${unit.id}/topics`, topic.id));
+                            topicSteps = topicDoc.data()?.steps || [];
+                         }
                     }
                     return { ...topic, steps: topicSteps };
                 }));
@@ -116,26 +128,26 @@ function PageContent() {
             courseData.units = enrichedUnits;
             setCourse(courseData);
 
-            // Determine active content
+            // Aktif içeriği belirle
+            let contentToActivate: Topic | Unit | null = null;
             if (startTopicIdFromUrl) {
-                const topic = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl);
-                setActiveContent(topic || null);
+                contentToActivate = enrichedUnits?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl) || null;
             } else if (unitIdFromUrl) {
-                const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
+                const unit = enrichedUnits?.find(u => u.id === unitIdFromUrl);
                 if (unit) {
-                    // If the unit itself has steps, show it. Otherwise, find the first topic.
                     if (unit.steps && unit.steps.length > 0) {
-                         setActiveContent(unit);
+                        contentToActivate = unit;
                     } else {
-                         const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
-                         setActiveContent(firstUncompletedTopicInUnit || unit.topics[0] || null);
+                        const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
+                        contentToActivate = firstUncompletedTopicInUnit || unit.topics[0] || null;
                     }
                 }
             } else {
-                const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
+                 const allTopics = enrichedUnits.flatMap((u: Unit) => u.topics || []);
                 const firstUncompletedTopic = allTopics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
-                setActiveContent(firstUncompletedTopic || allTopics[0] || null);
+                contentToActivate = firstUncompletedTopic || allTopics[0] || null;
             }
+             setActiveContent(contentToActivate);
 
         } catch (error: any) {
             console.error("Ders verisi alınırken hata:", error);
@@ -259,8 +271,7 @@ function PageContent() {
             
             await batch.commit();
             
-            // Optimistically update local state
-             setCompletedTopics(prev => ({
+            setCompletedTopics(prev => ({
                 ...prev,
                 [contentId]: {
                     completionCount: newCompletionCount,
