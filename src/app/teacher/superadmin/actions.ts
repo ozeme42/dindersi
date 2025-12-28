@@ -318,21 +318,20 @@ export async function exportManifestAndContent() {
                             }
                         }
                     
-                    const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
-                    
-                    const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
-                        const topicData = topicDoc.data() as Topic;
-                        const defsSnap = db.collection('activityItems').where('topicId', '==', topicDoc.id).where('type', '==', 'definition').limit(1).get();
-                        const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
-                        return (topicData.isPublished ?? true) && (topicData.htmlContent || hasYazilacaklar || (topicData.steps && topicData.steps.length > 0));
-                    });
+                        const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
+                        
+                        const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
+                            const topicData = topicDoc.data() as Topic;
+                            const hasContent = topicData.htmlContent || (topicData.writingContent?.notes && topicData.writingContent.notes.length > 0) || (topicData.steps && topicData.steps.length > 0);
+                            return (topicData.isPublished ?? true) && hasContent;
+                        });
 
-                    const unitHasOzet = !!unitData.htmlContent;
-                    const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
-                    const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
+                        const unitHasOzet = !!unitData.htmlContent;
+                        const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
+                        const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
 
-                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
-                }));
+                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
+                    }));
 
                     const validUnits = units.filter(Boolean);
                     return validUnits.length > 0 ? { id: course.id, title: course.title, units: validUnits } : null;
