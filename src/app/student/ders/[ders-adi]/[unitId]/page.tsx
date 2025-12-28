@@ -63,7 +63,6 @@ function PageContent() {
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
-            // Canlı modda Firestore'dan ilerlemeyi çek
             if (user) {
                 const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
                 const progressSnap = await getDoc(progressRef);
@@ -90,39 +89,47 @@ function PageContent() {
                 setIsLoading(false);
                 return;
             }
-            
-            // Ünite ve Konu adımlarını manifest veya canlı veriden zenginleştir
-            const enrichedUnits = [];
-            for (const unit of (courseData.units || [])) {
-                let unitSteps: LessonStep[] = [];
-                try {
-                    const cacheBuster = `?v=${Date.now()}`;
-                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json${cacheBuster}`);
-                    if (unitFlowRes.ok) {
-                        unitSteps = await unitFlowRes.json();
-                    }
-                } catch (e) { console.warn(`No static flow file for unit ${unit.id}`) }
-    
-                const enrichedTopics = [];
-                for (const topic of (unit.topics || [])) {
-                    let topicSteps: LessonStep[] = [];
-                     try {
-                        const cacheBuster = `?v=${Date.now()}`;
-                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json${cacheBuster}`);
-                        if (topicFlowRes.ok) {
-                            topicSteps = await topicFlowRes.json();
-                        }
-                     } catch(e) { console.warn(`No static flow file for topic ${topic.id}`) }
-                    enrichedTopics.push({ ...topic, steps: topicSteps });
-                }
-                enrichedUnits.push({ ...unit, steps: unitSteps, topics: enrichedTopics });
-            }
 
+            const enrichedUnits: Unit[] = await Promise.all(
+                (courseData.units || []).map(async (unit: Unit) => {
+                    let unitSteps: LessonStep[] = [];
+                    let enrichedTopics: Topic[] = [];
+
+                    try {
+                        const cacheBuster = `?v=${Date.now()}`;
+                        const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json${cacheBuster}`);
+                        if (unitFlowRes.ok) {
+                            unitSteps = await unitFlowRes.json();
+                        }
+                    } catch (e) {
+                        console.warn(`No static flow file for unit ${unit.id}`);
+                    }
+                    
+                    if (unit.topics && unit.topics.length > 0) {
+                         enrichedTopics = await Promise.all(
+                            unit.topics.map(async (topic: Topic) => {
+                                let topicSteps: LessonStep[] = [];
+                                try {
+                                    const cacheBuster = `?v=${Date.now()}`;
+                                    const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json${cacheBuster}`);
+                                    if (topicFlowRes.ok) {
+                                        topicSteps = await topicFlowRes.json();
+                                    }
+                                } catch (e) {
+                                    console.warn(`No static flow file for topic ${topic.id}`);
+                                }
+                                return { ...topic, steps: topicSteps };
+                            })
+                        );
+                    }
+
+                    return { ...unit, steps: unitSteps, topics: enrichedTopics };
+                })
+            );
 
             courseData.units = enrichedUnits;
             setCourse(courseData);
 
-            // Aktif içeriği belirle
             let contentToActivate: Topic | Unit | null = null;
             if (startTopicIdFromUrl) {
                 contentToActivate = enrichedUnits?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl) || null;

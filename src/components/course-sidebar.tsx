@@ -15,10 +15,9 @@ interface CourseSidebarProps {
     course: Course;
     activeTopic: Topic | null;
     onSelectTopic: (topic: Topic) => void;
-    onSelectUnitFlow?: (unit: Unit) => void; // Make this optional for reuse
+    onSelectUnitFlow?: (unit: Unit) => void;
     isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
-    // Aşağıdaki proplar opsiyoneldir, soru bankasında kullanılabilir ama ders anlatımında boş gelebilir
     topicProgress?: { [topicId: string]: any }; 
     testCounts?: { [topicId: string]: any }; 
 }
@@ -27,12 +26,11 @@ export function CourseSidebar({
     course,
     activeTopic,
     onSelectTopic,
-    onSelectUnitFlow, // Added prop
+    onSelectUnitFlow,
     isTopicUnlocked,
     isTopicCompleted,
 }: CourseSidebarProps) {
     
-    // Aktif konuyu görünür alana kaydırmak için ref
     const activeRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -43,7 +41,6 @@ export function CourseSidebar({
 
     return (
         <div className="h-full flex flex-col bg-slate-950 border-r border-white/5 select-none">
-            {/* Başlık Alanı */}
             <div className="p-4 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-2">
                 <div className="flex-1 min-w-0">
                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Ders İçeriği</h3>
@@ -60,7 +57,6 @@ export function CourseSidebar({
                         {course.units?.map((unit, unitIndex) => (
                             <AccordionItem key={unit.id} value={unit.id} className="border-none">
                                 
-                                {/* Ünite Başlığı (Modern Kart) */}
                                 <AccordionTrigger className="py-3 px-4 mb-4 bg-slate-900/80 hover:bg-slate-800 rounded-xl border border-white/5 text-slate-200 hover:text-white transition-all hover:no-underline group">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 group-hover:border-indigo-500/50 transition-colors">
@@ -71,7 +67,6 @@ export function CourseSidebar({
                                 </AccordionTrigger>
 
                                 <AccordionContent className="pt-0 pb-2 pl-2">
-                                     {/* Ünite Akışı Butonu (Eğer varsa) */}
                                     {onSelectUnitFlow && unit.steps && unit.steps.length > 0 && (
                                         <div className="relative pl-6 pb-2 mb-2">
                                              <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
@@ -93,7 +88,6 @@ export function CourseSidebar({
                                         </div>
                                     )}
 
-                                    {/* Timeline (Yol Haritası) Yapısı */}
                                     <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
                                         {unit.topics?.map((topic, topicIndex) => {
                                             const isLocked = !isTopicUnlocked(topicIndex, unitIndex);
@@ -106,7 +100,6 @@ export function CourseSidebar({
                                                     ref={isActive ? activeRef : null}
                                                     className="relative pl-6 py-2 group/topic"
                                                 >
-                                                    {/* Bağlantı Çizgisi ve Nokta */}
                                                     <div className={cn(
                                                         "absolute left-[-5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full border-2 transition-all duration-300 z-10 box-content",
                                                         isActive 
@@ -124,7 +117,6 @@ export function CourseSidebar({
                                                         )}
                                                     </div>
 
-                                                    {/* Konu Kartı */}
                                                     <button
                                                         onClick={() => !isLocked && onSelectTopic(topic)}
                                                         disabled={isLocked}
@@ -137,7 +129,6 @@ export function CourseSidebar({
                                                                     : "bg-slate-900/20 border-white/5 hover:bg-slate-800 hover:border-white/10"
                                                         )}
                                                     >
-                                                        {/* Aktiflik Işıltısı */}
                                                         {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />}
 
                                                         <div className="flex items-center gap-3 min-w-0">
@@ -171,7 +162,6 @@ export function CourseSidebar({
                 </div>
             </div>
 
-            {/* Alt Bilgi */}
             <div className="p-4 border-t border-white/5 bg-slate-900/80 backdrop-blur-md text-[10px] text-slate-500 flex justify-between items-center">
                 <span>İlerleme: %{calculateTotalProgress(course, isTopicCompleted)}</span>
                 <div className="flex gap-2">
