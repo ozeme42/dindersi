@@ -94,17 +94,17 @@ function PageContent() {
             // Ünite ve Konu adımlarını manifest veya canlı veriden zenginleştir
             const enrichedUnits = await Promise.all((courseData.units || []).map(async (unit: any) => {
                 let unitSteps: LessonStep[] = [];
-                // ALWAYS FETCH FROM STATIC FILE FOR STUDENT VIEW
                 try {
-                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json`);
+                    const cacheBuster = `?v=${Date.now()}`;
+                    const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json${cacheBuster}`);
                     if (unitFlowRes.ok) unitSteps = await unitFlowRes.json();
                 } catch (e) { console.warn(`No static flow file for unit ${unit.id}`) }
 
                 const enrichedTopics = await Promise.all((unit.topics || []).map(async (topic: any) => {
                     let topicSteps: LessonStep[] = [];
-                    // ALWAYS FETCH FROM STATIC FILE FOR STUDENT VIEW
                      try {
-                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json`);
+                        const cacheBuster = `?v=${Date.now()}`;
+                        const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json${cacheBuster}`);
                         if (topicFlowRes.ok) topicSteps = await topicFlowRes.json();
                      } catch(e) { console.warn(`No static flow file for topic ${topic.id}`) }
                     return { ...topic, steps: topicSteps };
