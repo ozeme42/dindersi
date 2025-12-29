@@ -67,7 +67,7 @@ export function CourseSidebar({
                                 </AccordionTrigger>
 
                                 <AccordionContent className="pt-0 pb-2 pl-2">
-                                    {onSelectUnitFlow && unit.steps && unit.steps.length > 0 && (
+                                    {(onSelectUnitFlow && (unit as any).hasFlowContent) && (
                                         <div className="relative pl-6 pb-2 mb-2">
                                              <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
                                                 <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
@@ -85,6 +85,28 @@ export function CourseSidebar({
                                                     </span>
                                                 </div>
                                             </button>
+                                        </div>
+                                    )}
+
+                                    {/* Ünite Özeti Butonu - YENİ EKLENDİ */}
+                                    {(unit as any).hasUnitOzet && (
+                                        <div className="relative pl-6 pb-2 mb-2">
+                                             <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
+                                                <div className="w-2.5 h-full border-l-2 border-slate-800 -translate-x-px" />
+                                            </div>
+                                            <Link 
+                                                href={`/student/ozetler/${course.id}/${unit.id}`}
+                                                className="w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden bg-amber-900/20 border-amber-500/50 hover:bg-amber-800/40 hover:border-amber-400/80"
+                                            >
+                                                <div className="flex items-center gap-3 min-w-0">
+                                                    <div className="shrink-0 text-amber-400">
+                                                        <BookOpen className="w-4 h-4" />
+                                                    </div>
+                                                    <span className="text-sm font-bold truncate text-white">
+                                                        Ünite Özeti
+                                                    </span>
+                                                </div>
+                                            </Link>
                                         </div>
                                     )}
 
