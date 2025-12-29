@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -51,6 +50,13 @@ import {
   DialogClose,
   DialogDescription,
 } from '@/components/ui/dialog';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 
@@ -474,11 +480,14 @@ export default function ImageLibraryPage() {
       
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
             <DialogHeader>
               <DialogTitle>
                 {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
               </DialogTitle>
+              <DialogDescription>
+                Görsel bilgilerini güncelleyin veya yeni bir dosya yükleyin.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
@@ -486,8 +495,11 @@ export default function ImageLibraryPage() {
                 <Input
                   id="image-title"
                   value={editingImage?.title || ""}
-                  onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) =>
+                    setEditingImage(prev => ({ ...prev, title: e.target.value }))
+                  }
                   required
+                  className="bg-slate-800 border-white/20"
                 />
               </div>
               <div className="space-y-2">
@@ -498,6 +510,7 @@ export default function ImageLibraryPage() {
                   accept="image/png, image/jpeg, image/gif, image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   required={!editingImage?.id}
+                  className="bg-slate-800 border-white/20 file:text-white"
                 />
               </div>
             </div>
@@ -516,7 +529,7 @@ export default function ImageLibraryPage() {
       </Dialog>
       
        <Dialog open={isFolderCreatorOpen} onOpenChange={setIsFolderCreatorOpen}>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-white/10 text-white">
                 <DialogHeader>
                     <DialogTitle>Yeni Klasör Oluştur</DialogTitle>
                     <DialogDescription>Görsellerinizi düzenlemek için yeni bir klasör oluşturun.</DialogDescription>
@@ -527,7 +540,7 @@ export default function ImageLibraryPage() {
         </Dialog>
         
         <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-white/10 text-white">
                 <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle><DialogDescription>Görseli taşımak istediğiniz klasörü seçin.</DialogDescription></DialogHeader>
                 <div className="py-4 space-y-2">
                      <Button variant="outline" className="w-full justify-start" onClick={() => handleMoveImage(null)}>
