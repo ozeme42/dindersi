@@ -1,3 +1,4 @@
+
 {
   "indexes": [
     {
@@ -46,19 +47,19 @@
       ]
     },
     {
-      "collectionGroup": "scoreEvents",
+      "collectionGroup": "imageLibrary",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
+        { "fieldPath": "teacherId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "scoreEvents",
+      "collectionGroup": "imageFolders",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "gameType", "order": "ASCENDING" },
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
+        { "fieldPath": "teacherId", "order": "ASCENDING" },
+        { "fieldPath": "name", "order": "ASCENDING" }
       ]
     }
   ],
