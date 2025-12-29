@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -48,6 +49,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
@@ -66,7 +68,7 @@ import { Input } from "@/components/ui/input";
 import { FullscreenToggle } from "@/components/fullscreen-toggle";
 import { saveImageRecord, getImagesAndFolders, createFolder, deleteFolder, moveImageToFolder, deleteImage, saveBulkImageRecords } from './actions';
 import { cn } from "@/lib/utils";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertTitle, AlertDescription as AlertDialogAlertDescription } from "@/components/ui/alert";
 import { BulkImageUploadDialog } from '@/components/bulk-image-upload-dialog';
 
 
@@ -78,13 +80,13 @@ function ErrorWithLink({ message }: { message: string }) {
         <Alert variant="destructive" className="whitespace-pre-wrap">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Hata!</AlertTitle>
-            <AlertDescription className="text-red-200">
+            <AlertDialogAlertDescription className="text-red-200">
                 {parts.map((part, index) => 
                     urlRegex.test(part) ? 
                     <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="underline font-bold break-all">{part}</a> : 
                     <span key={index}>{part}</span>
                 )}
-            </AlertDescription>
+            </AlertDialogAlertDescription>
         </Alert>
     );
 }
@@ -226,17 +228,16 @@ export default function ImageLibraryPage() {
 
     const handleDownload = (imageUrl: string, imageName: string) => {
         try {
-            // Instead of creating a link and clicking, open in a new tab.
-            // This is more reliable across browsers and avoids popup-blocker issues.
-            window.open(imageUrl, '_blank');
-            toast({ 
-                title: "İndirme Başlatılıyor", 
-                description: "Görsel yeni sekmede açılıyor. Oradan resmi kaydedebilirsiniz.", 
-                variant: "default" 
-            });
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = imageName || 'indirilen-gorsel.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } catch (error) {
             console.error("Download failed:", error);
-            toast({ title: "İndirme Başlatılamadı", description: "Bir hata oluştu.", variant: "destructive" });
+            window.open(imageUrl, '_blank');
+            toast({ title: "İndirme Başlatılamadı", description: "Görsel yeni sekmede açılıyor. Oradan kaydedebilirsiniz.", variant: "default" });
         }
     };
     
@@ -473,7 +474,7 @@ export default function ImageLibraryPage() {
       
       {/* Dialogs */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent>
             <DialogHeader>
               <DialogTitle>
                 {editingImage?.id ? "Görseli Düzenle" : "Yeni Görsel Yükle"}
@@ -487,7 +488,6 @@ export default function ImageLibraryPage() {
                   value={editingImage?.title || ""}
                   onChange={(e) => setEditingImage(prev => ({ ...prev, title: e.target.value }))}
                   required
-                  className="bg-slate-800 border-white/20"
                 />
               </div>
               <div className="space-y-2">
@@ -498,7 +498,6 @@ export default function ImageLibraryPage() {
                   accept="image/png, image/jpeg, image/gif, image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   required={!editingImage?.id}
-                  className="bg-slate-800 border-white/20 file:text-white"
                 />
               </div>
             </div>
@@ -517,18 +516,20 @@ export default function ImageLibraryPage() {
       </Dialog>
       
        <Dialog open={isFolderCreatorOpen} onOpenChange={setIsFolderCreatorOpen}>
-            <DialogContent className="bg-slate-900 border-white/10 text-white">
-                <DialogHeader><DialogTitle>Yeni Klasör Oluştur</DialogTitle></DialogHeader>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Yeni Klasör Oluştur</DialogTitle>
+                    <DialogDescription>Görsellerinizi düzenlemek için yeni bir klasör oluşturun.</DialogDescription>
+                </DialogHeader>
                 <div className="py-4"><Label htmlFor="folder-name">Klasör Adı</Label><Input id="folder-name" value={newFolderName} onChange={e => setNewFolderName(e.target.value)} /></div>
                 <DialogFooter><DialogClose asChild><Button variant="ghost">İptal</Button></DialogClose><Button onClick={handleCreateFolder} disabled={isSaving || !newFolderName.trim()}>Oluştur</Button></DialogFooter>
             </DialogContent>
         </Dialog>
         
         <Dialog open={isMoveDialogOpen} onOpenChange={setIsMoveDialogOpen}>
-            <DialogContent className="bg-slate-900 border-white/10 text-white">
-                <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle></DialogHeader>
+            <DialogContent>
+                <DialogHeader><DialogTitle>Görseli Taşı</DialogTitle><DialogDescription>Görseli taşımak istediğiniz klasörü seçin.</DialogDescription></DialogHeader>
                 <div className="py-4 space-y-2">
-                    <p className="text-sm text-muted-foreground">Görseli taşımak istediğiniz klasörü seçin.</p>
                      <Button variant="outline" className="w-full justify-start" onClick={() => handleMoveImage(null)}>
                         <Folder className="mr-2 h-4 w-4"/> Ana Dizin (Klasörsüz)
                     </Button>
@@ -547,6 +548,7 @@ export default function ImageLibraryPage() {
                 <div className="relative w-full h-full flex flex-col">
                     <DialogHeader className="flex flex-row justify-between items-center mb-2 text-white p-2 bg-black/30 rounded-t-lg">
                       <DialogTitle className="font-bold">{fullscreenImage.title}</DialogTitle>
+                       <DialogDescription>Görsel önizlemesi.</DialogDescription>
                       <div className="flex items-center gap-2">
                         <Button variant="ghost" size="icon" onClick={() => handleDownload(fullscreenImage!.url, fullscreenImage!.title)}><Download className="h-5 w-5"/></Button>
                         <FullscreenToggle elementRef={fullscreenRef} />
