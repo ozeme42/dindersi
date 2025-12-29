@@ -86,9 +86,6 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
             case 'content': return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content }} />;
             case 'objectiveList': return <span className="text-xs text-yellow-400/80">{(step as any).items.length} hedef</span>;
             case 'conceptExplanation': return <span className="text-xs text-blue-400/80">{(step as any).items.length} kavram</span>;
-            case 'mcq': return <span className="text-xs text-purple-400/80 italic">{(step as any).question}</span>;
-            case 'tf': return <span className="text-xs text-purple-400/80 italic">{(step as any).statement}</span>;
-            case 'fitb': return <span className="text-xs text-purple-400/80 italic">{(step as any).sentenceWithBlank}</span>;
             case 'flashcard': return <span className="text-xs text-emerald-400/80">{(step as any).cards.length} kart</span>;
             case 'anagram': return <span className="text-xs text-orange-400/80 font-mono">{(step as any).scrambledWord}</span>;
             case 'visual': return (step as any).imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={(step as any).imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
@@ -343,7 +340,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
