@@ -42,13 +42,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -233,16 +226,17 @@ export default function ImageLibraryPage() {
 
     const handleDownload = (imageUrl: string, imageName: string) => {
         try {
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = imageName || 'indirilen-gorsel.jpg';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Instead of creating a link and clicking, open in a new tab.
+            // This is more reliable across browsers and avoids popup-blocker issues.
+            window.open(imageUrl, '_blank');
+            toast({ 
+                title: "İndirme Başlatılıyor", 
+                description: "Görsel yeni sekmede açılıyor. Oradan resmi kaydedebilirsiniz.", 
+                variant: "default" 
+            });
         } catch (error) {
             console.error("Download failed:", error);
-            window.open(imageUrl, '_blank');
-            toast({ title: "İndirme Başlatılamadı", description: "Görsel yeni sekmede açılıyor. Oradan kaydedebilirsiniz.", variant: "default" });
+            toast({ title: "İndirme Başlatılamadı", description: "Bir hata oluştu.", variant: "destructive" });
         }
     };
     

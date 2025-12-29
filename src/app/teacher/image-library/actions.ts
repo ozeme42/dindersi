@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -9,7 +10,7 @@ import {
   getDocs, 
   doc, 
   addDoc, 
-  updateDoc,
+  updateDoc, 
   deleteDoc, 
   serverTimestamp, 
   orderBy, 
@@ -28,6 +29,7 @@ export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: stri
             title: data.title,
             url: data.url,
             storagePath: data.storagePath || null, // storagePath can be null for external URLs
+            teacherId: teacherId,
             folderId: data.folderId || null,
             folderName: data.folderName || null,
         };
@@ -35,13 +37,11 @@ export async function saveImageRecord(data: Partial<ImageAsset>, teacherId: stri
         if (data.id) {
             // Update existing document
             const docRef = doc(db, 'imageLibrary', data.id);
-            // When updating, we don't need to touch teacherId or createdAt
             await updateDoc(docRef, dataToSave);
         } else {
             // Create new document
             await addDoc(collection(db, 'imageLibrary'), {
                 ...dataToSave,
-                teacherId: teacherId, // Add teacherId for new records
                 createdAt: serverTimestamp()
             });
         }
