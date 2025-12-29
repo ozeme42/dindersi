@@ -26,7 +26,8 @@ import {
     Filter,
     ArrowLeft,
     ArrowRight,
-    Check
+    Check,
+    Home
 } from "lucide-react";
 import {
     Select,
