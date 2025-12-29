@@ -1,47 +1,37 @@
-
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserMinus, ArrowLeft, Crown, AlertTriangle, Loader2, Repeat, Home, Check, Trophy, PartyPopper, Award, Swords, Target, Timer, CheckCircle2, XCircle, Lock, User, ArrowRight } from "lucide-react";
+import { Loader2, Repeat, Home, CheckCircle2, Lock, User, ArrowRight, ArrowLeft, Trophy, Timer } from "lucide-react";
 import Link from "next/link";
 import { getKavramDuellosuQuestions } from '../actions';
 import type { KavramDuellosuQuestion } from '../actions';
-import { Alert, AlertTitle, AlertDescription as AlertDesc } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { QuestionDialog } from "@/components/question-dialog";
-import { Badge } from "@/components/ui/badge";
-import { updateMultipleStudentScores } from "../../../../teacher/smartboard/actions";
-import type { UserProfile, GetQuizInput, GetQuizOutput, Question } from "@/lib/types";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from 'firebase/firestore';
 import { playSound, stopSound } from "@/lib/audio-service";
 import Confetti from 'react-dom-confetti';
 
 type GameQuestion = KavramDuellosuQuestion;
-type Player = { id: string; name: string; isGuest: boolean; };
 
-function CompetitionLoadingSkeleton() {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-950">
-        <Loader2 className="h-16 w-16 animate-spin text-rose-500" />
-      </div>
-    );
+// Fisher-Yates Karıştırma Algoritması
+function shuffleArray<T>(array: T[]): T[] {
+    const newArr = [...array];
+    for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+    }
+    return newArr;
 }
 
 function DuelGameComponent() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const [questions, setQuestions] = useState<GameQuestion[]>([]);
-    const [lastCorrectIndex, setLastCorrectIndex] = useState<number | null>(null);
     
     const [state, setState] = useState({
         p1Score: 0,
@@ -50,7 +40,7 @@ function DuelGameComponent() {
         showNextButton: false,
         correctAnswer: null as string | null,
         winner: null as 'p1' | 'p2' | null,
-        gameState: 'playing' as 'playing' | 'finished',
+        gameState: 'loading' as 'loading' | 'playing' | 'finished',
     });
 
     const [p1Lock, setP1Lock] = useState(false);
@@ -62,55 +52,40 @@ function DuelGameComponent() {
 
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
-        try {
-            const params = {
-                courseId: searchParams.get('courseId') || undefined,
-                unitId: searchParams.get('unitId') || undefined,
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const questionResult = await getKavramDuellosuQuestions(params);
+        const params = {
+            courseId: searchParams.get('courseId') || undefined,
+            unitId: searchParams.get('unitId') || undefined,
+            topicId: searchParams.get('topicId') || undefined,
+        };
+        const questionResult = await getKavramDuellosuQuestions(params);
+        
+        if (questionResult.error) {
+            setError(questionResult.error);
+        } else if (questionResult.questions && questionResult.questions.length > 0) {
+            // Soruları 3 kez çoğalt
+            const tripleQuestions = [...questionResult.questions, ...questionResult.questions, ...questionResult.questions];
             
-            if (questionResult.error) {
-                throw new Error(questionResult.error);
-            } else if (questionResult.questions && questionResult.questions.length > 0) {
-                // Shuffle questions at the beginning of the game
-                setQuestions(questionResult.questions.sort(() => Math.random() - 0.5));
-                setGameState('playing');
-            } else {
-                setError("Uygun soru bulunamadı.");
-            }
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [searchParams]);
+            // Önce soruların sırasını karıştır, SONRA her sorunun şıklarını kendi içinde karıştır
+            const processedQuestions = tripleQuestions
+                .sort(() => Math.random() - 0.5)
+                .map(q => ({
+                    ...q,
+                    options: shuffleArray([...q.options]) // Şıkları burada karıştırıyoruz
+                }));
 
+            setQuestions(processedQuestions);
+            setState(s => ({ ...s, gameState: 'playing' }));
+        } else {
+            setError("Uygun soru bulunamadı.");
+        }
+        setIsLoading(false);
+    }, [searchParams]);
 
     useEffect(() => {
         fetchGameData();
     }, [fetchGameData]);
     
-    const currentQ = useMemo(() => {
-        if (!questions[state.currentQIndex]) return null;
-        
-        const question = questions[state.currentQIndex];
-        let shuffledOptions = [...question.options];
-        
-        // This logic ensures the correct answer is not in the same spot twice in a row.
-        if (lastCorrectIndex !== null) {
-            let correctIndex = shuffledOptions.indexOf(question.a);
-            let attempts = 0;
-            while (correctIndex === lastCorrectIndex && attempts < 10) {
-                shuffledOptions.sort(() => Math.random() - 0.5);
-                correctIndex = shuffledOptions.indexOf(question.a);
-                attempts++;
-            }
-        }
-        
-        return { ...question, options: shuffledOptions };
-
-    }, [questions, state.currentQIndex, lastCorrectIndex]);
+    const currentQ = questions[state.currentQIndex];
 
     const loadQuestion = useCallback(() => {
         if (!currentQ) {
@@ -134,10 +109,10 @@ function DuelGameComponent() {
     }, [currentQ, state.currentQIndex, questions.length]);
     
     useEffect(() => {
-        if (!isLoading && questions.length > 0) {
+        if (!isLoading && questions.length > 0 && state.gameState === 'playing') {
             loadQuestion();
         }
-    }, [isLoading, questions, state.currentQIndex, loadQuestion]);
+    }, [isLoading, questions, state.currentQIndex, loadQuestion, state.gameState]);
     
     const handleTimeUp = useCallback(() => {
         if (timerRef.current) clearInterval(timerRef.current);
@@ -194,6 +169,7 @@ function DuelGameComponent() {
                 document.getElementById(zoneId)?.classList.remove('shake');
             }, 500);
 
+            // Eğer her iki oyuncu da kilitlendiyse, süreyi durdur ve sonraki butonu göster
             if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
                  if (timerRef.current) clearInterval(timerRef.current);
                  stopSound('timer');
@@ -206,10 +182,6 @@ function DuelGameComponent() {
         if (timerRef.current) {
             clearInterval(timerRef.current);
             stopSound('timer');
-        }
-        
-        if (currentQ.options) {
-            setLastCorrectIndex(currentQ.options.indexOf(currentQ.a));
         }
 
         playSound('correct');
@@ -232,7 +204,15 @@ function DuelGameComponent() {
     }
 
     const resetGame = () => {
-        setQuestions(prev => [...prev].sort(() => Math.random() - 0.5));
+        // Reset yaparken de hem soruları hem şıkları tekrar karıştır
+        setQuestions(prev => {
+            const reorderedQuestions = [...prev].sort(() => Math.random() - 0.5);
+            return reorderedQuestions.map(q => ({
+                ...q,
+                options: shuffleArray([...q.options])
+            }));
+        });
+
         setState({
             p1Score: 0,
             p2Score: 0,
@@ -244,7 +224,6 @@ function DuelGameComponent() {
         });
         setP1Lock(false);
         setP2Lock(false);
-        setLastCorrectIndex(null);
     }
     
     if (isLoading) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;
@@ -322,6 +301,7 @@ function DuelGameComponent() {
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
             `}</style>
             
+            {/* Player 1 Zone */}
             <div id="p1-zone" className="player-zone flex-1 bg-blue-900/50 border-r-4 border-white/10 flex flex-col relative">
                 <div className="p-4 bg-blue-800 flex justify-between items-center shadow-lg z-10">
                     <div className="flex items-center gap-2">
@@ -350,6 +330,7 @@ function DuelGameComponent() {
                 }
             </div>
 
+            {/* Player 2 Zone */}
             <div id="p2-zone" className="player-zone flex-1 bg-red-900/50 flex flex-col relative">
                 <div className="p-4 bg-red-800 flex justify-between items-center shadow-lg z-10">
                     <div className="flex items-center gap-2"><User className="w-6 h-6 text-red-200" /><span className="text-2xl font-bold text-red-200">KIRMIZI TAKIM</span></div>
@@ -371,6 +352,7 @@ function DuelGameComponent() {
                 }
             </div>
 
+            {/* Central Controls */}
              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60]">
                 {state.showNextButton ? (
                      <Button onClick={nextQuestion} className="h-24 px-12 text-2xl font-black bg-white text-slate-900 hover:bg-slate-200 pointer-events-auto animate-in zoom-in-50 duration-300">

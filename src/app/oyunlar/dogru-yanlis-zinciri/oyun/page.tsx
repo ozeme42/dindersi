@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
@@ -30,7 +29,6 @@ function TrueFalseChainGame() {
     const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [score, setScore] = useState(0);
-    const [correctStreak, setCorrectStreak] = useState(0);
     const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
     const [error, setError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -70,7 +68,6 @@ function TrueFalseChainGame() {
             timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
         } else if (timeLeft <= 0 && gameState === 'playing') {
             playSound('timeUp');
-            setCorrectStreak(0); // Reset streak on time up
             setGameState('finished');
         }
         return () => clearTimeout(timer);
@@ -84,15 +81,12 @@ function TrueFalseChainGame() {
 
         if (isCorrect) {
             playSound('correct');
-            const newStreak = correctStreak + 1;
-            const pointsToAdd = newStreak * 10;
+            const pointsToAdd = 10; // Sabit puan
             setScore(prev => prev + pointsToAdd);
-            setCorrectStreak(newStreak);
             setTimeLeft(prev => prev + CORRECT_BONUS);
             setFeedback('correct');
         } else {
             playSound('incorrect');
-            setCorrectStreak(0); // Reset streak on wrong answer
             setTimeLeft(prev => Math.max(0, prev - WRONG_PENALTY));
             setFeedback('wrong');
         }
@@ -126,7 +120,6 @@ function TrueFalseChainGame() {
 
     const handleRestart = () => {
         setScore(0);
-        setCorrectStreak(0);
         setCurrentQuestionIndex(0);
         setTimeLeft(INITIAL_TIME);
         setGameState('loading');
