@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
@@ -81,7 +82,7 @@ function TrueFalseChainGame() {
 
         if (isCorrect) {
             playSound('correct');
-            const pointsToAdd = 10; // Sabit puan
+            const pointsToAdd = 25; // Sabit puan
             setScore(prev => prev + pointsToAdd);
             setTimeLeft(prev => prev + CORRECT_BONUS);
             setFeedback('correct');
