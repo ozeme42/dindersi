@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -262,8 +260,7 @@ export async function exportAllData(
 }
 
 /**
- * Stage 1: Exports manifest.json and HTML content for `ozetler`.
- * This is a relatively light operation.
+ * Exports manifest.json, HTML content for `ozetler`, and JSON content for `flows` and `yazilacaklar`.
  */
 export async function exportManifestAndContent() {
     const db = getAdminDb();
@@ -273,8 +270,11 @@ export async function exportManifestAndContent() {
     const CHUNK_SIZE = 100;
 
     try {
-        await fs.mkdir(curriculumPath, { recursive: true });
-        
+        // Ensure subdirectories exist
+        await fs.mkdir(path.join(curriculumPath, 'ozetler'), { recursive: true });
+        await fs.mkdir(path.join(curriculumPath, 'yazilacaklar'), { recursive: true });
+        await fs.mkdir(path.join(curriculumPath, 'flows'), { recursive: true });
+
         const addFile = (filePath: string, content: any) => {
             const finalContent = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
             allDocsToWrite.push({
@@ -301,36 +301,38 @@ export async function exportManifestAndContent() {
 
                 const courses = await Promise.all(coursesInClass.map(async (course) => {
                     const unitsSnapshot = await db.collection('courses').doc(course.id).collection('units').orderBy('title').get();
+                    
                     const units = await Promise.all(unitsSnapshot.docs.map(async (unitDoc) => {
                         const unitData = unitDoc.data() as Unit;
-                         if (!(unitData.isPublished ?? true)) return null;
+                        if (!(unitData.isPublished ?? true)) return null;
 
-                        // Create ozetler file for unit if content exists
+                        const publishedSteps = (unitData.steps || []).filter((s: LessonStep) => s.isPublished ?? true);
+                        const hasUnitFlow = publishedSteps.length > 0;
+                        if (hasUnitFlow) {
+                            addFile(`flows/${unitDoc.id}.json`, JSON.stringify(publishedSteps));
+                        }
+                        
                         if (unitData.htmlContent) {
                             addFile(`ozetler/${unitDoc.id}.html`, unitData.htmlContent);
                         }
 
-                        // Export unit steps (ders akışı)
-                        if (unitData.steps && unitData.steps.length > 0) {
-                            const publishedSteps = unitData.steps.filter((s: LessonStep) => s.isPublished ?? true);
-                            if (publishedSteps.length > 0) {
-                                addFile(`flows/${unitDoc.id}.json`, JSON.stringify(publishedSteps));
-                            }
-                        }
-                    
                         const topicsSnapshot = await db.collection('courses').doc(course.id).collection('units').doc(unitDoc.id).collection('topics').orderBy('title').get();
                         
-                        const hasVisibleTopics = topicsSnapshot.docs.some(topicDoc => {
+                        const hasVisibleTopicsWithContent = (await Promise.all(topicsSnapshot.docs.map(async (topicDoc) => {
                             const topicData = topicDoc.data() as Topic;
-                            const hasContent = topicData.htmlContent || (topicData.writingContent?.notes && topicData.writingContent.notes.length > 0) || (topicData.steps && topicData.steps.length > 0);
-                            return (topicData.isPublished ?? true) && hasContent;
-                        });
+                            if (!(topicData.isPublished ?? true)) return false;
 
-                        const unitHasOzet = !!unitData.htmlContent;
-                        const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
-                        const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
+                            const defsSnap = await db.collection('activityItems').where('topicId', '==', topicDoc.id).where('type', '==', 'definition').get();
+                            const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
+                            const hasFlow = (topicData.steps || []).some(s => s.isPublished ?? true);
 
-                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
+                            return topicData.htmlContent || hasYazilacaklar || hasFlow;
+                        }))).some(Boolean);
+
+                        const hasContent = !!unitData.htmlContent || hasUnitFlow || hasVisibleTopicsWithContent;
+                        
+                        // We return an empty topics array here because we will populate it in a second pass.
+                        return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent, hasFlowContent: hasUnitFlow, topics: [] } : null;
                     }));
 
                     const validUnits = units.filter(Boolean);
@@ -342,9 +344,7 @@ export async function exportManifestAndContent() {
             }))).filter(Boolean);
         };
         
-        const classGroups = await getClassGroups(false);
-        const generalGroup = await getClassGroups(true);
-        let finalClassGroups = [...classGroups, ...generalGroup] as any[];
+        let finalClassGroups = (await Promise.all([getClassGroups(false), getClassGroups(true)])).flat() as any[];
 
         for (let group of finalClassGroups) {
             for (let course of group.courses) {
@@ -358,27 +358,23 @@ export async function exportManifestAndContent() {
                         const defsSnap = await db.collection('activityItems').where('topicId', '==', doc.id).where('type', '==', 'definition').get();
                         const hasYazilacaklar = (topicData.writingContent?.notes?.length || 0) > 0 || !defsSnap.empty;
 
-                        if (topicData.htmlContent) {
-                            addFile(`ozetler/${doc.id}.html`, topicData.htmlContent);
-                        }
-                        if (hasYazilacaklar) {
-                            const notes = topicData.writingContent?.notes || [];
-                            const conceptDefinitions = defsSnap.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }));
-                            addFile(`yazilacaklar/${doc.id}.json`, JSON.stringify({ notes, conceptDefinitions }));
-                        }
-                         // Export topic steps (ders akışı)
-                        if (topicData.steps && topicData.steps.length > 0) {
-                            const publishedSteps = topicData.steps.filter((s: LessonStep) => s.isPublished ?? true);
-                            if (publishedSteps.length > 0) {
-                                addFile(`flows/${doc.id}.json`, JSON.stringify(publishedSteps));
-                            }
-                        }
+                        if (topicData.htmlContent) addFile(`ozetler/${doc.id}.html`, topicData.htmlContent);
                         
-                        const hasOzetContent = !!topicData.htmlContent;
-                        const hasFlowContent = (topicData.steps || []).some(s => s.isPublished ?? true);
+                        if (hasYazilacaklar) {
+                            addFile(`yazilacaklar/${doc.id}.json`, JSON.stringify({
+                                notes: topicData.writingContent?.notes || [],
+                                conceptDefinitions: defsSnap.docs.map(d => ({concept: d.data().content.term, definition: d.data().content.definition }))
+                            }));
+                        }
 
-                        if (hasOzetContent || hasYazilacaklar || hasFlowContent) {
-                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent, hasFlowContent };
+                        const publishedSteps = (topicData.steps || []).filter((s: LessonStep) => s.isPublished ?? true);
+                        const hasFlowContent = publishedSteps.length > 0;
+                        if (hasFlowContent) {
+                            addFile(`flows/${doc.id}.json`, JSON.stringify(publishedSteps));
+                        }
+
+                        if (topicData.htmlContent || hasYazilacaklar || hasFlowContent) {
+                            return { id: doc.id, title: topicData.title, hasYazilacaklarContent: hasYazilacaklar, hasOzetContent: !!topicData.htmlContent, hasFlowContent };
                         }
                         return null;
                     });
@@ -386,18 +382,16 @@ export async function exportManifestAndContent() {
                     const topics = (await Promise.all(topicPromises)).filter(Boolean);
                     unit.topics = topics;
                 }
+                 // After populating topics, filter out units that now have no content (e.g. all their topics were empty)
                 course.units = course.units.filter((u: any) => u.topics.length > 0 || u.hasUnitOzet || u.hasFlowContent);
             }
+             // Then filter out courses that have no units
             group.courses = group.courses.filter((c: any) => c.units.length > 0);
         }
         
         finalClassGroups = finalClassGroups.filter(g => g.courses.length > 0);
+        
         addFile('manifest.json', { classGroups: finalClassGroups });
-
-        // Ensure subdirectories exist
-        await fs.mkdir(path.join(curriculumPath, 'ozetler'), { recursive: true });
-        await fs.mkdir(path.join(curriculumPath, 'yazilacaklar'), { recursive: true });
-        await fs.mkdir(path.join(curriculumPath, 'flows'), { recursive: true }); // DERS AKIŞI KLASÖRÜ
 
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);

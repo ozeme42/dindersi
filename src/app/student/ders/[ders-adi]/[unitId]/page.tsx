@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -56,6 +55,20 @@ function PageContent() {
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
         };
     }, []);
+    
+    // This function will now be responsible for fetching the steps from the correct JSON file.
+    const fetchStepsForContent = async (contentId: string): Promise<LessonStep[]> => {
+        try {
+            const cacheBuster = `?v=${Date.now()}`;
+            const res = await fetch(`/curriculum/flows/${contentId}.json${cacheBuster}`);
+            if (res.ok) {
+                return await res.json();
+            }
+        } catch (e) {
+            console.warn(`Could not fetch static flow for ${contentId}:`, e);
+        }
+        return [];
+    };
 
     const fetchCourseData = useCallback(async () => {
         if (!courseId) return;
@@ -63,15 +76,16 @@ function PageContent() {
         setView(startTopicIdFromUrl || unitIdFromUrl ? 'content' : 'map');
 
         try {
-            if (user) {
-                const progressRef = doc(db, 'users', user.uid, 'progress', courseId);
-                const progressSnap = await getDoc(progressRef);
-                if (progressSnap.exists()) {
-                    setCompletedTopics(progressSnap.data() as UserProgress);
-                }
+            // Fetch progress and manifest concurrently
+            const [progressSnap, manifestRes] = await Promise.all([
+                user ? getDoc(doc(db, 'users', user.uid, 'progress', courseId)) : Promise.resolve(null),
+                fetch('/curriculum/manifest.json')
+            ]);
+            
+            if (progressSnap?.exists()) {
+                setCompletedTopics(progressSnap.data() as UserProgress);
             }
             
-            const manifestRes = await fetch('/curriculum/manifest.json');
             if (!manifestRes.ok) throw new Error("Müfredat manifestosu bulunamadı.");
             const manifest = await manifestRes.json();
 
@@ -90,65 +104,35 @@ function PageContent() {
                 return;
             }
 
-            const enrichedUnits: Unit[] = await Promise.all(
-                (courseData.units || []).map(async (unit: Unit) => {
-                    let unitSteps: LessonStep[] = [];
-                    let enrichedTopics: Topic[] = [];
-
-                    try {
-                        const cacheBuster = `?v=${Date.now()}`;
-                        const unitFlowRes = await fetch(`/curriculum/flows/${unit.id}.json${cacheBuster}`);
-                        if (unitFlowRes.ok) {
-                            unitSteps = await unitFlowRes.json();
-                        }
-                    } catch (e) {
-                        console.warn(`No static flow file for unit ${unit.id}`);
-                    }
-                    
-                    if (unit.topics && unit.topics.length > 0) {
-                         enrichedTopics = await Promise.all(
-                            unit.topics.map(async (topic: Topic) => {
-                                let topicSteps: LessonStep[] = [];
-                                try {
-                                    const cacheBuster = `?v=${Date.now()}`;
-                                    const topicFlowRes = await fetch(`/curriculum/flows/${topic.id}.json${cacheBuster}`);
-                                    if (topicFlowRes.ok) {
-                                        topicSteps = await topicFlowRes.json();
-                                    }
-                                } catch (e) {
-                                    console.warn(`No static flow file for topic ${topic.id}`);
-                                }
-                                return { ...topic, steps: topicSteps };
-                            })
-                        );
-                    }
-
-                    return { ...unit, steps: unitSteps, topics: enrichedTopics };
-                })
-            );
-
-            courseData.units = enrichedUnits;
             setCourse(courseData);
 
             let contentToActivate: Topic | Unit | null = null;
             if (startTopicIdFromUrl) {
-                contentToActivate = enrichedUnits?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl) || null;
+                contentToActivate = courseData.units?.flatMap(u => u.topics).find(t => t.id === startTopicIdFromUrl) || null;
             } else if (unitIdFromUrl) {
-                const unit = enrichedUnits?.find(u => u.id === unitIdFromUrl);
+                const unit = courseData.units?.find(u => u.id === unitIdFromUrl);
                 if (unit) {
-                    if (unit.steps && unit.steps.length > 0) {
-                        contentToActivate = unit;
+                    // Check if the unit itself has a flow defined in the manifest
+                    if (unit.hasFlowContent) {
+                         contentToActivate = unit;
                     } else {
+                        // Fallback to first topic if unit has no flow
                         const firstUncompletedTopicInUnit = unit.topics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
                         contentToActivate = firstUncompletedTopicInUnit || unit.topics[0] || null;
                     }
                 }
             } else {
-                 const allTopics = enrichedUnits.flatMap((u: Unit) => u.topics || []);
+                const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
                 const firstUncompletedTopic = allTopics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
                 contentToActivate = firstUncompletedTopic || allTopics[0] || null;
             }
-             setActiveContent(contentToActivate);
+
+            if(contentToActivate) {
+                 // Fetch the steps for the initially activated content from its static file
+                const steps = await fetchStepsForContent(contentToActivate.id);
+                setActiveContent({ ...contentToActivate, steps });
+            }
+
 
         } catch (error: any) {
             console.error("Ders verisi alınırken hata:", error);
@@ -191,21 +175,16 @@ function PageContent() {
     }, [course, activeContent]);
 
 
-    const handleSelectTopic = useCallback((topic: Topic) => {
-        setActiveContent(topic);
+    const handleSelectContent = useCallback(async (content: Topic | Unit) => {
+        setIsLoading(true);
+        const steps = await fetchStepsForContent(content.id);
+        setActiveContent({ ...content, steps });
         setView('content');
         if (window.innerWidth < 768) {
              window.scrollTo(0,0);
         }
+        setIsLoading(false);
     }, []);
-    
-     const handleSelectUnitFlow = (unit: Unit) => {
-        setActiveContent(unit);
-        setView('content');
-         if (window.innerWidth < 768) {
-             window.scrollTo(0,0);
-        }
-    };
 
     const onProgressUpdate = useCallback((topicId: string, newProgress: LocalProgress) => {
         setLocalProgressMap(prev => ({
@@ -300,7 +279,7 @@ function PageContent() {
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
              const nextTopic = allTopics[currentIndex + 1];
              if (isTopicUnlocked(nextTopic.id)) {
-                 setActiveContent(nextTopic);
+                 handleSelectContent(nextTopic);
                  return; 
              }
         }
@@ -408,8 +387,8 @@ function PageContent() {
                     <MemoizedSidebar
                         course={course}
                         activeTopic={activeContentData?.type === 'topic' ? activeContent : null}
-                        onSelectTopic={handleSelectTopic}
-                        onSelectUnitFlow={handleSelectUnitFlow}
+                        onSelectTopic={(topic) => handleSelectContent(topic)}
+                        onSelectUnitFlow={(unit) => handleSelectContent(unit)}
                         isTopicUnlocked={(topicIndex, unitIndex) => {
                             const allTopics = course.units?.flatMap(u => u.topics || []) || [];
                             const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
