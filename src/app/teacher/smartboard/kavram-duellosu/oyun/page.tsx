@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
@@ -61,23 +62,30 @@ function DuelGameComponent() {
 
     const fetchGameData = useCallback(async () => {
         setIsLoading(true);
-        const params = {
-            courseId: searchParams.get('courseId') || undefined,
-            unitId: searchParams.get('unitId') || undefined,
-            topicId: searchParams.get('topicId') || undefined,
-        };
-        const questionResult = await getKavramDuellosuQuestions(params);
-        
-        if (questionResult.error) {
-            setError(questionResult.error);
-        } else if (questionResult.questions && questionResult.questions.length > 0) {
-            const tripleQuestions = [...questionResult.questions, ...questionResult.questions, ...questionResult.questions];
-            setQuestions(tripleQuestions.sort(() => Math.random() - 0.5));
-        } else {
-            setError("Uygun soru bulunamadı.");
+        try {
+            const params = {
+                courseId: searchParams.get('courseId') || undefined,
+                unitId: searchParams.get('unitId') || undefined,
+                topicId: searchParams.get('topicId') || undefined,
+            };
+            const questionResult = await getKavramDuellosuQuestions(params);
+            
+            if (questionResult.error) {
+                throw new Error(questionResult.error);
+            } else if (questionResult.questions && questionResult.questions.length > 0) {
+                // Shuffle questions at the beginning of the game
+                setQuestions(questionResult.questions.sort(() => Math.random() - 0.5));
+                setGameState('playing');
+            } else {
+                setError("Uygun soru bulunamadı.");
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }, [searchParams]);
+
 
     useEffect(() => {
         fetchGameData();
@@ -89,9 +97,9 @@ function DuelGameComponent() {
         const question = questions[state.currentQIndex];
         let shuffledOptions = [...question.options];
         
+        // This logic ensures the correct answer is not in the same spot twice in a row.
         if (lastCorrectIndex !== null) {
             let correctIndex = shuffledOptions.indexOf(question.a);
-            // If the correct answer is in the same spot, reshuffle until it's not.
             let attempts = 0;
             while (correctIndex === lastCorrectIndex && attempts < 10) {
                 shuffledOptions.sort(() => Math.random() - 0.5);
@@ -186,7 +194,6 @@ function DuelGameComponent() {
                 document.getElementById(zoneId)?.classList.remove('shake');
             }, 500);
 
-            // Eğer her iki oyuncu da kilitlendiyse, süreyi durdur ve sonraki butonu göster
             if ((isP1 && p2Lock) || (!isP1 && p1Lock)) {
                  if (timerRef.current) clearInterval(timerRef.current);
                  stopSound('timer');
@@ -201,7 +208,9 @@ function DuelGameComponent() {
             stopSound('timer');
         }
         
-        setLastCorrectIndex(currentQ.options.indexOf(currentQ.a));
+        if (currentQ.options) {
+            setLastCorrectIndex(currentQ.options.indexOf(currentQ.a));
+        }
 
         playSound('correct');
         const winner = player;
