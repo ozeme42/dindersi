@@ -344,7 +344,7 @@ function KavramYarismaGame() {
                 
                 {/* Soru Kartı */}
                 <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-3xl shadow-2xl mb-6 relative group animate-in slide-in-from-bottom-4 duration-500">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-3xl" />
+                    <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
                     <h3 className="text-xl md:text-3xl font-bold text-white leading-relaxed text-center">
                         {currentQ.definition}
                     </h3>
@@ -362,7 +362,7 @@ function KavramYarismaGame() {
 
                 {/* Seçenekler */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-                    {currentQ.options.map((option) => {
+                    {currentQ.options.map((option, index) => {
                         const isCorrectOption = option === correctCard;
                         const isDisabledOption = disabledCards.includes(option);
                         

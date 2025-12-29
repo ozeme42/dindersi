@@ -1908,12 +1908,8 @@ export function LessonContentViewer({
          }
         showContinueButton = revealedSentencesCount < totalItems;
     }
-
-    const showFloatingButton = isFullWidthStep && (
-        (isActivityStep && (isStepCompleted || isTeacher))
-    );
     
-    const isStudentInActivity = isActivityStep && !isTeacher;
+    // YÜZEN BUTON MANTIĞI KALDIRILDI
 
     return (
       <div className="h-full w-full flex flex-col bg-slate-50 overflow-hidden relative">
@@ -1972,8 +1968,8 @@ export function LessonContentViewer({
            </div>
         </div>
         
-        {/* HTML/Görsel Adımı için AÇMA TUŞU (Bar gizliyken görünür) */}
-        {isTeacher && isImmersiveStep && hideUI && (
+        {/* AÇMA TUŞU (Bar gizliyken görünür) - isTeacher ve hideUI true ise görünür */}
+        {isTeacher && hideUI && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-5 fade-in">
                  <Button 
                     onClick={(e) => {
@@ -1988,114 +1984,92 @@ export function LessonContentViewer({
             </div>
         )}
 
-        {!isStudentInActivity && (
-            <div className={cn(
-                "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
-                // GİZLEME CLASS MANTIĞI:
-                hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-12 px-4 opacity-100",
-                // GLASSMORPHISM & STYLE:
-                !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
-                // POSITION:
-                "relative"
-            )} onClick={(e) => e.stopPropagation()}>
-                
-                {/* GİZLEME BUTONU (Sadece Öğretmen & Immersive & Bar Açıkken) */}
-                {isTeacher && isImmersiveStep && !hideUI && (
-                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
-                        <Button 
-                            onClick={() => setHideUI(true)}
-                            size="sm"
-                            className="h-6 w-10 rounded-t-lg rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
-                        >
-                            <ChevronDown className="h-4 w-4 text-slate-500" />
-                        </Button>
-                    </div>
-                )}
+        {/* ALT BAR */}
+        <div className={cn(
+            "flex-shrink-0 flex justify-between items-center z-30 transition-all duration-300 ease-in-out",
+            // GİZLEME CLASS MANTIĞI:
+            hideUI ? "h-0 p-0 overflow-hidden border-0 opacity-0 pointer-events-none" : "h-12 px-4 opacity-100",
+            // GLASSMORPHISM & STYLE:
+            !hideUI && "bg-white/90 backdrop-blur-xl border-t border-slate-200/60 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)]",
+            // POSITION:
+            "relative"
+        )} onClick={(e) => e.stopPropagation()}>
+            
+            {/* GİZLEME BUTONU (Sadece Öğretmen & Bar Açıkken) */}
+            {isTeacher && !hideUI && (
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-40">
+                    <Button 
+                        onClick={() => setHideUI(true)}
+                        size="sm"
+                        className="h-6 w-10 rounded-t-lg rounded-b-none bg-white/90 border-t border-x border-slate-200 hover:bg-white shadow-sm"
+                    >
+                        <ChevronDown className="h-4 w-4 text-slate-500" />
+                    </Button>
+                </div>
+            )}
 
-                {/* SOL: Geri Butonu + İlerleme */}
-                <div className="flex items-center gap-3 flex-1">
+            {/* SOL: Geri Butonu + İlerleme */}
+            <div className="flex items-center gap-3 flex-1">
+                <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePrev} 
+                    disabled={currentStepIndex === 0} 
+                    className={cn(
+                        "rounded-full h-8 px-4 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0", 
+                        "font-medium text-xs md:text-sm"
+                    )}
+                >
+                    <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+                    Geri
+                </Button>
+                
+                <div className="hidden md:flex items-center gap-2">
+                    <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
+                    </div>
+                    <span className="text-slate-400 text-[10px] font-bold">{currentStepIndex + 1}/{steps.length}</span>
+                </div>
+            </div>
+
+            {/* ORTA: Puan Rozeti */}
+            <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm">
+                    <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                    <span className="text-xs font-black tracking-tight">{internalProgress.score}</span>
+                </div>
+            </div>
+
+            {/* SAĞ: Aksiyonlar */}
+            <div className="flex gap-3 flex-1 justify-end items-center">
+                
+                {isTeacher && (
                     <Button 
                         variant="ghost" 
                         size="sm" 
-                        onClick={handlePrev} 
-                        disabled={currentStepIndex === 0} 
-                        className={cn(
-                            "rounded-full h-8 px-4 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors border-0", 
-                            "font-medium text-xs md:text-sm"
-                        )}
+                        onClick={handleNext} 
+                        className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-8 px-3 rounded-full text-xs font-medium"
+                        title="Bu adımı zorla geç"
                     >
-                        <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
-                        Geri
+                        Atla
                     </Button>
-                    
-                    <div className="hidden md:flex items-center gap-2">
-                        <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 transition-all duration-500 ease-out" style={{width: `${((currentStepIndex+1)/steps.length)*100}%`}}></div>
-                        </div>
-                        <span className="text-slate-400 text-[10px] font-bold">{currentStepIndex + 1}/{steps.length}</span>
-                    </div>
-                </div>
+                )}
 
-                {/* ORTA: Puan Rozeti */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
-                    <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 text-amber-700 rounded-full shadow-sm">
-                        <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                        <span className="text-xs font-black tracking-tight">{internalProgress.score}</span>
-                    </div>
-                </div>
-
-                {/* SAĞ: Aksiyonlar */}
-                <div className="flex gap-3 flex-1 justify-end items-center">
-                    
-                    {isTeacher && (
-                        <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            onClick={handleNext} 
-                            className="text-slate-400 hover:text-amber-600 hover:bg-amber-50 transition-colors h-8 px-3 rounded-full text-xs font-medium"
-                            title="Bu adımı zorla geç"
-                        >
-                            Atla
-                        </Button>
-                    )}
-
-                    <Button 
-                        size="sm" 
-                        onClick={handleContinueOrNext} 
-                        disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
-                        className={cn(
-                            "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all h-8 rounded-full transform hover:-translate-y-0.5 active:translate-y-0", 
-                            showContinueButton ? "px-5" : "px-5",
-                            "text-xs md:text-sm font-bold tracking-wide"
-                        )}
-                    >
-                        {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
-                        <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80" />
-                    </Button>
-                </div>
-            </div>
-        )}
-
-        {showFloatingButton && (
-            <div className={cn("absolute bottom-6 right-6 z-50 animate-in slide-in-from-bottom-10 fade-in zoom-in duration-500 transition-all ease-in-out", hideUI ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0")} onClick={(e) => e.stopPropagation()}>
                 <Button 
-                    size="lg" 
-                    onClick={handleNext}
+                    size="sm" 
+                    onClick={handleContinueOrNext} 
+                    disabled={!isNextButtonEnabled || (isAnimating && !isTeacher)}
                     className={cn(
-                        "text-white border-4 rounded-2xl h-14 px-6 text-lg font-black uppercase tracking-widest shadow-xl transition-all transform hover:scale-105 active:scale-95", 
-                        (isActivityStep && isStepCompleted) 
-                            ? "bg-green-500 hover:bg-green-600 border-green-200 animate-bounce shadow-[0_0_30px_rgba(22,163,74,0.4)]" 
-                            : (isTeacher && isActivityStep
-                                ? "bg-amber-500 hover:bg-amber-600 border-amber-200 shadow-amber-200/50"
-                                : "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 border-indigo-200 shadow-indigo-300/50"
-                            )
+                        "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 transition-all h-8 rounded-full transform hover:-translate-y-0.5 active:translate-y-0", 
+                        showContinueButton ? "px-5" : "px-5",
+                        "text-xs md:text-sm font-bold tracking-wide"
                     )}
                 >
-                    {currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "Devam Et"} 
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    {showContinueButton ? "Devam" : (currentStepIndex === steps.length - 1 ? (completeButtonText || "Bitir") : "İleri")}
+                    <ArrowRight className="ml-1.5 h-3.5 w-3.5 opacity-80" />
                 </Button>
             </div>
-        )}
+        </div>
       </div>
     );
 }

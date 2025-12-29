@@ -43,8 +43,8 @@ export async function getConceptQuizAction(
         if (allDefinitions.length < 1) {
             return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
-        if (allTermsFromDefinitions.length < 4) {
-            return { error: "Bu oyun için en az 4 farklı kavram/tanım çifti gereklidir.", questions: null };
+        if (allTermsFromDefinitions.length < 8) { // 8 seçenek için en az 8 farklı kavram olmalı
+            return { error: "Bu oyun için en az 8 farklı kavram/tanım çifti gereklidir.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -57,19 +57,19 @@ export async function getConceptQuizAction(
             const distractors = allTermsFromDefinitions
                 .filter(term => term !== correctAnswer)
                 .sort(() => 0.5 - Math.random())
-                .slice(0, 7);
+                .slice(0, 7); // 7 çeldirici al
 
-            // Eğer yeterli çeldirici yoksa bu soruyu atla (pratikte yukarıdaki kontrol bunu engellemeli)
-            if (distractors.length < 3) { // Need at least 3 distractors for a 4-option question
+            // Eğer yeterli çeldirici yoksa bu soruyu atla
+            if (distractors.length < 7) { 
                 continue; 
             }
             
             // Seçenekleri oluştururken Set kullanarak benzersizliği garantile
-            const optionsSet = new Set([correctAnswer, ...distractors.slice(0, 3)]);
+            const optionsSet = new Set([correctAnswer, ...distractors]);
             const options = Array.from(optionsSet).sort(() => 0.5 - Math.random());
             
-            // Eğer bir şekilde 4 seçenek oluşmadıysa (çok nadir), doldur
-            while(options.length < 4 && distractors.length > options.length -1) {
+            // Eğer bir şekilde 8 seçenek oluşmadıysa, doldur
+            while(options.length < 8 && allTermsFromDefinitions.length > options.length) {
                 const nextDistractor = allTermsFromDefinitions.find(t => !options.includes(t));
                 if (nextDistractor) options.push(nextDistractor);
                 else break;
