@@ -43,8 +43,8 @@ export async function getConceptQuizAction(
         if (allDefinitions.length < 1) {
             return { error: "Bu konu için oynanabilir tanım ('definition') verisi bulunamadı.", questions: null };
         }
-        if (allTermsFromDefinitions.length < 8) { // 8 seçenek için en az 8 farklı kavram olmalı
-            return { error: "Bu oyun için en az 8 farklı kavram/tanım çifti gereklidir.", questions: null };
+        if (allTermsFromDefinitions.length < 4) {
+            return { error: "Bu oyun için en az 4 farklı kavram/tanım çifti gereklidir.", questions: null };
         }
         
         const gameQuestions: ConceptQuizQuestion[] = [];
@@ -57,23 +57,14 @@ export async function getConceptQuizAction(
             const distractors = allTermsFromDefinitions
                 .filter(term => term !== correctAnswer)
                 .sort(() => 0.5 - Math.random())
-                .slice(0, 7); // 7 çeldirici al
+                .slice(0, 3); // 3 çeldirici al
 
             // Eğer yeterli çeldirici yoksa bu soruyu atla
-            if (distractors.length < 7) { 
+            if (distractors.length < 3) { 
                 continue; 
             }
             
-            // Seçenekleri oluştururken Set kullanarak benzersizliği garantile
-            const optionsSet = new Set([correctAnswer, ...distractors]);
-            const options = Array.from(optionsSet).sort(() => 0.5 - Math.random());
-            
-            // Eğer bir şekilde 8 seçenek oluşmadıysa, doldur
-            while(options.length < 8 && allTermsFromDefinitions.length > options.length) {
-                const nextDistractor = allTermsFromDefinitions.find(t => !options.includes(t));
-                if (nextDistractor) options.push(nextDistractor);
-                else break;
-            }
+            const options = [correctAnswer, ...distractors].sort(() => 0.5 - Math.random());
             
             gameQuestions.push({
                 definition,

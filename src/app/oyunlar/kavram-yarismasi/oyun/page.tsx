@@ -216,6 +216,65 @@ function KavramYarismaGame() {
         startGame();
     };
     
+    // --- RENDER YARDIMCISI ---
+    // Bu fonksiyon 4 seçeneği alır ve 2 satır x 2 sütun (flexbox) olarak render eder.
+    // Bu sayede "grid" in esneme sorunundan kurtuluruz.
+    const renderOptionsGrid = (side: 'left' | 'right') => {
+        const selection = side === 'left' ? leftSelection : rightSelection;
+        const locked = side === 'left' ? leftLocked : rightLocked;
+
+        // Seçenekleri 2'şerli gruplara ayır (Üst satır, Alt satır)
+        const row1 = currentQ.options.slice(0, 2);
+        const row2 = currentQ.options.slice(2, 4);
+
+        const renderBtn = (option: string) => {
+            let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50 shadow-sm";
+            
+            // Renklendirme mantığı (Sağ taraf için turuncu hover)
+            if (side === 'right') {
+                stateClass = "bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:bg-orange-50 shadow-sm";
+            }
+
+            if (selection === option) {
+                if (correctCard === option) stateClass = "bg-emerald-500 text-white border-emerald-500 shadow-lg scale-[0.98] z-10";
+                else stateClass = "bg-red-500 text-white border-red-500";
+            } else if (correctCard === option) {
+                stateClass = "bg-emerald-100 text-emerald-800 border-emerald-300 ring-2 ring-emerald-200";
+            }
+
+            return (
+                <button
+                    key={`${side}-${option}`}
+                    onClick={() => handleCardClick(side, option)}
+                    disabled={locked || isRoundOver}
+                    className={cn(
+                        // w-1/2 diyerek genişliği zorluyoruz
+                        "w-1/2 h-full flex items-center justify-center text-center p-2 rounded-xl md:rounded-2xl border-2 transition-all active:scale-[0.95] select-none overflow-hidden",
+                        "text-sm md:text-lg lg:text-xl font-bold leading-tight break-words", // Yazı boyutu
+                        stateClass,
+                        locked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
+                    )}
+                >
+                   <span className="line-clamp-4">{option}</span>
+                </button>
+            );
+        };
+
+        return (
+            <div className="flex flex-col w-full h-full gap-2 md:gap-3 p-2 md:p-3">
+                {/* ÜST SATIR (Yükseklik %50) */}
+                <div className="flex w-full h-1/2 gap-2 md:gap-3">
+                    {row1.map(opt => renderBtn(opt))}
+                </div>
+                {/* ALT SATIR (Yükseklik %50) */}
+                <div className="flex w-full h-1/2 gap-2 md:gap-3">
+                    {row2.map(opt => renderBtn(opt))}
+                </div>
+            </div>
+        );
+    };
+
+
     // --- RENDER ---
 
     if (gameState === 'loading') {
@@ -303,8 +362,8 @@ function KavramYarismaGame() {
             className="h-screen bg-slate-50 text-slate-900 flex flex-col items-center relative overflow-hidden select-none"
         >
             {/* --- ÜST KISIM --- */}
-            <div className="w-full bg-white shadow-sm border-b border-slate-200 z-30 flex flex-col shrink-0">
-                <div className="w-full max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+            <div className="w-full bg-white shadow-sm border-b border-slate-200 z-30 flex flex-col shrink-0 h-[25vh]">
+                <div className="w-full max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-12">
                     <div className="flex items-center gap-2">
                         <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-800" asChild>
                             <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="w-5 h-5"/></Link>
@@ -327,13 +386,14 @@ function KavramYarismaGame() {
                     </div>
                 </div>
 
-                <div className="w-full max-w-4xl mx-auto p-2 pb-4 text-center">
-                    <h2 className="text-xl md:text-3xl font-bold text-slate-800 leading-tight">
+                {/* Soru Metni */}
+                <div className="w-full max-w-4xl mx-auto p-4 text-center flex-grow flex flex-col justify-center items-center overflow-hidden">
+                    <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-slate-800 leading-snug line-clamp-4">
                         {currentQ.definition}
                     </h2>
                      {feedbackMsg && (
                         <div className={cn(
-                            "mt-1 inline-block px-4 py-0.5 rounded-full text-sm font-bold animate-in zoom-in",
+                            "mt-2 inline-block px-4 py-1 rounded-full text-sm font-bold animate-in zoom-in",
                             feedbackMsg.includes('Kazandı') ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                         )}>
                             {feedbackMsg}
@@ -341,7 +401,7 @@ function KavramYarismaGame() {
                     )}
                 </div>
                 
-                 <div className="w-full h-1 bg-slate-100">
+                 <div className="w-full h-1.5 bg-slate-100 mt-auto">
                     <div 
                         className="h-full bg-slate-800 transition-all duration-300"
                         style={{ width: `${((currentQIndex + 1) / questions.length) * 100}%` }}
@@ -350,7 +410,7 @@ function KavramYarismaGame() {
             </div>
 
             {/* --- OYUN ALANI (Split Screen) --- */}
-            <div className="flex-grow w-full relative grid grid-cols-2 h-full overflow-hidden">
+            <div className="flex-grow w-full relative grid grid-cols-2 h-[75vh] overflow-hidden">
                 
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-300 z-20 -translate-x-1/2 flex items-center justify-center pointer-events-none">
                     <div className="bg-white border border-slate-300 rounded-full p-1.5 shadow-sm">
@@ -360,83 +420,39 @@ function KavramYarismaGame() {
 
                 {/* SOL TARAF */}
                 <div className={cn(
-                    "relative w-full h-full flex flex-col p-2 md:p-4 transition-colors",
+                    "relative w-full h-full flex flex-col border-r border-slate-200 transition-colors",
                     leftLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-blue-50/40"
                 )}>
-                    <div className="flex justify-between items-center mb-2 px-1 shrink-0">
+                    {/* Header P1 */}
+                    <div className="flex justify-between items-center p-3 bg-white/60 border-b border-blue-100 h-12 shrink-0">
                         <span className="text-blue-600 font-bold text-xs md:text-sm tracking-widest">MAVİ</span>
-                        <div className="bg-white px-3 py-1 rounded-lg shadow-sm border border-blue-100 font-mono font-bold text-blue-600">
+                        <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-blue-100 font-mono font-bold text-blue-600">
                             {scoreLeft}
                         </div>
                     </div>
 
-                    {/* ÇÖZÜM BURADA: flex-1 ve min-h-0 */}
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full">
-                        {currentQ.options.map((option) => {
-                             let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50 shadow-sm";
-                             if (leftSelection === option) {
-                                 if (correctCard === option) stateClass = "bg-emerald-500 text-white border-emerald-500 shadow-lg scale-[1.02] z-10";
-                                 else stateClass = "bg-red-500 text-white border-red-500";
-                             } else if (correctCard === option) {
-                                 stateClass = "bg-emerald-100 text-emerald-800 border-emerald-300 ring-2 ring-emerald-200";
-                             }
-
-                             return (
-                                <button
-                                    key={`left-${option}`}
-                                    onClick={() => handleCardClick('left', option)}
-                                    disabled={leftLocked || isRoundOver}
-                                    className={cn(
-                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-3xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
-                                        stateClass,
-                                        leftLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
-                                    )}
-                                >
-                                    {option}
-                                </button>
-                             )
-                        })}
+                    {/* MANUEL FLEX GRID YAPISI */}
+                    <div className="flex-grow h-full overflow-hidden">
+                        {renderOptionsGrid('left')}
                     </div>
                 </div>
 
                 {/* SAĞ TARAF */}
                 <div className={cn(
-                    "relative w-full h-full flex flex-col p-2 md:p-4 transition-colors",
+                    "relative w-full h-full flex flex-col transition-colors",
                     rightLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-orange-50/40"
                 )}>
-                    <div className="flex justify-between items-center mb-2 px-1 shrink-0">
-                        <div className="bg-white px-3 py-1 rounded-lg shadow-sm border border-orange-100 font-mono font-bold text-orange-600">
+                    {/* Header P2 */}
+                    <div className="flex justify-between items-center p-3 bg-white/60 border-b border-orange-100 h-12 shrink-0">
+                        <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-orange-100 font-mono font-bold text-orange-600">
                             {scoreRight}
                         </div>
                         <span className="text-orange-600 font-bold text-xs md:text-sm tracking-widest">TURUNCU</span>
                     </div>
 
-                    {/* ÇÖZÜM BURADA: flex-1 ve min-h-0 */}
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full">
-                         {currentQ.options.map((option) => {
-                             let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:bg-orange-50 shadow-sm";
-                             if (rightSelection === option) {
-                                 if (correctCard === option) stateClass = "bg-emerald-500 text-white border-emerald-500 shadow-lg scale-[1.02] z-10";
-                                 else stateClass = "bg-red-500 text-white border-red-500";
-                             } else if (correctCard === option) {
-                                 stateClass = "bg-emerald-100 text-emerald-800 border-emerald-300 ring-2 ring-emerald-200";
-                             }
-
-                             return (
-                                <button
-                                    key={`right-${option}`}
-                                    onClick={() => handleCardClick('right', option)}
-                                    disabled={rightLocked || isRoundOver}
-                                    className={cn(
-                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-3xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
-                                        stateClass,
-                                        rightLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
-                                    )}
-                                >
-                                    {option}
-                                </button>
-                             )
-                        })}
+                     {/* MANUEL FLEX GRID YAPISI */}
+                    <div className="flex-grow h-full overflow-hidden">
+                        {renderOptionsGrid('right')}
                     </div>
                 </div>
             </div>

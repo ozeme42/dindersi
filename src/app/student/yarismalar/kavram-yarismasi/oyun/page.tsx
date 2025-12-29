@@ -371,7 +371,7 @@ function KavramYarismaGame() {
                         </div>
                     </div>
 
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-4 gap-2 md:gap-4 w-full justify-center">
+                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full justify-center">
                         {currentQ.options.map((option) => {
                              let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50 shadow-sm";
                              if (leftSelection === option) {
@@ -392,7 +392,7 @@ function KavramYarismaGame() {
                                         leftLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
                                     )}
                                 >
-                                    {option}
+                                   <span className="line-clamp-4">{option}</span>
                                 </button>
                              )
                         })}
@@ -411,7 +411,7 @@ function KavramYarismaGame() {
                         <span className="text-orange-600 font-bold text-xs md:text-sm tracking-widest">TURUNCU</span>
                     </div>
 
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-4 gap-2 md:gap-4 w-full justify-center">
+                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full justify-center">
                          {currentQ.options.map((option) => {
                              let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:bg-orange-50 shadow-sm";
                              if (rightSelection === option) {
@@ -432,7 +432,7 @@ function KavramYarismaGame() {
                                         rightLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
                                     )}
                                 >
-                                    {option}
+                                   <span className="line-clamp-4">{option}</span>
                                 </button>
                              )
                         })}
