@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense, useMemo, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +40,7 @@ function DuelGameComponent() {
     const [error, setError] = useState<string | null>(null);
 
     const [questions, setQuestions] = useState<GameQuestion[]>([]);
+    const [lastCorrectIndex, setLastCorrectIndex] = useState<number | null>(null);
     
     const [state, setState] = useState({
         p1Score: 0,
@@ -82,7 +83,26 @@ function DuelGameComponent() {
         fetchGameData();
     }, [fetchGameData]);
     
-    const currentQ = questions[state.currentQIndex];
+    const currentQ = useMemo(() => {
+        if (!questions[state.currentQIndex]) return null;
+        
+        const question = questions[state.currentQIndex];
+        let shuffledOptions = [...question.options];
+        
+        if (lastCorrectIndex !== null) {
+            let correctIndex = shuffledOptions.indexOf(question.a);
+            // If the correct answer is in the same spot, reshuffle until it's not.
+            let attempts = 0;
+            while (correctIndex === lastCorrectIndex && attempts < 10) {
+                shuffledOptions.sort(() => Math.random() - 0.5);
+                correctIndex = shuffledOptions.indexOf(question.a);
+                attempts++;
+            }
+        }
+        
+        return { ...question, options: shuffledOptions };
+
+    }, [questions, state.currentQIndex, lastCorrectIndex]);
 
     const loadQuestion = useCallback(() => {
         if (!currentQ) {
@@ -180,6 +200,8 @@ function DuelGameComponent() {
             clearInterval(timerRef.current);
             stopSound('timer');
         }
+        
+        setLastCorrectIndex(currentQ.options.indexOf(currentQ.a));
 
         playSound('correct');
         const winner = player;
@@ -213,6 +235,7 @@ function DuelGameComponent() {
         });
         setP1Lock(false);
         setP2Lock(false);
+        setLastCorrectIndex(null);
     }
     
     if (isLoading) return <div className="h-screen w-screen flex items-center justify-center bg-slate-900"><Loader2 className="w-16 h-16 animate-spin text-cyan-400" /></div>;

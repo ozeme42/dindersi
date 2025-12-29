@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/auth-context";
 import { submitConceptQuizScoreAction, getConceptQuizAction } from '../actions';
 import type { ConceptQuizQuestion } from '../actions';
-import { Loader2, ArrowLeft, Timer, Zap, XCircle, Play, Swords } from "lucide-react";
+import { Loader2, ArrowLeft, Timer, Zap, XCircle, Play, Swords, User, Users, Trophy } from "lucide-react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { playSound, stopSound } from '@/lib/audio-service';
@@ -21,18 +21,22 @@ function KavramYarismaGame() {
     const router = useRouter();
     const mainContentRef = useRef<HTMLDivElement>(null);
 
-    const [gameState, setGameState] = useState('loading');
+    const [gameState, setGameState] = useState('loading'); 
+    const [gameMode, setGameMode] = useState<'single' | 'team' | null>(null);
     const [currentQIndex, setCurrentQIndex] = useState(0);
     
-    // --- OYUN DURUMLARI ---
+    // Puanlar
     const [scoreLeft, setScoreLeft] = useState(0);
     const [scoreRight, setScoreRight] = useState(0);
+    
+    // Kilitler
     const [leftLocked, setLeftLocked] = useState(false);
     const [rightLocked, setRightLocked] = useState(false);
 
     const [timeLeft, setTimeLeft] = useState(15);
     const [feedbackMsg, setFeedbackMsg] = useState('');
     
+    // Seçimler
     const [leftSelection, setLeftSelection] = useState<string | null>(null);
     const [rightSelection, setRightSelection] = useState<string | null>(null);
 
@@ -45,7 +49,7 @@ function KavramYarismaGame() {
     const [questions, setQuestions] = useState<ConceptQuizQuestion[]>([]);
     const [error, setError] = useState<string | null>(null);
     
-    const gameContext = `Kavram Yarışması (VS) - ${searchParams.get('topicName') || 'Genel'}`;
+    const gameContext = `Kavram Yarışması (${gameMode === 'team' ? 'VS' : 'Tekli'}) - ${searchParams.get('topicName') || 'Genel'}`;
 
     // --- VERİ ÇEKME ---
     const fetchGameData = useCallback(async () => {
@@ -69,7 +73,7 @@ function KavramYarismaGame() {
             setGameState('error');
         } else {
             setQuestions(fetchedQuestions);
-            setGameState('start');
+            setGameState('mode-select'); 
         }
     }, [searchParams]);
 
@@ -78,12 +82,13 @@ function KavramYarismaGame() {
     }, [fetchGameData]);
 
     // --- OYUN AKIŞI ---
-    const startGame = useCallback(() => {
+    const startGame = useCallback((mode: 'single' | 'team') => {
         if (questions.length === 0) {
             setError("Oyun için soru yüklenemedi veya bulunamadı.");
             setGameState('error');
             return;
         }
+        setGameMode(mode);
         setCurrentQIndex(0);
         setScoreLeft(0);
         setScoreRight(0);
@@ -115,34 +120,35 @@ function KavramYarismaGame() {
         }, 1000);
     }, []);
 
-    const handleTimeUp = useCallback(() => {
+    const handleTimeUp = () => {
         if (timerRef.current) clearInterval(timerRef.current);
         stopSound('timer');
-        if (isRoundOver) return;
-        
         playSound('incorrect');
         setFeedbackMsg('Süre Bitti!');
-        
-        const currentQ = questions[currentQIndex];
-        if (currentQ) {
-            setCorrectCard(currentQ.correctAnswer);
-        }
-
         setLeftLocked(true);
         setRightLocked(true);
         setIsRoundOver(true);
-    }, [currentQIndex, questions, isRoundOver]);
+    };
+
+    useEffect(() => {
+        if (isRoundOver && questions.length > 0) {
+             const q = questions[currentQIndex];
+             if(q) setCorrectCard(q.correctAnswer);
+        }
+    }, [isRoundOver, currentQIndex, questions]);
 
 
-    const handleCardClick = (side: 'left' | 'right', concept: string) => {
+    const handleCardClick = (side: 'left' | 'right' | 'single', concept: string) => {
         if (isRoundOver || correctCard) return;
+        
         if (side === 'left' && leftLocked) return;
         if (side === 'right' && rightLocked) return;
+        if (side === 'single' && leftLocked) return;
 
         const currentQ = questions[currentQIndex];
         if (!currentQ) return;
 
-        if (side === 'left') setLeftSelection(concept);
+        if (side === 'left' || side === 'single') setLeftSelection(concept);
         else setRightSelection(concept);
 
         if (concept === currentQ.correctAnswer) {
@@ -151,18 +157,30 @@ function KavramYarismaGame() {
             playSound('correct');
             
             const points = Math.max(10, timeLeft * 2); 
-            if (side === 'left') setScoreLeft(prev => prev + points);
-            else setScoreRight(prev => prev + points);
+            
+            if (side === 'left' || side === 'single') {
+                setScoreLeft(prev => prev + points);
+                setFeedbackMsg(side === 'single' ? 'Doğru Cevap!' : 'Mavi Taraf Kazandı!');
+            } else {
+                setScoreRight(prev => prev + points);
+                setFeedbackMsg('Turuncu Taraf Kazandı!');
+            }
 
             setCorrectCard(concept);
-            setFeedbackMsg(side === 'left' ? 'Mavi Taraf Kazandı!' : 'Turuncu Taraf Kazandı!');
             setIsRoundOver(true);
         } else {
             playSound('incorrect');
-            if (side === 'left') {
+            
+            if (side === 'single') {
+                setLeftLocked(true);
+                setFeedbackMsg('Yanlış Cevap!');
+                finalizeRoundFail(currentQ.correctAnswer);
+            } 
+            else if (side === 'left') {
                 setLeftLocked(true);
                 if (rightLocked) finalizeRoundFail(currentQ.correctAnswer);
-            } else {
+            } 
+            else { 
                 setRightLocked(true);
                 if (leftLocked) finalizeRoundFail(currentQ.correctAnswer);
             }
@@ -172,7 +190,7 @@ function KavramYarismaGame() {
     const finalizeRoundFail = (answer: string) => {
         if (timerRef.current) clearInterval(timerRef.current);
         stopSound('timer');
-        setFeedbackMsg('Kimse Bilemedi!');
+        if (!feedbackMsg) setFeedbackMsg('Kimse Bilemedi!');
         setCorrectCard(answer);
         setIsRoundOver(true);
     };
@@ -194,16 +212,22 @@ function KavramYarismaGame() {
     };
 
     const handleSaveAndExit = async () => {
-        const totalScore = scoreLeft + scoreRight;
+        if (gameMode === 'team') {
+            router.push('/oyunlar/kavram-yarismasi');
+            return;
+        }
+
+        const totalScore = scoreLeft;
         if (!user || totalScore === 0 || scoreSaved || isSaving) {
             router.push('/oyunlar/kavram-yarismasi');
             return;
         }
+        
         setIsSaving(true);
         const result = await submitConceptQuizScoreAction(user.uid, totalScore, gameContext);
         if (result.success) {
             setScoreSaved(true);
-            toast({ title: 'Başarılı!', description: `Toplam ${totalScore} puan profiline eklendi.` });
+            toast({ title: 'Başarılı!', description: `${totalScore} puan profiline eklendi.` });
             router.push('/oyunlar/kavram-yarismasi');
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
@@ -213,26 +237,113 @@ function KavramYarismaGame() {
 
     const restartGame = () => {
         setIsSaving(false);
-        startGame();
+        setGameState('mode-select');
     };
     
-    // --- RENDER YARDIMCISI ---
-    // Bu fonksiyon 4 seçeneği alır ve 2 satır x 2 sütun (flexbox) olarak render eder.
-    // Bu sayede "grid" in esneme sorunundan kurtuluruz.
-    const renderOptionsGrid = (side: 'left' | 'right') => {
-        const selection = side === 'left' ? leftSelection : rightSelection;
-        const locked = side === 'left' ? leftLocked : rightLocked;
+    // --- 1. MOD SEÇİM EKRANI ---
+    if (gameState === 'mode-select') {
+        return (
+            <div className="h-[100dvh] bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+                <div className="absolute inset-0 grid grid-cols-2 opacity-30 pointer-events-none">
+                    <div className="bg-gradient-to-br from-emerald-100 to-transparent"></div>
+                    <div className="bg-gradient-to-bl from-blue-100 to-transparent"></div>
+                </div>
 
-        // Seçenekleri 2'şerli gruplara ayır (Üst satır, Alt satır)
+                <div className="relative z-10 w-full max-w-2xl text-center space-y-4 md:space-y-8 animate-in zoom-in-95 duration-500">
+                    <h1 className="text-3xl md:text-4xl font-black text-slate-800">Oyun Modunu Seç</h1>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <button 
+                            onClick={() => startGame('single')}
+                            className="group relative bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-3xl p-6 md:p-8 transition-all hover:shadow-xl hover:-translate-y-1"
+                        >
+                            <div className="absolute top-4 right-4 bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full">
+                                Puanlı
+                            </div>
+                            <div className="bg-emerald-50 w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                                <User className="w-8 h-8 md:w-10 md:h-10 text-emerald-600" />
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">Tek Kişilik</h3>
+                            <p className="text-slate-500 text-sm">Kendini test et, puanlarını profiline kaydet.</p>
+                        </button>
+
+                        <button 
+                            onClick={() => startGame('team')}
+                            className="group relative bg-white border-2 border-slate-200 hover:border-blue-500 rounded-3xl p-6 md:p-8 transition-all hover:shadow-xl hover:-translate-y-1"
+                        >
+                             <div className="absolute top-4 right-4 bg-slate-100 text-slate-500 text-xs font-bold px-3 py-1 rounded-full">
+                                Eğlence
+                            </div>
+                            <div className="bg-blue-50 w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                                <Users className="w-8 h-8 md:w-10 md:h-10 text-blue-600" />
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-2">Takımlı VS</h3>
+                            <p className="text-slate-500 text-sm">Arkadaşınla aynı ekranda yarış. Puan yok.</p>
+                        </button>
+                    </div>
+                    
+                    <Button variant="ghost" onClick={() => router.back()} className="text-slate-400 hover:text-slate-600">
+                        <ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön
+                    </Button>
+                </div>
+            </div>
+        )
+    }
+
+    if (gameState === 'loading') return <div className="flex h-[100dvh] items-center justify-center bg-slate-50"><Loader2 className="h-16 w-16 animate-spin text-emerald-500"/></div>
+    if (error) return <div className="flex h-[100dvh] items-center justify-center p-4 bg-slate-50 text-center"><p className="text-red-500 font-bold">{error}</p></div>
+
+    if (gameState === 'end') {
+        let endTitle = "Oyun Bitti!";
+        let endDesc = "";
+        
+        if (gameMode === 'team') {
+            if (scoreLeft > scoreRight) {
+                endTitle = "Mavi Taraf Kazandı! 🏆";
+                endDesc = "Tebrikler Mavi Takım! Harika bir yarıştı.";
+            } else if (scoreRight > scoreLeft) {
+                endTitle = "Turuncu Taraf Kazandı! 🏆";
+                endDesc = "Tebrikler Turuncu Takım! Harika bir yarıştı.";
+            } else {
+                endTitle = "Berabere! 🤝";
+                endDesc = "Dostluk kazandı.";
+            }
+        }
+
+        return (
+            <GameEndScreen 
+                score={gameMode === 'team' ? 0 : scoreLeft} 
+                title={endTitle}
+                description={endDesc}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={scoreSaved}
+                onRestart={restartGame}
+                backUrl="/oyunlar/kavram-yarismasi"
+                hideSaveButton={gameMode === 'team'}
+            />
+        );
+    }
+
+    const currentQ = questions[currentQIndex];
+    if (!currentQ) return <div className="flex h-[100dvh] items-center justify-center">Soru yüklenemedi...</div>;
+
+    // --- GRID RENDER FONKSİYONU ---
+    const renderOptionsGrid = (side: 'left' | 'right' | 'single') => {
+        const selection = (side === 'left' || side === 'single') ? leftSelection : rightSelection;
+        const locked = (side === 'left' || side === 'single') ? leftLocked : rightLocked;
+
         const row1 = currentQ.options.slice(0, 2);
         const row2 = currentQ.options.slice(2, 4);
 
         const renderBtn = (option: string) => {
             let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50 shadow-sm";
             
-            // Renklendirme mantığı (Sağ taraf için turuncu hover)
             if (side === 'right') {
                 stateClass = "bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:bg-orange-50 shadow-sm";
+            }
+            if (side === 'single') {
+                stateClass = "bg-white text-slate-700 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 shadow-sm";
             }
 
             if (selection === option) {
@@ -248,9 +359,8 @@ function KavramYarismaGame() {
                     onClick={() => handleCardClick(side, option)}
                     disabled={locked || isRoundOver}
                     className={cn(
-                        // w-1/2 diyerek genişliği zorluyoruz
                         "w-1/2 h-full flex items-center justify-center text-center p-2 rounded-xl md:rounded-2xl border-2 transition-all active:scale-[0.95] select-none overflow-hidden",
-                        "text-sm md:text-lg lg:text-xl font-bold leading-tight break-words", // Yazı boyutu
+                        "text-sm md:text-lg lg:text-xl font-bold leading-tight break-words",
                         stateClass,
                         locked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
                     )}
@@ -261,12 +371,10 @@ function KavramYarismaGame() {
         };
 
         return (
-            <div className="flex flex-col w-full h-full gap-2 md:gap-3 p-2 md:p-3">
-                {/* ÜST SATIR (Yükseklik %50) */}
+            <div className="flex flex-col w-full h-full gap-2 md:gap-3 p-2 md:p-3 pb-8 md:pb-3"> {/* MOBİL İÇİN pb-8 EKLENDİ */}
                 <div className="flex w-full h-1/2 gap-2 md:gap-3">
                     {row1.map(opt => renderBtn(opt))}
                 </div>
-                {/* ALT SATIR (Yükseklik %50) */}
                 <div className="flex w-full h-1/2 gap-2 md:gap-3">
                     {row2.map(opt => renderBtn(opt))}
                 </div>
@@ -274,101 +382,23 @@ function KavramYarismaGame() {
         );
     };
 
-
-    // --- RENDER ---
-
-    if (gameState === 'loading') {
-        return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-16 w-16 animate-spin text-emerald-500"/></div>
-    }
-
-    if (error) {
-        return (
-             <div className="flex h-screen items-center justify-center p-4 bg-slate-50">
-                <div className="bg-white border border-red-200 text-slate-800 px-8 py-6 rounded-3xl relative max-w-md text-center shadow-xl">
-                    <Zap className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-bold mb-2">Hata Oluştu</h3>
-                    <p className="text-slate-500 mb-6">{error}</p>
-                    <Button asChild className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 rounded-xl">
-                        <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
-                    </Button>
-                </div>
-            </div>
-        )
-    }
-
-    if (gameState === 'start') {
-        return (
-            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-                <div className="absolute inset-0 grid grid-cols-2 opacity-30 pointer-events-none">
-                    <div className="bg-gradient-to-br from-blue-100 to-transparent"></div>
-                    <div className="bg-gradient-to-bl from-orange-100 to-transparent"></div>
-                </div>
-                
-                <div className="relative z-10 w-full max-w-lg text-center space-y-8 animate-in zoom-in-95 duration-500">
-                    <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" />
-                        <Swords className="w-32 h-32 text-slate-800 mx-auto drop-shadow-md" />
-                    </div>
-                    
-                    <div>
-                        <h1 className="text-4xl font-black text-slate-800 mb-2">KAVRAM DÜELLOSU</h1>
-                        <p className="text-slate-500 text-lg">Arkadaşınla veya kendinle yarış!</p>
-                    </div>
-
-                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-xl text-left space-y-4">
-                        <div className="flex items-center gap-4 text-slate-600">
-                            <Swords className="w-6 h-6 text-indigo-500 shrink-0" />
-                            <span>Ekran ikiye bölünür: <strong>Mavi</strong> ve <strong>Turuncu</strong> taraf.</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-slate-600">
-                            <Zap className="w-6 h-6 text-yellow-500 shrink-0" />
-                            <span>Doğru cevabı <strong>ilk bilen</strong> puanı kapar!</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-slate-600">
-                            <XCircle className="w-6 h-6 text-red-500 shrink-0" />
-                            <span>Yanlış yapan o tur için <strong>kilitlenir</strong>.</span>
-                        </div>
-                    </div>
-
-                    <Button 
-                        onClick={startGame}
-                        className="w-full h-16 text-xl font-bold rounded-2xl bg-slate-900 hover:bg-slate-800 text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all"
-                    >
-                        DÜELLOYU BAŞLAT <Play className="ml-3 h-6 w-6 fill-current" />
-                    </Button>
-                </div>
-            </div>
-        );
-    }
-    
-     if (gameState === 'end') {
-        return (
-            <GameEndScreen 
-                score={scoreLeft + scoreRight}
-                onSave={handleSaveAndExit}
-                isSaving={isSaving}
-                scoreSaved={scoreSaved}
-                onRestart={restartGame}
-                backUrl="/oyunlar/kavram-yarismasi"
-            />
-        );
-    }
-
-    const currentQ = questions[currentQIndex];
-
+    // --- 2. OYUN EKRANI ---
     return (
         <div 
             ref={mainContentRef}
-            className="h-screen bg-slate-50 text-slate-900 flex flex-col items-center relative overflow-hidden select-none"
+            // h-screen yerine h-[100dvh] kullanıldı. Bu mobil tarayıcı adres çubuğunu hesaba katar.
+            className="h-[100dvh] bg-slate-50 text-slate-900 flex flex-col items-center relative overflow-hidden select-none"
         >
-            {/* --- ÜST KISIM --- */}
-            <div className="w-full bg-white shadow-sm border-b border-slate-200 z-30 flex flex-col shrink-0 h-[25vh]">
+            {/* HEADER */}
+            <div className="w-full bg-white shadow-sm border-b border-slate-200 z-30 flex flex-col shrink-0 h-[25dvh]">
                 <div className="w-full max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-12">
                     <div className="flex items-center gap-2">
                         <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-800" asChild>
                             <Link href="/oyunlar/kavram-yarismasi"><ArrowLeft className="w-5 h-5"/></Link>
                         </Button>
-                        <span className="font-bold text-slate-700 hidden sm:inline">Kavram Düellosu</span>
+                        <span className="font-bold text-slate-700 hidden sm:inline">
+                            {gameMode === 'single' ? 'Tekli Yarış' : 'VS Modu'}
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-2 bg-slate-100 px-4 py-1 rounded-full border border-slate-200">
@@ -379,14 +409,15 @@ function KavramYarismaGame() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                         <Button onClick={endGame} variant="ghost" className="text-red-400 hover:bg-red-50 hover:text-red-600 text-xs font-bold h-8">
-                            Bitir
-                        </Button>
+                        {gameMode === 'single' && (
+                             <Button onClick={endGame} variant="ghost" className="text-red-400 hover:bg-red-50 hover:text-red-600 text-xs font-bold h-8">
+                                Bitir
+                            </Button>
+                        )}
                         <FullscreenToggle elementRef={mainContentRef} className="text-slate-400 hover:text-slate-800 h-8 w-8" />
                     </div>
                 </div>
 
-                {/* Soru Metni */}
                 <div className="w-full max-w-4xl mx-auto p-4 text-center flex-grow flex flex-col justify-center items-center overflow-hidden">
                     <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-slate-800 leading-snug line-clamp-4">
                         {currentQ.definition}
@@ -394,7 +425,7 @@ function KavramYarismaGame() {
                      {feedbackMsg && (
                         <div className={cn(
                             "mt-2 inline-block px-4 py-1 rounded-full text-sm font-bold animate-in zoom-in",
-                            feedbackMsg.includes('Kazandı') ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+                            (feedbackMsg.includes('Kazandı') || feedbackMsg.includes('Doğru')) ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                         )}>
                             {feedbackMsg}
                         </div>
@@ -409,60 +440,75 @@ function KavramYarismaGame() {
                 </div>
             </div>
 
-            {/* --- OYUN ALANI (Split Screen) --- */}
-            <div className="flex-grow w-full relative grid grid-cols-2 h-[75vh] overflow-hidden">
+            {/* OYUN ALANI */}
+            {/* h-[75vh] yerine h-[75dvh] ve safe area için alt padding eklendi */}
+            <div className="flex-grow w-full relative h-[75dvh] overflow-hidden pb-safe">
                 
-                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-300 z-20 -translate-x-1/2 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white border border-slate-300 rounded-full p-1.5 shadow-sm">
-                        <Swords className="w-4 h-4 text-slate-400" />
-                    </div>
-                </div>
-
-                {/* SOL TARAF */}
-                <div className={cn(
-                    "relative w-full h-full flex flex-col border-r border-slate-200 transition-colors",
-                    leftLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-blue-50/40"
-                )}>
-                    {/* Header P1 */}
-                    <div className="flex justify-between items-center p-3 bg-white/60 border-b border-blue-100 h-12 shrink-0">
-                        <span className="text-blue-600 font-bold text-xs md:text-sm tracking-widest">MAVİ</span>
-                        <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-blue-100 font-mono font-bold text-blue-600">
-                            {scoreLeft}
+                {/* --- TEK KİŞİLİK MOD --- */}
+                {gameMode === 'single' && (
+                    <div className="w-full h-full max-w-2xl mx-auto flex flex-col p-4 pb-8 md:pb-4">
+                        <div className="flex justify-center mb-2 md:mb-4">
+                             <div className="bg-white px-6 py-2 rounded-full shadow-sm border border-slate-200 font-mono font-bold text-emerald-600 flex items-center gap-2 text-xl">
+                                <Trophy className="w-6 h-6" />
+                                {scoreLeft}
+                            </div>
+                        </div>
+                        <div className="flex-grow h-full overflow-hidden border-2 border-slate-100 rounded-3xl bg-white/50 p-2">
+                             {renderOptionsGrid('single')}
                         </div>
                     </div>
+                )}
 
-                    {/* MANUEL FLEX GRID YAPISI */}
-                    <div className="flex-grow h-full overflow-hidden">
-                        {renderOptionsGrid('left')}
-                    </div>
-                </div>
-
-                {/* SAĞ TARAF */}
-                <div className={cn(
-                    "relative w-full h-full flex flex-col transition-colors",
-                    rightLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-orange-50/40"
-                )}>
-                    {/* Header P2 */}
-                    <div className="flex justify-between items-center p-3 bg-white/60 border-b border-orange-100 h-12 shrink-0">
-                        <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-orange-100 font-mono font-bold text-orange-600">
-                            {scoreRight}
+                {/* --- TAKIMLI MOD --- */}
+                {gameMode === 'team' && (
+                    <div className="w-full h-full grid grid-cols-2 relative pb-8 md:pb-0">
+                         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-slate-300 z-20 -translate-x-1/2 flex items-center justify-center pointer-events-none">
+                            <div className="bg-white border border-slate-300 rounded-full p-1.5 shadow-sm">
+                                <Swords className="w-4 h-4 text-slate-400" />
+                            </div>
                         </div>
-                        <span className="text-orange-600 font-bold text-xs md:text-sm tracking-widest">TURUNCU</span>
-                    </div>
 
-                     {/* MANUEL FLEX GRID YAPISI */}
-                    <div className="flex-grow h-full overflow-hidden">
-                        {renderOptionsGrid('right')}
+                        {/* SOL */}
+                        <div className={cn(
+                            "relative w-full h-full flex flex-col border-r border-slate-200 transition-colors",
+                            leftLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-blue-50/40"
+                        )}>
+                            <div className="flex justify-between items-center p-3 bg-white/60 border-b border-blue-100 h-12 shrink-0">
+                                <span className="text-blue-600 font-bold text-xs md:text-sm tracking-widest">MAVİ</span>
+                                <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-blue-100 font-mono font-bold text-blue-600">
+                                    {scoreLeft}
+                                </div>
+                            </div>
+                            <div className="flex-grow h-full overflow-hidden">
+                                {renderOptionsGrid('left')}
+                            </div>
+                        </div>
+
+                        {/* SAĞ */}
+                        <div className={cn(
+                            "relative w-full h-full flex flex-col transition-colors",
+                            rightLocked ? "bg-slate-100 grayscale opacity-70 cursor-not-allowed" : "bg-orange-50/40"
+                        )}>
+                            <div className="flex justify-between items-center p-3 bg-white/60 border-b border-orange-100 h-12 shrink-0">
+                                <div className="bg-white px-3 py-0.5 rounded-lg shadow-sm border border-orange-100 font-mono font-bold text-orange-600">
+                                    {scoreRight}
+                                </div>
+                                <span className="text-orange-600 font-bold text-xs md:text-sm tracking-widest">TURUNCU</span>
+                            </div>
+                            <div className="flex-grow h-full overflow-hidden">
+                                {renderOptionsGrid('right')}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
-            {/* FOOTER BUTON */}
+            {/* SONRAKİ BUTONU */}
             {isRoundOver && (
-                <div className="absolute bottom-12 md:bottom-20 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10">
+                <div className="absolute bottom-16 md:bottom-20 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10 w-full flex justify-center px-4">
                     <Button
                         onClick={nextQuestion}
-                        className="px-12 py-8 text-xl font-bold rounded-full bg-slate-900 text-white shadow-2xl hover:bg-slate-800 hover:scale-110 transition-all border-4 border-white/20"
+                        className="w-full max-w-xs md:w-auto px-12 py-8 text-xl font-bold rounded-full bg-slate-900 text-white shadow-2xl hover:bg-slate-800 hover:scale-105 transition-all border-4 border-white/20"
                     >
                         {currentQIndex + 1 < questions.length ? 'Sıradaki Soru' : 'Sonuçları Gör'} 
                         <ArrowLeft className="ml-3 h-6 w-6 rotate-180" />
@@ -472,7 +518,6 @@ function KavramYarismaGame() {
         </div>
     );
 }
-
 
 export default function Page() {
      return (
