@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef, useCallback, Suspense } from "react";
@@ -203,10 +204,10 @@ function KavramYarismaGame() {
         const result = await submitConceptQuizScoreAction(user.uid, totalScore, gameContext);
         if (result.success) {
             setScoreSaved(true);
-            toast({ title: 'Başarılı!', description: `Toplam ${totalScore} puan profiline eklendi.` });
+            toast({ title: "Başarılı!", description: `Toplam ${totalScore} puan profiline eklendi.` });
             router.push('/oyunlar/kavram-yarismasi');
         } else {
-            toast({ title: 'Hata', description: result.error, variant: 'destructive' });
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsSaving(false);
     };
@@ -370,8 +371,7 @@ function KavramYarismaGame() {
                         </div>
                     </div>
 
-                    {/* ÇÖZÜM BURADA: flex-1 ve min-h-0 */}
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full">
+                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-4 gap-2 md:gap-4 w-full justify-center">
                         {currentQ.options.map((option) => {
                              let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-blue-400 hover:bg-blue-50 shadow-sm";
                              if (leftSelection === option) {
@@ -387,7 +387,7 @@ function KavramYarismaGame() {
                                     onClick={() => handleCardClick('left', option)}
                                     disabled={leftLocked || isRoundOver}
                                     className={cn(
-                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-3xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
+                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-2xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
                                         stateClass,
                                         leftLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
                                     )}
@@ -411,8 +411,7 @@ function KavramYarismaGame() {
                         <span className="text-orange-600 font-bold text-xs md:text-sm tracking-widest">TURUNCU</span>
                     </div>
 
-                    {/* ÇÖZÜM BURADA: flex-1 ve min-h-0 */}
-                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 w-full">
+                    <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-4 gap-2 md:gap-4 w-full justify-center">
                          {currentQ.options.map((option) => {
                              let stateClass = "bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:bg-orange-50 shadow-sm";
                              if (rightSelection === option) {
@@ -428,7 +427,7 @@ function KavramYarismaGame() {
                                     onClick={() => handleCardClick('right', option)}
                                     disabled={rightLocked || isRoundOver}
                                     className={cn(
-                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-3xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
+                                        "w-full h-full flex items-center justify-center text-center p-2 text-lg md:text-2xl font-bold rounded-2xl border-2 transition-all active:scale-95 leading-tight break-words",
                                         stateClass,
                                         rightLocked && "opacity-50 cursor-not-allowed hover:bg-white hover:border-slate-200"
                                     )}
