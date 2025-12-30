@@ -217,11 +217,11 @@ export function TopicEditor({
         let newStep: LessonStep;
 
         switch(type) {
-            case 'content': newStep = { type, title: defaultTitle, content: 'İçeriği buraya girin...' }; break;
+            case 'content': newStep = { type, title: defaultTitle, content: '<h1>Başlık</h1><p>İçeriği buraya girin...</p>' }; break;
             case 'objectiveList': newStep = { type, title: defaultTitle, items: ['Yeni hedef...'] }; break;
             case 'conceptExplanation': newStep = { type, title: defaultTitle, items: [{ concept: "Kavram 1", definition: "Tanım 1"}] }; break;
             case 'flashcard': newStep = { type, title: defaultTitle, cards: [{ term: 'Terim', definition: 'Tanım' }] }; break;
-            case 'visual': newStep = { type, title: defaultTitle, imageUrl: 'https://placehold.co/600x400.png' }; break;
+            case 'visual': newStep = { type, title: defaultTitle, imageUrl: 'https://placehold.co/800x600.png' }; break;
             case 'mcq': newStep = { type, title: defaultTitle, question: 'Soru?', options: ['A', 'B', 'C', 'D'], correctAnswer: 'A' }; break;
             case 'tf': newStep = { type, title: defaultTitle, statement: 'Bu ifade doğru mu?', isTrue: true }; break;
             case 'trueFalseList': newStep = { type, title: defaultTitle, questions: [{ statement: 'Yeni ifade...', isTrue: true}] }; break;
@@ -335,14 +335,14 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
                 const q = item as Question;
                 if (q.type === 'Çoktan Seçmeli') newSteps.push({ type: 'mcq', title: q.text, ...q });
                 else if (q.type === 'Doğru/Yanlış') newSteps.push({ type: 'tf', title: q.text, statement: q.text, isTrue: q.correctAnswer === 'Doğru' });
-                else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: q.text, sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
+                else if (q.type === 'Boşluk Doldurma') newSteps.push({ type: 'fitb', title: 'Boşluk Doldurma', sentenceWithBlank: q.text, options: q.options || [], correctAnswer: q.correctAnswer || '' });
             });
         }
 

@@ -19,7 +19,6 @@ export async function updateUnitContent(courseId: string, unitId: string, data: 
             dataToUpdate.title = data.title;
         }
         
-        // GÜNCELLENDİ: htmlContent'in null veya undefined olup olmadığını kontrol et
         if (data.htmlContent !== undefined) {
             dataToUpdate.htmlContent = data.htmlContent;
         }
