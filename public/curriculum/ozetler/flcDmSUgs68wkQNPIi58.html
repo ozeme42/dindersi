@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doğru Sözlü Olmak - İnfografik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        gold: {
+                            500: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-700 antialiased">
+
+    <!-- Header Section -->
+    <header class="gradient-bg text-white py-16 px-4 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <i class="fas fa-balance-scale absolute top-10 left-10 text-9xl"></i>
+            <i class="fas fa-hand-holding-heart absolute bottom-10 right-10 text-9xl"></i>
+        </div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <h2 class="text-gold-500 font-semibold tracking-widest uppercase mb-2">Ahlaki Davranışlar</h2>
+            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6">Doğru Sözlü Olmak</h1>
+            <p class="text-lg md:text-xl text-emerald-100 max-w-2xl mx-auto leading-relaxed">
+                "Doğruluk kalbin huzura ermesidir. Yalan ise şüpheden ibarettir."
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-12 -mt-10 relative z-20">
+
+        <!-- Section 1: Definition Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <!-- Card 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-emerald-600 card-hover transition-all duration-300">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4">
+                    <i class="fas fa-book-open text-xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-gray-800 mb-3">Ahlak Nedir?</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    İnsanın iyi veya kötü vasıflandırılmasına yol açan manevi nitelikleri, huyları ve iradeli davranışlarının bütünüdür.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-emerald-600 card-hover transition-all duration-300">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-gray-800 mb-3">Doğruluk Nedir?</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Söz, davranış ve niyet bakımından dürüstlük ve iyilikten yana olmaktır. Güven, adalet ve samimiyet erdemlerini kapsar.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-emerald-600 card-hover transition-all duration-300">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4">
+                    <i class="fas fa-gem text-xl"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-gray-800 mb-3">El-Emin</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Hz. Muhammed (sav), peygamber olmadan önce bile dürüstlüğü sayesinde "El-Emin" (Güvenilir) lakabıyla anılmıştır.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 2: The Indonesian Merchant Story -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-16 flex flex-col md:flex-row">
+            <div class="md:w-1/3 bg-emerald-800 p-8 flex flex-col justify-center items-center text-center text-white">
+                <i class="fas fa-ship text-6xl mb-4 text-emerald-300 opacity-80"></i>
+                <h3 class="font-serif text-2xl font-bold mb-2">Tarihten Bir Ders</h3>
+                <p class="text-emerald-200">Endonezya'nın İslam'la Tanışması</p>
+            </div>
+            <div class="md:w-2/3 p-8 md:p-12 flex flex-col justify-center">
+                <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-quote-left text-emerald-600 mr-3"></i>
+                    5 Akçelik Kumaş Hikayesi
+                </h4>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Müslüman bir tüccar, çırağının bir kumaşı yanlışlıkla 5 akçe yerine 10 akçeye sattığını öğrenir. Derhal müşteriyi buldurur, durumu açıklar, özür diler ve paranın üstünü iade eder.
+                </p>
+                <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-emerald-600">
+                    <p class="font-semibold text-emerald-900">Sonuç:</p>
+                    <p class="text-sm text-emerald-800">Bu dürüstlükten etkilenen Kral ve halkı Müslüman olmayı seçer. Dürüstlük, sözcüklerden daha güçlü bir davettir.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: The Path (Flowchart) -->
+        <div class="mb-16">
+            <h3 class="text-center font-serif text-3xl font-bold text-gray-800 mb-10">Hadis-i Şerif Işığında Yol Haritası</h3>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-0">
+                
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center group">
+                    <div class="w-32 h-32 rounded-full bg-white shadow-lg border-4 border-emerald-100 flex flex-col items-center justify-center group-hover:border-emerald-500 transition-colors">
+                        <i class="fas fa-comment-dots text-3xl text-emerald-600 mb-2"></i>
+                        <span class="font-bold text-gray-700">DOĞRULUK</span>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="h-12 w-1 md:w-16 md:h-1 bg-gray-300 relative mx-4">
+                    <i class="fas fa-chevron-right absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-300 hidden md:block"></i>
+                    <i class="fas fa-chevron-down absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-300 block md:hidden"></i>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center group">
+                    <div class="w-32 h-32 rounded-full bg-white shadow-lg border-4 border-emerald-100 flex flex-col items-center justify-center group-hover:border-emerald-500 transition-colors">
+                        <i class="fas fa-hand-holding-heart text-3xl text-emerald-600 mb-2"></i>
+                        <span class="font-bold text-gray-700">İYİLİK</span>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="h-12 w-1 md:w-16 md:h-1 bg-gray-300 relative mx-4">
+                    <i class="fas fa-chevron-right absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-300 hidden md:block"></i>
+                    <i class="fas fa-chevron-down absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-300 block md:hidden"></i>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center group">
+                    <div class="w-32 h-32 rounded-full bg-emerald-600 shadow-lg border-4 border-emerald-200 flex flex-col items-center justify-center text-white transform scale-110">
+                        <i class="fas fa-star text-3xl mb-2 text-yellow-300"></i>
+                        <span class="font-bold">CENNET</span>
+                    </div>
+                </div>
+
+            </div>
+            <p class="text-center text-sm text-gray-500 mt-6 italic">"Doğruluktan ayrılmayın. Çünkü doğruluk iyiliğe, iyilik de cennete götürür..."</p>
+        </div>
+
+        <!-- Section 4: Prophet Shuayb & Medyen -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <div class="bg-gray-100 rounded-xl p-8">
+                <h3 class="font-serif text-2xl font-bold text-gray-800 mb-4 border-b-2 border-emerald-600 inline-block pb-2">Hz. Şuayb ve Medyen Halkı</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fas fa-exclamation-triangle text-red-500 mt-1 mr-3"></i>
+                        <span class="text-gray-700">Medyen halkı ölçü ve tartıda hile yapıyordu.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-balance-scale-right text-red-500 mt-1 mr-3"></i>
+                        <span class="text-gray-700">Alırken tam ölçüyor, satarken eksik veriyorlardı.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-user-shield text-emerald-600 mt-1 mr-3"></i>
+                        <span class="text-gray-700">Hz. Şuayb onları adalete, dürüstlüğe ve Allah'a imana davet etti.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-ban text-red-500 mt-1 mr-3"></i>
+                        <span class="text-gray-700">Uyarıları dinlemeyen kavim helak oldu.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Consequences of Lying -->
+            <div class="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
+                <h3 class="font-serif text-2xl font-bold text-gray-800 mb-4">Yalanın Zararları</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-red-50 rounded text-center">
+                        <i class="fas fa-heart-broken text-red-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-semibold text-gray-700">Güven Zedelenir</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded text-center">
+                        <i class="fas fa-users-slash text-red-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-semibold text-gray-700">Sosyal Barış Bozulur</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded text-center">
+                        <i class="fas fa-spinner text-red-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-semibold text-gray-700">Huzursuzluk Verir</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded text-center">
+                        <i class="fas fa-fire-alt text-red-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-semibold text-gray-700">Kötülüğe Götürür</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Benefits Summary (Checklist) -->
+        <div class="bg-emerald-900 rounded-2xl p-8 md:p-12 text-white text-center">
+            <h2 class="font-serif text-3xl font-bold mb-8">Doğru Sözlü Olmanın Kazandırdıkları</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Vicdan rahatlığı sağlar</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Toplumda saygınlık kazandırır</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Dostlukları pekiştirir</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Allah'ın rızasını kazandırır</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>İşleri ve ilişkileri düzenler</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Güven ortamı oluşturur</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Başarıya götürür</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check bg-emerald-600 rounded-full p-1 text-xs"></i>
+                    <span>Aileyi mutlu eder</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quran Verse Block -->
+        <div class="mt-12 text-center max-w-3xl mx-auto">
+             <i class="fas fa-quran text-4xl text-emerald-800 mb-4 opacity-30"></i>
+             <p class="text-xl md:text-2xl font-serif text-gray-800 italic">
+                "Ey iman edenler! Allah’a karşı gelmekten sakının ve doğru söz söyleyin ki Allah sizin işlerinizi düzeltsin ve günahlarınızı bağışlasın..."
+             </p>
+             <p class="text-emerald-600 font-bold mt-2">(Ahzâb Suresi, 70-71. Ayetler)</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center mt-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="mb-2">Ahlaki Davranışlar Ünitesi</p>
+            <p class="text-sm">Abdulkerim Tanrıkulu, Lisan-ı Hal ile Davet ve Ders Kitabı Kaynaklarından Derlenmiştir.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

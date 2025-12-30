@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merhametli Olmak - İnfografik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teal-soft': '#e0f2f1',
+                        'teal-deep': '#00695c',
+                        'gold-accent': '#ffb300',
+                        'warm-sand': '#fff8e1',
+                        'soft-gray': '#f5f5f5'
+                    },
+                    fontFamily: {
+                        'serif': ['"Playfair Display"', 'serif'],
+                        'sans': ['"Inter"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .icon-pulse:hover i {
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .bg-pattern {
+            background-color: #ffffff;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300695c' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-pattern text-gray-800 font-sans antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-teal-deep text-white py-16 px-4 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <i class="fas fa-heart absolute top-10 left-10 text-9xl"></i>
+            <i class="fas fa-dove absolute bottom-10 right-10 text-9xl"></i>
+        </div>
+        <div class="container mx-auto text-center relative z-10">
+            <div class="inline-block bg-white text-teal-deep px-4 py-1 rounded-full text-sm font-bold tracking-wide mb-4 uppercase">Ahlaki Davranışlar</div>
+            <h1 class="font-serif text-5xl md:text-7xl font-bold mb-4">Merhametli Olmak</h1>
+            <p class="text-xl md:text-2xl font-light italic opacity-90">"Bütün varlıklara sevgiyle yaklaşmak"</p>
+        </div>
+    </header>
+
+    <!-- Definition Section -->
+    <section class="container mx-auto px-4 py-12 -mt-8 relative z-20">
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center max-w-4xl mx-auto border-t-8 border-gold-accent">
+            <h2 class="text-3xl font-serif font-bold text-teal-deep mb-6">Merhamet Nedir?</h2>
+            <p class="text-lg leading-relaxed text-gray-600 mb-8">
+                Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama... 
+                Merhamet, yaratılan her canlıya bir "can" olduğu için değer vermektir.
+            </p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-4 bg-teal-soft rounded-lg icon-pulse cursor-pointer">
+                    <i class="fas fa-heart text-3xl text-teal-deep mb-2"></i>
+                    <h3 class="font-bold">Sevgi</h3>
+                </div>
+                <div class="p-4 bg-teal-soft rounded-lg icon-pulse cursor-pointer">
+                    <i class="fas fa-hand-holding-heart text-3xl text-teal-deep mb-2"></i>
+                    <h3 class="font-bold">Şefkat</h3>
+                </div>
+                <div class="p-4 bg-teal-soft rounded-lg icon-pulse cursor-pointer">
+                    <i class="fas fa-balance-scale text-3xl text-teal-deep mb-2"></i>
+                    <h3 class="font-bold">Vicdan</h3>
+                </div>
+                <div class="p-4 bg-teal-soft rounded-lg icon-pulse cursor-pointer">
+                    <i class="fas fa-dove text-3xl text-teal-deep mb-2"></i>
+                    <h3 class="font-bold">Affetme</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Islamic Perspective (Rahman & Rahim) -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-serif font-bold text-gray-800">İslam'da Merhametin Kaynağı</h2>
+            <div class="w-24 h-1 bg-gold-accent mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <!-- Card 1 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-teal-deep card-hover">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-kaaba text-4xl text-teal-deep mr-4"></i>
+                    <div>
+                        <h3 class="text-2xl font-bold font-serif">Allah'ın İsimleri</h3>
+                        <p class="text-sm text-gray-500">Besmele'nin Özü</p>
+                    </div>
+                </div>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="font-bold text-gold-accent mr-2">RAHMAN:</span>
+                        <span class="text-gray-600">Dünyadaki bütün varlıklara, ayrım yapmaksızın merhamet eden, rızık veren.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="font-bold text-gold-accent mr-2">RAHÎM:</span>
+                        <span class="text-gray-600">Ahirette sadece inananlara merhamet edecek ve bağışlayacak olan.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-l-4 border-teal-deep card-hover">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-hands-praying text-4xl text-teal-deep mr-4"></i>
+                    <div>
+                        <h3 class="text-2xl font-bold font-serif">Hz. Muhammed (s.a.v.)</h3>
+                        <p class="text-sm text-gray-500">Örnek Şahsiyet</p>
+                    </div>
+                </div>
+                <blockquote class="italic text-gray-600 border-l-2 border-gold-accent pl-4 my-4">
+                    "Ve seni ancak âlemlere rahmet olarak gönderdik." <br>
+                    <span class="text-sm font-bold not-italic text-teal-deep">- Enbiyâ Suresi, 107. Ayet</span>
+                </blockquote>
+                <p class="text-gray-600 text-sm">
+                    Ümmetinin sıkıntısı ona ağır gelir, müminlere karşı çok şefkatli ve merhametlidir.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Individual vs Society Impact -->
+    <section class="bg-teal-deep py-16 text-white relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-serif text-center mb-12">Merhametin İki Boyutu</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Individual -->
+                <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+                    <div class="flex justify-center mb-6">
+                        <div class="bg-gold-accent p-4 rounded-full text-teal-deep">
+                            <i class="fas fa-user text-3xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-6 font-serif">Bireye Yansımaları</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Kalbi yumuşatır, huzur verir.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Kin, kibir ve nefret duygularını yok eder.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Empati yeteneğini geliştirir.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>"Karıncayı bile incitmez" hassasiyeti kazandırır.</li>
+                    </ul>
+                </div>
+
+                <!-- Society -->
+                <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+                    <div class="flex justify-center mb-6">
+                        <div class="bg-gold-accent p-4 rounded-full text-teal-deep">
+                            <i class="fas fa-users text-3xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-6 font-serif">Topluma Yansımaları</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Güven ve huzur ortamı oluşturur.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Dayanışma ve paylaşmayı artırır.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Sosyal sorunların çözümünü kolaylaştırır.</li>
+                        <li class="flex items-center"><i class="fas fa-check text-gold-accent mr-3"></i>Şiddet ve kaba davranışları azaltır.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Historical & Modern Examples -->
+    <section class="container mx-auto px-4 py-16">
+        <h2 class="text-4xl font-serif font-bold text-center text-gray-800 mb-12">Merhametin Somut İzleri</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+            
+            <!-- Birdhouses (Kuş Evleri) -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-2xl h-80">
+                <div class="absolute inset-0 bg-gray-200 flex items-center justify-center">
+                   <!-- Placeholder illustration using FontAwesome since we can't load external images easily without URLs -->
+                   <i class="fas fa-mosque text-9xl text-gray-300"></i>
+                   <i class="fas fa-crow absolute top-1/3 right-1/3 text-4xl text-gray-400"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-teal-deep/90 to-transparent flex flex-col justify-end p-8">
+                    <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-white text-2xl font-serif font-bold mb-2">Tarihten Bir Miras: Kuş Evleri</h3>
+                        <p class="text-teal-soft text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Osmanlı mimarisinde estetiğin ve merhametin sembolü. Cami ve medrese duvarlarına, kuşlar soğukta üşümesin diye yapılan zarif barınaklar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modern Solidarity (Earthquake example) -->
+            <div class="relative group cursor-pointer overflow-hidden rounded-2xl shadow-2xl h-80">
+                <div class="absolute inset-0 bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-hands-helping text-9xl text-gray-300"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-teal-deep/90 to-transparent flex flex-col justify-end p-8">
+                    <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 class="text-white text-2xl font-serif font-bold mb-2">Günümüzden Bir Örnek: Dayanışma</h3>
+                        <p class="text-teal-soft text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Zor zamanlarda (deprem, afet vb.) bir araya gelmek. Tıpkı metinde geçen Miraç'ın, yaşıtlarına yardım etmek için gösterdiği çaba gibi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer / Summary -->
+    <footer class="bg-warm-sand py-12 text-center border-t border-gold-accent">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <i class="fas fa-quote-left text-3xl text-gold-accent mb-4"></i>
+            <p class="text-2xl font-serif text-teal-deep italic mb-6">
+                "Allah'ın nimetlerini saymaya kalksanız başa çıkamazsınız. Allah gerçekten bağışlayıcıdır, merhametlidir."
+            </p>
+            <p class="text-sm text-gray-500 font-bold uppercase tracking-widest">Nahl Suresi, 18. Ayet</p>
+        </div>
+    </footer>
+
+</body>
+</html>

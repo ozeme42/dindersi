@@ -1,0 +1,188 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Adap ve nezaket kavramlarını tanımlayabileceksiniz.",
+      "Toplumsal yaşamda adap ve nezaket kurallarının önemini açıklayabileceksiniz.",
+      "Selamlaşma adabının temel ilkelerini ve İslam'daki yerini kavrayabileceksiniz.",
+      "İletişim ve konuşma adabı kurallarına uygun davranmanın önemini açıklayabileceksiniz.",
+      "Sosyal medya kullanımında uyulması gereken adap ve nezaket kurallarını belirleyebileceksiniz.",
+      "Sofra adabı kurallarını ve İslam'daki önemini açıklayabileceksiniz.",
+      "Kur'an-ı Kerim ve Hz. Peygamber'in hadislerinden yola çıkarak adap ve nezaket kurallarının dini temellerini yorumlayabileceksiniz.",
+      "Günlük hayattaki farklı durumlarda adap ve nezaket kurallarını uygulayabileceksiniz."
+    ]
+  },
+  {
+    "title": "Anahtar Kavramlar",
+    "type": "content",
+    "content": "<ul><li>İletişim</li><li>Nezaket</li><li>Adap</li><li>İsraf</li><li>Selam</li>"
+  },
+  {
+    "type": "content",
+    "title": "Adap ve Nezaket Nedir?",
+    "content": "<ul><ul><li>Nezaket, insanı yormayan ve çevresindekileri mutlu eden ince davranışlar bütünüdür.</li><li>Adap, bir toplumda örf, âdet ve kural haline gelmiş iyi ve güzel davranışlar anlamına gelir.</li><li>Toplumsal yaşamın düzen içinde devam edebilmesi için adap ve nezaket kurallarına ihtiyaç duyulur.</li><li>Bu kurallara uymak, insanlara saygı duymanın bir gereğidir ve toplumda sevgi, saygı, birlik ve huzuru pekiştirir.</li></ul></ul>"
+  },
+  {
+    "title": "İslam'da Adap ve Nezaket Kuralları",
+    "content": "<ul><ul><li>İslam, hayatın her alanında ölçülü ve dengeli olmayı tavsiye eder, bu nedenle Kur'an-ı Kerim'de adap ve nezaket kurallarına yer verilmiştir.</li><li>Ayetlerde bir topluluğun diğer bir toplulukla alay etmemesi, birbirini aşağılamaması ve kötü ad takmaması gerektiği vurgulanır.</li><li>Hz. Peygamber, söz ve davranışlarıyla güzel ahlakı ve nezaketi teşvik ederek Müslümanlara örnek olmuştur.</li><li>Onun nezaketi, çocukluğundan itibaren yanında olan Enes bin Malik gibi sahabeler tarafından örnek olarak anlatılmıştır.</li></ul></ul>",
+    "type": "content"
+  },
+  {
+    "content": "<ul><ul><li><b>Selamlaşma Adabı:</b> Müslümanların birbirlerine iyi niyet ve saygı dileklerini bildirdiği, huzur ve beraberliği pekiştiren dualı bir iletişim şeklidir.</li><li><b>İletişim ve Konuşma Adabı:</b> Doğru sözlü olmak, açık ve anlaşılır ifadeler kullanmak, kırıcı ifadelerden kaçınmak ve ses tonunu ayarlamak bu adabın temelini oluşturur. Sosyal medyada da doğru bilgiyi paylaşma, özel bilgileri koruma gibi kurallar önemlidir.</li><li><b>Sofra Adabı:</b> Yemeğe besmele ile başlamak, elleri temizlemek, sağ elle ve kendi önünden yemek, israftan kaçınmak, aşırı yememek ve yemek yapana teşekkür etmek gibi davranışları kapsar. Ayrıca helal rızık kazanmak ve Allah'a şükretmek de sofra adabının bir parçasıdır.</li></ul></ul>",
+    "type": "content",
+    "title": "Temel Adap ve Nezaket Alanları"
+  },
+  {
+    "title": "Veri Bankası Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Selam",
+        "definition": "Müslümanların iyi niyet ve saygı dileklerini bildirdiği dua cümlesidir."
+      },
+      {
+        "definition": "İnsanları yormayan, mutlu eden ince davranışlardır.",
+        "term": "Nezaket"
+      },
+      {
+        "term": "İletişim",
+        "definition": "Duygu, düşünce veya bilgilerin başkalarına aktarılmasıdır."
+      },
+      {
+        "definition": "Yeme içmede veya tüketimde aşırıya kaçmaktır.",
+        "term": "İsraf"
+      },
+      {
+        "term": "Adap",
+        "definition": "Bir toplumda kural hâlini almış iyi ve güzel davranışlardır."
+      }
+    ],
+    "type": "flashcard"
+  },
+  {
+    "type": "anagramFlashcard",
+    "cards": [
+      {
+        "scrambledWord": "MTİLİEİŞ",
+        "correctAnswer": "İletişim",
+        "definition": "İpucu: Bu kelime \"İletişim\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Nezaket\"",
+        "scrambledWord": "KZETAEN",
+        "correctAnswer": "Nezaket"
+      },
+      {
+        "correctAnswer": "Adap",
+        "scrambledWord": "DAAP",
+        "definition": "İpucu: Bu kelime \"Adap\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İsraf\"",
+        "correctAnswer": "İsraf",
+        "scrambledWord": "RAİFS"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Selam\"",
+        "correctAnswer": "Selam",
+        "scrambledWord": "AELMS"
+      }
+    ],
+    "title": "Veri Bankası Anagram Kartları"
+  },
+  {
+    "type": "visual",
+    "title": "Adap",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1767071963758-Adap.png?alt=media&token=a681cd40-c195-47c4-a587-4024c6c63e18"
+  },
+  {
+    "isTrue": true,
+    "statement": "Nezaket, insanı yormayan ve diğer insanları mutlu eden ince davranışlardır.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "isTrue": true,
+    "statement": "Adap kelimesi, toplumda örf, âdet ve kural hâlini almış iyi ve güzel davranışlar anlamına gelen \"edep\" kelimesinin çoğuludur.",
+    "type": "tf"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "isTrue": false,
+    "statement": "Toplumsal yaşamda adap ve nezaket kurallarına uyan kişiler arttıkça, insanların birbirlerine karşı sevgi ve saygıları azalır."
+  },
+  {
+    "statement": "Kur'an-ı Kerim, bir topluluğun diğer bir toplulukla alay etmesini veya birbirini aşağılamasını teşvik eder.",
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "isTrue": false
+  },
+  {
+    "type": "tf",
+    "isTrue": true,
+    "statement": "Yemek yerken sağ elle yemek ve besmele çekmek, İslam'daki sofra adabının önemli kurallarındandır.",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "question": "Nezaket, insanı yormayan ve diğer insanları mutlu eden ince davranışlar olarak tanımlanır. Buna göre, aşağıdakilerden hangisi nezaketli bir davranış değildir?",
+    "options": [
+      "Yapılan bir iyiliğe teşekkür etmek",
+      "Okul koridorunda yanlışlıkla çarptığı arkadaşından özür dilemek",
+      "Başkalarının sözünü sürekli kesmek",
+      "İnsanlara güler yüzle yaklaşmak"
+    ],
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Başkalarının sözünü sürekli kesmek",
+    "type": "mcq"
+  },
+  {
+    "correctAnswer": "Adap ve nezaket kuralları",
+    "type": "mcq",
+    "question": "Toplumsal yaşamda insanların birbirleriyle olan ilişkilerini düzenleyen ve yaşamı kolaylaştıran kurallara genel olarak ne ad verilir?",
+    "options": [
+      "Toplumsal normlar",
+      "Görgü kuralları",
+      "Adap ve nezaket kuralları",
+      "Etik ilkeler"
+    ],
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "type": "mcq",
+    "question": "Kur'an-ı Kerim'de adap ve nezaket kurallarına dikkat çekilen ayetlerden birinde insanlara hangi konuda uyarıda bulunulur?",
+    "correctAnswer": "Bir topluluğun diğer bir toplulukla alay etmemesi",
+    "title": "Kontrol Sorusu",
+    "options": [
+      "Yemekten önce elleri yıkamak",
+      "Bir topluluğun diğer bir toplulukla alay etmemesi",
+      "Yüksek sesle konuşmaktan kaçınmak",
+      "Herkese selam vermek"
+    ]
+  },
+  {
+    "question": "İslam'da selamlaşma adabına göre aşağıdakilerden hangisi doğrudur?",
+    "type": "mcq",
+    "options": [
+      "Büyük olan küçüğe selam verir.",
+      "Sayıca az olanlar, sayıca çok olanlara selam verir.",
+      "Oturana, yürüyen selam verir.",
+      "Yürüyen, araçta olana selam verir."
+    ],
+    "title": "Kontrol Sorusu",
+    "correctAnswer": "Sayıca az olanlar, sayıca çok olanlara selam verir."
+  },
+  {
+    "type": "mcq",
+    "correctAnswer": "Yemeğe besmeleyle başlamak",
+    "options": [
+      "Yemeğe besmeleyle başlamak",
+      "Ağızda yemek varken konuşmak",
+      "Tabağa ihtiyacından fazla yemek almak",
+      "Yemeği çok hızlı yemek"
+    ],
+    "title": "Kontrol Sorusu",
+    "question": "Sofra adabı ile ilgili olarak Hz. Peygamber'in tavsiyelerinden biri nedir?"
+  }
+]

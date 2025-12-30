@@ -1,0 +1,242 @@
+[
+  {
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList",
+    "items": [
+      "Merhamet kavramının tanımını yapabileceksiniz.",
+      "Merhametle ilişkili kavramları açıklayabileceksiniz.",
+      "Merhametli olmanın bireysel ve toplumsal boyutlarını inceleyebileceksiniz.",
+      "İslam'da merhametin önemini ve yerini açıklayabileceksiniz.",
+      "Güncel hayattan merhametli davranış örnekleri verebileceksiniz.",
+      "Merhametli olmanın birey ve topluma sağladığı faydaları ifade edebileceksiniz."
+    ]
+  },
+  {
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Rahman</li><li>Rahîm</li><li>Merhamet</li><li>Vicdan</li><li>Şefkat</li><li>Empati</li>",
+    "type": "content"
+  },
+  {
+    "content": "<ul>Merhamet; şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama olarak tanımlanır.Yaratılanlara şefkatle yaklaşmak ancak onları sevmekle mümkündür.Merhametle ilişkili temel kavramlar sevgidir, şefkattir ve vicdandır.Tüm canlıların acıları karşısında duyarlı davranmak vicdani bir sorumluluktur.</ul>",
+    "type": "content",
+    "title": "Merhametin Tanımı ve İlişkili Kavramlar"
+  },
+  {
+    "title": "İslam Dininde Merhamet Anlayışı",
+    "content": "<ul>Merhamet, İslam'da övülen ve tavsiye edilen ahlaki davranışlardandır.Kur'an-ı Kerim'de bu kavram genellikle “rahmet” kelimesiyle ifade edilir.Allah'ın Rahman ismi, dünyadaki tüm varlıklara merhamet etmesini; Rahîm ismi ise ahirette sadece inananlara merhamet etmesini belirtir.Peygamberimiz Hz. Muhammed (sav) de âlemlere rahmet olarak gönderilmiş ve ümmetine karşı çok şefkatli ve merhametli olmuştur.</ul>",
+    "type": "content"
+  },
+  {
+    "content": "<ul>Merhametli kişi, karşısındakini bir can olarak kabul eder ve anlamaya çalışır.Bu durum, insanların empati yapma becerilerini geliştirir.Kaba ve kırıcı davranışlardan uzak durmayı sağlar.Kin, kibir, kıskançlık ve nefret gibi olumsuz duyguların önüne geçerek bireysel huzuru artırır.</ul>",
+    "title": "Merhametin Bireysel Boyutları",
+    "type": "content"
+  },
+  {
+    "type": "content",
+    "title": "Merhametin Toplumsal Boyutları",
+    "content": "<ul>Merhamet, bireylerin güven ve huzur içinde yaşamasında önemli bir yere sahiptir.Merhametli insanlar, yaşamın her alanında sorunların çözümü için gayret gösterir.Dayanışma ve paylaşmanın artmasına katkıda bulunur.Bu sayede toplumda huzur ortamı ve karşılıklı anlayış oluşur.</ul>"
+  },
+  {
+    "title": "Veri Bankası Bilgi Kartları",
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "Allah'ın ahirette sadece inananlara rahmetini ifade eden ismidir.",
+        "term": "Rahîm"
+      },
+      {
+        "definition": "Doğru ile yanlışı ayıran iç sesimizdir.",
+        "term": "Vicdan"
+      },
+      {
+        "term": "Empati",
+        "definition": "Başkasının duygularını anlama yeteneğidir."
+      },
+      {
+        "term": "Merhamet",
+        "definition": "Acıma, şefkat ve bağışlama içeren duygudur."
+      },
+      {
+        "term": "Şefkat",
+        "definition": "Canlılara karşı duyulan sevgi dolu inceliktir."
+      },
+      {
+        "term": "Rahman",
+        "definition": "Allah'ın dünyadaki tüm varlıklara rahmetini ifade eden ismidir."
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Veri Bankası Anagram Kartları",
+    "cards": [
+      {
+        "scrambledWord": "MARNHA",
+        "correctAnswer": "Rahman",
+        "definition": "İpucu: Bu kelime \"Rahman\""
+      },
+      {
+        "correctAnswer": "Rahîm",
+        "definition": "İpucu: Bu kelime \"Rahîm\"",
+        "scrambledWord": "ARHÎM"
+      },
+      {
+        "correctAnswer": "Merhamet",
+        "definition": "İpucu: Bu kelime \"Merhamet\"",
+        "scrambledWord": "MEHATRME"
+      },
+      {
+        "correctAnswer": "Vicdan",
+        "scrambledWord": "NDİCVA",
+        "definition": "İpucu: Bu kelime \"Vicdan\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Şefkat\"",
+        "scrambledWord": "FKŞAET",
+        "correctAnswer": "Şefkat"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Empati\"",
+        "scrambledWord": "ETİAPM",
+        "correctAnswer": "Empati"
+      }
+    ]
+  },
+  {
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1767071963760-Merhmet.png?alt=media&token=f6b1f409-118b-4e48-8011-9c3568ee17a2",
+    "title": "Merhmet",
+    "type": "visual"
+  },
+  {
+    "isTrue": false,
+    "title": "Doğru/Yanlış",
+    "statement": "Merhamet, yalnızca insanlara karşı gösterilmesi gereken bir duygudur.",
+    "type": "tf"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "statement": "İslam dininde merhamet, övülen ve tavsiye edilen ahlaki davranışlardandır.",
+    "isTrue": true,
+    "type": "tf"
+  },
+  {
+    "isTrue": false,
+    "statement": "Allah'ın \"Rahman\" ismi, ahirette sadece inananlara merhamet etmesini ifade eder.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "type": "tf",
+    "isTrue": true,
+    "statement": "Hz. Muhammed (sav), Kur'an'da âlemlere rahmet olarak gönderildiği şeklinde ifade edilmiştir.",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Merhametli olmak, bireyin empati yapma becerilerini geliştirmesine yardımcı olur.",
+    "isTrue": true
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "statement": "Merhamet, kin, kibir ve nefret gibi olumsuz duyguların artmasına neden olur.",
+    "isTrue": false,
+    "type": "tf"
+  },
+  {
+    "statement": "Osmanlı'da kuş evleri, merhametin ve estetiğin bir sembolü olarak yapılmıştır.",
+    "type": "tf",
+    "isTrue": true,
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "isTrue": false,
+    "statement": "Vicdan, tüm canlıların acılarına karşı duyarsız kalmayı gerektiren bir kavramdır.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "isTrue": true,
+    "statement": "Merhametle ilişkili temel kavramlardan biri sevgidir.",
+    "type": "tf",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "statement": "Allah'ın \"Rahîm\" ismi, dünyadaki bütün varlıklara merhamet etmesini ifade eder.",
+    "isTrue": false,
+    "type": "tf"
+  },
+  {
+    "question": "Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama şeklinde tanımlanan merhametin ilişkili olduğu ilk kavram aşağıdakilerden hangisidir?",
+    "correctAnswer": "Sevgi",
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "options": [
+      "Kibir",
+      "Sevgi",
+      "Kıskançlık",
+      "Nefret"
+    ]
+  },
+  {
+    "type": "mcq",
+    "question": "Allah'ın (cc) rahmetini ifade eden başta gelen isimler hangi seçenekte doğru verilmiştir?",
+    "options": [
+      "Rezzak ve Fettah",
+      "Alim ve Hakim",
+      "Rahman ve Rahîm",
+      "Aziz ve Cebbar"
+    ],
+    "correctAnswer": "Rahman ve Rahîm",
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "correctAnswer": "Bütün varlıklara",
+    "question": "Allah'ın (cc) Rahman ismi, O'nun merhametini hangi varlıklara yönelik ifade eder?",
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "options": [
+      "Sadece hayvanlara",
+      "Sadece insanlara",
+      "Sadece inananlara",
+      "Bütün varlıklara"
+    ]
+  },
+  {
+    "correctAnswer": "Ahirette sadece inananlara merhamet etmesini",
+    "options": [
+      "İnsanlara rızık vermesini",
+      "Dünyadaki tüm varlıklara merhamet etmesini",
+      "Ahirette sadece inananlara merhamet etmesini",
+      "Peygamber göndermesini"
+    ],
+    "question": "Allah'ın (cc) Rahîm ismi hangi durumu ifade etmektedir?",
+    "type": "mcq",
+    "title": "Kontrol Sorusu"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "options": [
+      "Çok zengin ve cömert",
+      "Çok bilgili ve bilge",
+      "Çok şefkatli ve merhametli",
+      "Çok güçlü ve kudretli"
+    ],
+    "question": "Kur'an-ı Kerim'de Hz. Peygamber'in müminlere karşı nasıl bir nitelikte olduğu bildirilmiştir?",
+    "correctAnswer": "Çok şefkatli ve merhametlidir",
+    "type": "mcq"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "type": "mcq",
+    "options": [
+      "Saygı ve hoşgörü",
+      "Neşe, sevinç ve mutluluk",
+      "Kin, kibir, kıskançlık ve nefret",
+      "Çalışkanlık ve azim"
+    ],
+    "correctAnswer": "Kin, kibir, kıskançlık ve nefret",
+    "question": "Merhamet, bireyde hangi olumsuz duyguların önüne geçmeye yardımcı olur?"
+  }
+]

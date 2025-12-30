@@ -1,1 +1,90 @@
-{"notes":["Hac, Zilhicce ayının 9-13. günleri arasında (Arefe ve Kurban Bayramı) Kâbe ve çevresinde yapılan bir ibadettir.","Hac ibadetine başlamadan önce \"ihram\"a girilir; ihramda belirli giyim kuralları ve yasaklar bulunur.","İhramdan sonra Kâbe etrafında 7 kez dönerek \"tavaf\" yapılır ve her dönüşe \"şavt\" denir. Tavaf Hacerülesved'den başlar.","Mekke'deki Safa ve Merve tepeleri arasında 7 kez gidiş-dönüş şeklinde yürümek \"say\" ibadetidir.","Arafat Vakfesi, arefe günü Arafat'ta bulunmaktır ve \"Hac Arafat'tır\" hadisiyle haccın en önemli farzlarından biri olduğu belirtilir.","Arafat'tan sonra Müzdelife'de vakfe yapılır ve Kurban Bayramı günlerinde Mina'da \"şeytan taşlama\" ibadeti yerine getirilir.","Bayramın ilk gününden itibaren \"hedy kurbanı\" kesilir ve saç kesilerek ihramdan çıkılır.","Haccın farzları; ihram, Arafat'ta vakfe ve ziyaret tavafıdır."],"conceptDefinitions":[{"concept":"Arafat’ta vakfe","definition":"Hac ibadetini yerine getirmek isteyen kişinin, arefe günü öğle namazı vakti ile bayramın birinci günü sabah namazına kadarki süre içerisinde Arafat’ta bulunması (zorunda olduğu, haccın farzı olan) ibadet."},{"concept":"Kabe'nin diğer isimleri","definition":"Beytullah,Beytü’l-Haram,Kâbe-i Muazzama"},{"concept":"İhram Yasakları","definition":"Kavga edilmez, kötü söz söylenmez. Parfüm sürülmez, kokulu sabun kullanılmaz. Hayvanlar incitilmez, bitkiler koparılmaz. Tırnak kesilmez, tıraş olunmaz."},{"concept":"Telbiye","definition":"Hac ve umrede tüm Müslümanların okudukları ortak bir dua; Allah’a (cc) olan teslimiyete, yönelişe ve yalnız O’na ibadet edildiğine dair verilen bir söz."},{"concept":"Arafat","definition":"Mekke’nin doğusunda bulunan (vakfe yapılan) bir mekân."},{"concept":"Şeytan taşlama","definition":"Kurban Bayramı günlerinde Mina'da, cemre adı verilen yerlere yedişer taş atılarak yerine getirilen (vacip olan) sembolik ibadet."},{"concept":"Ziyaret tavafı","definition":"Hacdaki son tavaftır ve (haccın) farzıdır."},{"concept":"Tavaf","definition":"Kâbe’nin etrafında yedi kez dönmekten ibaret olan özel ibadet."},{"concept":"Say","definition":"Mekke’deki Safa ve Merve tepeleri arasında gidiş dönüş şeklinde toplam yedi kez yürümek (olan haccın vacibi)."},{"concept":"Veda tavafı","definition":"Mekke’den ayrılmadan önce son yapılan sünnet (ve haccın vacibi olan) bir tavaf."},{"concept":"Zemzem","definition":"Kâbe’de Hacerülesved’in tam karşısından çıkan, Müslümanların önem verdiği su."},{"concept":"Kudüm tavafı","definition":"Haccın en başında yapılan sünnet bir tavaf."},{"concept":"Hedy kurbanı","definition":"Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."},{"concept":"İhram","definition":"Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılması."},{"concept":"Şavt","definition":"Kâbe’nin etrafında bir (tek) dönüş."},{"concept":"Hacerülesved","definition":"“Siyah taş” anlamına gelen, Kâbe'de tavafın başlangıç yerini belirlemek maksadıyla Hz. İbrahim tarafından yerleştirilmiş taş."},{"concept":"Müzdelife vakfesi","definition":"Arafat’tan sonra arefe gününün akşamında Müzdelife adı verilen bölgede yapılan (haccın vacibi olan) vakfe."},{"concept":"Mikat sınırı","definition":"İhramın giyilmesinin zorunlu olduğu (Harem bölgesinin başladığı) yerler."},{"concept":"Harem bölgesi","definition":"Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."}]}
+{
+  "notes": [
+    "Hac, Zilhicce ayının 9-13. günleri arasında (Arefe ve Kurban Bayramı) Kâbe ve çevresinde yapılan bir ibadettir.",
+    "Hac ibadetine başlamadan önce \"ihram\"a girilir; ihramda belirli giyim kuralları ve yasaklar bulunur.",
+    "İhramdan sonra Kâbe etrafında 7 kez dönerek \"tavaf\" yapılır ve her dönüşe \"şavt\" denir. Tavaf Hacerülesved'den başlar.",
+    "Mekke'deki Safa ve Merve tepeleri arasında 7 kez gidiş-dönüş şeklinde yürümek \"say\" ibadetidir.",
+    "Arafat Vakfesi, arefe günü Arafat'ta bulunmaktır ve \"Hac Arafat'tır\" hadisiyle haccın en önemli farzlarından biri olduğu belirtilir.",
+    "Arafat'tan sonra Müzdelife'de vakfe yapılır ve Kurban Bayramı günlerinde Mina'da \"şeytan taşlama\" ibadeti yerine getirilir.",
+    "Bayramın ilk gününden itibaren \"hedy kurbanı\" kesilir ve saç kesilerek ihramdan çıkılır.",
+    "Haccın farzları; ihram, Arafat'ta vakfe ve ziyaret tavafıdır."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Arafat’ta vakfe",
+      "definition": "Hac ibadetini yerine getirmek isteyen kişinin, arefe günü öğle namazı vakti ile bayramın birinci günü sabah namazına kadarki süre içerisinde Arafat’ta bulunması (zorunda olduğu, haccın farzı olan) ibadet."
+    },
+    {
+      "concept": "Kabe'nin diğer isimleri",
+      "definition": "Beytullah,Beytü’l-Haram,Kâbe-i Muazzama"
+    },
+    {
+      "concept": "İhram Yasakları",
+      "definition": "Kavga edilmez, kötü söz söylenmez. Parfüm sürülmez, kokulu sabun kullanılmaz. Hayvanlar incitilmez, bitkiler koparılmaz. Tırnak kesilmez, tıraş olunmaz."
+    },
+    {
+      "concept": "Telbiye",
+      "definition": "Hac ve umrede tüm Müslümanların okudukları ortak bir dua; Allah’a (cc) olan teslimiyete, yönelişe ve yalnız O’na ibadet edildiğine dair verilen bir söz."
+    },
+    {
+      "concept": "Arafat",
+      "definition": "Mekke’nin doğusunda bulunan (vakfe yapılan) bir mekân."
+    },
+    {
+      "concept": "Şeytan taşlama",
+      "definition": "Kurban Bayramı günlerinde Mina'da, cemre adı verilen yerlere yedişer taş atılarak yerine getirilen (vacip olan) sembolik ibadet."
+    },
+    {
+      "concept": "Ziyaret tavafı",
+      "definition": "Hacdaki son tavaftır ve (haccın) farzıdır."
+    },
+    {
+      "concept": "Tavaf",
+      "definition": "Kâbe’nin etrafında yedi kez dönmekten ibaret olan özel ibadet."
+    },
+    {
+      "concept": "Say",
+      "definition": "Mekke’deki Safa ve Merve tepeleri arasında gidiş dönüş şeklinde toplam yedi kez yürümek (olan haccın vacibi)."
+    },
+    {
+      "concept": "Veda tavafı",
+      "definition": "Mekke’den ayrılmadan önce son yapılan sünnet (ve haccın vacibi olan) bir tavaf."
+    },
+    {
+      "concept": "Zemzem",
+      "definition": "Kâbe’de Hacerülesved’in tam karşısından çıkan, Müslümanların önem verdiği su."
+    },
+    {
+      "concept": "Kudüm tavafı",
+      "definition": "Haccın en başında yapılan sünnet bir tavaf."
+    },
+    {
+      "concept": "Hedy kurbanı",
+      "definition": "Hac ibadetinde bayramın ilk gününden itibaren kesilen kurban."
+    },
+    {
+      "concept": "İhram",
+      "definition": "Hac veya umre yapmaya niyet eden kişinin, diğer vakitlerde mubah olan bazı fiilleri ibadet bitene kadar kendi nefsine haram kılması."
+    },
+    {
+      "concept": "Şavt",
+      "definition": "Kâbe’nin etrafında bir (tek) dönüş."
+    },
+    {
+      "concept": "Hacerülesved",
+      "definition": "“Siyah taş” anlamına gelen, Kâbe'de tavafın başlangıç yerini belirlemek maksadıyla Hz. İbrahim tarafından yerleştirilmiş taş."
+    },
+    {
+      "concept": "Müzdelife vakfesi",
+      "definition": "Arafat’tan sonra arefe gününün akşamında Müzdelife adı verilen bölgede yapılan (haccın vacibi olan) vakfe."
+    },
+    {
+      "concept": "Mikat sınırı",
+      "definition": "İhramın giyilmesinin zorunlu olduğu (Harem bölgesinin başladığı) yerler."
+    },
+    {
+      "concept": "Harem bölgesi",
+      "definition": "Mekke şehri ve etrafındaki, sınırları Hz. Peygamber tarafından belirlenmiş, dışarıdan gelen Müslümanların ancak ihram giyerek bu sınırlardan geçebildikleri geniş alan."
+    }
+  ]
+}

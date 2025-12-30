@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vatan Sevgisi - İnfografik</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'turk-red': '#E30A17',
+                        'turk-red-dark': '#8a040d',
+                        'marble': '#f9fafb',
+                        'slate-dark': '#1e293b',
+                        'gold-accent': '#d4af37'
+                    },
+                    fontFamily: {
+                        'hero': ['"Cinzel"', 'serif'],
+                        'body': ['"Lato"', 'sans-serif'],
+                        'quote': ['"Playfair Display"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .flag-gradient {
+            background: linear-gradient(135deg, #E30A17 0%, #b90e18 100%);
+        }
+        .moon-star-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50 L52 56 L58 56 L53 60 L55 66 L50 62 L45 66 L47 60 L42 56 L48 56 Z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800 font-body antialiased">
+
+    <!-- Hero Header -->
+    <header class="flag-gradient text-white py-20 px-4 relative overflow-hidden shadow-2xl">
+        <!-- Abstract Moon & Star representation -->
+        <div class="absolute -right-20 -top-20 text-white opacity-10 text-[20rem]">
+            <i class="fas fa-star-and-crescent"></i>
+        </div>
+        
+        <div class="container mx-auto text-center relative z-10">
+            <div class="inline-block border-b-2 border-white/50 pb-2 mb-4 text-sm tracking-[0.3em] uppercase">Ahlaki Davranışlar</div>
+            <h1 class="font-hero text-5xl md:text-7xl font-bold mb-6 drop-shadow-md">Vatanımızı Sevmek</h1>
+            <p class="text-xl md:text-2xl font-light max-w-2xl mx-auto italic opacity-90">
+                "Sahipsiz olan vatanın batması haktır,<br>Sen sahip çıkarsan bu vatan batmayacaktır."
+            </p>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-gray-50 to-transparent"></div>
+    </header>
+
+    <!-- Definitions Section -->
+    <section class="container mx-auto px-4 -mt-10 relative z-20 mb-20">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Vatan Card -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-turk-red card-hover">
+                <div class="flex items-center mb-6">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center text-turk-red text-2xl mr-4">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-hero text-2xl font-bold text-slate-dark">Vatan Nedir?</h2>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">Toprak Parçasından Fazlası</span>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                    Sadece sınırları belli bir toprak parçası değildir. Vatan, milleti geçmişiyle birleştirir ve geleceğe bağlar. Din, dil, tarih, ahlak ve geleneğin özgürce yaşandığı yerdir.
+                </p>
+            </div>
+            
+            <!-- Millet Card -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border-t-4 border-turk-red card-hover">
+                <div class="flex items-center mb-6">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center text-turk-red text-2xl mr-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-hero text-2xl font-bold text-slate-dark">Millet Nedir?</h2>
+                        <span class="text-xs text-gray-500 uppercase tracking-wider">Birlik ve Beraberlik</span>
+                    </div>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                    Aynı topraklar üzerinde yaşayan; aralarında din, dil, tarih, ülkü, gelenek ve görenek birliği olan insan topluluğudur.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spiritual Dimension: Şehit & Gazi -->
+    <section class="bg-slate-dark text-white py-16 mb-20 relative overflow-hidden">
+        <div class="absolute inset-0 moon-star-bg opacity-20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="text-center font-hero text-3xl md:text-4xl text-gold-accent mb-12">Kutsal Emanetçiler</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+                <div class="text-right border-r-2 border-gray-600 pr-8">
+                    <h3 class="text-2xl font-bold mb-2 text-white">Şehitlik</h3>
+                    <p class="text-gray-400 mb-4">Allah yolunda; din, vatan, namus için canını feda edenler.</p>
+                    <blockquote class="font-quote text-lg italic text-gold-accent">
+                        "Allah yolunda öldürülenlere 'ölüler' demeyiniz. Bilakis onlar diridirler, fakat siz bilemezsiniz."
+                    </blockquote>
+                </div>
+                <div class="text-left pl-4">
+                    <h3 class="text-2xl font-bold mb-2 text-white">Gazilik</h3>
+                    <p class="text-gray-400 mb-4">Vatan savunması için savaşa katılıp sağ dönen kahramanlar.</p>
+                    <p class="text-gray-300">
+                        Şehitler nurlanmış, gaziler onurlanmış askerlerdir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Poetry & Literature Section -->
+    <section class="container mx-auto px-4 mb-20">
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+            <div class="md:w-1/2 bg-turk-red p-10 text-white flex flex-col justify-center relative">
+                <i class="fas fa-feather-alt text-6xl absolute top-4 right-4 opacity-20"></i>
+                <h3 class="font-hero text-2xl mb-6 border-b border-white/30 pb-2">İstiklal Marşı</h3>
+                <p class="font-quote text-xl leading-loose italic">
+                    "Bastığın yerleri 'toprak' diyerek geçme, tanı,<br>
+                    Düşün altındaki binlerce kefensiz yatanı.<br>
+                    Sen şehit oğlusun, incitme, yazıktır atanı,<br>
+                    Verme, dünyaları alsan da bu cennet vatanı."
+                </p>
+                <div class="mt-4 font-bold text-right">- Mehmet Akif Ersoy</div>
+            </div>
+            <div class="md:w-1/2 bg-gray-100 p-10 flex flex-col justify-center text-slate-800 relative">
+                <i class="fas fa-flag text-6xl absolute top-4 right-4 text-turk-red opacity-10"></i>
+                <h3 class="font-hero text-2xl mb-6 border-b border-gray-300 pb-2">Bayrak Şiiri</h3>
+                <p class="font-quote text-xl leading-loose italic text-gray-700">
+                    "Ey mavi göklerin beyaz ve kızıl süsü,<br>
+                    Kız kardeşimin gelinliği, şehidimin son örtüsü,<br>
+                    Işık ışık, dalga dalga bayrağım!<br>
+                    Senin destanını okudum, senin destanını yazacağım."
+                </p>
+                <div class="mt-4 font-bold text-right">- Arif Nihat Asya</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline of Valor -->
+    <section class="container mx-auto px-4 mb-20">
+        <h2 class="text-center font-hero text-4xl font-bold text-slate-800 mb-16">Tarihe Kazınan Destanlar</h2>
+        
+        <div class="relative">
+            <!-- Connector Line -->
+            <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-10 transform -translate-y-1/2"></div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 1. Çanakkale & Kurtuluş -->
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center group hover:bg-turk-red hover:text-white transition-colors duration-300">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-white">
+                        <i class="fas fa-monument text-2xl text-slate-800"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Çanakkale & Kurtuluş</h3>
+                    <p class="text-sm opacity-80">Bağımsızlık ve yurt bütünlüğü için verilen topyekûn mücadele.</p>
+                </div>
+
+                <!-- 2. Kıbrıs Barış Harekâtı -->
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center group hover:bg-turk-red hover:text-white transition-colors duration-300">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-white">
+                        <i class="fas fa-peace text-2xl text-slate-800"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Kıbrıs Barış Harekâtı</h3>
+                    <p class="text-sm opacity-80">1974 - Soydaşlarımızı zulümden kurtarmak için yapılan çıkarma.</p>
+                </div>
+
+                <!-- 3. 15 Temmuz -->
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center group hover:bg-turk-red hover:text-white transition-colors duration-300">
+                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-white">
+                        <i class="fas fa-fist-raised text-2xl text-slate-800"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">15 Temmuz Destanı</h3>
+                    <p class="text-sm opacity-80">Ömer Halisdemir ve milletin iradesiyle önlenen hain darbe girişimi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Defense Industry -->
+    <section class="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <div class="inline-block bg-turk-red px-3 py-1 text-xs font-bold rounded mb-4">GELECEK VİZYONU</div>
+                    <h2 class="font-hero text-4xl mb-6 leading-tight">Vatanı Sevmek,<br>Onu Yüceltmektir</h2>
+                    <p class="text-gray-300 mb-6 text-lg">
+                        Sadece geçmişle övünmek yetmez. Vatan sevgisi, savunma sanayisinde yerli ve milli projeler geliştirmeyi, ülkeyi ileriye taşımayı gerektirir.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <i class="fas fa-fighter-jet text-turk-red mr-4 text-xl"></i>
+                            <span><b>KAAN:</b> Milli Muharip Savaş Uçağı</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-robot text-turk-red mr-4 text-xl"></i>
+                            <span><b>İHA/SİHA:</b> İnsansız Hava Araçları</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-rocket text-turk-red mr-4 text-xl"></i>
+                            <span><b>Uzay:</b> Yerli Uydu Sistemleri</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <!-- Stylized Graphic for KAAN Jet -->
+                    <div class="relative bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-sm">
+                        <div class="absolute -top-6 -right-6 w-20 h-20 bg-turk-red rounded-full opacity-50 blur-xl"></div>
+                        <i class="fas fa-plane-departure text-9xl text-white/80 block text-center transform -rotate-45"></i>
+                        <div class="mt-8 text-center">
+                            <h3 class="text-2xl font-bold font-hero">GÖKBEY & KAAN</h3>
+                            <p class="text-sm text-gray-400">Gök Vatanın Bekçileri</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12 text-center">
+        <div class="container mx-auto px-4">
+            <div class="w-16 h-1 bg-turk-red mx-auto mb-6"></div>
+            <p class="text-2xl font-quote italic text-slate-800 mb-2">
+                "Mevzubahis vatansa gerisi teferruattır."
+            </p>
+            <p class="text-gray-500 text-sm mt-8">3. Ünite: Ahlaki Davranışlar - Vatan Sevgisi</p>
+        </div>
+    </footer>
+
+</body>
+</html>

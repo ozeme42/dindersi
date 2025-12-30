@@ -1,0 +1,255 @@
+[
+  {
+    "title": "Öğrenme Hedefleri",
+    "type": "objectiveList",
+    "items": [
+      "Doğru sözlü olmanın tanımını yapabileceksiniz.",
+      "Doğru sözlü olmanın bireysel ve toplumsal önemini kendi yaşantınızdan ve çevrenizden hareketle gözden geçirebileceksiniz.",
+      "Doğru sözlü olmanın bireysel ve toplumsal önemine dair çıkarımlarda bulunabileceksiniz.",
+      "Kur'an-ı Kerim ve Hz. Peygamber'in hadisleri ışığında doğruluğun İslam'daki yerini ve önemini açıklayabileceksiniz.",
+      "Yalan söylemenin bireysel ve toplumsal zararlarını analiz edebileceksiniz.",
+      "Hz. Şuayb kıssasından hareketle dürüst bir insanda bulunması gereken özellikleri listeleyebileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>El-Emin</li><li>Hz. Şuayb</li><li>Doğruluk</li><li>Ahlak</li><li>Dürüstlük</li><li>Cennet</li><li>Yalan</li><li>Adalet</li><li>Güven</li>"
+  },
+  {
+    "type": "content",
+    "content": "<ul><ul><li>Ahlak, insanın iyi ya da kötü nitelendirilmesine yol açan manevi özelliklerin ve iradeli davranışların bütünüdür.</li><li>Birey ve toplumun huzuru ahlaki davranışlara bağlıdır.</li><li>Doğruluk; söz, davranış ve niyet bakımından dürüst ve iyilikten yana olmaktır.</li><li>Güven, adalet ve samimiyet gibi erdemleri kapsar ve bireyin güven kazanmasını sağlar.</li></ul></ul>",
+    "title": "Doğruluğun Tanımı ve Önemi"
+  },
+  {
+    "content": "<ul><ul><li>Doğruluktan uzaklaşmak, bireysel ve toplumsal sorunlara yol açar; en başta kişinin yalancılıkla anılmasına neden olur.</li><li>Yalan, insanlar arasında düşmanlığa ve sosyal barışın bozulmasına sebep olur.</li><li>Hz. Peygamber (sav) yalanın kötülüğe, kötülüğün ise cehenneme götürdüğünü belirtmiştir.</li><li>Yalan söyleyen insan güveni zedeler ve ilişkilerin zarar görmesine yol açar.</li></ul></ul>",
+    "title": "Doğruluktan Uzaklaşmanın Sonuçları",
+    "type": "content"
+  },
+  {
+    "type": "content",
+    "title": "Kuran ve Peygamberin Doğruluk Vurgusu",
+    "content": "<ul><ul><li>Kur’an-ı Kerim’de doğru sözlü olmanın gerekliliğine dair birçok ayet bulunur, örneğin \"Allah’a karşı gelmekten sakının ve doğru söz söyleyin.\"</li><li>İslam, yalan yere şahitliği ve başkalarını aldatmayı kesinlikle yasaklar ve adaletin titizlikle ayakta tutulmasını emreder.</li><li>Doğruluk, peygamberlerin temel özelliklerinden biridir; Hz. Peygamber (sav) hayatı boyunca dürüstlüğü ilke edinmiş ve \"el-emin\" lakabıyla anılmıştır.</li><li>Peygamberimiz şaka yoluyla bile yalan söylememiştir ve Müslümanları doğruluk konusunda uyarmıştır.</li></ul></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Hz. Şuayb Kıssası'ndan Öğütler",
+    "content": "<ul><ul><li>Hz. Şuayb, Medyen halkına peygamber olarak gönderilmiştir; bu halk putlara tapıyor, ölçü ve tartıda hile yaparak adaletsizlik ediyordu.</li><li>Hz. Şuayb, kavmini Allah'ın (cc) birliğine iman etmeye, ölçü ve tartıyı eksiksiz yapmaya ve insanların haklarını yememeye çağırmıştır.</li><li>Kavminin onu yalanlaması ve mesajlarını reddetmesi nedeniyle azaba uğraması, doğruluktan sapmanın kötü sonuçlarını gösterir.</li><li>Kıssa, ticarette ve tüm yaşamda dürüstlüğün ne kadar hayati olduğunu vurgular.</li></ul></ul>"
+  },
+  {
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "Herkese eşit ve dürüst davranmaktır.",
+        "term": "Adalet"
+      },
+      {
+        "term": "Yalan",
+        "definition": "Sosyal barışı bozan kötü bir davranıştır."
+      },
+      {
+        "definition": "Samimiyet ve iyilikle hareket etmektir.",
+        "term": "Dürüstlük"
+      },
+      {
+        "term": "Doğruluk",
+        "definition": "Söz, niyet ve eylemde dürüst ve iyilikten yana olmaktır."
+      },
+      {
+        "term": "Cennet",
+        "definition": "İyiliklerin karşılığının alındığı ödüldür."
+      },
+      {
+        "term": "Ahlak",
+        "definition": "İnsanın manevi nitelikleri ve iradeli davranışlar bütünü nedir?"
+      },
+      {
+        "term": "Hz. Şuayb",
+        "definition": "Medyen halkına gönderilen peygamber."
+      },
+      {
+        "definition": "Dostlukların temelini oluşturan duygudur.",
+        "term": "Güven"
+      },
+      {
+        "term": "El-Emin",
+        "definition": "Hz. Muhammed'e verilen güvenilir lakap nedir?"
+      }
+    ],
+    "title": "Veri Bankası Bilgi Kartları"
+  },
+  {
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"El-Emin\"",
+        "scrambledWord": "MLNİEE-",
+        "correctAnswer": "El-Emin"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Hz. Şuayb\"",
+        "scrambledWord": "ŞAYH ZBU.",
+        "correctAnswer": "Hz. Şuayb"
+      },
+      {
+        "correctAnswer": "Doğruluk",
+        "scrambledWord": "DOKUĞLUR",
+        "definition": "İpucu: Bu kelime \"Doğruluk\""
+      },
+      {
+        "scrambledWord": "HAKLA",
+        "correctAnswer": "Ahlak",
+        "definition": "İpucu: Bu kelime \"Ahlak\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Dürüstlük\"",
+        "correctAnswer": "Dürüstlük",
+        "scrambledWord": "LKTSÜÜRÜD"
+      },
+      {
+        "correctAnswer": "Cennet",
+        "scrambledWord": "TNEECN",
+        "definition": "İpucu: Bu kelime \"Cennet\""
+      },
+      {
+        "scrambledWord": "YAALN",
+        "correctAnswer": "Yalan",
+        "definition": "İpucu: Bu kelime \"Yalan\""
+      },
+      {
+        "scrambledWord": "LADAET",
+        "correctAnswer": "Adalet",
+        "definition": "İpucu: Bu kelime \"Adalet\""
+      },
+      {
+        "correctAnswer": "Güven",
+        "definition": "İpucu: Bu kelime \"Güven\"",
+        "scrambledWord": "GENÜV"
+      }
+    ],
+    "title": "Veri Bankası Anagram Kartları",
+    "type": "anagramFlashcard"
+  },
+  {
+    "title": "631d",
+    "type": "visual",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/imageLibrary%2FMYZ210AYLDPf8TY1yjLnpfWPqZ33%2F1767043753785-3.%C3%9Cnite%201.konu.png?alt=media&token=dd0c8152-8912-42fa-97c8-a92f1e33225e"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "type": "tf",
+    "statement": "Dürüst bir kumaş tüccarının hikayesi Endonezyalıların İslam ile tanışmasına vesile olmuştur.",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "isTrue": true,
+    "statement": "Doğruluk, iyiliğe, iyilik de cennete götürürken, yalan kötülüğe, kötülük de cehenneme götürür."
+  },
+  {
+    "statement": "Kur'an-ı Kerim'de yalan söylemek ve yalancı şahitlik yapmak teşvik edilmektedir.",
+    "title": "Doğru/Yanlış",
+    "isTrue": false,
+    "type": "tf"
+  },
+  {
+    "title": "Doğru/Yanlış",
+    "statement": "Doğruluk, söz, davranış ve niyet bakımından dürüstlük ve iyilikten yana olmak şeklinde ifade edilir.",
+    "type": "tf",
+    "isTrue": true
+  },
+  {
+    "type": "tf",
+    "isTrue": false,
+    "statement": "Yalan söylemek, insanların birbirlerine düşmanlık beslemesine ve sosyal barışın bozulmasına sebep olmaz.",
+    "title": "Doğru/Yanlış"
+  },
+  {
+    "statement": "Ahlaki davranışlar sadece bireyin kendine faydalı olmasını sağlar, topluma etkisi yoktur.",
+    "isTrue": false,
+    "title": "Doğru/Yanlış",
+    "type": "tf"
+  },
+  {
+    "statement": "Hz. Peygamber, şaka dahi olsa asla yalan söylememiştir.",
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "isTrue": true
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "question": "Endonezyalıların İslam ile erken tanışmasının temel sebebi ne olarak anlatılmaktadır?",
+    "options": [
+      "Savaşlar ve fetihler",
+      "Müslüman bir tüccarın dürüstlüğü",
+      "Ticari anlaşmalar",
+      "Misyonerlik faaliyetleri"
+    ],
+    "correctAnswer": "Müslüman bir tüccarın dürüstlüğü",
+    "type": "mcq"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "options": [
+      "Sadece kişinin dış görünüşü",
+      "Toplumun ekonomik yapısı",
+      "Hükümetin belirlediği kurallar",
+      "İnsanın iyi veya kötü vasıflandırılmasına yol açan manevi nitelikleri ve iradeli davranışları"
+    ],
+    "question": "Ahlak kavramı aşağıdakilerden hangisini ifade eder?",
+    "content": {
+      "title": "",
+      "categories": [],
+      "text": "",
+      "definition": "",
+      "items": [],
+      "term": ""
+    },
+    "type": "mcq",
+    "correctAnswer": "İnsanın iyi veya kötü vasıflandırılmasına yol açan manevi nitelikleri ve iradeli davranışları"
+  },
+  {
+    "title": "Kontrol Sorusu",
+    "question": "Doğruluk kavramı insan ilişkilerinde hangi erdemleri kapsar?",
+    "type": "mcq",
+    "options": [
+      "Zenginlik, güç ve ün",
+      "Güven, adalet ve samimiyet",
+      "Rekabet, çekişme ve üstünlük",
+      "Merak, endişe ve korku"
+    ],
+    "correctAnswer": "Güven, adalet ve samimiyet"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Doğruluktan uzaklaşmak bireysel ve toplumsal olarak hangi sorunlara yol açar?",
+    "options": [
+      "Toplumda birlik ve beraberlik",
+      "Kişinin yalancılıkla anılması ve sosyal barışın bozulması",
+      "Zenginlik ve refah artışı",
+      "Bilimsel gelişmelerin hızlanması"
+    ],
+    "content": {
+      "categories": [],
+      "items": [],
+      "title": "",
+      "text": "",
+      "definition": "",
+      "term": ""
+    },
+    "correctAnswer": "Kişinin yalancılıkla anılması ve sosyal barışın bozulması"
+  },
+  {
+    "question": "Hz. Peygamber, peygamber olmadan önce dürüstlüğü sebebiyle hangi lakapla anılmıştır?",
+    "correctAnswer": "el-Emin",
+    "title": "Kontrol Sorusu",
+    "options": [
+      "el-Alim",
+      "el-Hakim",
+      "el-Emin",
+      "el-Kerim"
+    ],
+    "type": "mcq"
+  }
+]

@@ -1,1 +1,68 @@
-{"notes":["Dünya hayatı geçicidir, ahiret ise sonsuzdur.","İnsanlar yaptıklarından sorumludur ve ahirette hesap verecektir.","Ölüm, ruhun bedenden ayrılmasıdır ve yeni bir hayatın başlangıcıdır.","Berzah âlemi, ölümden dirilmeye kadar geçen süredir.","Kıyamet, dünya hayatının sonudur.","Ba's, ölümden sonra tekrar dirilmedir.","Haşr, insanların hesap için toplanmasıdır.","Mahşer, hesap için toplanılan meydandır.","Mizan, sevap ve günahların tartılmasıdır.","Cennet ve cehennem, mükâfat ve azap yerleridir."],"conceptDefinitions":[{"concept":"Mahşer","definition":"Toplanılan yer"},{"concept":"Ba's","definition":"Yeniden diriliş"},{"concept":"Ecel","definition":"Ölüm anı, zamanı, vakti"},{"concept":"Amel defteri","definition":"İnsanların yaptıklarının kayıt edildiği defter"},{"concept":"Berzah","definition":"Ölenlerin tekrar dirilene kadar ruhlarıyla yaşadıkları hayat"},{"concept":"Cennet","definition":"İman etmiş ve salih ameller işlemiş kişilerin bu davranışlarının karşılığını alacağı bir mükâfat yurdudur."},{"concept":"Kabir","definition":"Berzah'ın diğer adı"},{"concept":"Ölüm","definition":"Dünya hayatının son bulmasıdır."},{"concept":"Haşr","definition":"Hesaba çekilmek için tüm insanlar bir meydanda toplanması"},{"concept":"Sırat","definition":"Manevi geçit"},{"concept":"Cehennem","definition":"İman etmemiş ve kötü işler yapmış kişilerin davranışlarının karşılığını alacağı yerdir."},{"concept":"Kıyamet","definition":"Tüm âlemin ve canlıların hayatının son bulacağı bir zaman"},{"concept":"Mizan","definition":"Sevap ve günahların tartılacağı manevi terazi"}]}
+{
+  "notes": [
+    "Dünya hayatı geçicidir, ahiret ise sonsuzdur.",
+    "İnsanlar yaptıklarından sorumludur ve ahirette hesap verecektir.",
+    "Ölüm, ruhun bedenden ayrılmasıdır ve yeni bir hayatın başlangıcıdır.",
+    "Berzah âlemi, ölümden dirilmeye kadar geçen süredir.",
+    "Kıyamet, dünya hayatının sonudur.",
+    "Ba's, ölümden sonra tekrar dirilmedir.",
+    "Haşr, insanların hesap için toplanmasıdır.",
+    "Mahşer, hesap için toplanılan meydandır.",
+    "Mizan, sevap ve günahların tartılmasıdır.",
+    "Cennet ve cehennem, mükâfat ve azap yerleridir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "Mahşer",
+      "definition": "Toplanılan yer"
+    },
+    {
+      "concept": "Ba's",
+      "definition": "Yeniden diriliş"
+    },
+    {
+      "concept": "Ecel",
+      "definition": "Ölüm anı, zamanı, vakti"
+    },
+    {
+      "concept": "Amel defteri",
+      "definition": "İnsanların yaptıklarının kayıt edildiği defter"
+    },
+    {
+      "concept": "Berzah",
+      "definition": "Ölenlerin tekrar dirilene kadar ruhlarıyla yaşadıkları hayat"
+    },
+    {
+      "concept": "Cennet",
+      "definition": "İman etmiş ve salih ameller işlemiş kişilerin bu davranışlarının karşılığını alacağı bir mükâfat yurdudur."
+    },
+    {
+      "concept": "Kabir",
+      "definition": "Berzah'ın diğer adı"
+    },
+    {
+      "concept": "Ölüm",
+      "definition": "Dünya hayatının son bulmasıdır."
+    },
+    {
+      "concept": "Haşr",
+      "definition": "Hesaba çekilmek için tüm insanlar bir meydanda toplanması"
+    },
+    {
+      "concept": "Sırat",
+      "definition": "Manevi geçit"
+    },
+    {
+      "concept": "Cehennem",
+      "definition": "İman etmemiş ve kötü işler yapmış kişilerin davranışlarının karşılığını alacağı yerdir."
+    },
+    {
+      "concept": "Kıyamet",
+      "definition": "Tüm âlemin ve canlıların hayatının son bulacağı bir zaman"
+    },
+    {
+      "concept": "Mizan",
+      "definition": "Sevap ve günahların tartılacağı manevi terazi"
+    }
+  ]
+}

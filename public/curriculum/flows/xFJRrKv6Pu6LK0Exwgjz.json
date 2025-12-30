@@ -1,1 +1,428 @@
-[{"type":"objectiveList","title":"Öğrenme Hedefleri","items":["Ramazan ayı ve oruç ibadetiyle ilgili temel kavramları (sahur, imsak, iftar, teravih, mukabele, fitre) tanımlayabileceksiniz.","Orucun İslam dinindeki önemini ve kimlere farz olduğunu açıklayabileceksiniz.","Oruç tutarken dikkat edilmesi gereken hususları ve görgü kurallarını belirtebileceksiniz.","Orucu bozan ve bozmayan durumları ayırt edebileceksiniz.","Farz, vacip ve sünnet oruç çeşitlerini örneklerle açıklayabileceksiniz.","Kaza ve fidye gibi oruç ibadetiyle ilgili özel durumları yorumlayabileceksiniz."]},{"type":"content","content":"<ul><li>Fitre</li><li>İmsakiye</li><li>Teravih</li><li>Kaza Orucu</li><li>Mukabele</li><li>İftar</li><li>Sahur</li><li>Fidye</li><li>Hatim</li><li>İmsak</li></ul>","title":"Anahtar Kavramlar (Veri Bankası)"},{"type":"content","content":"Ramazan ayı ve oruç ibadetiyle ilgili bilinmesi gereken başlıca kavramlar. Sahur (imsaktan önce yemek yenen vakit). İmsak (oruca başlama vakti). İftar (orucu açma vakti). Teravih (yatsı namazından sonra kılınan sünnet namaz). Mukabele (Kur'an-ı Kerim'i birinin okuyup diğerlerinin takip etmesi). Fitre (maddi durumu uygun olanların verdiği vacip sadaka). Bu kavramlar, ibadetin doğru ve anlamlı bir şekilde yerine getirilmesi için önem taşır.","title":"Ramazan Ayı ve Oruç İbadetinin Temel Kavramları"},{"type":"content","content":"Oruç ibadetini yerine getirirken öncelikle niyet etmek gerekir. Oruçlu bir kimsenin yalan, kötü söz ve davranışlardan kaçınması, sabırlı olması ve öfkesine hakim olması önemlidir. Bilinçli olarak yemek, içmek gibi durumlar orucu bozarken, unutarak yapılanlar orucu bozmaz. Hastalık veya yolculuk gibi geçerli mazeretlerle tutulamayan oruçlar kaza edilir, iyileşemeyecek durumdaki hastalar ise fidye verir.","title":"Oruçlunun Uyması Gereken Kurallar"},{"type":"content","title":"Oruç Çeşitleri","content":"Oruçlar farz, vacip ve sünnet olmak üzere üç ana çeşide ayrılır. Farz oruç, Allah'ın kesin emri olan Ramazan orucu, kaza orucu ve kefaret orucunu kapsar. Vacip oruç, farz kadar kesin olmasa da dinen tutulması gereken adak orucudur. Sünnet oruç ise Hz Peygamber'in tavsiye ettiği Muharrem ve Şevval aylarında tutulan oruçlardır."},{"type":"flashcard","cards":[{"definition":"Oruca başlama vaktidir.","term":"İmsak"},{"definition":"Kur’an-ı Kerim’i ilk suresi olan Fatiha suresinden başlayıp en son suresi olan Nâs suresine kadar yüzüne veya ezberden okumak.","term":"hatim"},{"definition":"Kur'an'ın okunup takip edildiği ibadettir.","term":"Mukabele"},{"definition":"Ramazanda yatsıdan sonra kılınan özel namazdır.","term":"Teravih"},{"definition":"İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için vermeleri gereken ücret.","term":"Fidye"},{"term":"İftar","definition":"Orucun bitip yemeğe başlandığı vakittir."},{"term":"Kaza Orucu","definition":"Tutulamayan oruçların sonradan tutulmasıdır."},{"definition":"Oruca başlamadan önce yemek yenilen vakittir.","term":"Sahur"},{"term":"İmsakiye","definition":"Oruç vakitlerini gösteren çizelgedir."},{"definition":"Sağlıklı olmanın şükrü olarak verilen sadakadır.","term":"Fitre"}],"title":"Bilgi Kartları (Veri Bankası)"},{"title":"Anagram Kartları (Veri Bankası)","cards":[{"definition":"İpucu: Bu kelime \"Fitre\"","correctAnswer":"Fitre","scrambledWord":"İRFTE"},{"definition":"İpucu: Bu kelime \"İmsakiye\"","scrambledWord":"İMKİAYSE","correctAnswer":"İmsakiye"},{"definition":"İpucu: Bu kelime \"Teravih\"","correctAnswer":"Teravih","scrambledWord":"ARİVEHT"},{"definition":"İpucu: Bu kelime \"Kaza Orucu\"","correctAnswer":"Kaza Orucu","scrambledWord":"UKAUZ AOCR"},{"correctAnswer":"Mukabele","scrambledWord":"KEMAUBLE","definition":"İpucu: Bu kelime \"Mukabele\""},{"definition":"İpucu: Bu kelime \"İftar\"","scrambledWord":"AİRTF","correctAnswer":"İftar"},{"definition":"İpucu: Bu kelime \"Sahur\"","scrambledWord":"AUSHR","correctAnswer":"Sahur"},{"scrambledWord":"FDİEY","definition":"İpucu: Bu kelime \"Fidye\"","correctAnswer":"Fidye"},{"definition":"İpucu: Bu kelime \"Hatim\"","scrambledWord":"HAMİT","correctAnswer":"Hatim"},{"scrambledWord":"MAİSK","definition":"İpucu: Bu kelime \"İmsak\"","correctAnswer":"İmsak"}],"type":"anagramFlashcard"},{"type":"trueFalseList","title":"Doğru/Yanlış Alıştırması","questions":[{"statement":"Sahura kalkmak farzdır.","isTrue":false},{"isTrue":true,"statement":"İmsak, oruca başlama vaktidir."},{"isTrue":true,"statement":"İftar vaktinin girmesiyle o günün orucu tamamlanmış olur."},{"isTrue":false,"statement":"Teravih namazı sadece camide kılınabilir."},{"statement":"Mukabele, Kur'an-ı Kerim'in baştan sona okunması ve takip edilmesidir.","isTrue":true},{"statement":"Fitre, sağlıklı olmanın şükrü olarak verilen vacip bir sadakadır.","isTrue":true},{"isTrue":false,"statement":"Oruca başlamadan önce niyet etmek gerekli değildir."},{"isTrue":false,"statement":"Oruçlu olduğunu unutarak yemek veya içmek orucu bozar."},{"statement":"Ramazan orucunu tutmak farzdır.","isTrue":true},{"isTrue":false,"statement":"Adak orucu farz oruçlar arasında yer alır."}]},{"scrambledSentence":"vaktinin o orucu İftar olur. girmesiyle günün tamamlanmış","type":"sentenceScramble","correctSentence":"İftar vaktinin girmesiyle o günün orucu tamamlanmış olur.","title":"Cümle Düzeltme (Veri Bankası)"},{"sentenceWithBlank":"Müslümanların oruç tutmak için imsaktan önce yemek yedikleri vakte ___ denir.","options":["iftar","imsak","teravih","sahur"],"type":"fitb","correctAnswer":"sahur","title":"Boşluk Doldurma"},{"correctAnswer":"imsak","type":"fitb","options":["sahur","iftar","imsak","teravih"],"sentenceWithBlank":"Oruca başlama vaktine ___ denir. Ayrıca sabah namazının vakti de imsakla başlar.","title":"Boşluk Doldurma"},{"options":["sahur","imsak","iftar","mukabele"],"title":"Boşluk Doldurma","correctAnswer":"iftar","sentenceWithBlank":"Oruç tutan bir kimsenin akşam ezanı vaktinin girmesiyle yiyip içmeye başlamasına ___ denir.","type":"fitb"},{"options":["vitir","kuşluk","teravih","teheccüd"],"correctAnswer":"teravih","title":"Boşluk Doldurma","type":"fitb","sentenceWithBlank":"Ramazan ayında yatsı namazından sonra genellikle yirmi rekât olarak kılınan sünnet namaza ___ denir."},{"type":"fitb","correctAnswer":"mukabele","options":["hatim","tilavet","mukabele","ezan"],"title":"Boşluk Doldurma","sentenceWithBlank":"Bir kişinin Kur’an-ı Kerim’i ezberden veya yüzünden okuması, diğer insanların da okunan ayetleri Kur’an-ı Kerim üzerinden takip etmesine ___ denir."},{"type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)","correctSentence":"Ramazan ayında yapılan mukabelelerde Kur’an-ı Kerim baştan sona okunur.","scrambledSentence":"Ramazan Kerim baştan yapılan mukabelelerde Kur’an-ı ayında sona okunur."},{"sentenceWithBlank":"Maddi durumu uygun olan Müslümanların sağlıklı olmalarının bir şükrü olarak vermekle yükümlü oldukları vacip sadakaya ___ denir.","type":"fitb","correctAnswer":"fitre","options":["zekat","sadaka-i cariye","fitre","kurban"],"title":"Boşluk Doldurma"},{"type":"fitb","sentenceWithBlank":"Hastalık veya yolculuk gibi geçerli bir mazeretle tutulamayan oruçların ramazan ayından sonra tutulmasına '___' denir.","correctAnswer":"kaza orucu","options":["kefaret orucu","adak orucu","kaza orucu","sünnet orucu"],"title":"Boşluk Doldurma"},{"sentenceWithBlank":"Yüce Allah’ın kesinlikle tutulmasını emrettiği oruçtur. Ramazan orucunu tutmak ___'dır.","type":"fitb","correctAnswer":"farz","options":["vacip","sünnet","mekruh","farz"],"title":"Boşluk Doldurma"},{"scrambledSentence":"Kim içirmiştir ona ve orucunu oruçlu Allah tamamlasın. Çünkü iken unutarak yedirmiş yerse","correctSentence":"Kim oruçlu iken unutarak yerse orucunu tamamlasın. Çünkü ona Allah yedirmiş ve içirmiştir","type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)"},{"question":"Müslümanların oruç tutmak için imsaktan önce yemek yedikleri vakte ne ad verilir?","type":"mcq","options":["İmsak","Teravih","Sahur","İftar"],"title":"Çoktan Seçmeli","correctAnswer":"Sahur"},{"options":["Teravih - Yatsı","İmsak - Sabah","İftar - Akşam","Sahur - Öğle"],"title":"Çoktan Seçmeli","question":"Oruca başlama vaktine ne denir ve aynı zamanda hangi namazın vakti de bu zamanla başlar?","type":"mcq","correctAnswer":"İmsak - Sabah"},{"question":"Maddi durumu uygun olan Müslümanların sağlıklı olmalarının bir şükrü olarak vermekle yükümlü oldukları vacip sadakaya ne denir?","title":"Çoktan Seçmeli","type":"mcq","options":["Kurban","Fitre","Sadaka-i cariye","Zekât"],"correctAnswer":"Fitre"},{"title":"Çoktan Seçmeli","type":"mcq","question":"Aşağıdakilerden hangisi orucu bozmayan durumlardan biridir?","correctAnswer":"Unutarak yemek veya içmek","options":["Kendi isteğiyle ağız dolusu kusmak","Unutarak yemek veya içmek","Güneşin battığını zannederek iftar etmek","Bilerek bir şey yemek"]},{"title":"Çoktan Seçmeli","correctAnswer":"Adak orucu","options":["Kefaret orucu","Ramazan orucu","Adak orucu","Kaza orucu"],"type":"mcq","question":"Aşağıdaki oruç çeşitlerinden hangisi Farz Oruç kapsamında değildir?"},{"type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)","correctSentence":"Kim bir oruçluya iftar ettirirse iftar ettirdiği kimsenin sevabı kadar sevap ona da yazılır, iftar edenin sevabından da bir şey eksilmez.","scrambledSentence":"iftar iftar sevabından ettirdiği sevabı eksilmez. ettirirse bir iftar şey yazılır, da oruçluya sevap bir da edenin Kim kimsenin ona kadar"},{"options":["Nafile","Teravih","Kuşluk","Teheccüd"],"title":"Çoktan Seçmeli","correctAnswer":"Teravih","question":"Ramazan ayında yatsı namazından sonra genellikle yirmi rekât olarak kılınan sünnet namaza ne ad verilir?","type":"mcq"},{"question":"Bir kişinin Kur’an-ı Kerim’i ezberden veya yüzünden okuması, diğer insanların da okunan ayetleri Kur’an-ı Kerim üzerinden takip etmesine ne denir?","title":"Çoktan Seçmeli","correctAnswer":"Mukabele","type":"mcq","options":["Hatim","Tefsir","Mukabele","Kıraat"]},{"correctAnswer":"Fidye","question":"İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için fakire verdikleri sadakaya ne denir?","options":["Zekât","Sadaka","Fidye","Fitre"],"type":"mcq","title":"Çoktan Seçmeli"},{"type":"mcq","correctAnswer":"Ahlaki davranışların orucun önemli bir parçası olduğu","title":"Çoktan Seçmeli","options":["Orucun sadece aç kalmak olduğu","Oruç tutmanın gereksiz olduğu","Ahlaki davranışların orucun önemli bir parçası olduğu","Orucun sadece fiziksel bir ibadet olduğu"],"question":"Hz. Peygamber’in oruçlunun dikkat etmesi gereken hususları vurguladığı sözünde, yalan söylemeyi ve yalan ile amel etmeyi bırakmayanın yemeği, içmeyi terk etmesine Allah'ın ihtiyacı olmadığını belirtmesi neye işaret eder?"},{"options":["Bugün yemek yemeyeceğim.","Sadece susuz kalacağım.","Niyet ettim Allah rızası için bugünkü ramazan orucunu tutmaya.","Allahım, beni affet."],"question":"Oruca başlamadan önce nasıl niyet edilir?","type":"mcq","correctAnswer":"Niyet ettim Allah rızası için bugünkü ramazan orucunu tutmaya.","title":"Çoktan Seçmeli"},{"correctSentence":"Oruç (sahibini koruyan) bir kalkandır. Oruçlu saygısızlık yapmasın, kötü konuşmasın. Eğer biri kendisiyle kavga etmeye veya ona kötü söz söylemeye kalkışırsa iki defa ‘Ben oruçluyum.’ desin.","type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)","scrambledSentence":"konuşmasın. bir ona (sahibini söylemeye kavga desin. koruyan) oruçluyum.’ kalkandır. ‘Ben biri söz kendisiyle defa Eğer kötü Oruç kalkışırsa saygısızlık yapmasın, kötü veya iki Oruçlu etmeye"}]
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Ramazan ayı ve oruç ibadetiyle ilgili temel kavramları (sahur, imsak, iftar, teravih, mukabele, fitre) tanımlayabileceksiniz.",
+      "Orucun İslam dinindeki önemini ve kimlere farz olduğunu açıklayabileceksiniz.",
+      "Oruç tutarken dikkat edilmesi gereken hususları ve görgü kurallarını belirtebileceksiniz.",
+      "Orucu bozan ve bozmayan durumları ayırt edebileceksiniz.",
+      "Farz, vacip ve sünnet oruç çeşitlerini örneklerle açıklayabileceksiniz.",
+      "Kaza ve fidye gibi oruç ibadetiyle ilgili özel durumları yorumlayabileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "content": "<ul><li>Fitre</li><li>İmsakiye</li><li>Teravih</li><li>Kaza Orucu</li><li>Mukabele</li><li>İftar</li><li>Sahur</li><li>Fidye</li><li>Hatim</li><li>İmsak</li></ul>",
+    "title": "Anahtar Kavramlar (Veri Bankası)"
+  },
+  {
+    "type": "content",
+    "content": "Ramazan ayı ve oruç ibadetiyle ilgili bilinmesi gereken başlıca kavramlar. Sahur (imsaktan önce yemek yenen vakit). İmsak (oruca başlama vakti). İftar (orucu açma vakti). Teravih (yatsı namazından sonra kılınan sünnet namaz). Mukabele (Kur'an-ı Kerim'i birinin okuyup diğerlerinin takip etmesi). Fitre (maddi durumu uygun olanların verdiği vacip sadaka). Bu kavramlar, ibadetin doğru ve anlamlı bir şekilde yerine getirilmesi için önem taşır.",
+    "title": "Ramazan Ayı ve Oruç İbadetinin Temel Kavramları"
+  },
+  {
+    "type": "content",
+    "content": "Oruç ibadetini yerine getirirken öncelikle niyet etmek gerekir. Oruçlu bir kimsenin yalan, kötü söz ve davranışlardan kaçınması, sabırlı olması ve öfkesine hakim olması önemlidir. Bilinçli olarak yemek, içmek gibi durumlar orucu bozarken, unutarak yapılanlar orucu bozmaz. Hastalık veya yolculuk gibi geçerli mazeretlerle tutulamayan oruçlar kaza edilir, iyileşemeyecek durumdaki hastalar ise fidye verir.",
+    "title": "Oruçlunun Uyması Gereken Kurallar"
+  },
+  {
+    "type": "content",
+    "title": "Oruç Çeşitleri",
+    "content": "Oruçlar farz, vacip ve sünnet olmak üzere üç ana çeşide ayrılır. Farz oruç, Allah'ın kesin emri olan Ramazan orucu, kaza orucu ve kefaret orucunu kapsar. Vacip oruç, farz kadar kesin olmasa da dinen tutulması gereken adak orucudur. Sünnet oruç ise Hz Peygamber'in tavsiye ettiği Muharrem ve Şevval aylarında tutulan oruçlardır."
+  },
+  {
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "Oruca başlama vaktidir.",
+        "term": "İmsak"
+      },
+      {
+        "definition": "Kur’an-ı Kerim’i ilk suresi olan Fatiha suresinden başlayıp en son suresi olan Nâs suresine kadar yüzüne veya ezberden okumak.",
+        "term": "hatim"
+      },
+      {
+        "definition": "Kur'an'ın okunup takip edildiği ibadettir.",
+        "term": "Mukabele"
+      },
+      {
+        "definition": "Ramazanda yatsıdan sonra kılınan özel namazdır.",
+        "term": "Teravih"
+      },
+      {
+        "definition": "İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için vermeleri gereken ücret.",
+        "term": "Fidye"
+      },
+      {
+        "term": "İftar",
+        "definition": "Orucun bitip yemeğe başlandığı vakittir."
+      },
+      {
+        "term": "Kaza Orucu",
+        "definition": "Tutulamayan oruçların sonradan tutulmasıdır."
+      },
+      {
+        "definition": "Oruca başlamadan önce yemek yenilen vakittir.",
+        "term": "Sahur"
+      },
+      {
+        "term": "İmsakiye",
+        "definition": "Oruç vakitlerini gösteren çizelgedir."
+      },
+      {
+        "definition": "Sağlıklı olmanın şükrü olarak verilen sadakadır.",
+        "term": "Fitre"
+      }
+    ],
+    "title": "Bilgi Kartları (Veri Bankası)"
+  },
+  {
+    "title": "Anagram Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Fitre\"",
+        "correctAnswer": "Fitre",
+        "scrambledWord": "İRFTE"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İmsakiye\"",
+        "scrambledWord": "İMKİAYSE",
+        "correctAnswer": "İmsakiye"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Teravih\"",
+        "correctAnswer": "Teravih",
+        "scrambledWord": "ARİVEHT"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Kaza Orucu\"",
+        "correctAnswer": "Kaza Orucu",
+        "scrambledWord": "UKAUZ AOCR"
+      },
+      {
+        "correctAnswer": "Mukabele",
+        "scrambledWord": "KEMAUBLE",
+        "definition": "İpucu: Bu kelime \"Mukabele\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İftar\"",
+        "scrambledWord": "AİRTF",
+        "correctAnswer": "İftar"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Sahur\"",
+        "scrambledWord": "AUSHR",
+        "correctAnswer": "Sahur"
+      },
+      {
+        "scrambledWord": "FDİEY",
+        "definition": "İpucu: Bu kelime \"Fidye\"",
+        "correctAnswer": "Fidye"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Hatim\"",
+        "scrambledWord": "HAMİT",
+        "correctAnswer": "Hatim"
+      },
+      {
+        "scrambledWord": "MAİSK",
+        "definition": "İpucu: Bu kelime \"İmsak\"",
+        "correctAnswer": "İmsak"
+      }
+    ],
+    "type": "anagramFlashcard"
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Sahura kalkmak farzdır.",
+        "isTrue": false
+      },
+      {
+        "isTrue": true,
+        "statement": "İmsak, oruca başlama vaktidir."
+      },
+      {
+        "isTrue": true,
+        "statement": "İftar vaktinin girmesiyle o günün orucu tamamlanmış olur."
+      },
+      {
+        "isTrue": false,
+        "statement": "Teravih namazı sadece camide kılınabilir."
+      },
+      {
+        "statement": "Mukabele, Kur'an-ı Kerim'in baştan sona okunması ve takip edilmesidir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Fitre, sağlıklı olmanın şükrü olarak verilen vacip bir sadakadır.",
+        "isTrue": true
+      },
+      {
+        "isTrue": false,
+        "statement": "Oruca başlamadan önce niyet etmek gerekli değildir."
+      },
+      {
+        "isTrue": false,
+        "statement": "Oruçlu olduğunu unutarak yemek veya içmek orucu bozar."
+      },
+      {
+        "statement": "Ramazan orucunu tutmak farzdır.",
+        "isTrue": true
+      },
+      {
+        "isTrue": false,
+        "statement": "Adak orucu farz oruçlar arasında yer alır."
+      }
+    ]
+  },
+  {
+    "scrambledSentence": "vaktinin o orucu İftar olur. girmesiyle günün tamamlanmış",
+    "type": "sentenceScramble",
+    "correctSentence": "İftar vaktinin girmesiyle o günün orucu tamamlanmış olur.",
+    "title": "Cümle Düzeltme (Veri Bankası)"
+  },
+  {
+    "sentenceWithBlank": "Müslümanların oruç tutmak için imsaktan önce yemek yedikleri vakte ___ denir.",
+    "options": [
+      "iftar",
+      "imsak",
+      "teravih",
+      "sahur"
+    ],
+    "type": "fitb",
+    "correctAnswer": "sahur",
+    "title": "Boşluk Doldurma"
+  },
+  {
+    "correctAnswer": "imsak",
+    "type": "fitb",
+    "options": [
+      "sahur",
+      "iftar",
+      "imsak",
+      "teravih"
+    ],
+    "sentenceWithBlank": "Oruca başlama vaktine ___ denir. Ayrıca sabah namazının vakti de imsakla başlar.",
+    "title": "Boşluk Doldurma"
+  },
+  {
+    "options": [
+      "sahur",
+      "imsak",
+      "iftar",
+      "mukabele"
+    ],
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "iftar",
+    "sentenceWithBlank": "Oruç tutan bir kimsenin akşam ezanı vaktinin girmesiyle yiyip içmeye başlamasına ___ denir.",
+    "type": "fitb"
+  },
+  {
+    "options": [
+      "vitir",
+      "kuşluk",
+      "teravih",
+      "teheccüd"
+    ],
+    "correctAnswer": "teravih",
+    "title": "Boşluk Doldurma",
+    "type": "fitb",
+    "sentenceWithBlank": "Ramazan ayında yatsı namazından sonra genellikle yirmi rekât olarak kılınan sünnet namaza ___ denir."
+  },
+  {
+    "type": "fitb",
+    "correctAnswer": "mukabele",
+    "options": [
+      "hatim",
+      "tilavet",
+      "mukabele",
+      "ezan"
+    ],
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Bir kişinin Kur’an-ı Kerim’i ezberden veya yüzünden okuması, diğer insanların da okunan ayetleri Kur’an-ı Kerim üzerinden takip etmesine ___ denir."
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Ramazan ayında yapılan mukabelelerde Kur’an-ı Kerim baştan sona okunur.",
+    "scrambledSentence": "Ramazan Kerim baştan yapılan mukabelelerde Kur’an-ı ayında sona okunur."
+  },
+  {
+    "sentenceWithBlank": "Maddi durumu uygun olan Müslümanların sağlıklı olmalarının bir şükrü olarak vermekle yükümlü oldukları vacip sadakaya ___ denir.",
+    "type": "fitb",
+    "correctAnswer": "fitre",
+    "options": [
+      "zekat",
+      "sadaka-i cariye",
+      "fitre",
+      "kurban"
+    ],
+    "title": "Boşluk Doldurma"
+  },
+  {
+    "type": "fitb",
+    "sentenceWithBlank": "Hastalık veya yolculuk gibi geçerli bir mazeretle tutulamayan oruçların ramazan ayından sonra tutulmasına '___' denir.",
+    "correctAnswer": "kaza orucu",
+    "options": [
+      "kefaret orucu",
+      "adak orucu",
+      "kaza orucu",
+      "sünnet orucu"
+    ],
+    "title": "Boşluk Doldurma"
+  },
+  {
+    "sentenceWithBlank": "Yüce Allah’ın kesinlikle tutulmasını emrettiği oruçtur. Ramazan orucunu tutmak ___'dır.",
+    "type": "fitb",
+    "correctAnswer": "farz",
+    "options": [
+      "vacip",
+      "sünnet",
+      "mekruh",
+      "farz"
+    ],
+    "title": "Boşluk Doldurma"
+  },
+  {
+    "scrambledSentence": "Kim içirmiştir ona ve orucunu oruçlu Allah tamamlasın. Çünkü iken unutarak yedirmiş yerse",
+    "correctSentence": "Kim oruçlu iken unutarak yerse orucunu tamamlasın. Çünkü ona Allah yedirmiş ve içirmiştir",
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)"
+  },
+  {
+    "question": "Müslümanların oruç tutmak için imsaktan önce yemek yedikleri vakte ne ad verilir?",
+    "type": "mcq",
+    "options": [
+      "İmsak",
+      "Teravih",
+      "Sahur",
+      "İftar"
+    ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Sahur"
+  },
+  {
+    "options": [
+      "Teravih - Yatsı",
+      "İmsak - Sabah",
+      "İftar - Akşam",
+      "Sahur - Öğle"
+    ],
+    "title": "Çoktan Seçmeli",
+    "question": "Oruca başlama vaktine ne denir ve aynı zamanda hangi namazın vakti de bu zamanla başlar?",
+    "type": "mcq",
+    "correctAnswer": "İmsak - Sabah"
+  },
+  {
+    "question": "Maddi durumu uygun olan Müslümanların sağlıklı olmalarının bir şükrü olarak vermekle yükümlü oldukları vacip sadakaya ne denir?",
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "options": [
+      "Kurban",
+      "Fitre",
+      "Sadaka-i cariye",
+      "Zekât"
+    ],
+    "correctAnswer": "Fitre"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "question": "Aşağıdakilerden hangisi orucu bozmayan durumlardan biridir?",
+    "correctAnswer": "Unutarak yemek veya içmek",
+    "options": [
+      "Kendi isteğiyle ağız dolusu kusmak",
+      "Unutarak yemek veya içmek",
+      "Güneşin battığını zannederek iftar etmek",
+      "Bilerek bir şey yemek"
+    ]
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Adak orucu",
+    "options": [
+      "Kefaret orucu",
+      "Ramazan orucu",
+      "Adak orucu",
+      "Kaza orucu"
+    ],
+    "type": "mcq",
+    "question": "Aşağıdaki oruç çeşitlerinden hangisi Farz Oruç kapsamında değildir?"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Kim bir oruçluya iftar ettirirse iftar ettirdiği kimsenin sevabı kadar sevap ona da yazılır, iftar edenin sevabından da bir şey eksilmez.",
+    "scrambledSentence": "iftar iftar sevabından ettirdiği sevabı eksilmez. ettirirse bir iftar şey yazılır, da oruçluya sevap bir da edenin Kim kimsenin ona kadar"
+  },
+  {
+    "options": [
+      "Nafile",
+      "Teravih",
+      "Kuşluk",
+      "Teheccüd"
+    ],
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Teravih",
+    "question": "Ramazan ayında yatsı namazından sonra genellikle yirmi rekât olarak kılınan sünnet namaza ne ad verilir?",
+    "type": "mcq"
+  },
+  {
+    "question": "Bir kişinin Kur’an-ı Kerim’i ezberden veya yüzünden okuması, diğer insanların da okunan ayetleri Kur’an-ı Kerim üzerinden takip etmesine ne denir?",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Mukabele",
+    "type": "mcq",
+    "options": [
+      "Hatim",
+      "Tefsir",
+      "Mukabele",
+      "Kıraat"
+    ]
+  },
+  {
+    "correctAnswer": "Fidye",
+    "question": "İyileşemeyecek durumda olan hastaların oruçsuz geçirilen her gün için fakire verdikleri sadakaya ne denir?",
+    "options": [
+      "Zekât",
+      "Sadaka",
+      "Fidye",
+      "Fitre"
+    ],
+    "type": "mcq",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "type": "mcq",
+    "correctAnswer": "Ahlaki davranışların orucun önemli bir parçası olduğu",
+    "title": "Çoktan Seçmeli",
+    "options": [
+      "Orucun sadece aç kalmak olduğu",
+      "Oruç tutmanın gereksiz olduğu",
+      "Ahlaki davranışların orucun önemli bir parçası olduğu",
+      "Orucun sadece fiziksel bir ibadet olduğu"
+    ],
+    "question": "Hz. Peygamber’in oruçlunun dikkat etmesi gereken hususları vurguladığı sözünde, yalan söylemeyi ve yalan ile amel etmeyi bırakmayanın yemeği, içmeyi terk etmesine Allah'ın ihtiyacı olmadığını belirtmesi neye işaret eder?"
+  },
+  {
+    "options": [
+      "Bugün yemek yemeyeceğim.",
+      "Sadece susuz kalacağım.",
+      "Niyet ettim Allah rızası için bugünkü ramazan orucunu tutmaya.",
+      "Allahım, beni affet."
+    ],
+    "question": "Oruca başlamadan önce nasıl niyet edilir?",
+    "type": "mcq",
+    "correctAnswer": "Niyet ettim Allah rızası için bugünkü ramazan orucunu tutmaya.",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "correctSentence": "Oruç (sahibini koruyan) bir kalkandır. Oruçlu saygısızlık yapmasın, kötü konuşmasın. Eğer biri kendisiyle kavga etmeye veya ona kötü söz söylemeye kalkışırsa iki defa ‘Ben oruçluyum.’ desin.",
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "scrambledSentence": "konuşmasın. bir ona (sahibini söylemeye kavga desin. koruyan) oruçluyum.’ kalkandır. ‘Ben biri söz kendisiyle defa Eğer kötü Oruç kalkışırsa saygısızlık yapmasın, kötü veya iki Oruçlu etmeye"
+  }
+]

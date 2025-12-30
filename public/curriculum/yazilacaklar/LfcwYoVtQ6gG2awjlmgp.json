@@ -1,1 +1,30 @@
-{"notes":["Hz. İsmail, babası Hz. İbrahim ve annesi Hz. Hacer olan, Kur'an'da adı geçen bir peygamberdir.","Hz. İbrahim, Allah'ın emriyle Hz. Hacer ve oğlu İsmail'i Mekke yakınlarındaki ıssız çöle bırakmıştır.","Susuz kalan İsmail için annesi Hacer, Safa ve Merve tepeleri arasında su aramış, sonunda Zemzem suyu İsmail'in ayağının dibinden kaynamıştır.","Zemzem suyunun ortaya çıkışı ve Hacer'in koşuşturması, hac ve umre ibadetlerindeki say'ın kaynağıdır.","Hz. İbrahim, rüyasında İsmail'i kurban etmesi emredildiğinde, hem İbrahim hem de İsmail Allah'ın emrine tam bir teslimiyet göstermiştir.","Allah, Hz. İbrahim'e bir koç göndererek İsmail'i kurban etme emrinin yerine getirilmesini sağlamış, bu olay kurban ibadetinin temelini oluşturmuştur.","Hz. İsmail, babası Hz. İbrahim ile birlikte Kâbe'yi inşa etmiş ve onu ilk tavaf edenlerden olmuştur.","Son Peygamber Hz. Muhammed (sav), Hz. İsmail'in soyundan gelmektedir."],"conceptDefinitions":[{"concept":"İshak (Hz.)","definition":"(Hz. İsmail'den sonra) Allah’ın (cc) bir mucizesi olarak Hz. Sare’nin dünyaya gelen ve (kardeşi gibi) bir peygamber olan oğlu."},{"concept":"Beytullah","definition":"(Kur'an'da geçtiği üzere) Hz. İbrahim'in, Hz. İsmail ile beraber temellerini yükselttiği yapı (Kâbe)."},{"concept":"Zemzem","definition":"Hz. Hacer'in, (Mekke'de) oğlu Hz. İsmail susuz kalınca Safa ve Merve tepeleri arasında koşturarak su aradığı sırada Hz. İsmail’in ayağının dibinden kaynayan su."},{"concept":"Hz. İsmail (as)","definition":"Kur’an ve hadislerde adı geçen peygamber; babası Hz. İbrahim, annesi ise Hz. Hacer’dir."}]}
+{
+  "notes": [
+    "Hz. İsmail, babası Hz. İbrahim ve annesi Hz. Hacer olan, Kur'an'da adı geçen bir peygamberdir.",
+    "Hz. İbrahim, Allah'ın emriyle Hz. Hacer ve oğlu İsmail'i Mekke yakınlarındaki ıssız çöle bırakmıştır.",
+    "Susuz kalan İsmail için annesi Hacer, Safa ve Merve tepeleri arasında su aramış, sonunda Zemzem suyu İsmail'in ayağının dibinden kaynamıştır.",
+    "Zemzem suyunun ortaya çıkışı ve Hacer'in koşuşturması, hac ve umre ibadetlerindeki say'ın kaynağıdır.",
+    "Hz. İbrahim, rüyasında İsmail'i kurban etmesi emredildiğinde, hem İbrahim hem de İsmail Allah'ın emrine tam bir teslimiyet göstermiştir.",
+    "Allah, Hz. İbrahim'e bir koç göndererek İsmail'i kurban etme emrinin yerine getirilmesini sağlamış, bu olay kurban ibadetinin temelini oluşturmuştur.",
+    "Hz. İsmail, babası Hz. İbrahim ile birlikte Kâbe'yi inşa etmiş ve onu ilk tavaf edenlerden olmuştur.",
+    "Son Peygamber Hz. Muhammed (sav), Hz. İsmail'in soyundan gelmektedir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "İshak (Hz.)",
+      "definition": "(Hz. İsmail'den sonra) Allah’ın (cc) bir mucizesi olarak Hz. Sare’nin dünyaya gelen ve (kardeşi gibi) bir peygamber olan oğlu."
+    },
+    {
+      "concept": "Beytullah",
+      "definition": "(Kur'an'da geçtiği üzere) Hz. İbrahim'in, Hz. İsmail ile beraber temellerini yükselttiği yapı (Kâbe)."
+    },
+    {
+      "concept": "Zemzem",
+      "definition": "Hz. Hacer'in, (Mekke'de) oğlu Hz. İsmail susuz kalınca Safa ve Merve tepeleri arasında koşturarak su aradığı sırada Hz. İsmail’in ayağının dibinden kaynayan su."
+    },
+    {
+      "concept": "Hz. İsmail (as)",
+      "definition": "Kur’an ve hadislerde adı geçen peygamber; babası Hz. İbrahim, annesi ise Hz. Hacer’dir."
+    }
+  ]
+}

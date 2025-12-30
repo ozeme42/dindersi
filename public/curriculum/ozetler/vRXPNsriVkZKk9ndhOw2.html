@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adap ve Nezaket Kuralları</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5',   // Indigo
+                        'secondary': '#10b981', // Emerald
+                        'accent': '#f59e0b',    // Amber
+                        'soft-bg': '#f3f4f6',
+                        'paper': '#ffffff'
+                    },
+                    fontFamily: {
+                        'head': ['"Comfortaa"', 'cursive'],
+                        'body': ['"Nunito"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .blob-shape {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 8s ease-in-out infinite;
+        }
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+        }
+        .card-pop {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .card-pop:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+    </style>
+</head>
+<body class="font-body text-gray-700 antialiased">
+
+    <!-- Hero Header -->
+    <header class="bg-gradient-to-br from-primary to-indigo-800 text-white pt-20 pb-24 px-4 rounded-b-[3rem] shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+        <div class="absolute bottom-0 left-0 w-40 h-40 bg-accent opacity-20 rounded-full blur-2xl -ml-10 -mb-10"></div>
+        
+        <div class="container mx-auto text-center relative z-10">
+            <div class="inline-flex items-center bg-white/20 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-white/30">
+                <i class="fas fa-star text-accent mr-2"></i>
+                <span class="font-bold text-sm tracking-wide">AHLAKİ DAVRANIŞLAR</span>
+            </div>
+            <h1 class="font-head text-4xl md:text-6xl font-bold mb-4">Adap ve Nezaket</h1>
+            <p class="text-xl md:text-2xl text-indigo-100 max-w-2xl mx-auto font-light">
+                "Nezaket, insanı yormayan fakat diğer insanları mutlu eden ince davranışlardır."
+            </p>
+        </div>
+    </header>
+
+    <!-- Definitions Section -->
+    <section class="container mx-auto px-4 -mt-16 relative z-20 mb-20">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Adap Card -->
+            <div class="bg-paper p-8 rounded-3xl shadow-xl card-pop border-l-8 border-accent">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center text-accent text-2xl mr-4">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h2 class="font-head text-2xl font-bold text-gray-800">Adap (Edep)</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                    Bir toplumda örf, âdet ve kural hâlini almış iyi ve güzel davranışlar bütünüdür. Ruhun ve aklın güzelliğidir.
+                </p>
+            </div>
+            <!-- Nezaket Card -->
+            <div class="bg-paper p-8 rounded-3xl shadow-xl card-pop border-l-8 border-secondary">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center text-secondary text-2xl mr-4">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h2 class="font-head text-2xl font-bold text-gray-800">Nezaket</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                    Başkalarına karşı incelikli, kibar ve saygılı davranmaktır. Kalp kırmamak için ölçülü hareket etmektir.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Grid: The 3 Pillars -->
+    <main class="container mx-auto px-4 mb-20">
+        <h2 class="text-center font-head text-3xl font-bold text-primary mb-12 relative inline-block left-1/2 transform -translate-x-1/2">
+            Nezaketin 3 Temel Alanı
+            <div class="w-full h-2 bg-accent/30 absolute bottom-0 -z-10 rounded-full"></div>
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            
+            <!-- 1. Selamlaşma -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div class="bg-blue-100 p-6 flex justify-center">
+                    <i class="fas fa-handshake text-6xl text-blue-500"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-head text-xl font-bold text-gray-800 mb-4 text-center">Selamlaşma Adabı</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span><b>Ortak Dil:</b> "Selamünaleyküm" (Selam üzerine olsun).</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span><b>Kural:</b> Küçük büyüğe, yürüyen oturana selam verir.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span><b>Amaç:</b> Güven, barış ve esenlik dilemektir.</span>
+                        </li>
+                    </ul>
+                    <div class="mt-4 bg-blue-50 p-3 rounded-lg text-xs italic text-blue-800 border-l-2 border-blue-500">
+                        "Aranızda selamı yayınız." (Hadis-i Şerif)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. İletişim -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div class="bg-purple-100 p-6 flex justify-center">
+                    <i class="fas fa-comments text-6xl text-purple-500"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-head text-xl font-bold text-gray-800 mb-4 text-center">İletişim Adabı</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-purple-500 mt-1 mr-2"></i>
+                            <span><b>Doğruluk:</b> Yalandan kaçınmak, dürüst olmak.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-purple-500 mt-1 mr-2"></i>
+                            <span><b>Üslup:</b> Bağırmadan, açık ve anlaşılır konuşmak.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-purple-500 mt-1 mr-2"></i>
+                            <span><b>Dinlemek:</b> Söz kesmemek, yüze bakmak.</span>
+                        </li>
+                    </ul>
+                     <div class="mt-4 bg-purple-50 p-3 rounded-lg text-xs italic text-purple-800 border-l-2 border-purple-500">
+                        "İnsanlara güzel söz söyleyiniz." (Bakara, 83)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Sofra -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div class="bg-green-100 p-6 flex justify-center">
+                    <i class="fas fa-utensils text-6xl text-green-500"></i>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-head text-xl font-bold text-gray-800 mb-4 text-center">Sofra Adabı</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><b>Başlangıç:</b> Besmele çekmek, elleri yıkamak.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><b>Süreç:</b> Sağ elle ve önünden yemek. İsraf etmemek.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><b>Bitiş:</b> Allah'a şükretmek, hazırlayana teşekkür etmek.</span>
+                        </li>
+                    </ul>
+                     <div class="mt-4 bg-green-50 p-3 rounded-lg text-xs italic text-green-800 border-l-2 border-green-500">
+                        "Yiyin, için fakat israf etmeyin." (Araf, 31)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Social Media Etiquette (Special Section) -->
+    <section class="container mx-auto px-4 mb-20">
+        <div class="bg-gray-800 text-white rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-gray-700 to-transparent opacity-50"></div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center relative z-10">
+                <div>
+                    <h2 class="font-head text-3xl font-bold mb-6 text-accent">
+                        <i class="fas fa-mobile-alt mr-3"></i> Dijital Nezaket
+                    </h2>
+                    <p class="text-gray-300 mb-6">
+                        Teknoloji gelişti, iletişim hızlandı. Ancak sosyal medyada da yüz yüze iletişimdeki nezaket kuralları geçerlidir.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center mr-3"><i class="fas fa-times"></i></div>
+                            <span>Kaba ve kırıcı yorumlar yapma.</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center mr-3"><i class="fas fa-times"></i></div>
+                            <span>Doğruluğundan emin olmadığın bilgiyi yayma.</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center mr-3"><i class="fas fa-check"></i></div>
+                            <span>Türkçeyi düzgün kullan.</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center mr-3"><i class="fas fa-check"></i></div>
+                            <span>Özel hayatın gizliliğine (mahremiyete) saygı duy.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
+                    <h3 class="text-xl font-bold mb-4 text-center">Unutma!</h3>
+                    <p class="italic text-center text-gray-300">
+                        "Klavye başında olman, karşınızdakinin duyguları olduğu gerçeğini değiştirmez. Gerçek hayatta yapmayacağın davranışı, sanal dünyada da yapma."
+                    </p>
+                    <div class="mt-6 flex justify-center gap-4 text-3xl opacity-70">
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fab fa-whatsapp"></i>
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prophet's Example Section -->
+    <section class="container mx-auto px-4 mb-20">
+        <div class="bg-gradient-to-r from-secondary to-green-600 rounded-3xl p-1 text-center shadow-xl">
+            <div class="bg-white rounded-[1.3rem] p-8 md:p-12">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-3xl mx-auto mb-6">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h2 class="font-head text-3xl font-bold text-gray-800 mb-6">En Güzel Örnek: Hz. Muhammed (s.a.v.)</h2>
+                
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+                    Çocukluğu Hz. Peygamber’in yanında geçen <strong>Enes bin Malik</strong> şöyle anlatır:
+                </p>
+                
+                <blockquote class="text-2xl font-head text-primary italic max-w-4xl mx-auto leading-normal">
+                    <i class="fas fa-quote-left text-accent text-lg align-top mr-2"></i>
+                    On sene Peygamber’in yanındaydım, bana bir kerecik olsun ‘Öf!’ demedi. Yaptığım bir şey hakkında ‘Bunu neden yaptın?’ veya yapmadığım bir iş hakkında ‘Böyle yapsaydın olmaz mıydı?’ demedi.
+                    <i class="fas fa-quote-right text-accent text-lg align-bottom ml-2"></i>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 text-center">
+        <div class="container mx-auto px-4">
+            <h3 class="text-2xl font-head mb-4 text-accent">Adap ve Nezaket</h3>
+            <p class="opacity-70 mb-8 max-w-lg mx-auto">
+                Toplumda adap ve nezaket kurallarına uyan kişiler arttıkça insanların birbirlerine karşı sevgi ve saygıları artar, toplumdaki birlik ve huzur pekişir.
+            </p>
+            <div class="inline-block border-t border-gray-600 pt-8 w-1/2">
+                <span class="text-sm text-gray-500">3. Ünite: Ahlaki Davranışlar</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

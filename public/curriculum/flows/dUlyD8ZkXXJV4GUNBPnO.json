@@ -1,1 +1,502 @@
-[{"content":"<ul><li>Peygamberlerin kim olduğunu ve görevlerinin neler olduğunu öğreneceğim.</li><li>Peygamberlere neden inanmamız gerektiğini kavrayacağım.</li><li>Peygamberlerin sahip olduğu bazı önemli özellikleri öğreneceğim (sıdk, emanet, ismet, tebliğ, fetanet).</li><li>Mucizenin ne olduğunu ve bazı peygamberlerin mucizelerine örnekler verebileceğim.</li><li>Vahiy, tebliğ, nübüvvet, risalet gibi kavramları anlayacağım.</li><li>Kur'an-ı Kerim'de adı geçen peygamberleri öğreneceğim.</li></ul>","type":"content","title":"Bu Konuda Öğreneceklerimiz"},{"type":"content","content":"<ul><li>Fetanet</li><li>İnzar</li><li>Nübüvvet</li><li>Emanet</li><li>Tezkiye</li><li>Resul</li><li>Mucize</li><li>Nebi</li><li>Tebliğ</li><li>İsmet</li><li>Peygamber</li><li>Vahiy</li><li>Risalet</li><li>Tebşir</li><li>Tebyin</li><li>Sıdk</li><li>Temsil</li><li>Tevhid</li></ul>","title":"Anahtar Kavramlar"},{"title":"Peygamberlerin Görevi","type":"content","content":"<ul><li>Allah'ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli elçilerdir.</li><li>Hz. Âdem, yeryüzündeki ilk insan ve ilk peygamberdir.</li><li>Peygamberler Allah’ın (cc) seçtiği elçilerdir. </li><li>Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir.</li><li> Bunlardan bazılarına da ilahi kitaplar göndermiştir.</li><li>“Peygamber” kelimesi, Farsça kökenli olup sözlükte “haber getiren” anlamına gelir.</li><li> Terim anlamı ise “Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli kişilerdir.</li><li> Peygamberlerin en önemli özelliği Allah’tan (cc) vahiy almalarıdır.</li></ul>"},{"htmlContent":"<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Peygamberler Afişi (Responsive)</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde taşmayı gizle, sığdıracağız */\n        }\n\n        .poster-container {\n            /* Tasarımın Orijinal Sabit Boyutları */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n            \n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            display: grid;\n            grid-template-columns: 1fr 1.3fr 1fr; /* 3 Sütunlu Izgara */\n            box-shadow: 0 40px 80px rgba(0,0,0,0.6);\n            overflow: hidden;\n            position: relative;\n            \n            /* Animasyonlu geçiş */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* --- İÇERİK STİLLERİ (Masaüstü) --- */\n        .decoration {\n            position: absolute;\n            opacity: 0.08;\n            font-size: 300px;\n            color: #fbbf24;\n            z-index: 0;\n            font-family: 'Playfair Display', serif;\n        }\n        .dec-1 { top: -80px; left: -50px; content: \"NUR\"; }\n        .dec-2 { bottom: -80px; right: -50px; content: \"HİDAYET\"; }\n\n        .column {\n            padding: 60px 50px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            text-align: center;\n            border-right: 2px solid rgba(251, 191, 36, 0.2);\n            z-index: 1;\n            position: relative;\n        }\n        .column:last-child { border-right: none; }\n\n        h1 {\n            font-family: 'Playfair Display', serif;\n            font-size: 5.5rem;\n            margin: 10px 0;\n            color: #fbbf24;\n            letter-spacing: 4px;\n            text-shadow: 0 4px 15px rgba(0,0,0,0.5);\n        }\n\n        h2 {\n            font-family: 'Playfair Display', serif;\n            font-size: 2.2rem;\n            color: #93c5fd;\n            margin-bottom: 30px;\n            border-bottom: 3px solid #93c5fd;\n            padding-bottom: 15px;\n            width: 90%;\n            letter-spacing: 1px;\n        }\n\n        h3 {\n            font-size: 1.6rem;\n            color: #fbbf24;\n            margin: 20px 0 10px 0;\n            font-weight: 700;\n        }\n\n        p, li {\n            font-size: 1.25rem;\n            line-height: 1.6;\n            color: #e2e8f0;\n            margin: 0;\n        }\n\n        .highlight-box {\n            background: rgba(251, 191, 36, 0.1);\n            border: 2px solid #fbbf24;\n            padding: 30px;\n            border-radius: 20px;\n            margin-top: 30px;\n            width: 90%;\n            box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.05);\n        }\n\n        .icon-text {\n            font-size: 5rem;\n            margin-bottom: 15px;\n            display: block;\n            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));\n        }\n        \n        .sub-info {\n            font-size: 1.1rem;\n            color: #93c5fd;\n            font-style: italic;\n            margin-top: 15px;\n            font-weight: 300;\n        }\n\n        .center-icon-box {\n            margin-top: 60px;\n            border: 3px dashed rgba(255,255,255,0.3);\n            padding: 40px;\n            border-radius: 50%;\n            background: rgba(255,255,255,0.02);\n        }\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto;\n                display: block;\n                overflow-y: auto;\n                padding: 10px;\n            }\n\n            .poster-container {\n                width: 100%;\n                height: auto;\n                display: flex; /* Grid yerine Flex */\n                flex-direction: column; /* Alt alta diz */\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n                box-shadow: none;\n            }\n\n            .column {\n                padding: 40px 20px;\n                border-right: none;\n                border-bottom: 1px solid rgba(255,255,255,0.1);\n                width: 100%;\n                box-sizing: border-box;\n            }\n\n            /* Mobilde sıralamayı değiştir: Önce Tanım (Orta), Sonra Kaynak (Sol), Sonra Görev (Sağ) */\n            /* Flex order kullanımı */\n            .column:nth-child(3) { order: 1; border-top: none; } /* Orta Sütun (HTML'de 3. sırada çünkü decorationlar 1 ve 2) -> En başa */\n            .column:nth-child(2) { order: 2; } /* Sol Sütun -> İkinci */\n            .column:nth-child(4) { order: 3; border-bottom: none; } /* Sağ Sütun -> Sonuncu */\n\n            /* Yazı boyutlarını mobile göre ayarla */\n            h1 { font-size: 3.5rem; letter-spacing: 2px; }\n            h2 { font-size: 1.8rem; width: 100%; }\n            h3 { font-size: 1.4rem; }\n            p, li { font-size: 1.1rem; }\n            .icon-text { font-size: 4rem; }\n            .center-icon-box { margin-top: 30px; padding: 20px; }\n            .center-icon-box span { font-size: 5rem; }\n\n            /* Süslemeleri gizle veya küçült */\n            .decoration { display: none; }\n        }\n\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <div class=\"decoration dec-1\"></div>\n            <div class=\"decoration dec-2\"></div>\n\n            <!-- SOL SÜTUN (Mobilde 2. Sırada) -->\n            <div class=\"column\">\n                <h2>KAYNAĞI VE SEÇİMİ</h2>\n                \n                <div style=\"margin-bottom: 30px;\">\n                    <span class=\"icon-text\">☝️</span>\n                    <h3>ALLAH'IN (cc) ELÇİLERİ</h3>\n                    <p>Peygamberler, insanlar arasından Allah tarafından özel olarak seçilmişlerdir.</p>\n                </div>\n\n                <div class=\"highlight-box\">\n                    <span style=\"font-size: 3rem; display:block; margin-bottom:10px;\">✨</span>\n                    <h3 style=\"margin-top:0;\">EN ÖNEMLİ ÖZELLİK</h3>\n                    <p>Allah'tan doğrudan <strong>VAHİY</strong> almalarıdır.</p>\n                </div>\n\n                <div style=\"margin-top: 40px; background: rgba(147, 197, 253, 0.1); padding: 20px; border-radius: 15px; width: 90%;\">\n                    <h3>İLK PEYGAMBER</h3>\n                    <p style=\"font-size: 1.6rem; font-weight: bold; color:#fff; margin: 10px 0;\">HZ. ÂDEM</p>\n                    <p class=\"sub-info\" style=\"color:#cbd5e1;\">(Aynı zamanda yeryüzündeki ilk insan)</p>\n                </div>\n            </div>\n\n            <!-- ORTA SÜTUN (Mobilde 1. Sırada - Başlık) -->\n            <div class=\"column\" style=\"background: rgba(0,0,0,0.1);\">\n                <span class=\"sub-info\" style=\"margin-bottom: 5px; font-size: 1.2rem; color: #fbbf24;\">Farsça Kökeni: \"Haber Getiren\"</span>\n                <h1>PEYGAMBER</h1>\n                <div style=\"width: 100px; height: 5px; background: #fbbf24; margin: 20px 0; border-radius: 5px;\"></div>\n                \n                <p style=\"font-size: 1.3rem; margin-top: 20px; max-width: 95%; leading-relaxed;\">\n                    Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli <strong>seçilmiş elçilerdir.</strong>\n                </p>\n\n                <div class=\"center-icon-box\">\n                    <span style=\"font-size: 7rem;\">🕋</span>\n                </div>\n            </div>\n\n            <!-- SAĞ SÜTUN (Mobilde 3. Sırada) -->\n            <div class=\"column\">\n                <h2>GÖREVİ VE AMACI</h2>\n\n                <div style=\"margin-bottom: 30px;\">\n                    <span class=\"icon-text\">📜</span>\n                    <h3>TEBLİĞ GÖREVİ</h3>\n                    <p>İlahi mesajı insanlara olduğu gibi iletmek.</p>\n                    <p class=\"sub-info\" style=\"margin-top: 10px;\">AMAÇ: İnsanlara <strong>doğru yolu</strong> göstermek.</p>\n                </div>\n\n                <div class=\"highlight-box\" style=\"margin-top: 20px; text-align: left;\">\n                    <h3 style=\"text-align: center;\">KAPSAM VE ARAÇLAR</h3>\n                    <ul style=\"padding-left: 20px; margin-top: 20px;\">\n                        <li style=\"margin-bottom: 15px;\">Farklı zamanlarda <strong>birçok peygamber</strong> görevlendirilmiştir.</li>\n                        <li>Bunlardan bazılarına rehber olarak <strong>İlahi Kitaplar</strong> gönderilmiştir.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar (Kenar payları dahil)\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>","title":"İnteraktif Sunum","type":"htmlSlide"},{"title":"Vahiy ve Tebliğ","content":"<ul><li>Peygamberler Allah'tan (cc) vahiy alırlar ve bu vahyi insanlara tebliğ ederler.</li><li>Vahiy, Allah'ın emir ve hükümlerini peygamberlere bildirmesi, tebliğ ise peygamberlerin bu vahyi insanlara iletmesidir. </li><li>Kur’an-ı Kerim’de peygamberler için “resul” ve “nebi” kavramları kullanılır. </li><li>Resul “elçi”, nebi ise “haberci” anlamına gelir.</li></ul>","type":"content"},{"type":"htmlSlide","htmlContent":"<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Vahiy ve Tebliğ Afişi</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde scroll yok, sığdırma var */\n        }\n\n        .poster-container {\n            /* Sabit Orijinal Boyutlar */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n            \n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            box-shadow: 0 40px 80px rgba(0,0,0,0.7);\n            overflow: hidden;\n            position: relative;\n            display: flex;\n            flex-direction: column;\n            \n            /* Ölçekleme için merkez noktası */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* --- İÇERİK STİLLERİ (Masaüstü) --- */\n        .decoration {\n            position: absolute;\n            opacity: 0.07;\n            font-family: 'Playfair Display', serif;\n            color: #fbbf24;\n            z-index: 0;\n            font-size: 220px;\n        }\n        .dec-top { top: -50px; left: 15%; content: \"VAHİY\"; }\n        .dec-bottom { bottom: -50px; right: 15%; content: \"TEBLİĞ\"; }\n\n        .process-layer {\n            flex: 3;\n            display: flex;\n            align-items: center;\n            justify-content: space-around;\n            padding: 50px;\n            border-bottom: 3px dashed rgba(251, 191, 36, 0.3);\n            z-index: 1;\n        }\n\n        .node {\n            background: rgba(15, 23, 42, 0.8);\n            border: 3px solid #93c5fd;\n            padding: 35px;\n            border-radius: 20px;\n            text-align: center;\n            width: 240px;\n            box-shadow: 0 15px 30px rgba(0,0,0,0.4);\n        }\n        .node-source { border-color: #fbbf24; }\n\n        .node h3 { margin: 0; font-size: 1.8rem; color: #fbbf24; font-family: 'Playfair Display', serif; }\n        .node p { font-size: 1.1rem; color: #cbd5e1; margin-top: 15px; }\n        .node-icon { font-size: 4rem; display: block; margin-bottom: 15px; }\n\n        .flow-arrow-container {\n            flex-grow: 1;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            margin: 0 30px;\n            position: relative;\n            top: -20px;\n        }\n        .flow-arrow {\n            font-size: 4.5rem;\n            color: #93c5fd;\n            margin: 10px 0;\n        }\n        .action-title {\n            font-weight: bold;\n            color: #fff;\n            font-size: 1.5rem;\n            background: #1e3a8a;\n            padding: 8px 25px;\n            border-radius: 30px;\n            border: 2px solid #93c5fd;\n        }\n        .action-desc { font-size: 1rem; color: #cbd5e1; text-align: center; max-width: 200px; margin-top: 10px; }\n\n        .terms-layer {\n            flex: 2;\n            display: flex;\n            background: rgba(0,0,0,0.2);\n            z-index: 1;\n        }\n\n        .term-box {\n            flex: 1;\n            padding: 40px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            border-right: 2px solid rgba(251, 191, 36, 0.2);\n            text-align: center;\n            transition: all 0.3s ease;\n        }\n        .term-box:last-child { border-right: none; }\n        \n        .term-title-group { margin-bottom: 20px; }\n        .term-arabic { font-family: 'Playfair Display', serif; font-size: 3.2rem; color: #fbbf24; display: block; }\n        .term-meaning { font-size: 2.4rem; font-weight: bold; color: #fff; text-transform: uppercase; letter-spacing: 3px; }\n        .term-desc { font-size: 1.2rem; color: #e2e8f0; max-width: 75%; background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 15px; line-height: 1.6; }\n\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto; /* Yükseklik serbest */\n                display: block; /* Flex'i iptal et */\n                overflow-y: auto; /* Dikey scroll aç */\n                padding: 10px;\n            }\n\n            .poster-container {\n                /* Sabitliği iptal et, esnek yap */\n                width: 100%;\n                height: auto;\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n            }\n\n            /* Akış Yönünü Değiştir (Yatay -> Dikey) */\n            .process-layer {\n                flex-direction: column;\n                padding: 30px 20px;\n                gap: 20px;\n            }\n\n            /* Kutuları Ekrana Sığdır */\n            .node {\n                width: 90%;\n                max-width: 100%;\n                padding: 20px;\n                transform: none !important; /* Varsa inline style'ı ez */\n            }\n            .node h3 { font-size: 1.5rem; }\n            .node-icon { font-size: 3rem; }\n\n            /* Okları Döndür */\n            .flow-arrow-container {\n                margin: 10px 0;\n                top: 0;\n            }\n            .flow-arrow {\n                transform: rotate(90deg); /* Aşağı baktır */\n                font-size: 3rem;\n                margin: 5px 0;\n            }\n            .action-title { font-size: 1.1rem; }\n\n            /* Alt Katmanı Düzenle */\n            .terms-layer {\n                flex-direction: column;\n                border-top: 2px dashed rgba(251, 191, 36, 0.2);\n            }\n            .term-box {\n                border-right: none;\n                border-bottom: 1px solid rgba(255,255,255,0.1);\n                padding: 30px 20px;\n            }\n            .term-arabic { font-size: 2.5rem; }\n            .term-meaning { font-size: 1.8rem; }\n            .term-desc { font-size: 1rem; max-width: 100%; }\n\n            /* Arka plan süslerini küçült */\n            .decoration { font-size: 100px; opacity: 0.05; }\n            .dec-top { top: 10px; left: 10px; }\n            .dec-bottom { bottom: 10px; right: 10px; }\n        }\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <div class=\"decoration dec-top\">VAHİY</div>\n            <div class=\"decoration dec-bottom\">TEBLİĞ</div>\n\n            <div class=\"process-layer\">\n                <!-- Kaynak -->\n                <div class=\"node node-source\">\n                    <span class=\"node-icon\">✨</span>\n                    <h3>ALLAH (cc)</h3>\n                    <p>Emir ve Hükümlerin Kaynağı</p>\n                </div>\n\n                <!-- Ok 1 -->\n                <div class=\"flow-arrow-container\">\n                    <div class=\"action-title\">VAHİY</div>\n                    <div class=\"flow-arrow\">➔</div>\n                    <div class=\"action-desc\">Allah'ın hükümlerini bildirmesi.</div>\n                </div>\n\n                <!-- Merkez -->\n                <div class=\"node\" style=\"transform: scale(1.15); border-color: #fff;\">\n                    <span class=\"node-icon\">🤲</span>\n                    <h3 style=\"color:#fff;\">PEYGAMBERLER</h3>\n                    <p>Vahyi alan ve ileten seçilmiş elçiler.</p>\n                </div>\n\n                <!-- Ok 2 -->\n                <div class=\"flow-arrow-container\">\n                    <div class=\"action-title\">TEBLİĞ</div>\n                    <div class=\"flow-arrow\">➔</div>\n                    <div class=\"action-desc\">Peygamberlerin vahyi iletmesi.</div>\n                </div>\n\n                <!-- Hedef -->\n                <div class=\"node\">\n                    <span class=\"node-icon\">👥</span>\n                    <h3>İNSANLAR</h3>\n                    <p>Mesajın muhatapları.</p>\n                </div>\n            </div>\n\n            <div class=\"terms-layer\">\n                <div class=\"term-box\">\n                     <div class=\"term-title-group\">\n                        <span class=\"term-arabic\">Resul</span>\n                        <span class=\"term-meaning\">\"ELÇİ\"</span>\n                    </div>\n                    <p class=\"term-desc\">Kur'an-ı Kerim'de peygamberler için kullanılan, risalet (elçilik) görevini vurgulayan kavram.</p>\n                </div>\n\n                <div class=\"term-box\">\n                    <div class=\"term-title-group\">\n                        <span class=\"term-arabic\">Nebi</span>\n                        <span class=\"term-meaning\">\"HABERCİ\"</span>\n                    </div>\n                    <p class=\"term-desc\">Allah'tan aldığı haberleri (nübüvvet) insanlara ulaştıran kişi anlamındaki kavram.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle (CSS devreye girsin)\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>","title":"İnteraktif Sunum"},{"title":"Peygamberlerin Özellikleri","content":"<ul><li>Peygamberler, güvenilir, dürüst, akıllı, zeki ve sabırlı insanlardır.</li><li>Günah işlemekten uzak dururlar ve topluma örnek olurlar.</li></ul>","type":"content"},{"htmlContent":"<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Peygamberlerin Özellikleri ve Görevleri (Responsive)</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde scroll yok, sığdırma var */\n        }\n\n        .poster-container {\n            /* Sabit Orijinal Boyutlar */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n\n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            box-shadow: 0 40px 80px rgba(0,0,0,0.7);\n            overflow: hidden;\n            display: flex;\n            flex-direction: column;\n            position: relative;\n\n            /* Animasyonlu geçiş */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* Başlık Alanı */\n        .main-header {\n            text-align: center;\n            padding: 30px;\n            border-bottom: 3px solid rgba(251, 191, 36, 0.3);\n            background: rgba(0,0,0,0.2);\n            z-index: 2;\n        }\n        .main-header h1 {\n            font-family: 'Playfair Display', serif;\n            font-size: 3.5rem;\n            margin: 0;\n            color: #fff;\n            text-shadow: 0 4px 10px rgba(0,0,0,0.5);\n        }\n        .main-header span { color: #fbbf24; }\n\n        /* İçerik Alanı */\n        .content-wrapper {\n            display: flex;\n            flex: 1;\n            position: relative;\n        }\n\n        /* ORTAK SÜTUN STİLLERİ */\n        .column {\n            flex: 1;\n            padding: 40px;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .col-left {\n            border-right: 2px dashed rgba(255, 255, 255, 0.2);\n            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, transparent 100%);\n        }\n        \n        .col-right {\n            background: linear-gradient(180deg, rgba(147, 197, 253, 0.05) 0%, transparent 100%);\n        }\n\n        /* Bölüm Başlıkları */\n        .section-title {\n            font-family: 'Playfair Display', serif;\n            font-size: 2.5rem;\n            margin-bottom: 30px;\n            text-align: center;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 15px;\n        }\n        .title-gold { color: #fbbf24; }\n        .title-blue { color: #93c5fd; }\n\n        /* --- TABLO/IZGARA YAPISI --- */\n        .grid-container {\n            display: grid;\n            gap: 20px;\n            height: 100%;\n        }\n        \n        /* Sol Taraf: 2x2 Izgara */\n        .grid-2x2 {\n            grid-template-columns: 1fr 1fr;\n            grid-template-rows: 1fr 1fr;\n        }\n\n        /* Sağ Taraf: 2 Sütunlu Liste */\n        .grid-list {\n            grid-template-columns: 1fr 1fr;\n            grid-auto-rows: min-content;\n        }\n\n        /* KART TASARIMI */\n        .card {\n            background: rgba(15, 23, 42, 0.6);\n            border-radius: 15px;\n            padding: 25px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            transition: transform 0.3s;\n            box-shadow: 0 5px 15px rgba(0,0,0,0.2);\n            position: relative;\n            overflow: hidden;\n        }\n        /* Mobilde hover efekti takılma yapmasın diye sadece masaüstünde kalsın diyebiliriz ama basit tutalım */\n        \n        .card-trait { border-left: 5px solid #fbbf24; }\n        .card-trait h3 { color: #fbbf24; font-size: 1.8rem; margin: 0 0 10px 0; font-family: 'Playfair Display', serif;}\n        \n        .card-duty { border-left: 5px solid #93c5fd; }\n        .card-duty h3 { color: #93c5fd; font-size: 1.6rem; margin: 0 0 10px 0; font-family: 'Playfair Display', serif;}\n\n        .card p {\n            font-size: 1.1rem;\n            line-height: 1.5;\n            color: #e2e8f0;\n            margin: 0;\n        }\n\n        /* Dekoratif Arka Plan */\n        .decoration {\n            position: absolute;\n            font-size: 300px;\n            opacity: 0.05;\n            z-index: 0;\n            pointer-events: none;\n        }\n        .dec-left { bottom: -50px; left: -50px; color: #fbbf24; }\n        .dec-right { top: -50px; right: -50px; color: #93c5fd; }\n\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto;\n                display: block;\n                overflow-y: auto;\n                padding: 10px;\n            }\n\n            .poster-container {\n                width: 100%;\n                height: auto;\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n                box-shadow: none;\n            }\n\n            .main-header {\n                padding: 20px 10px;\n            }\n            .main-header h1 {\n                font-size: 2rem; /* Başlığı küçült */\n                line-height: 1.2;\n            }\n            .main-header span {\n                display: block; /* \"Özellikleri ve Görevleri\" alt satıra geçsin */\n                margin-top: 5px;\n            }\n\n            .content-wrapper {\n                flex-direction: column; /* Yan yana değil alt alta */\n            }\n\n            .column {\n                padding: 20px;\n                width: 100%;\n                box-sizing: border-box;\n            }\n\n            .col-left {\n                border-right: none;\n                border-bottom: 2px dashed rgba(255, 255, 255, 0.2);\n            }\n\n            .section-title {\n                font-size: 1.8rem;\n                margin-bottom: 20px;\n            }\n\n            /* Gridleri Tek Sütuna Düşür */\n            .grid-container {\n                display: flex;\n                flex-direction: column;\n                gap: 15px;\n            }\n\n            .card {\n                padding: 20px;\n                min-height: auto; /* Yükseklik serbest */\n            }\n\n            .card h3 { font-size: 1.4rem; }\n            .card p { font-size: 1rem; }\n\n            /* Süslemeleri gizle */\n            .decoration { display: none; }\n        }\n\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <!-- Ana Başlık -->\n            <div class=\"main-header\">\n                <h1>PEYGAMBERLERİN <span>ÖZELLİKLERİ</span> VE <span>GÖREVLERİ</span></h1>\n            </div>\n\n            <div class=\"content-wrapper\">\n                <!-- Dekoratif Arkaplan -->\n                <div class=\"decoration dec-left\">★</div>\n                <div class=\"decoration dec-right\">✦</div>\n\n                <!-- SOL SÜTUN: ÖZELLİKLER (SIFATLAR) -->\n                <div class=\"column col-left\">\n                    <h2 class=\"section-title title-gold\">\n                        <span>✨</span> ÖZELLİKLERİ\n                    </h2>\n                    \n                    <div class=\"grid-container grid-2x2\">\n                        <!-- Sıdk -->\n                        <div class=\"card card-trait\">\n                            <h3>SIDK</h3>\n                            <p>Dürüst ve doğru sözlü olmaktır. Asla yalan söylemezler.</p>\n                        </div>\n                        <!-- Emanet -->\n                        <div class=\"card card-trait\">\n                            <h3>EMANET</h3>\n                            <p>Güvenilir olmaktır. Her konuda emniyet duyulan kişilerdir.</p>\n                        </div>\n                        <!-- İsmet -->\n                        <div class=\"card card-trait\">\n                            <h3>İSMET</h3>\n                            <p>Allah (cc) tarafından her türlü günahtan korunmuş olmaktır.</p>\n                        </div>\n                        <!-- Fetanet -->\n                        <div class=\"card card-trait\">\n                            <h3>FETANET</h3>\n                            <p>Akıllı, zeki ve uyanık olmaktır. Yüksek kavrayış gücüne sahiptirler.</p>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- SAĞ SÜTUN: GÖREVLER -->\n                <div class=\"column col-right\">\n                    <h2 class=\"section-title title-blue\">\n                        <span>📜</span> GÖREVLERİ\n                    </h2>\n\n                    <div class=\"grid-container grid-list\">\n                        <!-- Tebliğ -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBLİĞ</h3>\n                            <p>Vahyi eksiklik ve fazlalık olmadan insanlara bildirmek.</p>\n                        </div>\n                        <!-- Tebyin -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBYİN</h3>\n                            <p>Allah’ın (cc) emir ve yasaklarını insanlara açıklamak.</p>\n                        </div>\n                        <!-- Temsil -->\n                        <div class=\"card card-duty\">\n                            <h3>TEMSİL</h3>\n                            <p>İslam’ı anlama ve yaşama konusunda insanlara örneklik etmek.</p>\n                        </div>\n                        <!-- İnzar -->\n                        <div class=\"card card-duty\">\n                            <h3>İNZAR</h3>\n                            <p>Allah’ın (cc) emirlerine uymayanları uyarmak.</p>\n                        </div>\n                        <!-- Tebşir -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBŞİR</h3>\n                            <p>Allah’ın (cc) emirlerine uyanları müjdelemek.</p>\n                        </div>\n                        <!-- Tezkiye -->\n                        <div class=\"card card-duty\">\n                            <h3>TEZKİYE</h3>\n                            <p>İnsanların kötü huylardan uzaklaşmalarını sağlamak.</p>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar (Kenar payları dahil)\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>","type":"htmlSlide","title":"İnteraktif Sunum"},{"title":"Mucizeler","content":"<ul><li>Peygamberlerin Allah'ın izniyle gösterdiği olağanüstü olaylardır.</li><li>Bu mucizeler, peygamberliğin doğruluğunu kanıtlamak ve insanları inanmaya teşvik etmek içindir.</li></ul>","type":"content"},{"title":"İlk ve Son Peygamber","content":"<ul><li>Hz.Âdem ilk peygamber, Hz.Muhammed (sav) ise son peygamberdir.<li><li>Kur’an’da ismi geçen yirmi beş peygamber vardır.</li><li>Peygamberlik, Allah (cc) tarafından verilen bir görev olup insanların tercihine bağlı değildir.</li></ul>","type":"content"},{"title":"Bilgi Kartları","type":"flashcard","cards":[{"definition":"Akıl ve zekâ","term":"Fetanet"},{"term":"Vahiy","definition":"Yüce Allah’ın, emir ve hükümlerini peygamberlere bildirmesine vahiy denir."},{"term":"İsmet","definition":"Günahlardan korunma"},{"definition":"Peygamberlerin dürüst ve doğru sözlü olması","term":"Sıdk"},{"definition":"İnsanların kötü huylardan uzaklaşmalarını sağlamaya çalışmaları. ","term":"Tezkiye"},{"term":"Peygamber","definition":"Allah'ın elçisi"},{"definition":"Allah’ın (cc) emirlerine uymayanları uyarmak.","term":"İnzar"},{"definition":"Allah’ın (cc) emir ve yasaklarını insanlara açıklamak.","term":"Tebyin"},{"term":"Temsil","definition":"İslam’ı anlama ve yaşama konusunda insanlara örneklik etmek."},{"definition":"Tek yaratıcı inancı","term":"Tevhid"},{"term":"Risalet","definition":"Elçilik görevi"},{"term":"Resul","definition":"Elçi"},{"definition":"Güvenilirlik","term":"Emanet"},{"definition":"Doğru sözlülük","term":"Sıdk"},{"term":"Mucize","definition":"Olağanüstü olay"},{"definition":"Allah'tan gelen mesaj","term":"Vahiy"},{"definition":"Vahyi iletme","term":"Tebliğ"},{"definition":"Haberci","term":"Nebi"},{"definition":"Peygamberlik görevi","term":"Nübüvvet"},{"definition":"Allah’ın (cc) emirlerine uyanları müjdelemek.","term":"Tebşir"}]},{"type":"anagramFlashcard","title":"Anagram Kartları","cards":[{"definition":"İpucu: Bu kelime \"Fetanet\"","correctAnswer":"Fetanet","scrambledWord":"TFENATE"},{"definition":"İpucu: Bu kelime \"İnzar\"","correctAnswer":"İnzar","scrambledWord":"İARNZ"},{"definition":"İpucu: Bu kelime \"Nübüvvet\"","scrambledWord":"TBNÜEVVÜ","correctAnswer":"Nübüvvet"},{"scrambledWord":"TEMNAE","definition":"İpucu: Bu kelime \"Emanet\"","correctAnswer":"Emanet"},{"scrambledWord":"KYEİTZE","correctAnswer":"Tezkiye","definition":"İpucu: Bu kelime \"Tezkiye\""},{"definition":"İpucu: Bu kelime \"Resul\"","scrambledWord":"SRELU","correctAnswer":"Resul"},{"scrambledWord":"UMCİZE","correctAnswer":"Mucize","definition":"İpucu: Bu kelime \"Mucize\""},{"correctAnswer":"Nebi","scrambledWord":"BNEİ","definition":"İpucu: Bu kelime \"Nebi\""},{"correctAnswer":"Tebliğ","definition":"İpucu: Bu kelime \"Tebliğ\"","scrambledWord":"LBEĞİT"},{"correctAnswer":"İsmet","scrambledWord":"İETSM","definition":"İpucu: Bu kelime \"İsmet\""},{"definition":"İpucu: Bu kelime \"Peygamber\"","scrambledWord":"EYMERABPG","correctAnswer":"Peygamber"},{"definition":"İpucu: Bu kelime \"Vahiy\"","scrambledWord":"HYAVİ","correctAnswer":"Vahiy"},{"scrambledWord":"RİEASLT","correctAnswer":"Risalet","definition":"İpucu: Bu kelime \"Risalet\""},{"definition":"İpucu: Bu kelime \"Tebşir\"","scrambledWord":"İTEBRŞ","correctAnswer":"Tebşir"},{"definition":"İpucu: Bu kelime \"Tebyin\"","correctAnswer":"Tebyin","scrambledWord":"TNYEBİ"},{"correctAnswer":"Sıdk","definition":"İpucu: Bu kelime \"Sıdk\"","scrambledWord":"KISD"},{"correctAnswer":"Temsil","scrambledWord":"TSİLME","definition":"İpucu: Bu kelime \"Temsil\""},{"scrambledWord":"HİTEVD","definition":"İpucu: Bu kelime \"Tevhid\"","correctAnswer":"Tevhid"}]},{"title":"Doğru/Yanlış Alıştırması","questions":[{"statement":"Peygamberler, Allah'ın seçtiği elçilerdir.","isTrue":true},{"statement":"Hz. Âdem, son peygamberdir.","isTrue":false},{"isTrue":true,"statement":"Peygamberler, insanlara doğru yolu göstermek için görevlendirilmişlerdir."},{"isTrue":false,"statement":"Bütün peygamberlere ilahi kitaplar gönderilmiştir."},{"statement":"Peygamberlik, insanların tercihine bağlı bir görevdir.","isTrue":false},{"isTrue":true,"statement":"Peygamberler, üstün ahlaka sahip kişilerdir."},{"statement":"Kur'an'da ismi geçen tüm peygamberler bilinmektedir.","isTrue":false},{"isTrue":true,"statement":"Hz. Muhammed (sav), son peygamberdir."},{"isTrue":true,"statement":"Mucizeler, peygamberlerin peygamberliklerini ispatlamak için gösterdikleri olağanüstü olaylardır."},{"isTrue":true,"statement":"Kur'an-ı Kerim, Hz. Muhammed'in (sav) en büyük mucizesidir."}],"type":"trueFalseList"},{"title":"Boşluk Doldurma","sentenceWithBlank":"Peygamberlerin en önemli özelliği Allah'tan (cc) ___ almalarıdır.","correctAnswer":"vahiy","options":["vahiy","ilham","mesaj","emir"],"type":"fitb"},{"type":"fitb","options":["Âdem","Musa","İsa","Muhammed"],"title":"Boşluk Doldurma","correctAnswer":"Âdem","sentenceWithBlank":"İlk peygamber Hz. ____'dir."},{"title":"Boşluk Doldurma","sentenceWithBlank":"Son peygamber Hz. ____'dir (sav).","correctAnswer":"Muhammed","options":["Muhammed","İsa","Musa","Âdem"],"type":"fitb"},{"options":["tebliğ","vahiy","risalet","nübüvvet"],"type":"fitb","sentenceWithBlank":"Peygamberlerin insanlara Allah'tan (cc) aldığı şekilde iletmesine ___ adı verilir.","title":"Boşluk Doldurma","correctAnswer":"tebliğ"},{"scrambledSentence":"peygamberdir. insan Âdem ilk ve yeryüzündeki ilk","title":"Cümle Düzeltme","type":"sentenceScramble","correctSentence":"Âdem yeryüzündeki ilk insan ve ilk peygamberdir."},{"type":"sentenceScramble","scrambledSentence":"elçilerdir Allah'ın (cc) seçtiği Peygamberler.","correctSentence":"Peygamberler Allah’ın (cc) seçtiği elçilerdir.","title":"Cümle Düzeltme"},{"type":"sentenceScramble","scrambledSentence":"görevlendirmiştir. zamanlarda birçok peygamber için doğru yolu göstermeleri Allah (cc) insanlara farklı","correctSentence":"Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir.","title":"Cümle Düzeltme"},{"title":"Cümle Düzeltme","scrambledSentence":"Allah’ın O ve duyururlar, Allah’tan gönderdiği korkmazlar. korkarlar kimseden peygamberler başka emirleri ki O’ndan","correctSentence":"O peygamberler ki Allah’ın gönderdiği emirleri duyururlar, Allah’tan korkarlar ve O’ndan başka kimseden korkmazlar.","type":"sentenceScramble"},{"scrambledSentence":"Hz.Muhammed’e Mağarası’nda (sav) ilk vahiy gelmiştir Nur Hira Dağı’ndaki","correctSentence":"Hz.Muhammed’e (sav) ilk vahiy Nur Dağı’ndaki Hira Mağarası’nda gelmiştir","title":"Cümle Düzeltme","type":"sentenceScramble"},{"correctAnswer":"Olağanüstü güçlere sahip olma","title":"Çoktan Seçmeli","options":["Güvenilirlik","Doğruluk","Olağanüstü güçlere sahip olma","Akıl ve zeka"],"question":"Aşağıdakilerden hangisi peygamberlerin ortak özelliklerinden biri değildir?","type":"mcq"},{"title":"Çoktan Seçmeli","options":["25","28","30","35"],"type":"mcq","question":"Kur'an-ı Kerim'de adı geçen kaç peygamber vardır?","correctAnswer":"25"},{"title":"Çoktan Seçmeli","question":"Peygamberlerin Allah'tan aldığı mesajları insanlara iletmesine ne ad verilir?","options":["Vahiy","Tebliğ","Nübüvvet","Risalet"],"correctAnswer":"Tebliğ","type":"mcq"},{"question":"Hangisi Hz. Muhammed'in (sav) en büyük mucizesidir?","options":["Kur'an-ı Kerim","Ölüleri diriltmesi","Denizi yarması","Göğe yükselmesi"],"type":"mcq","title":"Çoktan Seçmeli","correctAnswer":"Kur'an-ı Kerim"},{"correctAnswer":"İnzar","question":"Peygamberlerin insanları kötülüklerden sakındırmaları hangi görevleri kapsamındadır?","type":"mcq","options":["Tebyin","Tebşir","İnzar","Temsil"],"title":"Çoktan Seçmeli"},{"type":"mcq","correctAnswer":"Haber getiren","options":["Elçi","Haber getiren","Doğru yolu gösteren","Vahiy alan"],"question":"Peygamber kelimesinin sözlük anlamı nedir?","title":"Çoktan Seçmeli"},{"correctAnswer":"25","title":"Çoktan Seçmeli","question":"Kur'an-ı Kerim'de adı geçen peygamber sayısı kaçtır?","options":["28","25","30","20"],"type":"mcq"},{"question":"Peygamberlerin insanlara Allah'tan aldıkları mesajları iletmesine ne denir?","type":"mcq","title":"Çoktan Seçmeli","correctAnswer":"Tebliğ","options":["Tebliğ","Vahiy","Mucize","İsmet"]},{"options":["Asanın yılana dönüşmesi","Ölüleri diriltmesi","Kur'an-ı Kerim","Ateşin yakmaması"],"question":"Hz. Peygamber'in en büyük mucizesi nedir?","correctAnswer":"Kur'an-ı Kerim","title":"Çoktan Seçmeli","type":"mcq"},{"correctAnswer":"Sıdk","options":["Sıdk","Emanet","İsmet","Fetanet"],"type":"mcq","question":"Peygamberlerin dürüst ve doğru sözlü olmalarına ne denir?","title":"Çoktan Seçmeli"},{"options":["Sıdk","Emanet","İsmet","Fetanet"],"correctAnswer":"Emanet","type":"mcq","question":"Peygamberlerin güvenilir olmalarına ne denir?","title":"Çoktan Seçmeli"},{"title":"Çoktan Seçmeli","type":"mcq","options":["Sıdk","Emanet","İsmet","Fetanet"],"correctAnswer":"İsmet","question":"Peygamberlerin Allah tarafından her türlü günahtan korunmuş olmalarına ne denir?"}]
+[
+  {
+    "content": "<ul><li>Peygamberlerin kim olduğunu ve görevlerinin neler olduğunu öğreneceğim.</li><li>Peygamberlere neden inanmamız gerektiğini kavrayacağım.</li><li>Peygamberlerin sahip olduğu bazı önemli özellikleri öğreneceğim (sıdk, emanet, ismet, tebliğ, fetanet).</li><li>Mucizenin ne olduğunu ve bazı peygamberlerin mucizelerine örnekler verebileceğim.</li><li>Vahiy, tebliğ, nübüvvet, risalet gibi kavramları anlayacağım.</li><li>Kur'an-ı Kerim'de adı geçen peygamberleri öğreneceğim.</li></ul>",
+    "type": "content",
+    "title": "Bu Konuda Öğreneceklerimiz"
+  },
+  {
+    "type": "content",
+    "content": "<ul><li>Fetanet</li><li>İnzar</li><li>Nübüvvet</li><li>Emanet</li><li>Tezkiye</li><li>Resul</li><li>Mucize</li><li>Nebi</li><li>Tebliğ</li><li>İsmet</li><li>Peygamber</li><li>Vahiy</li><li>Risalet</li><li>Tebşir</li><li>Tebyin</li><li>Sıdk</li><li>Temsil</li><li>Tevhid</li></ul>",
+    "title": "Anahtar Kavramlar"
+  },
+  {
+    "title": "Peygamberlerin Görevi",
+    "type": "content",
+    "content": "<ul><li>Allah'ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli elçilerdir.</li><li>Hz. Âdem, yeryüzündeki ilk insan ve ilk peygamberdir.</li><li>Peygamberler Allah’ın (cc) seçtiği elçilerdir. </li><li>Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir.</li><li> Bunlardan bazılarına da ilahi kitaplar göndermiştir.</li><li>“Peygamber” kelimesi, Farsça kökenli olup sözlükte “haber getiren” anlamına gelir.</li><li> Terim anlamı ise “Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli kişilerdir.</li><li> Peygamberlerin en önemli özelliği Allah’tan (cc) vahiy almalarıdır.</li></ul>"
+  },
+  {
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Peygamberler Afişi (Responsive)</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde taşmayı gizle, sığdıracağız */\n        }\n\n        .poster-container {\n            /* Tasarımın Orijinal Sabit Boyutları */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n            \n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            display: grid;\n            grid-template-columns: 1fr 1.3fr 1fr; /* 3 Sütunlu Izgara */\n            box-shadow: 0 40px 80px rgba(0,0,0,0.6);\n            overflow: hidden;\n            position: relative;\n            \n            /* Animasyonlu geçiş */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* --- İÇERİK STİLLERİ (Masaüstü) --- */\n        .decoration {\n            position: absolute;\n            opacity: 0.08;\n            font-size: 300px;\n            color: #fbbf24;\n            z-index: 0;\n            font-family: 'Playfair Display', serif;\n        }\n        .dec-1 { top: -80px; left: -50px; content: \"NUR\"; }\n        .dec-2 { bottom: -80px; right: -50px; content: \"HİDAYET\"; }\n\n        .column {\n            padding: 60px 50px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            text-align: center;\n            border-right: 2px solid rgba(251, 191, 36, 0.2);\n            z-index: 1;\n            position: relative;\n        }\n        .column:last-child { border-right: none; }\n\n        h1 {\n            font-family: 'Playfair Display', serif;\n            font-size: 5.5rem;\n            margin: 10px 0;\n            color: #fbbf24;\n            letter-spacing: 4px;\n            text-shadow: 0 4px 15px rgba(0,0,0,0.5);\n        }\n\n        h2 {\n            font-family: 'Playfair Display', serif;\n            font-size: 2.2rem;\n            color: #93c5fd;\n            margin-bottom: 30px;\n            border-bottom: 3px solid #93c5fd;\n            padding-bottom: 15px;\n            width: 90%;\n            letter-spacing: 1px;\n        }\n\n        h3 {\n            font-size: 1.6rem;\n            color: #fbbf24;\n            margin: 20px 0 10px 0;\n            font-weight: 700;\n        }\n\n        p, li {\n            font-size: 1.25rem;\n            line-height: 1.6;\n            color: #e2e8f0;\n            margin: 0;\n        }\n\n        .highlight-box {\n            background: rgba(251, 191, 36, 0.1);\n            border: 2px solid #fbbf24;\n            padding: 30px;\n            border-radius: 20px;\n            margin-top: 30px;\n            width: 90%;\n            box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.05);\n        }\n\n        .icon-text {\n            font-size: 5rem;\n            margin-bottom: 15px;\n            display: block;\n            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));\n        }\n        \n        .sub-info {\n            font-size: 1.1rem;\n            color: #93c5fd;\n            font-style: italic;\n            margin-top: 15px;\n            font-weight: 300;\n        }\n\n        .center-icon-box {\n            margin-top: 60px;\n            border: 3px dashed rgba(255,255,255,0.3);\n            padding: 40px;\n            border-radius: 50%;\n            background: rgba(255,255,255,0.02);\n        }\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto;\n                display: block;\n                overflow-y: auto;\n                padding: 10px;\n            }\n\n            .poster-container {\n                width: 100%;\n                height: auto;\n                display: flex; /* Grid yerine Flex */\n                flex-direction: column; /* Alt alta diz */\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n                box-shadow: none;\n            }\n\n            .column {\n                padding: 40px 20px;\n                border-right: none;\n                border-bottom: 1px solid rgba(255,255,255,0.1);\n                width: 100%;\n                box-sizing: border-box;\n            }\n\n            /* Mobilde sıralamayı değiştir: Önce Tanım (Orta), Sonra Kaynak (Sol), Sonra Görev (Sağ) */\n            /* Flex order kullanımı */\n            .column:nth-child(3) { order: 1; border-top: none; } /* Orta Sütun (HTML'de 3. sırada çünkü decorationlar 1 ve 2) -> En başa */\n            .column:nth-child(2) { order: 2; } /* Sol Sütun -> İkinci */\n            .column:nth-child(4) { order: 3; border-bottom: none; } /* Sağ Sütun -> Sonuncu */\n\n            /* Yazı boyutlarını mobile göre ayarla */\n            h1 { font-size: 3.5rem; letter-spacing: 2px; }\n            h2 { font-size: 1.8rem; width: 100%; }\n            h3 { font-size: 1.4rem; }\n            p, li { font-size: 1.1rem; }\n            .icon-text { font-size: 4rem; }\n            .center-icon-box { margin-top: 30px; padding: 20px; }\n            .center-icon-box span { font-size: 5rem; }\n\n            /* Süslemeleri gizle veya küçült */\n            .decoration { display: none; }\n        }\n\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <div class=\"decoration dec-1\"></div>\n            <div class=\"decoration dec-2\"></div>\n\n            <!-- SOL SÜTUN (Mobilde 2. Sırada) -->\n            <div class=\"column\">\n                <h2>KAYNAĞI VE SEÇİMİ</h2>\n                \n                <div style=\"margin-bottom: 30px;\">\n                    <span class=\"icon-text\">☝️</span>\n                    <h3>ALLAH'IN (cc) ELÇİLERİ</h3>\n                    <p>Peygamberler, insanlar arasından Allah tarafından özel olarak seçilmişlerdir.</p>\n                </div>\n\n                <div class=\"highlight-box\">\n                    <span style=\"font-size: 3rem; display:block; margin-bottom:10px;\">✨</span>\n                    <h3 style=\"margin-top:0;\">EN ÖNEMLİ ÖZELLİK</h3>\n                    <p>Allah'tan doğrudan <strong>VAHİY</strong> almalarıdır.</p>\n                </div>\n\n                <div style=\"margin-top: 40px; background: rgba(147, 197, 253, 0.1); padding: 20px; border-radius: 15px; width: 90%;\">\n                    <h3>İLK PEYGAMBER</h3>\n                    <p style=\"font-size: 1.6rem; font-weight: bold; color:#fff; margin: 10px 0;\">HZ. ÂDEM</p>\n                    <p class=\"sub-info\" style=\"color:#cbd5e1;\">(Aynı zamanda yeryüzündeki ilk insan)</p>\n                </div>\n            </div>\n\n            <!-- ORTA SÜTUN (Mobilde 1. Sırada - Başlık) -->\n            <div class=\"column\" style=\"background: rgba(0,0,0,0.1);\">\n                <span class=\"sub-info\" style=\"margin-bottom: 5px; font-size: 1.2rem; color: #fbbf24;\">Farsça Kökeni: \"Haber Getiren\"</span>\n                <h1>PEYGAMBER</h1>\n                <div style=\"width: 100px; height: 5px; background: #fbbf24; margin: 20px 0; border-radius: 5px;\"></div>\n                \n                <p style=\"font-size: 1.3rem; margin-top: 20px; max-width: 95%; leading-relaxed;\">\n                    Allah’ın (cc) emir, yasak ve öğütlerini insanlara bildirmekle görevli <strong>seçilmiş elçilerdir.</strong>\n                </p>\n\n                <div class=\"center-icon-box\">\n                    <span style=\"font-size: 7rem;\">🕋</span>\n                </div>\n            </div>\n\n            <!-- SAĞ SÜTUN (Mobilde 3. Sırada) -->\n            <div class=\"column\">\n                <h2>GÖREVİ VE AMACI</h2>\n\n                <div style=\"margin-bottom: 30px;\">\n                    <span class=\"icon-text\">📜</span>\n                    <h3>TEBLİĞ GÖREVİ</h3>\n                    <p>İlahi mesajı insanlara olduğu gibi iletmek.</p>\n                    <p class=\"sub-info\" style=\"margin-top: 10px;\">AMAÇ: İnsanlara <strong>doğru yolu</strong> göstermek.</p>\n                </div>\n\n                <div class=\"highlight-box\" style=\"margin-top: 20px; text-align: left;\">\n                    <h3 style=\"text-align: center;\">KAPSAM VE ARAÇLAR</h3>\n                    <ul style=\"padding-left: 20px; margin-top: 20px;\">\n                        <li style=\"margin-bottom: 15px;\">Farklı zamanlarda <strong>birçok peygamber</strong> görevlendirilmiştir.</li>\n                        <li>Bunlardan bazılarına rehber olarak <strong>İlahi Kitaplar</strong> gönderilmiştir.</li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar (Kenar payları dahil)\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>",
+    "title": "İnteraktif Sunum",
+    "type": "htmlSlide"
+  },
+  {
+    "title": "Vahiy ve Tebliğ",
+    "content": "<ul><li>Peygamberler Allah'tan (cc) vahiy alırlar ve bu vahyi insanlara tebliğ ederler.</li><li>Vahiy, Allah'ın emir ve hükümlerini peygamberlere bildirmesi, tebliğ ise peygamberlerin bu vahyi insanlara iletmesidir. </li><li>Kur’an-ı Kerim’de peygamberler için “resul” ve “nebi” kavramları kullanılır. </li><li>Resul “elçi”, nebi ise “haberci” anlamına gelir.</li></ul>",
+    "type": "content"
+  },
+  {
+    "type": "htmlSlide",
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Vahiy ve Tebliğ Afişi</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde scroll yok, sığdırma var */\n        }\n\n        .poster-container {\n            /* Sabit Orijinal Boyutlar */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n            \n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            box-shadow: 0 40px 80px rgba(0,0,0,0.7);\n            overflow: hidden;\n            position: relative;\n            display: flex;\n            flex-direction: column;\n            \n            /* Ölçekleme için merkez noktası */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* --- İÇERİK STİLLERİ (Masaüstü) --- */\n        .decoration {\n            position: absolute;\n            opacity: 0.07;\n            font-family: 'Playfair Display', serif;\n            color: #fbbf24;\n            z-index: 0;\n            font-size: 220px;\n        }\n        .dec-top { top: -50px; left: 15%; content: \"VAHİY\"; }\n        .dec-bottom { bottom: -50px; right: 15%; content: \"TEBLİĞ\"; }\n\n        .process-layer {\n            flex: 3;\n            display: flex;\n            align-items: center;\n            justify-content: space-around;\n            padding: 50px;\n            border-bottom: 3px dashed rgba(251, 191, 36, 0.3);\n            z-index: 1;\n        }\n\n        .node {\n            background: rgba(15, 23, 42, 0.8);\n            border: 3px solid #93c5fd;\n            padding: 35px;\n            border-radius: 20px;\n            text-align: center;\n            width: 240px;\n            box-shadow: 0 15px 30px rgba(0,0,0,0.4);\n        }\n        .node-source { border-color: #fbbf24; }\n\n        .node h3 { margin: 0; font-size: 1.8rem; color: #fbbf24; font-family: 'Playfair Display', serif; }\n        .node p { font-size: 1.1rem; color: #cbd5e1; margin-top: 15px; }\n        .node-icon { font-size: 4rem; display: block; margin-bottom: 15px; }\n\n        .flow-arrow-container {\n            flex-grow: 1;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            margin: 0 30px;\n            position: relative;\n            top: -20px;\n        }\n        .flow-arrow {\n            font-size: 4.5rem;\n            color: #93c5fd;\n            margin: 10px 0;\n        }\n        .action-title {\n            font-weight: bold;\n            color: #fff;\n            font-size: 1.5rem;\n            background: #1e3a8a;\n            padding: 8px 25px;\n            border-radius: 30px;\n            border: 2px solid #93c5fd;\n        }\n        .action-desc { font-size: 1rem; color: #cbd5e1; text-align: center; max-width: 200px; margin-top: 10px; }\n\n        .terms-layer {\n            flex: 2;\n            display: flex;\n            background: rgba(0,0,0,0.2);\n            z-index: 1;\n        }\n\n        .term-box {\n            flex: 1;\n            padding: 40px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            align-items: center;\n            border-right: 2px solid rgba(251, 191, 36, 0.2);\n            text-align: center;\n            transition: all 0.3s ease;\n        }\n        .term-box:last-child { border-right: none; }\n        \n        .term-title-group { margin-bottom: 20px; }\n        .term-arabic { font-family: 'Playfair Display', serif; font-size: 3.2rem; color: #fbbf24; display: block; }\n        .term-meaning { font-size: 2.4rem; font-weight: bold; color: #fff; text-transform: uppercase; letter-spacing: 3px; }\n        .term-desc { font-size: 1.2rem; color: #e2e8f0; max-width: 75%; background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 15px; line-height: 1.6; }\n\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto; /* Yükseklik serbest */\n                display: block; /* Flex'i iptal et */\n                overflow-y: auto; /* Dikey scroll aç */\n                padding: 10px;\n            }\n\n            .poster-container {\n                /* Sabitliği iptal et, esnek yap */\n                width: 100%;\n                height: auto;\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n            }\n\n            /* Akış Yönünü Değiştir (Yatay -> Dikey) */\n            .process-layer {\n                flex-direction: column;\n                padding: 30px 20px;\n                gap: 20px;\n            }\n\n            /* Kutuları Ekrana Sığdır */\n            .node {\n                width: 90%;\n                max-width: 100%;\n                padding: 20px;\n                transform: none !important; /* Varsa inline style'ı ez */\n            }\n            .node h3 { font-size: 1.5rem; }\n            .node-icon { font-size: 3rem; }\n\n            /* Okları Döndür */\n            .flow-arrow-container {\n                margin: 10px 0;\n                top: 0;\n            }\n            .flow-arrow {\n                transform: rotate(90deg); /* Aşağı baktır */\n                font-size: 3rem;\n                margin: 5px 0;\n            }\n            .action-title { font-size: 1.1rem; }\n\n            /* Alt Katmanı Düzenle */\n            .terms-layer {\n                flex-direction: column;\n                border-top: 2px dashed rgba(251, 191, 36, 0.2);\n            }\n            .term-box {\n                border-right: none;\n                border-bottom: 1px solid rgba(255,255,255,0.1);\n                padding: 30px 20px;\n            }\n            .term-arabic { font-size: 2.5rem; }\n            .term-meaning { font-size: 1.8rem; }\n            .term-desc { font-size: 1rem; max-width: 100%; }\n\n            /* Arka plan süslerini küçült */\n            .decoration { font-size: 100px; opacity: 0.05; }\n            .dec-top { top: 10px; left: 10px; }\n            .dec-bottom { bottom: 10px; right: 10px; }\n        }\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <div class=\"decoration dec-top\">VAHİY</div>\n            <div class=\"decoration dec-bottom\">TEBLİĞ</div>\n\n            <div class=\"process-layer\">\n                <!-- Kaynak -->\n                <div class=\"node node-source\">\n                    <span class=\"node-icon\">✨</span>\n                    <h3>ALLAH (cc)</h3>\n                    <p>Emir ve Hükümlerin Kaynağı</p>\n                </div>\n\n                <!-- Ok 1 -->\n                <div class=\"flow-arrow-container\">\n                    <div class=\"action-title\">VAHİY</div>\n                    <div class=\"flow-arrow\">➔</div>\n                    <div class=\"action-desc\">Allah'ın hükümlerini bildirmesi.</div>\n                </div>\n\n                <!-- Merkez -->\n                <div class=\"node\" style=\"transform: scale(1.15); border-color: #fff;\">\n                    <span class=\"node-icon\">🤲</span>\n                    <h3 style=\"color:#fff;\">PEYGAMBERLER</h3>\n                    <p>Vahyi alan ve ileten seçilmiş elçiler.</p>\n                </div>\n\n                <!-- Ok 2 -->\n                <div class=\"flow-arrow-container\">\n                    <div class=\"action-title\">TEBLİĞ</div>\n                    <div class=\"flow-arrow\">➔</div>\n                    <div class=\"action-desc\">Peygamberlerin vahyi iletmesi.</div>\n                </div>\n\n                <!-- Hedef -->\n                <div class=\"node\">\n                    <span class=\"node-icon\">👥</span>\n                    <h3>İNSANLAR</h3>\n                    <p>Mesajın muhatapları.</p>\n                </div>\n            </div>\n\n            <div class=\"terms-layer\">\n                <div class=\"term-box\">\n                     <div class=\"term-title-group\">\n                        <span class=\"term-arabic\">Resul</span>\n                        <span class=\"term-meaning\">\"ELÇİ\"</span>\n                    </div>\n                    <p class=\"term-desc\">Kur'an-ı Kerim'de peygamberler için kullanılan, risalet (elçilik) görevini vurgulayan kavram.</p>\n                </div>\n\n                <div class=\"term-box\">\n                    <div class=\"term-title-group\">\n                        <span class=\"term-arabic\">Nebi</span>\n                        <span class=\"term-meaning\">\"HABERCİ\"</span>\n                    </div>\n                    <p class=\"term-desc\">Allah'tan aldığı haberleri (nübüvvet) insanlara ulaştıran kişi anlamındaki kavram.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle (CSS devreye girsin)\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>",
+    "title": "İnteraktif Sunum"
+  },
+  {
+    "title": "Peygamberlerin Özellikleri",
+    "content": "<ul><li>Peygamberler, güvenilir, dürüst, akıllı, zeki ve sabırlı insanlardır.</li><li>Günah işlemekten uzak dururlar ve topluma örnek olurlar.</li></ul>",
+    "type": "content"
+  },
+  {
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Peygamberlerin Özellikleri ve Görevleri (Responsive)</title>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap');\n\n        /* --- GENEL AYARLAR --- */\n        body {\n            margin: 0;\n            padding: 0;\n            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);\n            font-family: 'Roboto', sans-serif;\n            color: #fff;\n            box-sizing: border-box;\n        }\n\n        /* --- MASAÜSTÜ VARSAYILAN (Sabit & Ölçeklenebilir) --- */\n        #main-wrapper {\n            width: 100vw;\n            height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            overflow: hidden; /* Masaüstünde scroll yok, sığdırma var */\n        }\n\n        .poster-container {\n            /* Sabit Orijinal Boyutlar */\n            width: 1500px;\n            height: 850px;\n            flex-shrink: 0;\n\n            background: rgba(255, 255, 255, 0.05);\n            border: 4px solid #fbbf24;\n            border-radius: 30px;\n            box-shadow: 0 40px 80px rgba(0,0,0,0.7);\n            overflow: hidden;\n            display: flex;\n            flex-direction: column;\n            position: relative;\n\n            /* Animasyonlu geçiş */\n            transform-origin: center center;\n            transition: transform 0.2s ease-out;\n        }\n\n        /* Başlık Alanı */\n        .main-header {\n            text-align: center;\n            padding: 30px;\n            border-bottom: 3px solid rgba(251, 191, 36, 0.3);\n            background: rgba(0,0,0,0.2);\n            z-index: 2;\n        }\n        .main-header h1 {\n            font-family: 'Playfair Display', serif;\n            font-size: 3.5rem;\n            margin: 0;\n            color: #fff;\n            text-shadow: 0 4px 10px rgba(0,0,0,0.5);\n        }\n        .main-header span { color: #fbbf24; }\n\n        /* İçerik Alanı */\n        .content-wrapper {\n            display: flex;\n            flex: 1;\n            position: relative;\n        }\n\n        /* ORTAK SÜTUN STİLLERİ */\n        .column {\n            flex: 1;\n            padding: 40px;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .col-left {\n            border-right: 2px dashed rgba(255, 255, 255, 0.2);\n            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, transparent 100%);\n        }\n        \n        .col-right {\n            background: linear-gradient(180deg, rgba(147, 197, 253, 0.05) 0%, transparent 100%);\n        }\n\n        /* Bölüm Başlıkları */\n        .section-title {\n            font-family: 'Playfair Display', serif;\n            font-size: 2.5rem;\n            margin-bottom: 30px;\n            text-align: center;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 15px;\n        }\n        .title-gold { color: #fbbf24; }\n        .title-blue { color: #93c5fd; }\n\n        /* --- TABLO/IZGARA YAPISI --- */\n        .grid-container {\n            display: grid;\n            gap: 20px;\n            height: 100%;\n        }\n        \n        /* Sol Taraf: 2x2 Izgara */\n        .grid-2x2 {\n            grid-template-columns: 1fr 1fr;\n            grid-template-rows: 1fr 1fr;\n        }\n\n        /* Sağ Taraf: 2 Sütunlu Liste */\n        .grid-list {\n            grid-template-columns: 1fr 1fr;\n            grid-auto-rows: min-content;\n        }\n\n        /* KART TASARIMI */\n        .card {\n            background: rgba(15, 23, 42, 0.6);\n            border-radius: 15px;\n            padding: 25px;\n            display: flex;\n            flex-direction: column;\n            justify-content: center;\n            transition: transform 0.3s;\n            box-shadow: 0 5px 15px rgba(0,0,0,0.2);\n            position: relative;\n            overflow: hidden;\n        }\n        /* Mobilde hover efekti takılma yapmasın diye sadece masaüstünde kalsın diyebiliriz ama basit tutalım */\n        \n        .card-trait { border-left: 5px solid #fbbf24; }\n        .card-trait h3 { color: #fbbf24; font-size: 1.8rem; margin: 0 0 10px 0; font-family: 'Playfair Display', serif;}\n        \n        .card-duty { border-left: 5px solid #93c5fd; }\n        .card-duty h3 { color: #93c5fd; font-size: 1.6rem; margin: 0 0 10px 0; font-family: 'Playfair Display', serif;}\n\n        .card p {\n            font-size: 1.1rem;\n            line-height: 1.5;\n            color: #e2e8f0;\n            margin: 0;\n        }\n\n        /* Dekoratif Arka Plan */\n        .decoration {\n            position: absolute;\n            font-size: 300px;\n            opacity: 0.05;\n            z-index: 0;\n            pointer-events: none;\n        }\n        .dec-left { bottom: -50px; left: -50px; color: #fbbf24; }\n        .dec-right { top: -50px; right: -50px; color: #93c5fd; }\n\n\n        /* -----------------------------------------------------------\n           MOBİL MODU (Media Query)\n           Ekran 1024px'den darsa (Tablet Dik & Telefon) bu kurallar çalışır.\n        ----------------------------------------------------------- */\n        @media screen and (max-width: 1024px) {\n            #main-wrapper {\n                height: auto;\n                display: block;\n                overflow-y: auto;\n                padding: 10px;\n            }\n\n            .poster-container {\n                width: 100%;\n                height: auto;\n                transform: none !important; /* JS ölçeklemesini iptal et */\n                margin-top: 0;\n                border-width: 2px;\n                box-shadow: none;\n            }\n\n            .main-header {\n                padding: 20px 10px;\n            }\n            .main-header h1 {\n                font-size: 2rem; /* Başlığı küçült */\n                line-height: 1.2;\n            }\n            .main-header span {\n                display: block; /* \"Özellikleri ve Görevleri\" alt satıra geçsin */\n                margin-top: 5px;\n            }\n\n            .content-wrapper {\n                flex-direction: column; /* Yan yana değil alt alta */\n            }\n\n            .column {\n                padding: 20px;\n                width: 100%;\n                box-sizing: border-box;\n            }\n\n            .col-left {\n                border-right: none;\n                border-bottom: 2px dashed rgba(255, 255, 255, 0.2);\n            }\n\n            .section-title {\n                font-size: 1.8rem;\n                margin-bottom: 20px;\n            }\n\n            /* Gridleri Tek Sütuna Düşür */\n            .grid-container {\n                display: flex;\n                flex-direction: column;\n                gap: 15px;\n            }\n\n            .card {\n                padding: 20px;\n                min-height: auto; /* Yükseklik serbest */\n            }\n\n            .card h3 { font-size: 1.4rem; }\n            .card p { font-size: 1rem; }\n\n            /* Süslemeleri gizle */\n            .decoration { display: none; }\n        }\n\n    </style>\n</head>\n<body>\n\n    <div id=\"main-wrapper\">\n        <div class=\"poster-container\" id=\"poster\">\n            <!-- Ana Başlık -->\n            <div class=\"main-header\">\n                <h1>PEYGAMBERLERİN <span>ÖZELLİKLERİ</span> VE <span>GÖREVLERİ</span></h1>\n            </div>\n\n            <div class=\"content-wrapper\">\n                <!-- Dekoratif Arkaplan -->\n                <div class=\"decoration dec-left\">★</div>\n                <div class=\"decoration dec-right\">✦</div>\n\n                <!-- SOL SÜTUN: ÖZELLİKLER (SIFATLAR) -->\n                <div class=\"column col-left\">\n                    <h2 class=\"section-title title-gold\">\n                        <span>✨</span> ÖZELLİKLERİ\n                    </h2>\n                    \n                    <div class=\"grid-container grid-2x2\">\n                        <!-- Sıdk -->\n                        <div class=\"card card-trait\">\n                            <h3>SIDK</h3>\n                            <p>Dürüst ve doğru sözlü olmaktır. Asla yalan söylemezler.</p>\n                        </div>\n                        <!-- Emanet -->\n                        <div class=\"card card-trait\">\n                            <h3>EMANET</h3>\n                            <p>Güvenilir olmaktır. Her konuda emniyet duyulan kişilerdir.</p>\n                        </div>\n                        <!-- İsmet -->\n                        <div class=\"card card-trait\">\n                            <h3>İSMET</h3>\n                            <p>Allah (cc) tarafından her türlü günahtan korunmuş olmaktır.</p>\n                        </div>\n                        <!-- Fetanet -->\n                        <div class=\"card card-trait\">\n                            <h3>FETANET</h3>\n                            <p>Akıllı, zeki ve uyanık olmaktır. Yüksek kavrayış gücüne sahiptirler.</p>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- SAĞ SÜTUN: GÖREVLER -->\n                <div class=\"column col-right\">\n                    <h2 class=\"section-title title-blue\">\n                        <span>📜</span> GÖREVLERİ\n                    </h2>\n\n                    <div class=\"grid-container grid-list\">\n                        <!-- Tebliğ -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBLİĞ</h3>\n                            <p>Vahyi eksiklik ve fazlalık olmadan insanlara bildirmek.</p>\n                        </div>\n                        <!-- Tebyin -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBYİN</h3>\n                            <p>Allah’ın (cc) emir ve yasaklarını insanlara açıklamak.</p>\n                        </div>\n                        <!-- Temsil -->\n                        <div class=\"card card-duty\">\n                            <h3>TEMSİL</h3>\n                            <p>İslam’ı anlama ve yaşama konusunda insanlara örneklik etmek.</p>\n                        </div>\n                        <!-- İnzar -->\n                        <div class=\"card card-duty\">\n                            <h3>İNZAR</h3>\n                            <p>Allah’ın (cc) emirlerine uymayanları uyarmak.</p>\n                        </div>\n                        <!-- Tebşir -->\n                        <div class=\"card card-duty\">\n                            <h3>TEBŞİR</h3>\n                            <p>Allah’ın (cc) emirlerine uyanları müjdelemek.</p>\n                        </div>\n                        <!-- Tezkiye -->\n                        <div class=\"card card-duty\">\n                            <h3>TEZKİYE</h3>\n                            <p>İnsanların kötü huylardan uzaklaşmalarını sağlamak.</p>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- MASAÜSTÜ İÇİN ÖLÇEKLEME SCRİPTİ -->\n    <script>\n        function fitPoster() {\n            // Sadece masaüstü modunda çalış (Genişlik > 1024px)\n            if (window.innerWidth > 1024) {\n                const poster = document.getElementById('poster');\n                const winWidth = window.innerWidth;\n                const winHeight = window.innerHeight;\n                \n                // Orijinal boyutlar (Kenar payları dahil)\n                const targetWidth = 1540; \n                const targetHeight = 890;\n\n                // Ölçek oranını hesapla\n                const scale = Math.min(winWidth / targetWidth, winHeight / targetHeight);\n                \n                // Uygula\n                poster.style.transform = `scale(${scale})`;\n            } else {\n                // Mobildeysek ölçeklemeyi temizle\n                document.getElementById('poster').style.transform = 'none';\n            }\n        }\n\n        // Yüklenince ve yeniden boyutlandırılınca çalıştır\n        window.addEventListener('load', fitPoster);\n        window.addEventListener('resize', fitPoster);\n    </script>\n\n</body>\n</html>",
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum"
+  },
+  {
+    "title": "Mucizeler",
+    "content": "<ul><li>Peygamberlerin Allah'ın izniyle gösterdiği olağanüstü olaylardır.</li><li>Bu mucizeler, peygamberliğin doğruluğunu kanıtlamak ve insanları inanmaya teşvik etmek içindir.</li></ul>",
+    "type": "content"
+  },
+  {
+    "title": "İlk ve Son Peygamber",
+    "content": "<ul><li>Hz.Âdem ilk peygamber, Hz.Muhammed (sav) ise son peygamberdir.<li><li>Kur’an’da ismi geçen yirmi beş peygamber vardır.</li><li>Peygamberlik, Allah (cc) tarafından verilen bir görev olup insanların tercihine bağlı değildir.</li></ul>",
+    "type": "content"
+  },
+  {
+    "title": "Bilgi Kartları",
+    "type": "flashcard",
+    "cards": [
+      {
+        "definition": "Akıl ve zekâ",
+        "term": "Fetanet"
+      },
+      {
+        "term": "Vahiy",
+        "definition": "Yüce Allah’ın, emir ve hükümlerini peygamberlere bildirmesine vahiy denir."
+      },
+      {
+        "term": "İsmet",
+        "definition": "Günahlardan korunma"
+      },
+      {
+        "definition": "Peygamberlerin dürüst ve doğru sözlü olması",
+        "term": "Sıdk"
+      },
+      {
+        "definition": "İnsanların kötü huylardan uzaklaşmalarını sağlamaya çalışmaları. ",
+        "term": "Tezkiye"
+      },
+      {
+        "term": "Peygamber",
+        "definition": "Allah'ın elçisi"
+      },
+      {
+        "definition": "Allah’ın (cc) emirlerine uymayanları uyarmak.",
+        "term": "İnzar"
+      },
+      {
+        "definition": "Allah’ın (cc) emir ve yasaklarını insanlara açıklamak.",
+        "term": "Tebyin"
+      },
+      {
+        "term": "Temsil",
+        "definition": "İslam’ı anlama ve yaşama konusunda insanlara örneklik etmek."
+      },
+      {
+        "definition": "Tek yaratıcı inancı",
+        "term": "Tevhid"
+      },
+      {
+        "term": "Risalet",
+        "definition": "Elçilik görevi"
+      },
+      {
+        "term": "Resul",
+        "definition": "Elçi"
+      },
+      {
+        "definition": "Güvenilirlik",
+        "term": "Emanet"
+      },
+      {
+        "definition": "Doğru sözlülük",
+        "term": "Sıdk"
+      },
+      {
+        "term": "Mucize",
+        "definition": "Olağanüstü olay"
+      },
+      {
+        "definition": "Allah'tan gelen mesaj",
+        "term": "Vahiy"
+      },
+      {
+        "definition": "Vahyi iletme",
+        "term": "Tebliğ"
+      },
+      {
+        "definition": "Haberci",
+        "term": "Nebi"
+      },
+      {
+        "definition": "Peygamberlik görevi",
+        "term": "Nübüvvet"
+      },
+      {
+        "definition": "Allah’ın (cc) emirlerine uyanları müjdelemek.",
+        "term": "Tebşir"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Anagram Kartları",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Fetanet\"",
+        "correctAnswer": "Fetanet",
+        "scrambledWord": "TFENATE"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İnzar\"",
+        "correctAnswer": "İnzar",
+        "scrambledWord": "İARNZ"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Nübüvvet\"",
+        "scrambledWord": "TBNÜEVVÜ",
+        "correctAnswer": "Nübüvvet"
+      },
+      {
+        "scrambledWord": "TEMNAE",
+        "definition": "İpucu: Bu kelime \"Emanet\"",
+        "correctAnswer": "Emanet"
+      },
+      {
+        "scrambledWord": "KYEİTZE",
+        "correctAnswer": "Tezkiye",
+        "definition": "İpucu: Bu kelime \"Tezkiye\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Resul\"",
+        "scrambledWord": "SRELU",
+        "correctAnswer": "Resul"
+      },
+      {
+        "scrambledWord": "UMCİZE",
+        "correctAnswer": "Mucize",
+        "definition": "İpucu: Bu kelime \"Mucize\""
+      },
+      {
+        "correctAnswer": "Nebi",
+        "scrambledWord": "BNEİ",
+        "definition": "İpucu: Bu kelime \"Nebi\""
+      },
+      {
+        "correctAnswer": "Tebliğ",
+        "definition": "İpucu: Bu kelime \"Tebliğ\"",
+        "scrambledWord": "LBEĞİT"
+      },
+      {
+        "correctAnswer": "İsmet",
+        "scrambledWord": "İETSM",
+        "definition": "İpucu: Bu kelime \"İsmet\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Peygamber\"",
+        "scrambledWord": "EYMERABPG",
+        "correctAnswer": "Peygamber"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Vahiy\"",
+        "scrambledWord": "HYAVİ",
+        "correctAnswer": "Vahiy"
+      },
+      {
+        "scrambledWord": "RİEASLT",
+        "correctAnswer": "Risalet",
+        "definition": "İpucu: Bu kelime \"Risalet\""
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Tebşir\"",
+        "scrambledWord": "İTEBRŞ",
+        "correctAnswer": "Tebşir"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Tebyin\"",
+        "correctAnswer": "Tebyin",
+        "scrambledWord": "TNYEBİ"
+      },
+      {
+        "correctAnswer": "Sıdk",
+        "definition": "İpucu: Bu kelime \"Sıdk\"",
+        "scrambledWord": "KISD"
+      },
+      {
+        "correctAnswer": "Temsil",
+        "scrambledWord": "TSİLME",
+        "definition": "İpucu: Bu kelime \"Temsil\""
+      },
+      {
+        "scrambledWord": "HİTEVD",
+        "definition": "İpucu: Bu kelime \"Tevhid\"",
+        "correctAnswer": "Tevhid"
+      }
+    ]
+  },
+  {
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Peygamberler, Allah'ın seçtiği elçilerdir.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hz. Âdem, son peygamberdir.",
+        "isTrue": false
+      },
+      {
+        "isTrue": true,
+        "statement": "Peygamberler, insanlara doğru yolu göstermek için görevlendirilmişlerdir."
+      },
+      {
+        "isTrue": false,
+        "statement": "Bütün peygamberlere ilahi kitaplar gönderilmiştir."
+      },
+      {
+        "statement": "Peygamberlik, insanların tercihine bağlı bir görevdir.",
+        "isTrue": false
+      },
+      {
+        "isTrue": true,
+        "statement": "Peygamberler, üstün ahlaka sahip kişilerdir."
+      },
+      {
+        "statement": "Kur'an'da ismi geçen tüm peygamberler bilinmektedir.",
+        "isTrue": false
+      },
+      {
+        "isTrue": true,
+        "statement": "Hz. Muhammed (sav), son peygamberdir."
+      },
+      {
+        "isTrue": true,
+        "statement": "Mucizeler, peygamberlerin peygamberliklerini ispatlamak için gösterdikleri olağanüstü olaylardır."
+      },
+      {
+        "isTrue": true,
+        "statement": "Kur'an-ı Kerim, Hz. Muhammed'in (sav) en büyük mucizesidir."
+      }
+    ],
+    "type": "trueFalseList"
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Peygamberlerin en önemli özelliği Allah'tan (cc) ___ almalarıdır.",
+    "correctAnswer": "vahiy",
+    "options": [
+      "vahiy",
+      "ilham",
+      "mesaj",
+      "emir"
+    ],
+    "type": "fitb"
+  },
+  {
+    "type": "fitb",
+    "options": [
+      "Âdem",
+      "Musa",
+      "İsa",
+      "Muhammed"
+    ],
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "Âdem",
+    "sentenceWithBlank": "İlk peygamber Hz. ____'dir."
+  },
+  {
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Son peygamber Hz. ____'dir (sav).",
+    "correctAnswer": "Muhammed",
+    "options": [
+      "Muhammed",
+      "İsa",
+      "Musa",
+      "Âdem"
+    ],
+    "type": "fitb"
+  },
+  {
+    "options": [
+      "tebliğ",
+      "vahiy",
+      "risalet",
+      "nübüvvet"
+    ],
+    "type": "fitb",
+    "sentenceWithBlank": "Peygamberlerin insanlara Allah'tan (cc) aldığı şekilde iletmesine ___ adı verilir.",
+    "title": "Boşluk Doldurma",
+    "correctAnswer": "tebliğ"
+  },
+  {
+    "scrambledSentence": "peygamberdir. insan Âdem ilk ve yeryüzündeki ilk",
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble",
+    "correctSentence": "Âdem yeryüzündeki ilk insan ve ilk peygamberdir."
+  },
+  {
+    "type": "sentenceScramble",
+    "scrambledSentence": "elçilerdir Allah'ın (cc) seçtiği Peygamberler.",
+    "correctSentence": "Peygamberler Allah’ın (cc) seçtiği elçilerdir.",
+    "title": "Cümle Düzeltme"
+  },
+  {
+    "type": "sentenceScramble",
+    "scrambledSentence": "görevlendirmiştir. zamanlarda birçok peygamber için doğru yolu göstermeleri Allah (cc) insanlara farklı",
+    "correctSentence": "Allah (cc) insanlara doğru yolu göstermeleri için farklı zamanlarda birçok peygamber görevlendirmiştir.",
+    "title": "Cümle Düzeltme"
+  },
+  {
+    "title": "Cümle Düzeltme",
+    "scrambledSentence": "Allah’ın O ve duyururlar, Allah’tan gönderdiği korkmazlar. korkarlar kimseden peygamberler başka emirleri ki O’ndan",
+    "correctSentence": "O peygamberler ki Allah’ın gönderdiği emirleri duyururlar, Allah’tan korkarlar ve O’ndan başka kimseden korkmazlar.",
+    "type": "sentenceScramble"
+  },
+  {
+    "scrambledSentence": "Hz.Muhammed’e Mağarası’nda (sav) ilk vahiy gelmiştir Nur Hira Dağı’ndaki",
+    "correctSentence": "Hz.Muhammed’e (sav) ilk vahiy Nur Dağı’ndaki Hira Mağarası’nda gelmiştir",
+    "title": "Cümle Düzeltme",
+    "type": "sentenceScramble"
+  },
+  {
+    "correctAnswer": "Olağanüstü güçlere sahip olma",
+    "title": "Çoktan Seçmeli",
+    "options": [
+      "Güvenilirlik",
+      "Doğruluk",
+      "Olağanüstü güçlere sahip olma",
+      "Akıl ve zeka"
+    ],
+    "question": "Aşağıdakilerden hangisi peygamberlerin ortak özelliklerinden biri değildir?",
+    "type": "mcq"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "options": [
+      "25",
+      "28",
+      "30",
+      "35"
+    ],
+    "type": "mcq",
+    "question": "Kur'an-ı Kerim'de adı geçen kaç peygamber vardır?",
+    "correctAnswer": "25"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "question": "Peygamberlerin Allah'tan aldığı mesajları insanlara iletmesine ne ad verilir?",
+    "options": [
+      "Vahiy",
+      "Tebliğ",
+      "Nübüvvet",
+      "Risalet"
+    ],
+    "correctAnswer": "Tebliğ",
+    "type": "mcq"
+  },
+  {
+    "question": "Hangisi Hz. Muhammed'in (sav) en büyük mucizesidir?",
+    "options": [
+      "Kur'an-ı Kerim",
+      "Ölüleri diriltmesi",
+      "Denizi yarması",
+      "Göğe yükselmesi"
+    ],
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Kur'an-ı Kerim"
+  },
+  {
+    "correctAnswer": "İnzar",
+    "question": "Peygamberlerin insanları kötülüklerden sakındırmaları hangi görevleri kapsamındadır?",
+    "type": "mcq",
+    "options": [
+      "Tebyin",
+      "Tebşir",
+      "İnzar",
+      "Temsil"
+    ],
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "type": "mcq",
+    "correctAnswer": "Haber getiren",
+    "options": [
+      "Elçi",
+      "Haber getiren",
+      "Doğru yolu gösteren",
+      "Vahiy alan"
+    ],
+    "question": "Peygamber kelimesinin sözlük anlamı nedir?",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "correctAnswer": "25",
+    "title": "Çoktan Seçmeli",
+    "question": "Kur'an-ı Kerim'de adı geçen peygamber sayısı kaçtır?",
+    "options": [
+      "28",
+      "25",
+      "30",
+      "20"
+    ],
+    "type": "mcq"
+  },
+  {
+    "question": "Peygamberlerin insanlara Allah'tan aldıkları mesajları iletmesine ne denir?",
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "correctAnswer": "Tebliğ",
+    "options": [
+      "Tebliğ",
+      "Vahiy",
+      "Mucize",
+      "İsmet"
+    ]
+  },
+  {
+    "options": [
+      "Asanın yılana dönüşmesi",
+      "Ölüleri diriltmesi",
+      "Kur'an-ı Kerim",
+      "Ateşin yakmaması"
+    ],
+    "question": "Hz. Peygamber'in en büyük mucizesi nedir?",
+    "correctAnswer": "Kur'an-ı Kerim",
+    "title": "Çoktan Seçmeli",
+    "type": "mcq"
+  },
+  {
+    "correctAnswer": "Sıdk",
+    "options": [
+      "Sıdk",
+      "Emanet",
+      "İsmet",
+      "Fetanet"
+    ],
+    "type": "mcq",
+    "question": "Peygamberlerin dürüst ve doğru sözlü olmalarına ne denir?",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "options": [
+      "Sıdk",
+      "Emanet",
+      "İsmet",
+      "Fetanet"
+    ],
+    "correctAnswer": "Emanet",
+    "type": "mcq",
+    "question": "Peygamberlerin güvenilir olmalarına ne denir?",
+    "title": "Çoktan Seçmeli"
+  },
+  {
+    "title": "Çoktan Seçmeli",
+    "type": "mcq",
+    "options": [
+      "Sıdk",
+      "Emanet",
+      "İsmet",
+      "Fetanet"
+    ],
+    "correctAnswer": "İsmet",
+    "question": "Peygamberlerin Allah tarafından her türlü günahtan korunmuş olmalarına ne denir?"
+  }
+]

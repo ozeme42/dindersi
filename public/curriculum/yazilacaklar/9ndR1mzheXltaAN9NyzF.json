@@ -1,1 +1,41 @@
-{"notes":["Ahiret inancı olan bir insan, Allah'ın emirlerine uymaya ve yasaklarından sakınmaya özen gösterir.","Dünya hayatı, insanın Allah tarafından başıboş bırakılmadığı, bir imtihan ve amaçla var olduğu geçici bir yerdir.","İnsan, dünya hayatındaki seçimlerinden ve davranışlarından ahirette sorumlu tutulacak ve sorguya çekilecektir.","Ahiret inancı, insanın sevdikleriyle sonsuza dek bir arada yaşama umudunu besler, çünkü ahirette ölüm yoktur.","Dünyadaki haksızlıklar ve tam cezalandırılamayan suçlar ahirette Allah'ın mutlak adaletiyle karşılık bulacak, hak yerini bulacaktır.","Ahirete iman eden kişi, dünyanın geçici zevklerinden uzaklaşarak kalıcı olan ahiret için çalışır.","Allah, merhamet ve affın kaynağıdır; samimi tövbe edenlere rahmet ahirette sadece müminlere tahsis edilmiştir."],"conceptDefinitions":[{"concept":"İmtihan","definition":"Dünya hayatının geçici bir deneme olduğunu ifade eder."},{"concept":"Diriliş","definition":"Ölümden sonra yeniden hayata dönmektir."},{"concept":"Ahiret","definition":"Ölümden sonraki sonsuz yaşamın adıdır."},{"concept":"Merhamet","definition":"Yüce Yaratıcı'nın kullarına gösterdiği şefkat duygusudur."},{"concept":"Tövbe","definition":"Günahlarından pişman olup af dilemek eylemidir."},{"concept":"Sorumluluk","definition":"Seçimlerinin sonuçlarını üstlenme yükümlülüğüdür."},{"concept":"Adalet","definition":"Hak edenin karşılığını mutlaka bulacağı hükümdür."}]}
+{
+  "notes": [
+    "Ahiret inancı olan bir insan, Allah'ın emirlerine uymaya ve yasaklarından sakınmaya özen gösterir.",
+    "Dünya hayatı, insanın Allah tarafından başıboş bırakılmadığı, bir imtihan ve amaçla var olduğu geçici bir yerdir.",
+    "İnsan, dünya hayatındaki seçimlerinden ve davranışlarından ahirette sorumlu tutulacak ve sorguya çekilecektir.",
+    "Ahiret inancı, insanın sevdikleriyle sonsuza dek bir arada yaşama umudunu besler, çünkü ahirette ölüm yoktur.",
+    "Dünyadaki haksızlıklar ve tam cezalandırılamayan suçlar ahirette Allah'ın mutlak adaletiyle karşılık bulacak, hak yerini bulacaktır.",
+    "Ahirete iman eden kişi, dünyanın geçici zevklerinden uzaklaşarak kalıcı olan ahiret için çalışır.",
+    "Allah, merhamet ve affın kaynağıdır; samimi tövbe edenlere rahmet ahirette sadece müminlere tahsis edilmiştir."
+  ],
+  "conceptDefinitions": [
+    {
+      "concept": "İmtihan",
+      "definition": "Dünya hayatının geçici bir deneme olduğunu ifade eder."
+    },
+    {
+      "concept": "Diriliş",
+      "definition": "Ölümden sonra yeniden hayata dönmektir."
+    },
+    {
+      "concept": "Ahiret",
+      "definition": "Ölümden sonraki sonsuz yaşamın adıdır."
+    },
+    {
+      "concept": "Merhamet",
+      "definition": "Yüce Yaratıcı'nın kullarına gösterdiği şefkat duygusudur."
+    },
+    {
+      "concept": "Tövbe",
+      "definition": "Günahlarından pişman olup af dilemek eylemidir."
+    },
+    {
+      "concept": "Sorumluluk",
+      "definition": "Seçimlerinin sonuçlarını üstlenme yükümlülüğüdür."
+    },
+    {
+      "concept": "Adalet",
+      "definition": "Hak edenin karşılığını mutlaka bulacağı hükümdür."
+    }
+  ]
+}

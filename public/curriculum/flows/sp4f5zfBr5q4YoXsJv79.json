@@ -1,1 +1,221 @@
-[{"type":"objectiveList","title":"Öğrenme Hedefleri","items":["Umrenin tanımını yapabileceksiniz.","Umrenin hükmünü (sünnet olduğunu) açıklayabileceksiniz.","Umrenin ne zaman yapılabileceğini ifade edebileceksiniz.","Kur'an-ı Kerim'deki Umre ile ilgili ayeti belirtebileceksiniz.","Umrenin yapılış adımlarını sırasıyla açıklayabileceksiniz.","Umrenin faziletlerini belirtebileceksiniz.","Hac ile umre arasındaki temel farkları sıralayabileceksiniz."]},{"type":"content","title":"Anahtar Kavramlar (Veri Bankası)","content":"<ul><li>Umre</li></ul>"},{"type":"content","title":"Umre Nedir ve Nasıl Yapılır?","content":"Umre, hac mevsimi dışında, sırasıyla Kâbe'yi tavaf etme, Safa ve Merve tepeleri arasında say yapma ve saçları tıraş ettikten sonra ihramdan çıkma şeklinde gerçekleştirilen bir ibadettir."},{"type":"content","title":"Umrenin Hükmü ve Zamanı","content":"Ömürde bir kere umre yapmak sünnettir. Hacdan farklı olarak, umre için belirli bir zamanı yoktur ve yılın her vaktinde birden fazla kez yapılabilir. Kur'an-ı Kerim'de haccın ve umrenin Allah için eksiksiz yerine getirilmesi emredilmektedir."},{"type":"content","title":"Umreye Başlama ve İhrama Girme","content":"Umre yapmak isteyen kişi gusledip temizlendikten sonra mikat sınırında ihrama girer. Ardından iki rekât namaz kılıp niyet eder ve telbiye okumaya başlar."},{"type":"content","title":"Umrenin Ritüelleri ve Tamamlanması","content":"Kâbe'ye gelindiğinde umre tavafı niyet edilerek yapılır. Tavaf namazı kılındıktan sonra Safa Tepesi'ne gidilip say için niyet edilir ve Safa ile Merve arasında yedi kez yürüyerek say görevi yerine getirilir. Son olarak saçlar tıraş edilerek veya kısaltılarak ihramdan çıkılır."},{"type":"content","title":"Umrenin Fazileti ve Hac ile Farkları","content":"Hz. Peygamber (s.a.v.) bir hadisinde 'İki umre, aralarında işlenen günahlara kefarettir...' buyurarak umrenin faziletini belirtmiştir. Hac farz olup belirli bir zamanda yapılırken, umre sünnettir ve her zaman yapılabilir; ayrıca hacdaki vakfe, şeytan taşlama ve kurban kesme gibi ritüeller umrede bulunmaz."},{"type":"flashcard","title":"Bilgi Kartları (Veri Bankası)","cards":[{"term":"Umre","definition":"Hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ibadettir."}]},{"type":"trueFalseList","title":"Doğru/Yanlış Alıştırması","questions":[{"statement":"Umre ibadeti sadece hac mevsiminde yapılabilir.","isTrue":false},{"statement":"Ömürde bir kez umre yapmak farzdır.","isTrue":false},{"statement":"Kâbe'yi tavaf etmek, Safa ve Merve arasında say yapmak ve tıraş olmak umrenin temel adımlarındandır.","isTrue":true},{"statement":"Hac ibadeti zilhicce ayında yapılırken, umre için belirli bir zaman sınırlaması yoktur.","isTrue":true}]},{"type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)","correctSentence":"Hac zamanı dışında her zaman yapılabilir.","scrambledSentence":"her yapılabilir. Hac zaman zamanı dışında"},{"type":"sentenceScramble","title":"Cümle Düzeltme (Veri Bankası)","correctSentence":"Haccı ve umreyi Allah için eksiksiz yerine getirin. İki umre, aralarında işlenen günahlara kefarettir.","scrambledSentence":"Allah günahlara kefarettir. umreyi umre, eksiksiz aralarında ve için getirin. Haccı yerine İki işlenen"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Umre, hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ___.","options":["ibadettir","gelenektir","ayindir","ziyarettir"],"correctAnswer":"ibadettir"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Ömürde bir kere umre yapmak ___.","options":["sünnettir","farzdır","vaciptir","haramdır"],"correctAnswer":"sünnettir"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Kur’an-ı Kerim’de “Haccı ve umreyi Allah için eksiksiz yerine getirin...” (Bakara suresi, ___.) buyrulmaktadır.","options":["196. ayet","255. ayet","1. ayet","120. ayet"],"correctAnswer":"196. ayet"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Umre yapmak isteyen kişi gusledip temizlendikten sonra ___ sınırında ihrama girer.","options":["mikat","Mekke","Medine","Arafat"],"correctAnswer":"mikat"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Safa ve Merve arasında yedi kez yürüyerek ___ görevini yerine getirir.","options":["say","tavaf","vakfe","şeytan taşlama"],"correctAnswer":"say"},{"type":"fitb","title":"Boşluk Doldurma","sentenceWithBlank":"Hz. Peygamber: “İki umre, aralarında işlenen günahlara ___...” buyurmuştur.","options":["kefarettir","nedendir","sebeptir","zorunluluktur"],"correctAnswer":"kefarettir"},{"type":"mcq","title":"Çoktan Seçmeli","question":"Umre ibadetinin sırasıyla doğru adımları hangi seçenekte verilmiştir?","options":["Kurban kesmek, tavaf yapmak, sa'y yapmak, ihramdan çıkmak.","Sa'y yapmak, tavaf yapmak, tıraş olmak, ihramdan çıkmak.","Tavaf yapmak, sa'y yapmak, tıraş olduktan sonra ihramdan çıkmak.","İhrama girmek, vakfe yapmak, şeytan taşlamak, ihramdan çıkmak."],"correctAnswer":"Tavaf yapmak, sa'y yapmak, tıraş olduktan sonra ihramdan çıkmak."},{"type":"mcq","title":"Çoktan Seçmeli","question":"Umre hangi zaman dilimlerinde yapılabilir?","options":["Hac mevsimi ile aynı anda yapılabilir.","Belirli bir zamanı yoktur, sadece bir yılda bir defa yapılabilir.","Sadece Hac mevsimi dışında her vakit yapılabilir.","Yalnızca Zilhicce ayında."],"correctAnswer":"Sadece Hac mevsimi dışında her vakit yapılabilir."},{"type":"mcq","title":"Çoktan Seçmeli","question":"İslam dinine göre umre yapmanın hükmü nedir?","options":["Vacip","Sünnet","Farz","Mekruh"],"correctAnswer":"Sünnet"},{"type":"mcq","title":"Çoktan Seçmeli","question":"Hz. Peygamber’in bir hadisinde umrenin fazileti nasıl belirtilmiştir?","options":["“Umre yapmak kişiyi doğrudan cennete götürür.”","“Bir umre, bir hacca bedeldir.”","“Umre yapanın tüm geçmiş günahları affolur.”","“İki umre, aralarında işlenen günahlara kefarettir...”"],"correctAnswer":"“İki umre, aralarında işlenen günahlara kefarettir...”"},{"type":"mcq","title":"Çoktan Seçmeli","question":"Aşağıdakilerden hangisi Hac ibadetinde yapıldığı hâlde umrede bulunmayan bir uygulamadır?","options":["Kâbe’yi tavaf etme","İhramdan çıkma","Vakfe yapma","Safa ile Merve arasında sa’y yapma"],"correctAnswer":"Vakfe yapma"}]
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Umrenin tanımını yapabileceksiniz.",
+      "Umrenin hükmünü (sünnet olduğunu) açıklayabileceksiniz.",
+      "Umrenin ne zaman yapılabileceğini ifade edebileceksiniz.",
+      "Kur'an-ı Kerim'deki Umre ile ilgili ayeti belirtebileceksiniz.",
+      "Umrenin yapılış adımlarını sırasıyla açıklayabileceksiniz.",
+      "Umrenin faziletlerini belirtebileceksiniz.",
+      "Hac ile umre arasındaki temel farkları sıralayabileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar (Veri Bankası)",
+    "content": "<ul><li>Umre</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Umre Nedir ve Nasıl Yapılır?",
+    "content": "Umre, hac mevsimi dışında, sırasıyla Kâbe'yi tavaf etme, Safa ve Merve tepeleri arasında say yapma ve saçları tıraş ettikten sonra ihramdan çıkma şeklinde gerçekleştirilen bir ibadettir."
+  },
+  {
+    "type": "content",
+    "title": "Umrenin Hükmü ve Zamanı",
+    "content": "Ömürde bir kere umre yapmak sünnettir. Hacdan farklı olarak, umre için belirli bir zamanı yoktur ve yılın her vaktinde birden fazla kez yapılabilir. Kur'an-ı Kerim'de haccın ve umrenin Allah için eksiksiz yerine getirilmesi emredilmektedir."
+  },
+  {
+    "type": "content",
+    "title": "Umreye Başlama ve İhrama Girme",
+    "content": "Umre yapmak isteyen kişi gusledip temizlendikten sonra mikat sınırında ihrama girer. Ardından iki rekât namaz kılıp niyet eder ve telbiye okumaya başlar."
+  },
+  {
+    "type": "content",
+    "title": "Umrenin Ritüelleri ve Tamamlanması",
+    "content": "Kâbe'ye gelindiğinde umre tavafı niyet edilerek yapılır. Tavaf namazı kılındıktan sonra Safa Tepesi'ne gidilip say için niyet edilir ve Safa ile Merve arasında yedi kez yürüyerek say görevi yerine getirilir. Son olarak saçlar tıraş edilerek veya kısaltılarak ihramdan çıkılır."
+  },
+  {
+    "type": "content",
+    "title": "Umrenin Fazileti ve Hac ile Farkları",
+    "content": "Hz. Peygamber (s.a.v.) bir hadisinde 'İki umre, aralarında işlenen günahlara kefarettir...' buyurarak umrenin faziletini belirtmiştir. Hac farz olup belirli bir zamanda yapılırken, umre sünnettir ve her zaman yapılabilir; ayrıca hacdaki vakfe, şeytan taşlama ve kurban kesme gibi ritüeller umrede bulunmaz."
+  },
+  {
+    "type": "flashcard",
+    "title": "Bilgi Kartları (Veri Bankası)",
+    "cards": [
+      {
+        "term": "Umre",
+        "definition": "Hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ibadettir."
+      }
+    ]
+  },
+  {
+    "type": "trueFalseList",
+    "title": "Doğru/Yanlış Alıştırması",
+    "questions": [
+      {
+        "statement": "Umre ibadeti sadece hac mevsiminde yapılabilir.",
+        "isTrue": false
+      },
+      {
+        "statement": "Ömürde bir kez umre yapmak farzdır.",
+        "isTrue": false
+      },
+      {
+        "statement": "Kâbe'yi tavaf etmek, Safa ve Merve arasında say yapmak ve tıraş olmak umrenin temel adımlarındandır.",
+        "isTrue": true
+      },
+      {
+        "statement": "Hac ibadeti zilhicce ayında yapılırken, umre için belirli bir zaman sınırlaması yoktur.",
+        "isTrue": true
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Hac zamanı dışında her zaman yapılabilir.",
+    "scrambledSentence": "her yapılabilir. Hac zaman zamanı dışında"
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme (Veri Bankası)",
+    "correctSentence": "Haccı ve umreyi Allah için eksiksiz yerine getirin. İki umre, aralarında işlenen günahlara kefarettir.",
+    "scrambledSentence": "Allah günahlara kefarettir. umreyi umre, eksiksiz aralarında ve için getirin. Haccı yerine İki işlenen"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Umre, hac mevsimi dışında sırasıyla Kâbe’yi tavaf etme, say yapma, tıraş olduktan sonra ihramdan çıkma şeklinde yapılan ___.",
+    "options": [
+      "ibadettir",
+      "gelenektir",
+      "ayindir",
+      "ziyarettir"
+    ],
+    "correctAnswer": "ibadettir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Ömürde bir kere umre yapmak ___.",
+    "options": [
+      "sünnettir",
+      "farzdır",
+      "vaciptir",
+      "haramdır"
+    ],
+    "correctAnswer": "sünnettir"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Kur’an-ı Kerim’de “Haccı ve umreyi Allah için eksiksiz yerine getirin...” (Bakara suresi, ___.) buyrulmaktadır.",
+    "options": [
+      "196. ayet",
+      "255. ayet",
+      "1. ayet",
+      "120. ayet"
+    ],
+    "correctAnswer": "196. ayet"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Umre yapmak isteyen kişi gusledip temizlendikten sonra ___ sınırında ihrama girer.",
+    "options": [
+      "mikat",
+      "Mekke",
+      "Medine",
+      "Arafat"
+    ],
+    "correctAnswer": "mikat"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Safa ve Merve arasında yedi kez yürüyerek ___ görevini yerine getirir.",
+    "options": [
+      "say",
+      "tavaf",
+      "vakfe",
+      "şeytan taşlama"
+    ],
+    "correctAnswer": "say"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Hz. Peygamber: “İki umre, aralarında işlenen günahlara ___...” buyurmuştur.",
+    "options": [
+      "kefarettir",
+      "nedendir",
+      "sebeptir",
+      "zorunluluktur"
+    ],
+    "correctAnswer": "kefarettir"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Umre ibadetinin sırasıyla doğru adımları hangi seçenekte verilmiştir?",
+    "options": [
+      "Kurban kesmek, tavaf yapmak, sa'y yapmak, ihramdan çıkmak.",
+      "Sa'y yapmak, tavaf yapmak, tıraş olmak, ihramdan çıkmak.",
+      "Tavaf yapmak, sa'y yapmak, tıraş olduktan sonra ihramdan çıkmak.",
+      "İhrama girmek, vakfe yapmak, şeytan taşlamak, ihramdan çıkmak."
+    ],
+    "correctAnswer": "Tavaf yapmak, sa'y yapmak, tıraş olduktan sonra ihramdan çıkmak."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Umre hangi zaman dilimlerinde yapılabilir?",
+    "options": [
+      "Hac mevsimi ile aynı anda yapılabilir.",
+      "Belirli bir zamanı yoktur, sadece bir yılda bir defa yapılabilir.",
+      "Sadece Hac mevsimi dışında her vakit yapılabilir.",
+      "Yalnızca Zilhicce ayında."
+    ],
+    "correctAnswer": "Sadece Hac mevsimi dışında her vakit yapılabilir."
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "İslam dinine göre umre yapmanın hükmü nedir?",
+    "options": [
+      "Vacip",
+      "Sünnet",
+      "Farz",
+      "Mekruh"
+    ],
+    "correctAnswer": "Sünnet"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Hz. Peygamber’in bir hadisinde umrenin fazileti nasıl belirtilmiştir?",
+    "options": [
+      "“Umre yapmak kişiyi doğrudan cennete götürür.”",
+      "“Bir umre, bir hacca bedeldir.”",
+      "“Umre yapanın tüm geçmiş günahları affolur.”",
+      "“İki umre, aralarında işlenen günahlara kefarettir...”"
+    ],
+    "correctAnswer": "“İki umre, aralarında işlenen günahlara kefarettir...”"
+  },
+  {
+    "type": "mcq",
+    "title": "Çoktan Seçmeli",
+    "question": "Aşağıdakilerden hangisi Hac ibadetinde yapıldığı hâlde umrede bulunmayan bir uygulamadır?",
+    "options": [
+      "Kâbe’yi tavaf etme",
+      "İhramdan çıkma",
+      "Vakfe yapma",
+      "Safa ile Merve arasında sa’y yapma"
+    ],
+    "correctAnswer": "Vakfe yapma"
+  }
+]

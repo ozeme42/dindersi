@@ -1,4 +1,3 @@
-
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
@@ -14,8 +13,28 @@ function isQuestion(obj: any): obj is Question {
 
 // Centralized function to fetch questions - DYNAMIC DB-BASED
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
-    const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes } = params;
+    const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic } = params;
 
+    // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
+    if (isStatic) {
+        const staticItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        
+        let filteredItems = staticItems;
+        const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
+
+        if (mappedTypes && mappedTypes.length > 0) {
+            filteredItems = filteredItems.filter(item => mappedTypes.includes(item.type));
+        }
+
+        // Shuffle all found items
+        const shuffled = filteredItems.sort(() => 0.5 - Math.random());
+        // Take the requested number of items
+        const selectedItems = shuffled.slice(0, questionCount);
+
+        return { questions: JSON.parse(JSON.stringify(selectedItems)) };
+    }
+    
+    // --- DYNAMIC DB LOGIC ---
     try {
         const isActivity = questionTypes && (questionTypes.includes('definition') || questionTypes.includes('concept') || questionTypes.includes('sentence'));
         const collectionName = isActivity ? "activityItems" : "questions";
@@ -24,19 +43,14 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         
         let conditions: any[] = [];
 
-        // HIERARCHICAL FILTERING LOGIC
-        // Start from the most specific filter and move to the most general.
         if (topicId && topicId !== 'all') {
             conditions.push(where("topicId", "==", topicId));
         } else if (unitId && unitId !== 'all') {
-            // If topicId is 'all', but unitId is specific, get all for that unit.
             conditions.push(where("unitId", "==", unitId));
         } else if (courseId && courseId !== 'all') {
-            // If unitId is also 'all', but courseId is specific, get all for that course.
             conditions.push(where("courseId", "==", courseId));
         }
-        // If all are 'all' or undefined, no specific location filter is applied.
-
+        
         if (difficulty && difficulty.length > 0) {
             conditions.push(where("difficulty", "in", difficulty));
         }
@@ -57,15 +71,11 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
             return { id: doc.id, ...data } as Question | ActivityItem;
         });
 
-        // Shuffle all found questions
         const shuffled = allQuestions.sort(() => 0.5 - Math.random());
-        // Take the requested number of questions
         const selectedQuestions = shuffled.slice(0, questionCount);
         
-        // Shuffle options for each question
         const questionsWithShuffledOptions = selectedQuestions.map(question => {
             if ('type' in question && (question.type === 'Çoktan Seçmeli' || question.type === 'Boşluk Doldurma') && 'options' in question && question.options) {
-                // Create a shallow copy to avoid mutating the original array
                 const newOptions = [...question.options];
                 newOptions.sort(() => Math.random() - 0.5);
                 return { ...question, options: newOptions };
@@ -90,9 +100,8 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
 
 /**
- * Fetches all activity items for a given course or unit when "all" is selected.
- * This is crucial for static builds where we can't perform complex queries.
- * REWRITTEN to be simpler and more robust.
+ * Fetches all activity items for a given context, starting with the most specific.
+ * If a topic file is not found or empty, it tries to read the unit file.
  */
 export async function getStaticQuestionsForGame(params: {
   courseId?: string;
@@ -101,32 +110,48 @@ export async function getStaticQuestionsForGame(params: {
 }): Promise<ActivityItem[]> {
     const { courseId, unitId, topicId } = params;
 
-    try {
-        let fileToRead;
-
-        // Determine which pre-aggregated file to read based on the most specific ID available.
-        if (topicId && topicId !== 'all') {
-            fileToRead = `${topicId}.json`;
-        } else if (unitId && unitId !== 'all') {
-            fileToRead = `${unitId}.json`;
-        } else if (courseId && courseId !== 'all') {
-            fileToRead = `${courseId}.json`;
-        } else {
-            console.warn("getStaticQuestionsForGame called without a specific enough context (course, unit, or topic). It should have at least a courseId.");
-            return [];
+    const readJsonFile = async (filePath: string): Promise<any[] | null> => {
+        try {
+            const fileContent = await fs.readFile(filePath, 'utf-8');
+            const data = JSON.parse(fileContent);
+            return Array.isArray(data) ? data : null;
+        } catch (e: any) {
+            if (e.code === 'ENOENT') {
+                return null; // File not found is an expected case, not an error.
+            }
+            console.error(`Error reading or parsing ${filePath}:`, e);
+            return null; // Treat other errors as if file is not available.
         }
+    };
 
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activity-items', fileToRead);
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        return JSON.parse(fileContent) as ActivityItem[];
-        
-    } catch (e: any) {
-        if (e.code === 'ENOENT') {
-            console.warn(`No aggregated activity file found for the selection. Path: public/curriculum/activity-items/${params.topicId || params.unitId || params.courseId}.json`);
-            return [];
+    const baseDir = path.join(process.cwd(), 'public', 'curriculum', 'activity-items');
+
+    // 1. Try to read the specific topic file.
+    if (topicId && topicId !== 'all') {
+        const topicPath = path.join(baseDir, `${topicId}.json`);
+        const topicData = await readJsonFile(topicPath);
+        // If topic data exists and is not empty, return it.
+        // Also, return it if no unitId is provided (can't fall back).
+        if ((topicData && topicData.length > 0) || !unitId) {
+            return topicData || [];
         }
-        console.error(`Major error in getStaticQuestionsForGame:`, e);
-        return [];
     }
-}
+    
+    // 2. If topic data is missing or empty, fall back to the whole unit file.
+    // This is crucial for games that need a larger pool of distractors.
+    if (unitId && unitId !== 'all') {
+        const unitPath = path.join(baseDir, `${unitId}.json`);
+        const unitData = await readJsonFile(unitPath);
+        if (unitData) return unitData;
+    }
 
+    // 3. Fallback to the entire course file if necessary.
+    if (courseId && courseId !== 'all') {
+        const coursePath = path.join(baseDir, `${courseId}.json`);
+        const courseData = await readJsonFile(coursePath);
+        if (courseData) return courseData;
+    }
+
+    console.warn(`No aggregated activity file found for the selection. Context:`, params);
+    return [];
+}
