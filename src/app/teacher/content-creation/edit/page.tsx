@@ -2,13 +2,13 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, ActivityItem, Question, Topic, GenerateLessonContentInput, VideoStep, ObjectiveListStep, ConceptExplanationStep, AccordionStep, IframeStep, ImageAsset, Course, Unit, SchoolClass } from '@/lib/types';
+import type { LessonStep, Topic } from '@/lib/types';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { 
     Loader2, PlusCircle, Brain, BookOpen, Trash2, Save, ArrowLeft, Sparkles, 
     FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, 
@@ -21,14 +21,12 @@ import { updateTopicContent } from './actions';
 import Link from 'next/link';
 import Image from "next/image";
 import { 
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, 
-    DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuSeparator 
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { StepEditorDialog } from '@/components/step-editor-dialog';
 import { LessonPreviewDialog } from '@/components/lesson-preview-dialog';
 import { BulkStepImportDialog } from '@/components/bulk-step-import-dialog';
 import { LibraryImportDialog } from '@/components/library-import-dialog';
-import type { GenerateLessonContentOutput } from '@/ai/flows/generate-lesson-content';
 import { generateLessonContent } from '@/ai/flows/generate-lesson-content';
 import { generateConceptMap } from '@/ai/flows/generate-concept-map-flow';
 import { generateHtmlSlide } from '@/ai/flows/generate-html-slide-flow';
@@ -37,17 +35,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Label } from '@/components/ui/label';
-import { cn, cleanForAnagram } from '@/lib/utils';
-import { playableActivities } from '@/lib/game-config';
-import React from 'react';
 import { Input } from '@/components/ui/input';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
+import { playableActivities } from '@/lib/game-config';
 
 
 type DraggableLessonStep = LessonStep & { id: string };
 
-// --- STEP CARD COMPONENT (Updated Colors) ---
 function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish }: { 
     step: LessonStep; 
     order: number;
@@ -164,7 +158,7 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
 
 export function TopicEditor({ 
     title, setTitle, steps, setSteps, sourceText, setSourceText,
-    onSave, isSaving, isUnitFlow = false, onOpenAIGeneration
+    onSave, isSaving, isUnitFlow = false, onOpenAIGeneration, children
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
@@ -173,6 +167,7 @@ export function TopicEditor({
     isSaving: boolean,
     isUnitFlow?: boolean,
     onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { title: string, sourceText: string }) => void;
+    children?: React.ReactNode;
 }) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
@@ -299,7 +294,7 @@ export function TopicEditor({
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: LessonStep['type'] | 'keyConcepts' | 'questions' | 'anagramGame') => {
+    const handleItemsImportedFromLibrary = (importedItems: any[], stepType: any) => {
         if (importedItems.length === 0) return;
         
         let newSteps: LessonStep[] = [];
@@ -315,7 +310,7 @@ export function TopicEditor({
             newSteps.push({ type: 'flashcard', title: 'Veri Bankası Bilgi Kartları', cards: cards });
         } else if (stepType === 'anagramGame') {
             const cards = importedItems.map(item => {
-                const cleanWord = cleanForAnagram((item as ActivityItem).content.term || '');
+                const cleanWord = (item as ActivityItem).content.term?.toLocaleUpperCase('tr-TR') || '';
                 return {
                     definition: (item as ActivityItem).content.definition || 'Tanım bulunamadı.',
                     correctAnswer: cleanWord,
@@ -324,7 +319,7 @@ export function TopicEditor({
             });
             newSteps.push({ type: 'anagramGame', title: 'Kelime Dehası', cards: cards });
         } else if (stepType === 'anagramFlashcard') {
-            const cards = items.map(item => ({
+            const cards = importedItems.map(item => ({
                 definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`,
                 scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
                 correctAnswer: (item as ActivityItem).content.text || ''
@@ -339,7 +334,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
@@ -484,6 +479,8 @@ export function TopicEditor({
                         </AccordionItem>
                     </Accordion>
                 </Card>
+
+                {children}
 
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-2 gap-4">

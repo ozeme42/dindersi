@@ -1,12 +1,11 @@
 
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, useParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { Unit, LessonStep, Topic } from '@/lib/types';
+import type { Unit, LessonStep } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateUnitContent } from './actions';
@@ -150,6 +149,7 @@ function UnitFlowEditor() {
                 isUnitFlow={true}
                 onOpenAIGeneration={(type) => { setAiGenerationType(type); setIsAiOpen(true); }}
             >
+                {/* HTML İçerik alanı `children` olarak buraya eklendi */}
                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
                     <Accordion type="single" collapsible className="w-full" defaultValue="html-content">
                         <AccordionItem value="html-content" className="border-b-0">
