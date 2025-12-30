@@ -340,7 +340,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
@@ -485,18 +485,16 @@ export function TopicEditor({
                                         className="min-h-[120px] text-base bg-slate-950 border-white/10 text-white focus:border-indigo-500/50"
                                     />
                                 </div>
-                                {!isUnitFlow && (
-                                    <div className="border-t border-white/5 pt-6">
-                                        <Label htmlFor="htmlContent" className="text-slate-300 font-semibold mb-2 block">İnteraktif HTML İçeriği (Öğrenci Paneli için)</Label>
-                                        <Textarea 
-                                            id="htmlContent"
-                                            value={htmlContent} 
-                                            onChange={(e) => setHtmlContent(e.target.value)}
-                                            placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                            className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
-                                        />
-                                    </div>
-                                )}
+                                <div className="border-t border-white/5 pt-6">
+                                    <Label htmlFor="htmlContent" className="text-slate-300 font-semibold mb-2 block">İnteraktif HTML İçeriği (Öğrenci Paneli için)</Label>
+                                    <Textarea 
+                                        id="htmlContent"
+                                        value={htmlContent} 
+                                        onChange={(e) => setHtmlContent(e.target.value)}
+                                        placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                        className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                    />
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
@@ -742,3 +740,4 @@ export default function Page() {
     
 
     
+
