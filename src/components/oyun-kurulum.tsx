@@ -154,7 +154,7 @@ type OyunKurulumProps = {
     gameName?: string;
     gamePath?: string;
     pageIcon?: React.ElementType;
-    gameIcon?: React.ElementType; // Add gameIcon as an alternative
+    gameIcon?: React.ElementType;
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
     isStatic?: boolean;
@@ -165,7 +165,7 @@ export function OyunKurulum({
     gameName, 
     gamePath, 
     pageIcon: PageIconProp, 
-    gameIcon, // Accept gameIcon
+    gameIcon,
     targetPath, 
     dataType, 
     isStatic = false 
@@ -177,11 +177,10 @@ export function OyunKurulum({
     const [isLoading, setIsLoading] = useState(true);
     const [isDataLoading, setIsDataLoading] = useState(false);
     
-    // Combine pageIcon and gameIcon props.
-    const PageIcon = PageIconProp || gameIcon;
+    const PageIcon = PageIconProp || gameIcon || Gamepad2;
   
     const [classGroups, setClassGroups] = useState<ClassGroup[]>([]);
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<EnrichedCourse[]>([]);
     const [units, setUnits] = useState<Unit[]>([]);
     const [topics, setTopics] = useState<Topic[]>([]);
     
@@ -258,21 +257,21 @@ export function OyunKurulum({
       fetchCurriculumData();
     }, [fetchCurriculumData]);
   
-    const handleSelectCourse = (course: Course) => {
+    const handleSelectCourse = (course: EnrichedCourse) => {
       setSelection({ 
           ...selection, 
           courseId: course.id, 
           courseName: course.title, 
-          courseColor: (course as any).color || "from-slate-700 to-slate-800",
+          courseColor: course.color || "from-slate-700 to-slate-800",
           unitId: '', unitName: '',
       });
       
       setIsLoading(true);
       setSearchQuery("");
       setTimeout(() => {
-          let unitsWithContent = (course as any).units;
+          let unitsWithContent = course.units;
           if (dataType !== 'games') {
-               unitsWithContent = (course as any).units.filter((unit: Unit) => {
+               unitsWithContent = course.units.filter((unit) => {
                   if (dataType === 'ozetler') return (unit as any).hasUnitOzet || unit.topics.some((t: Topic) => (t as any).hasOzetContent);
                   if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => (t as any).hasYazilacaklarContent);
                   return false;
@@ -328,7 +327,7 @@ export function OyunKurulum({
               }
           }
           
-          setTopics(topicsWithContent);
+          setTopics(topicsWithContent.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })));
           setIsLoading(false);
           setCurrentStep(3);
       }, 300);
@@ -401,7 +400,7 @@ export function OyunKurulum({
                                   subtitle={course.className}
                                   icon={(course as any).icon || Book}
                                   color={(course as any).color || getGradient(idx)}
-                                  onClick={() => handleSelectCourse(course as Course)}
+                                  onClick={() => handleSelectCourse(course as EnrichedCourse)}
                                   delay={idx * 50}
                               />
                           )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ders bulunamadı.</p>}
@@ -421,7 +420,7 @@ export function OyunKurulum({
                                   subtitle="Genel Tekrar"
                                   icon={Sparkles}
                                   color="from-yellow-600 to-amber-500"
-                                  onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
+                                  onClick={()={() => handleSelectUnit('all', 'Tüm Üniteler')}}
                                   delay={0}
                               />
                           )}
@@ -567,6 +566,6 @@ export function OyunKurulum({
           </GlassPanel>
       </div>
     );
-  }
+}
 
     
