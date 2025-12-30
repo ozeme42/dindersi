@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
@@ -175,7 +176,6 @@ export function OyunKurulum({
     const searchParams = useSearchParams();
     const [currentStep, setCurrentStep] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
-    const [isDataLoading, setIsDataLoading] = useState(false);
     
     const PageIcon = PageIconProp || gameIcon || Gamepad2;
   
@@ -251,7 +251,7 @@ export function OyunKurulum({
       } finally {
           setIsLoading(false);
       }
-    }, [user, dataType, isStatic]);
+    }, [user?.uid, dataType, isStatic]);
   
     useEffect(() => {
       fetchCurriculumData();
@@ -420,7 +420,7 @@ export function OyunKurulum({
                                   subtitle="Genel Tekrar"
                                   icon={Sparkles}
                                   color="from-yellow-600 to-amber-500"
-                                  onClick={()={() => handleSelectUnit('all', 'Tüm Üniteler')}}
+                                  onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
                                   delay={0}
                               />
                           )}
@@ -567,5 +567,3 @@ export function OyunKurulum({
       </div>
     );
 }
-
-    
