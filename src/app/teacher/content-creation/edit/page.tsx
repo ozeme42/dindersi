@@ -163,13 +163,12 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
 }
 
 export function TopicEditor({ 
-    title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
+    title, setTitle, steps, setSteps, sourceText, setSourceText,
     onSave, isSaving, isUnitFlow = false, onOpenAIGeneration
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
     sourceText: string, setSourceText: (t: string) => void,
-    htmlContent: string, setHtmlContent: (h: string) => void,
     onSave: () => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
@@ -325,7 +324,7 @@ export function TopicEditor({
             });
             newSteps.push({ type: 'anagramGame', title: 'Kelime Dehası', cards: cards });
         } else if (stepType === 'anagramFlashcard') {
-            const cards = importedItems.map(item => ({
+            const cards = items.map(item => ({
                 definition: `İpucu: Bu kelime "${(item as ActivityItem).content.text}"`,
                 scrambledWord: ((item as ActivityItem).content.text || '').split('').sort(() => Math.random() - 0.5).join('').toLocaleUpperCase('tr-TR'),
                 correctAnswer: (item as ActivityItem).content.text || ''
@@ -469,32 +468,18 @@ export function TopicEditor({
                                         <FileText className="h-5 w-5" />
                                     </div>
                                     <div className="flex flex-col items-start">
-                                        <span className="text-lg font-bold text-white">Kaynak ve İçerik</span>
-                                        <span className="text-xs text-slate-400 font-normal">Yapay zeka ve öğrenci paneli için temel metinler.</span>
+                                        <span className="text-lg font-bold text-white">Kaynak Metin (Yapay Zeka İçin)</span>
+                                        <span className="text-xs text-slate-400 font-normal">Bu metin, yapay zekanın içerik üretmesi için temel olarak kullanılır.</span>
                                     </div>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
-                                <div>
-                                    <Label htmlFor="source-text" className="text-slate-300 font-semibold mb-2 block">Kaynak Metin (Yapay Zeka için)</Label>
-                                    <Textarea 
-                                        id="source-text"
-                                        value={sourceText} 
-                                        onChange={(e) => setSourceText(e.target.value)}
-                                        placeholder="Konuyla ilgili temel bilgileri, özet metni veya anahtar kelimeleri buraya girin..."
-                                        className="min-h-[120px] text-base bg-slate-950 border-white/10 text-white focus:border-indigo-500/50"
-                                    />
-                                </div>
-                                <div className="border-t border-white/5 pt-6">
-                                    <Label htmlFor="htmlContent" className="text-slate-300 font-semibold mb-2 block">İnteraktif HTML İçeriği (Öğrenci Paneli için)</Label>
-                                    <Textarea 
-                                        id="htmlContent"
-                                        value={htmlContent} 
-                                        onChange={(e) => setHtmlContent(e.target.value)}
-                                        placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                        className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
-                                    />
-                                </div>
+                                <Textarea 
+                                    value={sourceText} 
+                                    onChange={(e) => setSourceText(e.target.value)}
+                                    placeholder="Konuyla ilgili temel bilgileri, özet metni veya anahtar kelimeleri buraya girin..."
+                                    className="min-h-[120px] text-base bg-slate-950 border-white/10 text-white focus:border-indigo-500/50"
+                                />
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
@@ -622,7 +607,6 @@ function TopicEditorWrapper() {
     const [title, setTitle] = useState('');
     const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
     const [sourceText, setSourceText] = useState('');
-    const [htmlContent, setHtmlContent] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     
@@ -650,7 +634,6 @@ function TopicEditorWrapper() {
             setTitle(topicData.title);
             setSteps(addIdToSteps(topicData.steps || []));
             setSourceText(topicData.sourceText || '');
-            setHtmlContent(topicData.htmlContent || '');
         } else {
             toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
         }
@@ -665,7 +648,7 @@ function TopicEditorWrapper() {
         if (!courseId || !unitId || !topicId) return;
         setIsSaving(true);
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
+        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText });
         if(result.success) { 
             toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." });
         } else { 
@@ -706,7 +689,6 @@ function TopicEditorWrapper() {
                 title={title} setTitle={setTitle}
                 steps={steps} setSteps={setSteps}
                 sourceText={sourceText} setSourceText={setSourceText}
-                htmlContent={htmlContent} setHtmlContent={setHtmlContent}
                 onSave={handleSaveFlow}
                 isSaving={isSaving}
                 onOpenAIGeneration={(type, context) => {
@@ -740,4 +722,3 @@ export default function Page() {
     
 
     
-
