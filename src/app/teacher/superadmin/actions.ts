@@ -1,7 +1,9 @@
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
+import { Timestamp, doc, collection, writeBatch, setDoc, updateDoc, deleteDoc, query, where, orderBy, getDocs, getDoc } from "firebase-admin/firestore";
+import { firestore } from 'firebase-admin';
 import type { UserProfile, SchoolClass, Course, Unit, Topic, ActivityItem, Question, Assignment, ScoreEvent, LessonStep } from "@/lib/types";
 
 // Node.js file system and path modules
@@ -182,7 +184,7 @@ export async function exportAllData(
     
     // This function now returns data with its original IDs preserved for re-importing.
     const fetchCollectionWithFilter = async (collectionName: string) => {
-        let query: FirebaseFirestore.Query = db.collection(collectionName);
+        let q: FirebaseFirestore.Query = db.collection(collectionName);
         
         const conditions = [];
         if (topicId && topicId !== 'all') conditions.push({ field: 'topicId', op: '==', value: topicId });
@@ -199,13 +201,12 @@ export async function exportAllData(
         }
         
         if (conditions.length > 0) {
-            // Handle 'in' query limitations (max 30 values) if necessary, for now it's simple
             for (const cond of conditions) {
-                 query = query.where(cond.field, cond.op as any, cond.value);
+                 q = q.where(cond.field, cond.op as any, cond.value);
             }
         }
        
-        const snapshot = await query.get();
+        const snapshot = await q.get();
         return snapshot.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
     };
 
@@ -308,7 +309,7 @@ export async function exportManifestAndContent() {
         const allTopics = topicsSnap.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
         const topicsByUnit = new Map<string, any[]>();
         allTopics.forEach(topic => {
-            const parent = doc.ref.parent.parent;
+            const parent = doc(topic.ref.parent.path).parent;
             if (parent) {
                 const unitId = parent.id;
                 if (!topicsByUnit.has(unitId)) topicsByUnit.set(unitId, []);
@@ -319,7 +320,7 @@ export async function exportManifestAndContent() {
         const allUnits = unitsSnap.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
         const unitsByCourse = new Map<string, any[]>();
         allUnits.forEach(unit => {
-            const parent = doc.ref.parent.parent;
+            const parent = doc(unit.ref.parent.path).parent;
             if (parent) {
                 const courseId = parent.id;
                 if (!unitsByCourse.has(courseId)) unitsByCourse.set(courseId, []);
@@ -503,3 +504,5 @@ export async function exportActivityData() {
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
+
+    
