@@ -16,7 +16,7 @@ import { getCurriculumForSelection, type ClassGroup } from '@/components/actions
 // --- TİP TANIMLARI ---
 type Topic = { id: string; title: string; hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; isPublished?: boolean };
 type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean; isPublished?: boolean };
-type Course = { id: string; title: string; units?: Unit[]; className?: string; icon?: any; color?: string; };
+type Course = EnrichedCourse;
 
 const ICONS = [Book, Sparkles, Book, Gamepad2];
 const getGradient = (index: number) => {
@@ -141,16 +141,16 @@ const SelectionCard = ({
 // --- MAIN PAGE COMPONENT ---
 
 type OyunKurulumProps = {
-    pageTitle: string;
+    pageTitle?: string;
     gameName?: string;
     gamePath?: string;
     pageIcon: React.ElementType;
-    targetPath: string;
+    targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
     isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, pageIcon: PageIcon, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -164,7 +164,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
   
   const [searchQuery, setSearchQuery] = useState("");
 
-  const finalGameName = gameName || searchParams.get('gameName') || pageTitle || "Etkinlik Kurulumu";
+  const pageTitle = initialPageTitle || gameName || searchParams.get('gameName') || "Etkinlik Kurulumu";
   const finalGamePath = gamePath || searchParams.get('gamePath') || "";
 
   const [selection, setSelection] = useState({
@@ -186,7 +186,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
   }, []);
 
   const getBackUrl = () => {
-    if (targetPath.startsWith('student')) return '/student';
+    if (targetPath?.startsWith('student')) return '/student';
     if(targetPath === 'oyunlar') return '/oyunlar';
     return '/'; // Fallback for static or public pages
   };
@@ -265,7 +265,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
     
     if (dataType === 'games' && unit.id === 'all') {
         const params = new URLSearchParams({
-            gameName: finalGameName,
+            gameName: pageTitle,
             gamePath: finalGamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
@@ -280,7 +280,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
         return;
     }
 
-    if (dataType === 'ozetler' && unit.hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
+    if (dataType === 'ozetler' && (unit as any).hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
         const pathPrefix = isStatic ? '' : '/student';
         const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
         router.push(url);
@@ -313,7 +313,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
   const handleSelectTopic = (topicId: string, topicName: string) => {
       setSelection({...selection, topicName});
       
-      const pathPrefix = isStatic ? '' : '/student';
+      const pathPrefix = isStatic ? '' : (targetPath || 'oyunlar').startsWith('student/') ? '/student' : '';
       let finalUrl = '';
       
       if (dataType === 'yazilacaklar') {
@@ -322,7 +322,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
           finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
       } else { // games
           const params = new URLSearchParams({
-            gameName: finalGameName,
+            gameName: pageTitle,
             gamePath: finalGamePath,
             courseId: selection.courseId,
             courseName: selection.courseName,
@@ -533,10 +533,4 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon,
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
-                </div>
-            </div>
-        </GlassPanel>
-
-    </div>
-  );
-}
+                

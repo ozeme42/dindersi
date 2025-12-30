@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from "react";
@@ -5,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, Users, Wind } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Book, Library, ListTodo, PartyPopper, Package, Users, Wind } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -138,11 +139,11 @@ export function TornadoSetupClientPage() {
             case 1:
                 return <SelectionGrid items={allClasses} selectedId={selection.classId} onSelect={handleSelectClass} titleKey="name" isLoading={isLoading} />;
             case 2:
-                return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading} />;
+                return <SelectionGrid items={courses} selectedId={selection.courseId} onSelect={handleSelectCourse} titleKey="title" isLoading={isLoading}/>;
             case 3:
-                return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{id: 'all', name: 'Tüm Üniteler'}]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading} />;
+                return <SelectionGrid items={units} selectedId={selection.unitId} onSelect={handleSelectUnit} specialOptions={[{id: 'all', name: 'Tüm Üniteler'}]} disabled={!selection.courseId} titleKey="title" isLoading={isLoading}/>;
             case 4:
-                return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{id: 'all', name: 'Tüm Konular'}]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading} />;
+                return <SelectionGrid items={topics} selectedId={selection.topicId} onSelect={handleSelectTopic} specialOptions={[{id: 'all', name: 'Tüm Konular'}]} disabled={!selection.unitId || selection.unitId === 'all'} titleKey="title" isLoading={isLoading}/>;
             case 5:
                 return (
                     <div className="w-full max-w-4xl mx-auto space-y-8">
@@ -217,7 +218,7 @@ export function TornadoSetupClientPage() {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
 
-            <div className="relative z-10 w-full max-w-6xl space-y-8 flex flex-col h-full flex-grow">
+            <div className="relative z-10 w-full max-w-6xl space-y-8">
         
                 {/* Başlık Alanı */}
                 <div className="text-center space-y-4 py-4">
@@ -241,24 +242,24 @@ export function TornadoSetupClientPage() {
                         ></div>
 
                         {steps.map((step, index) => {
-                            const isCompleted = currentStep > step.id;
-                            const isActive = currentStep === step.id;
+                            const isActive = currentStep >= step.id;
+                            const isCurrent = currentStep === step.id;
                             
                             return (
                                 <div key={step.id} className="flex flex-col items-center gap-3 group cursor-default">
                                     <div className={cn(
                                         "w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center border-4 transition-all duration-300 z-10 shadow-lg",
-                                        isActive 
+                                        isCurrent 
                                             ? "bg-slate-900 border-cyan-500 text-cyan-400 scale-110 shadow-cyan-500/50" 
-                                            : isCompleted 
+                                            : isActive 
                                                 ? "bg-blue-600 border-blue-600 text-white scale-100" 
                                                 : "bg-slate-900 border-slate-800 text-slate-600"
                                     )}>
-                                        {isCompleted ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
+                                        {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
                                     </div>
                                     <span className={cn(
                                         "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
-                                        isActive ? "text-cyan-400" : isCompleted ? "text-blue-500" : "text-slate-600"
+                                        isCurrent ? "text-cyan-400" : isActive ? "text-blue-500" : "text-slate-600"
                                     )}>
                                         {step.name}
                                     </span>
@@ -269,8 +270,8 @@ export function TornadoSetupClientPage() {
                 </div>
 
                 {/* Ana İçerik Kartı */}
-                <div className="mt-8 flex-grow flex flex-col">
-                    <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col flex-grow min-h-[500px]">
+                <div className="mt-8">
+                    <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
                         <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
                             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                                 <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-lg">
@@ -281,7 +282,7 @@ export function TornadoSetupClientPage() {
                             {isLoading && <Loader2 className="h-6 w-6 animate-spin text-cyan-500" />}
                         </div>
 
-                        <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30 overflow-y-auto">
+                        <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30">
                             {renderContent()}
                         </div>
 
@@ -324,3 +325,7 @@ export function TornadoSetupClientPage() {
         </div>
     );
 }
+
+```
+- src/app/teacher/smartboard/tornado/page.tsx
+- src/app/oyunlar/adam-asmaca/page.tsx
