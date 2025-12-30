@@ -9,7 +9,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import type { Unit, LessonStep } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { updateUnitContent } from './actions';
+import { updateUnitContent } from './[unitId]/actions'; 
 import { TopicEditor } from '@/app/teacher/content-creation/edit/page'; 
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,7 +25,7 @@ const addStableIdsToSteps = (steps: LessonStep[]): (LessonStep & { id: string })
         const existingId = (step as any).id;
         return {
             ...step,
-            isPublished: step.isPublished ?? true, // YENİ: Varsayılan olarak true ata
+            isPublished: step.isPublished ?? true,
             id: existingId || `step-${Date.now()}-${index}-${Math.random()}`
         };
     });
