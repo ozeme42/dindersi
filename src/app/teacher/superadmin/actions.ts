@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -306,25 +307,25 @@ export async function exportManifestAndContent() {
             }
         });
 
-        const allTopics = topicsSnap.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+        const allTopicsRaw = topicsSnap.docs.map(doc => ({ ref: doc.ref, data: serialize({ id: doc.id, ...doc.data() }) }));
         const topicsByUnit = new Map<string, any[]>();
-        allTopics.forEach(topic => {
-            const parent = doc(topic.ref.parent.path).parent;
+        allTopicsRaw.forEach(topic => {
+            const parent = topic.ref.parent.parent;
             if (parent) {
                 const unitId = parent.id;
                 if (!topicsByUnit.has(unitId)) topicsByUnit.set(unitId, []);
-                topicsByUnit.get(unitId)!.push(topic);
+                topicsByUnit.get(unitId)!.push(topic.data);
             }
         });
 
-        const allUnits = unitsSnap.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+        const allUnitsRaw = unitsSnap.docs.map(doc => ({ ref: doc.ref, data: serialize({ id: doc.id, ...doc.data() }) }));
         const unitsByCourse = new Map<string, any[]>();
-        allUnits.forEach(unit => {
-            const parent = doc(unit.ref.parent.path).parent;
+        allUnitsRaw.forEach(unit => {
+            const parent = unit.ref.parent.parent;
             if (parent) {
                 const courseId = parent.id;
                 if (!unitsByCourse.has(courseId)) unitsByCourse.set(courseId, []);
-                unitsByCourse.get(courseId)!.push(unit);
+                unitsByCourse.get(courseId)!.push(unit.data);
             }
         });
 
