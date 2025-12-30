@@ -46,6 +46,7 @@ function UnitFlowEditor() {
     const [title, setTitle] = useState('');
     const [steps, setSteps] = useState<(LessonStep & { id: string })[]>([]); // Adım state'i artık ID içerecek
     const [sourceText, setSourceText] = useState('');
+    const [htmlContent, setHtmlContent] = useState(''); // YENİ: HTML içeriği için state
 
     const fetchUnitData = useCallback(async () => {
         if (!courseId || !unitId) {
@@ -62,9 +63,9 @@ function UnitFlowEditor() {
                 const unitData = { id: unitSnap.id, ...unitSnap.data() } as Unit;
                 
                 setTitle(unitData.title);
-                // DÜZELTME: Veritabanından gelen adımlara ID atama işlemi burada yapılıyor.
                 setSteps(addStableIdsToSteps(unitData.steps || []));
                 setSourceText(unitData.sourceText || '');
+                setHtmlContent(unitData.htmlContent || ''); // YENİ: State'i doldur
                 setUnit(unitData);
 
             } else {
@@ -92,6 +93,7 @@ function UnitFlowEditor() {
             title: title,
             steps: steps.map(({ id, ...rest }) => rest), // Kaydederken geçici ID'leri kaldır
             sourceText: sourceText,
+            htmlContent: htmlContent, // YENİ: Kaydedilecek veriye ekle
         };
 
         try {
@@ -137,8 +139,8 @@ function UnitFlowEditor() {
                 setSteps={setSteps as any}
                 sourceText={sourceText}
                 setSourceText={setSourceText}
-                htmlContent={unit.htmlContent || ''} // This is not editable here, so we pass it directly
-                setHtmlContent={() => {}} // Dummy function
+                htmlContent={htmlContent}
+                setHtmlContent={setHtmlContent}
                 onSave={handleSave}
                 isSaving={isSaving}
                 isUnitFlow={true}
