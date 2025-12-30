@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Ünite: Detaylı Konu Özetleri</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'serif': ['"Merriweather"', 'serif'],
+                        'sans': ['"Open Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        merhamet: '#00897b', // Teal
+                        nezaket: '#8e24aa',  // Purple
+                        vatan: '#c62828',    // Red
+                        dua: '#1565c0'       // Blue
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Print Styles: Her konu yeni sayfada başlar */
+        @media print {
+            .no-print { display: none !important; }
+            .page-break { break-before: page; }
+            body { background-color: white; }
+            .shadow-xl { box-shadow: none !important; }
+            .print-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        }
+        
+        .tab-active {
+            background-color: white;
+            border-bottom: 4px solid;
+            transform: translateY(-2px);
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .content-hidden { display: none; }
+        .content-visible { display: block; animation: fadeIn 0.5s ease-in-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 min-h-screen">
+
+    <!-- Navigation / Control Panel (Hidden in Print) -->
+    <nav class="no-print bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center md:justify-between items-center py-4">
+                <div class="font-bold text-xl text-gray-700 mb-2 md:mb-0">
+                    <i class="fas fa-book-reader mr-2"></i> 3. Ünite Çalışma Notları
+                </div>
+                
+                <!-- Tab Buttons -->
+                <div class="flex space-x-2 overflow-x-auto pb-2 md:pb-0">
+                    <button onclick="showTab('merhamet', this)" class="tab-btn px-4 py-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-semibold border-merhamet transition-all text-sm whitespace-nowrap tab-active text-merhamet">
+                        1. Merhamet
+                    </button>
+                    <button onclick="showTab('nezaket', this)" class="tab-btn px-4 py-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-semibold border-nezaket transition-all text-sm whitespace-nowrap text-gray-600">
+                        2. Adap ve Nezaket
+                    </button>
+                    <button onclick="showTab('vatan', this)" class="tab-btn px-4 py-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-semibold border-vatan transition-all text-sm whitespace-nowrap text-gray-600">
+                        3. Vatan Sevgisi
+                    </button>
+                    <button onclick="showTab('dua', this)" class="tab-btn px-4 py-2 rounded-t-lg bg-gray-200 hover:bg-gray-300 font-semibold border-dua transition-all text-sm whitespace-nowrap text-gray-600">
+                        4. Kunut Duaları
+                    </button>
+                </div>
+
+                <button onclick="window.print()" class="hidden md:block bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition">
+                    <i class="fas fa-print"></i> Tümünü Yazdır
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-4 py-8 print-container max-w-4xl">
+
+        <!-- ==========================================
+             KONU 1: MERHAMETLİ OLMAK
+             ========================================== -->
+        <article id="merhamet" class="content-visible bg-white rounded-xl shadow-xl overflow-hidden mb-8 border-t-8 border-merhamet print:block">
+            <div class="bg-merhamet/10 p-6 border-b border-merhamet/20 flex items-center justify-between">
+                <div>
+                    <span class="uppercase tracking-widest text-xs font-bold text-merhamet">1. Konu</span>
+                    <h1 class="text-3xl font-serif font-bold text-gray-800">Merhametli Olmak</h1>
+                </div>
+                <i class="fas fa-dove text-4xl text-merhamet opacity-50"></i>
+            </div>
+            
+            <div class="p-8 space-y-6">
+                <!-- Tanım -->
+                <section>
+                    <h2 class="text-xl font-bold text-merhamet mb-3 border-l-4 border-merhamet pl-3">Kavramlar ve Tanımlar</h2>
+                    <p class="leading-relaxed">
+                        <strong>Merhamet:</strong> Şefkat gösterme, acıma, yumuşak huylu olma, affetme ve bağışlama demektir. Yaratılanlara şefkatle yaklaşmak ancak onları sevmekle mümkündür.
+                    </p>
+                    <div class="mt-2 grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded"><strong>Empati:</strong> Kendini başkasının yerine koyabilme becerisidir. Merhametin temelidir.</div>
+                        <div class="bg-gray-50 p-3 rounded"><strong>Vicdan:</strong> İnsanın içindeki iyiyi doğruyu bulma yetisidir.</div>
+                    </div>
+                </section>
+
+                <!-- Dini Boyut -->
+                <section class="bg-merhamet/5 p-5 rounded-lg">
+                    <h2 class="text-xl font-bold text-merhamet mb-3">İslam'da Yeri</h2>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>Rahman:</strong> Allah'ın dünyadaki <em>bütün varlıklara</em> merhamet etmesidir.</li>
+                        <li><strong>Rahîm:</strong> Allah'ın ahirette <em>sadece inananlara</em> merhamet etmesidir.</li>
+                        <li><strong>Hz. Peygamber:</strong> Kur'an'da "Biz seni ancak alemlere rahmet olarak gönderdik" (Enbiya, 107) ifadesiyle anılır. Ümmetine çok düşkündür.</li>
+                    </ul>
+                </section>
+
+                <!-- Etkileri -->
+                <section>
+                    <h2 class="text-xl font-bold text-merhamet mb-3 border-l-4 border-merhamet pl-3">Birey ve Topluma Etkileri</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-bold mb-2">Bireye Faydası</h3>
+                            <ul class="space-y-1 text-sm list-disc list-inside text-gray-600">
+                                <li>Kalbi yumuşatır.</li>
+                                <li>Kin ve nefreti yok eder.</li>
+                                <li>"Karıncayı bile incitmez" hassasiyeti kazandırır.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2">Topluma Faydası</h3>
+                            <ul class="space-y-1 text-sm list-disc list-inside text-gray-600">
+                                <li>Güven ortamı oluşur.</li>
+                                <li>Şiddet azalır.</li>
+                                <li>Dayanışma (ör: afet zamanları) artar.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tarihsel Örnek -->
+                <div class="flex items-center gap-4 bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-4">
+                    <i class="fas fa-landmark text-yellow-600 text-2xl"></i>
+                    <div>
+                        <strong>Kuş Evleri:</strong> Osmanlı mimarisinde cami ve medrese duvarlarına yapılan kuş evleri, merhametin estetikle birleşmiş en güzel örneğidir.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================
+             KONU 2: ADAP VE NEZAKET
+             ========================================== -->
+        <article id="nezaket" class="content-hidden bg-white rounded-xl shadow-xl overflow-hidden mb-8 border-t-8 border-nezaket print:block page-break">
+            <div class="bg-nezaket/10 p-6 border-b border-nezaket/20 flex items-center justify-between">
+                <div>
+                    <span class="uppercase tracking-widest text-xs font-bold text-nezaket">2. Konu</span>
+                    <h1 class="text-3xl font-serif font-bold text-gray-800">Adap ve Nezaket Kuralları</h1>
+                </div>
+                <i class="fas fa-user-friends text-4xl text-nezaket opacity-50"></i>
+            </div>
+
+            <div class="p-8 space-y-6">
+                 <!-- Tanım -->
+                 <div class="flex gap-4 mb-6">
+                    <div class="flex-1 bg-purple-50 p-4 rounded border-l-4 border-nezaket">
+                        <strong class="text-lg block mb-1">Adap (Edep)</strong>
+                        Toplumda örf, âdet, kural halini almış iyi davranışlardır.
+                    </div>
+                    <div class="flex-1 bg-purple-50 p-4 rounded border-l-4 border-nezaket">
+                        <strong class="text-lg block mb-1">Nezaket</strong>
+                        Başkalarına karşı ince, kibar ve saygılı davranmaktır.
+                    </div>
+                </div>
+
+                <!-- 3 Temel Alan -->
+                <section>
+                    <h2 class="text-xl font-bold text-nezaket mb-4 border-b pb-2">Nezaketin 3 Temel Alanı</h2>
+                    
+                    <!-- 1. Selamlaşma -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-gray-800"><i class="fas fa-handshake text-nezaket mr-2"></i>1. Selamlaşma Adabı</h3>
+                        <p class="text-sm text-gray-600 mb-2 ml-6">"Selamünaleyküm" (Selam üzerine olsun) diyerek barış ve esenlik dilemektir.</p>
+                        <ul class="ml-6 text-sm list-disc list-inside bg-gray-50 p-2 rounded">
+                            <li>Küçük büyüğe, yürüyen oturana, az olan çok olana selam verir.</li>
+                            <li>Evlere girerken izin istenir ve selam verilir.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2. İletişim -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-gray-800"><i class="fas fa-comments text-nezaket mr-2"></i>2. İletişim Adabı</h3>
+                        <ul class="ml-6 text-sm list-disc list-inside bg-gray-50 p-2 rounded">
+                            <li>Doğru sözlü olmak (Yalan söylememek).</li>
+                            <li>Bağırmadan, açık ve anlaşılır konuşmak.</li>
+                            <li>Söz kesmemek, dinlemeyi bilmek.</li>
+                            <li>Kaba ve kırıcı (alaycı) ifadelerden kaçınmak.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 3. Sofra -->
+                    <div class="mb-4">
+                        <h3 class="font-bold text-gray-800"><i class="fas fa-utensils text-nezaket mr-2"></i>3. Sofra Adabı</h3>
+                        <ul class="ml-6 text-sm list-disc list-inside bg-gray-50 p-2 rounded">
+                            <li>Yemeğe Besmele ile başlamak, sonunda "Elhamdülillah" demek.</li>
+                            <li>Sağ el ile ve önünden yemek.</li>
+                            <li>İsraf etmemek (Tabağına yiyeceğin kadar almak).</li>
+                            <li>Yemekten önce ve sonra elleri yıkamak.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Sosyal Medya -->
+                <section class="bg-gray-800 text-white p-4 rounded-lg">
+                    <h3 class="font-bold mb-2"><i class="fas fa-mobile-alt mr-2"></i>Dijital Nezaket (Sosyal Medya)</h3>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><i class="fas fa-check text-green-400 mr-2"></i> Türkçeyi doğru kullanmak.</div>
+                        <div><i class="fas fa-check text-green-400 mr-2"></i> Özel hayatın gizliliğine saygı.</div>
+                        <div><i class="fas fa-check text-green-400 mr-2"></i> Doğruluğu kesin olmayan bilgiyi yaymamak.</div>
+                        <div><i class="fas fa-check text-green-400 mr-2"></i> Klavye başında da nazik olmak.</div>
+                    </div>
+                </section>
+
+                <div class="text-sm italic text-gray-500 mt-4">
+                    "Müminin mümin üzerindeki hakkı: Hastayken ziyaret, cenazesine katılmak, davete icabet, selamlaşmak, hapşırana dua etmek, samimi olmak." (Hadis)
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================
+             KONU 3: VATAN SEVGİSİ
+             ========================================== -->
+        <article id="vatan" class="content-hidden bg-white rounded-xl shadow-xl overflow-hidden mb-8 border-t-8 border-vatan print:block page-break">
+            <div class="bg-vatan/10 p-6 border-b border-vatan/20 flex items-center justify-between">
+                <div>
+                    <span class="uppercase tracking-widest text-xs font-bold text-vatan">3. Konu</span>
+                    <h1 class="text-3xl font-serif font-bold text-gray-800">Vatanımızı Sevmek</h1>
+                </div>
+                <i class="fas fa-flag text-4xl text-vatan opacity-50"></i>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <!-- Tanımlar -->
+                <section class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white border shadow-sm p-4 rounded">
+                        <h3 class="text-vatan font-bold uppercase text-sm mb-2">Vatan Nedir?</h3>
+                        <p class="text-sm">Sadece bir toprak parçası değil; milletin din, dil, tarih ve kültürünü özgürce yaşadığı, geçmişi geleceğe bağlayan yerdir.</p>
+                    </div>
+                    <div class="bg-white border shadow-sm p-4 rounded">
+                        <h3 class="text-vatan font-bold uppercase text-sm mb-2">Millet Nedir?</h3>
+                        <p class="text-sm">Aynı toprakta yaşayan, aralarında duygu, ülkü, gelenek birliği olan insan topluluğudur.</p>
+                    </div>
+                </section>
+
+                <!-- Şehit ve Gazi -->
+                <section class="bg-vatan text-white p-5 rounded-lg shadow-inner">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="flex-1">
+                            <strong class="text-lg border-b border-white/30 block mb-2">ŞEHİTLİK</strong>
+                            <p class="text-sm opacity-90">Allah yolunda; vatan, din, can ve namus için savaşırken ölenlere denir. İslam'da peygamberlikten sonraki en yüksek mertebedir. Onlara "ölü" denmez.</p>
+                        </div>
+                        <div class="flex-1">
+                            <strong class="text-lg border-b border-white/30 block mb-2">GAZİLİK</strong>
+                            <p class="text-sm opacity-90">Vatan savunması için savaşa katılıp sağ dönen kahramanlardır. "Şehit nurlanmış, gazi onurlanmış askerdir."</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tarihi Olaylar -->
+                <section>
+                    <h2 class="text-xl font-bold text-vatan mb-3 border-l-4 border-vatan pl-3">Vatan Savunması Örnekleri</h2>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-history text-vatan mt-1 mr-3"></i>
+                            <div>
+                                <strong>Çanakkale ve Kurtuluş Savaşı:</strong> Milletin bağımsızlık uğruna topyekûn mücadelesidir.
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-peace text-vatan mt-1 mr-3"></i>
+                            <div>
+                                <strong>Kıbrıs Barış Harekâtı (1974):</strong> Kıbrıs Türklerini zulümden kurtarmak için yapılmıştır.
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-fist-raised text-vatan mt-1 mr-3"></i>
+                            <div>
+                                <strong>15 Temmuz Destanı:</strong> <strong>Ömer Halisdemir</strong> gibi kahramanların ve milletin iradesinin darbecilere karşı duruşudur.
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+
+                <!-- Modern Vatanseverlik -->
+                <div class="bg-gray-100 p-4 rounded border-l-4 border-gray-600">
+                    <h3 class="font-bold text-gray-800">Günümüzde Vatanseverlik</h3>
+                    <p class="text-sm text-gray-600 mt-1">Sadece savaşmak değil; ülkeyi kalkındırmaktır. Savunma sanayisindeki yerli projeler (İHA, SİHA, KAAN, GÖKBEY) vatanı korumanın modern yoludur.</p>
+                </div>
+
+                <!-- Şiir -->
+                <div class="text-center italic text-gray-500 mt-2">
+                    "Sahipsiz olan vatanın batması haktır, sen sahip çıkarsan bu vatan batmayacaktır." <br>
+                    <span class="text-xs not-italic font-bold">- Mehmet Akif Ersoy</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- ==========================================
+             KONU 4: KUNUT DUALARI
+             ========================================== -->
+        <article id="dua" class="content-hidden bg-white rounded-xl shadow-xl overflow-hidden mb-8 border-t-8 border-dua print:block page-break">
+            <div class="bg-dua/10 p-6 border-b border-dua/20 flex items-center justify-between">
+                <div>
+                    <span class="uppercase tracking-widest text-xs font-bold text-dua">4. Konu</span>
+                    <h1 class="text-3xl font-serif font-bold text-gray-800">Bir Dua Öğreniyorum: Kunut</h1>
+                </div>
+                <i class="fas fa-hands-praying text-4xl text-dua opacity-50"></i>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <!-- Temel Bilgiler -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-blue-50 p-4 rounded border border-blue-100">
+                        <strong class="text-dua block mb-1">Ne Zaman?</strong>
+                        Yatsı namazından sonra kılınan <strong>Vitir namazının 3. rekatında</strong> okunur.
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded border border-blue-100">
+                        <strong class="text-dua block mb-1">Anlamı Nedir?</strong>
+                        Kunut; itaat, ibadet, kıyam (ayakta durma) ve Allah'a sığınma demektir.
+                    </div>
+                </div>
+
+                <!-- Kunut 1 -->
+                <section class="mb-6">
+                    <h2 class="text-lg font-bold text-dua mb-2 border-b border-dua/30 pb-1">Kunut 1 Duası Özeti</h2>
+                    <p class="text-sm text-gray-600 mb-2 italic">"Allahümme innâ nesteînüke..."</p>
+                    <ul class="list-disc list-inside text-sm space-y-1 text-gray-700 bg-gray-50 p-3 rounded">
+                        <li>Allah'tan yardım ve hidayet isteriz.</li>
+                        <li>Günahlarımızın bağışlanmasını dileriz.</li>
+                        <li>O'na inanır, güvenir ve tövbe ederiz.</li>
+                        <li>Bize verdiği nimetler için O'nu överiz (şükrederiz).</li>
+                        <li>Nankörlük etmeyiz.</li>
+                    </ul>
+                </section>
+
+                <!-- Kunut 2 -->
+                <section>
+                    <h2 class="text-lg font-bold text-dua mb-2 border-b border-dua/30 pb-1">Kunut 2 Duası Özeti</h2>
+                    <p class="text-sm text-gray-600 mb-2 italic">"Allahümme iyyâke na'büdü..."</p>
+                    <ul class="list-disc list-inside text-sm space-y-1 text-gray-700 bg-gray-50 p-3 rounded">
+                        <li>Yalnız Allah'a kulluk ederiz.</li>
+                        <li>Namazı ve secdeyi sadece O'nun için yaparız.</li>
+                        <li>O'nun rahmetini umarız.</li>
+                        <li>O'nun azabından korkarız (çünkü azabı kafirlere ulaşacaktır).</li>
+                    </ul>
+                </section>
+
+                <!-- Sonuç -->
+                <div class="mt-4 bg-yellow-50 p-3 rounded text-sm text-center">
+                    <strong>Özetle:</strong> Kunut duaları, kulun acizliğini kabul edip Allah'a tam teslimiyetle sığınmasıdır. Hem yardım istenir hem de kulluk bilinci tazelenir.
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <footer class="no-print bg-gray-800 text-white py-6 text-center mt-12">
+        <p class="opacity-75">3. Ünite Özeti Sonu</p>
+        <p class="text-xs mt-2 opacity-50">Çıktı almak için sağ üstteki butonu veya tarayıcı menüsünü kullanabilirsiniz.</p>
+    </footer>
+
+    <script>
+        function showTab(tabId, btnElement) {
+            // Hide all content
+            document.querySelectorAll('article').forEach(el => {
+                el.classList.add('content-hidden');
+                el.classList.remove('content-visible');
+            });
+            
+            // Show selected content
+            const content = document.getElementById(tabId);
+            content.classList.remove('content-hidden');
+            content.classList.add('content-visible');
+
+            // Reset all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active', 'text-merhamet', 'text-nezaket', 'text-vatan', 'text-dua', 'bg-white');
+                btn.classList.add('text-gray-600', 'bg-gray-200');
+                // Remove custom border colors from active state styling logic if needed, 
+                // but keeping the class structure simple here.
+                btn.style.borderBottomColor = "transparent"; 
+            });
+
+            // Activate clicked button
+            btnElement.classList.remove('text-gray-600', 'bg-gray-200');
+            btnElement.classList.add('tab-active', 'bg-white');
+            
+            // Apply specific color to active text/border based on tab ID
+            if(tabId === 'merhamet') { btnElement.classList.add('text-merhamet'); btnElement.style.borderBottomColor = "#00897b"; }
+            if(tabId === 'nezaket') { btnElement.classList.add('text-nezaket'); btnElement.style.borderBottomColor = "#8e24aa"; }
+            if(tabId === 'vatan') { btnElement.classList.add('text-vatan'); btnElement.style.borderBottomColor = "#c62828"; }
+            if(tabId === 'dua') { btnElement.classList.add('text-dua'); btnElement.style.borderBottomColor = "#1565c0"; }
+        }
+
+        // Initialize first tab
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstBtn = document.querySelector('.tab-btn');
+            showTab('merhamet', firstBtn);
+        });
+    </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Wand2, ArrowLeft, Download, Plus, Minus, Maximize, Minimize, Columns } from 'lucide-react';
+import { Loader2, Wand2, ArrowLeft, Download, Plus, Minus, Maximize, Minimize, Columns, Save } from 'lucide-react';
 import type { Topic, YazilacaklarContent, ActivityItem } from '@/lib/types';
 import Link from 'next/link';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
@@ -300,3 +300,5 @@ export default function Page() {
         </Suspense>
     )
 }
+
+    
