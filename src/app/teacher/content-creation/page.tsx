@@ -833,7 +833,3 @@ export default function ContentCreationPage() {
         </div>
     );
 }
-
-```
-- src/app/teacher/content-creation/edit/page.tsx
-- src/app/teacher/content-creation/edit-unit/[unitId]/page.tsx
