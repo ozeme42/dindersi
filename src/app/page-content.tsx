@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -176,14 +177,14 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                             </AccordionTrigger>
                                             <AccordionContent className="px-6 pb-6 pt-2">
                                                 <Accordion type="multiple" className="w-full space-y-2">
-                                                    {course.units.map(unit => (
+                                                    {course.units.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map(unit => (
                                                         <AccordionItem key={unit.id} value={unit.id} className="border-none bg-slate-900/50 rounded-xl overflow-hidden">
                                                             <AccordionTrigger className="px-4 py-3 hover:no-underline text-slate-300 font-semibold group/unit">
                                                                 <div className="flex items-center gap-3 w-full">
                                                                     <ChevronRight className="h-4 w-4 text-slate-600 transition-transform duration-200 group-data-[state=open]/unit:rotate-90"/>
                                                                     <span className="flex-1 text-left">{unit.title}</span>
                                                                     {unit.hasUnitOzet && (
-                                                                        <Link href={`/ozetler/${unit.id}`} onClick={(e) => e.stopPropagation()}>
+                                                                        <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()}>
                                                                             <span className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-6 px-2 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
                                                                                 <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
                                                                             </span>
@@ -192,17 +193,17 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                 </div>
                                                             </AccordionTrigger>
                                                             <AccordionContent className="p-4 bg-black/20 space-y-2">
-                                                                {unit.topics.map(topic => (
+                                                                {unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map(topic => (
                                                                     <div key={topic.id} className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors">
                                                                         <p className="font-medium text-sm text-slate-300">{topic.title}</p>
                                                                         <div className="flex gap-2">
                                                                             {topic.hasYazilacaklarContent && (
-                                                                                <Link href={`/yazilacaklar/${topic.id}`}>
+                                                                                <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}>
                                                                                     <Button variant="secondary" size="sm" className="h-7 px-3 text-xs bg-sky-600 hover:bg-sky-500 text-white"><Columns className="mr-1.5 h-3 w-3"/> Notlar</Button>
                                                                                 </Link>
                                                                             )}
                                                                             {topic.hasOzetContent && (
-                                                                                <Link href={`/ozetler/${topic.id}`}>
+                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}>
                                                                                     <Button variant="secondary" size="sm" className="h-7 px-3 bg-purple-600 hover:bg-purple-500 text-white"><FileText className="mr-1.5 h-3 w-3"/> Özet</Button>
                                                                                 </Link>
                                                                             )}
