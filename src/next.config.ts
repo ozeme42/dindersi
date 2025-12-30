@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  experimental: {
+    allowedDevOrigins: ["https://6000-firebase-degerleryedek-1766077914929.cluster-6frnii43o5blcu522sivebzpii.cloudworkstations.dev"],
+  },
   images: {
     remotePatterns: [
       {
