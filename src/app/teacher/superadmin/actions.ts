@@ -290,8 +290,8 @@ export async function exportManifestAndContent() {
         
         // Fetch all data in parallel to be efficient
         const [classesSnap, coursesSnap, unitsSnap, topicsSnap, activityItemsSnap] = await Promise.all([
-            db.collection("classes").orderBy('name', 'asc').get(),
-            db.collection("courses").orderBy('title', 'asc').get(),
+            db.collection("classes").get(),
+            db.collection("courses").get(),
             db.collectionGroup("units").get(),
             db.collectionGroup("topics").get(),
             db.collection('activityItems').get(),
@@ -308,17 +308,18 @@ export async function exportManifestAndContent() {
         });
 
         const allTopicsRaw = topicsSnap.docs.map(doc => {
-             const parentRef = doc.ref.parent.parent;
-             return {
-                 parent: { courseId: parentRef?.parent?.id, unitId: parentRef?.id },
-                 data: serialize({ id: doc.id, ...doc.data() })
+            const parentRef = doc.ref.parent.parent;
+            return {
+                parent: { courseId: parentRef?.id },
+                data: serialize({ id: doc.id, ...doc.data() })
             };
         });
         const topicsByUnit = new Map<string, any[]>();
         allTopicsRaw.forEach(topic => {
-            if (topic.parent.unitId) {
-                if (!topicsByUnit.has(topic.parent.unitId)) topicsByUnit.set(topic.parent.unitId, []);
-                topicsByUnit.get(topic.parent.unitId)!.push(topic.data);
+            const parentUnitRef = topic.data.unitId;
+            if (parentUnitRef) {
+                if (!topicsByUnit.has(parentUnitRef)) topicsByUnit.set(parentUnitRef, []);
+                topicsByUnit.get(parentUnitRef)!.push(topic.data);
             }
         });
 
@@ -338,25 +339,30 @@ export async function exportManifestAndContent() {
         });
 
         const allCourses = coursesSnap.docs.map(doc => serialize({ id: doc.id, ...doc.data() }));
+        allCourses.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr'));
         
         // Process and build the final manifest structure
+        const allClasses = classesSnap.docs.map(doc => serialize({id: doc.id, ...doc.data()}));
+        allClasses.sort((a,b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
+
         const classGroups = [];
         
         // Get courses by class
-        for (const classDoc of classesSnap.docs) {
-            const classData = serialize(classDoc.data()) as SchoolClass;
+        for (const classData of allClasses) {
             if (classData.isPublished === false) continue;
             
-            const coursesForClass = allCourses.filter(c => c.classId === classDoc.id && (c.isPublished ?? true));
+            const coursesForClass = allCourses.filter(c => c.classId === classData.id && (c.isPublished ?? true));
             
             const processedCourses = [];
             for (const course of coursesForClass) {
                 const unitsForCourse = (unitsByCourse.get(course.id) || []).filter(u => u.isPublished ?? true);
-                
+                unitsForCourse.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
                 const processedUnits = [];
                 for (const unit of unitsForCourse) {
                     const topicsForUnit = (topicsByUnit.get(unit.id) || []).filter(t => t.isPublished ?? true);
-                    
+                    topicsForUnit.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
                     const processedTopics = topicsForUnit.map(topic => {
                         const hasFlow = (topic.steps || []).filter((s: LessonStep) => s.isPublished ?? true).length > 0;
                         const hasOzet = !!topic.htmlContent;
@@ -391,9 +397,13 @@ export async function exportManifestAndContent() {
         const processedGeneralCourses = [];
         for (const course of generalCourses) {
             const unitsForCourse = (unitsByCourse.get(course.id) || []).filter(u => u.isPublished ?? true);
+            unitsForCourse.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
             const processedUnits = [];
             for (const unit of unitsForCourse) {
                  const topicsForUnit = (topicsByUnit.get(unit.id) || []).filter(t => t.isPublished ?? true);
+                 topicsForUnit.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
                  const hasUnitFlow = (unit.steps || []).filter((s: LessonStep) => s.isPublished ?? true).length > 0;
                  if(hasUnitFlow) addFile(`flows/${unit.id}.json`, (unit.steps || []).filter((s: LessonStep) => s.isPublished ?? true));
                  if(unit.htmlContent) addFile(`ozetler/${unit.id}.html`, unit.htmlContent);

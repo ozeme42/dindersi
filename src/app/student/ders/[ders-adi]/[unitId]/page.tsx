@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { Suspense, useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -275,6 +276,8 @@ function PageContent() {
         });
     
         const allTopics = course.units.flatMap(u => u.topics || []);
+        allTopics.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
         const currentIndex = allTopics.findIndex(t => t.id === (isUnitFlow ? null : contentId));
         
         if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
@@ -294,12 +297,18 @@ function PageContent() {
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
         if (!course?.units) return false;
+        
         const allTopics = course.units.flatMap(u => u.topics || []);
+        allTopics.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+        
         if (allTopics.length === 0) return true;
+        
         const topicIndex = allTopics.findIndex(t => t.id === topicId);
         if (topicIndex <= 0) return true;
+
         const previousTopic = allTopics[topicIndex - 1];
         if (!previousTopic) return true;
+
         return isTopicCompleted(previousTopic.id);
     }, [course?.units, isTopicCompleted, user?.role]);
     
@@ -391,8 +400,14 @@ function PageContent() {
                         onSelectTopic={(topic) => handleSelectContent(topic)}
                         onSelectUnitFlow={(unit) => handleSelectContent(unit)}
                         isTopicUnlocked={(topicIndex, unitIndex) => {
-                            const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-                            const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
+                            const allTopics = (course.units || []).flatMap(u => u.topics || []);
+                            allTopics.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
+
+                            const topic = allTopics.find(t => t.id === allTopics[topicIndex]?.id);
+                            if (!topic) return false;
+                            
+                            const globalIndex = allTopics.findIndex(t => t.id === topic.id);
+
                             if (globalIndex <= 0) return true;
                             const prevTopic = allTopics[globalIndex - 1];
                             return prevTopic ? isTopicCompleted(prevTopic.id) : true;

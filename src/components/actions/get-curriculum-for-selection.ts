@@ -1,3 +1,5 @@
+
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -35,7 +37,7 @@ export async function getCurriculumForSelection(
 
         // --- DYNAMIC DATA FETCHING LOGIC (FOR BOTH TEACHER & STUDENT) ---
         const [classesSnap, coursesSnap] = await Promise.all([
-            getDocs(query(collection(db, "classes"))), // No order needed, will sort client-side
+            getDocs(query(collection(db, "classes"))), 
             getDocs(collection(db, "courses"))
         ]);
         
@@ -63,14 +65,14 @@ export async function getCurriculumForSelection(
         for (const course of relevantCourses) {
             const unitsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units`)));
             const unitsData = unitsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Unit));
-            unitsData.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+            unitsData.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
 
             const enrichedUnits: EnrichedCourse['units'] = [];
 
             for (const unitDoc of unitsData) {
                 const topicsSnapshot = await getDocs(query(collection(db, `courses/${course.id}/units/${unitDoc.id}/topics`)));
                 const topicsData = topicsSnapshot.docs.map(d => ({id: d.id, ...d.data()} as Topic));
-                topicsData.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+                topicsData.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
                 
                 const topicsWithFlags = await Promise.all(topicsData.map(async (topicData) => {
                     
@@ -118,7 +120,7 @@ export async function getCurriculumForSelection(
             }
         }
         
-        enrichedCourses.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+        enrichedCourses.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr'));
 
         const groupedByClass: {[key: string]: Course[]} = {};
         enrichedCourses.forEach(course => {
