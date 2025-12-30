@@ -552,8 +552,8 @@ export default function ContentCreationPage() {
                             </button>
                             
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                {currentStep === 3 && item.hasFlowContent && (
-                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-purple-500/90 text-white hover:bg-purple-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Akışını Düzenle">
+                                {currentStep === 3 && (
+                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-purple-500/90 text-white hover:bg-purple-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite İçeriği/Özeti">
                                         <Workflow className="h-4 w-4" />
                                     </Button>
                                 )}
@@ -833,3 +833,7 @@ export default function ContentCreationPage() {
         </div>
     );
 }
+
+```
+- src/app/teacher/content-creation/edit/page.tsx
+- src/app/teacher/content-creation/edit-unit/[unitId]/page.tsx
