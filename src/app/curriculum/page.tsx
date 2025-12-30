@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense, useEffect, useState, useRef } from 'react';
@@ -18,7 +19,7 @@ function OzetDisplayPage() {
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
     
-    const backUrl = `/student`;
+    const backUrl = `/curriculum`;
 
     useEffect(() => {
         if (!slug || slug.length === 0) {

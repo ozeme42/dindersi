@@ -8,28 +8,47 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 
-async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
+async function getContent(slug: string[]): Promise<{ title: string, htmlContent: string } | null> {
+    if (!slug || slug.length === 0) return null;
+    const contentId = slug[slug.length - 1]; // Use the last segment of the slug as the ID
+    
     try {
-        let docRef;
-        if (topicId) {
-            docRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
-        } else {
-            docRef = doc(db, 'courses', courseId, 'units', unitId);
+        const res = await fetch(`/curriculum/ozetler/${contentId}.html`);
+        if (!res.ok) {
+            return null;
         }
+        const htmlContent = await res.text();
         
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            if (data.htmlContent) {
-                return { title: data.title, htmlContent: data.htmlContent };
+        // Fetch title from manifest
+        const manifestRes = await fetch('/curriculum/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest not found');
+        const manifest = await manifestRes.json();
+        
+        let title = '';
+        for (const group of manifest.classGroups) {
+            for (const course of group.courses) {
+                for (const unit of course.units) {
+                    if (unit.id === contentId) {
+                        title = unit.title;
+                        break;
+                    }
+                    if (slug.length > 2) { // Topic has more segments
+                        const topic = unit.topics.find((t: any) => t.id === contentId);
+                        if (topic) {
+                            title = topic.title;
+                            break;
+                        }
+                    }
+                }
+                if(title) break;
             }
+            if(title) break;
         }
-        return null;
+
+        return { title: title || 'Özet', htmlContent };
     } catch (e) {
-        console.error("Error fetching content from Firestore:", e);
+        console.error("Error fetching static content:", e);
         return null;
     }
 }
@@ -38,7 +57,6 @@ async function getContent(courseId: string, unitId: string, topicId?: string): P
 function OzetDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
-    const [courseId, unitId, topicId] = slug || [];
 
     const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +64,7 @@ function OzetDisplayPage() {
     const mainContentRef = useRef<HTMLDivElement>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     
-    const backUrl = `/student`;
+    const backUrl = `/student/ozetler`;
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -57,15 +75,15 @@ function OzetDisplayPage() {
     }, []);
 
     useEffect(() => {
-        if (!courseId || !unitId) {
-            setError("Geçersiz URL. Ders veya ünite bilgisi eksik.");
+        if (!slug) {
+            setError("Geçersiz URL.");
             setIsLoading(false);
             return;
         }
 
         const fetchUnit = async () => {
             setIsLoading(true);
-            const fetchedContent = await getContent(courseId, unitId, topicId);
+            const fetchedContent = await getContent(slug);
             if (fetchedContent) {
                 setContent(fetchedContent);
             } else {
@@ -74,7 +92,7 @@ function OzetDisplayPage() {
             setIsLoading(false);
         };
         fetchUnit();
-    }, [courseId, unitId, topicId]);
+    }, [slug]);
     
     if (isLoading) {
         return (

@@ -4,12 +4,14 @@
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote } from 'lucide-react';
-import type { YazilacaklarContent } from '@/lib/types';
+import type { YazilacaklarContent, Topic } from '@/lib/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export function YazilacaklarDisplayPage() {
     const params = useParams();
@@ -131,7 +133,7 @@ export function YazilacaklarDisplayPage() {
         }
     };
     
-    const backUrl = `/curriculum`;
+    const backUrl = `/`;
     
     const increaseFontSize = () => setFontSize(fs => Math.min(fs + 0.1, 2.5));
     const decreaseFontSize = () => setFontSize(fs => Math.max(0.8, fs - 0.1));

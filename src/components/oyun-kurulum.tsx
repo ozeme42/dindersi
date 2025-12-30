@@ -141,16 +141,16 @@ const SelectionCard = ({
 // --- MAIN PAGE COMPONENT ---
 
 type OyunKurulumProps = {
-    pageTitle?: string;
+    pageTitle: string;
     gameName?: string;
     gamePath?: string;
-    pageIcon?: React.ElementType;
-    targetPath?: string;
+    pageIcon: React.ElementType;
+    targetPath: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
-    isStatic?: boolean; // Artık kullanılmayacak, ama uyumluluk için durabilir
+    isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon = Gamepad2, targetPath, dataType }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -186,7 +186,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   }, []);
 
   const getBackUrl = () => {
-    if (targetPath?.startsWith('student')) return '/student';
+    if (targetPath.startsWith('student')) return '/student';
     if(targetPath === 'oyunlar') return '/oyunlar';
     return '/'; // Fallback for static or public pages
   };
@@ -203,9 +203,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const fetchCurriculumData = useCallback(async () => {
     setIsLoading(true);
     try {
-        const isForStudent = user?.role === 'student';
-        // Always fetch from live DB now
-        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, false, isForStudent ? user?.uid : undefined);
+        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, user?.uid);
         
         if (error) {
             console.error(error);
@@ -230,7 +228,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     } finally {
         setIsLoading(false);
     }
-  }, [user, dataType]);
+  }, [user, dataType, isStatic]);
 
   useEffect(() => {
     fetchCurriculumData();
@@ -275,6 +273,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
             unitName: 'Tüm Üniteler',
             topicId: 'all',
             topicName: 'Tüm Konular',
+            isStatic: String(isStatic),
         });
         const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         router.push(url);
@@ -282,9 +281,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     }
 
     if (dataType === 'ozetler' && unit.hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
-        // Updated path construction for live data
-        const pathPrefix = user?.role === 'teacher' ? '/teacher/smartboard' : '/student';
-        const url = `${pathPrefix}/ozetler/goruntule/${selection.courseId}/${unit.id}`;
+        const pathPrefix = isStatic ? '' : '/student';
+        const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
         router.push(url);
         return;
     }
@@ -315,31 +313,28 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const handleSelectTopic = (topicId: string, topicName: string) => {
       setSelection({...selection, topicName});
       
-      const pathPrefix = user?.role === 'teacher' ? '/teacher/smartboard' : '/student';
-      let basePath = targetPath;
+      const pathPrefix = isStatic ? '' : '/student';
+      let finalUrl = '';
       
-      if (!basePath) {
-          basePath = dataType === 'games' ? 'oyunlar' : dataType;
-      }
-      
-      const params = new URLSearchParams({
-        courseId: selection.courseId,
-        courseName: selection.courseName,
-        unitId: selection.unitId,
-        unitName: selection.unitName,
-        topicId: topicId,
-        topicName: topicName,
-      });
-
-      let finalUrl = `/${basePath}/${finalGamePath}/oyun?${params.toString()}`;
-      
-      if(dataType === 'yazilacaklar') {
+      if (dataType === 'yazilacaklar') {
           finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
+      } else if (dataType === 'ozetler') {
+          finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+      } else { // games
+          const params = new URLSearchParams({
+            gameName: finalGameName,
+            gamePath: finalGamePath,
+            courseId: selection.courseId,
+            courseName: selection.courseName,
+            unitId: selection.unitId,
+            unitName: selection.unitName,
+            topicId: topicId,
+            topicName: topicName,
+            isStatic: String(isStatic),
+          });
+          finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
       }
-      if(dataType === 'ozetler') {
-           finalUrl = `${pathPrefix}/ozetler/goruntule/${selection.courseId}/${selection.unitId}/${topicId}`;
-      }
-
+      
       router.push(finalUrl);
   };
 
@@ -402,7 +397,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                                 subtitle="Genel Tekrar"
                                 icon={Sparkles}
                                 color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'} as Unit)}
+                                onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
                                 delay={0}
                             />
                         )}
@@ -480,7 +475,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                         <PageIcon className="h-8 w-8 text-blue-400" />
                     </div>
                     <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {pageTitle || finalGameName}
+                        {pageTitle}
                     </h1>
                 </div>
             </div>
@@ -536,8 +531,8 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                 
                 <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
-                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:100ms]"></div>
-                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce [animation-delay:200ms]"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
+                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
                 </div>
             </div>
         </GlassPanel>
