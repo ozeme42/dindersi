@@ -62,7 +62,7 @@ import { Badge } from '@/components/ui/badge';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 
 type EnrichedTopic = Topic & { questionCount?: number };
-type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number };
+type EnrichedUnit = Unit & { topics: EnrichedTopic[], questionCount?: number, hasFlowContent?: boolean };
 type EnrichedCourse = Course & { units: EnrichedUnit[] };
 type EnrichedClass = SchoolClass & { courses: EnrichedCourse[] };
 
@@ -229,7 +229,7 @@ export default function ContentCreationPage() {
                     );
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
+                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, hasFlowContent: (unitData.steps || []).length > 0 };
 
                         const topicsSnapshot = await getDocs(
                             query(
@@ -267,7 +267,7 @@ export default function ContentCreationPage() {
                     );
                     for (const unitDoc of unitsSnapshot.docs) {
                         const unitData = { id: unitDoc.id, ...unitDoc.data() } as Unit;
-                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0 };
+                        const enrichedUnit: EnrichedUnit = { ...unitData, topics: [], questionCount: 0, hasFlowContent: (unitData.steps || []).length > 0 };
                         const topicsSnapshot = await getDocs(
                             query(
                                 collection(
@@ -552,9 +552,16 @@ export default function ContentCreationPage() {
                             </button>
                             
                             <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                {currentStep === 3 && (
-                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-green-500/90 text-white hover:bg-green-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Akışını Düzenle">
+                                {currentStep === 3 && item.hasFlowContent && (
+                                    <Button size="icon" variant="secondary" className="h-8 w-8 bg-purple-500/90 text-white hover:bg-purple-400" onClick={(e) => { e.stopPropagation(); router.push(`/teacher/content-creation/edit-unit/${item.id}?courseId=${selections.courseId}`); }} title="Ünite Akışını Düzenle">
                                         <Workflow className="h-4 w-4" />
+                                    </Button>
+                                )}
+                                {currentStep === 3 && item.htmlContent && (
+                                     <Button size="icon" variant="secondary" className="h-8 w-8 bg-rose-500/90 text-white hover:bg-rose-400" asChild>
+                                        <Link href={`/teacher/smartboard/ozetler/goruntule/${selections.courseId}/${item.id}`} target="_blank" onClick={(e) => e.stopPropagation()} title="Ünite Özeti">
+                                            <FileText className="h-4 w-4"/>
+                                        </Link>
                                     </Button>
                                 )}
                                 <Button size="icon" variant="secondary" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); handleTogglePublish(path, isPublished); }} title={isPublished ? "Gizle" : "Yayınla"}>
@@ -819,7 +826,7 @@ export default function ContentCreationPage() {
                 isOpen={isAIGenOpen}
                 onOpenChange={setIsAIGenOpen}
                 context={aiGenerationContext}
-                onStepsGenerated={(steps, context) => handleAiStepsGenerated(steps, context)}
+                onStepsGenerated={(steps, context) => handleAiStepsGenerated(steps, context as any)}
                 generationType={'anlatim'}
             />
 

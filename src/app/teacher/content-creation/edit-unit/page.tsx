@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useCallback } from 'react';
@@ -49,9 +50,9 @@ function UnitFlowEditor() {
     const { toast } = useToast();
     
     const [title, setTitle] = useState('');
-    const [steps, setSteps] = useState<(LessonStep & { id: string })[]>([]); // Adım state'i artık ID içerecek
+    const [steps, setSteps] = useState<(LessonStep & { id: string })[]>([]);
     const [sourceText, setSourceText] = useState('');
-    const [htmlContent, setHtmlContent] = useState(''); // YENİ: HTML içeriği için state
+    const [htmlContent, setHtmlContent] = useState('');
 
     const fetchUnitData = useCallback(async () => {
         if (!courseId || !unitId) {
@@ -70,7 +71,7 @@ function UnitFlowEditor() {
                 setTitle(unitData.title);
                 setSteps(addStableIdsToSteps(unitData.steps || []));
                 setSourceText(unitData.sourceText || '');
-                setHtmlContent(unitData.htmlContent || ''); // YENİ: State'i doldur
+                setHtmlContent(unitData.htmlContent || '');
                 setUnit(unitData);
 
             } else {
@@ -96,9 +97,9 @@ function UnitFlowEditor() {
         
         const dataToSave = {
             title: title,
-            steps: steps.map(({ id, ...rest }) => rest), // Kaydederken geçici ID'leri kaldır
+            steps: steps.map(({ id, ...rest }) => rest),
             sourceText: sourceText,
-            htmlContent: htmlContent, // YENİ: Kaydedilecek veriye ekle
+            htmlContent: htmlContent,
         };
 
         try {
@@ -118,7 +119,6 @@ function UnitFlowEditor() {
     };
     
     const handleAiStepsGenerated = (newSteps: LessonStep[]) => {
-        // AI'dan gelen yeni adımlara da ID ata
         const stepsWithIds = addStableIdsToSteps(newSteps);
         setSteps(prev => [...prev, ...stepsWithIds]);
         toast({
