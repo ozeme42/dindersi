@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
-import type { Course, Unit, Topic } from "@/lib/types";
+import type { Course, Unit, Topic, SchoolClass } from "@/lib/types";
 
 
 // --- TİP TANIMLARI ---
@@ -153,399 +153,420 @@ type OyunKurulumProps = {
     pageTitle?: string;
     gameName?: string;
     gamePath?: string;
-    pageIcon: React.ElementType;
+    pageIcon?: React.ElementType;
+    gameIcon?: React.ElementType; // Add gameIcon as an alternative
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
     isStatic?: boolean;
 }
 
-export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, pageIcon: PageIcon, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
-  const { user } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+export function OyunKurulum({ 
+    pageTitle: initialPageTitle, 
+    gameName, 
+    gamePath, 
+    pageIcon: PageIconProp, 
+    gameIcon, // Accept gameIcon
+    targetPath, 
+    dataType, 
+    isStatic = false 
+}: OyunKurulumProps) {
+    const { user } = useAuth();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [currentStep, setCurrentStep] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isDataLoading, setIsDataLoading] = useState(false);
+    
+    // Combine pageIcon and gameIcon props.
+    const PageIcon = PageIconProp || gameIcon;
   
-  const [classGroups, setClassGroups] = useState<ClassGroup[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [units, setUnits] = useState<Unit[]>([]);
-  const [topics, setTopics] = useState<Topic[]>([]);
+    const [classGroups, setClassGroups] = useState<ClassGroup[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [units, setUnits] = useState<Unit[]>([]);
+    const [topics, setTopics] = useState<Topic[]>([]);
+    
+    const [searchQuery, setSearchQuery] = useState("");
   
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const pageTitle = initialPageTitle || gameName || searchParams.get('gameName') || "Etkinlik Kurulumu";
-  const finalGamePath = gamePath || searchParams.get('gamePath') || "";
-
-  const [selection, setSelection] = useState({
-    courseId: "",
-    courseName: "",
-    courseColor: "from-slate-700 to-slate-800", 
-    unitId: "",
-    unitName: "",
-    topicName: ""
-  });
+    const pageTitle = initialPageTitle || gameName || searchParams.get('gameName') || "Etkinlik Kurulumu";
+    const finalGamePath = gamePath || searchParams.get('gamePath') || "";
   
-  const stepsToDisplay = useMemo(() => {
-    const allSteps = [
-        { id: 1, name: "Ders", icon: Book },
-        { id: 2, name: "Ünite", icon: Library },
-        { id: 3, name: "Konu", icon: ListTodo },
-    ];
-    return allSteps;
-  }, []);
-
-  const getBackUrl = () => {
-    if (targetPath?.startsWith('student')) return '/student';
-    if(targetPath === 'oyunlar') return '/oyunlar';
-    return '/'; // Fallback for static or public pages
-  };
-  
-  const handleBack = () => {
-    if (currentStep > 1) {
-        setCurrentStep(currentStep - 1);
-        setSearchQuery(""); // Geri gidince aramayı temizle
-    } else {
-        router.push(getBackUrl());
-    }
-  };
-
-  const fetchCurriculumData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-        const userId = isStatic ? undefined : user?.uid;
-        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, userId);
-        
-        if (error) {
-            console.error(error);
-            setClassGroups([]);
-            return;
-        }
-        
-        const classGroupsWithData = (fetchedClassGroups || []).map((group, groupIndex) => ({
-            ...group,
-            courses: group.courses.map((course: any, courseIndex: number) => ({
-                ...course,
-                icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
-                color: getGradient(groupIndex + courseIndex),
-                className: group.name,
-            }))
-        }));
-        
-        setClassGroups(classGroupsWithData);
-        setCourses(classGroupsWithData.flatMap(group => group.courses));
-    } catch (error) {
-        console.error(error);
-    } finally {
-        setIsLoading(false);
-    }
-  }, [user, dataType, isStatic]);
-
-  useEffect(() => {
-    fetchCurriculumData();
-  }, [fetchCurriculumData]);
-
-  const handleSelectCourse = (course: Course) => {
-    setSelection({ 
-        ...selection, 
-        courseId: course.id, 
-        courseName: course.title, 
-        courseColor: (course as any).color || "from-slate-700 to-slate-800",
-        unitId: '', unitName: '',
+    const [selection, setSelection] = useState({
+      courseId: "",
+      courseName: "",
+      courseColor: "from-slate-700 to-slate-800", 
+      unitId: "",
+      unitName: "",
+      topicName: ""
     });
     
-    setIsLoading(true);
-    setSearchQuery("");
-    setTimeout(() => {
-        let unitsWithContent = (course as any).units;
-        if (dataType !== 'games') {
-             unitsWithContent = (course as any).units.filter((unit: Unit) => {
-                if (dataType === 'ozetler') return (unit as any).hasUnitOzet || unit.topics.some((t: Topic) => t.hasOzetContent);
-                if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => t.hasYazilacaklarContent);
-                return false;
-             });
-        }
-        setUnits(unitsWithContent || []);
-        setIsLoading(false);
-        setCurrentStep(2);
-    }, 300);
-  };
-
-  const handleSelectUnit = (unit: Unit) => {
-    setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
-    
-    if (dataType === 'games' && unit.id === 'all') {
-        const params = new URLSearchParams({
-            gameName: pageTitle,
-            gamePath: finalGamePath,
-            courseId: selection.courseId,
-            courseName: selection.courseName,
-            unitId: 'all',
-            unitName: 'Tüm Üniteler',
-            topicId: 'all',
-            topicName: 'Tüm Konular',
-            isStatic: String(isStatic),
-        });
-        const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
-        router.push(url);
-        return;
-    }
-
-    if (dataType === 'ozetler' && (unit as any).hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
-        const pathPrefix = isStatic ? '' : '/student';
-        const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
-        router.push(url);
-        return;
-    }
-
-    setIsLoading(true);
-    setSearchQuery("");
-    setTimeout(() => {
-        const selectedCourse = courses.find(c => c.id === selection.courseId);
-        const selectedUnit = selectedCourse?.units?.find(u => u.id === unit.id);
-        
-        let topicsWithContent: Topic[] = [];
-        if (selectedUnit?.topics) {
-            if (dataType === 'games') {
-                topicsWithContent = selectedUnit.topics;
-            } else if (dataType === 'ozetler') {
-                topicsWithContent = selectedUnit.topics.filter(t => t.hasOzetContent);
-            } else if (dataType === 'yazilacaklar') {
-                topicsWithContent = selectedUnit.topics.filter(t => t.hasYazilacaklarContent);
-            }
-        }
-        
-        setTopics(topicsWithContent);
-        setIsLoading(false);
-        setCurrentStep(3);
-    }, 300);
-  };
+    const stepsToDisplay = useMemo(() => {
+      const allSteps = [
+          { id: 1, name: "Ders", icon: Book },
+          { id: 2, name: "Ünite", icon: Library },
+          { id: 3, name: "Konu", icon: ListTodo },
+      ];
+      return allSteps;
+    }, []);
   
-  const handleSelectTopic = (topicId: string, topicName: string) => {
-      setSelection({...selection, topicName});
+    const getBackUrl = () => {
+      if (targetPath?.startsWith('student')) return '/student';
+      if(targetPath === 'oyunlar') return '/oyunlar';
+      return '/'; // Fallback for static or public pages
+    };
+    
+    const handleBack = () => {
+      if (currentStep > 1) {
+          setCurrentStep(currentStep - 1);
+          setSearchQuery(""); // Geri gidince aramayı temizle
+      } else {
+          router.push(getBackUrl());
+      }
+    };
+  
+    const fetchCurriculumData = useCallback(async () => {
+      setIsLoading(true);
+      try {
+          const userId = isStatic ? undefined : user?.uid;
+          const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, userId);
+          
+          if (error) {
+              console.error(error);
+              setClassGroups([]);
+              return;
+          }
+          
+          const classGroupsWithData = (fetchedClassGroups || []).map((group, groupIndex) => ({
+              ...group,
+              courses: group.courses.map((course: any, courseIndex: number) => ({
+                  ...course,
+                  icon: ICONS[(groupIndex + courseIndex) % ICONS.length],
+                  color: getGradient(groupIndex + courseIndex),
+                  className: group.name,
+              }))
+          }));
+          
+          setClassGroups(classGroupsWithData);
+          setCourses(classGroupsWithData.flatMap(group => group.courses));
+      } catch (error) {
+          console.error(error);
+      } finally {
+          setIsLoading(false);
+      }
+    }, [user, dataType, isStatic]);
+  
+    useEffect(() => {
+      fetchCurriculumData();
+    }, [fetchCurriculumData]);
+  
+    const handleSelectCourse = (course: Course) => {
+      setSelection({ 
+          ...selection, 
+          courseId: course.id, 
+          courseName: course.title, 
+          courseColor: (course as any).color || "from-slate-700 to-slate-800",
+          unitId: '', unitName: '',
+      });
       
-      const pathPrefix = isStatic ? '' : (targetPath || 'oyunlar').startsWith('student/') ? '/student' : '';
-      let finalUrl = '';
+      setIsLoading(true);
+      setSearchQuery("");
+      setTimeout(() => {
+          let unitsWithContent = (course as any).units;
+          if (dataType !== 'games') {
+               unitsWithContent = (course as any).units.filter((unit: Unit) => {
+                  if (dataType === 'ozetler') return (unit as any).hasUnitOzet || unit.topics.some((t: Topic) => (t as any).hasOzetContent);
+                  if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => (t as any).hasYazilacaklarContent);
+                  return false;
+               });
+          }
+          setUnits(unitsWithContent || []);
+          setIsLoading(false);
+          setCurrentStep(2);
+      }, 300);
+    };
+  
+    const handleSelectUnit = (unit: Unit) => {
+      setSelection({ ...selection, unitId: unit.id, unitName: unit.title, topicName: '' });
       
-      if (dataType === 'yazilacaklar') {
-          finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
-      } else if (dataType === 'ozetler') {
-          finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
-      } else { // games
+      if (dataType === 'games' && unit.id === 'all') {
           const params = new URLSearchParams({
-            gameName: pageTitle,
-            gamePath: finalGamePath,
-            courseId: selection.courseId,
-            courseName: selection.courseName,
-            unitId: selection.unitId,
-            unitName: selection.unitName,
-            topicId: topicId,
-            topicName: topicName,
-            isStatic: String(isStatic),
+              gameName: pageTitle,
+              gamePath: finalGamePath,
+              courseId: selection.courseId,
+              courseName: selection.courseName,
+              unitId: 'all',
+              unitName: 'Tüm Üniteler',
+              topicId: 'all',
+              topicName: 'Tüm Konular',
+              isStatic: String(isStatic),
           });
-          finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+          const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+          router.push(url);
+          return;
       }
-      
-      router.push(finalUrl);
-  };
-
-
-  // --- FILTERING LOGIC ---
-  const filterItems = (items: any[]) => {
-      if (!searchQuery) return items;
-      return items.filter(item => 
-          (item.title || item.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.className && item.className.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
-  };
-
-  const renderStepContent = () => {
-      if (isLoading) {
-          return (
-              <div className="flex flex-col items-center justify-center h-48 md:h-96 gap-4 animate-pulse">
-                  <div className="relative">
-                    <Loader2 className="h-10 w-10 md:h-20 md:w-20 text-cyan-400 animate-spin" />
-                    <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full"></div>
-                  </div>
-                  <p className="text-sm md:text-2xl font-bold text-cyan-200">İçerikler Yükleniyor...</p>
-              </div>
-          );
+  
+      if (dataType === 'ozetler' && (unit as any).hasUnitOzet && (!unit.topics || unit.topics.every(t => !(t as any).hasOzetContent))) {
+          const pathPrefix = isStatic ? '' : '/student';
+          const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
+          router.push(url);
+          return;
       }
-      
-      const gridClasses = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 pb-10";
-      
-      switch(currentStep) {
-          case 1:
-            const filteredCourses = filterItems(courses);
+  
+      setIsLoading(true);
+      setSearchQuery("");
+      setTimeout(() => {
+          const selectedCourse = courses.find(c => c.id === selection.courseId);
+          const selectedUnit = selectedCourse?.units?.find(u => u.id === unit.id);
+          
+          let topicsWithContent: Topic[] = [];
+          if (selectedUnit?.topics) {
+              if (dataType === 'games') {
+                  topicsWithContent = selectedUnit.topics;
+              } else if (dataType === 'ozetler') {
+                  topicsWithContent = selectedUnit.topics.filter(t => (t as any).hasOzetContent);
+              } else if (dataType === 'yazilacaklar') {
+                  topicsWithContent = selectedUnit.topics.filter(t => (t as any).hasYazilacaklarContent);
+              }
+          }
+          
+          setTopics(topicsWithContent);
+          setIsLoading(false);
+          setCurrentStep(3);
+      }, 300);
+    };
+    
+    const handleSelectTopic = (topicId: string, topicName: string) => {
+        setSelection({...selection, topicName});
+        
+        const pathPrefix = isStatic ? '' : (targetPath || 'oyunlar').startsWith('student/') ? '/student' : '';
+        let finalUrl = '';
+        
+        if (dataType === 'yazilacaklar') {
+            finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
+        } else if (dataType === 'ozetler') {
+            finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+        } else { // games
+            const params = new URLSearchParams({
+              gameName: pageTitle,
+              gamePath: finalGamePath,
+              courseId: selection.courseId,
+              courseName: selection.courseName,
+              unitId: selection.unitId,
+              unitName: selection.unitName,
+              topicId: topicId,
+              topicName: topicName,
+              isStatic: String(isStatic),
+            });
+            finalUrl = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
+        }
+        
+        router.push(finalUrl);
+    };
+  
+  
+    // --- FILTERING LOGIC ---
+    const filterItems = (items: any[]) => {
+        if (!searchQuery) return items;
+        return items.filter(item => 
+            (item.title || item.name).toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (item.className && item.className.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+    };
+  
+    const renderStepContent = () => {
+        if (isLoading) {
             return (
-                <>
-                    <SearchInput value={searchQuery} onChange={setSearchQuery} />
-                    <div className={gridClasses}>
-                        {filteredCourses.length > 0 ? filteredCourses.map((course, idx) => (
-                            <SelectionCard 
-                                key={course.id}
-                                title={course.title}
-                                subtitle={course.className}
-                                icon={(course as any).icon || Book}
-                                color={(course as any).color || getGradient(idx)}
-                                onClick={() => handleSelectCourse(course as Course)}
-                                delay={idx * 50}
-                            />
-                        )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ders bulunamadı.</p>}
+                <div className="flex flex-col items-center justify-center h-48 md:h-96 gap-4 animate-pulse">
+                    <div className="relative">
+                      <Loader2 className="h-10 w-10 md:h-20 md:w-20 text-cyan-400 animate-spin" />
+                      <div className="absolute inset-0 bg-cyan-400/20 blur-xl rounded-full"></div>
                     </div>
-                </>
+                    <p className="text-sm md:text-2xl font-bold text-cyan-200">İçerikler Yükleniyor...</p>
+                </div>
             );
-          case 2:
-            const filteredUnits = filterItems(units);
-            return (
-                <>
-                    <SearchInput value={searchQuery} onChange={setSearchQuery} />
-                    <div className={gridClasses}>
-                        {dataType === 'games' && !searchQuery && (
-                            <SelectionCard 
-                                key="all-units"
-                                title="Tüm Üniteler (Karma)"
-                                subtitle="Genel Tekrar"
-                                icon={Sparkles}
-                                color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
-                                delay={0}
-                            />
-                        )}
-                        {filteredUnits.length > 0 ? filteredUnits.map((unit, idx) => (
-                            <SelectionCard 
-                                key={unit.id}
-                                title={unit.title}
-                                subtitle={selection.courseName}
-                                icon={Library}
-                                color={selection.courseColor}
-                                onClick={() => handleSelectUnit(unit as Unit)}
-                                delay={(idx + 1) * 50}
-                                hasContent={dataType === 'games' || (unit as any).hasUnitOzet || (unit.topics && unit.topics.some((t: any) => t.hasOzetContent || t.hasYazilacaklarContent))}
-                            />
-                        )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
-                    </div>
-                </>
-            );
-          case 3:
-            const filteredTopics = filterItems(topics);
-            
-            return (
-                <>
-                    <SearchInput value={searchQuery} onChange={setSearchQuery} />
-                    <div className={gridClasses}>
-                        {dataType === 'games' && !searchQuery && (
+        }
+        
+        const gridClasses = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 pb-10";
+        
+        switch(currentStep) {
+            case 1:
+              const filteredCourses = filterItems(courses);
+              return (
+                  <>
+                      <SearchInput value={searchQuery} onChange={setSearchQuery} />
+                      <div className={gridClasses}>
+                          {filteredCourses.length > 0 ? filteredCourses.map((course, idx) => (
                               <SelectionCard 
-                                key="all-topics"
-                                title="Tüm Konular (Karma)"
-                                subtitle="Ünite Tekrarı"
-                                icon={Sparkles}
-                                color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectTopic('all', 'Tüm Konular')}
-                                delay={0}
-                            />
-                        )}
-                        
-                        {filteredTopics.length > 0 ? filteredTopics.map((topic, idx) => (
-                            <SelectionCard 
-                                key={topic.id}
-                                title={topic.title}
-                                subtitle={selection.unitName}
-                                icon={ListTodo}
-                                color={selection.courseColor}
-                                onClick={() => handleSelectTopic(topic.id, topic.title)}
-                                delay={(idx + 1) * 50}
-                                hasContent={true}
-                            />
-                        )) : (
-                            <p className="col-span-full text-center text-slate-500 py-10">
-                                Bu ünite için görüntülenecek içerik bulunamadı.
-                            </p>
-                        )}
-                    </div>
-                </>
-            );
-          default:
-            return null;
-      }
+                                  key={course.id}
+                                  title={course.title}
+                                  subtitle={course.className}
+                                  icon={(course as any).icon || Book}
+                                  color={(course as any).color || getGradient(idx)}
+                                  onClick={() => handleSelectCourse(course as Course)}
+                                  delay={idx * 50}
+                              />
+                          )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ders bulunamadı.</p>}
+                      </div>
+                  </>
+              );
+            case 2:
+              const filteredUnits = filterItems(units);
+              return (
+                  <>
+                      <SearchInput value={searchQuery} onChange={setSearchQuery} />
+                      <div className={gridClasses}>
+                          {dataType === 'games' && !searchQuery && (
+                              <SelectionCard 
+                                  key="all-units"
+                                  title="Tüm Üniteler (Karma)"
+                                  subtitle="Genel Tekrar"
+                                  icon={Sparkles}
+                                  color="from-yellow-600 to-amber-500"
+                                  onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
+                                  delay={0}
+                              />
+                          )}
+                          {filteredUnits.length > 0 ? filteredUnits.map((unit, idx) => (
+                              <SelectionCard 
+                                  key={unit.id}
+                                  title={unit.title}
+                                  subtitle={selection.courseName}
+                                  icon={Library}
+                                  color={selection.courseColor}
+                                  onClick={() => handleSelectUnit(unit as Unit)}
+                                  delay={(idx + 1) * 50}
+                                  hasContent={dataType === 'games' || (unit as any).hasUnitOzet || (unit.topics && unit.topics.some((t: any) => t.hasOzetContent || t.hasYazilacaklarContent))}
+                              />
+                          )) : <p className="col-span-full text-center text-slate-500 py-10">Aradığınız kriterde ünite bulunamadı.</p>}
+                      </div>
+                  </>
+              );
+            case 3:
+              const filteredTopics = filterItems(topics);
+              
+              return (
+                  <>
+                      <SearchInput value={searchQuery} onChange={setSearchQuery} />
+                      <div className={gridClasses}>
+                          {dataType === 'games' && !searchQuery && (
+                                <SelectionCard 
+                                  key="all-topics"
+                                  title="Tüm Konular (Karma)"
+                                  subtitle="Ünite Tekrarı"
+                                  icon={Sparkles}
+                                  color="from-yellow-600 to-amber-500"
+                                  onClick={() => handleSelectTopic('all', 'Tüm Konular')}
+                                  delay={0}
+                              />
+                          )}
+                          
+                          {filteredTopics.length > 0 ? filteredTopics.map((topic, idx) => (
+                              <SelectionCard 
+                                  key={topic.id}
+                                  title={topic.title}
+                                  subtitle={selection.unitName}
+                                  icon={ListTodo}
+                                  color={selection.courseColor}
+                                  onClick={() => handleSelectTopic(topic.id, topic.title)}
+                                  delay={(idx + 1) * 50}
+                                  hasContent={true}
+                              />
+                          )) : (
+                              <p className="col-span-full text-center text-slate-500 py-10">
+                                  Bu ünite için görüntülenecek içerik bulunamadı.
+                              </p>
+                          )}
+                      </div>
+                  </>
+              );
+            default:
+              return null;
+        }
+    }
+  
+    return (
+      <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 font-sans text-white">
+          
+          <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
+              <button 
+                  onClick={handleBack}
+                  className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
+              >
+                  <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
+              </button>
+              <div className="text-center mx-2 overflow-hidden flex-1">
+                  <div className="flex items-center justify-center gap-2">
+                      {PageIcon && (
+                          <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl">
+                              <PageIcon className="h-8 w-8 text-blue-400" />
+                          </div>
+                      )}
+                      <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
+                          {pageTitle}
+                      </h1>
+                  </div>
+              </div>
+              <div className="w-9 md:w-20 shrink-0"></div>
+          </div>
+  
+          <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
+              <div className="relative flex justify-between items-center">
+                  <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
+                  <div 
+                      className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
+                      style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
+                  ></div>
+  
+                  {stepsToDisplay.slice(0, 3).map((step) => {
+                      const isActive = currentStep >= step.id;
+                      const isCurrent = currentStep === step.id;
+                      return (
+                          <div key={step.id} className="flex flex-col items-center gap-1">
+                              <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
+                                  {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
+                              </div>
+                              <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
+                          </div>
+                      );
+                  })}
+              </div>
+          </div>
+  
+          <GlassPanel className="max-w-5xl mx-auto min-h-[600px] flex flex-col">
+              <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
+                  <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
+                      {stepsToDisplay.find(s => s.id === currentStep)?.icon && (
+                          <div className="p-1.5 md:p-2 bg-white/5 rounded-lg">
+                             {React.createElement(stepsToDisplay.find(s => s.id === currentStep)!.icon, { className: "h-4 w-4 md:h-6 md:w-6 text-cyan-400" })}
+                          </div>
+                      )}
+                      {stepsToDisplay.find(s => s.id === currentStep)?.name} Seçimi
+                  </h2>
+                  
+                  <div className="px-2 py-0.5 md:px-4 md:py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
+                      ADIM {currentStep} / {stepsToDisplay.length}
+                  </div>
+              </div>
+  
+              <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
+                  {renderStepContent()}
+              </div>
+  
+              <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
+                  <span className="truncate mr-4">
+                      {currentStep === 1 && "Devam etmek için bir ders seçin."}
+                      {currentStep === 2 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.courseName} seçildi. Şimdi ünite seçin.</span>}
+                      {currentStep === 3 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.unitName} seçildi. Son olarak, bir konu seç.</span>}
+                  </span>
+                  
+                  <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
+                      <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
+                      <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
+                      <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
+                  </div>
+              </div>
+          </GlassPanel>
+      </div>
+    );
   }
 
-  return (
-    <div className="min-h-screen bg-[#0f172a] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-800 via-[#0f172a] to-black p-2 md:p-10 pb-24 font-sans text-white">
-        
-        <div className="max-w-7xl mx-auto flex items-center justify-between mb-4 md:mb-12 pt-2">
-            <button 
-                onClick={handleBack}
-                className="p-2 md:p-4 bg-white/5 hover:bg-white/10 rounded-lg md:rounded-2xl border border-white/10 transition-all group shrink-0"
-            >
-                <ArrowLeft className="h-5 w-5 md:h-8 md:w-8 text-slate-400 group-hover:text-white transition-colors" />
-            </button>
-            <div className="text-center mx-2 overflow-hidden flex-1">
-                <div className="flex items-center justify-center gap-2">
-                    <div className="hidden md:block p-2 bg-blue-500/20 rounded-xl">
-                        <PageIcon className="h-8 w-8 text-blue-400" />
-                    </div>
-                    <h1 className="text-lg md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-blue-400 truncate">
-                        {pageTitle}
-                    </h1>
-                </div>
-            </div>
-            <div className="w-9 md:w-20 shrink-0"></div>
-        </div>
-
-        <div className="max-w-4xl mx-auto mb-4 md:mb-12 px-1">
-            <div className="relative flex justify-between items-center">
-                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
-                <div 
-                    className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 shadow-[0_0_15px_#3b82f6] -z-10 rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
-                ></div>
-
-                {stepsToDisplay.slice(0, 3).map((step) => {
-                    const isActive = currentStep >= step.id;
-                    const isCurrent = currentStep === step.id;
-                    return (
-                        <div key={step.id} className="flex flex-col items-center gap-1">
-                            <div className={cn("w-8 h-8 md:w-14 md:h-14 rounded-full flex items-center justify-center border-2 md:border-4 transition-all duration-500 z-10 font-black text-xs md:text-xl shadow-xl", isActive ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-blue-500/50" : "bg-slate-900 border-slate-700 text-slate-500")}>
-                                {isActive && !isCurrent ? <Check className="h-3 w-3 md:h-6 md:w-6" /> : step.id}
-                            </div>
-                            <span className={cn("text-[9px] md:text-sm font-bold uppercase tracking-wider transition-colors duration-300", isCurrent ? "text-blue-400" : isActive ? "text-white" : "text-slate-600")}>{step.name}</span>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-
-        <GlassPanel className="max-w-5xl mx-auto min-h-[600px] flex flex-col">
-            <div className="p-3 md:p-6 border-b border-white/5 bg-black/20 flex justify-between items-center">
-                <h2 className="text-base md:text-2xl font-bold text-white flex items-center gap-2">
-                    {React.createElement(stepsToDisplay[currentStep-1].icon, { className: "h-5 w-5 md:h-6 md:w-6 text-cyan-400" })}
-                    <span className="hidden md:inline">{stepsToDisplay[currentStep-1].name} Seçimi</span>
-                    <span className="md:hidden">Seçim Yap</span>
-                </h2>
-                
-                <div className="px-2 py-0.5 md:px-4 md:py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-[10px] md:text-sm font-bold uppercase tracking-wider whitespace-nowrap">
-                    ADIM {currentStep} / {stepsToDisplay.length}
-                </div>
-            </div>
-
-            <div className="flex-grow p-2 md:p-8 lg:p-12 overflow-y-auto">
-                {renderStepContent()}
-            </div>
-
-            <div className="p-3 md:p-6 border-t border-white/5 bg-black/20 flex justify-between items-center text-slate-500 text-[10px] md:text-sm font-medium">
-                <span className="truncate mr-4">
-                    {currentStep === 1 && "Devam etmek için bir ders seçin."}
-                    {currentStep === 2 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.courseName} seçildi. Şimdi ünite seçin.</span>}
-                    {currentStep === 3 && <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500"></span>{selection.unitName} seçildi. Son olarak, bir konu seç.</span>}
-                </span>
-                
-                <div className="flex gap-1 md:gap-2 shrink-0 opacity-50">
-                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
-                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
-                    <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
-                </div>
-            </div>
-        </GlassPanel>
-    </div>
-  );
-}
+    
