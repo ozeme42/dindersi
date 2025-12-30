@@ -21,6 +21,9 @@ export async function getTeacherScales(teacherId: string): Promise<{ success: bo
         );
         const querySnapshot = await getDocs(q);
         const scales = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as EvaluationScale));
+        
+        scales.sort((a, b) => a.name.localeCompare(b.name, 'tr', { numeric: true }));
+
         return { success: true, data: JSON.parse(JSON.stringify(scales)) };
     } catch (error: any) {
         console.error("Error fetching scales:", error);

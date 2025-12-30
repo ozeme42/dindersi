@@ -19,15 +19,23 @@ export async function getCourseForSoruBankasi(courseId: string): Promise<{ cours
         const courseData = { id: courseSnap.id, ...courseSnap.data() } as Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] };
 
         const unitsRef = collection(db, 'courses', courseId, 'units');
-        const unitsQuery = query(unitsRef, orderBy("title"));
+        const unitsQuery = query(unitsRef); // Order by name client-side for locale-aware numeric sort
         const unitsSnap = await getDocs(unitsQuery);
         
-        courseData.units = await Promise.all(unitsSnap.docs.map(async (unitDoc) => {
-            const unit = { id: unitDoc.id, title: unitDoc.data().title, topics: [] };
-            const topicsRef = collection(db, 'courses', courseId, 'units', unitDoc.id, 'topics');
-            const topicsQuery = query(topicsRef, orderBy("title"));
+        const unitsData = unitsSnap.docs.map(unitDoc => ({
+            id: unitDoc.id,
+            ...unitDoc.data()
+        } as Unit));
+        
+        unitsData.sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+
+        courseData.units = await Promise.all(unitsData.map(async (unitData) => {
+            const unit = { id: unitData.id, title: unitData.title, topics: [] };
+            const topicsRef = collection(db, 'courses', courseId, 'units', unitData.id, 'topics');
+            const topicsQuery = query(topicsRef); // Order client-side
             const topicsSnap = await getDocs(topicsQuery);
-            unit.topics = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, title: topicDoc.data().title }));
+            const topicsData = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
+            unit.topics = topicsData.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
             return unit;
         }));
         
@@ -60,7 +68,7 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
             collection(db, 'questions'), 
             where('topicId', '==', topicId),
             where('difficulty', '==', difficulty),
-            where('type', 'in', ['Çoktan Seçmeli', 'Doğru/Yanlış'])
+            where('type', 'in', ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'])
         );
 
         const snapshot = await getDocs(q);
@@ -128,7 +136,7 @@ export async function updateTopicTestProgress(userId: string, courseId: string, 
         await updateDoc(progressRef, {
             [fieldPath]: result
         }).catch(async (error) => {
-            if (error.code === 'not-found') {
+            if (error.code === 'not-found' || error.code === 'INVALID_ARGUMENT') { // Firestore can throw invalid_argument if path doesn't exist for update
                  // The document or nested object doesn't exist, so create it.
                 await setDoc(progressRef, {
                     [topicId]: {

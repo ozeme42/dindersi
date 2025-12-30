@@ -37,7 +37,7 @@ export async function getUnitScaleDetails(courseId: string, unitId: string, bran
         const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
         const unit = { id: unitSnap.id, ...unitSnap.data() } as Unit;
 
-        const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`), orderBy("title")));
+        const topicsSnapshot = await getDocs(query(collection(db, `courses/${courseId}/units/${unitId}/topics`)));
         
         const unsortedTopics = topicsSnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}) as Topic);
         
@@ -55,7 +55,7 @@ export async function getUnitScaleDetails(courseId: string, unitId: string, bran
                 const poolClassName = `${fullClassName} (Havuz)`;
                 const studentsQuery = query(
                     collection(db, 'users'), 
-                    where('role', '==', 'guest'),
+                    where('role', 'in', ['student', 'guest']),
                     where('class', 'in', [fullClassName, poolClassName])
                 );
                 const studentsSnapshot = await getDocs(studentsQuery);
@@ -117,7 +117,7 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
             const poolClassName = `${scaleFullClassName} (Havuz)`;
             const studentsQuery = query(
                 collection(db, 'users'), 
-                where('role', '==', 'guest'),
+                where('role', 'in', ['student', 'guest']),
                 where('class', 'in', [scaleFullClassName, poolClassName])
             );
             const studentsSnapshot = await getDocs(studentsQuery);

@@ -36,7 +36,7 @@ const serialize = (data: any): any => {
 export async function getFlowData(): Promise<EnrichedClass[]> {
     try {
         const [classesSnap, coursesSnap, unitsSnap, topicsSnap, questionsSnap] = await Promise.all([
-            getDocs(query(collection(db, 'classes'), orderBy('createdAt', 'asc'))),
+            getDocs(query(collection(db, 'classes'))),
             getDocs(query(collection(db, 'courses'))),
             getDocs(collectionGroup(db, 'units')),
             getDocs(collectionGroup(db, 'topics')),
@@ -84,8 +84,11 @@ export async function getFlowData(): Promise<EnrichedClass[]> {
             const unitsForCourse = (unitsByCourse.get(courseData.id) || []).sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
             return { ...courseData, units: unitsForCourse };
         });
+        courses.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' }));
 
         const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+        classes.sort((a,b) => a.name.localeCompare(b.name, 'tr', { numeric: true, sensitivity: 'base' }));
+
         const enrichedClasses: EnrichedClass[] = classes.map(cls => ({
             ...cls,
             courses: courses.filter(c => c.classId === cls.id),
