@@ -4,17 +4,39 @@
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowLeft, Download, Plus, Minus, BookOpen, StickyNote } from 'lucide-react';
-import type { YazilacaklarContent } from '@/lib/types';
+import type { YazilacaklarContent, Topic } from '@/lib/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+// Helper to fetch definitions directly from Firestore
+async function getDefinitionsForTopic(topicId: string) {
+    if (!topicId) return [];
+    try {
+        const q = query(collection(db, "activityItems"), where("topicId", "==", topicId), where("type", "==", "definition"));
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => {
+            const item = doc.data();
+            return {
+                concept: item.content.term || '',
+                definition: item.content.definition || ''
+            };
+        }).filter(item => item.concept && item.definition);
+    } catch (error) {
+        console.error("Error fetching definitions for topic:", error);
+        return [];
+    }
+}
+
 
 export function YazilacaklarDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
-    const topicId = slug ? slug[slug.length - 1] : undefined;
+    const [courseId, unitId, topicId] = slug || [];
 
     const [content, setContent] = useState<YazilacaklarContent | null>(null);
     const [topicTitle, setTopicTitle] = useState<string>('');
@@ -37,7 +59,7 @@ export function YazilacaklarDisplayPage() {
     }, []);
 
     const fetchContent = useCallback(async () => {
-        if (!topicId) {
+        if (!topicId || !courseId || !unitId) {
             setError("Eksik konu bilgisi.");
             setIsLoading(false);
             return;
@@ -45,46 +67,32 @@ export function YazilacaklarDisplayPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const manifestRes = await fetch('/curriculum/manifest.json');
-            if (!manifestRes.ok) throw new Error('Manifest yüklenemedi');
-            const manifestData = await manifestRes.json();
+            const topicRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+            const topicSnap = await getDoc(topicRef);
             
-            let foundTopic = null;
-            for (const group of manifestData.classGroups) {
-                for (const course of group.courses) {
-                    for (const unit of course.units) {
-                        const topic = unit.topics.find((t: any) => t.id === topicId);
-                        if(topic) {
-                            foundTopic = topic;
-                            break;
-                        }
-                    }
-                    if(foundTopic) break;
+            if (topicSnap.exists()) {
+                const topicData = topicSnap.data() as Topic;
+                setTopicTitle(topicData.title);
+                
+                const definitions = await getDefinitionsForTopic(topicId);
+                const notes = topicData.writingContent?.notes || [];
+
+                if (definitions.length === 0 && notes.length === 0) {
+                     throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
                 }
-                if(foundTopic) break;
-            }
-            
-            if (foundTopic) {
-                setTopicTitle((foundTopic as any).title);
+                
+                setContent({ conceptDefinitions: definitions, notes: notes });
+
+            } else {
+                 throw new Error('Konu veritabanında bulunamadı.');
             }
 
-            const res = await fetch(`/curriculum/yazilacaklar/${topicId}.json`);
-            if (!res.ok) {
-                throw new Error('Bu konu için "Yazılacaklar" içeriği bulunamadı.');
-            }
-            const data: YazilacaklarContent = await res.json();
-
-            if ((data.notes?.length || 0) === 0 && (data.conceptDefinitions?.length || 0) === 0) {
-                 throw new Error('Bu konu için "Yazılacaklar" içeriği boş.');
-            }
-            
-            setContent(data);
         } catch (e: any) {
             setError(e.message || 'İçerik alınırken bir hata oluştu.');
         } finally {
             setIsLoading(false);
         }
-    }, [topicId]);
+    }, [topicId, courseId, unitId]);
 
     useEffect(() => {
         fetchContent();

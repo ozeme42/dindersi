@@ -8,70 +8,73 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import Link from 'next/link';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+async function getContent(courseId: string, unitId: string, topicId?: string): Promise<{ title: string, htmlContent: string } | null> {
+    try {
+        let docRef;
+        if (topicId) {
+            docRef = doc(db, 'courses', courseId, 'units', unitId, 'topics', topicId);
+        } else {
+            docRef = doc(db, 'courses', courseId, 'units', unitId);
+        }
+        
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.htmlContent) {
+                return { title: data.title, htmlContent: data.htmlContent };
+            }
+        }
+        return null;
+    } catch (e) {
+        console.error("Error fetching content from Firestore:", e);
+        return null;
+    }
+}
+
 
 function OzetDisplayPage() {
     const params = useParams();
     const slug = params.slug as string[];
-    
-    // Logic is the same as the main ozetler page, so we can reuse it or keep it simple.
+    const [courseId, unitId, topicId] = slug || [];
+
     const [content, setContent] = useState<{title: string, htmlContent: string} | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const mainContentRef = useRef<HTMLDivElement>(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     
     const backUrl = `/student`;
 
     useEffect(() => {
-        if (!slug || slug.length === 0) {
-            setError("Geçersiz URL.");
+        const handleFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
+
+    useEffect(() => {
+        if (!courseId || !unitId) {
+            setError("Geçersiz URL. Ders veya ünite bilgisi eksik.");
             setIsLoading(false);
             return;
         }
-        
-        const contentId = slug.length > 2 ? slug[2] : (slug.length > 1 ? slug[1] : slug[0]);
 
         const fetchUnit = async () => {
             setIsLoading(true);
-            try {
-                const res = await fetch(`/curriculum/ozetler/${contentId}.html`);
-                if (!res.ok) {
-                    throw new Error('Özet içeriği bulunamadı veya yüklenemedi.');
-                }
-                const htmlContent = await res.text();
-                
-                // Fetch title from manifest
-                const manifestRes = await fetch('/curriculum/manifest.json');
-                if (!manifestRes.ok) throw new Error('Manifest not found');
-                const manifest = await manifestRes.json();
-                
-                let title = '';
-                 for (const group of manifest.classGroups) {
-                    for (const course of group.courses) {
-                        for (const unit of course.units) {
-                            if (unit.id === contentId) {
-                                title = unit.title;
-                                break;
-                            }
-                            const topic = unit.topics.find((t: any) => t.id === contentId);
-                            if (topic) {
-                                title = topic.title;
-                                break;
-                            }
-                        }
-                        if(title) break;
-                    }
-                    if(title) break;
-                }
-
-                setContent({ title: title || 'Özet', htmlContent });
-            } catch (e: any) {
-                setError(e.message);
-            } finally {
-                setIsLoading(false);
+            const fetchedContent = await getContent(courseId, unitId, topicId);
+            if (fetchedContent) {
+                setContent(fetchedContent);
+            } else {
+                setError('Bu içerik için interaktif özet bulunamadı.');
             }
+            setIsLoading(false);
         };
         fetchUnit();
-    }, [slug]);
+    }, [courseId, unitId, topicId]);
     
     if (isLoading) {
         return (
@@ -81,7 +84,7 @@ function OzetDisplayPage() {
         );
     }
     
-    if (error || !content) {
+    if (error || !content || !content.htmlContent) {
         return (
             <div className="min-h-screen bg-slate-800 flex flex-col items-center justify-center p-8 text-center">
                 <div className="bg-slate-700 p-8 rounded-3xl border border-red-400/30 max-w-md w-full backdrop-blur-sm shadow-xl">
@@ -97,49 +100,69 @@ function OzetDisplayPage() {
     return (
         <div 
             ref={mainContentRef} 
-            className="w-full min-h-screen bg-slate-800 flex flex-col relative overflow-hidden transition-all pb-24 md:pb-8"
+            className={cn(
+                "w-full min-h-screen bg-slate-800 flex flex-col relative overflow-hidden transition-all", 
+                !isFullscreen ? "pb-24 md:pb-8" : "pb-0"
+            )}
         >
-             <div className="fixed inset-0 pointer-events-none z-0 opacity-50">
-                <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-cyan-400/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px]" />
-            </div>
+             {!isFullscreen && (
+                <div className="fixed inset-0 pointer-events-none z-0 opacity-50">
+                    <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-cyan-400/20 rounded-full blur-[120px]" />
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px]" />
+                </div>
+            )}
 
-            <div className="sticky top-0 z-30 w-full border-b border-white/20 bg-slate-700/90 backdrop-blur-xl transition-all shadow-md pt-4">
+            <div className={cn(
+                "sticky top-0 z-30 w-full border-b border-white/20 bg-slate-700/90 backdrop-blur-xl transition-all shadow-md",
+                !isFullscreen && "pt-4"
+            )}>
                  <div className="container mx-auto px-4 pb-4">
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 overflow-hidden">
-                            <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/50 transition-all">
-                                <Link href={backUrl} className="flex items-center gap-2">
-                                    <ArrowLeft className="h-5 w-5 stroke-[3px]"/>
-                                    <span className="hidden sm:inline">Geri</span>
-                                </Link>
-                            </Button>
+                            {!isFullscreen && (
+                                <Button asChild size="sm" className="shrink-0 bg-white text-slate-900 hover:bg-cyan-300 hover:text-slate-950 font-extrabold rounded-xl h-10 px-4 shadow-lg border-2 border-white/50 transition-all">
+                                    <Link href={backUrl} className="flex items-center gap-2">
+                                        <ArrowLeft className="h-5 w-5 stroke-[3px]"/>
+                                        <span className="hidden sm:inline">Geri</span>
+                                    </Link>
+                                </Button>
+                            )}
                             <h1 className="text-lg md:text-xl font-black text-white truncate drop-shadow-md tracking-wide">
                                 {content?.title || 'Özet'}
                             </h1>
                         </div>
-                         <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
+                        <div className="flex items-center gap-2 [&_button]:!bg-white [&_button]:!text-slate-900 [&_button]:!border-2 [&_button]:!border-white/50 [&_button]:!h-10 [&_button]:!w-10 [&_button]:!rounded-xl [&_button]:!shadow-lg [&_button:hover]:!bg-cyan-300">
                              <FullscreenToggle elementRef={mainContentRef} />
                         </div>
                     </div>
                  </div>
             </div>
             
-            <div className="flex-grow flex flex-col min-h-0 relative z-10 transition-all duration-300 container mx-auto px-4 pt-6">
-                <div className="w-full transition-all duration-300 flex flex-col bg-white h-[80vh] rounded-2xl border-4 border-slate-600/50 shadow-2xl overflow-hidden">
-                     <div className="h-10 bg-slate-200 border-b border-slate-300 flex items-center px-4 gap-2 shrink-0">
-                        <div className="flex gap-2">
-                            <div className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-600/30 shadow-sm" />
-                            <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600/30 shadow-sm" />
-                            <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-600/30 shadow-sm" />
-                        </div>
-                        <div className="ml-4 flex-1 flex justify-center">
-                            <div className="bg-white border border-slate-300 rounded-lg px-6 py-1 text-xs text-slate-600 font-bold flex items-center gap-2 shadow-sm">
-                                <LayoutTemplate className="w-3.5 h-3.5 text-cyan-600" />
-                                <span>Özet Modülü</span>
+            <div className={cn(
+                "flex-grow flex flex-col min-h-0 relative z-10 transition-all duration-300",
+                !isFullscreen ? "container mx-auto px-4 pt-6" : "p-0"
+            )}>
+                <div className={cn(
+                    "w-full transition-all duration-300 flex flex-col bg-white",
+                    !isFullscreen ? "h-[80vh] rounded-2xl border-4 border-slate-600/50 shadow-2xl overflow-hidden" : "h-full rounded-none"
+                )}>
+                    
+                    {!isFullscreen && (
+                        <div className="h-10 bg-slate-200 border-b border-slate-300 flex items-center px-4 gap-2 shrink-0">
+                            <div className="flex gap-2">
+                                <div className="w-3.5 h-3.5 rounded-full bg-red-500 border border-red-600/30 shadow-sm" />
+                                <div className="w-3.5 h-3.5 rounded-full bg-amber-500 border border-amber-600/30 shadow-sm" />
+                                <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 border border-emerald-600/30 shadow-sm" />
+                            </div>
+                            
+                            <div className="ml-4 flex-1 flex justify-center">
+                                <div className="bg-white border border-slate-300 rounded-lg px-6 py-1 text-xs text-slate-600 font-bold flex items-center gap-2 shadow-sm">
+                                    <LayoutTemplate className="w-3.5 h-3.5 text-cyan-600" />
+                                    <span>Özet Modülü</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                     <iframe
                         srcDoc={content.htmlContent}
                         className="w-full flex-grow border-0 bg-white"

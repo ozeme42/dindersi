@@ -147,10 +147,10 @@ type OyunKurulumProps = {
     pageIcon?: React.ElementType;
     targetPath?: string;
     dataType: 'games' | 'yazilacaklar' | 'ozetler';
-    isStatic?: boolean;
+    isStatic?: boolean; // Artık kullanılmayacak, ama uyumluluk için durabilir
 }
 
-export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon = Gamepad2, targetPath, dataType, isStatic = false }: OyunKurulumProps) {
+export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon = Gamepad2, targetPath, dataType }: OyunKurulumProps) {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -188,8 +188,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const getBackUrl = () => {
     if (targetPath?.startsWith('student')) return '/student';
     if(targetPath === 'oyunlar') return '/oyunlar';
-    if(isStatic) return '/';
-    return '/teacher/smartboard';
+    return '/'; // Fallback for static or public pages
   };
   
   const handleBack = () => {
@@ -201,11 +200,12 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     }
   };
 
-  const fetchManifest = useCallback(async () => {
+  const fetchCurriculumData = useCallback(async () => {
     setIsLoading(true);
     try {
-        const isForStudent = !isStatic && user?.role === 'student';
-        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, isForStudent ? user?.uid : undefined);
+        const isForStudent = user?.role === 'student';
+        // Always fetch from live DB now
+        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, false, isForStudent ? user?.uid : undefined);
         
         if (error) {
             console.error(error);
@@ -230,11 +230,11 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
     } finally {
         setIsLoading(false);
     }
-  }, [user, dataType, isStatic]);
+  }, [user, dataType]);
 
   useEffect(() => {
-    fetchManifest();
-  }, [fetchManifest]);
+    fetchCurriculumData();
+  }, [fetchCurriculumData]);
 
   const handleSelectCourse = (course: Course) => {
     setSelection({ 
@@ -276,15 +276,15 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
             topicId: 'all',
             topicName: 'Tüm Konular',
         });
-        if (isStatic) params.append('isStatic', 'true');
         const url = `/oyunlar/${finalGamePath}/oyun?${params.toString()}`;
         router.push(url);
         return;
     }
 
     if (dataType === 'ozetler' && unit.hasUnitOzet && (!unit.topics || unit.topics.every(t => !t.hasOzetContent))) {
-        const pathPrefix = isStatic ? '' : '/student';
-        const url = `${pathPrefix}/ozetler/${selection.courseId}/${unit.id}`;
+        // Updated path construction for live data
+        const pathPrefix = user?.role === 'teacher' ? '/teacher/smartboard' : '/student';
+        const url = `${pathPrefix}/ozetler/goruntule/${selection.courseId}/${unit.id}`;
         router.push(url);
         return;
     }
@@ -315,7 +315,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
   const handleSelectTopic = (topicId: string, topicName: string) => {
       setSelection({...selection, topicName});
       
-      const pathPrefix = isStatic ? '' : (user?.role === 'teacher' ? '/teacher/smartboard' : '/student');
+      const pathPrefix = user?.role === 'teacher' ? '/teacher/smartboard' : '/student';
       let basePath = targetPath;
       
       if (!basePath) {
@@ -331,17 +331,13 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
         topicName: topicName,
       });
 
-      if (isStatic) {
-          params.append('isStatic', 'true');
-      }
-      
       let finalUrl = `/${basePath}/${finalGamePath}/oyun?${params.toString()}`;
       
       if(dataType === 'yazilacaklar') {
           finalUrl = `${pathPrefix}/yazilacaklar/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
       if(dataType === 'ozetler') {
-          finalUrl = `${pathPrefix}/ozetler/${selection.courseId}/${selection.unitId}/${topicId}`;
+           finalUrl = `${pathPrefix}/ozetler/goruntule/${selection.courseId}/${selection.unitId}/${topicId}`;
       }
 
       router.push(finalUrl);
@@ -406,7 +402,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                                 subtitle="Genel Tekrar"
                                 icon={Sparkles}
                                 color="from-yellow-600 to-amber-500"
-                                onClick={() => handleSelectUnit('all', 'Tüm Üniteler')}
+                                onClick={() => handleSelectUnit({id: 'all', title: 'Tüm Üniteler'} as Unit)}
                                 delay={0}
                             />
                         )}
@@ -499,7 +495,7 @@ export function OyunKurulum({ pageTitle, gameName, gamePath, pageIcon: PageIcon 
                     style={{ width: `${((currentStep - 1) / (stepsToDisplay.length - 1)) * 100}%` }}
                 ></div>
 
-                {stepsToDisplay.map((step) => {
+                {stepsToDisplay.slice(0, 3).map((step) => {
                     const isActive = currentStep >= step.id;
                     const isCurrent = currentStep === step.id;
                     return (
