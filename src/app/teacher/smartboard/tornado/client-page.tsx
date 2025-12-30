@@ -214,11 +214,11 @@ export function TornadoSetupClientPage() {
       
             {/* Arka Plan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
+                <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-900/20 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-900/20 rounded-full blur-[120px]" />
             </div>
 
-            <div className="relative z-10 w-full max-w-6xl space-y-8">
+            <div className="relative z-10 w-full max-w-5xl space-y-8">
         
                 {/* Başlık Alanı */}
                 <div className="text-center space-y-4 py-4">
@@ -228,12 +228,12 @@ export function TornadoSetupClientPage() {
                     <h1 className="text-4xl md:text-6xl font-black text-white drop-shadow-xl tracking-tight">
                         TORNADO
                     </h1>
-                    <p className="text-slate-400 text-lg font-medium">Fırtına gibi esmeye hazır mısın?</p>
+                    <p className="text-slate-400 text-lg font-medium">Sürpriz kutularla dolu eğlenceli bir yarışma.</p>
                 </div>
 
                 {/* Stepper (Adım Göstergesi) */}
                 <div className="flex justify-center items-center px-4 w-full">
-                    <div className="relative flex items-center justify-between w-full max-w-4xl">
+                    <div className="relative flex items-center justify-between w-full max-w-3xl">
                         {/* Bağlantı Çizgisi */}
                         <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-800 -z-10 rounded-full"></div>
                         <div 
@@ -253,12 +253,12 @@ export function TornadoSetupClientPage() {
                                             ? "bg-slate-900 border-cyan-500 text-cyan-400 scale-110 shadow-cyan-500/50" 
                                             : isActive 
                                                 ? "bg-blue-600 border-blue-600 text-white scale-100" 
-                                                : "bg-slate-900 border-slate-800 text-slate-600"
+                                                : "bg-slate-900 border-slate-700 text-slate-600"
                                     )}>
                                         {isActive && !isCurrent ? <Check className="w-6 h-6 stroke-[3]" /> : step.icon}
                                     </div>
                                     <span className={cn(
-                                        "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap uppercase tracking-wider",
+                                        "text-xs md:text-sm font-bold transition-colors duration-300 absolute -bottom-8 whitespace-nowrap",
                                         isCurrent ? "text-cyan-400" : isActive ? "text-blue-500" : "text-slate-600"
                                     )}>
                                         {step.name}
@@ -270,25 +270,25 @@ export function TornadoSetupClientPage() {
                 </div>
 
                 {/* Ana İçerik Kartı */}
-                <div className="mt-8">
-                    <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
-                        <div className="p-6 md:p-8 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
-                            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-lg">
+                <div className="mt-12">
+                    <div className="bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden min-h-[500px] flex flex-col">
+                        <div className="p-6 border-b border-white/5 bg-slate-900/80 flex items-center justify-between">
+                             <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
                                     {currentStep}
                                 </span>
                                 {steps.find(s => s.id === currentStep)?.name} Seçimi
-                            </h2>
-                            {isLoading && <Loader2 className="h-6 w-6 animate-spin text-cyan-500" />}
+                             </h2>
+                             <div className="h-2 w-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_#14b8a6]"></div>
                         </div>
 
-                        <div className="flex-grow p-6 md:p-10 flex items-center justify-center bg-slate-950/30">
-                            {renderContent()}
+                        <div className="flex-grow p-8 flex items-center justify-center bg-slate-950/30">
+                             {renderContent()}
                         </div>
 
-                        <div className="p-6 md:p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
+                        <div className="p-6 border-t border-white/5 bg-slate-900/80 flex justify-between items-center">
                             {currentStep === 1 ? (
-                                <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-14 px-8 rounded-xl text-lg">
+                                <Button asChild variant="ghost" className="text-slate-400 hover:text-white hover:bg-white/10 h-12 px-6 rounded-xl">
                                     <Link href="/teacher/smartboard">
                                         <ArrowLeft className="mr-2 h-5 w-5" /> Menüye Dön
                                     </Link>
@@ -297,7 +297,7 @@ export function TornadoSetupClientPage() {
                                 <Button 
                                     variant="outline" 
                                     onClick={handleBack}
-                                    className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-14 px-8 rounded-xl text-lg bg-transparent"
+                                    className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12 px-6 rounded-xl bg-transparent"
                                 >
                                     <ArrowLeft className="mr-2 h-5 w-5" /> Geri
                                 </Button>
@@ -312,7 +312,7 @@ export function TornadoSetupClientPage() {
                                         (currentStep === 3 && !selection.unitId) ||
                                         (currentStep === 4 && !selection.topicId)
                                     }
-                                    className="bg-cyan-600 hover:bg-cyan-500 text-white h-14 px-8 rounded-xl text-lg shadow-lg shadow-cyan-900/20 transition-all hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+                                    className="bg-cyan-600 hover:bg-cyan-500 text-white h-12 px-8 rounded-xl shadow-lg shadow-cyan-900/20"
                                 >
                                     İleri <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
@@ -320,12 +320,7 @@ export function TornadoSetupClientPage() {
                         </div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-    );
+              </div>
+    </div>
+  );
 }
-
-```
-- src/app/teacher/smartboard/tornado/page.tsx
-- src/app/oyunlar/adam-asmaca/page.tsx
