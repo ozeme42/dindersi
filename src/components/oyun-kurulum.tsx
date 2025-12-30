@@ -10,13 +10,22 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { getCurriculumForSelection, type ClassGroup } from '@/components/actions/get-curriculum-for-selection';
+import { getCurriculumForSelection } from '@/components/actions/get-curriculum-for-selection';
+import type { Course, Unit, Topic } from "@/lib/types";
 
 
 // --- TİP TANIMLARI ---
-type Topic = { id: string; title: string; hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; isPublished?: boolean };
-type Unit = { id: string; title: string; topics: Topic[]; hasUnitOzet?: boolean; isPublished?: boolean };
-type Course = EnrichedCourse;
+type EnrichedCourse = Course & {
+    units: (Omit<Unit, 'topics'> & {
+        topics: (Topic & { hasOzetContent?: boolean; hasYazilacaklarContent?: boolean; })[]
+    })[]
+};
+
+type ClassGroup = { 
+    name: string; 
+    courses: EnrichedCourse[] 
+};
+
 
 const ICONS = [Book, Sparkles, Book, Gamepad2];
 const getGradient = (index: number) => {
@@ -203,7 +212,8 @@ export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, p
   const fetchCurriculumData = useCallback(async () => {
     setIsLoading(true);
     try {
-        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, user?.uid);
+        const userId = isStatic ? undefined : user?.uid;
+        const { classGroups: fetchedClassGroups, error } = await getCurriculumForSelection(dataType, isStatic, userId);
         
         if (error) {
             console.error(error);
@@ -249,7 +259,7 @@ export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, p
         let unitsWithContent = (course as any).units;
         if (dataType !== 'games') {
              unitsWithContent = (course as any).units.filter((unit: Unit) => {
-                if (dataType === 'ozetler') return unit.hasUnitOzet || unit.topics.some((t: Topic) => t.hasOzetContent);
+                if (dataType === 'ozetler') return (unit as any).hasUnitOzet || unit.topics.some((t: Topic) => t.hasOzetContent);
                 if (dataType === 'yazilacaklar') return unit.topics.some((t: Topic) => t.hasYazilacaklarContent);
                 return false;
              });
@@ -375,8 +385,8 @@ export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, p
                                 key={course.id}
                                 title={course.title}
                                 subtitle={course.className}
-                                icon={course.icon || Book}
-                                color={course.color || getGradient(idx)}
+                                icon={(course as any).icon || Book}
+                                color={(course as any).color || getGradient(idx)}
                                 onClick={() => handleSelectCourse(course as Course)}
                                 delay={idx * 50}
                             />
@@ -533,4 +543,9 @@ export function OyunKurulum({ pageTitle: initialPageTitle, gameName, gamePath, p
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce"></div>
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-100"></div>
                     <div className="h-1 w-1 md:h-2 md:w-2 rounded-full bg-slate-600 animate-bounce delay-200"></div>
-                
+                </div>
+            </div>
+        </GlassPanel>
+    </div>
+  );
+}
