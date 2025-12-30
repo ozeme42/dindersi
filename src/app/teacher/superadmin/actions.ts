@@ -307,25 +307,33 @@ export async function exportManifestAndContent() {
             }
         });
 
-        const allTopicsRaw = topicsSnap.docs.map(doc => ({ ref: doc.ref, data: serialize({ id: doc.id, ...doc.data() }) }));
+        const allTopicsRaw = topicsSnap.docs.map(doc => {
+             const parentRef = doc.ref.parent.parent;
+             return {
+                 parent: { courseId: parentRef?.parent?.id, unitId: parentRef?.id },
+                 data: serialize({ id: doc.id, ...doc.data() })
+            };
+        });
         const topicsByUnit = new Map<string, any[]>();
         allTopicsRaw.forEach(topic => {
-            const parent = topic.ref.parent.parent;
-            if (parent) {
-                const unitId = parent.id;
-                if (!topicsByUnit.has(unitId)) topicsByUnit.set(unitId, []);
-                topicsByUnit.get(unitId)!.push(topic.data);
+            if (topic.parent.unitId) {
+                if (!topicsByUnit.has(topic.parent.unitId)) topicsByUnit.set(topic.parent.unitId, []);
+                topicsByUnit.get(topic.parent.unitId)!.push(topic.data);
             }
         });
 
-        const allUnitsRaw = unitsSnap.docs.map(doc => ({ ref: doc.ref, data: serialize({ id: doc.id, ...doc.data() }) }));
+        const allUnitsRaw = unitsSnap.docs.map(doc => {
+            const parentRef = doc.ref.parent.parent;
+            return {
+                parent: { courseId: parentRef?.id },
+                data: serialize({ id: doc.id, ...doc.data() })
+            };
+        });
         const unitsByCourse = new Map<string, any[]>();
         allUnitsRaw.forEach(unit => {
-            const parent = unit.ref.parent.parent;
-            if (parent) {
-                const courseId = parent.id;
-                if (!unitsByCourse.has(courseId)) unitsByCourse.set(courseId, []);
-                unitsByCourse.get(courseId)!.push(unit.data);
+            if (unit.parent.courseId) {
+                if (!unitsByCourse.has(unit.parent.courseId)) unitsByCourse.set(unit.parent.courseId, []);
+                unitsByCourse.get(unit.parent.courseId)!.push(unit.data);
             }
         });
 
@@ -494,6 +502,7 @@ export async function exportActivityData() {
             });
         }
         
+        // Write all files in chunks
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
             await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
@@ -505,5 +514,3 @@ export async function exportActivityData() {
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
-
-    
