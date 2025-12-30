@@ -38,6 +38,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Input } from '@/components/ui/input';
 import { AiLessonStepGenerationDialog } from '@/components/ai-lesson-step-generation-dialog';
 import { playableActivities } from '@/lib/game-config';
+import { cn } from "@/lib/utils";
 
 
 type DraggableLessonStep = LessonStep & { id: string };
