@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -39,6 +40,13 @@ export function CourseSidebar({
         }
     }, [activeTopic]);
 
+    const sortedUnits = React.useMemo(() => {
+        if (!course?.units) return [];
+        return [...course.units].sort((a, b) => 
+            (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true, sensitivity: 'base' })
+        );
+    }, [course]);
+
     return (
         <div className="h-full flex flex-col bg-slate-950 border-r border-white/5 select-none">
             <div className="p-4 border-b border-white/5 bg-slate-900/50 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between gap-2">
@@ -53,8 +61,13 @@ export function CourseSidebar({
 
             <div className="overflow-y-auto">
                 <div className="p-4 pb-20">
-                    <Accordion type="multiple" defaultValue={course.units?.map(u => u.id)} className="space-y-6">
-                        {course.units?.map((unit, unitIndex) => (
+                    <Accordion type="multiple" defaultValue={sortedUnits.map(u => u.id)} className="space-y-6">
+                        {sortedUnits.map((unit, unitIndex) => {
+                             const sortedTopics = (unit.topics || []).sort((a, b) => 
+                                (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true, sensitivity: 'base' })
+                            );
+
+                            return (
                             <AccordionItem key={unit.id} value={unit.id} className="border-none">
                                 
                                 <AccordionTrigger className="py-3 px-4 mb-4 bg-slate-900/80 hover:bg-slate-800 rounded-xl border border-white/5 text-slate-200 hover:text-white transition-all hover:no-underline group">
@@ -88,7 +101,7 @@ export function CourseSidebar({
                                         </div>
                                     )}
 
-                                    {/* Ünite Özeti Butonu - YENİ EKLENDİ */}
+                                    {/* Ünite Özeti Butonu */}
                                     {(unit as any).hasUnitOzet && (
                                         <div className="relative pl-6 pb-2 mb-2">
                                              <div className="absolute left-[-5px] top-0 bottom-0 w-2.5 flex items-center">
@@ -111,7 +124,7 @@ export function CourseSidebar({
                                     )}
 
                                     <div className="relative border-l-2 border-slate-800 ml-4 space-y-1">
-                                        {unit.topics?.map((topic, topicIndex) => {
+                                        {sortedTopics.map((topic, topicIndex) => {
                                             const isLocked = !isTopicUnlocked(topicIndex, unitIndex);
                                             const isCompleted = isTopicCompleted(topic.id);
                                             const isActive = activeTopic?.id === topic.id;
@@ -179,7 +192,7 @@ export function CourseSidebar({
                                     </div>
                                 </AccordionContent>
                             </AccordionItem>
-                        ))}
+                        )})}
                     </Accordion>
                 </div>
             </div>
