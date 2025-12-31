@@ -158,12 +158,13 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
 }
 
 export function TopicEditor({ 
-    title, setTitle, steps, setSteps, sourceText, setSourceText,
+    title, setTitle, steps, setSteps, sourceText, setSourceText, htmlContent, setHtmlContent,
     onSave, isSaving, isUnitFlow = false, onOpenAIGeneration, children
 }: { 
     title: string, setTitle: (t: string) => void,
     steps: DraggableLessonStep[], setSteps: (s: DraggableLessonStep[] | ((prev: DraggableLessonStep[]) => DraggableLessonStep[])) => void,
     sourceText: string, setSourceText: (t: string) => void,
+    htmlContent?: string, setHtmlContent?: (c: string) => void,
     onSave: () => Promise<void>,
     isSaving: boolean,
     isUnitFlow?: boolean,
@@ -481,6 +482,37 @@ export function TopicEditor({
                     </Accordion>
                 </Card>
 
+                {setHtmlContent && (
+                    <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="html-content" className="border-b-0">
+                                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                                            <FileText className="h-5 w-5" />
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-lg font-bold text-white">İnteraktif HTML İçeriği</span>
+                                            <span className="text-xs text-slate-400 font-normal">Konu detay sayfasında gösterilecek tam sayfa içerik.</span>
+                                        </div>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
+                                    <div>
+                                        <Textarea
+                                            value={htmlContent || ''}
+                                            onChange={(e) => setHtmlContent(e.target.value)}
+                                            placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                            className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                        />
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </Card>
+                )}
+
+
                 {children}
 
                 <div className="space-y-6">
@@ -605,6 +637,7 @@ function TopicEditorWrapper() {
     const [title, setTitle] = useState('');
     const [steps, setSteps] = useState<DraggableLessonStep[]>([]);
     const [sourceText, setSourceText] = useState('');
+    const [htmlContent, setHtmlContent] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     
@@ -632,6 +665,7 @@ function TopicEditorWrapper() {
             setTitle(topicData.title);
             setSteps(addIdToSteps(topicData.steps || []));
             setSourceText(topicData.sourceText || '');
+            setHtmlContent(topicData.htmlContent || '');
         } else {
             toast({ title: "Hata", description: "Konu bulunamadı.", variant: "destructive" });
         }
@@ -646,7 +680,7 @@ function TopicEditorWrapper() {
         if (!courseId || !unitId || !topicId) return;
         setIsSaving(true);
         const stepsToSave = steps.map(({ id, ...rest }) => rest);
-        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText });
+        const result = await updateTopicContent({ courseId, unitId, topicId, steps: stepsToSave, sourceText, htmlContent });
         if(result.success) { 
             toast({ title: "Başarılı", description: "Konu içeriği başarıyla güncellendi." });
         } else { 
@@ -687,6 +721,7 @@ function TopicEditorWrapper() {
                 title={title} setTitle={setTitle}
                 steps={steps} setSteps={setSteps}
                 sourceText={sourceText} setSourceText={setSourceText}
+                htmlContent={htmlContent} setHtmlContent={setHtmlContent}
                 onSave={handleSaveFlow}
                 isSaving={isSaving}
                 onOpenAIGeneration={(type, context) => {
