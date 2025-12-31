@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, Suspense, useRef } from 'react';
@@ -94,7 +95,7 @@ const OpenEndedGame = () => {
         
         if (correct) {
             playSound('correct');
-            setScore(prev => prev + 25);
+            setScore(prev => prev + 200);
         } else {
             playSound('incorrect');
         }

@@ -154,7 +154,11 @@ function GameComponent() {
 
         if (formedWord === targetWord) {
             playSound('correct');
-            setScore(prev => prev + 100);
+            
+            // GÜNCELLEME: Harf başına 5 puan hesaplama mantığı
+            const pointsEarned = targetWord.length * 5;
+            setScore(prev => prev + pointsEarned);
+            
             setTimeout(() => setShowInfo(true), 300);
         } else {
             if (formedWord.length > 1) {
@@ -300,10 +304,8 @@ function GameComponent() {
                 
                 {/* 1. YAZI GÖRÜNTÜLEME ALANI */}
                 <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0 overflow-y-auto">
-                    {/* GÜNCELLEME: gap değerleri küçültüldü */}
                     <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 px-1 w-full">
                         {targetWords.map((word, wordIndex) => (
-                            // GÜNCELLEME: 'flex-wrap' eklendi, böylece çok uzun tek kelime alt satıra geçebilir
                             <div key={wordIndex} className="flex flex-wrap justify-center gap-1">
                                 {word.split('').map((char, charIndex) => {
                                     const overallIndex = targetWords.slice(0, wordIndex).join('').length + charIndex;
@@ -312,8 +314,6 @@ function GameComponent() {
                                     return (
                                         <div 
                                             key={`${wordIndex}-${charIndex}`}
-                                            // GÜNCELLEME: Mobilde boyutlar küçültüldü (w-9 h-11), text-xl yapıldı.
-                                            // Bu sayede ekrana daha fazla harf sığıyor.
                                             className={cn(
                                                 "w-9 h-11 sm:w-12 sm:h-14 md:w-16 md:h-20 rounded-md md:rounded-xl flex items-center justify-center text-xl sm:text-3xl md:text-5xl font-black transition-all duration-200",
                                                 isFilled 
