@@ -20,13 +20,13 @@ export function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/[^a-z0-9.-]/g, '');
 }
 
-// GÜNCELLENMİŞ FONKSİYON: Türkçe karakterleri korur.
+// GÜNCELLENMİŞ FONKSİYON: Türkçe ve şapkalı karakterleri korur.
 export const cleanForAnagram = (text: string): string => {
   if (!text) return '';
   // Metni tamamen büyük harfe çevir (Türkçe karakterlere duyarlı)
   const upperCaseText = text.toLocaleUpperCase('tr-TR');
-  // Sadece izin verilen Türkçe alfabe harfleri, rakamlar ve boşluklar dışındaki her şeyi sil
-  const cleanedText = upperCaseText.replace(/[^A-ZĞÜŞİÖÇ0-9\s]/g, '');
+  // Sadece izin verilen Türkçe alfabe harfleri (şapkalılar dahil), rakamlar ve boşluklar dışındaki her şeyi sil
+  const cleanedText = upperCaseText.replace(/[^A-ZÂĞÜŞİÖÇÛÎ0-9\s]/g, '');
   return cleanedText;
 };
 

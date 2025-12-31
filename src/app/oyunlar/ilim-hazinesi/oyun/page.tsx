@@ -1,16 +1,13 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-// EKLENDİ: XOctagon ikonu import edildi
-import { Lightbulb, RefreshCw, ChevronRight, Star, BookOpen, Loader2, AlertTriangle, Home, PartyPopper, Repeat, ArrowLeft, Hexagon, Sparkles, Trophy, XOctagon } from 'lucide-react';
+import { Lightbulb, RefreshCw, ChevronRight, Star, Loader2, AlertTriangle, PartyPopper, Repeat, ArrowLeft, Sparkles, Trophy, XOctagon } from 'lucide-react';
 import { getIlimHazinesiAction, submitIlimHazinesiScoreAction, type IlimHazinesiLevel } from '../actions';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
@@ -44,7 +41,6 @@ function GameComponent() {
     const [score, setScore] = useState(0);
     const [showInfo, setShowInfo] = useState(false);
     
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isFinished, setIsFinished] = useState(false);
@@ -251,99 +247,123 @@ function GameComponent() {
     if (!currentLevel) return null;
 
     const targetWords = currentLevel.mainWord.split(' ');
-    // FIX: Define constructedLetters here
     const constructedLetters = currentSelection.map(idx => ({ id: idx, letter: shuffledLetters[idx] }));
 
     return (
         <div 
             ref={mainContentRef}
-            className="min-h-screen bg-slate-950 text-white flex flex-col items-center overflow-hidden relative select-none touch-none"
+            className="h-[100dvh] bg-slate-950 text-white flex flex-col items-center overflow-hidden relative select-none touch-none"
             onMouseMove={handleMove}
             onMouseUp={handleEnd}
             onTouchMove={handleMove}
             onTouchEnd={handleEnd}
         >
+            {/* Arkaplan Efektleri */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-fuchsia-600/10 rounded-full blur-[120px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] animate-pulse delay-1000" />
             </div>
 
-            {/* --- HUD --- */}
-            <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
-                <div className="max-w-4xl mx-auto flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
-                            <Link href="/oyunlar/ilim-hazinesi"><ArrowLeft className="h-6 w-6" /></Link>
+            {/* --- HUD (Üst Bar) --- */}
+            <div className="w-full flex-none relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 px-4 py-2">
+                <div className="max-w-4xl mx-auto flex justify-between items-center h-12">
+                    <div className="flex items-center gap-2">
+                        <Button asChild variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
+                            <Link href="/oyunlar/ilim-hazinesi"><ArrowLeft className="h-5 w-5" /></Link>
                         </Button>
                         <div>
-                            <h1 className="font-bold text-lg text-white leading-tight">İlim Hazinesi</h1>
-                            <span className="text-xs font-bold text-fuchsia-400 uppercase tracking-wider">SEVİYE {levelIndex + 1}/{levels.length}</span>
+                            <h1 className="font-bold text-sm md:text-base text-white leading-tight">İlim Hazinesi</h1>
+                            <span className="text-[10px] font-bold text-fuchsia-400 uppercase tracking-wider block">SEVİYE {levelIndex + 1}/{levels.length}</span>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 md:gap-3">
-                        <Button 
+                    <div className="flex items-center gap-2">
+                         <Button 
                             onClick={() => setIsFinished(true)}
                             variant="ghost"
-                            className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10 hidden sm:flex"
+                            className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-[10px] md:text-xs border border-red-500/10 flex"
                         >
-                            <XOctagon className="h-4 w-4 mr-1.5" />
+                            <XOctagon className="h-3 w-3 mr-1" />
                             Bitir
                         </Button>
-
-                        <div className="flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
-                            <Trophy className="h-4 w-4 text-yellow-400" />
-                            <span className="font-mono font-bold text-white">{score}</span>
+                        <div className="flex items-center gap-1.5 bg-slate-950/50 border border-yellow-500/20 px-2.5 py-1 rounded-lg">
+                            <Trophy className="h-3.5 w-3.5 text-yellow-400" />
+                            <span className="font-mono font-bold text-white text-sm">{score}</span>
                         </div>
-                        <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 rounded-xl" />
+                        <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-8 w-8 rounded-lg" />
                     </div>
                 </div>
             </div>
             
-            {/* --- OYUN ALANI --- */}
-            <div className="relative flex-grow flex flex-col justify-center items-center w-full max-w-4xl z-10 pb-12">
+            {/* --- OYUN ALANI (Esnek Kapsayıcı) --- */}
+            <div className="flex-1 w-full max-w-4xl z-10 flex flex-col justify-between items-center pb-8 pt-4 px-2">
                 
-                <div className="h-24 flex items-center justify-center gap-4 mb-8">
-                    {targetWords.map((word, wordIndex) => (
-                        <div key={wordIndex} className="flex gap-2">
-                            {word.split('').map((char, charIndex) => {
-                                const overallIndex = targetWords.slice(0, wordIndex).join('').length + charIndex;
-                                const letterObj = constructedLetters[overallIndex];
-                                return (
-                                    <div 
-                                        key={`${wordIndex}-${charIndex}`}
-                                        className={cn(
-                                            "w-16 h-20 md:w-20 md:h-24 rounded-xl flex items-center justify-center text-4xl md:text-5xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-fuchsia-200 drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-150",
-                                            currentWordString.length > overallIndex ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-90 translate-y-4"
-                                        )}
-                                    >
-                                        {currentWordString.length > overallIndex ? currentWordString[overallIndex] : ''}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ))}
+                {/* 1. YAZI GÖRÜNTÜLEME ALANI */}
+                <div className="flex-1 flex flex-col items-center justify-center w-full min-h-0 overflow-y-auto">
+                    {/* GÜNCELLEME: gap değerleri küçültüldü */}
+                    <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 px-1 w-full">
+                        {targetWords.map((word, wordIndex) => (
+                            // GÜNCELLEME: 'flex-wrap' eklendi, böylece çok uzun tek kelime alt satıra geçebilir
+                            <div key={wordIndex} className="flex flex-wrap justify-center gap-1">
+                                {word.split('').map((char, charIndex) => {
+                                    const overallIndex = targetWords.slice(0, wordIndex).join('').length + charIndex;
+                                    const isFilled = currentWordString.length > overallIndex;
+                                    
+                                    return (
+                                        <div 
+                                            key={`${wordIndex}-${charIndex}`}
+                                            // GÜNCELLEME: Mobilde boyutlar küçültüldü (w-9 h-11), text-xl yapıldı.
+                                            // Bu sayede ekrana daha fazla harf sığıyor.
+                                            className={cn(
+                                                "w-9 h-11 sm:w-12 sm:h-14 md:w-16 md:h-20 rounded-md md:rounded-xl flex items-center justify-center text-xl sm:text-3xl md:text-5xl font-black transition-all duration-200",
+                                                isFilled 
+                                                    ? "bg-gradient-to-b from-slate-800 to-slate-900 border-b-2 md:border-b-4 border-fuchsia-600/50 text-transparent bg-clip-text bg-gradient-to-r from-white to-fuchsia-200 shadow-[0_4px_12px_rgba(192,38,211,0.2)]" 
+                                                    : "bg-slate-800/50 border border-slate-700/50 text-slate-700"
+                                            )}
+                                        >
+                                            {isFilled ? currentWordString[overallIndex] : ''}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
+                {/* 2. AKSİYON BUTONLARI */}
+                <div className="flex items-center justify-center gap-8 w-full py-4 shrink-0 z-30">
+                    <button 
+                        onClick={shuffleCurrent} 
+                        className="group flex flex-col items-center gap-2"
+                    >
+                        <div className="p-3 md:p-4 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 group-hover:text-white group-hover:bg-fuchsia-600 group-hover:border-fuchsia-500 transition-all duration-300 shadow-lg active:scale-95">
+                            <RefreshCw className="h-5 w-5 md:h-6 md:w-6 group-hover:rotate-180 transition-transform duration-500" />
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-fuchsia-400 transition-colors">Karıştır</span>
+                    </button>
+
+                    <button 
+                        onClick={useHint} 
+                        className="group flex flex-col items-center gap-2"
+                    >
+                        <div className="p-3 md:p-4 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 group-hover:text-yellow-900 group-hover:bg-yellow-400 group-hover:border-yellow-300 transition-all duration-300 shadow-lg active:scale-95">
+                            <Lightbulb className="h-5 w-5 md:h-6 md:w-6 group-hover:animate-pulse" />
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-yellow-400 transition-colors">İpucu</span>
+                    </button>
+                </div>
+
+                {/* 3. ÇARK ALANI */}
                 <div 
                     ref={wheelRef}
-                    className="relative w-[340px] h-[340px] md:w-[400px] md:h-[400px] bg-slate-900/40 backdrop-blur-sm rounded-full border border-white/10 shadow-[0_0_60px_rgba(192,132,252,0.15)] flex items-center justify-center"
+                    className="relative w-[300px] h-[300px] md:w-[360px] md:h-[360px] bg-slate-900/40 backdrop-blur-sm rounded-full border border-white/5 shadow-[0_0_60px_rgba(192,132,252,0.1)] flex items-center justify-center shrink-0 mb-4"
                 >
-                    <div className="absolute -top-24 left-0 right-0 flex justify-center gap-16 w-full z-20 pointer-events-auto">
-                        <button onClick={shuffleCurrent} className="group p-4 rounded-full bg-slate-800/80 border border-white/10 text-slate-300 hover:text-white hover:bg-fuchsia-500 hover:border-fuchsia-400 transition-all duration-300 shadow-lg">
-                            <RefreshCw className="h-6 w-6 group-hover:rotate-180 transition-transform duration-500" />
-                        </button>
-                        <button onClick={useHint} className="group p-4 rounded-full bg-slate-800/80 border border-white/10 text-slate-300 hover:text-yellow-900 hover:bg-yellow-400 hover:border-yellow-300 transition-all duration-300 shadow-lg">
-                            <Lightbulb className="h-6 w-6 group-hover:animate-pulse" />
-                        </button>
-                    </div>
-
                     <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible filter drop-shadow-[0_0_10px_rgba(217,70,239,0.8)]">
                         {currentSelection.length > 0 && isTouching && (
                             <path 
                                 d={`M ${currentSelection.map((idx) => {
                                     const pos = getLetterPosition(idx, shuffledLetters.length);
-                                    const center = (wheelRef.current?.offsetWidth || 340) / 2;
+                                    const center = (wheelRef.current?.offsetWidth || 300) / 2;
                                     return `${center + pos.x} ${center + pos.y}`;
                                 }).join(' L ')}`}
                                 fill="none"
@@ -368,7 +388,7 @@ function GameComponent() {
                                 onMouseDown={(e) => handleStart(i, e)}
                                 onTouchStart={(e) => handleStart(i, e)}
                                 className={cn(
-                                    `absolute w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-black cursor-pointer shadow-xl transition-all duration-150 z-10 select-none border-b-[6px] active:border-b-0 active:translate-y-2`,
+                                    `absolute w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center text-2xl md:text-3xl font-black cursor-pointer shadow-xl transition-all duration-150 z-10 select-none border-b-[4px] md:border-b-[6px] active:border-b-0 active:translate-y-2`,
                                     isSelected 
                                         ? 'bg-fuchsia-500 border-fuchsia-700 text-white scale-110 shadow-[0_0_30px_rgba(217,70,239,0.8)] z-20' 
                                         : colorClass 
