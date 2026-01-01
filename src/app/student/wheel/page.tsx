@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -12,14 +13,17 @@ import { claimWheelPrize } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
 
-// --- GÜNCEL PUAN LİSTESİ (SADECE 4 ADET) ---
-// Her puandan sadece 1 tane var. Dilimler 90 derece olacak.
+// --- GÜNCEL PUAN LİSTESİ (ARTIRILDI) ---
 const prizes = [
-  { value: 1000,  label: '1.000 XP',  color: '#3b82f6' }, // Mavi (Başlangıç)
-  { value: 20000, label: '20.000 XP', color: '#eab308' }, // Altın (Büyük Ödül)
-  { value: 5000,  label: '5.000 XP',  color: '#a855f7' }, // Mor (Orta)
-  { value: 10000, label: '10.000 XP', color: '#ef4444' }, // Kırmızı (Yüksek)
+  { value: 1000,  label: '1.000 XP',  color: '#3b82f6' },   // Mavi
+  { value: 5000,  label: '5.000 XP',  color: '#a855f7' },   // Mor
+  { value: 10000, label: '10.000 XP', color: '#ef4444' },   // Kırmızı
+  { value: 20000, label: '20.000 XP', color: '#eab308' },   // Altın
+  { value: 30000, label: '30.000 XP', color: '#22c55e' },   // Yeşil
+  { value: 40000, label: '40.000 XP', color: '#ec4899' },   // Pembe
+  { value: 50000, label: '50.000 XP', color: '#f97316' },   // Turuncu
 ];
+
 
 export default function WheelPage() {
     const { user, loading } = useAuth();
@@ -109,7 +113,7 @@ export default function WheelPage() {
                 <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 drop-shadow-2xl">
                     ŞANS ÇARKI
                 </h1>
-                <p className="text-slate-400 mt-2 text-sm font-medium">Büyük ödül 20.000 XP!</p>
+                <p className="text-slate-400 mt-2 text-sm font-medium">Büyük ödül 50.000 XP!</p>
             </div>
 
             {/* ÇARK ALANI */}
