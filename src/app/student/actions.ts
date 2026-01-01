@@ -55,13 +55,16 @@ export async function updateScore(userId: string, score: number, gameType: strin
 // 3. Seri Hesaplama Mantığı (GÜVENİLİR VE YENİDEN YAZILMIŞ)
 async function checkAndUpdateStreak(userId: string, userData: UserProfile): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     const todayStr = getTurkeyDateString();
+    const currentStreak = userData.currentStreak || 0;
     
     const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString((userData.lastWheelSpin as any).toDate()) : null;
-    let canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
+    
+    // YENİ MANTIK: Seri 7'nin katıysa VE o gün çark çevrilmemişse çark hakkı ver.
+    const canSpin = currentStreak > 0 && currentStreak % 7 === 0 && lastSpinStr !== todayStr;
 
     // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
     if (userData.lastStreakDate === todayStr) {
-         return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+         return { streakUpdated: false, newStreak: currentStreak, canSpinWheel: canSpin };
     }
 
     // Günlük Puan Kontrolü
@@ -87,11 +90,11 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     }, 0);
     
     if (totalDailyScore < 500) {
-        return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
+        return { streakUpdated: false, newStreak: currentStreak, canSpinWheel: canSpin };
     }
     
     // Hedef tamamlandı, seri mantığını çalıştır
-    let newStreak = userData.currentStreak || 0;
+    let newStreak = currentStreak;
     const lastStreakDateStr = userData.lastStreakDate;
     
     if (lastStreakDateStr) {
@@ -121,10 +124,10 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
         lastStreakDate: todayStr,
     });
 
-    // Çark hakkını yeniden hesapla
-    canSpin = newStreak >= 7 && lastSpinStr !== todayStr;
+    // Çark hakkını yeniden hesapla (YENİ MANTIK)
+    const newCanSpin = newStreak > 0 && newStreak % 7 === 0 && lastSpinStr !== todayStr;
 
-    return { streakUpdated: true, newStreak, canSpinWheel: canSpin };
+    return { streakUpdated: true, newStreak, canSpinWheel: newCanSpin };
 }
 
 // Geçici Test Fonksiyonu
