@@ -84,9 +84,9 @@ export function WheelOfFortune({
     <div className="relative flex items-center justify-center w-full h-full">
       
       {/* İBRE (OK) - SAĞ TARAFTA */}
-      <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-lg">
+      <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-lg transform rotate-180">
         <div 
-            className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[30px] border-r-white"
+            className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[30px] border-l-white"
         ></div>
       </div>
 
