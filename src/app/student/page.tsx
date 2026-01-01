@@ -184,9 +184,9 @@ export default function StudentDashboard() {
     const handleSetStreak = async () => {
         if (!user) return;
         setIsChecking(true);
-        const result = await setStreakForTesting(user.uid, 7);
+        const result = await setStreakForTesting(user.uid, 6);
         if (result.success) {
-            alert('Seri test için 7 güne ayarlandı! Sayfa yenileniyor...');
+            alert('Seri test için 6 güne ayarlandı! Sayfa yenileniyor...');
             window.location.reload();
         } else {
             alert('Seri ayarlanamadı.');
@@ -351,7 +351,7 @@ export default function StudentDashboard() {
                                 </div>
                             </div>
                             
-                            {!canSpinWheel && isGoalReached && (
+                            {isGoalReached && !canSpinWheel && (
                                 <div className="flex items-center justify-center md:justify-start gap-1.5 mt-2.5">
                                     <Gift className="w-3 h-3 text-pink-500" />
                                     <p className="text-[11px] font-medium text-slate-400">
@@ -410,6 +410,13 @@ export default function StudentDashboard() {
           </div>
           
           <HardestWorkersToday />
+          
+          {process.env.NODE_ENV === 'development' && (
+            <Button onClick={handleSetStreak} disabled={isChecking} className="mt-4 bg-gray-700 hover:bg-gray-600">
+                {isChecking ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null}
+                Seriyi 6 Yap (Test)
+            </Button>
+          )}
       </div>
       
       <style jsx global>{`
@@ -421,4 +428,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-

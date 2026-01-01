@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useRef, useMemo } from 'react';
@@ -86,7 +87,6 @@ export function WheelOfFortune({
       <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-lg">
         <div 
             className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-r-[30px] border-r-white"
-            style={{ transform: 'rotate(180deg)' }} 
         ></div>
       </div>
 
