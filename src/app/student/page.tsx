@@ -110,8 +110,9 @@ export default function StudentDashboard() {
             setIsChecking(false);
         }
     };
-    checkStreak();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (user) {
+        checkStreak();
+    }
   }, [user]); 
 
 

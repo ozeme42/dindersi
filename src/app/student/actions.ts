@@ -55,11 +55,12 @@ export async function updateScore(userId: string, score: number, gameType: strin
 // 3. Seri Hesaplama Mantığı (GÜVENİLİR VE YENİDEN YAZILMIŞ)
 async function checkAndUpdateStreak(userId: string, userData: UserProfile): Promise<{ streakUpdated: boolean, newStreak: number, canSpinWheel: boolean }> {
     const todayStr = getTurkeyDateString();
+    
+    const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString((userData.lastWheelSpin as any).toDate()) : null;
+    let canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
 
     // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
     if (userData.lastStreakDate === todayStr) {
-         const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
-         const canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
          return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
 
@@ -86,8 +87,6 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     }, 0);
     
     if (totalDailyScore < 500) {
-        const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
-        const canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
         return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
     
@@ -122,10 +121,10 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
         lastStreakDate: todayStr,
     });
 
-    const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
-    const canSpinWheel = newStreak >= 7 && lastSpinStr !== todayStr;
+    // Çark hakkını yeniden hesapla
+    canSpin = newStreak >= 7 && lastSpinStr !== todayStr;
 
-    return { streakUpdated: true, newStreak, canSpinWheel };
+    return { streakUpdated: true, newStreak, canSpinWheel: canSpin };
 }
 
 // Geçici Test Fonksiyonu
