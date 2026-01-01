@@ -58,7 +58,8 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
 
     // Bugünün hedefi zaten tamamlandıysa başka bir işlem yapma.
     if (userData.lastStreakDate === todayStr) {
-         const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
+         const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
+         const canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
          return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
 
@@ -85,7 +86,8 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     }, 0);
     
     if (totalDailyScore < 500) {
-        const canSpin = (userData.currentStreak || 0) >= 7 && (!userData.lastWheelSpin || getTurkeyDateString(new Date(userData.lastWheelSpin)) !== todayStr);
+        const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
+        const canSpin = (userData.currentStreak || 0) >= 7 && lastSpinStr !== todayStr;
         return { streakUpdated: false, newStreak: userData.currentStreak || 0, canSpinWheel: canSpin };
     }
     
@@ -120,7 +122,7 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
         lastStreakDate: todayStr,
     });
 
-    const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : "";
+    const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString(new Date(userData.lastWheelSpin)) : null;
     const canSpinWheel = newStreak >= 7 && lastSpinStr !== todayStr;
 
     return { streakUpdated: true, newStreak, canSpinWheel };
