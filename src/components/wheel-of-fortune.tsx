@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useRef, useMemo } from 'react';
@@ -22,20 +21,22 @@ export function WheelOfFortune({
   segments,
   onSpinStart,
   onSpinEnd,
-  spinDuration = 10,
+  spinDuration = 8,
 }: WheelOfFortuneProps) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
+  
+  // Önceki kazananı hatırlamak için (aynı sonucun tekrar gelmemesi için)
+  const lastWinnerIndex = useRef<number | null>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
 
   const numSegments = segments.length;
   const sliceAngle = 360 / numSegments;
 
-  // --- RENK GRADYANI (DÜZELTİLMİŞ) ---
+  // --- RENK GRADYANI ---
   const conicGradient = useMemo(() => {
-    // from -90deg: Gradyanı saat 12 yerine saat 3 yönünden (Sağdan) başlatır.
-    // Böylece CSS transform rotate(0deg) ile tam eşleşir.
-    let gradientString = 'conic-gradient(from -90deg, ';
+    // "from 0deg": Gradyanı tam tepe noktasından (Saat 12) başlatır.
+    let gradientString = 'conic-gradient(from 0deg, ';
     
     segments.forEach((segment, index) => {
         const startAngle = index * sliceAngle;
@@ -53,24 +54,42 @@ export function WheelOfFortune({
     setIsSpinning(true);
     if (onSpinStart) onSpinStart();
 
-    const newWinnerIndex = Math.floor(Math.random() * numSegments);
+    let newWinnerIndex;
     
-    // --- DÖNÜŞ HESAPLAMASI (ORTALAMA DÜZELTİLDİ) ---
-    const spinRounds = 5 + Math.floor(Math.random() * 3);
+    // --- GELİŞMİŞ RASTGELE SEÇİM ---
+    // Eğer dilim sayısı 1'den fazlaysa, bir öncekiyle aynı gelmemesini garanti et.
+    if (numSegments > 1) {
+        do {
+            newWinnerIndex = Math.floor(Math.random() * numSegments);
+        } while (newWinnerIndex === lastWinnerIndex.current);
+    } else {
+        newWinnerIndex = 0;
+    }
+
+    lastWinnerIndex.current = newWinnerIndex;
+
+    // --- DÖNÜŞ HESAPLAMASI ---
+    const spinRounds = 5 + Math.floor(Math.random() * 5); // 5 ila 10 tur
     const extraDegrees = 360 * spinRounds;
     
-    // Kazanan dilimin tam ORTA noktası
+    // Kazanan dilimin ortası
     const winnerCenterAngle = (newWinnerIndex * sliceAngle) + (sliceAngle / 2);
 
-    // İbre Sağda (0 derecede).
-    // Hedef: (360 - Kazananın Ortası). 
-    // Bu işlem kazanan dilimin ortasını tam 0 noktasına (sağa) getirir.
-    const targetRotation = extraDegrees + (360 - winnerCenterAngle);
+    // İBRE SAĞDA (90 derecede değil, CSS transform mantığında 0 derece sağdadır).
+    // Ancak Gradyan 0'ı TEPE (12) kabul ettiğimiz için bir dönüşüm yapmamız gerekir.
+    // İbremiz görsel olarak sağda (Saat 3). Gradyanımız tepeden (Saat 12) başlıyor.
+    // Bu yüzden ibre aslında gradyanın 90. derecesinde duruyor.
+    
+    const pointerOffset = 90; // İbre sağda olduğu için 90 derecelik ofset
+    const targetRotation = extraDegrees + (360 - winnerCenterAngle) + pointerOffset;
 
-    const currentRotation = rotation % 360;
-    const finalRotation = rotation + (targetRotation - currentRotation) + 360;
+    const currentRotation = rotation;
+    const finalRotation = currentRotation + (targetRotation - (currentRotation % 360));
+    
+    // Geri sarmaması için kontrol
+    const adjustedRotation = finalRotation < currentRotation ? finalRotation + 360 : finalRotation;
 
-    setRotation(finalRotation);
+    setRotation(adjustedRotation);
 
     setTimeout(() => {
       setIsSpinning(false);
@@ -81,45 +100,50 @@ export function WheelOfFortune({
   };
 
   return (
-    <div className="relative flex items-center justify-center w-full h-full">
+    <div className="relative flex items-center justify-center w-full h-full max-w-[500px] max-h-[500px] mx-auto aspect-square p-4">
       
       {/* İBRE (OK) - SAĞ TARAFTA */}
-      <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-lg transform rotate-180">
+      <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 z-30 flex items-center filter drop-shadow-xl transform rotate-180">
         <div 
-            className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[30px] border-l-white"
+            className="w-0 h-0 border-t-[20px] border-t-transparent border-b-[20px] border-b-transparent border-l-[35px] border-l-white"
         ></div>
       </div>
 
-      {/* DIŞ ÇEMBER GÖLGESİ */}
-      <div className="absolute inset-0 rounded-full shadow-2xl z-0"></div>
+      {/* GÖLGE */}
+      <div className="absolute inset-4 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.5)] z-0"></div>
 
-      {/* DÖNEN ÇARK KONTEYNERİ */}
+      {/* DÖNEN ÇARK */}
       <div
         ref={wheelRef}
-        className="w-full h-full rounded-full relative z-10 overflow-hidden border-8 border-slate-800/80"
+        className="w-full h-full rounded-full relative z-10 overflow-hidden border-[6px] border-slate-900"
         style={{
           transform: `rotate(${rotation}deg)`,
-          transition: `transform ${spinDuration}s cubic-bezier(0.2, 0, 0.1, 1)`, 
+          transition: `transform ${spinDuration}s cubic-bezier(0.15, 0, 0.10, 1)`,
           backgroundImage: conicGradient, 
         }}
       >
-        {/* METİNLER */}
         {segments.map((segment, index) => {
-          // DÜZELTME: Dilimin başlangıcına değil, ORTASINA hizala
-          const centerRotate = (index * sliceAngle) + (sliceAngle / 2);
+          // --- KRİTİK DÜZELTME ---
+          // Dilimin matematiksel orta noktası
+          const angleOffset = sliceAngle / 2;
           
+          // CSS 'justify-end' yazıyı SAĞA (Saat 3 yönüne / 90 dereceye) yaslar.
+          // Ancak bizim dilimlerimiz TEPEDEN (Saat 12 / 0 derece) başlar.
+          // Aradaki 90 derecelik farkı kapatmak için '-90' yapıyoruz.
+          const rotateValue = (index * sliceAngle) + angleOffset - 90;
+
           return (
             <div
               key={index}
-              className="absolute top-0 left-0 w-full h-full flex items-center justify-end pr-10"
+              className="absolute top-0 left-0 w-full h-full flex items-center justify-end pr-10" // pr-10: Yazıyı kenardan içeri iter
               style={{
-                  // Metni dilimin tam ortasına döndür
-                  transform: `rotate(${centerRotate}deg)`,
+                  transform: `rotate(${rotateValue}deg)`,
+                  transformOrigin: 'center', 
               }}
             >
-               <span className="text-white font-black text-lg sm:text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] select-none origin-center z-20">
+                <span className="text-white font-bold text-lg sm:text-xl md:text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] select-none">
                   {segment.label}
-               </span>
+                </span>
             </div>
           );
         })}
@@ -131,9 +155,9 @@ export function WheelOfFortune({
         disabled={isSpinning}
         className={cn(
           "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40",
-          "w-24 h-24 rounded-full bg-gradient-to-br from-white to-slate-200 border-4 border-slate-300 shadow-[0_0_30px_rgba(255,255,255,0.3)]",
-          "flex items-center justify-center font-black text-slate-900 tracking-wider text-xl",
-          "transition-all active:scale-95 hover:scale-105 hover:shadow-[0_0_50px_rgba(255,255,255,0.5)]",
+          "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-100 border-4 border-slate-300 shadow-[0_0_15px_rgba(0,0,0,0.3)]",
+          "flex items-center justify-center font-black text-slate-800 tracking-wider text-lg",
+          "transition-all active:scale-95 hover:scale-105 hover:bg-white",
           isSpinning && "opacity-90 cursor-not-allowed scale-100"
         )}
       >

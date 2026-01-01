@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from '@/lib/firebase';
@@ -57,7 +58,9 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     const todayStr = getTurkeyDateString();
     const currentStreak = userData.currentStreak || 0;
     
-    const lastSpinStr = userData.lastWheelSpin ? getTurkeyDateString((userData.lastWheelSpin as any).toDate()) : null;
+    // lastWheelSpin'in bir Timestamp nesnesi olduğunu varsayıyoruz
+    const lastSpinDate = userData.lastWheelSpin ? (userData.lastWheelSpin as Timestamp).toDate() : null;
+    const lastSpinStr = lastSpinDate ? getTurkeyDateString(lastSpinDate) : null;
     
     // YENİ MANTIK: Seri 7'nin katıysa VE o gün çark çevrilmemişse çark hakkı ver.
     const canSpin = currentStreak > 0 && currentStreak % 7 === 0 && lastSpinStr !== todayStr;
@@ -130,7 +133,8 @@ async function checkAndUpdateStreak(userId: string, userData: UserProfile): Prom
     return { streakUpdated: true, newStreak, canSpinWheel: newCanSpin };
 }
 
-// Geçici Test Fonksiyonu
+// Geçici Test Fonksiyonu - KALDIRILDI
+/*
 export async function setStreakForTesting(userId: string, streakValue: number): Promise<{ success: boolean }> {
     if (!userId) return { success: false };
     
@@ -151,3 +155,4 @@ export async function setStreakForTesting(userId: string, streakValue: number): 
         return { success: false };
     }
 }
+*/

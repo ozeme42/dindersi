@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
@@ -30,7 +30,7 @@ function HardestWorkersToday() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getLiveLeaderboard().then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
+        getLiveLeaderboard('daily').then(data => setDailyTop(data.slice(0, 3))).finally(() => setIsLoading(false));
     }, []);
     
     const rankIcons: { [key: number]: React.ReactNode } = {
@@ -98,22 +98,24 @@ export default function StudentDashboard() {
   const [isChecking, setIsChecking] = useState(false);
   const [canSpinWheel, setCanSpinWheel] = useState(false);
 
+  const checkStreak = useCallback(async () => {
+    if (!user || isChecking) return;
+    setIsChecking(true);
+    try {
+        const res = await forceStreakCheck(user.uid);
+        setCanSpinWheel(res.canSpinWheel);
+    } catch(e) {
+        console.error("Streak check failed", e);
+    } finally {
+        setIsChecking(false);
+    }
+  }, [user, isChecking]);
+
   useEffect(() => {
-    const checkStreak = async () => {
-        if (!user || isChecking) return;
-        setIsChecking(true);
-        try {
-            const res = await forceStreakCheck(user.uid);
-            setCanSpinWheel(res.canSpinWheel);
-        } catch(e) {
-            console.error("Streak check failed", e);
-        } finally {
-            setIsChecking(false);
-        }
-    };
     if (user) {
         checkStreak();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]); 
 
 
@@ -180,20 +182,6 @@ export default function StudentDashboard() {
     fetchData();
   }, [user]);
   
-    // TEST Butonu Fonksiyonu (Opsiyonel)
-    const handleSetStreak = async () => {
-        if (!user) return;
-        setIsChecking(true);
-        const result = await setStreakForTesting(user.uid, 6);
-        if (result.success) {
-            alert('Seri test için 6 güne ayarlandı! Sayfa yenileniyor...');
-            window.location.reload();
-        } else {
-            alert('Seri ayarlanamadı.');
-        }
-        setIsChecking(false);
-    };
-
   if (isLoading) return <div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-indigo-500" /></div>;
 
   // --- HESAPLAMALAR ---
@@ -410,13 +398,6 @@ export default function StudentDashboard() {
           </div>
           
           <HardestWorkersToday />
-          
-          {process.env.NODE_ENV === 'development' && (
-            <Button onClick={handleSetStreak} disabled={isChecking} className="mt-4 bg-gray-700 hover:bg-gray-600">
-                {isChecking ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null}
-                Seriyi 6 Yap (Test)
-            </Button>
-          )}
       </div>
       
       <style jsx global>{`
