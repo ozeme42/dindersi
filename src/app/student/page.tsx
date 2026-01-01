@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect } from "react";
@@ -203,6 +204,9 @@ export default function StudentDashboard() {
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
   
+  const currentStreak = user?.currentStreak || 0;
+  const daysToNextSpin = 7 - (currentStreak % 7);
+  
   return (
     <div className="min-h-full bg-[#2b1055] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900 via-[#2b1055] to-black p-4 sm:p-6 md:p-8 pb-32 md:pb-12 text-white font-sans selection:bg-indigo-500/30">
       
@@ -347,11 +351,11 @@ export default function StudentDashboard() {
                                 </div>
                             </div>
                             
-                            {!canSpinWheel && (user?.currentStreak || 0) < 7 && (
+                            {!canSpinWheel && isGoalReached && (
                                 <div className="flex items-center justify-center md:justify-start gap-1.5 mt-2.5">
-                                    <Flame className="w-3 h-3 text-orange-500" />
+                                    <Gift className="w-3 h-3 text-pink-500" />
                                     <p className="text-[11px] font-medium text-slate-400">
-                                        Çark için seri <span className="text-orange-400 font-bold">{user?.currentStreak || 0}/7</span> gün olmalı
+                                        Hediye çarkına son <span className="text-pink-400 font-bold">{daysToNextSpin}</span> gün!
                                     </p>
                                 </div>
                             )}
@@ -417,3 +421,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
