@@ -17,7 +17,6 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// ADDED Search ICON
 import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon, User } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
@@ -35,10 +34,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteUserFromFirestore, resetAllGeneralScores, getAllUsers } from '@/app/teacher/superadmin/actions';
 import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
+import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 
 
 // Types
@@ -87,7 +84,7 @@ function StudentTable({
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
-                            <TableCell>
+                             <TableCell>
                                 <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">
                                     {student.schoolName || '-'}
                                 </Badge>
@@ -97,7 +94,7 @@ function StudentTable({
                                     {student.class || 'Sınıfsız'}
                                 </Badge>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-lg text-amber-400 font-mono">
+                             <TableCell className="text-right font-bold text-lg text-amber-400 font-mono">
                                 {student.score || 0}
                             </TableCell>
                             <TableCell className="text-right">
@@ -174,7 +171,7 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
                                     <span className="font-bold text-white">{student.displayName}</span>
                                 </div>
                             </TableCell>
-                            <TableCell>
+                             <TableCell>
                                 <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">{student.schoolName || '-'}</Badge>
                             </TableCell>
                             <TableCell>
@@ -264,7 +261,6 @@ export default function StudentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   
@@ -422,7 +418,7 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-            if(list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+            if(list.length > 0 && list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
@@ -476,6 +472,9 @@ export default function StudentsPage() {
                 </div>
                 Öğrenci Yönetimi
             </h1>
+            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+            </Button>
         </div>
 
         <Tabs defaultValue="list" className="space-y-6">
@@ -503,7 +502,7 @@ export default function StudentsPage() {
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sisteme kayıtlı öğrencileri görüntüleyin ve yönetin.</CardDescription>
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                             <Select value={schoolFilter} onValueChange={setSchoolFilter}>
+                            <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     <SelectItem value="all">Tüm Okullar</SelectItem>

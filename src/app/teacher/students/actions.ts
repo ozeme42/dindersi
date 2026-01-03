@@ -23,19 +23,38 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
         return { 
             uid: doc.id, 
             ...data,
-            // Convert Timestamp to ISO string for client-side compatibility
             createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt,
         } as UserProfile
     });
 
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    const schoolsData = schoolsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
+    // Combine schools from the dedicated collection and from user profiles
+    const schoolSet = new Map<string, School>();
+
+    // 1. Add from 'schools' collection
+    schoolsSnap.docs.forEach(doc => {
+        const schoolData = doc.data() as { name: string };
+        if (schoolData.name && !schoolSet.has(schoolData.name.toLowerCase())) {
+            schoolSet.set(schoolData.name.toLowerCase(), { id: doc.id, name: schoolData.name });
+        }
+    });
+
+    // 2. Add from 'users' collection (if not already present)
+    students.forEach(student => {
+        if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
+            // For schools coming from users, the ID can be the slugified name as a stable key
+            const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
+            schoolSet.set(student.schoolName.toLowerCase(), { id: pseudoId, name: student.schoolName });
+        }
+    });
+
+    const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
         classes: JSON.parse(JSON.stringify(classes)),
-        schools: JSON.parse(JSON.stringify(schoolsData)),
+        schools: JSON.parse(JSON.stringify(combinedSchools)),
     };
   } catch (error) {
     console.error('Error fetching student data:', error);
@@ -62,6 +81,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
         const auth = getAdminAuth();
         const db = getAdminDb();
 
+        // Ensure the school exists, if provided
         if (schoolName) {
             const schoolsRef = db.collection('schools');
             const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
