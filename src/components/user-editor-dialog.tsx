@@ -70,29 +70,31 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
     const selectedClass = classes.find(c => c.id === classId);
 
     useEffect(() => {
-        if (user) {
-            const [className, branch] = user.class?.split(' - ') || ['', ''];
-            const userClass = classes.find(c => c.name === className);
-            const userSchool = schools.find(s => s.name === user.schoolName);
-            
-            reset({
-                uid: user.uid,
-                displayName: user.displayName || '',
-                email: user.email || '',
-                role: user.role || 'student',
-                classId: userClass?.id || null,
-                branch: branch || null,
-                schoolId: userSchool?.id || null,
-                score: user.score || 0,
-                password: '',
-                newSchoolName: '',
-            });
-        } else {
-            reset({
-                displayName: '', email: '', role: 'student', classId: null, branch: null, score: 0, password: '', schoolId: null, newSchoolName: '',
-            });
+        if (isOpen) {
+            if (user) {
+                const [className, branch] = user.class?.split(' - ') || ['', ''];
+                const userClass = classes.find(c => c.name === className);
+                const userSchool = schools.find(s => s.name === user.schoolName);
+                
+                reset({
+                    uid: user.uid,
+                    displayName: user.displayName || '',
+                    email: user.email || '',
+                    role: user.role || 'student',
+                    classId: userClass?.id || '',
+                    branch: branch || '',
+                    schoolId: userSchool?.id || '',
+                    score: user.score || 0,
+                    password: '',
+                    newSchoolName: '',
+                });
+            } else {
+                reset({
+                    displayName: '', email: '', role: 'student', classId: '', branch: '', score: 0, password: '', schoolId: '', newSchoolName: '',
+                });
+            }
         }
-    }, [user, reset, classes, schools]);
+    }, [user, isOpen, reset, classes, schools]);
 
 
     const onSubmit = (data: z.infer<typeof UserEditorSchema>) => {
@@ -101,8 +103,8 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <DialogContent>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{user?.uid ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı Oluştur"}</DialogTitle>
                     </DialogHeader>
