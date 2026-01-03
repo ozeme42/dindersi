@@ -17,6 +17,10 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Loader2, PlusCircle, Trash2, MoreHorizontal, User, GraduationCap, School as SchoolIcon } from "lucide-react";
 import { UserEditorDialog } from "@/components/user-editor-dialog";
 import { UserAvatar } from "@/components/user-avatar";
+import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import Link from 'next/link';
 
 export default function StudentsPage() {
     const { user: teacherUser } = useAuth();
@@ -104,7 +108,7 @@ export default function StudentsPage() {
 
     const filteredStudents = useMemo(() => {
         return students.filter(student => {
-            const matchesSearch = student.displayName.toLowerCase().includes(searchTerm.toLowerCase()) || student.email.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = student.displayName.toLowerCase().includes(searchTerm.toLowerCase()) || (student.email && student.email.toLowerCase().includes(searchTerm.toLowerCase()));
             const matchesClass = filter.class === 'all' || student.class === filter.class;
             const matchesSchool = filter.school === 'all' || student.schoolName === filter.school;
             return matchesSearch && matchesClass && matchesSchool;
@@ -166,11 +170,11 @@ export default function StudentsPage() {
                  </Select>
             </div>
 
-            <div className="rounded-lg border">
+            <Card>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-12"><Checkbox checked={selectedStudents.size > 0 && selectedStudents.size === filteredStudents.length} onCheckedChange={toggleSelectAll} /></TableHead>
+                            <TableHead className="w-12"><Checkbox checked={selectedStudents.size > 0 && selectedStudents.size === filteredStudents.length && filteredStudents.length > 0} onCheckedChange={toggleSelectAll} /></TableHead>
                             <TableHead>Ad Soyad</TableHead>
                             <TableHead>Okul</TableHead>
                             <TableHead>Sınıf</TableHead>
@@ -206,10 +210,9 @@ export default function StudentsPage() {
                         )) : <TableRow><TableCell colSpan={6} className="text-center h-24">Filtreye uygun öğrenci bulunamadı.</TableCell></TableRow>}
                     </TableBody>
                 </Table>
-            </div>
+            </Card>
 
             <UserEditorDialog isOpen={isEditorOpen} onOpenChange={setIsEditorOpen} user={editingUser} onSave={handleSaveUser} isSaving={isSaving} classes={classes} schools={schools} />
         </div>
     );
 }
-
