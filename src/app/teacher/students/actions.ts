@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -7,6 +6,22 @@ import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { collection, doc, getDocs, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, query, orderBy } from 'firebase/firestore';
+
+export async function getAllUsers(): Promise<UserProfile[]> {
+  noStore();
+  try {
+    const db = getAdminDb();
+    const usersSnapshot = await db.collection('users').get();
+    return usersSnapshot.docs.map(doc => {
+        const data = doc.data();
+        const serializedData = JSON.parse(JSON.stringify(data));
+        return { uid: doc.id, ...serializedData } as UserProfile;
+    });
+  } catch (error) {
+      console.error('Error fetching all users:', error);
+      return [];
+  }
+}
 
 export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();

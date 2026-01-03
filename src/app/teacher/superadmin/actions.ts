@@ -31,15 +31,6 @@ const serialize = (data: any): any => {
     return data;
 };
 
-export async function getAllUsers(): Promise<UserProfile[]> {
-    const db = getAdminDb();
-    const usersSnapshot = await db.collection('users').get();
-    return usersSnapshot.docs.map(doc => {
-        const data = doc.data();
-        return serialize({ uid: doc.id, ...data }) as UserProfile;
-    });
-}
-
 export async function deleteUserFromFirestore(userId: string): Promise<{ success: boolean; error?: string }> {
     if (!userId) {
         return { success: false, error: 'Kullanıcı ID\'si belirtilmedi.' };
@@ -99,40 +90,6 @@ export async function deleteBulkUsers(userIds: string[]): Promise<{ success: boo
     } catch (dbError: any) {
         console.error("Error committing Firestore deletions:", dbError);
         return { success: false, error: "Veritabanı silme işlemi sırasında bir hata oluştu.", deletedCount };
-    }
-}
-
-
-export async function updateUser(user: UserProfile): Promise<{ success: boolean; error?: string }> {
-    if (!user || !user.uid) {
-        return { success: false, error: "Geçersiz kullanıcı verisi." };
-    }
-
-    try {
-        const db = getAdminDb();
-        const auth = getAdminAuth();
-        const { uid, email, displayName, password } = user;
-        const firestoreData: any = {
-            displayName: user.displayName,
-            role: user.role,
-            class: user.class,
-            score: user.score,
-        };
-
-        const authUpdatePayload: any = { email, displayName };
-        if (password) {
-            authUpdatePayload.password = password;
-        }
-        await auth.updateUser(uid, authUpdatePayload);
-
-        const userRef = db.collection('users').doc(uid);
-        await userRef.update(firestoreData);
-        
-        return { success: true };
-
-    } catch (error: any) {
-        console.error("Error updating user:", error);
-        return { success: false, error: "Kullanıcı güncellenirken bir hata oluştu: " + error.message };
     }
 }
 
