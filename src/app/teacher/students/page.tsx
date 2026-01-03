@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -401,7 +402,7 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-             if(s.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+             if(list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
              list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
@@ -533,13 +534,13 @@ export default function StudentsPage() {
                          <CardFooter className="flex justify-between items-center bg-slate-900/50 border-t border-white/5 py-3">
                              <span className="text-sm text-slate-400">{filteredStudents.length} öğrenci bulundu.</span>
                              <div className="flex items-center gap-2">
-                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="bg-slate-800 border-white/10">
                                     <ArrowLeftIcon className="h-4 w-4 mr-2"/> Önceki
                                 </Button>
                                 <span className="font-bold text-sm bg-slate-800 border border-white/10 px-3 py-1 rounded-md">
                                     {currentPage} / {totalPages}
                                 </span>
-                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="bg-slate-800 border-white/10">
                                     Sonraki <ArrowRight className="h-4 w-4 ml-2"/>
                                 </Button>
                             </div>
