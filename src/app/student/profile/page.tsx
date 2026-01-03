@@ -1,11 +1,10 @@
 
-
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db, auth } from '@/lib/firebase';
-import { doc, updateDoc, collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { doc, updateDoc, collection, getDocs, query, orderBy, addDoc } from 'firebase/firestore';
 import type { UserProfile, SchoolClass, School } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
