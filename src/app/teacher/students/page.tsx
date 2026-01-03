@@ -82,7 +82,11 @@ function StudentTable({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {students.length > 0 ? students.map((student) => (
+                    {students.length > 0 ? students.map((student) => {
+                        const [currentClassName, currentBranch] = student.class?.split(' - ') || ['', ''];
+                        const studentClass = allClasses.find(c => c.name === currentClassName);
+
+                        return (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                              <TableCell>
                                 <div className="flex items-center gap-3">
@@ -124,7 +128,8 @@ function StudentTable({
                                  </DropdownMenu>
                             </TableCell>
                         </TableRow>
-                    )) : (
+                        )
+                    }) : (
                         <TableRow>
                             <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
@@ -138,7 +143,7 @@ function StudentTable({
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi."),
+  email: z.string().email("Geçersiz e-posta adresi.").optional(),
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -335,6 +340,9 @@ export default function StudentsPage() {
   const filteredGuestStudents = useMemo(() => {
     return allStudents.filter(s => s.role === 'guest');
   }, [allStudents]);
+
+  const validSchools = schools.filter(s => s.id && s.name);
+  const validClasses = classes.filter(c => c.id && c.name);
   
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -381,11 +389,14 @@ export default function StudentsPage() {
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                             <Select value={activeSchoolId} onValueChange={v => setActiveSchoolId(v)}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Okullar</SelectItem>{schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    <SelectItem value="all">Tüm Okullar</SelectItem>
+                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                </SelectContent>
                             </Select>
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                             </Select>
                             <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
@@ -524,12 +535,10 @@ export default function StudentsPage() {
              user={dialogState.user}
              onSave={handleSaveUser}
              isSaving={isSaving}
-             classes={classes}
-             schools={schools}
+             classes={validClasses}
+             schools={validSchools}
          />
       )}
     </div>
   );
 }
-
-    

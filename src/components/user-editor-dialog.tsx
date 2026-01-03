@@ -25,7 +25,7 @@ import { Loader2, PlusCircle } from "lucide-react";
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi."),
+  email: z.string().email("Geçersiz e-posta adresi.").optional(),
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -61,6 +61,17 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
 }) {
     const { register, handleSubmit, control, watch, formState: { errors }, reset, setValue } = useForm<z.infer<typeof UserEditorSchema>>({
         resolver: zodResolver(UserEditorSchema),
+        defaultValues: {
+            displayName: '',
+            email: '',
+            role: 'student',
+            classId: '',
+            branch: '',
+            schoolId: '',
+            score: 0,
+            password: '',
+            newSchoolName: '',
+        }
     });
 
     const role = watch("role");
