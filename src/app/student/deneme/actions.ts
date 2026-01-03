@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -94,7 +95,7 @@ export async function getDenemeQuestionsAction({ questionIds }: { questionIds: s
 
     try {
         const questionDocs = await Promise.all(
-            questionIds.map(id => getDoc(doc(db, 'examQuestions', id)))
+            questionIds.map(id => getDoc(doc(db, 'questions', id)))
         );
 
         const questions = questionDocs.map(docSnap => {

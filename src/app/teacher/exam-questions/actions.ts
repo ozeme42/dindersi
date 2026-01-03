@@ -14,13 +14,13 @@ export async function saveQuestion(questionToSave: Question): Promise<{ success:
     const { id, ...questionData } = questionToSave;
     try {
         if (id && id.startsWith('new-')) {
-            const newDocRef = await addDoc(collection(db, "examQuestions"), {
+            const newDocRef = await addDoc(collection(db, "questions"), {
                 ...questionData,
                 createdAt: serverTimestamp(),
             });
             return { success: true, question: { ...questionData, id: newDocRef.id } };
         } else if (id) {
-            await updateDoc(doc(db, "examQuestions", id), questionData);
+            await updateDoc(doc(db, "questions", id), questionData);
             return { success: true, question: questionToSave };
         } else {
             return { success: false, error: "Geçersiz Soru ID'si" };
@@ -37,7 +37,7 @@ export async function updateQuestionDifficulty(questionId: string, difficulty: Q
         return { success: false, error: "Geçersiz parametreler." };
     }
     try {
-        const questionRef = doc(db, "examQuestions", questionId);
+        const questionRef = doc(db, "questions", questionId);
         await updateDoc(questionRef, { difficulty });
         return { success: true };
     } catch (error) {
@@ -60,7 +60,7 @@ export async function deleteBulkQuestions(questionIds: string[]): Promise<{ succ
         for (const chunk of chunks) {
             const batch = writeBatch(db);
             chunk.forEach(id => {
-                const docRef = doc(db, "examQuestions", id);
+                const docRef = doc(db, "questions", id);
                 batch.delete(docRef);
             });
             await batch.commit();
@@ -95,7 +95,7 @@ export async function saveBulkQuestions(input: unknown, context: { classId?: str
     
     try {
         const batch = writeBatch(db);
-        const questionsCollection = collection(db, "examQuestions");
+        const questionsCollection = collection(db, "questions");
 
         validation.data.questions.forEach(question => {
             const docRef = doc(questionsCollection);
@@ -146,7 +146,7 @@ export async function saveGeneratedQuestions(input: unknown, context: { classId?
 
     try {
         const batch = writeBatch(db);
-        const questionsCollection = collection(db, "examQuestions");
+        const questionsCollection = collection(db, "questions");
 
         questions.forEach(question => {
             const docRef = doc(questionsCollection);
