@@ -14,8 +14,9 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle } from "lucide-react";
+import { 
+    FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle
+} from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -34,7 +35,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteStudents as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
+import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
 import { getAllUsers, saveUser, bulkAddStudents } from "./actions";
 
 
@@ -516,7 +517,7 @@ export default function StudentsPage() {
                       
                       <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
                           <TabsContent value="single" className="mt-0">
-                            <form onSubmit={e => handleOpenDialog(null)} className="flex gap-4 items-end">
+                            <form onSubmit={e => { e.preventDefault(); handleOpenDialog(null); }} className="flex gap-4 items-end">
                               <div className="flex-1 space-y-2">
                                   <Label className="text-slate-300">Yeni Öğrenci Bilgileri</Label>
                                   <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 w-full justify-start">
