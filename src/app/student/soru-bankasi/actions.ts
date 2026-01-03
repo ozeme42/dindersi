@@ -3,7 +3,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, writeBatch, serverTimestamp, increment, getCountFromServer } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, writeBatch, serverTimestamp, increment, getCountFromServer, setDoc } from "firebase/firestore";
 import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats } from "@/lib/types";
 
 
@@ -133,22 +133,13 @@ export async function updateTopicTestProgress(userId: string, courseId: string, 
         
         const fieldPath = `${topicId}.${difficultyKey}.${testIndex}`;
 
-        await updateDoc(progressRef, {
-            [fieldPath]: result
-        }).catch(async (error) => {
-            if (error.code === 'not-found' || error.code === 'INVALID_ARGUMENT') { // Firestore can throw invalid_argument if path doesn't exist for update
-                 // The document or nested object doesn't exist, so create it.
-                await setDoc(progressRef, {
-                    [topicId]: {
-                        [difficultyKey]: {
-                            [testIndex]: result
-                        }
-                    }
-                }, { merge: true });
-            } else {
-                throw error;
+        await setDoc(progressRef, {
+            [topicId]: {
+                [difficultyKey]: {
+                    [testIndex]: result
+                }
             }
-        })
+        }, { merge: true });
         
         return { success: true };
     } catch (e: any) {
