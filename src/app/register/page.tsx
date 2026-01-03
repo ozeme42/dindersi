@@ -31,7 +31,7 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 export default function RegisterPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   
@@ -49,25 +49,23 @@ export default function RegisterPage() {
             const [classesSnapshot, schoolsSnapshot, usersSnapshot] = await Promise.all([
                 getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
                 getDocs(query(collection(db, "schools"), orderBy("name", "asc"))),
-                getDocs(query(collection(db, "users"))) // Get all users to extract school names
+                getDocs(query(collection(db, "users")))
             ]);
 
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(classesData);
             
-            // Start with schools from the dedicated collection
             const schoolMap = new Map<string, School>();
             schoolsSnapshot.docs.forEach(doc => {
                 const schoolData = { id: doc.id, ...doc.data() } as School;
-                schoolMap.set(schoolData.name.toLowerCase(), schoolData);
+                schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
             });
 
-            // Add any school from student profiles that isn't already in the map
             usersSnapshot.docs.forEach(doc => {
                 const user = doc.data() as UserProfile;
-                if (user.schoolName && !schoolMap.has(user.schoolName.toLowerCase())) {
-                    schoolMap.set(user.schoolName.toLowerCase(), { id: user.schoolName, name: user.schoolName });
+                if (user.schoolName && !schoolMap.has(user.schoolName.trim().toLowerCase())) {
+                    schoolMap.set(user.schoolName.trim().toLowerCase(), { id: user.schoolName, name: user.schoolName.trim() });
                 }
             });
 
@@ -77,8 +75,9 @@ export default function RegisterPage() {
         } catch (error) {
             console.error("Error fetching data: ", error);
             toast({ title: "Hata", description: "Sınıf veya okul listesi alınamadı.", variant: "destructive" });
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }
     fetchData();
   }, [toast]);
@@ -108,20 +107,15 @@ export default function RegisterPage() {
 
     try {
         let finalSchoolName = '';
-        let shouldCreateNewSchool = false;
         if (selectedSchoolId === 'new') {
             finalSchoolName = newSchoolName.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
             if (!schools.some(s => s.name.toLowerCase() === finalSchoolName.toLowerCase())) {
-                 shouldCreateNewSchool = true;
+                 await addDoc(collection(db, "schools"), { name: finalSchoolName });
             }
         } else {
             finalSchoolName = schools.find(s => s.id === selectedSchoolId)?.name || '';
         }
         
-        if (shouldCreateNewSchool) {
-            await addDoc(collection(db, "schools"), { name: finalSchoolName });
-        }
-
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
@@ -221,8 +215,14 @@ export default function RegisterPage() {
                     <Select value={selectedSchoolId} onValueChange={setSelectedSchoolId}>
                         <SelectTrigger id="school" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Okulunuzu seçin..." /></SelectTrigger>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">
-                            {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                            <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                            {isLoading ? (
+                                <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
+                            ) : (
+                                <>
+                                    {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                                </>
+                            )}
                         </SelectContent>
                     </Select>
                 </div>
