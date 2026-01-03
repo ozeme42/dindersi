@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -87,7 +86,7 @@ function StudentTable({
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
-                             <TableCell>
+                            <TableCell>
                                 <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">
                                     {student.schoolName || '-'}
                                 </Badge>
@@ -422,9 +421,9 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-             if(s.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+            if(list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
-             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+            list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
     }
     
@@ -666,5 +665,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-```
