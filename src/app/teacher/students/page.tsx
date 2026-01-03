@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon, User } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -72,7 +72,7 @@ function StudentTable({
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
-                        <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sınıf-Şube</TableHead>
                         <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -104,7 +104,7 @@ function StudentTable({
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
                                          <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
                                          <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                            <User className="mr-2 h-4 w-4 text-cyan-400" /> Detayları Görüntüle
+                                             <User className="mr-2 h-4 w-4 text-cyan-400" /> Detayları Görüntüle
                                          </DropdownMenuItem>
                                          <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                              <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
@@ -507,7 +507,7 @@ export default function StudentsPage() {
                     <CardContent>
                         <StudentTable students={paginatedStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
                     </CardContent>
-                    {totalPages > 1 && (
+                     {totalPages > 1 && (
                          <CardFooter className="flex justify-between items-center bg-slate-900/50 border-t border-white/5 py-3">
                              <span className="text-sm text-slate-400">{filteredStudents.length} öğrenci bulundu.</span>
                              <div className="flex items-center gap-2">
@@ -562,7 +562,7 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                         <StudentTable students={filteredGuestStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={() => {}} allClasses={classes} />
+                         <StudentTable students={filteredGuestStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
                     </CardContent>
                  </Card>
             </TabsContent>
