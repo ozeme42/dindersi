@@ -31,7 +31,7 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 export default function RegisterPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true); // Başlangıçta true
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
@@ -44,6 +44,7 @@ export default function RegisterPage() {
   const selectedClass = classes.find(c => c.id === selectedClassId);
 
   const fetchData = useCallback(async () => {
+    setIsLoading(true);
     try {
       const [classesSnapshot, schoolsSnapshot] = await Promise.all([
         getDocs(query(collection(db, "classes"), orderBy("name", "asc"))),
@@ -55,7 +56,7 @@ export default function RegisterPage() {
 
       const schoolsData = schoolsSnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as School))
-        .filter(school => school.id && school.name && school.name.trim());
+        .filter(school => school && school.id && school.name && school.name.trim());
       setSchools(schoolsData);
 
     } catch (error) {
@@ -192,7 +193,7 @@ export default function RegisterPage() {
                         <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass || !selectedClass.branches || selectedClass.branches.length === 0}>
                             <SelectTrigger id="branch" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {selectedClass?.branches && selectedClass.branches.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>

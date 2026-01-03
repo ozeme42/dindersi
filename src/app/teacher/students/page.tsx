@@ -424,11 +424,8 @@ export default function StudentsPage() {
     if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'guest');
     if (activeClassId !== 'all' && selectedClass) {
-        if (activeBranch === 'all') {
-             list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
-        } else {
-             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
-        }
+        if (activeBranch === 'all') list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+        else list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
     }
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
@@ -595,7 +592,10 @@ export default function StudentsPage() {
                             <Label htmlFor="bulk-school">Okul</Label>
                             <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
                                 <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">{validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}<SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                                </SelectContent>
                             </Select>
                         </div>
                         {bulkSchoolId === 'new' && (
@@ -635,5 +635,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-    
