@@ -46,20 +46,33 @@ export default function RegisterPage() {
     async function fetchData() {
         setIsLoading(true);
         try {
-            const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
-            const schoolsQuery = query(collection(db, "schools"), orderBy("name", "asc"));
-            
-            const [classesSnapshot, schoolsSnapshot] = await Promise.all([
-                getDocs(classesQuery),
-                getDocs(schoolsQuery)
+            const [classesSnapshot, schoolsSnapshot, usersSnapshot] = await Promise.all([
+                getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+                getDocs(query(collection(db, "schools"), orderBy("name", "asc"))),
+                getDocs(query(collection(db, "users"))) // Get all users to extract school names
             ]);
 
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(classesData);
             
-            const schoolsData = schoolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
-            setSchools(schoolsData);
+            // Start with schools from the dedicated collection
+            const schoolMap = new Map<string, School>();
+            schoolsSnapshot.docs.forEach(doc => {
+                const schoolData = { id: doc.id, ...doc.data() } as School;
+                schoolMap.set(schoolData.name.toLowerCase(), schoolData);
+            });
+
+            // Add any school from student profiles that isn't already in the map
+            usersSnapshot.docs.forEach(doc => {
+                const user = doc.data() as UserProfile;
+                if (user.schoolName && !schoolMap.has(user.schoolName.toLowerCase())) {
+                    schoolMap.set(user.schoolName.toLowerCase(), { id: user.schoolName, name: user.schoolName });
+                }
+            });
+
+            const combinedSchools = Array.from(schoolMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+            setSchools(combinedSchools);
 
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -95,23 +108,27 @@ export default function RegisterPage() {
 
     try {
         let finalSchoolName = '';
+        let shouldCreateNewSchool = false;
         if (selectedSchoolId === 'new') {
-            // Capitalize each word for new school name
             finalSchoolName = newSchoolName.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
             if (!schools.some(s => s.name.toLowerCase() === finalSchoolName.toLowerCase())) {
-                 await addDoc(collection(db, "schools"), { name: finalSchoolName });
+                 shouldCreateNewSchool = true;
             }
         } else {
             finalSchoolName = schools.find(s => s.id === selectedSchoolId)?.name || '';
         }
         
+        if (shouldCreateNewSchool) {
+            await addDoc(collection(db, "schools"), { name: finalSchoolName });
+        }
+
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         const userProfile: Omit<UserProfile, 'uid'> = {
             displayName,
             email,
-            role: 'pending', // Set role to 'pending' for approval
+            role: 'pending',
             class: `${selectedClass?.name} - ${selectedBranch}`,
             schoolName: finalSchoolName,
             score: 0,
