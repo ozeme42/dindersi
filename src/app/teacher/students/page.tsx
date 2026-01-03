@@ -423,7 +423,6 @@ export default function StudentsPage() {
   }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
   
   const filteredGuestStudents = useMemo(() => {
-    if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'guest');
     
     if (activeClassId !== 'all' && selectedClass) {
@@ -450,8 +449,8 @@ export default function StudentsPage() {
       return allStudents.filter(s => s.role === 'pending').sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
   }, [allStudents]);
 
-  const validSchools = schools.filter(s => s && s.id);
-  const validClasses = classes.filter(c => c && c.id);
+  const validSchools = schools.filter(s => s && s.id && s.name);
+  const validClasses = classes.filter(c => c && c.id && c.name);
   
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -651,5 +650,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-```

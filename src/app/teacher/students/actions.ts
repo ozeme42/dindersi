@@ -39,7 +39,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     });
 
     const combinedSchools = Array.from(schoolMap.values())
-        .filter(s => s && s.id) // Ensure no schools with empty ID are included
+        .filter(s => s && s.id && s.name) // Ensure no invalid entries
         .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
@@ -219,4 +219,6 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: true };
     } catch (error: any) {
         console.error("Error approving student:", error);
-        return {
+        return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
+    }
+}
