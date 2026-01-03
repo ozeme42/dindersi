@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, writeBatch, serverTimestamp, setDoc, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, writeBatch, serverTimestamp, setDoc, orderBy, Timestamp } from "firebase/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
@@ -17,10 +17,18 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
       getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
     ]);
     
-    const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+    const students = studentsSnap.docs.map(doc => {
+        const data = doc.data();
+        return { 
+            uid: doc.id, 
+            ...data,
+            // Convert Timestamp to ISO string for client-side compatibility
+            createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt,
+        } as UserProfile
+    });
+
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    // Sadece 'schools' koleksiyonundan gelen veriyi kullan, böylece ID'si olmayan veri olmaz.
     const schoolsData = schoolsSnap.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as School))
         .filter(school => school && school.id && school.name && school.name.trim()); 
