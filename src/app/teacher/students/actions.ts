@@ -8,6 +8,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
+
 export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
@@ -218,3 +219,5 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
     }
 }
+
+    

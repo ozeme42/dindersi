@@ -108,8 +108,7 @@ export default function RegisterPage() {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        const userProfile: UserProfile = {
-            uid: user.uid,
+        const userProfile: Omit<UserProfile, 'uid'> = {
             displayName,
             email,
             role: 'pending', // Set role to 'pending' for approval
@@ -236,3 +235,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    
