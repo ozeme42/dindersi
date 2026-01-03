@@ -2,10 +2,10 @@
 
 'use server';
 
-import { getAdminAuth, getAdminDb } from '@/lib/firebase-admin';
-import type { UserProfile, SchoolClass, School } from '@/lib/types';
+import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
-import { normalizeNameToEmailLocalPart } from '@/lib/utils';
+import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { collection, doc, getDocs, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, query, orderBy } from 'firebase/firestore';
 
 export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
@@ -89,8 +89,8 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
             }
             await auth.updateUser(uid, updatePayload);
             
-            const userDocRef = doc(db, 'users', uid);
-            await updateDoc(userDocRef, {
+            const userDocRef = db.collection('users').doc(uid);
+            await userDocRef.update({
                 displayName,
                 role,
                 class: className || '',
@@ -116,7 +116,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
                 ownedItems: [],
             };
             
-            await setDoc(doc(db, 'users', newUserRecord.uid), userProfile);
+            await db.collection('users').doc(newUserRecord.uid).set(userProfile);
         }
         return { success: true };
     } catch (error: any) {
@@ -124,6 +124,98 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
         return { success: false, error: error.message };
     }
 }
+
+export async function bulkAddStudents(names: string[], className: string, schoolName: string): Promise<{ success: boolean; error?: string, successCount?: number }> {
+    if (!names || names.length === 0) {
+        return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
+    }
+    
+    const auth = getAdminAuth();
+    const db = getAdminDb();
+
+    // Check if school exists, if not, add it.
+    if (schoolName) {
+        const schoolsRef = db.collection('schools');
+        const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
+        if (schoolQuery.empty) {
+            await schoolsRef.add({ name: schoolName });
+        }
+    }
+
+    const successfulCreations: any[] = [];
+    const failedCreations: any[] = [];
+
+    for (const name of names) {
+        const finalDisplayName = name.trim();
+        if (!finalDisplayName) continue;
+
+        const email = `${normalizeNameToEmailLocalPart(finalDisplayName)}@degerleroyunu.com`;
+        // Generate a simple default password (e.g., '123456')
+        const password = 'password'; 
+
+        try {
+            const userRecord = await auth.createUser({
+                email,
+                password,
+                displayName: finalDisplayName,
+            });
+
+            const userProfile: Omit<UserProfile, 'uid'> = {
+                displayName: finalDisplayName,
+                email,
+                role: 'student',
+                class: className,
+                schoolName: schoolName,
+                score: 0,
+                createdAt: serverTimestamp(),
+                ownedItems: [],
+            };
+            
+            successfulCreations.push({ uid: userRecord.uid, profile: userProfile });
+        } catch (error: any) {
+             if (error.code === 'auth/email-already-exists') {
+                // Try to find the existing user to add to Firestore if they don't have a doc
+                try {
+                    const existingUser = await auth.getUserByEmail(email);
+                    const userDoc = await db.collection('users').doc(existingUser.uid).get();
+                    if (!userDoc.exists) {
+                         const userProfile: Omit<UserProfile, 'uid'> = {
+                            displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: serverTimestamp(), ownedItems: [],
+                        };
+                        successfulCreations.push({ uid: existingUser.uid, profile: userProfile });
+                    } else {
+                        // User already fully exists, skip
+                    }
+                } catch (e) {
+                     failedCreations.push({ name, reason: `Kullanıcı zaten var ama profili oluşturulamadı: ${e}` });
+                }
+            } else {
+                failedCreations.push({ name, reason: error.message });
+            }
+        }
+    }
+    
+    if (successfulCreations.length > 0) {
+        const batch = db.batch();
+        successfulCreations.forEach(({ uid, profile }) => {
+            const userRef = db.collection('users').doc(uid);
+            batch.set(userRef, profile);
+        });
+        await batch.commit();
+    }
+
+    if (failedCreations.length > 0) {
+        console.error("Bulk add failures:", failedCreations);
+        return { 
+            success: false, 
+            error: `${failedCreations.length} öğrenci oluşturulamadı. Lütfen isimleri kontrol edin (örn: daha önce eklenmiş olabilirler).`,
+            successCount: successfulCreations.length 
+        };
+    }
+
+    return { success: true, successCount: successfulCreations.length };
+}
+
 
 export async function deleteStudents(studentIds: string[]): Promise<{ success: boolean; error?: string }> {
     if (!studentIds || studentIds.length === 0) {
@@ -139,7 +231,7 @@ export async function deleteStudents(studentIds: string[]): Promise<{ success: b
         // Delete from Firestore
         const batch = db.batch();
         studentIds.forEach(id => {
-            const docRef = doc(db, 'users', id);
+            const docRef = db.collection('users').doc(id);
             batch.delete(docRef);
         });
         await batch.commit();
