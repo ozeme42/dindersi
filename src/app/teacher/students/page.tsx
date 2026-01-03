@@ -34,7 +34,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { getAllUsers, saveUser, deleteStudents as deleteUsersAction, bulkAddStudents } from './actions';
+import { updateUser, deleteStudents as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
+import { getAllUsers, saveUser, bulkAddStudents } from "./actions";
 
 
 // Types
@@ -198,6 +199,8 @@ export default function StudentsPage() {
   
   const [activeClassId, setActiveClassId] = useState<string>('all');
   const [activeBranch, setActiveBranch] = useState<string>('all');
+  const [activeSchoolId, setActiveSchoolId] = useState<string>('all');
+
   const [bulkClassId, setBulkClassId] = useState<string>('');
   const [bulkBranch, setBulkBranch] = useState<string>('');
   const [bulkSchoolId, setBulkSchoolId] = useState('');
@@ -284,33 +287,6 @@ export default function StudentsPage() {
     setIsSaving(false);
   };
 
-  const handleAddSingleStudent = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedClass || !activeBranch || activeBranch === 'all' || !newStudentName.trim()) {
-        toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
-        return;
-    }
-    setIsSaving(true);
-    const className = `${selectedClass.name} - ${activeBranch}`;
-    // `addGuestStudent` doesn't exist, should probably be `saveUser` with guest role
-    const result = await saveUser({
-        displayName: newStudentName,
-        email: `${newStudentName.toLowerCase().replace(/\s/g, '.')}@guest.com`,
-        role: 'guest',
-        class: className,
-        password: 'password' // Or generate one
-    });
-
-    if (result.success) {
-        toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
-        setNewStudentName("");
-        await fetchAllData();
-    } else {
-        toast({title: "Hata", description: result.error, variant: "destructive"});
-    }
-    setIsSaving(false);
-  }
-
   const handleBulkAdd = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !newBulkSchoolName)) {
@@ -332,7 +308,7 @@ export default function StudentsPage() {
     const result = await bulkAddStudents(names, className, finalSchoolName);
 
     if (result.success) {
-        toast({title: "Başarılı", description: `${result.successCount} sanal öğrenci eklendi.`});
+        toast({title: "Başarılı", description: `${result.successCount} öğrenci eklendi.`});
         setBulkStudentNames("");
         await fetchAllData();
     } else {
@@ -345,14 +321,12 @@ export default function StudentsPage() {
     const originalStudent = allStudents.find(s => s.uid === studentId);
     if (!originalStudent) return;
   
-    // Optimistic UI update
     setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
 
     const result = await saveUser({ ...originalStudent, class: newClassName } as UserProfile);
 
     if (!result.success) {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
-        // Revert UI on failure
         setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
     } else {
         toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
@@ -363,7 +337,14 @@ export default function StudentsPage() {
   const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
   const filteredStudents = useMemo(() => {
-    let list = allStudents.filter(s => s.role === 'student'); // Sadece 'student' rolündekiler
+    let list = allStudents.filter(s => s.role === 'student');
+    
+    if (activeSchoolId !== 'all') {
+        const school = schools.find(s => s.id === activeSchoolId);
+        if (school) {
+            list = list.filter(s => s.schoolName === school.name);
+        }
+    }
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
@@ -382,7 +363,7 @@ export default function StudentsPage() {
     
     list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
     return list;
-  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
+  }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
 
   const filteredGuestStudents = useMemo(() => {
     return allStudents.filter(s => s.role === 'guest');
@@ -391,7 +372,6 @@ export default function StudentsPage() {
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
-       {/* Arka Plan */}
        <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
@@ -428,7 +408,11 @@ export default function StudentsPage() {
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sisteme kayıtlı öğrencileri görüntüleyin ve yönetin.</CardDescription>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                            <Select value={activeSchoolId} onValueChange={v => setActiveSchoolId(v)}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Okullar</SelectItem>{schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent>
+                            </Select>
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
@@ -452,6 +436,7 @@ export default function StudentsPage() {
                                 <TableHeader className="bg-slate-900/80">
                                     <TableRow className="border-white/5 hover:bg-transparent">
                                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
+                                        <TableHead className="text-slate-300 font-bold">Okul</TableHead>
                                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                                         <TableHead className="text-slate-300 font-bold">Puan</TableHead>
                                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
@@ -465,6 +450,9 @@ export default function StudentsPage() {
                                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700 group-hover:border-purple-400 transition-colors"/>
                                                     <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
                                                 </div>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">{student.schoolName || '-'}</Badge>
                                             </TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
