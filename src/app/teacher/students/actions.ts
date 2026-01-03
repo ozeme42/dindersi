@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -29,9 +30,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
 
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    const schoolsData = schoolsSnap.docs
-        .map(doc => ({ id: doc.id, ...doc.data() } as School))
-        .filter(school => school && school.id && school.name && school.name.trim()); 
+    const schoolsData = schoolsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -208,8 +207,9 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: false, error: 'Kullanıcı ID\'si eksik.' };
     }
     try {
-        const userDocRef = doc(db, 'users', uid);
-        await updateDoc(userDocRef, { role: 'student' });
+        const db = getAdminDb();
+        const userDocRef = db.collection('users').doc(uid);
+        await userDocRef.update({ role: 'student' });
         return { success: true };
     } catch (error: any) {
         console.error("Error approving student:", error);
