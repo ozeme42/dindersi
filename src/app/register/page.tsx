@@ -42,35 +42,34 @@ export default function RegisterPage() {
 
   const selectedClass = classes.find(c => c.id === selectedClassId);
 
-  useEffect(() => {
-    async function fetchData() {
-        setIsLoading(true);
-        try {
-            const [classesSnapshot, schoolsSnapshot] = await Promise.all([
-                getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-                getDocs(query(collection(db, "schools"), orderBy("name", "asc"))),
-            ]);
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [classesSnapshot, schoolsSnapshot] = await Promise.all([
+        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+        getDocs(query(collection(db, "schools"), orderBy("name", "asc"))),
+      ]);
 
-            const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-            classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-            setClasses(classesData);
-            
-            // SIMPLIFIED AND SAFE SCHOOL FETCHING
-            const schoolsData = schoolsSnapshot.docs
-                .map(doc => ({ id: doc.id, ...doc.data() } as School))
-                .filter(school => school.id && school.name && school.name.trim()); // Ensure valid data
-                
-            setSchools(schoolsData);
+      const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+      classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+      setClasses(classesData);
 
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-            toast({ title: "Hata", description: "Sınıf veya okul listesi alınamadı.", variant: "destructive" });
-        } finally {
-            setIsLoading(false);
-        }
+      const schoolsData = schoolsSnapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as School))
+        .filter(school => school.id && school.name && school.name.trim());
+      setSchools(schoolsData);
+
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      toast({ title: "Hata", description: "Sınıf veya okul listesi alınamadı.", variant: "destructive" });
+    } finally {
+      setIsLoading(false);
     }
-    fetchData();
   }, [toast]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -185,13 +184,13 @@ export default function RegisterPage() {
                         <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); }}>
                             <SelectTrigger id="class" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                {classes && classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="branch">Şube</Label>
-                        <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass || selectedClass.branches?.length === 0}>
+                        <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass || !selectedClass.branches || selectedClass.branches.length === 0}>
                             <SelectTrigger id="branch" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
                                 {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
@@ -209,7 +208,7 @@ export default function RegisterPage() {
                                 <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
                             ) : (
                                 <>
-                                    {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    {schools && schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                     <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                 </>
                             )}

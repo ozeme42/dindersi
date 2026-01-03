@@ -20,10 +20,10 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    // SIMPLIFIED AND SAFE SCHOOL FETCHING
+    // Sadece 'schools' koleksiyonundan gelen veriyi kullan, böylece ID'si olmayan veri olmaz.
     const schoolsData = schoolsSnap.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as School))
-        .filter(school => school.id && school.name && school.name.trim()); // Ensure valid data
+        .filter(school => school.id && school.name && school.name.trim()); 
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
