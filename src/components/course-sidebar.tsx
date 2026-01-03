@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -18,7 +19,7 @@ interface CourseSidebarProps {
     isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
     topicProgress?: { [topicId: string]: any }; 
-    testCounts?: { [topicId: string]: { easy: number, medium: number, hard: number } };
+    testCounts?: { [topicId: string]: { easy: number, medium: number, hard: number } | null };
 }
 
 export function CourseSidebar({
@@ -130,7 +131,8 @@ export function CourseSidebar({
                                             
                                             // ** The Core Fix **
                                             const topicTestCounts = testCounts ? testCounts[topic.id] : null;
-                                            const hasTests = topicTestCounts ? (topicTestCounts.easy > 0 || topicTestCounts.medium > 0 || topicTestCounts.hard > 0) : false;
+                                            const hasTests = topicTestCounts ? (topicTestCounts.easy > 0 || topicTestCounts.medium > 0 || topicTestCounts.hard > 0) : true; // Assume tests exist if not loaded yet
+
 
                                             return (
                                                 <div 

@@ -96,23 +96,26 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        const questions = JSON.parse(fileContent) as Question[];
-
+        const q = query(
+            collection(db, 'questions'),
+            where('topicId', '==', topicId)
+        );
+        const snapshot = await getDocs(q);
+        if (snapshot.empty) {
+             return { easy: 0, medium: 0, hard: 0 };
+        }
+        
         const counts = { easy: 0, medium: 0, hard: 0 };
-        questions.forEach(q => {
-            if (q.difficulty === 'Kolay') counts.easy++;
-            else if (q.difficulty === 'Orta') counts.medium++;
-            else if (q.difficulty === 'Zor') counts.hard++;
+        snapshot.forEach(doc => {
+            const question = doc.data() as Question;
+            if (question.difficulty === 'Kolay') counts.easy++;
+            else if (question.difficulty === 'Orta') counts.medium++;
+            else if (question.difficulty === 'Zor') counts.hard++;
         });
 
         return counts;
     } catch (error: any) {
-        if (error.code === 'ENOENT') { // File not found
-            return { easy: 0, medium: 0, hard: 0 };
-        }
-        console.error(`Error reading question counts for topic ${topicId} from static file:`, error);
+        console.error(`Error fetching question counts for topic ${topicId} from DB:`, error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }
