@@ -103,11 +103,11 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{user?.uid ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı Oluştur"}</DialogTitle>
-                    </DialogHeader>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{user?.uid ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı Oluştur"}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid gap-4 py-4">
                         <div>
                             <Label htmlFor="displayName">Ad Soyad</Label>
