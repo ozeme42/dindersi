@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Allah'a Bağlılığı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #134e4a; /* Teal-900 */
+        }
+        .title-font {
+            font-family: 'Amiri', serif;
+        }
+        .pattern-bg {
+            background-color: #0d9488;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ccfbf1' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .concept-card {
+            transition: all 0.3s ease;
+        }
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(13, 148, 136, 0.2);
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #fff;
+            border: 2px solid #0d9488;
+        }
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="pattern-bg text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-teal-800 relative overflow-hidden">
+        <div class="absolute top-10 left-10 opacity-10 text-8xl"><i class="fas fa-praying-hands"></i></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-teal-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4 tracking-wide">ALLAH'A BAĞLILIK</h1>
+            <p class="text-xl text-teal-100 font-light max-w-2xl mx-auto italic">
+                "De ki: Benim namazım, ibadetim, hayatım ve ölümüm âlemlerin Rabbi olan Allah içindir." (Enam, 162)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: TEMEL KAVRAMLAR (Sözlük) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2 title-font">Kulluk Bilinci</h2>
+                <div class="h-1 w-20 bg-teal-500 mx-auto rounded"></div>
+                <p class="text-gray-600 mt-2">Bu kavramlar Allah ile bağımızı güçlendirir.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- İhlas -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-600 text-white">
+                            <i class="fas fa-heart text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold">İHLAS</h3>
+                            <p class="text-xs mt-2 bg-teal-700 px-2 py-1 rounded">Samimiyet</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-sm">Her işi, sözü ve ibadeti <strong>yalnızca Allah rızası için</strong> yapmaktır. Gösterişten uzak durmaktır.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İhsan -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-emerald-600 text-white">
+                            <i class="fas fa-eye text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold">İHSAN</h3>
+                            <p class="text-xs mt-2 bg-emerald-700 px-2 py-1 rounded">Gözetim</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-sm">Allah'ı görüyormuşçasına ibadet etmektir. Biz O'nu görmesek de <strong>O bizi her an görmektedir.</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Riya -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-red-500 text-white">
+                            <i class="fas fa-theater-masks text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold">RİYA</h3>
+                            <p class="text-xs mt-2 bg-red-600 px-2 py-1 rounded">Gösteriş</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-sm">İbadetleri Allah rızası için değil, <strong>insanlara gösteriş yapmak</strong> ve övülmek için yapmaktır. Kaçınılması gerekir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amel -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-500 text-white">
+                            <i class="fas fa-hands-helping text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold">AMEL</h3>
+                            <p class="text-xs mt-2 bg-amber-600 px-2 py-1 rounded">Eylem</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-sm">Dünya ve ahirette karşılığı olan her türlü iş ve davranıştır. <strong>Niyetlere göre</strong> değer kazanır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: ÜMMÜ MİHCEN (Örnek Olay) -->
+        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-teal-100 fade-in">
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/3 bg-teal-50 p-8 flex flex-col justify-center items-center text-center">
+                    <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md mb-4 text-teal-600 text-4xl">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-teal-900">Ümmü Mihcen (ra)</h3>
+                    <p class="text-sm text-teal-600 mt-2">Mescidin Hizmetkârı</p>
+                </div>
+                <div class="md:w-2/3 p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 title-font">Vefa ve Değer</h3>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        Ümmü Mihcen, kimsenin görmediği zamanlarda Mescid-i Nebevi'yi temizleyen, kendi halinde bir sahabiydi. Bir gün vefat etti ve sahabiler Peygamberimize haber vermeden onu defnetti.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        Peygamberimiz (sav) onu göremeyince sordu. Vefat ettiğini öğrenince çok üzüldü: <strong>"Bana haber vermeniz gerekmez miydi?"</strong> buyurdu. Hemen kabrine gitti ve ona özel olarak dua etti.
+                    </p>
+                    <div class="bg-teal-50 p-4 rounded-xl border-l-4 border-teal-500 text-sm italic text-teal-800">
+                        Mesaj: Allah katında değer, makamla değil; samimiyet (ihlas) ve hizmetle ölçülür. Peygamberimiz emeğe ve insana büyük vefa gösterirdi.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: DUA KÖŞESİ -->
+        <section class="max-w-3xl mx-auto text-center fade-in">
+            <h2 class="text-3xl font-bold text-teal-900 mb-6 title-font">Bir Dua</h2>
+            <div class="bg-[#134e4a] text-teal-50 p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10"><i class="fas fa-moon text-8xl"></i></div>
+                <div class="relative z-10">
+                    <p class="text-lg md:text-xl font-medium leading-relaxed italic mb-6">
+                        "Her şeyin Rabbi ve hükümdarı, tüm kâinatın İlahı olan Allah’ım! Cehennemden sana sığınırım."
+                    </p>
+                    <p class="text-sm text-teal-300 font-bold border-t border-teal-700 pt-4 inline-block px-4">
+                        Peygamberimizin Yatmadan Önceki Duasından
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: KONTROL NOKTASI (Quiz) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-3xl shadow-lg p-8 border border-teal-100 fade-in">
+            <h2 class="text-2xl font-bold text-center text-teal-900 mb-6 flex items-center justify-center gap-3">
+                <i class="fas fa-clipboard-check text-teal-500"></i> Bilgini Sına
+            </h2>
+
+            <div class="space-y-6">
+                <!-- Soru 1 -->
+                <div class="bg-teal-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">1. İbadetleri sadece Allah rızası için yapmaya ne denir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">Riya</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">İhlas</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-teal-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">2. "Allah'ı görüyormuş gibi ibadet etmek" hangi kavramdır?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">İhsan</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">İmsak</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-teal-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">3. Mescidi temizleyen ve Peygamberimizin değer verdiği sahabi kimdir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">Ümmü Mihcen</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-teal-200 p-3 rounded-lg text-sm hover:bg-teal-100 transition text-left">Hz. Hatice</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-teal-900 text-teal-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Allah'a Bağlılık</p>
+    </footer>
+
+    <script>
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.nextElementSibling;
+            const buttons = parent.querySelectorAll('button');
+
+            // Disable buttons
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.remove('bg-white', 'border-teal-200');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                feedback.innerText = "Doğru! Harikasın.";
+                feedback.classList.remove('hidden', 'text-red-600');
+                feedback.classList.add('text-green-600');
+            } else {
+                btn.classList.remove('bg-white', 'border-teal-200');
+                btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                feedback.innerText = "Yanlış Cevap.";
+                feedback.classList.remove('hidden', 'text-green-600');
+                feedback.classList.add('text-red-600');
+            }
+        }
+    </script>
+</body>
+</html>

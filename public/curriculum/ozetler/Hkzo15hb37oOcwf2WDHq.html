@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Ünite Özeti: Peygamberimizin Hayatı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdf8f6; /* Warm Sand */
+            color: #3e2723; /* Dark Brown */
+            scroll-behavior: smooth;
+        }
+        .title-font { font-family: 'Cinzel', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdf8f6; }
+        ::-webkit-scrollbar-thumb { background: #8d6e63; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5d4037; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(141, 110, 99, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .nav-item.active {
+            background-color: #4e342e;
+            color: #fff8e1;
+            border-left: 4px solid #d7ccc8;
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#fdf8f6]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-[#3e2723] text-[#d7ccc8] p-6 z-50 shadow-xl border-r border-[#5d4037]">
+        <div class="mb-10 flex items-center gap-3 text-orange-300">
+            <i class="fas fa-history text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide">4. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="nav-item block p-3 rounded-lg hover:bg-[#5d4037] transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#cevre" class="nav-item block p-3 rounded-lg hover:bg-[#5d4037] transition flex items-center gap-3">
+                <i class="fas fa-map-marked-alt w-5 text-center"></i> Doğduğu Çevre
+            </a>
+            <a href="#cocukluk" class="nav-item block p-3 rounded-lg hover:bg-[#5d4037] transition flex items-center gap-3">
+                <i class="fas fa-child w-5 text-center"></i> Çocukluk Yılları
+            </a>
+            <a href="#genclik" class="nav-item block p-3 rounded-lg hover:bg-[#5d4037] transition flex items-center gap-3">
+                <i class="fas fa-user-shield w-5 text-center"></i> Gençlik Yılları
+            </a>
+            <a href="#fil-suresi" class="nav-item block p-3 rounded-lg hover:bg-[#5d4037] transition flex items-center gap-3">
+                <i class="fas fa-book-open w-5 text-center"></i> Fil Suresi
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-[#8d6e63] text-white mt-6 font-bold text-center shadow-lg hover:bg-[#6d4c41] transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-[#a1887f] mt-auto pt-6 border-t border-[#5d4037]">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-[#3e2723] text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-history mr-2 text-orange-300"></i> Peygamberimizin Hayatı</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-[#8d6e63] px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#3e2723] mb-4 tracking-tight title-font">
+                KUTLU <span class="text-[#8d6e63]">BAŞLANGIÇ</span>
+            </h1>
+            <p class="text-lg text-[#5d4037] max-w-2xl mx-auto italic">
+                "Biz seni ancak âlemlere rahmet olarak gönderdik."
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto text-left">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-[#8d6e63] shadow-sm">
+                    <h3 class="font-bold text-lg text-[#3e2723] mb-2 flex items-center gap-2"><i class="fas fa-star"></i> Ümmülkura (Mekke)</h3>
+                    <p class="text-sm text-gray-600">Peygamberimizin doğduğu, Kâbe'nin bulunduğu kutsal şehir.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-[#5d4037] shadow-sm">
+                    <h3 class="font-bold text-lg text-[#3e2723] mb-2 flex items-center gap-2"><i class="fas fa-user-check"></i> El-Emin</h3>
+                    <p class="text-sm text-gray-600">Dürüstlüğü sebebiyle peygamberlikten önce aldığı "Güvenilir" lakabı.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: DOĞDUĞU ÇEVRE -->
+        <section id="cevre" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-[#d7ccc8] pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#3e2723] flex items-center justify-center text-white font-bold">1</div>
+                <h2 class="text-2xl font-bold text-[#3e2723]">Doğduğu Çevre (Cahiliye)</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Sosyal -->
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-center mb-4"><i class="fas fa-users text-3xl text-orange-600"></i></div>
+                    <h4 class="font-bold text-center text-[#3e2723] mb-2">Sosyal Yapı</h4>
+                    <ul class="text-sm text-gray-700 space-y-1 list-disc pl-4">
+                        <li>Kabilecilik hakimdi.</li>
+                        <li>Kölelik yaygındı.</li>
+                        <li><strong>Bedevi:</strong> Göçebe yaşayanlar.</li>
+                        <li><strong>Hadari:</strong> Şehirde yaşayanlar.</li>
+                    </ul>
+                </div>
+
+                <!-- Dini -->
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-center mb-4"><i class="fas fa-praying-hands text-3xl text-blue-600"></i></div>
+                    <h4 class="font-bold text-center text-[#3e2723] mb-2">Dini İnançlar</h4>
+                    <ul class="text-sm text-gray-700 space-y-1 list-disc pl-4">
+                        <li><strong>Putperestlik:</strong> En yaygın inanç (Şirk).</li>
+                        <li><strong>Haniflik:</strong> Hz. İbrahim'in tevhit inancını sürdürenler.</li>
+                        <li>Az sayıda Hristiyan ve Yahudi.</li>
+                    </ul>
+                </div>
+
+                <!-- Ekonomik -->
+                <div class="glass-card p-6 rounded-xl">
+                    <div class="text-center mb-4"><i class="fas fa-coins text-3xl text-yellow-600"></i></div>
+                    <h4 class="font-bold text-center text-[#3e2723] mb-2">Ekonomik Hayat</h4>
+                    <ul class="text-sm text-gray-700 space-y-1 list-disc pl-4">
+                        <li>Temel geçim kaynağı: <strong>Ticaret</strong>.</li>
+                        <li>Mekke tarıma elverişsizdi.</li>
+                        <li>Yılın belli zamanlarında <strong>Panayırlar</strong> kurulurdu.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. KONU: ÇOCUKLUK YILLARI -->
+        <section id="cocukluk" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-[#d7ccc8] pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#3e2723] flex items-center justify-center text-white font-bold">2</div>
+                <h2 class="text-2xl font-bold text-[#3e2723]">Çocukluk Yılları</h2>
+            </div>
+
+            <div class="relative pl-8 border-l-4 border-[#8d6e63] space-y-8">
+                <!-- Doğum -->
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-8 h-8 bg-green-500 rounded-full border-4 border-white"></div>
+                    <h3 class="font-bold text-lg text-green-700">20 Nisan 571 (Mekke)</h3>
+                    <p class="text-sm text-gray-600">Hz. Muhammed (sav) dünyaya geldi. Babası Abdullah vefat etmişti. Dedesi Abdülmuttalib ona "Muhammed" ismini verdi.</p>
+                </div>
+                <!-- Sütanne -->
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-8 h-8 bg-blue-500 rounded-full border-4 border-white"></div>
+                    <h3 class="font-bold text-lg text-blue-700">0-4 Yaş: Sütanne Halime</h3>
+                    <p class="text-sm text-gray-600">Sadoğulları yurdunda, sütannesi Halime'nin yanında kaldı. Temiz hava aldı, güzel Arapça öğrendi.</p>
+                </div>
+                <!-- Anne Vefat -->
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-8 h-8 bg-red-500 rounded-full border-4 border-white"></div>
+                    <h3 class="font-bold text-lg text-red-700">6 Yaş: Ebva (Hüzün)</h3>
+                    <p class="text-sm text-gray-600">Annesi Amine ile Medine ziyaretinden dönerken, Ebva köyünde annesi vefat etti.</p>
+                </div>
+                <!-- Dede ve Amca -->
+                <div class="relative">
+                    <div class="absolute -left-[42px] top-0 w-8 h-8 bg-orange-500 rounded-full border-4 border-white"></div>
+                    <h3 class="font-bold text-lg text-orange-700">8 Yaş: Dede ve Amca</h3>
+                    <p class="text-sm text-gray-600">Dedesi vefat edince amcası <strong>Ebu Talib</strong>'in himayesine girdi. Yengesi Fatıma ona annelik yaptı.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: GENÇLİK YILLARI -->
+        <section id="genclik" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-[#d7ccc8] pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#3e2723] flex items-center justify-center text-white font-bold">3</div>
+                <h2 class="text-2xl font-bold text-[#3e2723]">Gençlik Yılları ve Evlilik</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex gap-4 items-start bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-blue-100 p-3 rounded-lg text-blue-600"><i class="fas fa-handshake"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Hilfülfudul (Erdemliler Birliği)</h4>
+                        <p class="text-sm text-gray-600">Haksızlığa uğrayanları korumak için kurulan topluluğa 20 yaşlarında katıldı. Adalet anlayışını gösterir.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-green-100 p-3 rounded-lg text-green-600"><i class="fas fa-cube"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Kâbe Hakemliği (35 Yaş)</h4>
+                        <p class="text-sm text-gray-600">Hacerülesved taşını yerine koyma kavgasını, taşı hırkasıyla taşıtarak barışçıl bir şekilde çözdü.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 items-start bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="bg-pink-100 p-3 rounded-lg text-pink-600"><i class="fas fa-ring"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Hz. Hatice ile Evlilik (25 Yaş)</h4>
+                        <p class="text-sm text-gray-600">Güvenilirliği ve dürüstlüğü sayesinde Hz. Hatice ile evlendi. 6 çocukları oldu (Kasım, Zeyneb, Rukıyye, Ümmü Gülsüm, Fatıma, Abdullah).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. KONU: FİL SURESİ -->
+        <section id="fil-suresi" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-[#d7ccc8] pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#3e2723] flex items-center justify-center text-white font-bold">4</div>
+                <h2 class="text-2xl font-bold text-[#3e2723]">Fil Suresi</h2>
+            </div>
+
+            <div class="bg-[#efebe9] p-8 rounded-2xl border border-[#d7ccc8] relative overflow-hidden">
+                <i class="fas fa-elephant absolute top-4 right-4 text-6xl text-[#3e2723] opacity-10"></i>
+                
+                <h3 class="text-xl font-bold text-[#3e2723] mb-4">Fil Vakası</h3>
+                <p class="text-gray-700 text-sm mb-4">
+                    Yemen Valisi Ebrehe, Kâbe'yi yıkmak için fil ordusuyla geldi. Ancak Allah (cc), Ebabil kuşlarını göndererek orduyu helak etti. Bu olay Peygamberimizin doğumundan kısa süre önce gerçekleşti.
+                </p>
+                <div class="bg-white p-4 rounded-xl text-center shadow-sm">
+                    <p class="font-bold text-[#3e2723] mb-1">Anlamı:</p>
+                    <p class="text-sm italic text-gray-600">"Rabbinin, fil sahiplerine ne yaptığını görmedin mi? ... Onları yenilmiş ekin gibi yaptı."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-[#3e2723] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#8d6e63] rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-[#a1887f] text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-[#d7ccc8] mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-[#3e2723] rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-[#5d4037] text-white px-6 py-2 rounded-lg hover:bg-[#3e2723] transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. 'Şehirlerin Anası' (Ümmülkura) hangi şehirdir?",
+                options: ["Medine", "Mekke", "Taif", "Kudüs"],
+                correct: 1
+            },
+            {
+                q: "2. İslamiyet öncesi Arap Yarımadası'ndaki döneme ne ad verilir?",
+                options: ["Asrısaadet", "Altın Çağ", "Cahiliye Dönemi", "Fetret Devri"],
+                correct: 2
+            },
+            {
+                q: "3. Hz. Muhammed'in (sav) doğduğu yıl hangisidir?",
+                options: ["571", "610", "622", "632"],
+                correct: 0
+            },
+            {
+                q: "4. Peygamberimizin sütannesi kimdir?",
+                options: ["Amine", "Halime", "Süveybe", "Fatıma"],
+                correct: 1
+            },
+            {
+                q: "5. Annesinin vefatından sonra bakımını kim üstlenmiştir?",
+                options: ["Amcası Ebu Talib", "Dedesi Abdülmuttalib", "Sütannesi", "Hz. Ali"],
+                correct: 1
+            },
+            {
+                q: "6. 'El-Emin' lakabı ne anlama gelir?",
+                options: ["Güvenilir", "Zengin", "Cömert", "Cesur"],
+                correct: 0
+            },
+            {
+                q: "7. Haksızlığa uğrayanları korumak için kurulan topluluk hangisidir?",
+                options: ["Kureyş", "Darünnedve", "Hilfülfudul", "Suffe"],
+                correct: 2
+            },
+            {
+                q: "8. Peygamberimizin ilk eşi kimdir?",
+                options: ["Hz. Aişe", "Hz. Hafsa", "Hz. Hatice", "Hz. Zeyneb"],
+                correct: 2
+            },
+            {
+                q: "9. Kâbe hakemliği olayında krize neden olan taş hangisidir?",
+                options: ["Hacerülesved", "Makam-ı İbrahim", "Safa Taşı", "Akabe Taşı"],
+                correct: 0
+            },
+            {
+                q: "10. Fil Suresi'nde anlatılan ve Kâbe'yi yıkmaya gelen kişi kimdir?",
+                options: ["Ebu Cehil", "Ebrehe", "Nemrut", "Firavun"],
+                correct: 1
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-[#4e342e] p-6 rounded-xl border border-[#6d4c41]";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-[#3e2723] hover:bg-[#5d4037] border border-[#6d4c41] mb-2 transition flex items-center justify-between group text-[#d7ccc8]">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-white text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-orange-300 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-[#3e2723]');
+                btn.classList.add('bg-green-600', 'border-green-500', 'text-white');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-[#3e2723]');
+                btn.classList.add('bg-red-500', 'border-red-500', 'text-white');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-[#3e2723]');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allah'ın Elçileri: Peygamberler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4; /* Green-50 */
+            color: #14532d; /* Green-900 */
+        }
+        .title-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .flow-line {
+            position: relative;
+        }
+        .flow-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 50px;
+            height: 4px;
+            background: #cbd5e1;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .flow-line::after {
+                width: 4px;
+                height: 30px;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        .game-input {
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .game-input:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-green-600 to-emerald-700 text-white py-10 px-4 text-center rounded-b-[40px] shadow-lg mb-12">
+        <div class="max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/30 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font mb-4">ALLAH'IN ELÇİLERİ</h1>
+            <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">
+                "Bizim için seçilmiş en güzel öğretmenler: Peygamberler"
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: İLETİŞİM ZİNCİRİ (Görsel Anlatım) -->
+        <section class="text-center">
+            <h2 class="text-3xl font-bold text-green-800 mb-8 title-font">Vahyin Yolculuğu</h2>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-0">
+                
+                <!-- Allah -->
+                <div class="flow-line relative z-10">
+                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-amber-400">
+                        <span class="arabic text-3xl font-bold text-amber-500 mb-1">الله</span>
+                        <span class="font-bold text-gray-700">ALLAH (c.c)</span>
+                    </div>
+                </div>
+
+                <!-- Ok (Mobil için dikey, masaüstü için yatay boşluk) -->
+                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
+                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
+                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
+                </div>
+
+                <!-- Mesaj (Vahiy) -->
+                <div class="flow-line relative z-10">
+                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-blue-400">
+                        <i class="fas fa-envelope-open-text text-3xl text-blue-500 mb-2"></i>
+                        <span class="font-bold text-gray-700">VAHİY</span>
+                        <span class="text-xs text-gray-500">(Mesaj)</span>
+                    </div>
+                </div>
+
+                <!-- Ok -->
+                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
+                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
+                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
+                </div>
+
+                <!-- Peygamber -->
+                <div class="flow-line relative z-10">
+                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-green-500">
+                        <i class="fas fa-user-tie text-3xl text-green-600 mb-2"></i>
+                        <span class="font-bold text-gray-700">PEYGAMBER</span>
+                        <span class="text-xs text-gray-500">(Elçi / Öğretmen)</span>
+                    </div>
+                </div>
+
+                <!-- Ok -->
+                <div class="w-12 h-12 flex items-center justify-center text-gray-400 md:mx-4">
+                    <i class="fas fa-chevron-right hidden md:block text-2xl"></i>
+                    <i class="fas fa-chevron-down md:hidden text-2xl"></i>
+                </div>
+
+                <!-- İnsanlar -->
+                <div class="relative z-10">
+                    <div class="w-32 h-32 bg-white rounded-full flex flex-col items-center justify-center shadow-xl border-4 border-purple-400">
+                        <i class="fas fa-users text-3xl text-purple-500 mb-2"></i>
+                        <span class="font-bold text-gray-700">İNSANLAR</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-8 bg-green-50 border border-green-200 p-4 rounded-xl max-w-2xl mx-auto text-green-800">
+                <p><strong>Biliyor musun?</strong> Peygamberlik, çalışarak kazanılan bir makam değildir. Allah (c.c) dilediği kulunu peygamber olarak seçer.</p>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: GÖREVLER VE ÖZELLİKLER -->
+        <section>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-px bg-green-200 flex-1"></div>
+                <h2 class="text-3xl font-bold text-green-800 title-font">Peygamberlerin Görevleri</h2>
+                <div class="h-px bg-green-200 flex-1"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Kart 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-blue-500 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl mb-4">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Bildirmek (Tebliğ)</h3>
+                    <p class="text-sm text-gray-600">Allah'tan aldıkları emir ve yasakları hiçbir şeyi değiştirmeden insanlara ulaştırırlar.</p>
+                </div>
+
+                <!-- Kart 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-amber-500 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 text-xl mb-4">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Açıklamak</h3>
+                    <p class="text-sm text-gray-600">Anlaşılması zor olan konuları açıklar, ibadetlerin nasıl yapılacağını öğretirler.</p>
+                </div>
+
+                <!-- Kart 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-emerald-500 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-xl mb-4">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">Örnek Olmak</h3>
+                    <p class="text-sm text-gray-600">Sözleriyle değil, davranışlarıyla da en güzel örnektirler. Dürüst, güvenilir ve merhametlidirler.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: KELİME AVI OYUNU -->
+        <section class="max-w-3xl mx-auto bg-white p-8 rounded-3xl shadow-xl border border-green-100">
+            <div class="text-center mb-6">
+                <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
+                <h2 class="text-2xl font-bold text-gray-800 mt-2">Şifreli Kelimeleri Bul</h2>
+                <p class="text-gray-500">Boşlukları doldurarak anahtar kelimeleri tamamla.</p>
+            </div>
+
+            <div class="space-y-4">
+                
+                <!-- Soru 1 -->
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                    <span class="text-sm font-bold text-gray-500 w-8">1.</span>
+                    <div class="flex gap-2">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">M</div>
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">E</div>
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="S">
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="A">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">J</div>
+                    </div>
+                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                    <span class="text-sm font-bold text-gray-500 w-8">2.</span>
+                    <div class="flex gap-2">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Ö</div>
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Ğ</div>
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="Ü">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">T</div>
+                    </div>
+                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                    <span class="text-sm font-bold text-gray-500 w-8">3.</span>
+                    <div class="flex gap-2">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">İ</div>
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">Y</div>
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="İ">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">L</div>
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="İ">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">K</div>
+                    </div>
+                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
+                </div>
+
+                <!-- Soru 4 -->
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                    <span class="text-sm font-bold text-gray-500 w-8">4.</span>
+                    <div class="flex gap-2">
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="Ö">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">R</div>
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">N</div>
+                        <input type="text" maxlength="1" class="game-input w-8 h-10 bg-white border-2 border-gray-300 rounded" data-answer="E">
+                        <div class="w-8 h-10 bg-gray-200 rounded flex items-center justify-center font-bold text-gray-700">K</div>
+                    </div>
+                    <button onclick="checkWord(this)" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">Kontrol</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: DOĞRU ÇIKIŞI BUL (Tanılayıcı Ağaç Oyunu) -->
+        <section class="text-center">
+            <h2 class="text-3xl font-bold text-green-800 mb-8 title-font">Doğru Çıkışı Bul</h2>
+            
+            <div class="bg-indigo-900 rounded-3xl p-8 max-w-3xl mx-auto shadow-2xl relative overflow-hidden text-white">
+                <div class="absolute top-0 right-0 p-10 opacity-10">
+                    <i class="fas fa-project-diagram text-9xl"></i>
+                </div>
+
+                <div id="tree-game-container" class="relative z-10 min-h-[250px] flex flex-col justify-center items-center">
+                    
+                    <!-- Soru Alanı -->
+                    <div id="tree-question" class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 mb-8 w-full">
+                        <h3 class="text-xl md:text-2xl font-bold mb-4" id="q-text">Yükleniyor...</h3>
+                        
+                        <div class="flex justify-center gap-6">
+                            <button onclick="nextStep('D')" class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-bold transition transform hover:scale-105 shadow-lg border-b-4 border-green-700 active:border-b-0 active:translate-y-1">
+                                <i class="fas fa-check mr-2"></i> DOĞRU
+                            </button>
+                            <button onclick="nextStep('Y')" class="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg font-bold transition transform hover:scale-105 shadow-lg border-b-4 border-red-700 active:border-b-0 active:translate-y-1">
+                                <i class="fas fa-times mr-2"></i> YANLIŞ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sonuç Alanı (Başlangıçta Gizli) -->
+                    <div id="tree-result" class="hidden text-center">
+                        <div class="text-6xl mb-4" id="result-icon"></div>
+                        <h3 class="text-3xl font-bold mb-2 text-yellow-300" id="result-title"></h3>
+                        <p class="text-indigo-200 mb-6" id="result-desc"></p>
+                        <button onclick="resetTree()" class="text-white underline hover:text-yellow-300">Başa Dön</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-green-900 text-green-300 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamberler Ünitesi</p>
+    </footer>
+
+    <script>
+        // --- WORD GAME LOGIC ---
+        function checkWord(btn) {
+            const container = btn.parentElement;
+            const inputs = container.querySelectorAll('.game-input');
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                const answer = input.getAttribute('data-answer');
+                // Türkçe karakter uyumluluğu için
+                const userVal = input.value.trim().toUpperCase().replace('ı', 'I').replace('i', 'İ');
+                
+                if (userVal === answer) {
+                    input.classList.remove('border-gray-300', 'border-red-500', 'bg-white');
+                    input.classList.add('border-green-500', 'bg-green-100', 'text-green-700');
+                } else {
+                    input.classList.remove('border-gray-300', 'bg-white');
+                    input.classList.add('border-red-500', 'bg-red-50');
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Harika!';
+                btn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                btn.classList.add('bg-green-700', 'cursor-default');
+                btn.disabled = true;
+            } else {
+                btn.innerText = 'Tekrar Dene';
+                btn.classList.remove('bg-green-500');
+                btn.classList.add('bg-red-500', 'hover:bg-red-600');
+                setTimeout(() => {
+                    btn.innerText = 'Kontrol';
+                    btn.classList.add('bg-green-500');
+                    btn.classList.remove('bg-red-500', 'hover:bg-red-600');
+                }, 1000);
+            }
+        }
+
+        // --- DECISION TREE LOGIC ---
+        // Metindeki ağaç yapısının simülasyonu
+        const treeData = {
+            'start': {
+                text: "1. Peygamberler Allah'ın emirlerini insanlara ulaştıran elçilerdir.",
+                D: 'q2', // Sol kol (Doğru)
+                Y: 'q3'  // Sağ kol (Yanlış)
+            },
+            'q2': {
+                text: "2. Peygamberler insanlara güzel ahlak konusunda örnek olur.",
+                D: 'q4',
+                Y: 'exit_4' // 4. Çıkış (Hatalı yol)
+            },
+            'q3': {
+                text: "3. Peygamberlerin tek görevi mesajı iletmektir (açıklama yapmazlar).", // Yanlış ifade
+                D: 'exit_6', 
+                Y: 'exit_5' // Burası metinde biraz karışık olabilir, mantıken Yanlış'a gitmeli ama metindeki akışı simüle edelim. 
+                // Metindeki: Sağ kol -> "Peygamberlerin tek görevi... bildirmektir" -> Doğru dersen 5. çıkış (Hata), Yanlış dersen -> "Peygamberler adil... kimselerdir"
+            },
+            // Sol kolun devamı
+            'q4': {
+                text: "3. Peygamberler adil, merhametli ve yardımsever kimselerdir.",
+                D: 'exit_1', // 1. Çıkış (TEBRİKLER)
+                Y: 'exit_2'
+            },
+            // Sağ kolun devamı (q3 -> Yanlış dediğinde)
+            'exit_5': { // q3'e Doğru dersen
+                 isExit: true,
+                 id: 5,
+                 correct: false
+            },
+            'exit_6': { // q3'e Yanlış dersen -> Yeni soruya geçmesi gerekirdi ama metindeki yapıya sadık kalalım veya basitleştirelim.
+                // Metinde: Sağ koldan (Y) -> Soru 2: Tek görevi bildirmektir. (D->5, Y->Soru 3)
+                // Biz burada basitleştirilmiş bir akış sunuyoruz.
+                isExit: true,
+                id: 6,
+                correct: false
+            },
+            // Çıkışlar
+            'exit_1': { isExit: true, id: 1, correct: true },
+            'exit_2': { isExit: true, id: 2, correct: false },
+            'exit_4': { isExit: true, id: 4, correct: false }
+        };
+
+        // Metindeki tam akışı koda dökmek için özelleştirilmiş veri:
+        // Soru 1: Elçidir? (D -> Soru 2A, Y -> Soru 2B)
+        // Soru 2A: Örnek olur? (D -> Soru 3A, Y -> Çıkış 2) -> (Metinde D->3.Soru, Y->4.Çıkış demiş, biz mantığı kuruyoruz)
+        // Soru 3A: Adil merhametlidir? (D -> Çıkış 1, Y -> Çıkış 2)
+        
+        // Basitleştirilmiş, Eğitici Akış:
+        const simpleTree = {
+            'start': {
+                text: "Peygamberler, Allah'ın mesajını ileten elçilerdir.",
+                D: 'step2_left',
+                Y: 'step2_right'
+            },
+            'step2_left': {
+                text: "Peygamberler sadece mesajı iletir, başka bir şey yapmazlar.",
+                D: 'fail_msg_only',
+                Y: 'step3_correct'
+            },
+            'step2_right': {
+                // İlk soruya yanlış dediği için zaten kaybetti ama eğitmeye devam edelim
+                text: "Peygamberler olmasaydı insanlar her şeyi kendi aklıyla bulabilirdi.",
+                D: 'fail_reason',
+                Y: 'fail_reason' // Her türlü yanlış yolda
+            },
+            'step3_correct': {
+                text: "Peygamberler güzel ahlaklarıyla insanlara örnek olurlar.",
+                D: 'win',
+                Y: 'fail_sample'
+            },
+            
+            // Sonuçlar
+            'win': { type: 'result', success: true, msg: "Tebrikler! 1. Çıkışa ulaştın. Peygamberler hem elçi hem de en güzel örnektir." },
+            'fail_msg_only': { type: 'result', success: false, msg: "Hata! Peygamberler sadece mesajı iletmez, aynı zamanda açıklar ve yaşayarak öğretirler." },
+            'fail_reason': { type: 'result', success: false, msg: "Hata! İnsan aklı her şeyi kavrayamaz, bu yüzden peygamberlere muhtaçtır." },
+            'fail_sample': { type: 'result', success: false, msg: "Hata! Peygamberlerin en önemli özelliklerinden biri örnek olmalarıdır." }
+        };
+
+        let currentStep = 'start';
+
+        function nextStep(choice) {
+            const node = simpleTree[currentStep];
+            const nextKey = node[choice];
+            const nextNode = simpleTree[nextKey];
+
+            if (nextNode.type === 'result') {
+                showResult(nextNode);
+            } else {
+                currentStep = nextKey;
+                
+                // Animasyonlu geçiş
+                const qDiv = document.getElementById('tree-question');
+                qDiv.classList.remove('fade-in');
+                void qDiv.offsetWidth; // trigger reflow
+                qDiv.classList.add('fade-in');
+                
+                document.getElementById('q-text').innerText = nextNode.text;
+            }
+        }
+
+        function showResult(node) {
+            document.getElementById('tree-question').classList.add('hidden');
+            const resDiv = document.getElementById('tree-result');
+            resDiv.classList.remove('hidden');
+            resDiv.classList.add('fade-in');
+
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+
+            if (node.success) {
+                icon.innerHTML = '<i class="fas fa-trophy text-yellow-400"></i>';
+                title.innerText = "DOĞRU ÇIKIŞ!";
+                title.className = "text-3xl font-bold mb-2 text-green-400";
+            } else {
+                icon.innerHTML = '<i class="fas fa-exclamation-circle text-red-400"></i>';
+                title.innerText = "YANLIŞ ÇIKIŞ";
+                title.className = "text-3xl font-bold mb-2 text-red-400";
+            }
+            desc.innerText = node.msg;
+        }
+
+        function resetTree() {
+            currentStep = 'start';
+            document.getElementById('tree-result').classList.add('hidden');
+            document.getElementById('tree-question').classList.remove('hidden');
+            document.getElementById('q-text').innerText = simpleTree['start'].text;
+        }
+
+        // Başlangıç
+        document.getElementById('q-text').innerText = simpleTree['start'].text;
+
+    </script>
+</body>
+</html>

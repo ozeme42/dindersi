@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an'dan Öğütler: Peygamber Kıssaları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdf6e3; /* Solarized Light Beige */
+            color: #5d4037;
+        }
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+        /* Tab Transitions */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Interactive Elements */
+        .concept-card {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .concept-card.selected {
+            background-color: #d97706;
+            color: white;
+            border-color: #d97706;
+        }
+        .concept-card.matched {
+            background-color: #10b981;
+            color: white;
+            border-color: #10b981;
+            cursor: default;
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+        
+        /* Sea Splitting Effect for Musa Section */
+        .sea-container {
+            position: relative;
+            height: 100px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .sea-left, .sea-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to bottom, #3b82f6, #1e40af);
+            transition: transform 1s ease-in-out;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 2rem;
+        }
+        .sea-left { left: 0; transform-origin: left; }
+        .sea-right { right: 0; transform-origin: right; }
+        .sea-path {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #d4a373;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #7f5539;
+        }
+        .sea-container:hover .sea-left { transform: translateX(-40%); }
+        .sea-container:hover .sea-right { transform: translateX(40%); }
+
+        /* Fire Effect for Ibrahim */
+        .fire-container:hover .fire-icon {
+            color: #10b981; /* Green for cool/peace */
+            transform: scale(1.1);
+        }
+        .fire-container:hover .fire-text {
+            content: "Serinlik ve Esenlik";
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-[#8d6e63] text-[#fff8e1] py-10 px-4 text-center rounded-b-[40px] shadow-xl mb-10 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-[#fff8e1]/20 border border-[#fff8e1]/40 text-[#fff8e1] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
+            <h1 class="text-4xl md:text-5xl title-font font-bold mb-4">PEYGAMBER KISSALARI</h1>
+            <p class="text-lg text-[#efebe9] max-w-2xl mx-auto">
+                "Kıssadan Hisse: Geçmişin tecrübesi, geleceğin rehberidir."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: ÜLÜLAZM PEYGAMBERLER -->
+        <section class="text-center">
+            <h2 class="text-3xl font-bold text-[#4e342e] mb-2 title-font">Ülülazm Peygamberler</h2>
+            <p class="text-[#795548] mb-8">Sabır ve mücadeleleriyle övülen 5 büyük peygamber.</p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white px-6 py-3 rounded-full shadow-md border-b-4 border-[#8d6e63] text-[#5d4037] font-bold hover:-translate-y-1 transition">Hz. Nuh</div>
+                <div class="bg-white px-6 py-3 rounded-full shadow-md border-b-4 border-[#8d6e63] text-[#5d4037] font-bold hover:-translate-y-1 transition">Hz. İbrahim</div>
+                <div class="bg-white px-6 py-3 rounded-full shadow-md border-b-4 border-[#8d6e63] text-[#5d4037] font-bold hover:-translate-y-1 transition">Hz. Musa</div>
+                <div class="bg-white px-6 py-3 rounded-full shadow-md border-b-4 border-[#8d6e63] text-[#5d4037] font-bold hover:-translate-y-1 transition">Hz. İsa</div>
+                <div class="bg-[#8d6e63] px-6 py-3 rounded-full shadow-md border-b-4 border-[#5d4037] text-white font-bold hover:-translate-y-1 transition transform scale-105">Hz. Muhammed (s.a.v)</div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: KISSALAR (Tablo Yapı) -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#d7ccc8]">
+            <div class="flex flex-wrap border-b border-[#d7ccc8] bg-[#f5f5f5]">
+                <button onclick="openTab('nuh')" class="flex-1 py-4 px-6 text-center font-bold text-[#8d6e63] hover:bg-[#efebe9] transition border-b-4 border-transparent focus:border-[#5d4037] active-tab" id="btn-nuh">
+                    <i class="fas fa-ship mr-2"></i> Hz. NUH
+                </button>
+                <button onclick="openTab('ibrahim')" class="flex-1 py-4 px-6 text-center font-bold text-[#8d6e63] hover:bg-[#efebe9] transition border-b-4 border-transparent focus:border-[#5d4037]" id="btn-ibrahim">
+                    <i class="fas fa-fire mr-2"></i> Hz. İBRAHİM
+                </button>
+                <button onclick="openTab('musa')" class="flex-1 py-4 px-6 text-center font-bold text-[#8d6e63] hover:bg-[#efebe9] transition border-b-4 border-transparent focus:border-[#5d4037]" id="btn-musa">
+                    <i class="fas fa-water mr-2"></i> Hz. MUSA
+                </button>
+                <button onclick="openTab('isa')" class="flex-1 py-4 px-6 text-center font-bold text-[#8d6e63] hover:bg-[#efebe9] transition border-b-4 border-transparent focus:border-[#5d4037]" id="btn-isa">
+                    <i class="fas fa-dove mr-2"></i> Hz. İSA
+                </button>
+            </div>
+
+            <div class="p-8">
+                <!-- Hz. Nuh -->
+                <div id="nuh" class="tab-content active">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="bg-blue-50 p-6 rounded-full inline-block mb-4 shadow-inner">
+                                <i class="fas fa-ship text-6xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#5d4037]">Azim ve Kararlılık</h3>
+                            <p class="text-sm text-gray-500 mt-2">İnsanlığın İkinci Atası</p>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-blue-500">
+                                <h4 class="font-bold mb-1">Tufan ve Gemi</h4>
+                                <p class="text-sm text-[#5d4037]">Kavmi putlara tapıyordu. Nuh (as) onları 950 yıl uyardı. İnanmayınca Allah gemi yapmasını emretti. İnananlar ve hayvanlar gemiye binerek kurtuldu.</p>
+                            </div>
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-blue-500">
+                                <h4 class="font-bold mb-1">Oğlu ve İmtihan</h4>
+                                <p class="text-sm text-[#5d4037]">Kendi oğlu bile gemiye binmedi ve "Dağa çıkar kurtulurum" dedi. Ancak sular her yeri kapladı. (Ders: İman kan bağıyla değil, kalple olur.)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hz. İbrahim -->
+                <div id="ibrahim" class="tab-content">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center fire-container cursor-help">
+                            <div class="bg-orange-50 p-6 rounded-full inline-block mb-4 shadow-inner transition duration-500">
+                                <i class="fas fa-fire text-6xl text-orange-600 fire-icon transition duration-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#5d4037]">Tevhit ve Teslimiyet</h3>
+                            <p class="text-sm text-gray-500 mt-2 fire-text">Ateşin Serinliği (Üzerine Gel)</p>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-orange-500">
+                                <h4 class="font-bold mb-1">Putları Kırması</h4>
+                                <p class="text-sm text-[#5d4037]">Babil halkı putlara tapıyordu. İbrahim (as) kimse yokken putları kırdı, baltayı en büyüğünün boynuna astı. Onları düşünmeye sevk etti.</p>
+                            </div>
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-orange-500">
+                                <h4 class="font-bold mb-1">Ateş Mucizesi</h4>
+                                <p class="text-sm text-[#5d4037]">Nemrut onu ateşe attı. Ancak Allah "Ey ateş! İbrahim'e serin ve selamet ol" buyurdu. Ateş onu yakmadı.</p>
+                            </div>
+                            <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Hanif: Allah'ın birliğine inanan.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hz. Musa -->
+                <div id="musa" class="tab-content">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="bg-amber-50 p-6 rounded-full inline-block mb-4 shadow-inner">
+                                <i class="fas fa-scroll text-6xl text-amber-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#5d4037]">Mücadele ve Adalet</h3>
+                            <p class="text-sm text-gray-500 mt-2">Firavun'un Sarayında Büyüyen Peygamber</p>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-amber-500">
+                                <h4 class="font-bold mb-1">Nil Nehri ve Sandık</h4>
+                                <p class="text-sm text-[#5d4037]">Firavun erkek çocukları öldürüyordu. Annesi Musa'yı sandıkla nehre bıraktı. Onu Firavun'un karısı bulup büyüttü.</p>
+                            </div>
+                            <div class="sea-container border-2 border-blue-300 cursor-pointer" title="Denizin yarılması için üzerine gel">
+                                <div class="sea-left"><i class="fas fa-water"></i></div>
+                                <div class="sea-path">Kızıldeniz Yarıldı, Yollar Açıldı</div>
+                                <div class="sea-right"><i class="fas fa-water"></i></div>
+                            </div>
+                            <div class="text-xs text-center text-gray-500">Kızıldeniz'i yarmak için kutunun üzerine gel.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hz. İsa -->
+                <div id="isa" class="tab-content">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="bg-teal-50 p-6 rounded-full inline-block mb-4 shadow-inner">
+                                <i class="fas fa-heart text-6xl text-teal-600"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#5d4037]">Sevgi ve Sabır</h3>
+                            <p class="text-sm text-gray-500 mt-2">Hz. Meryem'in Oğlu</p>
+                        </div>
+                        <div class="md:w-2/3 space-y-4">
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-teal-500">
+                                <h4 class="font-bold mb-1">Mucize Doğum</h4>
+                                <p class="text-sm text-[#5d4037]">Babasız olarak dünyaya gelmiştir. Bu, Allah'ın "Ol" demesiyle (Kün feyekün) gerçekleşen bir mucizedir.</p>
+                            </div>
+                            <div class="bg-[#efebe9] p-4 rounded-xl border-l-4 border-teal-500">
+                                <h4 class="font-bold mb-1">İncil</h4>
+                                <p class="text-sm text-[#5d4037]">Kendisine İncil indirilmiştir. Hastaları iyileştirmek, ölüleri diriltmek gibi mucizeler verilmiştir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: KAVRAM EŞLEŞTİRME OYUNU -->
+        <section class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#4e342e]">Kavramları Eşleştir</h2>
+                <p class="text-[#795548]">Kavramın üzerine tıkla, sonra anlamını seç.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 bg-white p-8 rounded-3xl shadow-lg border border-[#d7ccc8]">
+                <!-- Sol: Kavramlar -->
+                <div class="flex flex-col gap-3" id="terms-container">
+                    <div class="concept-card bg-[#fff3e0] p-4 rounded-lg border-2 border-[#ffcc80] font-bold text-center" onclick="selectCard(this, 'term', 'mucize')">MUCİZE</div>
+                    <div class="concept-card bg-[#fff3e0] p-4 rounded-lg border-2 border-[#ffcc80] font-bold text-center" onclick="selectCard(this, 'term', 'hanif')">HANİF</div>
+                    <div class="concept-card bg-[#fff3e0] p-4 rounded-lg border-2 border-[#ffcc80] font-bold text-center" onclick="selectCard(this, 'term', 'kavim')">KAVİM</div>
+                    <div class="concept-card bg-[#fff3e0] p-4 rounded-lg border-2 border-[#ffcc80] font-bold text-center" onclick="selectCard(this, 'term', 'davet')">DAVET</div>
+                </div>
+
+                <!-- Sağ: Anlamlar (Karışık) -->
+                <div class="flex flex-col gap-3" id="defs-container">
+                    <div class="concept-card bg-[#e0f2f1] p-4 rounded-lg border-2 border-[#80cbc4] text-sm text-center flex items-center justify-center h-full" onclick="selectCard(this, 'def', 'hanif')">Allah'ın birliğine inanan, doğruya yönelen kimse.</div>
+                    <div class="concept-card bg-[#e0f2f1] p-4 rounded-lg border-2 border-[#80cbc4] text-sm text-center flex items-center justify-center h-full" onclick="selectCard(this, 'def', 'davet')">İslam'a ve İslam esaslarının uygulanmasına çağrı.</div>
+                    <div class="concept-card bg-[#e0f2f1] p-4 rounded-lg border-2 border-[#80cbc4] text-sm text-center flex items-center justify-center h-full" onclick="selectCard(this, 'def', 'mucize')">Peygamberlerin gösterdiği olağanüstü olaylar.</div>
+                    <div class="concept-card bg-[#e0f2f1] p-4 rounded-lg border-2 border-[#80cbc4] text-sm text-center flex items-center justify-center h-full" onclick="selectCard(this, 'def', 'kavim')">Aralarında dil ve kültür birliği olan insan topluluğu.</div>
+                </div>
+            </div>
+            <div id="match-msg" class="text-center mt-4 font-bold text-green-600 h-6"></div>
+        </section>
+
+        <!-- BÖLÜM 4: AYET DEDEKTİFİ (Quiz) -->
+        <section class="max-w-3xl mx-auto bg-[#3e2723] rounded-3xl p-8 text-[#fff8e1] relative overflow-hidden shadow-2xl">
+            <!-- Arka plan süsü -->
+            <div class="absolute -right-10 -top-10 text-[#5d4037] text-9xl opacity-50">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="relative z-10">
+                <div class="text-center mb-6">
+                    <span class="bg-[#d7ccc8] text-[#3e2723] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kontrol Noktası</span>
+                    <h2 class="text-3xl font-bold mt-2">Bu Ayet Kime Ait?</h2>
+                    <p class="text-[#d7ccc8]/80 text-sm">Ayetin hangi peygamberden bahsettiğini bul.</p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md p-6 rounded-xl border border-white/20 mb-6 min-h-[120px] flex items-center justify-center text-center">
+                    <p class="text-xl italic font-serif" id="quiz-text">Yükleniyor...</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="checkAnswer('Hz. Nuh')" class="bg-[#5d4037] hover:bg-[#4e342e] text-white py-3 rounded-lg border border-[#8d6e63] font-bold transition">Hz. Nuh</button>
+                    <button onclick="checkAnswer('Hz. İbrahim')" class="bg-[#5d4037] hover:bg-[#4e342e] text-white py-3 rounded-lg border border-[#8d6e63] font-bold transition">Hz. İbrahim</button>
+                    <button onclick="checkAnswer('Hz. Musa')" class="bg-[#5d4037] hover:bg-[#4e342e] text-white py-3 rounded-lg border border-[#8d6e63] font-bold transition">Hz. Musa</button>
+                    <button onclick="checkAnswer('Hz. İsa')" class="bg-[#5d4037] hover:bg-[#4e342e] text-white py-3 rounded-lg border border-[#8d6e63] font-bold transition">Hz. İsa</button>
+                </div>
+
+                <div id="quiz-feedback" class="mt-4 text-center font-bold text-yellow-400 h-6"></div>
+                <div class="mt-2 text-center text-sm text-[#d7ccc8]">Puan: <span id="score">0</span></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamber Kıssaları</p>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        function openTab(tabId) {
+            // Content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            // Buttons
+            const buttons = ['nuh', 'ibrahim', 'musa', 'isa'];
+            buttons.forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    btn.classList.add('border-b-4', 'border-[#5d4037]', 'bg-[#efebe9]');
+                    btn.classList.remove('border-transparent');
+                } else {
+                    btn.classList.remove('border-b-4', 'border-[#5d4037]', 'bg-[#efebe9]');
+                    btn.classList.add('border-transparent');
+                }
+            });
+        }
+
+        // --- MATCHING GAME LOGIC ---
+        let selectedTerm = null;
+        let selectedDef = null;
+
+        function selectCard(el, type, id) {
+            if (el.classList.contains('matched')) return;
+
+            // Clear previous selections of same type
+            const container = type === 'term' ? document.getElementById('terms-container') : document.getElementById('defs-container');
+            container.querySelectorAll('.concept-card').forEach(c => c.classList.remove('selected'));
+            
+            el.classList.add('selected');
+
+            if (type === 'term') selectedTerm = { el, id };
+            else selectedDef = { el, id };
+
+            // Check Match
+            if (selectedTerm && selectedDef) {
+                if (selectedTerm.id === selectedDef.id) {
+                    // Match!
+                    selectedTerm.el.classList.remove('selected');
+                    selectedDef.el.classList.remove('selected');
+                    selectedTerm.el.classList.add('matched');
+                    selectedDef.el.classList.add('matched');
+                    document.getElementById('match-msg').innerHTML = '<i class="fas fa-check-circle"></i> Doğru Eşleşme!';
+                    selectedTerm = null;
+                    selectedDef = null;
+                } else {
+                    // Fail
+                    document.getElementById('match-msg').innerText = 'Yanlış, tekrar dene.';
+                    setTimeout(() => {
+                        selectedTerm.el.classList.remove('selected');
+                        selectedDef.el.classList.remove('selected');
+                        selectedTerm = null;
+                        selectedDef = null;
+                        document.getElementById('match-msg').innerText = '';
+                    }, 500);
+                }
+            }
+        }
+
+        // --- QUIZ LOGIC ---
+        const questions = [
+            { text: "Gözetimimiz altında ve vahyimize göre gemiyi yap. (Hud 11/37)", answer: "Hz. Nuh" },
+            { text: "Ne bu tapınıp durduğunuz heykeller? (Enbiya 21/52)", answer: "Hz. İbrahim" },
+            { text: "Deniz onları görülmedik bir şekilde kuşatıp yuttu. (Taha 20/78)", answer: "Hz. Musa" },
+            { text: "Meryem oğlu Mesih sadece bir peygamberdir. (Maide 5/75)", answer: "Hz. İsa" },
+            { text: "Ben sizin için apaçık bir uyarıcıyım. (Hud 11/25)", answer: "Hz. Nuh" },
+            { text: "Ey ateş! İbrahim’e karşı serin ve esenlik ol. (Enbiya 21/69)", answer: "Hz. İbrahim" }
+        ];
+
+        let qIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (qIndex < questions.length) {
+                document.getElementById('quiz-text').innerText = `"${questions[qIndex].text}"`;
+                document.getElementById('quiz-feedback').innerText = "";
+            } else {
+                document.getElementById('quiz-text').innerHTML = `<i class="fas fa-trophy text-4xl text-yellow-400 mb-2"></i><br>Tebrikler! Test Bitti.`;
+                document.getElementById('quiz-feedback').innerText = `Skor: ${score} / ${questions.length * 10}`;
+            }
+        }
+
+        function checkAnswer(answer) {
+            if (qIndex >= questions.length) return;
+
+            if (answer === questions[qIndex].answer) {
+                score += 10;
+                document.getElementById('score').innerText = score;
+                document.getElementById('quiz-feedback').innerHTML = '<span class="text-green-400">Doğru!</span>';
+                setTimeout(() => {
+                    qIndex++;
+                    loadQuestion();
+                }, 800);
+            } else {
+                document.getElementById('quiz-feedback').innerHTML = '<span class="text-red-400">Yanlış! Tekrar dene.</span>';
+            }
+        }
+
+        // Initial Load
+        loadQuestion();
+        // Set default tab style
+        openTab('nuh');
+
+    </script>
+</body>
+</html>

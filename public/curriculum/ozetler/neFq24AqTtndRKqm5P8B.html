@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinin Mimarimize Etkisi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Raleway:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #115e59; /* Teal-900 */
+        }
+        .art-font {
+            font-family: 'Aref Ruqaa', serif;
+        }
+        .pattern-bg {
+            background-color: #134e4a;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232dd4bf' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+        .tile-card {
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .tile-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Motif decoration */
+        .motif-border {
+            position: relative;
+        }
+        .motif-border::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #0d9488;
+            border-radius: 2px;
+        }
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="pattern-bg text-white py-16 px-4 text-center rounded-b-[50px] shadow-2xl relative overflow-hidden mb-12">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-[#134e4a]/80"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-teal-500/20 border border-teal-400/30 text-teal-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
+            <h1 class="text-5xl md:text-7xl art-font mb-4 tracking-wide">Sanat ve Mimari</h1>
+            <p class="text-xl text-teal-100 font-light max-w-2xl mx-auto">
+                "Din kültürün özü, kültür ise dinin somut yansımasıdır."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: KÜLTÜR VE DİN (Giriş) -->
+        <section class="text-center fade-in">
+            <h2 class="text-3xl font-bold text-[#134e4a] mb-8 motif-border pb-4 inline-block">Kültür ve Dinin Uyumu</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-3xl shadow-lg border border-teal-100">
+                <div class="text-left space-y-4">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-city"></i></div>
+                        <div>
+                            <h3 class="font-bold text-lg text-teal-900">Şehir ve İmar</h3>
+                            <p class="text-gray-600 text-sm">İnsan yaşadığı yeri sadece barınmak için değil, inancına göre şekillendirmek için imar eder.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-fingerprint"></i></div>
+                        <div>
+                            <h3 class="font-bold text-lg text-teal-900">Kültürel Miras</h3>
+                            <p class="text-gray-600 text-sm">Nesilden nesile aktarılan maddi ve manevi değerler bütünüdür.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="bg-teal-100 p-3 rounded-full text-teal-700 text-xl"><i class="fas fa-praying-hands"></i></div>
+                        <div>
+                            <h3 class="font-bold text-lg text-teal-900">Dinin Etkisi</h3>
+                            <p class="text-gray-600 text-sm">Namaz ibadeti camileri, temizlik emri şadırvanları, ilim emri medreseleri ortaya çıkarmıştır.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative h-64 rounded-2xl overflow-hidden shadow-inner bg-teal-900 flex items-center justify-center text-teal-100 p-6 text-center italic">
+                    "Su ile şekerin karışması gibi, din ve kültür iç içe geçmiştir."
+                    <i class="fas fa-mosque absolute bottom-[-20px] right-[-20px] text-9xl opacity-10"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: MİMARİ ESERLER (İnteraktif Grid) -->
+        <section class="fade-in" style="animation-delay: 0.2s;">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#134e4a] mb-2 art-font">İslam Şehrini Keşfet</h2>
+                <p class="text-teal-600">Kartlara tıklayarak yapıların işlevlerini öğren.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Cami -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-teal-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-mosque text-6xl text-teal-800"></i></div>
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">CAMİ & MESCİT</h3>
+                    <p class="text-sm text-gray-500 italic">Şehrin Merkezi</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        Müslümanların ibadet ettiği, toplandığı, şehrin merkezinde yer alan ana yapıdır.
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-teal-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+
+                <!-- Medrese -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-blue-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-university text-6xl text-blue-800"></i></div>
+                    <h3 class="text-xl font-bold text-blue-800 mb-2">MEDRESE</h3>
+                    <p class="text-sm text-gray-500 italic">İlim Yuvası</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        Dinî ilimlerin yanında fen ve sosyal bilimlerin okutulduğu eğitim kurumlarıdır.
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-blue-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+
+                <!-- Kervansaray -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-amber-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-hotel text-6xl text-amber-800"></i></div>
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">KERVANSARAY</h3>
+                    <p class="text-sm text-gray-500 italic">Yolcu Durağı</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        Yolcuların konakladığı, dinlendiği, yeme-içme ihtiyaçlarının ücretsiz karşılandığı yapılar.
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-amber-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+
+                <!-- Külliye -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-purple-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-layer-group text-6xl text-purple-800"></i></div>
+                    <h3 class="text-xl font-bold text-purple-800 mb-2">KÜLLİYE</h3>
+                    <p class="text-sm text-gray-500 italic">Yapılar Topluluğu</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        Merkezinde cami olan; çevresinde medrese, imarethane (aşevi), şifahane bulunan kompleks.
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-purple-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+
+                <!-- Darüşşifa -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-rose-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-heartbeat text-6xl text-rose-800"></i></div>
+                    <h3 class="text-xl font-bold text-rose-800 mb-2">ŞİFAHANE</h3>
+                    <p class="text-sm text-gray-500 italic">Sağlık Merkezi</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        Hastaların tedavi edildiği hastanelerdir. (Örn: II. Bayezid Darüşşifası).
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-rose-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+
+                <!-- Sebil/Çeşme -->
+                <div class="tile-card bg-white p-6 rounded-2xl border-t-4 border-cyan-600 shadow-md group relative overflow-hidden" onclick="toggleInfo(this)">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition"><i class="fas fa-tint text-6xl text-cyan-800"></i></div>
+                    <h3 class="text-xl font-bold text-cyan-800 mb-2">SEBİL & ÇEŞME</h3>
+                    <p class="text-sm text-gray-500 italic">Su Hayattır</p>
+                    <div class="info-content hidden mt-4 pt-4 border-t border-gray-100 text-sm text-gray-700">
+                        İnsanların ve hayvanların su ihtiyacını karşılamak için yapılan estetik su yapılarıdır.
+                    </div>
+                    <button class="mt-4 text-xs font-bold text-cyan-600 uppercase tracking-wide group-hover:underline">Detay Göster</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: İSLAM SANATLARI (Görsel Galeri) -->
+        <section class="bg-[#111827] rounded-3xl p-10 text-white shadow-2xl fade-in relative overflow-hidden" style="animation-delay: 0.4s;">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-10 -mr-16 -mt-16 pointer-events-none"></div>
+            
+            <div class="text-center mb-10 relative z-10">
+                <h2 class="text-3xl font-bold mb-2 art-font text-teal-400">Estetik ve Zarafet: İslam Sanatları</h2>
+                <p class="text-gray-400">Yapıları süsleyen ince ruhlu sanatlar.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 relative z-10">
+                
+                <!-- Hüsnühat -->
+                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
+                    <div class="bg-white text-black w-12 h-12 flex items-center justify-center rounded font-serif font-bold text-2xl">ه</div>
+                    <div>
+                        <h4 class="text-xl font-bold text-teal-300">Hüsnühat (Hat)</h4>
+                        <p class="text-sm text-gray-300 mt-1">Arap harflerinin estetik ölçülerle güzel yazılması sanatıdır. Camilerin içini ayetlerle süsler.</p>
+                    </div>
+                </div>
+
+                <!-- Tezhip -->
+                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
+                    <div class="bg-amber-400 text-black w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-star"></i></div>
+                    <div>
+                        <h4 class="text-xl font-bold text-amber-300">Tezhip</h4>
+                        <p class="text-sm text-gray-300 mt-1">Altınlama demektir. Kitap kenarlarının, levhaların altın ve boya ile desen desen süslenmesidir.</p>
+                    </div>
+                </div>
+
+                <!-- Çini -->
+                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
+                    <div class="bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-shapes"></i></div>
+                    <div>
+                        <h4 class="text-xl font-bold text-blue-300">Çini</h4>
+                        <p class="text-sm text-gray-300 mt-1">Seramik ve porselenlerin geometrik veya çiçek motifleriyle süslenip fırınlanmasıdır. Mavi tonları hakimdir.</p>
+                    </div>
+                </div>
+
+                <!-- Minyatür -->
+                <div class="flex gap-4 items-start bg-gray-800/50 p-4 rounded-xl border border-gray-700 hover:border-teal-500 transition">
+                    <div class="bg-rose-500 text-white w-12 h-12 flex items-center justify-center rounded text-2xl"><i class="fas fa-paint-brush"></i></div>
+                    <div>
+                        <h4 class="text-xl font-bold text-rose-300">Minyatür</h4>
+                        <p class="text-sm text-gray-300 mt-1">Derinlik (perspektif) verilmeyen, ince işçilikle yapılan küçük renkli resim sanatıdır.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: TANILAYICI DALLANMIŞ AĞAÇ (Oyun) -->
+        <section class="max-w-3xl mx-auto text-center fade-in" style="animation-delay: 0.6s;">
+            <h2 class="text-3xl font-bold text-[#134e4a] mb-8">Doğru Çıkışı Bul</h2>
+            
+            <div class="bg-white rounded-3xl shadow-xl border border-teal-200 p-8 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-400 to-teal-600"></div>
+                
+                <div id="game-container" class="min-h-[250px] flex flex-col justify-center items-center">
+                    
+                    <!-- Soru Kartı -->
+                    <div id="question-card" class="w-full">
+                        <div class="bg-teal-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6 text-teal-600 text-2xl font-bold border-2 border-teal-200" id="step-number">1</div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-8 px-4" id="question-text">Yükleniyor...</h3>
+                        
+                        <div class="flex gap-6 justify-center w-full">
+                            <button onclick="nextStep('D')" class="flex-1 max-w-[150px] bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold shadow-lg transform transition active:scale-95 border-b-4 border-green-700 active:border-b-0">
+                                DOĞRU
+                            </button>
+                            <button onclick="nextStep('Y')" class="flex-1 max-w-[150px] bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold shadow-lg transform transition active:scale-95 border-b-4 border-red-700 active:border-b-0">
+                                YANLIŞ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sonuç Kartı (Gizli) -->
+                    <div id="result-card" class="hidden w-full">
+                        <div class="text-6xl mb-4" id="result-icon"></div>
+                        <h3 class="text-3xl font-bold mb-2" id="result-title"></h3>
+                        <p class="text-gray-600 mb-6 text-lg" id="result-desc"></p>
+                        <button onclick="resetGame()" class="text-teal-600 font-bold underline hover:text-teal-800">Başa Dön</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#134e4a] text-teal-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Sanat ve Mimari Ünitesi</p>
+    </footer>
+
+    <script>
+        // --- EXPAND INFO CARD ---
+        function toggleInfo(card) {
+            const content = card.querySelector('.info-content');
+            const btn = card.querySelector('button');
+            
+            // Close others (optional, for accordion effect)
+            // document.querySelectorAll('.info-content').forEach(c => c.classList.add('hidden'));
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                btn.innerText = "Kapat";
+            } else {
+                content.classList.add('hidden');
+                btn.innerText = "Detay Göster";
+            }
+        }
+
+        // --- BRANCHING TREE GAME LOGIC ---
+        // Metindeki ağaca göre mantık
+        const treeData = {
+            'start': {
+                text: "Din ve inanç, kültürün şekillenmesini sağlar.",
+                D: 'q2_left', 
+                Y: 'q2_right'
+            },
+            // Sol Kol (Doğru yolun devamı)
+            'q2_left': {
+                text: "Müslümanlar cami, aşevi, şifahane inşa ederek coğrafyayı güzelleştirmiştir.",
+                D: 'exit_1', // 1. Çıkış
+                Y: 'exit_2'  // 2. Çıkış
+            },
+            // Sağ Kol (Yanlış yolun devamı)
+            'q2_right': {
+                text: "Arap harflerinin güzel yazımıyla minyatür sanatı oluşmuştur.", // Yanlış (Hat olmalı)
+                D: 'exit_3', // 3. Çıkış (Hatalı bilgiye doğru dedi)
+                Y: 'exit_4'  // 4. Çıkış
+            },
+            // Sonuçlar
+            'exit_1': { type: 'end', id: 1, correct: true, msg: "Tebrikler! Konuyu harika kavramışsın." },
+            'exit_2': { type: 'end', id: 2, correct: false, msg: "Yanlış Çıkış. Müslümanlar gerçekten de bu yapılarla şehirleri güzelleştirmiştir." },
+            'exit_3': { type: 'end', id: 3, correct: false, msg: "Yanlış Çıkış. Güzel yazı sanatına 'Hüsnühat' denir, Minyatür resim sanatıdır." },
+            'exit_4': { type: 'end', id: 4, correct: false, msg: "Yanlış Çıkış. İlk soruda hata yapmıştın." }
+        };
+
+        // *Not: Metindeki ağaç yapısı biraz daha karmaşık olabilir (8 çıkışlı), 
+        // ancak web deneyimi için temel mantığı (2 seviye) simüle ettim.
+        // Daha karmaşık yapı istenirse veri yapısı genişletilebilir.
+        // Metindeki 8 çıkışlı yapıya göre genişletiyorum:
+
+        const complexTree = {
+            'start': {
+                text: "Din ve inanç, kültürün şekillenmesini sağlar.",
+                D: 'L2_sol', // Müslümanlar cami...
+                Y: 'L2_sag'  // Arap harfleri...
+            },
+            // SOL KOL
+            'L2_sol': {
+                text: "Müslümanlar cami, aşevi, şifahane inşa ederek coğrafyayı güzelleştirmiştir.",
+                D: 'L3_sol_sol', // Cami ve mescitler...
+                Y: 'L3_sol_sag'  // Çini yazma kitaplarda...
+            },
+            'L3_sol_sol': { // Soru: Cami ve mescitler Müslümanların ibadet yeridir.
+                text: "Cami ve mescitler Müslümanların ibadet ettiği ve toplandığı yerlerdir.",
+                D: 'exit_1', Y: 'exit_2'
+            },
+            'L3_sol_sag': { // Soru: Çini... (Yanlış, Tezhip olmalı)
+                text: "Çini, yazma kitaplarda, sayfaların yaldız ve boya ile bezenmesi sanatıdır.",
+                D: 'exit_3', Y: 'exit_4'
+            },
+
+            // SAĞ KOL
+            'L2_sag': {
+                text: "Arap harflerinin çeşitli şekil ve tarzlarda güzel yazımıyla minyatür sanatı oluşmuştur.",
+                D: 'L3_sag_sol', // Bölgenin iklimi...
+                Y: 'L3_sag_sag'  // Külliyeler...
+            },
+            'L3_sag_sol': {
+                text: "Bölgenin iklim ve şartlarına göre yapı malzemeleri değişebilir.",
+                D: 'exit_5', Y: 'exit_6'
+            },
+            'L3_sag_sag': {
+                text: "Külliyeler merkezinde cami olan ve diğer yapılarla kuşatılmış geniş merkezlerdir.",
+                D: 'exit_7', Y: 'exit_8'
+            },
+
+            // ÇIKIŞLAR
+            'exit_1': { type: 'end', title: "1. ÇIKIŞ", correct: true, msg: "Mükemmel! Tüm sorulara doğru cevap verdin." },
+            'exit_2': { type: 'end', title: "2. ÇIKIŞ", correct: false, msg: "Cami ve mescitler ibadet yeridir. Yanlış cevap." },
+            'exit_3': { type: 'end', title: "3. ÇIKIŞ", correct: false, msg: "Kitap süsleme sanatı Çini değil, Tezhip'tir." },
+            'exit_4': { type: 'end', title: "4. ÇIKIŞ", correct: false, msg: "İkinci soruda hata yaptın ama son bilgiyi doğru bildin (Çini tanımı yanlıştı)." },
+            'exit_5': { type: 'end', title: "5. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
+            'exit_6': { type: 'end', title: "6. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
+            'exit_7': { type: 'end', title: "7. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." },
+            'exit_8': { type: 'end', title: "8. ÇIKIŞ", correct: false, msg: "İlk soruda hata yaptın." }
+        };
+
+        let currentStep = 'start';
+
+        function nextStep(choice) {
+            const node = complexTree[currentStep];
+            const nextKey = node[choice];
+            const nextNode = complexTree[nextKey];
+
+            if (nextNode.type === 'end') {
+                showResult(nextNode);
+            } else {
+                currentStep = nextKey;
+                // Animation reset
+                const card = document.getElementById('question-card');
+                card.classList.remove('fade-in');
+                void card.offsetWidth; 
+                card.classList.add('fade-in');
+                
+                document.getElementById('question-text').innerText = nextNode.text;
+                // Update Step number visual
+                const stepNum = document.getElementById('step-number');
+                stepNum.innerText = parseInt(stepNum.innerText) + 1;
+            }
+        }
+
+        function showResult(node) {
+            document.getElementById('question-card').classList.add('hidden');
+            const resCard = document.getElementById('result-card');
+            resCard.classList.remove('hidden');
+            resCard.classList.add('fade-in');
+
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+
+            title.innerText = node.title;
+            title.className = node.correct ? "text-3xl font-bold mb-2 text-green-600" : "text-3xl font-bold mb-2 text-red-500";
+            
+            icon.innerHTML = node.correct ? '<i class="fas fa-award text-yellow-400"></i>' : '<i class="fas fa-compass text-gray-400"></i>';
+            desc.innerText = node.msg;
+        }
+
+        function resetGame() {
+            currentStep = 'start';
+            document.getElementById('result-card').classList.add('hidden');
+            document.getElementById('question-card').classList.remove('hidden');
+            document.getElementById('question-text').innerText = complexTree['start'].text;
+            document.getElementById('step-number').innerText = "1";
+        }
+
+        // Init
+        document.getElementById('question-text').innerText = complexTree['start'].text;
+
+    </script>
+</body>
+</html>

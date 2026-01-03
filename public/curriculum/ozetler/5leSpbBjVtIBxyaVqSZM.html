@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çocukların Dünyasında Peygamberimiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fff7ed; /* Orange-50 */
+            color: #431407; /* Brown */
+        }
+        .hand-font {
+            font-family: 'Indie Flower', cursive;
+        }
+        .pattern-bg {
+            background-color: #fb923c;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fff7ed' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Arbitrary large height */
+        }
+        .icon-rotate {
+            transition: transform 0.3s ease;
+        }
+        .icon-rotate.active {
+            transform: rotate(180deg);
+        }
+        .note-sticker {
+            background: #fef3c7;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+        }
+        .note-sticker:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="pattern-bg text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-orange-600">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 hand-font tracking-wide">ÇOCUKLARIN DÜNYASINDA PEYGAMBERİMİZ</h1>
+            <p class="text-xl text-orange-100 font-light max-w-2xl mx-auto">
+                "Allah'ım, bu ikisine merhamet et! Ben de onlara merhamet ediyorum."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: KAVRAMLAR VE ASRISAADET -->
+        <section>
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-orange-900 mb-2">Mutluluk Asrı</h2>
+                <p class="text-orange-700">O dönemde yaşamak nasıl olurdu?</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Asrısaadet -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-yellow-500 card-hover text-center">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-yellow-600 text-3xl">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Asrısaadet</h3>
+                    <p class="text-sm text-gray-600">"Mutluluk Asrı" demektir. Peygamberimizin yaşadığı, İslam'ın en güzel yaşandığı dönemdir. Çocuklar O'nu çok severdi.</p>
+                </div>
+
+                <!-- Salavat -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-green-500 card-hover text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
+                        <i class="fas fa-praying-hands"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Salavat</h3>
+                    <p class="text-sm text-gray-600">Peygamberimize olan sevgimizi göstermek için ismini duyunca "Sallallahü aleyhi ve sellem" deriz.</p>
+                </div>
+
+                <!-- Yetim -->
+                <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500 card-hover text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Yetim Hakkı</h3>
+                    <p class="text-sm text-gray-600">Babası vefat etmiş çocuklara yetim denir. Peygamberimiz "Ben ve yetimi koruyan, cennette yan yana olacağız" buyurmuştur.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: ŞEFKAT HİKAYELERİ (Accordion) -->
+        <section class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-orange-100">
+            <div class="bg-orange-50 p-6 border-b border-orange-100 text-center">
+                <h2 class="text-2xl font-bold text-orange-800 flex items-center justify-center gap-2">
+                    <i class="fas fa-book-open"></i> Peygamberimizden Hatıralar
+                </h2>
+                <p class="text-sm text-orange-600 mt-1">Hikayeleri okumak için başlıklara tıkla.</p>
+            </div>
+
+            <!-- Hikaye 1: Beşir -->
+            <div class="border-b border-gray-100">
+                <button onclick="toggleAccordion('story1')" class="w-full text-left p-5 flex justify-between items-center hover:bg-gray-50 transition">
+                    <span class="font-bold text-gray-700 text-lg">1. Ağlayan Çocuk Beşir</span>
+                    <i id="icon-story1" class="fas fa-chevron-down text-orange-400 icon-rotate"></i>
+                </button>
+                <div id="story1" class="accordion-content bg-orange-50/30">
+                    <div class="p-5 text-gray-600 leading-relaxed">
+                        <p class="mb-3">
+                            Uhud Savaşı sonrası herkes babasını karşılarken, babası şehit olan Beşir bir kenarda ağlıyordu. Peygamberimiz onu gördü, yanına gitti ve başını okşadı.
+                        </p>
+                        <p class="mb-3 font-bold text-orange-700">
+                            "Ağlama! Ben senin baban, Aişe de senin annen olsun istemez misin?"
+                        </p>
+                        <p>
+                            Beşir, "Evet, çok isterim!" dedi. Peygamberimiz onu kucakladı, bağrına bastı. Beşir'in hüznü sevince dönüştü.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hikaye 2: Ümame -->
+            <div class="border-b border-gray-100">
+                <button onclick="toggleAccordion('story2')" class="w-full text-left p-5 flex justify-between items-center hover:bg-gray-50 transition">
+                    <span class="font-bold text-gray-700 text-lg">2. Hz. Hamza'nın Kızı Ümame</span>
+                    <i id="icon-story2" class="fas fa-chevron-down text-orange-400 icon-rotate"></i>
+                </button>
+                <div id="story2" class="accordion-content bg-blue-50/30">
+                    <div class="p-5 text-gray-600 leading-relaxed">
+                        <p class="mb-3">
+                            Peygamberimiz Kabe ziyaretinden dönerken "Amca beni bırakma!" diye bir ses duyuldu. Bu, şehit amcası Hz. Hamza'nın kızı Ümame idi.
+                        </p>
+                        <p class="mb-3">
+                            Hz. Ali, Hz. Cafer ve Hz. Zeyd onun bakımını üstlenmek için yarıştılar. Peygamberimiz; 
+                            <span class="font-bold text-blue-700">"Teyze anne yarısı gibidir"</span> diyerek onu teyzesinin eşi olan Hz. Cafer'e emanet etti.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hikaye 3: İkram -->
+            <div class="border-b border-gray-100">
+                <button onclick="toggleAccordion('story3')" class="w-full text-left p-5 flex justify-between items-center hover:bg-gray-50 transition">
+                    <span class="font-bold text-gray-700 text-lg">3. İçecek İkramı ve Çocuk</span>
+                    <i id="icon-story3" class="fas fa-chevron-down text-orange-400 icon-rotate"></i>
+                </button>
+                <div id="story3" class="accordion-content bg-green-50/30">
+                    <div class="p-5 text-gray-600 leading-relaxed">
+                        <p class="mb-3">
+                            Bir mecliste Peygamberimize içecek ikram edildi. Sağında küçük bir çocuk, solunda ise yaşlılar vardı. İkram sağdan başlardı.
+                        </p>
+                        <p class="mb-3">
+                            Peygamberimiz çocuğa dönerek nazikçe: <span class="italic">"İzin verirsen önce büyüklere vereyim mi?"</span> diye sordu.
+                        </p>
+                        <p class="font-bold text-green-700">
+                            Çocuk: "Hayır Ya Resulullah! Senden gelen nasibimi kimseye vermem." dedi.
+                        </p>
+                        <p>
+                            Peygamberimiz çocuğun bu sevgisine gülümsedi ve içeceği önce ona verdi. (Çocuklara verilen değer ve hakkaniyet).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: EMPATİ DUVARI (Interactive) -->
+        <section class="fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-orange-900">Empati Köşesi</h2>
+                <p class="text-orange-700">O anı yaşasaydın ne hissederdin?</p>
+            </div>
+
+            <div class="bg-[#fef3c7] p-8 rounded-3xl border-2 border-dashed border-orange-300 relative">
+                <!-- Soru -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6 text-center">
+                    <p class="text-lg text-gray-700 font-medium">
+                        "Beşir'in yerinde olsaydın ve Peygamberimiz (sav) sana 'Ben baban olayım ister misin?' deseydi, o an ne hissederdin?"
+                    </p>
+                </div>
+
+                <!-- Input Alanı -->
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                    <input type="text" id="feelingInput" placeholder="Duygularını buraya yaz..." class="w-full md:w-2/3 p-4 rounded-xl border border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                    <button onclick="addNote()" class="bg-orange-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg transform hover:scale-105">
+                        Duvara As <i class="fas fa-thumbtack ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Notlar Alanı -->
+                <div id="notesContainer" class="mt-8 flex flex-wrap justify-center gap-4 min-h-[150px]">
+                    <!-- Örnek Notlar -->
+                    <div class="note-sticker w-48 h-48 p-4 flex items-center justify-center text-center font-hand text-xl text-gray-700">
+                        Çok mutlu olurdum, yalnızlığım biterdi.
+                    </div>
+                    <div class="note-sticker w-48 h-48 p-4 flex items-center justify-center text-center font-hand text-xl text-gray-700 bg-blue-100" style="transform: rotate(2deg);">
+                        Dünyanın en şanslı çocuğu hissederdim.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: BİLGİ KONTROLÜ (Quiz) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 border-t-8 border-orange-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-clipboard-check text-orange-500"></i> Kontrol Noktası
+            </h2>
+
+            <div class="space-y-6">
+                <!-- Soru 1 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">1. Yetimlerin bakımını üstlenen kişinin cennette Peygamberimize ne kadar yakın olacağı müjdelenmiştir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">İki parmak gibi yan yana</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Çok uzak</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">2. "Teyze ...... yarısı gibidir." hadisinde boşluğa ne gelmelidir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Baba</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Anne</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">3. Çocuklar Peygamberimizi görünce ne hissederlerdi?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Korku ve Endişe</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Sevgi ve Mutluluk</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-orange-900 text-orange-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Sevgi ve Merhamet Ünitesi</p>
+    </footer>
+
+    <script>
+        // --- ACCORDION LOGIC ---
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            // Toggle active class
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.classList.remove('active');
+            } else {
+                // Close others (Optional, for strictly one open)
+                document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.icon-rotate').forEach(el => el.classList.remove('active'));
+
+                content.classList.add('active');
+                icon.classList.add('active');
+            }
+        }
+
+        // --- EMPATHY WALL LOGIC ---
+        const colors = ['#fef3c7', '#dbeafe', '#dcfce7', '#fce7f3']; // Yellow, Blue, Green, Pink
+
+        function addNote() {
+            const input = document.getElementById('feelingInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                const container = document.getElementById('notesContainer');
+                const note = document.createElement('div');
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const randomRotate = Math.floor(Math.random() * 6) - 3; // -3 to +3 deg
+
+                note.className = 'note-sticker w-48 h-48 p-4 flex items-center justify-center text-center font-hand text-xl text-gray-700 animate-bounce';
+                note.style.background = randomColor;
+                note.style.transform = `rotate(${randomRotate}deg)`;
+                note.innerText = text;
+
+                // Add to start
+                container.insertBefore(note, container.firstChild);
+                
+                // Clear input
+                input.value = '';
+                
+                // Remove animation class after plays
+                setTimeout(() => note.classList.remove('animate-bounce'), 1000);
+            }
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.parentElement.querySelector('.feedback');
+            const buttons = parent.querySelectorAll('button');
+
+            // Disable buttons
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.remove('bg-white', 'border-gray-200');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                feedback.innerText = "Doğru! Harikasın.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-green-600');
+            } else {
+                btn.classList.remove('bg-white', 'border-gray-200');
+                btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                feedback.innerText = "Yanlış Cevap.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-red-600');
+            }
+        }
+    </script>
+</body>
+</html>

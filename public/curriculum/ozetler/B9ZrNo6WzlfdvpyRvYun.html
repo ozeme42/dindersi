@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Yeme İçme Adabı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fff7ed; /* Orange-50 */
+            color: #7c2d12; /* Orange-900 */
+        }
+        .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .pattern-bg {
+            background-color: #f97316;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff7ed' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .food-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(234, 88, 12, 0.2);
+        }
+        .stomach-section {
+            transition: all 0.3s;
+        }
+        .stomach-section:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        .plate-btn {
+            transition: transform 0.2s;
+        }
+        .plate-btn:active {
+            transform: scale(0.90);
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="pattern-bg text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-orange-700">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 fun-font drop-shadow-md">BEREKETLİ SOFRA</h1>
+            <p class="text-xl text-orange-100 font-bold max-w-2xl mx-auto">
+                "Besmele ile başla, sağ elinle ye, önünden ye."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: TEMEL İLKELER -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-orange-900 mb-2 fun-font">Sofra Adabı</h2>
+                <div class="h-1 w-20 bg-orange-400 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Helal -->
+                <div class="food-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-green-500 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Helal ve Temiz</h3>
+                    <p class="text-sm text-gray-600">Yiyecekler emekle kazanılmış, temiz ve dinen yasaklanmamış olmalıdır. Rızkı veren Allah'tır.</p>
+                </div>
+
+                <!-- Şükür -->
+                <div class="food-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-blue-500 text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-3xl">
+                        <i class="fas fa-praying-hands"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Besmele ve Şükür</h3>
+                    <p class="text-sm text-gray-600">Başlarken "Bismillah", bitirince "Elhamdülillah" demek yemeğin bereketini artırır.</p>
+                </div>
+
+                <!-- Saygı -->
+                <div class="food-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-purple-500 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600 text-3xl">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Saygı ve Nezaket</h3>
+                    <p class="text-sm text-gray-600">Sofrada başkalarını rahatsız etmemek, yemeği eleştirmemek ve önünden yemek saygıdır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: MİDE DENGESİ (1/3 Kuralı) -->
+        <section class="fade-in bg-white rounded-3xl p-8 shadow-xl border border-orange-100 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-50 rounded-full blur-3xl opacity-50 -mr-16 -mt-16 pointer-events-none"></div>
+            
+            <div class="text-center mb-8 relative z-10">
+                <h2 class="text-2xl font-bold text-orange-900 flex items-center justify-center gap-2">
+                    <i class="fas fa-balance-scale"></i> Sağlıklı Beslenme Formülü
+                </h2>
+                <p class="text-gray-600 text-sm mt-2">Peygamberimiz midenin nasıl doldurulması gerektiğini şöyle tarif etmiştir:</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 relative z-10">
+                <!-- Grafik -->
+                <div class="w-64 h-64 rounded-full border-8 border-orange-200 overflow-hidden flex flex-col shadow-inner bg-white">
+                    <div class="stomach-section h-1/3 bg-orange-400 flex items-center justify-center text-white font-bold text-lg border-b border-orange-300 cursor-help" title="Aşırı yememek gerekir">
+                        1/3 YEMEK <i class="fas fa-utensils ml-2"></i>
+                    </div>
+                    <div class="stomach-section h-1/3 bg-blue-400 flex items-center justify-center text-white font-bold text-lg border-b border-blue-300 cursor-help" title="Sindirim için su şarttır">
+                        1/3 SU <i class="fas fa-tint ml-2"></i>
+                    </div>
+                    <div class="stomach-section h-1/3 bg-green-400 flex items-center justify-center text-white font-bold text-lg cursor-help" title="Rahat nefes almak için">
+                        1/3 HAVA <i class="fas fa-wind ml-2"></i>
+                    </div>
+                </div>
+
+                <!-- Açıklama -->
+                <div class="max-w-md bg-orange-50 p-6 rounded-2xl border-l-4 border-orange-500">
+                    <h4 class="font-bold text-orange-800 mb-2">Neden Bu Kural?</h4>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Tıka basa doymadan kalkmak sağlığı korur.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Sindirimi kolaylaştırır.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> Tembelliği ve ağırlığı önler.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: SÜNNETLER VE YASAKLAR (İnteraktif Liste) -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <h2 class="text-3xl font-bold text-center text-orange-900 mb-8 fun-font">Peygamberimiz Ne Yapardı?</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Yapılması Gerekenler -->
+                <div class="bg-green-50 p-6 rounded-3xl border border-green-200">
+                    <h3 class="text-xl font-bold text-green-800 mb-4 text-center border-b-2 border-green-200 pb-2">✅ Bunları Yapardı</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600"><i class="fas fa-hand-sparkles"></i></div>
+                            <span class="text-gray-700 font-bold">Yemekten önce ve sonra elleri yıkamak.</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600"><i class="fas fa-hand-paper"></i></div>
+                            <span class="text-gray-700 font-bold">Sağ el ile yemek.</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600"><i class="fas fa-angle-double-down"></i></div>
+                            <span class="text-gray-700 font-bold">Önünden yemek.</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600"><i class="fas fa-glass-whiskey"></i></div>
+                            <span class="text-gray-700 font-bold">Suyu oturarak ve 3 nefeste içmek.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Kaçınılması Gerekenler -->
+                <div class="bg-red-50 p-6 rounded-3xl border border-red-200">
+                    <h3 class="text-xl font-bold text-red-800 mb-4 text-center border-b-2 border-red-200 pb-2">❌ Bunları Yapmazdı</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-red-100 p-2 rounded-lg text-red-600"><i class="fas fa-wind"></i></div>
+                            <span class="text-gray-700 font-bold">Yemeğe ve suya üflemek.</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-red-100 p-2 rounded-lg text-red-600"><i class="fas fa-trash-alt"></i></div>
+                            <span class="text-gray-700 font-bold">İsraf etmek (Tabağı sünnetlemek gerekir).</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-red-100 p-2 rounded-lg text-red-600"><i class="fas fa-running"></i></div>
+                            <span class="text-gray-700 font-bold">Ayakta yiyip içmek.</span>
+                        </li>
+                        <li class="flex items-center gap-4 bg-white p-3 rounded-xl shadow-sm">
+                            <div class="bg-red-100 p-2 rounded-lg text-red-600"><i class="fas fa-angry"></i></div>
+                            <span class="text-gray-700 font-bold">Yemeği kötülemek / Kusur bulmak.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: DOĞRU/YANLIŞ TABAĞI (Oyun) -->
+        <section class="max-w-3xl mx-auto bg-white rounded-3xl p-8 shadow-2xl border-t-8 border-orange-500 fade-in">
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6 flex items-center justify-center gap-2">
+                <i class="fas fa-question-circle text-orange-500"></i> Sofra Dedektifi
+            </h2>
+
+            <div class="bg-orange-50 rounded-2xl p-6 mb-6 text-center min-h-[100px] flex items-center justify-center">
+                <p id="game-question" class="text-xl font-bold text-orange-900 leading-relaxed">Soru Yükleniyor...</p>
+            </div>
+
+            <div class="flex gap-4 justify-center">
+                <button onclick="checkAnswer(true)" class="plate-btn w-32 h-32 rounded-full bg-green-500 text-white font-bold text-xl shadow-lg border-4 border-green-600 hover:bg-green-600 flex flex-col items-center justify-center gap-2">
+                    <i class="fas fa-thumbs-up text-3xl"></i> DOĞRU
+                </button>
+                <button onclick="checkAnswer(false)" class="plate-btn w-32 h-32 rounded-full bg-red-500 text-white font-bold text-xl shadow-lg border-4 border-red-600 hover:bg-red-600 flex flex-col items-center justify-center gap-2">
+                    <i class="fas fa-thumbs-down text-3xl"></i> YANLIŞ
+                </button>
+            </div>
+
+            <p id="game-feedback" class="text-center mt-6 font-bold text-lg hidden"></p>
+        </section>
+
+    </main>
+
+    <footer class="bg-orange-900 text-orange-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Yeme İçme Adabı</p>
+    </footer>
+
+    <script>
+        // --- QUIZ LOGIC ---
+        const questions = [
+            { text: "Çok sıcak bir çorbayı hemen içmek için üflemeliyiz.", isCorrect: false, feedback: "Yanlış! Yemeğe üflenmemelidir, soğuması beklenmelidir." },
+            { text: "Yemeğe başlamadan önce ellerimizi yıkamalıyız.", isCorrect: true, feedback: "Doğru! Bu hem sağlık hem de sünnettir." },
+            { text: "Tabağımızda kalan son lokmaları sıyırarak israfı önlemeliyiz.", isCorrect: true, feedback: "Doğru! Buna 'Tabağı Sünnetlemek' denir." },
+            { text: "Sofrada başkalarının önünden uzanarak yemek alabiliriz.", isCorrect: false, feedback: "Yanlış! Herkes kendi önünden yemelidir." },
+            { text: "Suyu ayakta ve tek seferde içmek daha iyidir.", isCorrect: false, feedback: "Yanlış! Suyu oturarak ve 3 yudumda içmek sünnettir." },
+            { text: "Yemeği beğenmezsek bunu yüksek sesle söylemeliyiz.", isCorrect: false, feedback: "Yanlış! Peygamberimiz yemeği asla kötülemezdi." },
+            { text: "Doyduktan sonra bile sofra kalkmadan kalkmamalıyız.", isCorrect: true, feedback: "Doğru! Diğerleri utanmasın diye beklemek nezakettir." }
+        ];
+
+        let currentQ = 0;
+
+        function loadQuestion() {
+            if (currentQ < questions.length) {
+                document.getElementById('game-question').innerText = questions[currentQ].text;
+                document.getElementById('game-feedback').classList.add('hidden');
+            } else {
+                document.getElementById('game-question').innerHTML = "<span class='text-green-600'>Tebrikler! Oyunu tamamladın. <i class='fas fa-star'></i></span>";
+                document.querySelectorAll('.plate-btn').forEach(b => b.disabled = true);
+            }
+        }
+
+        function checkAnswer(userChoice) {
+            const q = questions[currentQ];
+            const feedback = document.getElementById('game-feedback');
+            
+            feedback.classList.remove('hidden');
+            feedback.classList.remove('text-green-600', 'text-red-600');
+
+            if (userChoice === q.isCorrect) {
+                feedback.innerText = q.feedback;
+                feedback.classList.add('text-green-600');
+                setTimeout(() => {
+                    currentQ++;
+                    loadQuestion();
+                }, 2000);
+            } else {
+                feedback.innerText = "Hata! " + q.feedback;
+                feedback.classList.add('text-red-600');
+            }
+        }
+
+        // Initialize
+        loadQuestion();
+    </script>
+</body>
+</html>

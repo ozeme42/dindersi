@@ -346,16 +346,36 @@ function QuestionBankCoursePageComponent() {
         fetchInitialData();
     }, [user?.uid, user?.class, courseId]);
 
-    const isTopicUnlocked = useCallback((topicIndex: number, unitIndex: number) => {
-        if (!course) return false;
-        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        const globalIndex = course.units?.slice(0, unitIndex).reduce((acc, unit) => acc + (unit.topics?.length || 0), 0) + topicIndex;
-        if (globalIndex === 0) return true;
-        const prevTopic = allTopics[globalIndex - 1];
-        if (!prevTopic) return true; 
-        return isTopicCompleted(prevTopic.id);
-    }, [course, isTopicCompleted]);
-
+    const isTopicUnlocked = useCallback((topicId: string): boolean => {
+        if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
+        if (!course?.units) return false;
+    
+        // Tüm konuları al ve sıralı bir liste oluştur.
+        const allTopics = course.units
+            .flatMap(u => 
+                (u.topics || []).map(t => ({...t, unitTitle: u.title}))
+            )
+            .sort((a,b) => {
+                const unitCompare = a.unitTitle.localeCompare(b.unitTitle, 'tr', { numeric: true });
+                if (unitCompare !== 0) return unitCompare;
+                return (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true });
+            });
+    
+        if (allTopics.length === 0) return true;
+    
+        const topicIndex = allTopics.findIndex(t => t.id === topicId);
+        
+        // İlk konu her zaman açıktır.
+        if (topicIndex <= 0) return true;
+    
+        // Önceki konunun ID'sini bul.
+        const previousTopic = allTopics[topicIndex - 1];
+        if (!previousTopic) return true; // Eğer bir önceki konu yoksa (ki bu olmamalı), kilidi aç.
+    
+        // Önceki konunun tamamlanıp tamamlanmadığını kontrol et.
+        return isTopicCompleted(previousTopic.id);
+    }, [course?.units, isTopicCompleted, user?.role]);
+    
     const handleTestComplete = useCallback(async (difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number, score: number, passed: boolean, correctCount: number, totalQuestions: number) => {
         if (!user || !courseId || !activeTest?.topic.id) return;
         const { topic } = activeTest!;
@@ -639,7 +659,25 @@ function QuestionBankCoursePageComponent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={(topic) => { setActiveTopic(topic); setActiveTest(null); }}
-                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(topicIndex, unitIndex)}
+                        isTopicUnlocked={(topicIndex, unitIndex) => {
+                            if (!course?.units) return false;
+                            const allTopics = course.units
+                                .flatMap(u => 
+                                    (u.topics || []).map(t => ({...t, unitTitle: u.title}))
+                                )
+                                .sort((a,b) => {
+                                    const unitCompare = a.unitTitle.localeCompare(b.unitTitle, 'tr', { numeric: true });
+                                    if (unitCompare !== 0) return unitCompare;
+                                    return (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true });
+                                });
+
+                            const globalIndex = allTopics.findIndex(t => t.id === course.units[unitIndex]?.topics?.[topicIndex]?.id);
+                            
+                            if (globalIndex <= 0) return true;
+                            
+                            const prevTopic = allTopics[globalIndex - 1];
+                            return prevTopic ? isTopicCompleted(prevTopic.id) : true;
+                        }}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={topicProgress}
                         testCounts={testCounts}

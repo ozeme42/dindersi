@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bir Sure Öğreniyorum: İhlas Suresi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #f0fdf4; /* Light Green */
+            color: #14532d; /* Dark Green */
+        }
+        .arabic-font {
+            font-family: 'Amiri', serif;
+            line-height: 2;
+        }
+        .verse-card {
+            transition: all 0.3s ease;
+        }
+        .verse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .word-btn {
+            transition: all 0.2s;
+        }
+        .word-btn:active {
+            transform: scale(0.95);
+        }
+        .correct-anim {
+            animation: pulse-green 0.5s;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background-color: #86efac; }
+            100% { transform: scale(1); }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-emerald-900 text-white py-12 px-4 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-block bg-emerald-800 px-4 py-1 rounded-full text-emerald-200 text-sm mb-4 border border-emerald-600">1. Ünite: Allah İnancı</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">İhlas Suresi</h1>
+            <p class="text-xl text-emerald-100 font-light">"Samimiyet, Doğruluk ve Tevhit"</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
+
+        <!-- 1. Bölüm: Tanım ve Kavramlar -->
+        <section class="grid md:grid-cols-3 gap-6">
+            <!-- İhlas Nedir? -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-emerald-500">
+                <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4">
+                    <i class="fas fa-heart text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-gray-800">İhlas Nedir?</h3>
+                <p class="text-gray-600 text-sm">Samimiyet, doğruluk, temizlik ve saflık demektir. İnsanın davranışlarında sadece Allah'ın rızasını gözetmesi, ikiyüzlülükten uzak olmasıdır.</p>
+            </div>
+
+            <!-- Ehad -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-amber-500">
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 mb-4">
+                    <i class="fas fa-fingerprint text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-gray-800">Ehad</h3>
+                <p class="text-gray-600 text-sm">Allah'ın (cc) bir ve tek olmasıdır. O'nun eşi, benzeri ve ortağı yoktur.</p>
+            </div>
+
+            <!-- Samed -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-t-4 border-blue-500">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                    <i class="fas fa-infinity text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-gray-800">Samed</h3>
+                <p class="text-gray-600 text-sm">Hiçbir şeye muhtaç olmayan, aksine her şeyin kendisine muhtaç olduğu Yüce Yaratıcı demektir.</p>
+            </div>
+        </section>
+
+        <!-- 2. Bölüm: Surenin Okunuşu ve Anlamı -->
+        <section>
+            <div class="text-center mb-8">
+                <span class="arabic-font text-3xl text-emerald-800 block mb-2">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ</span>
+                <p class="text-sm text-gray-500">Bismillâhirrahmânirrahîm</p>
+                <p class="text-emerald-700 font-semibold">Rahman ve Rahîm olan Allah’ın adıyla</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Ayet 1 -->
+                <div class="verse-card bg-white rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 border border-emerald-50">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                    <div class="md:w-1/3 text-center md:text-right">
+                        <p class="arabic-font text-3xl text-gray-800">قُلْ هُوَ اللّٰهُ اَحَدٌۚ</p>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-amber-600 font-semibold mb-1">Kul hüvallâhü ehad</p>
+                        <p class="text-gray-700 text-lg">De ki: "O, Allah’tır, tektir."</p>
+                    </div>
+                </div>
+
+                <!-- Ayet 2 -->
+                <div class="verse-card bg-white rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 border border-emerald-50">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                    <div class="md:w-1/3 text-center md:text-right">
+                        <p class="arabic-font text-3xl text-gray-800">اَللّٰهُ الصَّمَدُۚ</p>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-amber-600 font-semibold mb-1">Allâhüssamed</p>
+                        <p class="text-gray-700 text-lg">Allah Samed’dir. <span class="text-sm text-gray-500">(Hiçbir şeye muhtaç olmayandır.)</span></p>
+                    </div>
+                </div>
+
+                <!-- Ayet 3 -->
+                <div class="verse-card bg-white rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 border border-emerald-50">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                    <div class="md:w-1/3 text-center md:text-right">
+                        <p class="arabic-font text-3xl text-gray-800">لَمْ يَلِدْ وَلَمْ يُولَدْۙ</p>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-amber-600 font-semibold mb-1">Lem yelid ve lem yûled</p>
+                        <p class="text-gray-700 text-lg">O, doğurmamış ve doğmamıştır.</p>
+                    </div>
+                </div>
+
+                <!-- Ayet 4 -->
+                <div class="verse-card bg-white rounded-xl p-6 flex flex-col md:flex-row items-center gap-6 border border-emerald-50">
+                    <div class="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">4</div>
+                    <div class="md:w-1/3 text-center md:text-right">
+                        <p class="arabic-font text-3xl text-gray-800">وَلَمْ يَكُنْ لَهُ كُفُوًا اَحَدٌ</p>
+                    </div>
+                    <div class="md:w-2/3 text-center md:text-left border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-amber-600 font-semibold mb-1">Ve lem yeküllehû küfüven ehad</p>
+                        <p class="text-gray-700 text-lg">O’nun hiçbir dengi (eşi, benzeri) yoktur.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Bölüm: Etkinlik - Kelimeleri Sırala -->
+        <section class="bg-emerald-50 rounded-3xl p-8 border border-emerald-100 relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 text-emerald-100 text-9xl opacity-50 rotate-12">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
+            
+            <div class="relative z-10">
+                <h3 class="text-2xl font-bold text-center mb-6 text-emerald-800">Etkinlik: Ayetleri Oluştur</h3>
+                <p class="text-center text-gray-600 mb-6">Aşağıdaki karışık kelimelere doğru sırayla tıklayarak ayetin anlamını oluştur.</p>
+
+                <!-- Oyun Alanı -->
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 min-h-[200px]">
+                    <!-- İlerleme Çubuğu -->
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="level-indicator" class="font-bold text-emerald-600">Ayet 1/4</span>
+                        <div class="flex gap-1">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500" id="dot-1"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-2"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-3"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300" id="dot-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hedef Cümle Alanı -->
+                    <div id="target-area" class="flex flex-wrap gap-2 mb-8 p-4 bg-gray-50 rounded-lg min-h-[60px] border-2 border-dashed border-gray-300 items-center justify-center">
+                        <span class="text-gray-400 text-sm italic">Kelimeleri buraya diz...</span>
+                    </div>
+
+                    <!-- Kaynak Kelimeler -->
+                    <div id="source-area" class="flex flex-wrap gap-3 justify-center">
+                        <!-- JS ile doldurulacak -->
+                    </div>
+
+                    <!-- Sonuç Mesajı -->
+                    <div id="game-feedback" class="mt-4 text-center font-bold hidden"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Bölüm: Mini Quiz (Hangisi Doğru?) -->
+        <section class="max-w-3xl mx-auto">
+            <h3 class="text-2xl font-bold text-center mb-6 text-emerald-800">Hangisi Doğru?</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                
+                <!-- Soru 1 -->
+                <div class="bg-white p-5 rounded-xl shadow border hover:border-emerald-300 transition">
+                    <p class="font-bold text-gray-800 mb-3">1. "Allâhüssamed" ne demektir?</p>
+                    <button onclick="checkQuiz(this, false)" class="w-full text-left p-2 rounded hover:bg-red-50 mb-2 border border-gray-100 text-sm">A) O, doğurmamış ve doğmamıştır.</button>
+                    <button onclick="checkQuiz(this, true)" class="w-full text-left p-2 rounded hover:bg-emerald-50 border border-gray-100 text-sm">B) Allah Samed'dir. (Hiçbir şeye muhtaç değildir.)</button>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-white p-5 rounded-xl shadow border hover:border-emerald-300 transition">
+                    <p class="font-bold text-gray-800 mb-3">2. "Lem yelid ve lem yûled" ne demektir?</p>
+                    <button onclick="checkQuiz(this, true)" class="w-full text-left p-2 rounded hover:bg-emerald-50 mb-2 border border-gray-100 text-sm">A) O, doğurmamış ve doğmamıştır.</button>
+                    <button onclick="checkQuiz(this, false)" class="w-full text-left p-2 rounded hover:bg-red-50 border border-gray-100 text-sm">B) De ki: O Allah tektir.</button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-emerald-900 text-emerald-400 py-6 text-center text-sm">
+        <p>İhlas Suresi Öğrenme Modülü</p>
+    </footer>
+
+    <script>
+        // --- Oyun Verileri ---
+        const levels = [
+            {
+                verse: "Kul hüvallâhü ehad",
+                words: ["De ki:", "O,", "Allah'tır,", "tektir."],
+                correctOrder: [0, 1, 2, 3] // İndeksler
+            },
+            {
+                verse: "Allâhüssamed",
+                words: ["Allah", "Samed'dir.", "(Hiçbir şeye", "muhtaç", "olmayandır.)"],
+                correctOrder: [0, 1, 2, 3, 4]
+            },
+            {
+                verse: "Lem yelid ve lem yûled",
+                words: ["O,", "doğurmamış", "ve", "doğmamıştır."],
+                correctOrder: [0, 1, 2, 3]
+            },
+            {
+                verse: "Ve lem yeküllehû küfüven ehad",
+                words: ["O'nun", "hiçbir", "dengi", "(eşi, benzeri)", "yoktur."],
+                correctOrder: [0, 1, 2, 3, 4]
+            }
+        ];
+
+        let currentLevel = 0;
+        let currentStep = 0; // Hangi kelimeyi bekliyoruz
+        let shuffledIndices = [];
+
+        function initGame() {
+            const levelData = levels[currentLevel];
+            currentStep = 0;
+            
+            // UI Güncelleme
+            document.getElementById('level-indicator').innerText = `Ayet ${currentLevel + 1}/4: "${levelData.verse}" Anlamını Oluştur`;
+            document.querySelectorAll('[id^="dot-"]').forEach((dot, idx) => {
+                dot.className = idx <= currentLevel ? "w-2 h-2 rounded-full bg-emerald-500" : "w-2 h-2 rounded-full bg-gray-300";
+            });
+
+            // Alanları Temizle
+            const targetArea = document.getElementById('target-area');
+            const sourceArea = document.getElementById('source-area');
+            const feedback = document.getElementById('game-feedback');
+            
+            targetArea.innerHTML = '';
+            sourceArea.innerHTML = '';
+            feedback.classList.add('hidden');
+            feedback.innerText = '';
+
+            // Kelimeleri Karıştır
+            shuffledIndices = levelData.words.map((_, i) => i);
+            shuffledIndices.sort(() => Math.random() - 0.5);
+
+            // Butonları Oluştur
+            shuffledIndices.forEach(originalIndex => {
+                const btn = document.createElement('button');
+                btn.innerText = levelData.words[originalIndex];
+                btn.className = "word-btn bg-white border border-emerald-200 text-emerald-800 px-4 py-2 rounded-lg shadow hover:bg-emerald-50 font-semibold";
+                btn.onclick = () => handleWordClick(btn, originalIndex);
+                sourceArea.appendChild(btn);
+            });
+        }
+
+        function handleWordClick(btn, originalIndex) {
+            const levelData = levels[currentLevel];
+            const feedback = document.getElementById('game-feedback');
+
+            // Doğru kelime mi?
+            if (originalIndex === levelData.correctOrder[currentStep]) {
+                // Doğru!
+                btn.remove(); // Aşağıdan sil
+                
+                // Yukarı ekle
+                const correctSpan = document.createElement('span');
+                correctSpan.innerText = levelData.words[originalIndex];
+                correctSpan.className = "bg-emerald-100 text-emerald-800 px-3 py-1 rounded border border-emerald-300 correct-anim";
+                document.getElementById('target-area').appendChild(correctSpan);
+
+                currentStep++;
+
+                // Level bitti mi?
+                if (currentStep === levelData.correctOrder.length) {
+                    feedback.innerText = "Harika! Doğru sıraladın.";
+                    feedback.className = "mt-4 text-center font-bold text-emerald-600 block";
+                    
+                    setTimeout(() => {
+                        if (currentLevel < levels.length - 1) {
+                            currentLevel++;
+                            initGame();
+                        } else {
+                            feedback.innerText = "Tebrikler! Tüm surenin anlamını tamamladın.";
+                            document.getElementById('source-area').innerHTML = '<div class="text-4xl text-amber-500"><i class="fas fa-trophy"></i></div>';
+                        }
+                    }, 1500);
+                }
+            } else {
+                // Yanlış
+                btn.classList.add('bg-red-100', 'border-red-400', 'shake');
+                setTimeout(() => {
+                    btn.classList.remove('bg-red-100', 'border-red-400', 'shake');
+                }, 500);
+            }
+        }
+
+        // --- Quiz Fonksiyonu ---
+        function checkQuiz(btn, isCorrect) {
+            // Butonları kilitle (basitçe parent içindeki tüm butonları disable et)
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                btn.innerHTML += ' <i class="fas fa-check"></i>';
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                btn.innerHTML += ' <i class="fas fa-times"></i>';
+                // Doğruyu göster
+                buttons.forEach(b => {
+                   if (b.onclick.toString().includes('true')) {
+                       b.classList.add('bg-green-50', 'border-green-300');
+                   } 
+                });
+            }
+        }
+
+        // Oyunu Başlat
+        initGame();
+
+    </script>
+</body>
+</html>

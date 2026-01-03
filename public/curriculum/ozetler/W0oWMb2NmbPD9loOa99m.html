@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Yanında Yetişen Çocuklar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Comfortaa:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #fdf4ff; /* Light purple tint */
+            color: #4c1d95; /* Deep purple */
+        }
+        .title-font {
+            font-family: 'Amiri', serif;
+        }
+        .sahabi-btn {
+            transition: all 0.3s ease;
+        }
+        .sahabi-btn.active {
+            background-color: #7c3aed;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.3);
+        }
+        .tab-content {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .memory-card {
+            transition: transform 0.3s;
+        }
+        .memory-card:hover {
+            transform: translateY(-5px);
+        }
+        .game-option {
+            transition: all 0.2s;
+        }
+        .game-option:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-12 px-4 text-center rounded-b-[60px] shadow-2xl mb-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')]"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4">PEYGAMBERİMİZİN YANINDA YETİŞEN ÇOCUKLAR</h1>
+            <p class="text-xl text-violet-100 font-light max-w-2xl mx-auto">
+                "Onlar, Peygamber evinin gülleri, İslam'ın ilk fidanlarıydı."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: SAHABİ PROFİLLERİ (Tabs) -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-violet-900 mb-2">Yıldız Çocukları Tanıyalım</h2>
+                <p class="text-violet-600">Peygamberimizin evinde yetişen 3 büyük isim.</p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex justify-center gap-4 mb-8 flex-wrap">
+                <button onclick="openTab('ali')" class="sahabi-btn active bg-white text-violet-700 border-2 border-violet-200 px-6 py-3 rounded-full font-bold shadow-sm" id="btn-ali">
+                    Hz. Ali
+                </button>
+                <button onclick="openTab('zeyd')" class="sahabi-btn bg-white text-violet-700 border-2 border-violet-200 px-6 py-3 rounded-full font-bold shadow-sm" id="btn-zeyd">
+                    Hz. Zeyd b. Harise
+                </button>
+                <button onclick="openTab('enes')" class="sahabi-btn bg-white text-violet-700 border-2 border-violet-200 px-6 py-3 rounded-full font-bold shadow-sm" id="btn-enes">
+                    Hz. Enes b. Malik
+                </button>
+            </div>
+
+            <!-- Content Container -->
+            <div class="bg-white rounded-3xl shadow-xl border border-violet-100 p-8 min-h-[400px]">
+                
+                <!-- HZ. ALİ CONTENT -->
+                <div id="ali" class="tab-content active">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="w-32 h-32 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 text-violet-600 text-5xl border-4 border-violet-200">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-violet-900">Hz. Ali</h3>
+                            <p class="text-sm text-gray-500 mt-2">Amcasının Oğlu</p>
+                            <span class="inline-block bg-violet-500 text-white text-xs px-3 py-1 rounded-full mt-2">İlk Müslüman Çocuk</span>
+                        </div>
+                        <div class="md:w-2/3 space-y-4 text-gray-700 leading-relaxed">
+                            <p><strong class="text-violet-700">Evine Gelişi:</strong> Babası Ebu Talib maddi zorluk çekince, Peygamberimiz yükünü hafifletmek için 5 yaşındaki Ali'yi yanına aldı.</p>
+                            <div class="bg-violet-50 p-4 rounded-xl border-l-4 border-violet-500">
+                                <h4 class="font-bold text-violet-800 mb-1">Kahramanlık Anı:</h4>
+                                <p class="text-sm">Peygamberimiz Mekke'den Medine'ye hicret edeceği gece, müşrikleri oyalamak için Hz. Ali O'nun yatağına yattı ve hırkasını üzerine örttü. Bu büyük bir cesaretti.</p>
+                            </div>
+                            <p><strong class="text-violet-700">Özelliği:</strong> İlim şehrinin kapısıdır. Peygamberimizin kızı Hz. Fatıma ile evlenmiştir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HZ. ZEYD CONTENT -->
+                <div id="zeyd" class="tab-content">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600 text-5xl border-4 border-blue-200">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-blue-900">Hz. Zeyd</h3>
+                            <p class="text-sm text-gray-500 mt-2">Evlatlığı</p>
+                            <span class="inline-block bg-blue-500 text-white text-xs px-3 py-1 rounded-full mt-2">Kur'an'da Adı Geçen Tek Sahabi</span>
+                        </div>
+                        <div class="md:w-2/3 space-y-4 text-gray-700 leading-relaxed">
+                            <p><strong class="text-blue-700">Evine Gelişi:</strong> Köle olarak satılmış, Hz. Hatice tarafından Peygamberimize hediye edilmiş ve Peygamberimiz onu hürriyetine kavuşturmuştur.</p>
+                            <div class="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500">
+                                <h4 class="font-bold text-blue-800 mb-1">Vefa Örneği:</h4>
+                                <p class="text-sm">Babası ve amcası onu bulup götürmek istediklerinde, o Peygamberimizin yanında kalmayı tercih etti. "Ben bu zattan öyle şeyler gördüm ki, kimseyi ona tercih etmem" dedi.</p>
+                            </div>
+                            <p><strong class="text-blue-700">Taif Olayı:</strong> Taif'te Peygamberimiz taşlanırken, vücudunu O'na siper etmiş, yaralanmasına rağmen Peygamberimizi korumuştur.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HZ. ENES CONTENT -->
+                <div id="enes" class="tab-content">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="w-32 h-32 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600 text-5xl border-4 border-amber-200">
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-amber-900">Hz. Enes</h3>
+                            <p class="text-sm text-gray-500 mt-2">Küçük Hizmetkar</p>
+                            <span class="inline-block bg-amber-500 text-white text-xs px-3 py-1 rounded-full mt-2">10 Yıl Hizmet Etti</span>
+                        </div>
+                        <div class="md:w-2/3 space-y-4 text-gray-700 leading-relaxed">
+                            <p><strong class="text-amber-700">Evine Gelişi:</strong> Peygamberimiz Medine'ye hicret edince, annesi Ümmü Süleym onu 10 yaşındayken Peygamberimize hizmet etmesi için getirdi.</p>
+                            <div class="bg-amber-50 p-4 rounded-xl border-l-4 border-amber-500">
+                                <h4 class="font-bold text-amber-800 mb-1">Hoşgörü Hatırası:</h4>
+                                <p class="text-sm">"10 yıl hizmet ettim. Bana bir kez bile 'Bunu niye yaptın?' veya 'Niye yapmadın?' demedi. Asla kızmadı, azarlamadı."</p>
+                            </div>
+                            <p><strong class="text-amber-700">Sırdaş:</strong> Peygamberimizin verdiği özel görevleri annesine bile söylemezdi. Bu yüzden "Küçük Sırdaş" olarak anılırdı.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: KİM BİLİYOR OYUNU (Etkinlik-6 Uyarlaması) -->
+        <section class="bg-white rounded-3xl p-8 shadow-lg border-2 border-indigo-100 max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Oyun Vakti</span>
+                <h2 class="text-2xl font-bold text-gray-800 mt-2">Ben Kimim?</h2>
+                <p class="text-gray-600">İpucunu oku ve doğru kişiyi bul.</p>
+            </div>
+
+            <div class="bg-indigo-50 p-6 rounded-2xl text-center mb-6 min-h-[120px] flex items-center justify-center relative">
+                <p id="game-clue" class="text-xl font-bold text-indigo-900 leading-relaxed">Başlamak için butona tıkla!</p>
+                <div id="game-feedback" class="absolute bottom-2 text-sm font-bold hidden"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="game-options">
+                <button onclick="checkAnswer('Ali')" class="game-option bg-white border-2 border-indigo-200 py-3 rounded-xl font-bold text-indigo-700 hover:bg-indigo-500 hover:text-white">Hz. Ali</button>
+                <button onclick="checkAnswer('Zeyd')" class="game-option bg-white border-2 border-indigo-200 py-3 rounded-xl font-bold text-indigo-700 hover:bg-indigo-500 hover:text-white">Hz. Zeyd</button>
+                <button onclick="checkAnswer('Enes')" class="game-option bg-white border-2 border-indigo-200 py-3 rounded-xl font-bold text-indigo-700 hover:bg-indigo-500 hover:text-white">Hz. Enes</button>
+                <button onclick="startGame()" id="start-btn" class="bg-indigo-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-indigo-700 col-span-2 md:col-span-1 md:col-start-4">BAŞLA</button>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: MEKTUP YAZMA (Performans Görevi) -->
+        <section class="max-w-3xl mx-auto">
+            <div class="bg-[#fffbeb] p-8 rounded-3xl shadow-xl relative overflow-hidden border border-orange-100">
+                <!-- Posta Pulu Süsü -->
+                <div class="absolute top-4 right-4 bg-white p-2 shadow-md rotate-12 border border-gray-200 w-20 h-24 flex items-center justify-center">
+                    <i class="fas fa-mosque text-3xl text-orange-400"></i>
+                </div>
+
+                <h2 class="text-3xl font-bold text-orange-900 mb-4 font-hand">Sevgili Peygamberime Mektup</h2>
+                <p class="text-orange-800 mb-6">Asrısaadet'te yaşayan bir çocuk olsaydın, O'na ne söylemek isterdin?</p>
+
+                <textarea id="letter-area" class="w-full h-48 bg-white p-6 rounded-xl border border-orange-200 focus:ring-2 focus:ring-orange-400 focus:outline-none text-gray-700 leading-loose shadow-inner resize-none font-hand text-lg" placeholder="Ey Allah'ın Resulü..."></textarea>
+
+                <div class="flex justify-between items-center mt-4">
+                    <p class="text-xs text-orange-600 italic">* Bu bir simülasyondur. Yazdıkların sadece senin ekranında kalır.</p>
+                    <button onclick="sendLetter()" class="bg-orange-500 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition shadow-lg flex items-center gap-2">
+                        Gönder <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-violet-900 text-violet-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamberimizin Çevresindeki Çocuklar</p>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        function openTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Show selected content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Button styles
+            const buttons = ['ali', 'zeyd', 'enes'];
+            buttons.forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    btn.classList.add('active', 'bg-violet-600', 'text-white', 'border-transparent');
+                    btn.classList.remove('bg-white', 'text-violet-700', 'border-violet-200');
+                } else {
+                    btn.classList.remove('active', 'bg-violet-600', 'text-white', 'border-transparent');
+                    btn.classList.add('bg-white', 'text-violet-700', 'border-violet-200');
+                }
+            });
+        }
+
+        // --- GAME LOGIC ---
+        const questions = [
+            { clue: "5 yaşından itibaren Peygamberimizin evinde büyüdüm ve ilk Müslüman çocuk oldum.", answer: "Ali" },
+            { clue: "Taif'te atılan taşlara karşı vücudumu Peygamberimize siper ettim.", answer: "Zeyd" },
+            { clue: "10 yaşında hizmet etmeye başladım ve Peygamberimizin 'Küçük Sırdaşı' oldum.", answer: "Enes" },
+            { clue: "Hicret gecesi Peygamberimizin yatağına yattım.", answer: "Ali" },
+            { clue: "Ailem beni bulduğunda, ben Peygamberimizin yanında kalmayı seçtim.", answer: "Zeyd" },
+            { clue: "Peygamberimiz bana 'Oğulcuğum' veya 'İki kulaklı' diye seslenirdi.", answer: "Enes" },
+            { clue: "Kur'an-ı Kerim'de ismi geçen tek sahabiyim.", answer: "Zeyd" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let gameActive = false;
+
+        function startGame() {
+            gameActive = true;
+            currentQuestionIndex = 0;
+            document.getElementById('start-btn').classList.add('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('game-clue').innerText = questions[currentQuestionIndex].clue;
+                document.getElementById('game-feedback').classList.add('hidden');
+                
+                // Enable buttons
+                document.querySelectorAll('.game-option').forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-green-500', 'text-white', 'bg-red-500', 'opacity-50');
+                    btn.classList.add('bg-white', 'text-indigo-700');
+                });
+            } else {
+                document.getElementById('game-clue').innerHTML = "<span class='text-green-600'><i class='fas fa-trophy'></i> Tebrikler! Tüm soruları bildin.</span>";
+                document.getElementById('start-btn').innerText = "Tekrar Oyna";
+                document.getElementById('start-btn').classList.remove('hidden');
+                document.querySelectorAll('.game-option:not(#start-btn)').forEach(btn => btn.disabled = true);
+            }
+        }
+
+        function checkAnswer(selected) {
+            if (!gameActive) return;
+
+            const correct = questions[currentQuestionIndex].answer;
+            const feedback = document.getElementById('game-feedback');
+            const btns = document.querySelectorAll('.game-option');
+
+            if (selected === correct) {
+                feedback.innerText = "Doğru! Harikasın.";
+                feedback.className = "absolute bottom-2 text-sm font-bold text-green-600 block";
+                
+                // Highlight correct button
+                btns.forEach(btn => {
+                    if (btn.innerText.includes(correct)) {
+                        btn.classList.remove('bg-white', 'text-indigo-700');
+                        btn.classList.add('bg-green-500', 'text-white');
+                    }
+                });
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }, 1000);
+            } else {
+                feedback.innerText = "Yanlış cevap, tekrar dene.";
+                feedback.className = "absolute bottom-2 text-sm font-bold text-red-500 block";
+                
+                // Highlight wrong button briefly
+                btns.forEach(btn => {
+                    if (btn.innerText.includes(selected)) {
+                        btn.classList.add('bg-red-500', 'text-white');
+                    }
+                });
+            }
+        }
+
+        // --- LETTER LOGIC ---
+        function sendLetter() {
+            const textarea = document.getElementById('letter-area');
+            if (textarea.value.trim() !== "") {
+                alert("Mektubun sevgiyle kaydedildi! Peygamber sevgisi kalbinden eksik olmasın.");
+                textarea.value = "";
+            } else {
+                alert("Lütfen önce duygularını yaz.");
+            }
+        }
+
+        // Init Tab
+        openTab('ali');
+
+    </script>
+</body>
+</html>

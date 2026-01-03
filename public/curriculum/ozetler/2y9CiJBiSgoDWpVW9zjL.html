@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dede Olarak Peygamberimiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdfbf7; /* Creamy White */
+            color: #5d4037; /* Brown */
+        }
+        .fun-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .flower-pattern {
+            background-color: #8bc34a;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f1f8e9' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M20 20c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .grandchild-card {
+            transition: all 0.3s ease;
+        }
+        .grandchild-card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .memory-box {
+            border-left: 4px solid #8bc34a;
+            transition: background-color 0.3s;
+        }
+        .memory-box:hover {
+            background-color: #f1f8e9;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dialogue-bubble {
+            position: relative;
+            background: #fff;
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        /* Triangle for speech bubble */
+        .dialogue-bubble.left::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #fff transparent transparent;
+        }
+        .dialogue-bubble.right::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            border-width: 10px 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent transparent #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="flower-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-green-700">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
+            <h1 class="text-4xl md:text-6xl fun-font font-bold mb-4">DEDE OLARAK PEYGAMBERİMİZ</h1>
+            <p class="text-xl text-green-100 font-bold max-w-2xl mx-auto">
+                "Onlar benim dünyadaki iki reyhanımdır."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: TORUNLAR BAHÇESİ (Liste) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-green-800 mb-2 fun-font">Torunlar Bahçesi</h2>
+                <div class="h-1 w-20 bg-green-500 mx-auto rounded"></div>
+                <p class="text-gray-600 mt-2">Peygamberimizin (sav) toplam 8 torunu vardır.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Hz. Zeyneb'in Çocukları -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-purple-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full text-purple-600"><i class="fas fa-female"></i></div>
+                        <h3 class="font-bold text-lg text-purple-900">Hz. Zeyneb'in Çocukları</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="grandchild-card bg-purple-50 p-3 rounded-xl flex items-center gap-3">
+                            <i class="fas fa-child text-purple-400"></i>
+                            <span class="font-bold text-gray-700">Ali</span>
+                        </div>
+                        <div class="grandchild-card bg-purple-50 p-3 rounded-xl flex items-center gap-3">
+                            <i class="fas fa-child-dress text-purple-400"></i>
+                            <span class="font-bold text-gray-700">Ümame</span>
+                            <span class="text-xs bg-white px-2 py-1 rounded text-purple-600 border border-purple-200">İlk Kız Torun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hz. Rukıyye'nin Çocuğu -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-blue-400">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full text-blue-600"><i class="fas fa-female"></i></div>
+                        <h3 class="font-bold text-lg text-blue-900">Hz. Rukıyye'nin Çocuğu</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="grandchild-card bg-blue-50 p-3 rounded-xl flex items-center gap-3">
+                            <i class="fas fa-child text-blue-400"></i>
+                            <span class="font-bold text-gray-700">Abdullah</span>
+                            <span class="text-xs bg-white px-2 py-1 rounded text-blue-600 border border-blue-200">Dedesinin İsmi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hz. Fatıma'nın Çocukları -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-green-500">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-green-100 p-3 rounded-full text-green-600"><i class="fas fa-female"></i></div>
+                        <h3 class="font-bold text-lg text-green-900">Hz. Fatıma'nın Çocukları</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="grandchild-card bg-green-50 p-3 rounded-xl">
+                            <span class="font-bold text-gray-700 block">Hz. Hasan</span>
+                        </div>
+                        <div class="grandchild-card bg-green-50 p-3 rounded-xl">
+                            <span class="font-bold text-gray-700 block">Hz. Hüseyin</span>
+                        </div>
+                        <div class="grandchild-card bg-green-50 p-3 rounded-xl">
+                            <span class="font-bold text-gray-700 block">Muhassin</span>
+                        </div>
+                        <div class="grandchild-card bg-green-50 p-3 rounded-xl">
+                            <span class="font-bold text-gray-700 block">Zeyneb</span>
+                        </div>
+                        <div class="grandchild-card bg-green-50 p-3 rounded-xl col-span-2">
+                            <span class="font-bold text-gray-700 block">Ümmü Gülsüm</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: UNUTULMAZ ANILAR (Story Cards) -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-green-900 mb-2">Dedem Peygamber Olsa...</h2>
+                <p class="text-gray-600">Torunlarıyla yaşadığı o güzel anlar.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-100">
+                <!-- Hikaye 1 -->
+                <div class="memory-box p-6 flex flex-col md:flex-row gap-6 items-start">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center shrink-0 text-orange-500 text-3xl">
+                        <i class="fas fa-mosque"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Hutbeden İndi</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Peygamberimiz minberde hutbe okurken, Hz. Hasan ve Hz. Hüseyin kırmızı elbiseleriyle mescide girdiler. Yürürken tökezlediklerini gören Peygamberimiz dayanamadı, <strong>konuşmasını kesti, minberden indi</strong>, onları kucaklayıp tekrar minbere çıktı.
+                        </p>
+                        <div class="mt-2 text-xs font-bold text-green-600 bg-green-50 inline-block px-2 py-1 rounded">Ders: Çocuk sevgisi her şeyden önce gelir.</div>
+                    </div>
+                </div>
+
+                <!-- Hikaye 2 -->
+                <div class="memory-box p-6 flex flex-col md:flex-row gap-6 items-start border-t border-gray-100">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center shrink-0 text-blue-500 text-3xl">
+                        <i class="fas fa-horse-head"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">En Güzel Binek</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Bir gün torunlarını omuzlarına almış gezdiriyordu. Bir sahabi "Ne güzel bir bineğiniz var" diye takıldı. Peygamberimiz (sav) gülümsedi: <strong>"Onlar da ne iyi binicidirler!"</strong> diyerek onlara verdiği değeri gösterdi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hikaye 3 -->
+                <div class="memory-box p-6 flex flex-col md:flex-row gap-6 items-start border-t border-gray-100">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center shrink-0 text-pink-500 text-3xl">
+                        <i class="fas fa-praying-hands"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Omuzda Namaz</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Kız torunu <strong>Ümame</strong>'yi çok severdi. Bazen o omzundayken namaz kılardı. Secdeye giderken onu yere bırakır, kalkarken tekrar omzuna alırdı.
+                        </p>
+                        <div class="mt-2 text-xs font-bold text-green-600 bg-green-50 inline-block px-2 py-1 rounded">Ders: İbadet ederken bile çocuklara şefkat gösterilir.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: MERHAMET DERSİ (Diyalog) -->
+        <section class="max-w-3xl mx-auto bg-green-50 p-8 rounded-3xl border border-green-200 fade-in">
+            <h2 class="text-2xl font-bold text-center text-green-900 mb-6">Merhamet Etmeyene...</h2>
+            
+            <div class="space-y-6">
+                <!-- Narrator -->
+                <div class="text-center text-sm text-gray-500 italic mb-4">
+                    Peygamberimiz torunu Hz. Hasan'ı öpüyordu. Yanında Akra bin Habis oturuyordu.
+                </div>
+
+                <!-- Akra -->
+                <div class="flex gap-4 items-start">
+                    <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold shrink-0">A</div>
+                    <div class="dialogue-bubble left">
+                        <p class="text-gray-800 font-bold">"Ya Resulullah! Benim on çocuğum var ama hiçbirini böyle öpmedim."</p>
+                    </div>
+                </div>
+
+                <!-- Peygamberimiz -->
+                <div class="flex gap-4 items-start justify-end">
+                    <div class="dialogue-bubble right bg-green-100">
+                        <p class="text-green-900 font-bold">"Merhamet etmeyene merhamet edilmez!"</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold shrink-0">P</div>
+                </div>
+                
+                <div class="text-center mt-6 p-4 bg-white rounded-xl border border-green-200 text-green-800 font-medium">
+                    <i class="fas fa-star mr-2 text-yellow-500"></i> Şefkat, sevginin gösterilmesidir. Çocukları öpmek, sevmek sünnettir.
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: ETKİNLİK KÖŞESİ (Quiz) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 border-t-8 border-orange-500 fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Neler Öğrendik?</h2>
+
+            <div class="space-y-6">
+                <!-- Soru 1 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">1. Peygamberimizin soyu (nesli) hangi çocuğundan devam etmiştir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Hz. Zeyneb</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Hz. Fatıma</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">2. "Seyit" ve "Şerif" unvanları kimlerin soyundan gelenlere verilir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Hz. Hasan ve Hz. Hüseyin</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Hz. Ali ve Hz. Osman</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-gray-50 p-4 rounded-xl">
+                    <p class="font-bold text-gray-800 mb-3">3. Peygamberimiz torunlarına hangi isimleri vermiştir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Harp (Savaş)</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-gray-200 p-3 rounded-lg text-sm hover:bg-orange-50 transition text-left">Hasan ve Hüseyin (Güzellik/İyilik)</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-green-900 text-green-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Aile Hayatı</p>
+    </footer>
+
+    <script>
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.parentElement.querySelector('.feedback');
+            
+            // Disable buttons
+            parent.querySelectorAll('button').forEach(b => b.disabled = true);
+
+            if(isCorrect) {
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                btn.classList.remove('bg-white');
+                feedback.innerText = "Doğru! Tebrikler.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-green-600');
+            } else {
+                btn.classList.add('bg-red-500', 'text-white');
+                btn.classList.remove('bg-white');
+                feedback.innerText = "Yanlış Cevap.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-red-600');
+            }
+        }
+    </script>
+</body>
+</html>

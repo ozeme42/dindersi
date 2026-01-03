@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bir Sure Öğreniyorum: Kevser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #ecfeff; /* Cyan-50 */
+            color: #164e63; /* Cyan-900 */
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            line-height: 2.5;
+        }
+        .water-gradient {
+            background: linear-gradient(180deg, #06b6d4 0%, #0891b2 100%);
+        }
+        /* Floating Animation */
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .droplet {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: ripple 2s linear infinite;
+        }
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        .verse-card {
+            transition: all 0.3s ease;
+        }
+        .verse-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.2);
+        }
+        .game-btn {
+            transition: all 0.2s;
+        }
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="water-gradient text-white pt-16 pb-24 px-4 text-center rounded-b-[50px] shadow-xl relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+        <div class="absolute bottom-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-cyan-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-md">KEVSER SURESİ</h1>
+            <p class="text-xl text-cyan-100 font-light max-w-2xl mx-auto">
+                "Şüphesiz biz sana bitip tükenmez nimetler verdik."
+            </p>
+            <div class="mt-6 flex justify-center gap-4 text-sm font-bold text-cyan-800">
+                <span class="bg-cyan-100 px-4 py-1 rounded-full shadow-lg flex items-center gap-2"><i class="fas fa-book-open"></i> En Kısa Sure (3 Ayet)</span>
+                <span class="bg-cyan-100 px-4 py-1 rounded-full shadow-lg flex items-center gap-2"><i class="fas fa-water"></i> Cennet Nehri</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 -mt-16 relative z-20 space-y-16 pb-20">
+
+        <!-- BÖLÜM 1: KAVRAMLAR VE HİKAYE -->
+        <section class="grid md:grid-cols-2 gap-8">
+            
+            <!-- Kavram Kartı: Kevser -->
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-cyan-500 float" style="animation-delay: 0s;">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 text-2xl">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">Kevser Ne Demek?</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                    Kelime anlamı <strong>"çokluk, bolluk, bereket"</strong> demektir. Aynı zamanda cennette Hz. Peygamber'e (sav) verilecek olan, müminlerin su içip ferahlayacağı <strong>büyük nehir veya havuzun</strong> adıdır.
+                </p>
+            </div>
+
+            <!-- Kavram Kartı: Ebter ve Teselli -->
+            <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-rose-400 float" style="animation-delay: 1.5s;">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-500 text-2xl">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800">Neden İndirildi?</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Peygamberimizin oğlu Kasım vefat edince müşrikler ona <strong>"Ebter" (soyu kesik)</strong> dediler. Allah (cc), Peygamberimizi teselli etmek ve asıl soyu kesik olanların ona hakaret edenler olduğunu bildirmek için bu sureyi indirdi.
+                </p>
+                <div class="mt-3 bg-rose-50 p-2 rounded text-xs text-rose-800 font-bold">
+                    <i class="fas fa-info-circle mr-1"></i> Peygamberimizin soyu Hz. Fatıma, Hz. Hasan ve Hz. Hüseyin ile devam etmiştir.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- BÖLÜM 2: AYET AYET KEVSER -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-cyan-900">Surenin Okunuşu ve Anlamı</h2>
+                <p class="text-cyan-600">Kartları inceleyerek ezberleyebilirsin.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Besmele -->
+                <div class="text-center mb-6 opacity-70">
+                    <p class="arabic-text text-2xl text-cyan-800">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ</p>
+                    <p class="text-xs font-bold">Bismillâhirrahmânirrahîm</p>
+                </div>
+
+                <!-- Ayet 1 -->
+                <div class="verse-card bg-white rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 border border-cyan-100">
+                    <div class="w-10 h-10 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0 shadow-lg">1</div>
+                    <div class="flex-1 text-center md:text-right order-2 md:order-1">
+                        <p class="arabic-text text-3xl md:text-4xl text-cyan-900 mb-2">اِنَّٓا اَعْطَيْنَاكَ الْكَوْثَرَۜ</p>
+                    </div>
+                    <div class="flex-1 text-center md:text-left order-1 md:order-2 border-t md:border-t-0 md:border-l border-cyan-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-lg font-bold text-cyan-700 mb-1">İnnâ e’taynâ kelkevser</p>
+                        <p class="text-gray-600 italic">"Şüphesiz biz sana bitip tükenmez nimetler (Kevser) verdik."</p>
+                    </div>
+                </div>
+
+                <!-- Ayet 2 -->
+                <div class="verse-card bg-white rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 border border-cyan-100">
+                    <div class="w-10 h-10 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0 shadow-lg">2</div>
+                    <div class="flex-1 text-center md:text-right order-2 md:order-1">
+                        <p class="arabic-text text-3xl md:text-4xl text-cyan-900 mb-2">فَصَلِّ لِرَبِّكَ وَانْحَرْۜ</p>
+                    </div>
+                    <div class="flex-1 text-center md:text-left order-1 md:order-2 border-t md:border-t-0 md:border-l border-cyan-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-lg font-bold text-cyan-700 mb-1">Fesalli lirabbike venḥar</p>
+                        <p class="text-gray-600 italic">"Şimdi sen Rabbin için namaz kıl ve kurban kes!"</p>
+                        <span class="text-xs bg-cyan-50 text-cyan-600 px-2 py-1 rounded mt-1 inline-block">Nahr = Kurban kesmek</span>
+                    </div>
+                </div>
+
+                <!-- Ayet 3 -->
+                <div class="verse-card bg-white rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 border border-cyan-100">
+                    <div class="w-10 h-10 bg-cyan-500 text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0 shadow-lg">3</div>
+                    <div class="flex-1 text-center md:text-right order-2 md:order-1">
+                        <p class="arabic-text text-3xl md:text-4xl text-cyan-900 mb-2">اِنَّ شَانِئَكَ هُوَ الْاَبْتَرُ</p>
+                    </div>
+                    <div class="flex-1 text-center md:text-left order-1 md:order-2 border-t md:border-t-0 md:border-l border-cyan-100 pt-4 md:pt-0 md:pl-6">
+                        <p class="text-lg font-bold text-cyan-700 mb-1">İnne şânieke hüvel ebter</p>
+                        <p class="text-gray-600 italic">"Asıl soyu gelmeyecek (kesik) olan, sana karşı nefret duyandır."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: OYUN (Sıralama) -->
+        <section class="max-w-3xl mx-auto bg-cyan-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+            <!-- Arka Plan Süsü -->
+            <div class="absolute -right-10 -bottom-10 text-cyan-800 text-9xl opacity-50 rotate-12">
+                <i class="fas fa-layer-group"></i>
+            </div>
+
+            <div class="relative z-10 text-center">
+                <span class="bg-cyan-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
+                <h2 class="text-3xl font-bold mt-2 mb-6">Ayetleri Sıraya Diz</h2>
+                <p class="text-cyan-200 mb-8 text-sm">Aşağıdaki karışık parçalara doğru sırayla tıkla.</p>
+
+                <!-- Oyun Alanı: Hedef -->
+                <div id="target-area" class="bg-white/10 backdrop-blur-sm rounded-xl p-6 min-h-[100px] mb-6 flex flex-col gap-2 border border-white/20">
+                    <span class="text-cyan-300/50 text-sm italic" id="placeholder-text">Ayetler buraya gelecek...</span>
+                </div>
+
+                <!-- Oyun Alanı: Kaynak -->
+                <div id="source-area" class="flex flex-wrap justify-center gap-3">
+                    <!-- JS ile butonlar buraya gelecek -->
+                </div>
+
+                <div id="game-msg" class="mt-6 font-bold text-xl h-8 text-yellow-300"></div>
+                <button onclick="resetGame()" class="mt-4 text-sm text-cyan-300 underline hover:text-white hidden" id="reset-btn">Tekrar Oyna</button>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: KONTROL NOKTASI (Quiz) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 border border-cyan-100">
+            <h2 class="text-2xl font-bold text-cyan-900 mb-6 flex items-center gap-2">
+                <i class="fas fa-pencil-alt"></i> Neler Öğrendik?
+            </h2>
+            <div class="space-y-4">
+                
+                <div class="bg-cyan-50 p-4 rounded-lg">
+                    <p class="font-bold text-cyan-800 mb-2">1. "Kevser" kelimesi ne anlama gelir?</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="checkQuiz(this, true)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Bolluk, bereket, Cennet nehri</button>
+                        <button onclick="checkQuiz(this, false)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Namaz ve Kurban</button>
+                    </div>
+                </div>
+
+                <div class="bg-cyan-50 p-4 rounded-lg">
+                    <p class="font-bold text-cyan-800 mb-2">2. Surenin ikinci ayetinde hangi iki ibadet emredilmiştir?</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="checkQuiz(this, false)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Oruç ve Zekât</button>
+                        <button onclick="checkQuiz(this, true)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Namaz ve Kurban</button>
+                    </div>
+                </div>
+
+                <div class="bg-cyan-50 p-4 rounded-lg">
+                    <p class="font-bold text-cyan-800 mb-2">3. "Ebter" ne demektir?</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="checkQuiz(this, true)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Soyu kesik, nesli devam etmeyen</button>
+                        <button onclick="checkQuiz(this, false)" class="bg-white py-2 rounded border border-cyan-200 hover:bg-cyan-100 text-sm">Çok zengin olan</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-cyan-900 text-cyan-300 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Kevser Suresi</p>
+    </footer>
+
+    <script>
+        // --- GAME LOGIC ---
+        const verses = [
+            { text: "1. İnnâ e’taynâ kelkevser", id: 1 },
+            { text: "2. Fesalli lirabbike venḥar", id: 2 },
+            { text: "3. İnne şânieke hüvel ebter", id: 3 }
+        ];
+
+        let currentStep = 1;
+
+        function initGame() {
+            const sourceArea = document.getElementById('source-area');
+            const targetArea = document.getElementById('target-area');
+            const msg = document.getElementById('game-msg');
+            const placeholder = document.getElementById('placeholder-text');
+            
+            sourceArea.innerHTML = '';
+            targetArea.innerHTML = '';
+            targetArea.appendChild(placeholder);
+            msg.innerText = '';
+            currentStep = 1;
+            document.getElementById('reset-btn').classList.add('hidden');
+            placeholder.classList.remove('hidden');
+
+            // Shuffle
+            const shuffled = [...verses].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach(v => {
+                const btn = document.createElement('button');
+                btn.className = "game-btn bg-white text-cyan-900 px-4 py-2 rounded-lg font-bold shadow hover:bg-cyan-50";
+                btn.innerText = v.text.substring(3); // Hide numbers for difficulty? Or keep for ease. Let's hide number prefix to make them think.
+                btn.innerText = v.text; // Actually, keeping numbers makes it easier for 5th grade.
+                btn.onclick = () => checkOrder(btn, v.id);
+                sourceArea.appendChild(btn);
+            });
+        }
+
+        function checkOrder(btn, id) {
+            const targetArea = document.getElementById('target-area');
+            const msg = document.getElementById('game-msg');
+            const placeholder = document.getElementById('placeholder-text');
+
+            if(id === currentStep) {
+                // Correct
+                placeholder.classList.add('hidden');
+                btn.classList.remove('bg-white', 'text-cyan-900');
+                btn.classList.add('bg-green-500', 'text-white', 'w-full', 'order-correct');
+                btn.disabled = true;
+                targetArea.appendChild(btn);
+                
+                currentStep++;
+
+                if(currentStep > 3) {
+                    msg.innerHTML = '<i class="fas fa-star"></i> Harika! Suresi tamamladın.';
+                    document.getElementById('reset-btn').classList.remove('hidden');
+                }
+            } else {
+                // Wrong
+                btn.classList.add('bg-red-500', 'text-white');
+                msg.innerText = 'Yanlış sıra, tekrar dene!';
+                setTimeout(() => {
+                    btn.classList.remove('bg-red-500', 'text-white');
+                    msg.innerText = '';
+                }, 500);
+            }
+        }
+
+        function resetGame() {
+            initGame();
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkQuiz(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if(isCorrect) {
+                btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
+                btn.innerHTML += ' <i class="fas fa-check"></i>';
+            } else {
+                btn.classList.add('bg-red-500', 'text-white', 'border-transparent');
+                buttons.forEach(b => {
+                    if(b.onclick.toString().includes('true')) {
+                        b.classList.add('bg-green-100', 'border-green-500');
+                    }
+                });
+            }
+        }
+
+        // Start
+        initGame();
+
+    </script>
+</body>
+</html>

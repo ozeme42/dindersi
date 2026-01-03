@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bir Sure Öğreniyorum: Fil Suresi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f5f5f4; /* Stone-100 */
+            color: #44403c; /* Stone-700 */
+        }
+        .title-font { font-family: 'Cinzel', serif; }
+        .arabic-font { font-family: 'Amiri', serif; line-height: 2.2; }
+        
+        .stone-pattern {
+            background-color: #57534e;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a8a29e' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .verse-card {
+            transition: all 0.3s ease;
+        }
+        .verse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dialogue Bubbles */
+        .bubble {
+            position: relative;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .bubble-left {
+            background-color: #e7e5e4;
+            color: #44403c;
+            border-bottom-left-radius: 0;
+        }
+        .bubble-right {
+            background-color: #44403c;
+            color: #f5f5f4;
+            border-bottom-right-radius: 0;
+            text-align: right;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-btn.correct {
+            background-color: #22c55e;
+            border-color: #166534;
+            color: white;
+            pointer-events: none;
+        }
+        .step-btn.wrong {
+            animation: shake 0.5s;
+            background-color: #ef4444;
+            color: white;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="stone-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-2xl mb-12 border-b-8 border-stone-800 relative overflow-hidden">
+        <div class="absolute top-4 left-4 opacity-10 text-8xl"><i class="fas fa-kaaba"></i></div>
+        <div class="absolute bottom-4 right-4 opacity-10 text-8xl"><i class="fas fa-crow"></i></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/10 border border-white/30 text-stone-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite Sonu</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4 tracking-wide text-[#e7e5e4]">FİL SURESİ</h1>
+            <p class="text-xl text-stone-300 font-light max-w-2xl mx-auto italic">
+                "Rabb'inin, fil sahiplerine ne yaptığını görmedin mi?"
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: TARİHİ OLAY (Fil Vakası) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2 title-font">Fil Vakası Nedir?</h2>
+                <div class="h-1 w-20 bg-stone-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center bg-white p-8 rounded-3xl shadow-xl border border-stone-200">
+                <!-- Harita / Görsel Alanı -->
+                <div class="relative h-80 bg-[#d6d3d1] rounded-2xl overflow-hidden border-4 border-stone-300 flex items-center justify-center group">
+                    <!-- Basit Harita Temsili -->
+                    <div class="absolute top-10 right-20 text-center">
+                        <i class="fas fa-kaaba text-4xl text-black"></i>
+                        <span class="block text-xs font-bold">MEKKE</span>
+                    </div>
+                    <div class="absolute bottom-10 left-20 text-center">
+                        <i class="fas fa-church text-4xl text-stone-600"></i>
+                        <span class="block text-xs font-bold">YEMEN (San'a)</span>
+                    </div>
+                    <!-- Ok -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-long-arrow-alt-right text-6xl text-red-600 -rotate-45 opacity-50 group-hover:opacity-100 transition duration-1000"></i>
+                    </div>
+                    <div class="absolute bottom-4 right-4 bg-white/80 p-2 rounded text-xs font-bold">
+                        Ebrehe'nin Ordusu <i class="fas fa-walking"></i> <i class="fas fa-elephant"></i>
+                    </div>
+                </div>
+
+                <!-- Hikaye -->
+                <div class="space-y-4">
+                    <div class="bg-stone-50 p-4 rounded-xl border-l-4 border-red-500">
+                        <h3 class="font-bold text-red-900 mb-1">Ebrehe'nin Hırsı</h3>
+                        <p class="text-sm text-gray-700">Yemen Valisi Ebrehe, insanların Kâbe'ye gitmesini kıskandı. San'a şehrinde büyük bir kilise yaptırdı ve herkesin oraya gelmesini istedi. Kimse gitmeyince Kâbe'yi yıkmaya karar verdi.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border-l-4 border-stone-500">
+                        <h3 class="font-bold text-stone-900 mb-1">Fil Ordusu</h3>
+                        <p class="text-sm text-gray-700">Büyük bir ordu ve en önde "Mahmud" adında devasa bir fille Mekke'ye yürüdü.</p>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border-l-4 border-green-500">
+                        <h3 class="font-bold text-green-900 mb-1">Mucizevi Son</h3>
+                        <p class="text-sm text-gray-700">Filler Kâbe'ye yaklaşınca yere çöktü, gitmedi. Allah (cc), Ebabil kuşlarını gönderdi. Kuşlar attıkları taşlarla orduyu bozguna uğrattı.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: TARİHİ DİYALOG -->
+        <section class="max-w-3xl mx-auto fade-in">
+            <div class="bg-stone-100 p-8 rounded-3xl border border-stone-300">
+                <h3 class="text-center font-bold text-xl text-stone-800 mb-6 flex items-center justify-center gap-2">
+                    <i class="fas fa-comments"></i> Tarihi Konuşma
+                </h3>
+
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 bg-red-800 text-white rounded-full flex items-center justify-center font-bold text-xl">E</div>
+                        <div class="bubble bubble-left w-3/4">
+                            <p class="font-bold text-xs text-red-800 mb-1">Ebrehe:</p>
+                            "Ben Kâbe'yi yıkmaya geldim, sen benden develerini mi istiyorsun? Senin bu kadar basit düşünen biri olduğunu bilmezdim."
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 justify-end">
+                        <div class="bubble bubble-right w-3/4">
+                            <p class="font-bold text-xs text-stone-300 mb-1">Abdülmuttalib:</p>
+                            "Ben develerin sahibiyim, onları istiyorum. <span class="text-yellow-400 font-bold">Kâbe'nin de bir sahibi (Allah) var, O evini koruyacaktır.</span>"
+                        </div>
+                        <div class="w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center font-bold text-xl">A</div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center text-sm text-stone-600 italic">
+                    * Bu olaydan sonra Kureyşliler dağlara çekilmiş ve Allah'ın evini korumasını beklemiştir.
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: SUREYİ ÖĞRENİYORUM (Ayet Ayet) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-stone-800 mb-2">Fil Suresi</h2>
+                <p class="text-stone-600">Kartları inceleyerek sureyi ezberleyebilirsin.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Besmele -->
+                <div class="col-span-full text-center mb-4">
+                    <span class="arabic-font text-2xl text-stone-800">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّح۪يمِ</span>
+                </div>
+
+                <!-- Ayet 1 -->
+                <div class="verse-card bg-white p-6 rounded-2xl border-t-4 border-stone-600 shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-stone-200 text-stone-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span>
+                        <p class="arabic-font text-2xl text-right">اَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِاَصْحَابِ الْف۪يلِۜ</p>
+                    </div>
+                    <p class="font-bold text-stone-700 mb-2">Elem terâ keyfe feale rabbüke biesḥâbilfîl</p>
+                    <p class="text-sm text-gray-600 italic">"Rabb’inin, fil sahiplerine ne yaptığını görmedin mi?"</p>
+                </div>
+
+                <!-- Ayet 2 -->
+                <div class="verse-card bg-white p-6 rounded-2xl border-t-4 border-stone-600 shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-stone-200 text-stone-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span>
+                        <p class="arabic-font text-2xl text-right">اَلَمْ يَجْعَلْ كَيْدَهُمْ ف۪ي تَضْل۪يلٍۙ</p>
+                    </div>
+                    <p class="font-bold text-stone-700 mb-2">Elem yec’al keydehüm fîtadlîl</p>
+                    <p class="text-sm text-gray-600 italic">"Onların tuzaklarını boşa çıkarmadı mı?"</p>
+                </div>
+
+                <!-- Ayet 3 -->
+                <div class="verse-card bg-white p-6 rounded-2xl border-t-4 border-stone-600 shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-stone-200 text-stone-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span>
+                        <p class="arabic-font text-2xl text-right">وَاَرْسَلَ عَلَيْهِمْ طَيْرًا اَبَاب۪يلَۙ</p>
+                    </div>
+                    <p class="font-bold text-stone-700 mb-2">Ve ersele aleyhim tayran ebâbîl</p>
+                    <p class="text-sm text-gray-600 italic">"Üzerlerine sürü sürü kuşlar (ebabil) gönderdi."</p>
+                </div>
+
+                <!-- Ayet 4 -->
+                <div class="verse-card bg-white p-6 rounded-2xl border-t-4 border-stone-600 shadow-md">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-stone-200 text-stone-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">4</span>
+                        <p class="arabic-font text-2xl text-right">تَرْم۪يهِمْ بِحِجَارَةٍ مِنْ سِجّ۪يلٍۖ</p>
+                    </div>
+                    <p class="font-bold text-stone-700 mb-2">Termîhim biḥicâratim min siccîl</p>
+                    <p class="text-sm text-gray-600 italic">"Onlara balçıktan pişirilmiş taşlar atıyorlardı."</p>
+                </div>
+
+                <!-- Ayet 5 -->
+                <div class="verse-card bg-white p-6 rounded-2xl border-t-4 border-stone-600 shadow-md md:col-span-2 lg:col-span-2 lg:col-start-1 md:col-start-1 md:mx-auto lg:mx-0 w-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="bg-stone-200 text-stone-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">5</span>
+                        <p class="arabic-font text-2xl text-right">فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ</p>
+                    </div>
+                    <p class="font-bold text-stone-700 mb-2">Fecealehüm keasfim me’kûl</p>
+                    <p class="text-sm text-gray-600 italic">"Nihayet onları yenilmiş ekin yaprakları hâline getirdi."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: SUREYİ SIRALA (Yeni Etkinlik) -->
+        <section class="max-w-4xl mx-auto bg-stone-800 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl fade-in">
+            <div class="relative z-10 text-center">
+                <h2 class="text-2xl font-bold mb-4 text-stone-200">Sureyi Sırala</h2>
+                <p class="text-stone-400 mb-6 text-sm">İster okunuşunu ister anlamını seçerek ayetleri doğru sıraya diz.</p>
+                
+                <!-- Mod Seçimi -->
+                <div class="flex justify-center gap-4 mb-8">
+                    <button onclick="startVerseGame('pronunciation')" class="bg-stone-600 hover:bg-stone-500 text-white px-6 py-2 rounded-lg font-bold transition border-b-4 border-stone-700 active:border-b-0">
+                        Okunuşu Sırala
+                    </button>
+                    <button onclick="startVerseGame('meaning')" class="bg-stone-600 hover:bg-stone-500 text-white px-6 py-2 rounded-lg font-bold transition border-b-4 border-stone-700 active:border-b-0">
+                        Anlamı Sırala
+                    </button>
+                </div>
+
+                <!-- Oyun Alanı -->
+                <div id="verse-game-area" class="grid gap-3 min-h-[250px]">
+                    <div class="text-stone-500 italic mt-8">Başlamak için yukarıdan bir seçim yapın...</div>
+                </div>
+                
+                <div id="verse-game-feedback" class="mt-6 font-bold text-yellow-400 text-lg h-8"></div>
+                <button onclick="resetVerseGame()" id="verse-reset-btn" class="mt-4 text-stone-400 underline text-sm hover:text-white hidden">Yeniden Başla</button>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: OLAY SIRALAMA (Eski Oyun) -->
+        <section class="max-w-3xl mx-auto bg-white border border-stone-200 rounded-3xl p-8 shadow-lg fade-in">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-stone-800">Fil Vakasını Sırala</h2>
+                <p class="text-stone-500 text-sm">Olayın akışını hatırla ve doğru sırayla tıkla.</p>
+            </div>
+
+            <div id="game-area" class="grid gap-3">
+                <button onclick="checkStep(this, 1)" class="step-btn bg-stone-100 hover:bg-stone-200 p-4 rounded-xl text-left border border-stone-300 text-stone-700 transition flex items-center gap-3">
+                    <span class="hidden check-icon"><i class="fas fa-check"></i></span>
+                    Ebrehe'nin Kâbe'yi yıkmak için yola çıkması
+                </button>
+                <button onclick="checkStep(this, 3)" class="step-btn bg-stone-100 hover:bg-stone-200 p-4 rounded-xl text-left border border-stone-300 text-stone-700 transition flex items-center gap-3">
+                    <span class="hidden check-icon"><i class="fas fa-check"></i></span>
+                    Fillerin Mekke önünde yere çöküp ilerlememesi
+                </button>
+                <button onclick="checkStep(this, 5)" class="step-btn bg-stone-100 hover:bg-stone-200 p-4 rounded-xl text-left border border-stone-300 text-stone-700 transition flex items-center gap-3">
+                    <span class="hidden check-icon"><i class="fas fa-check"></i></span>
+                    Ebrehe ordusunun yenilmiş ekin gibi helak olması
+                </button>
+                <button onclick="checkStep(this, 2)" class="step-btn bg-stone-100 hover:bg-stone-200 p-4 rounded-xl text-left border border-stone-300 text-stone-700 transition flex items-center gap-3">
+                    <span class="hidden check-icon"><i class="fas fa-check"></i></span>
+                    Abdülmuttalib'in Ebrehe ile konuşması ve halkı dağlara çekmesi
+                </button>
+                <button onclick="checkStep(this, 4)" class="step-btn bg-stone-100 hover:bg-stone-200 p-4 rounded-xl text-left border border-stone-300 text-stone-700 transition flex items-center gap-3">
+                    <span class="hidden check-icon"><i class="fas fa-check"></i></span>
+                    Gökyüzünde Ebabil kuşlarının belirmesi ve taş atması
+                </button>
+            </div>
+
+            <div id="game-feedback" class="mt-6 font-bold text-green-600 text-center text-lg h-8"></div>
+            <div class="text-center">
+                 <button onclick="location.reload()" id="reset-btn" class="mt-4 text-stone-400 underline text-sm hover:text-stone-600 hidden">Tekrar Oyna</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Fil Suresi ve Fil Vakası</p>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const verseData = [
+            { id: 1, pron: "Elem terâ keyfe feale rabbüke biesḥâbilfîl", meaning: "Rabb’inin, fil sahiplerine ne yaptığını görmedin mi?" },
+            { id: 2, pron: "Elem yec’al keydehüm fîtadlîl", meaning: "Onların tuzaklarını boşa çıkarmadı mı?" },
+            { id: 3, pron: "Ve ersele aleyhim tayran ebâbîl", meaning: "Üzerlerine sürü sürü kuşlar gönderdi." },
+            { id: 4, pron: "Termîhim biḥicâratim min siccîl", meaning: "Onlara balçıktan pişirilmiş taşlar atıyorlardı." },
+            { id: 5, pron: "Fecealehüm keasfim me’kûl", meaning: "Nihayet onları yenilmiş ekin yaprakları hâline getirdi." }
+        ];
+
+        // --- VERSE ORDERING GAME ---
+        let currentVerseStep = 1;
+        let currentMode = '';
+
+        function startVerseGame(mode) {
+            currentMode = mode;
+            currentVerseStep = 1;
+            const container = document.getElementById('verse-game-area');
+            const feedback = document.getElementById('verse-game-feedback');
+            document.getElementById('verse-reset-btn').classList.add('hidden');
+            feedback.innerText = "";
+            
+            // Shuffle
+            const shuffled = [...verseData].sort(() => Math.random() - 0.5);
+
+            let html = '';
+            shuffled.forEach(v => {
+                const text = mode === 'pronunciation' ? v.pron : v.meaning;
+                html += `<button onclick="checkVerseStep(this, ${v.id})" class="verse-game-btn bg-stone-700 hover:bg-stone-600 p-3 rounded-lg text-left border border-stone-600 transition text-stone-200">
+                            ${text}
+                         </button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function checkVerseStep(btn, id) {
+            const feedback = document.getElementById('verse-game-feedback');
+
+            if (id === currentVerseStep) {
+                // Correct
+                btn.classList.remove('bg-stone-700', 'hover:bg-stone-600', 'text-stone-200');
+                btn.classList.add('bg-green-600', 'text-white', 'border-green-500', 'pointer-events-none');
+                btn.innerHTML = `<i class="fas fa-check mr-2"></i> ` + btn.innerHTML;
+                
+                feedback.innerText = "Doğru!";
+                feedback.className = "mt-6 font-bold text-green-400 text-lg h-8";
+                
+                currentVerseStep++;
+
+                if (currentVerseStep > 5) {
+                    feedback.innerText = "Harika! Sureyi doğru sıraladın.";
+                    feedback.className = "mt-6 font-bold text-yellow-400 text-lg h-8 animate-bounce";
+                    document.getElementById('verse-reset-btn').classList.remove('hidden');
+                }
+            } else {
+                // Wrong
+                btn.classList.add('bg-red-600', 'text-white');
+                feedback.innerText = "Yanlış sıra, tekrar dene.";
+                feedback.className = "mt-6 font-bold text-red-400 text-lg h-8";
+                
+                setTimeout(() => {
+                    btn.classList.remove('bg-red-600', 'text-white');
+                }, 500);
+            }
+        }
+
+        function resetVerseGame() {
+            startVerseGame(currentMode);
+        }
+
+        // --- EVENT ORDERING GAME (Existing Logic) ---
+        let currentEventStep = 1;
+        const totalEventSteps = 5;
+
+        function checkStep(btn, stepId) {
+            const feedback = document.getElementById('game-feedback');
+
+            if (stepId === currentEventStep) {
+                // Correct
+                btn.classList.remove('bg-stone-100', 'hover:bg-stone-200', 'text-stone-700');
+                btn.classList.add('correct', 'bg-green-100', 'text-green-800', 'border-green-300');
+                btn.querySelector('.check-icon').classList.remove('hidden');
+                
+                feedback.innerText = "Doğru! Devam et...";
+                feedback.className = "mt-6 font-bold text-green-600 text-lg h-8";
+                
+                currentEventStep++;
+
+                if (currentEventStep > totalEventSteps) {
+                    feedback.innerText = "Tebrikler! Olayı doğru sıraladın.";
+                    feedback.className = "mt-6 font-bold text-green-700 text-lg h-8 animate-bounce";
+                    document.getElementById('reset-btn').classList.remove('hidden');
+                }
+            } else {
+                // Wrong
+                btn.classList.add('wrong', 'bg-red-100', 'text-red-800');
+                feedback.innerText = "Yanlış sıra! Önceki olayları düşün.";
+                feedback.className = "mt-6 font-bold text-red-500 text-lg h-8";
+                
+                setTimeout(() => {
+                    btn.classList.remove('wrong', 'bg-red-100', 'text-red-800');
+                }, 500);
+            }
+        }
+
+        // Shuffle buttons on load (Simple DOM shuffle for events)
+        window.onload = function() {
+            const parent = document.getElementById('game-area');
+            for (let i = parent.children.length; i >= 0; i--) {
+                parent.appendChild(parent.children[Math.random() * i | 0]);
+            }
+            // Auto start verse game in default mode
+            startVerseGame('pronunciation');
+        };
+    </script>
+</body>
+</html>

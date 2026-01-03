@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edebiyatımızda Dinin İzleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #fcfbf9; /* Old Book Page Color */
+            color: #2e1003; /* Deep Ink Brown */
+        }
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+        .poem-font {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+        }
+        .ink-bg {
+            background-color: #5b2110;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23883617' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .lit-card {
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .lit-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: #d97706;
+            transition: width 0.3s;
+            z-index: 0;
+        }
+        .lit-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+        .lit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+        .tab-btn {
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background-color: #78350f;
+            color: #fffbeb;
+            border-color: #78350f;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .highlight {
+            background-color: #fef3c7;
+            padding: 0 4px;
+            border-radius: 4px;
+            color: #b45309;
+            font-weight: bold;
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #78350f;
+            color: #fffbeb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="ink-bg text-[#fffbeb] py-16 px-4 text-center rounded-b-[50px] shadow-2xl mb-12 border-b-8 border-[#451a03] relative overflow-hidden">
+        <div class="absolute top-10 left-10 opacity-10 text-8xl rotate-12"><i class="fas fa-feather-alt"></i></div>
+        <div class="absolute bottom-10 right-10 opacity-10 text-8xl -rotate-12"><i class="fas fa-scroll"></i></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-[#fffbeb]/10 border border-[#fffbeb]/30 text-[#fffbeb] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4 tracking-wide">EDEBİYATIMIZDA DİNİN İZLERİ</h1>
+            <p class="text-xl text-orange-100/80 font-light max-w-2xl mx-auto italic">
+                "Dil, kültürün aynasıdır. Din ise o aynaya yansıyan en güçlü ışıktır."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: EDEBİ TÜRLER (Kartlar) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#451a03] mb-2 title-font">Türler ve Kavramlar</h2>
+                <div class="h-1 w-20 bg-amber-600 mx-auto rounded"></div>
+                <p class="text-[#78350f] mt-4">Din, edebiyatımıza yeni türler kazandırmıştır.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Tevhit -->
+                <div class="lit-card bg-white p-6 rounded-xl border border-gray-200">
+                    <div class="text-amber-600 text-4xl mb-4"><i class="fas fa-fingerprint"></i></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">TEVHİT</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Yüce Allah'ın varlığını ve birliğini anlatan şiir ve eserlerdir.
+                    </p>
+                </div>
+
+                <!-- Münacat -->
+                <div class="lit-card bg-white p-6 rounded-xl border border-gray-200">
+                    <div class="text-blue-600 text-4xl mb-4"><i class="fas fa-hands-praying"></i></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">MÜNACAT</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Allah'a yalvarmak, dua etmek ve bağışlanma dilemek amacıyla yazılan şiirlerdir.
+                    </p>
+                </div>
+
+                <!-- Naat -->
+                <div class="lit-card bg-white p-6 rounded-xl border border-gray-200">
+                    <div class="text-rose-600 text-4xl mb-4"><i class="fas fa-rose"></i></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">NAAT</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Hz. Peygamber'i (sav) ve onun güzel özelliklerini öven şiirlerdir. (Örn: Arif Nihat Asya)
+                    </p>
+                </div>
+
+                <!-- Mevlit -->
+                <div class="lit-card bg-white p-6 rounded-xl border border-gray-200">
+                    <div class="text-green-600 text-4xl mb-4"><i class="fas fa-baby"></i></div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">MEVLİT</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Hz. Peygamber'in doğumunu ve hayatını anlatan eserlerdir. En meşhuru Süleyman Çelebi'nin "Vesiletü'n-Necat"ıdır.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: ŞİİR KÜRSÜSÜ (Tabs) -->
+        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-[#d7ccc8] fade-in">
+            <div class="bg-[#efebe9] flex border-b border-[#d7ccc8] overflow-x-auto">
+                <button onclick="openTab('istiklal')" class="tab-btn active px-6 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition whitespace-nowrap" id="btn-istiklal">İstiklal Marşı</button>
+                <button onclick="openTab('mevlit')" class="tab-btn px-6 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition whitespace-nowrap" id="btn-mevlit">Vesiletü'n-Necat</button>
+                <button onclick="openTab('yunus')" class="tab-btn px-6 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition whitespace-nowrap" id="btn-yunus">Yunus Emre</button>
+                <button onclick="openTab('naat')" class="tab-btn px-6 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition whitespace-nowrap" id="btn-naat">Naat (A.N. Asya)</button>
+            </div>
+
+            <div class="p-8 min-h-[400px] bg-[url('https://www.transparenttextures.com/patterns/paper.png')]">
+                
+                <!-- İstiklal Marşı -->
+                <div id="istiklal" class="tab-content block">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-[#451a03] mb-1">İstiklal Marşı (Kesit)</h3>
+                        <p class="text-sm text-gray-500">Mehmet Akif Ersoy</p>
+                    </div>
+                    <div class="space-y-4 text-center poem-font text-[#2e1003]">
+                        <p>Ruhumun senden <span class="highlight">İlâhî</span>, şudur ancak emeli:</p>
+                        <p>Değmesin <span class="highlight">mabedimin</span> göğsüne nâmahrem eli.</p>
+                        <p>Bu <span class="highlight">ezanlar</span> -ki <span class="highlight">şehadetleri</span> dinin temeli-</p>
+                        <p>Ebedî yurdumun üstünde benim inlemeli.</p>
+                        <br>
+                        <p>Hakkıdır <span class="highlight">Hakk'a</span> tapan milletimin istiklâl.</p>
+                    </div>
+                    <div class="mt-8 p-4 bg-orange-50 rounded-xl border border-orange-200 text-sm text-orange-900 text-center">
+                        <i class="fas fa-info-circle mr-2"></i> Dinî Kavramlar: İlahi, Mabed, Ezan, Şehadet, Hakk.
+                    </div>
+                </div>
+
+                <!-- Mevlit -->
+                <div id="mevlit" class="tab-content hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-[#451a03] mb-1">Vesiletü'n-Necat (Kurtuluş Vesilesi)</h3>
+                        <p class="text-sm text-gray-500">Süleyman Çelebi</p>
+                    </div>
+                    <div class="space-y-4 text-center poem-font text-[#2e1003]">
+                        <p>Merhabâ ey <span class="highlight">âli sultân</span> merhabâ</p>
+                        <p>Merhabâ ey <span class="highlight">kân-ı irfan</span> merhabâ</p>
+                        <p>Merhabâ ey sırr-ı <span class="highlight">fürkân</span> merhabâ</p>
+                        <p>Merhabâ ey <span class="highlight">rahmeten lil-âlemîn</span></p>
+                    </div>
+                    <div class="mt-8 p-4 bg-green-50 rounded-xl border border-green-200 text-sm text-green-900 text-center">
+                        <i class="fas fa-info-circle mr-2"></i> Bu eser kandillerde, doğumlarda ve vefatlarda okunur.
+                    </div>
+                </div>
+
+                <!-- Yunus Emre -->
+                <div id="yunus" class="tab-content hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-[#451a03] mb-1">Adı Güzel Kendi Güzel Muhammed</h3>
+                        <p class="text-sm text-gray-500">Yunus Emre</p>
+                    </div>
+                    <div class="space-y-4 text-center poem-font text-[#2e1003]">
+                        <p>Arayı arayı bulsam izini</p>
+                        <p>İzinin tozuna sürsem yüzümü</p>
+                        <p><span class="highlight">Hak</span> nasib eylese görsem yüzünü</p>
+                        <p>Ya <span class="highlight">Muhammed</span> canım arzular seni</p>
+                    </div>
+                </div>
+
+                <!-- Naat -->
+                <div id="naat" class="tab-content hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-[#451a03] mb-1">Naat</h3>
+                        <p class="text-sm text-gray-500">Arif Nihat Asya</p>
+                    </div>
+                    <div class="space-y-4 text-center poem-font text-[#2e1003]">
+                        <p>Yüreklerden taşsın Yine, <span class="highlight">imanlar</span>!</p>
+                        <p>Itri, bestelesin <span class="highlight">Tekbir'ini</span>;</p>
+                        <p><span class="highlight">Evliya</span> okusun <span class="highlight">Kur'an'lar</span>!</p>
+                        <p>Gel, Ey Muhammed, bahardır.</p>
+                        <p>Dudaklar ardında saklı <span class="highlight">Aminlerimiz</span> vardır!..</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: BİLİN BAKALIM (Oyun) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#451a03] mb-2 title-font">Bilin Bakalım</h2>
+                <p class="text-gray-600">İpuçlarından kavramı bul.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- Kart 1 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-amber-300">
+                            <div class="bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 text-amber-600"><i class="fas fa-question"></i></div>
+                            <h3 class="font-bold text-gray-800 text-lg mb-4">İPUÇLARI</h3>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>1. Kandil</li>
+                                <li>2. Doğum</li>
+                                <li>3. Peygamber</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4 border px-2 py-1 rounded">(Cevap için Tıkla)</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="text-2xl font-bold mb-2">MEVLİT</h3>
+                            <p class="text-sm">Hz. Peygamber'in doğumunu anlatan şiir/tören.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 2 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-blue-300">
+                            <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 text-blue-600"><i class="fas fa-question"></i></div>
+                            <h3 class="font-bold text-gray-800 text-lg mb-4">İPUÇLARI</h3>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>1. Övgü</li>
+                                <li>2. Şiir</li>
+                                <li>3. Peygamber</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4 border px-2 py-1 rounded">(Cevap için Tıkla)</p>
+                        </div>
+                        <div class="flip-card-back bg-[#1e3a8a]">
+                            <h3 class="text-2xl font-bold mb-2">NAAT</h3>
+                            <p class="text-sm">Hz. Peygamber'i övmek için yazılan şiir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 3 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-green-300">
+                            <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 text-green-600"><i class="fas fa-question"></i></div>
+                            <h3 class="font-bold text-gray-800 text-lg mb-4">İPUÇLARI</h3>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>1. Ramazan</li>
+                                <li>2. Kurban</li>
+                                <li>3. Şeker</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4 border px-2 py-1 rounded">(Cevap için Tıkla)</p>
+                        </div>
+                        <div class="flip-card-back bg-[#14532d]">
+                            <h3 class="text-2xl font-bold mb-2">BAYRAM</h3>
+                            <p class="text-sm">Dini ve milli sevinç günleri.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: SÖZLÜ KÜLTÜR (Test) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl p-8 border border-[#d7ccc8] fade-in">
+            <h2 class="text-2xl font-bold text-center text-[#451a03] mb-6 flex items-center justify-center gap-2">
+                <i class="fas fa-comments"></i> Sözlü Edebiyat Dedektifi
+            </h2>
+            
+            <div class="space-y-4" id="quiz-container">
+                <!-- Soru 1 -->
+                <div class="bg-[#fcfbf9] p-4 rounded-xl border border-gray-200">
+                    <p class="font-bold text-gray-800 mb-3">1. "Allah dağına göre kar verir" sözü ne tür bir eserdir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-green-50 transition">Atasözü</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-red-50 transition">Deyim</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-[#fcfbf9] p-4 rounded-xl border border-gray-200">
+                    <p class="font-bold text-gray-800 mb-3">2. "Minarede ses, ölümsüz nefes, Haydi namaza herkes." Bu nedir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-red-50 transition">Mani</button>
+                        <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-green-50 transition">Bilmece (Cevap: Ezan)</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-[#fcfbf9] p-4 rounded-xl border border-gray-200">
+                    <p class="font-bold text-gray-800 mb-3">3. Aşağıdakilerden hangisi edebiyatımızın önemli şahsiyetlerinden biridir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-green-50 transition">Hacı Bektaş Veli</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded-lg bg-white border hover:bg-red-50 transition">Ebrehe</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#451a03] text-[#d7ccc8] py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Edebiyat ve Din</p>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('block');
+                el.classList.add('hidden');
+            });
+            document.getElementById(tabName).classList.remove('hidden');
+            document.getElementById(tabName).classList.add('block');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-[#78350f]', 'text-[#fffbeb]', 'border-[#78350f]');
+                btn.classList.add('text-[#5d4037]');
+            });
+            
+            const btn = document.getElementById('btn-' + tabName);
+            btn.classList.add('active', 'bg-[#78350f]', 'text-[#fffbeb]', 'border-[#78350f]');
+            btn.classList.remove('text-[#5d4037]');
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.nextElementSibling;
+            const buttons = parent.querySelectorAll('button');
+
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                feedback.innerText = "Doğru!";
+                feedback.className = "mt-2 text-sm font-bold text-green-600 block";
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                feedback.innerText = "Yanlış Cevap.";
+                feedback.className = "mt-2 text-sm font-bold text-red-600 block";
+            }
+        }
+    </script>
+</body>
+</html>

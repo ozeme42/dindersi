@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Doğumu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4; /* Green-50 */
+            color: #14532d; /* Green-900 */
+        }
+        .title-font {
+            font-family: 'Amiri', serif;
+        }
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a34a' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .id-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .id-card:hover {
+            transform: translateY(-5px);
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 150px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="pattern-bg bg-green-700 text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl relative overflow-hidden mb-12 border-b-8 border-green-800">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">1. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4">PEYGAMBERİMİZİN DOĞUMU</h1>
+            <p class="text-xl text-green-100 font-light max-w-2xl mx-auto">
+                "Âlemlere rahmet olarak gönderilen kutlu elçi."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: KİMLİK KARTI -->
+        <section class="fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-green-900 mb-2 title-font">Kimlik Kartı</h2>
+                <p class="text-green-600">Peygamberimizi yakından tanıyalım.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto id-card rounded-2xl border-2 border-green-200 p-8 relative overflow-hidden">
+                <!-- Watermark -->
+                <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none">
+                    <i class="fas fa-star-and-crescent text-9xl text-green-900"></i>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                    <!-- Gül Resmi Temsili -->
+                    <div class="w-32 h-32 bg-green-100 rounded-full flex items-center justify-center border-4 border-white shadow-lg shrink-0">
+                        <i class="fas fa-seedling text-5xl text-green-600"></i>
+                    </div>
+
+                    <div class="flex-1 space-y-4 w-full">
+                        <div class="grid grid-cols-3 border-b border-green-100 pb-2">
+                            <span class="font-bold text-green-800 col-span-1">Adı:</span>
+                            <span class="text-gray-700 col-span-2 title-font text-xl">Hz. Muhammed (sav)</span>
+                        </div>
+                        <div class="grid grid-cols-3 border-b border-green-100 pb-2">
+                            <span class="font-bold text-green-800 col-span-1">Baba Adı:</span>
+                            <span class="text-gray-700 col-span-2">Abdullah</span>
+                        </div>
+                        <div class="grid grid-cols-3 border-b border-green-100 pb-2">
+                            <span class="font-bold text-green-800 col-span-1">Anne Adı:</span>
+                            <span class="text-gray-700 col-span-2">Amine</span>
+                        </div>
+                        <div class="grid grid-cols-3 border-b border-green-100 pb-2">
+                            <span class="font-bold text-green-800 col-span-1">Doğum Yeri:</span>
+                            <span class="text-gray-700 col-span-2">Mekke</span>
+                        </div>
+                        <div class="grid grid-cols-3 pb-2">
+                            <span class="font-bold text-green-800 col-span-1">Doğum Tarihi:</span>
+                            <span class="text-gray-700 col-span-2">20 Nisan 571 (Rebiülevvel 12)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-green-50 p-4 rounded-xl border border-green-100 text-sm text-center text-green-800">
+                    <i class="fas fa-info-circle mr-2"></i> Doğduğu gün "Mevlit Kandili" olarak kutlanır. Babası O doğmadan vefat etmiştir.
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: İSİMLERİ (Flip Cards) -->
+        <section class="fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-green-900 mb-2 title-font">Güzel İsimleri</h2>
+                <div class="h-1 w-20 bg-green-400 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Muhammed -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-green-100">
+                            <h3 class="text-2xl font-bold text-green-800 title-font">MUHAMMED</h3>
+                            <p class="text-xs text-gray-400 mt-2">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <p class="text-sm font-bold">Yerde ve gökte çok övülen.</p>
+                            <p class="text-xs mt-2">(Dedesi Abdülmuttalib koymuştur.)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ahmed -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-green-100">
+                            <h3 class="text-2xl font-bold text-green-800 title-font">AHMED</h3>
+                            <p class="text-xs text-gray-400 mt-2">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <p class="text-sm font-bold">Allah'ı en çok öven, en çok şükreden.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mahmud -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-green-100">
+                            <h3 class="text-2xl font-bold text-green-800 title-font">MAHMUD</h3>
+                            <p class="text-xs text-gray-400 mt-2">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <p class="text-sm font-bold">Övülen, methedilen.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mustafa -->
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-green-100">
+                            <h3 class="text-2xl font-bold text-green-800 title-font">MUSTAFA</h3>
+                            <p class="text-xs text-gray-400 mt-2">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <p class="text-sm font-bold">Seçilmiş olan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: SÜTANNE GELENEĞİ -->
+        <section class="fade-in bg-white rounded-3xl p-8 shadow-xl border border-green-100 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-50 rounded-full blur-3xl opacity-50 -mr-16 -mt-16 pointer-events-none"></div>
+            
+            <div class="text-center mb-10 relative z-10">
+                <h2 class="text-3xl font-bold text-green-900 mb-2">Sütanne Geleneği</h2>
+                <p class="text-gray-600">Mekke'nin sıcak havasından, yaylaların serinliğine.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center relative z-10">
+                <div class="space-y-4">
+                    <div class="bg-green-50 p-4 rounded-xl border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-800 mb-1"><i class="fas fa-question-circle mr-2"></i> Neden Sütanne?</h4>
+                        <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
+                            <li>Mekke'nin havası çok sıcaktı (Sağlık).</li>
+                            <li>Salgın hastalıklardan korunmak.</li>
+                            <li>Çölde Arapça daha düzgün konuşuluyordu (Dil).</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800 mb-1"><i class="fas fa-baby mr-2"></i> İlk Sütannesi</h4>
+                        <p class="text-sm text-gray-700">Kısa bir süre <strong>Süveybe</strong> hanım emzirdi. Böylece amcası <strong>Hz. Hamza</strong> ile süt kardeşi oldular.</p>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 p-6 rounded-xl border border-yellow-200 text-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow text-yellow-600 text-2xl">
+                        <i class="fas fa-hands-holding-child"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-900 mb-2">Halime Hatun</h3>
+                    <p class="text-sm text-gray-700 mb-4">
+                        Sadoğulları yurdundan gelen Halime Hatun, Peygamberimizi yetim olduğu için başta almak istemedi ama sonra kabul etti. Evi berekete kavuştu.
+                    </p>
+                    <div class="inline-block bg-white px-4 py-2 rounded-lg text-sm font-bold text-yellow-800 shadow-sm">
+                        4 Yaşına Kadar Yanında Kaldı
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: BİLGİ YARIŞMASI (Kontrol Noktası) -->
+        <section class="max-w-3xl mx-auto fade-in">
+            <div class="bg-green-900 rounded-3xl p-8 text-white relative shadow-2xl overflow-hidden">
+                <div class="absolute top-0 right-0 p-10 opacity-10">
+                    <i class="fas fa-puzzle-piece text-9xl"></i>
+                </div>
+
+                <div class="relative z-10 text-center">
+                    <span class="bg-green-700 text-green-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kontrol Noktası</span>
+                    <h2 class="text-2xl font-bold mt-4 mb-6">Bilgilerini Test Et</h2>
+
+                    <div id="quiz-container" class="space-y-4 text-left">
+                        <!-- Soru 1 -->
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                            <p class="mb-3 font-bold">1. Peygamberimiz kaç yılında doğmuştur?</p>
+                            <div class="flex gap-3">
+                                <button onclick="checkAnswer(this, false)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">610</button>
+                                <button onclick="checkAnswer(this, true)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">571</button>
+                                <button onclick="checkAnswer(this, false)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">632</button>
+                            </div>
+                        </div>
+
+                        <!-- Soru 2 -->
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                            <p class="mb-3 font-bold">2. Peygamberimizin ismini kim koymuştur?</p>
+                            <div class="flex gap-3">
+                                <button onclick="checkAnswer(this, true)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Dedesi Abdülmuttalib</button>
+                                <button onclick="checkAnswer(this, false)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Annesi Amine</button>
+                            </div>
+                        </div>
+
+                        <!-- Soru 3 -->
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                            <p class="mb-3 font-bold">3. Peygamberimiz sütannesi Halime ile nerede yaşamıştır?</p>
+                            <div class="flex gap-3">
+                                <button onclick="checkAnswer(this, false)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Mekke Merkez</button>
+                                <button onclick="checkAnswer(this, true)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Sadoğulları Yurdu</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Soru 4 -->
+                        <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                            <p class="mb-3 font-bold">4. Babası Abdullah ne zaman vefat etmiştir?</p>
+                            <div class="flex gap-3">
+                                <button onclick="checkAnswer(this, true)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Doğumdan Önce</button>
+                                <button onclick="checkAnswer(this, false)" class="flex-1 bg-green-800 hover:bg-green-700 py-2 rounded transition">Doğumdan Sonra</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-feedback" class="mt-6 font-bold text-yellow-300 h-6"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-green-800 text-green-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamberimizin Doğumu</p>
+    </footer>
+
+    <script>
+        function checkAnswer(btn, isCorrect) {
+            // Disable buttons in this group
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            const feedback = document.getElementById('quiz-feedback');
+
+            if (isCorrect) {
+                btn.classList.remove('bg-green-800', 'hover:bg-green-700');
+                btn.classList.add('bg-green-500', 'text-white', 'font-bold', 'scale-105');
+                feedback.innerText = "Doğru Cevap! Harikasın.";
+            } else {
+                btn.classList.remove('bg-green-800', 'hover:bg-green-700');
+                btn.classList.add('bg-red-500', 'text-white', 'opacity-50');
+                
+                // Highlight correct one
+                buttons.forEach(b => {
+                    if (b.onclick.toString().includes('true')) {
+                        b.classList.remove('bg-green-800');
+                        b.classList.add('bg-green-500', 'border', 'border-white');
+                    }
+                });
+                feedback.innerText = "Yanlış Cevap. Doğrusu işaretlendi.";
+            }
+        }
+    </script>
+</body>
+</html>

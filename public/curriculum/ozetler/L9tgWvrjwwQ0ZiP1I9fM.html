@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an-ı Kerim'in Temel Özellikleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+        .arabic-font {
+            font-family: 'Amiri', serif;
+        }
+        .glass-header {
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Flip Card Styles */
+        .flip-card {
+            perspective: 1000px;
+            height: 200px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            flex-direction: column;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .tag-cloud-item {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="glass-header text-white pt-16 pb-24 px-4 text-center rounded-b-[3rem] shadow-xl mb-12 relative z-10">
+        <span class="bg-teal-800/50 border border-teal-400/30 text-teal-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite: Kur'an-ı Kerim</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">HAYAT REHBERİ: KUR'AN</h1>
+        <p class="text-lg text-teal-100 max-w-2xl mx-auto font-light">
+            "Bu, kendisinde şüphe olmayan kitaptır. Allah’a karşı gelmekten sakınanlar için yol göstericidir." (Bakara, 2)
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 -mt-20 relative z-20 space-y-16 pb-20">
+
+        <!-- ETKİNLİK 1: ÇAĞRIŞIM (Kelime Bulutu) -->
+        <section class="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-slate-800"><i class="fas fa-brain text-teal-500 mr-2"></i> Beyin Fırtınası</h2>
+                <p class="text-slate-500">"Kur'an-ı Kerim" denince aklına gelen ilk 5 kavramı yaz.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-center mb-6">
+                <input type="text" id="word-input" class="w-full md:w-64 px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="Örn: Rehber, Huzur..." onkeypress="handleEnter(event)">
+                <button onclick="addWord()" class="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl font-bold transition shadow-lg shadow-teal-500/30">
+                    Ekle <i class="fas fa-plus ml-2"></i>
+                </button>
+            </div>
+
+            <div id="tag-cloud" class="flex flex-wrap justify-center gap-3 min-h-[60px]">
+                <!-- Kelimeler buraya gelecek -->
+                <span class="tag-cloud-item bg-slate-100 text-slate-500 px-4 py-2 rounded-lg text-sm border border-slate-200 italic">Henüz kelime eklenmedi...</span>
+            </div>
+        </section>
+
+        <!-- KONU: TEMEL ÖZELLİKLER (5 Madde) -->
+        <section>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-px bg-slate-300 flex-1"></div>
+                <h2 class="text-3xl font-bold text-slate-800">Kur'an'ın 5 Temel Özelliği</h2>
+                <div class="h-px bg-slate-300 flex-1"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- 1. İyiye Yönlendirme -->
+                <div class="feature-card bg-white p-6 rounded-2xl border-t-4 border-emerald-500 shadow-sm">
+                    <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-2xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">İyiye ve Güzele Yönlendirir</h3>
+                    <p class="text-sm text-slate-600 mb-3">İyilik yapmak, anne-babaya saygı, dürüstlük gibi "Salih Amel"leri emreder.</p>
+                    <div class="bg-emerald-50 p-3 rounded-lg text-xs text-emerald-800 italic">
+                        "...İyilik edin. Şüphesiz Allah iyilik edenleri sever." (Bakara, 195)
+                    </div>
+                </div>
+
+                <!-- 2. Kötülükten Sakındırma -->
+                <div class="feature-card bg-white p-6 rounded-2xl border-t-4 border-red-500 shadow-sm">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 text-2xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Kötülüklerden Sakındırır</h3>
+                    <p class="text-sm text-slate-600 mb-3">Yalan, haksızlık ve zulüm gibi davranışlardan uzak durmayı öğütler.</p>
+                    <div class="bg-red-50 p-3 rounded-lg text-xs text-red-800 italic">
+                        "...İyiliği emreden ve kötülükten meneden bir topluluk bulunsun." (Al-i İmran, 104)
+                    </div>
+                </div>
+
+                <!-- 3. Açıklayıcı -->
+                <div class="feature-card bg-white p-6 rounded-2xl border-t-4 border-blue-500 shadow-sm">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mb-4">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Açıklayıcıdır</h3>
+                    <p class="text-sm text-slate-600 mb-3">İnanç, ibadet, ahlak ve sosyal hayatla ilgili bilinmesi gerekenleri açıklar.</p>
+                    <div class="bg-blue-50 p-3 rounded-lg text-xs text-blue-800 italic">
+                        "...Bunlar, gerçeği açıklayan kitabın ayetleridir." (Yusuf, 1)
+                    </div>
+                </div>
+
+                <!-- 4. Yol Gösterici -->
+                <div class="feature-card bg-white p-6 rounded-2xl border-t-4 border-amber-500 shadow-sm lg:col-span-1">
+                    <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 text-2xl mb-4">
+                        <i class="fas fa-compass"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Yol Göstericidir (Hidayet)</h3>
+                    <p class="text-sm text-slate-600 mb-3">Allah'a, doğruya ve kurtuluşa giden yolu gösteren bir rehberdir.</p>
+                </div>
+
+                <!-- 5. Düşünmeye Sevk Etme -->
+                <div class="feature-card bg-white p-6 rounded-2xl border-t-4 border-indigo-500 shadow-sm lg:col-span-2">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 text-2xl mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Düşünmeye Yöneltir</h3>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <p class="text-sm text-slate-600 flex-1">İnsanı diğer varlıklardan ayıran aklı kullanmayı emreder. Evrendeki düzeni, yaratılışı ve hayatı sorgulatır.</p>
+                        <div class="bg-indigo-50 p-3 rounded-lg text-xs text-indigo-800 italic flex-1 flex items-center justify-center">
+                            "Hâlâ akıl erdirmeyecek misiniz?" (Yasin, 68)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ETKİNLİK 2: SEN OLSAN NE YAPARDIN? (Flip Cards) -->
+        <section>
+            <div class="bg-slate-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+
+                <div class="text-center mb-10 relative z-10">
+                    <span class="bg-teal-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Etkinlik</span>
+                    <h2 class="text-3xl font-bold mt-2">Sen Olsan Ne Yapardın?</h2>
+                    <p class="text-slate-300">Aşağıdaki durumlarda bir Müslüman Kur'an ahlakına göre nasıl davranır? Kartları çevir.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 relative z-10 text-slate-800">
+                    
+                    <!-- Senaryo 1 -->
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white rounded-xl shadow-lg border-b-4 border-slate-300">
+                                <i class="fas fa-procedures text-4xl text-rose-500 mb-3"></i>
+                                <h3 class="font-bold text-lg">Arkadaşın Hastalandığında</h3>
+                                <p class="text-xs text-slate-400 mt-2">Kartı çevir</p>
+                            </div>
+                            <div class="flip-card-back bg-rose-500 text-white rounded-xl shadow-lg">
+                                <h3 class="font-bold mb-2"><i class="fas fa-heart"></i> Kur'an Ahlakı</h3>
+                                <p class="text-sm">Onu ziyaret eder, moral verir ve ihtiyacı varsa yardım ederim. (Vefa ve Merhamet)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Senaryo 2 -->
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white rounded-xl shadow-lg border-b-4 border-slate-300">
+                                <i class="fas fa-coins text-4xl text-amber-500 mb-3"></i>
+                                <h3 class="font-bold text-lg">Para Üstü Fazla Verildiğinde</h3>
+                                <p class="text-xs text-slate-400 mt-2">Kartı çevir</p>
+                            </div>
+                            <div class="flip-card-back bg-amber-500 text-white rounded-xl shadow-lg">
+                                <h3 class="font-bold mb-2"><i class="fas fa-balance-scale"></i> Kur'an Ahlakı</h3>
+                                <p class="text-sm">Hemen fark edip satıcıya iade ederim. (Dürüstlük ve Hakkaniyet)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Senaryo 3 -->
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white rounded-xl shadow-lg border-b-4 border-slate-300">
+                                <i class="fas fa-shopping-bag text-4xl text-blue-500 mb-3"></i>
+                                <h3 class="font-bold text-lg">Annen Yük Taşıdığında</h3>
+                                <p class="text-xs text-slate-400 mt-2">Kartı çevir</p>
+                            </div>
+                            <div class="flip-card-back bg-blue-500 text-white rounded-xl shadow-lg">
+                                <h3 class="font-bold mb-2"><i class="fas fa-hands-helping"></i> Kur'an Ahlakı</h3>
+                                <p class="text-sm">Hemen koşup yükünü alırım. Ona "Of" bile demem. (Anne-Babaya İyilik)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Senaryo 4 -->
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white rounded-xl shadow-lg border-b-4 border-slate-300">
+                                <i class="fas fa-pencil-alt text-4xl text-purple-500 mb-3"></i>
+                                <h3 class="font-bold text-lg">Sınavdan İyi Not Almak İçin</h3>
+                                <p class="text-xs text-slate-400 mt-2">Kartı çevir</p>
+                            </div>
+                            <div class="flip-card-back bg-purple-500 text-white rounded-xl shadow-lg">
+                                <h3 class="font-bold mb-2"><i class="fas fa-check-circle"></i> Kur'an Ahlakı</h3>
+                                <p class="text-sm">Kopya çekmem. Sadece çalışarak Allah'tan yardım isterim. (Emek ve Dürüstlük)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Senaryo 5 -->
+                     <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front bg-white rounded-xl shadow-lg border-b-4 border-slate-300">
+                                <i class="fas fa-users text-4xl text-teal-500 mb-3"></i>
+                                <h3 class="font-bold text-lg">Kantinde Sıra Beklerken</h3>
+                                <p class="text-xs text-slate-400 mt-2">Kartı çevir</p>
+                            </div>
+                            <div class="flip-card-back bg-teal-500 text-white rounded-xl shadow-lg">
+                                <h3 class="font-bold mb-2"><i class="fas fa-user-clock"></i> Kur'an Ahlakı</h3>
+                                <p class="text-sm">Kaynak yapmam. Başkalarının hakkına saygı gösterir, sıramı beklerim. (Kul Hakkı)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Özet / Yazma Alanı -->
+        <section class="max-w-2xl mx-auto text-center">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Özetle...</h2>
+            <div class="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+                <p class="text-lg text-amber-900 font-serif italic mb-4">
+                    "İslam dini dürüstlük ve merhamete önem verir. Çünkü..."
+                </p>
+                <textarea id="summary-text" class="w-full p-4 rounded-lg border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm" rows="3" placeholder="Cümleyi kendi düşüncelerinle tamamla..."></textarea>
+                <button onclick="saveSummary()" class="mt-4 bg-amber-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-amber-700 transition">Kaydet</button>
+                <p id="save-msg" class="text-green-600 text-sm mt-2 hidden font-bold">Düşüncelerin kaydedildi!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Kur'an'ın Özellikleri</p>
+    </footer>
+
+    <script>
+        // --- Tag Cloud Logic ---
+        const tags = [];
+        const colors = ['bg-teal-100 text-teal-700', 'bg-blue-100 text-blue-700', 'bg-amber-100 text-amber-700', 'bg-rose-100 text-rose-700', 'bg-indigo-100 text-indigo-700'];
+
+        function addWord() {
+            const input = document.getElementById('word-input');
+            const word = input.value.trim();
+            const container = document.getElementById('tag-cloud');
+
+            if (word) {
+                // Clear initial message
+                if (tags.length === 0) container.innerHTML = '';
+
+                tags.push(word);
+                const colorClass = colors[Math.floor(Math.random() * colors.length)];
+                
+                const tagEl = document.createElement('span');
+                tagEl.className = `tag-cloud-item ${colorClass} px-4 py-2 rounded-lg text-sm font-bold border border-transparent shadow-sm flex items-center gap-2`;
+                tagEl.innerHTML = `${word} <button onclick="this.parentElement.remove()" class="hover:text-red-500 text-xs ml-1"><i class="fas fa-times"></i></button>`;
+                
+                container.appendChild(tagEl);
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') addWord();
+        }
+
+        // --- Summary Logic ---
+        function saveSummary() {
+            const text = document.getElementById('summary-text').value;
+            if(text.trim()) {
+                const msg = document.getElementById('save-msg');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 3000);
+            }
+        }
+    </script>
+</body>
+</html>

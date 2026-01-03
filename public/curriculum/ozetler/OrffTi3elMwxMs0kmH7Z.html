@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimiz ve Çevre Bilinci</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ecfdf5; /* Emerald-50 */
+            color: #064e3b; /* Emerald-900 */
+        }
+        .hand-font { font-family: 'Caveat', cursive; }
+        
+        .nature-pattern {
+            background-color: #059669;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM22.485 0l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM0 22.485l.828.83-1.415 1.415-.828-.828-.828.828L-3.659 22.49l.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM0 54.627l.828.83-1.415 1.415-.828-.828-.828.828L-3.659 54.63l.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM54.627 32.142l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM22.485 32.142l.83.828-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM32.142 54.627l.828.83-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828zM32.142 22.485l.828.83-1.415 1.415-.828-.828-.828.828-1.415-1.415.828-.828-.828-.828 1.415-1.415.828.828.828-.828 1.415 1.415-.828.828z' fill='%23a7f3d0' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .eco-card {
+            transition: all 0.3s ease;
+        }
+        .eco-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(5, 150, 105, 0.2);
+        }
+        
+        .tree-grow {
+            animation: grow 1.5s ease-out forwards;
+            transform-origin: bottom center;
+        }
+        @keyframes grow {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tab-btn.active {
+            background-color: #059669;
+            color: white;
+            border-color: #059669;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="nature-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-emerald-800">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-emerald-900/30 border border-emerald-200/30 text-emerald-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
+            <h1 class="text-4xl md:text-6xl hand-font font-bold mb-4 tracking-wide text-emerald-50">DOĞA DOSTU PEYGAMBER</h1>
+            <p class="text-xl text-emerald-100 font-light max-w-2xl mx-auto italic">
+                "Yeryüzündekilere merhamet edin ki, gökyüzündekiler de size merhamet etsin."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: DOĞA YASALARI (Kavramlar) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-2">Çevre Ahlakı</h2>
+                <div class="h-1 w-20 bg-emerald-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Emanet -->
+                <div class="eco-card bg-white p-6 rounded-2xl border-t-4 border-green-500 shadow-md">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4 text-green-600 text-2xl">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Emanet</h3>
+                    <p class="text-sm text-gray-600">Yeryüzü, hayvanlar, bitkiler ve sular Allah'ın bize emanetidir. Onları korumak kulluk görevimizdir.</p>
+                </div>
+
+                <!-- Denge -->
+                <div class="eco-card bg-white p-6 rounded-2xl border-t-4 border-blue-500 shadow-md">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600 text-2xl">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Denge (Mizan)</h3>
+                    <p class="text-sm text-gray-600">Allah evreni hassas bir dengeyle yaratmıştır. İsraf ve kirlilik bu dengeyi bozar. Dengeyi korumalıyız.</p>
+                </div>
+
+                <!-- Merhamet -->
+                <div class="eco-card bg-white p-6 rounded-2xl border-t-4 border-rose-500 shadow-md">
+                    <div class="w-14 h-14 bg-rose-100 rounded-full flex items-center justify-center mb-4 text-rose-600 text-2xl">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Merhamet</h3>
+                    <p class="text-sm text-gray-600">Her canlının yaşama hakkı vardır. Hayvanlara eziyet etmek, ağaçları sebepsiz kesmek yasaktır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: YEŞİL MİRAS (Ağaç Dikme) -->
+        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-100 fade-in">
+            <div class="bg-emerald-50 p-8 text-center border-b border-emerald-100">
+                <h2 class="text-3xl font-bold text-emerald-900 mb-4 flex items-center justify-center gap-3">
+                    <i class="fas fa-tree text-emerald-600"></i> Kıyamet Kopsa Bile...
+                </h2>
+                <p class="text-emerald-800 italic max-w-2xl mx-auto text-lg">
+                    "Elinizde bir fidan varken kıyamet kopmaya başlasa bile, eğer onu dikmeye gücünüz yeterse mutlaka dikiniz."
+                </p>
+            </div>
+
+            <div class="p-8 flex flex-col items-center">
+                <!-- Dikim Alanı -->
+                <div class="w-full h-48 bg-sky-50 rounded-xl relative overflow-hidden mb-6 border-b-8 border-[#8d6e63] flex items-end justify-center" id="garden-area">
+                    <div class="absolute top-4 right-4 text-yellow-400 text-5xl opacity-80"><i class="fas fa-sun"></i></div>
+                    <div class="absolute bottom-2 text-emerald-800 text-sm font-bold bg-white/80 px-2 rounded">Benim Bahçem</div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-gray-600 mb-4 text-sm">Butona tıklayarak Peygamberimizin tavsiyesine uy ve sanal bir fidan dik.</p>
+                    <button onclick="plantTree()" class="bg-emerald-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-emerald-700 transition transform hover:scale-105 active:scale-95 flex items-center gap-2 mx-auto">
+                        <i class="fas fa-seedling"></i> Fidan Dik
+                    </button>
+                    <p id="tree-counter" class="mt-4 font-bold text-emerald-700">Dikilen Fidan: 0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: SADIK DOST KASVA (Hayvan Hakları) -->
+        <section class="fade-in">
+            <div class="flex flex-col md:flex-row gap-8 bg-[#fff7ed] p-8 rounded-3xl shadow-lg border-l-8 border-orange-400">
+                <div class="md:w-1/3 flex items-center justify-center">
+                    <div class="w-48 h-48 bg-white rounded-full flex items-center justify-center text-8xl text-orange-800 shadow-inner border-4 border-orange-200">
+                        <i class="fas fa-camel"></i>
+                    </div>
+                </div>
+                <div class="md:w-2/3">
+                    <h3 class="text-2xl font-bold text-orange-900 mb-4">Sadık Dost: Kasva</h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Peygamberimizin <strong>Kasva</strong> adında çok sevdiği bir devesi vardı. Hicret yolculuğunda, Veda Hutbesi'nde hep onunla beraberdi. Peygamberimiz ona asla fazla yük yüklemez, onu yormaz ve bakımını ihmal etmezdi.
+                    </p>
+                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-orange-800 mb-2"><i class="fas fa-paw mr-2"></i> Hayvan Hakları Dersleri:</h4>
+                        <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                            <li>Susuz bir köpeğe su veren kişi cennetle müjdelenmiştir.</li>
+                            <li>Hayvanları dövmek, aç bırakmak ve güçleri yetmeyen yükü yüklemek yasaktır.</li>
+                            <li>Kuşların yuvasını bozmak, yavrularını almak günahtır.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: SU DEDEKTİFİ (İsraf Kontrolü) -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-blue-900">Su Tasarrufu Dedektifi</h2>
+                <p class="text-blue-700 text-sm">"Akan bir nehirde abdest alıyor olsan bile suyu israf etme!"</p>
+            </div>
+
+            <div class="bg-blue-50 rounded-3xl p-8 border border-blue-200">
+                <div class="space-y-4">
+                    <!-- Soru 1 -->
+                    <div class="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm">
+                        <span class="font-bold text-gray-700 text-sm md:text-base">Diş fırçalarken musluğu açık bırakmak.</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkHabit(this, false)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-green-100">Doğru</button>
+                            <button onclick="checkHabit(this, true)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-red-100">Yanlış</button>
+                        </div>
+                    </div>
+
+                    <!-- Soru 2 -->
+                    <div class="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm">
+                        <span class="font-bold text-gray-700 text-sm md:text-base">Abdest alırken suyu az açmak.</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkHabit(this, true)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-green-100">Doğru</button>
+                            <button onclick="checkHabit(this, false)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-red-100">Yanlış</button>
+                        </div>
+                    </div>
+
+                    <!-- Soru 3 -->
+                    <div class="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm">
+                        <span class="font-bold text-gray-700 text-sm md:text-base">Gereksiz yanan lambaları söndürmek.</span>
+                        <div class="flex gap-2">
+                            <button onclick="checkHabit(this, true)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-green-100">Doğru</button>
+                            <button onclick="checkHabit(this, false)" class="px-4 py-2 rounded-lg border border-gray-300 text-sm hover:bg-red-100">Yanlış</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="habit-feedback" class="mt-4 text-center font-bold text-blue-800 hidden"></div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: SOSYAL SORUMLULUK (Proje Seçimi) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <h2 class="text-3xl font-bold text-center text-emerald-900 mb-8">Senin Projen Hangisi?</h2>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl border-2 border-transparent hover:border-emerald-500 cursor-pointer text-center group" onclick="selectProject(this, 'Kuş Yuvası')">
+                    <div class="text-4xl text-sky-400 mb-2 group-hover:scale-110 transition"><i class="fas fa-home"></i></div>
+                    <h4 class="font-bold text-gray-800">Kuş Yuvası Yapmak</h4>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-2 border-transparent hover:border-emerald-500 cursor-pointer text-center group" onclick="selectProject(this, 'Fidan Dikmek')">
+                    <div class="text-4xl text-green-500 mb-2 group-hover:scale-110 transition"><i class="fas fa-seedling"></i></div>
+                    <h4 class="font-bold text-gray-800">Okula Fidan Dikmek</h4>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-2 border-transparent hover:border-emerald-500 cursor-pointer text-center group" onclick="selectProject(this, 'Besleme')">
+                    <div class="text-4xl text-orange-400 mb-2 group-hover:scale-110 transition"><i class="fas fa-cat"></i></div>
+                    <h4 class="font-bold text-gray-800">Hayvanları Beslemek</h4>
+                </div>
+                <div class="bg-white p-4 rounded-xl border-2 border-transparent hover:border-emerald-500 cursor-pointer text-center group" onclick="selectProject(this, 'Atık Toplama')">
+                    <div class="text-4xl text-blue-400 mb-2 group-hover:scale-110 transition"><i class="fas fa-recycle"></i></div>
+                    <h4 class="font-bold text-gray-800">Atık Toplamak</h4>
+                </div>
+            </div>
+            <div id="project-msg" class="text-center mt-6 p-4 bg-emerald-100 rounded-lg text-emerald-800 font-bold hidden"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-emerald-900 text-emerald-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Çevre Bilinci</p>
+    </footer>
+
+    <script>
+        // --- PLANTING GAME ---
+        let treeCount = 0;
+        const garden = document.getElementById('garden-area');
+
+        function plantTree() {
+            treeCount++;
+            document.getElementById('tree-counter').innerText = "Dikilen Fidan: " + treeCount;
+
+            const tree = document.createElement('i');
+            tree.className = 'fas fa-tree text-green-600 text-4xl absolute bottom-0 tree-grow';
+            
+            // Random Position
+            const randomLeft = Math.floor(Math.random() * 90); 
+            tree.style.left = randomLeft + '%';
+            
+            garden.appendChild(tree);
+        }
+
+        // --- HABIT CHECKER ---
+        let habitsChecked = 0;
+        function checkHabit(btn, isCorrect) {
+            // Disable siblings
+            const parent = btn.parentElement;
+            parent.querySelectorAll('button').forEach(b => {
+                b.className = "px-4 py-2 rounded-lg border border-gray-200 text-sm opacity-50 cursor-not-allowed";
+                b.disabled = true;
+            });
+
+            if(isCorrect) {
+                btn.className = "px-4 py-2 rounded-lg bg-green-500 text-white font-bold text-sm shadow-md";
+                btn.innerHTML = "Doğru <i class='fas fa-check'></i>";
+                btn.style.opacity = "1";
+            } else {
+                btn.className = "px-4 py-2 rounded-lg bg-red-500 text-white font-bold text-sm shadow-md";
+                btn.innerHTML = "Hata <i class='fas fa-times'></i>";
+                btn.style.opacity = "1";
+            }
+            
+            habitsChecked++;
+            if(habitsChecked === 3) {
+                document.getElementById('habit-feedback').innerText = "Harika! Doğayı korumak için bilinçlisin.";
+                document.getElementById('habit-feedback').classList.remove('hidden');
+            }
+        }
+
+        // --- PROJECT SELECTOR ---
+        function selectProject(card, name) {
+            document.querySelectorAll('.bg-white').forEach(c => c.classList.remove('border-emerald-500', 'bg-emerald-50'));
+            card.classList.add('border-emerald-500', 'bg-emerald-50');
+            
+            const msg = document.getElementById('project-msg');
+            msg.innerHTML = `Harika seçim! <strong>"${name}"</strong> projesi ile dünyaya iyilik katacaksın.`;
+            msg.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

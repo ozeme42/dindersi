@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Ünite Özeti: Aile Hayatında Peygamberimiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fff7ed; /* Orange-50 */
+            color: #431407; /* Brown-900 */
+            scroll-behavior: smooth;
+        }
+        .title-font { font-family: 'Cinzel', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fff7ed; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(234, 88, 12, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .role-btn.active {
+            background-color: #ea580c;
+            color: white;
+            border-color: #c2410c;
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#fff7ed]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-[#431407] text-orange-100 p-6 z-50 shadow-2xl">
+        <div class="mb-10 flex items-center gap-3 text-orange-400">
+            <i class="fas fa-home text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide text-white">4. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="block p-3 rounded-lg hover:bg-[#5d4037] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#roller" class="block p-3 rounded-lg hover:bg-[#5d4037] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-user-friends w-5 text-center"></i> Aile Rolleri
+            </a>
+            <a href="#aile-agaci" class="block p-3 rounded-lg hover:bg-[#5d4037] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-sitemap w-5 text-center"></i> Aile Ağacı
+            </a>
+            <a href="#hatiralar" class="block p-3 rounded-lg hover:bg-[#5d4037] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-book-open w-5 text-center"></i> Hatıralar
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-orange-600 text-white mt-6 font-bold text-center shadow-lg hover:bg-orange-700 transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-orange-400 mt-auto pt-6 border-t border-[#5d4037]">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-[#431407] text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-home mr-2 text-orange-400"></i> Aile Hayatı</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-orange-600 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#431407] mb-4 tracking-tight title-font">
+                MUTLU <span class="text-orange-600">AİLE</span> ÖRNEĞİ
+            </h1>
+            <p class="text-lg text-orange-800 max-w-2xl mx-auto italic">
+                "Sizin en hayırlınız, ailesine karşı en hayırlı olanınızdır."
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto text-left">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-orange-900 mb-2">Ehlibeyt Nedir?</h3>
+                    <p class="text-sm text-gray-600">"Ev halkı" demektir. Peygamberimizin ailesini (Hz. Ali, Hz. Fatıma, Hz. Hasan, Hz. Hüseyin) ifade eder.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-amber-900 mb-2">Salli ve Barik Duaları</h3>
+                    <p class="text-sm text-gray-600">Namazlarda okuduğumuz bu dualarda Peygamberimizin ve Hz. İbrahim'in ailelerine (Âl) dua ederiz.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: AİLE ROLLERİ (Tabs) -->
+        <section id="roller" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-orange-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#431407] flex items-center justify-center text-white font-bold">1</div>
+                <h2 class="text-2xl font-bold text-[#431407]">Peygamberimizin Rolleri</h2>
+            </div>
+            
+            <div class="flex justify-center gap-4 mb-6">
+                <button onclick="openRole('es')" id="btn-es" class="role-btn active px-6 py-2 rounded-full border border-orange-600 text-orange-900 font-bold transition">EŞ OLARAK</button>
+                <button onclick="openRole('baba')" id="btn-baba" class="role-btn px-6 py-2 rounded-full border border-orange-600 text-orange-900 font-bold transition">BABA OLARAK</button>
+                <button onclick="openRole('dede')" id="btn-dede" class="role-btn px-6 py-2 rounded-full border border-orange-600 text-orange-900 font-bold transition">DEDE OLARAK</button>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 shadow-md border border-orange-100 min-h-[250px]">
+                <!-- Eş İçerik -->
+                <div id="content-es" class="role-content block">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-red-100 p-4 rounded-full text-red-500 text-3xl"><i class="fas fa-heart"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Sevgi ve Nezaket</h3>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Eşlerine değer verir, onlarla şakalaşırdı (Hz. Aişe ile koşu yarışı).</li>
+                                <li>• Ev işlerine yardım eder, kendi söküğünü dikerdi.</li>
+                                <li>• Hz. Hatice'ye vefalıydı, vefatından sonra bile onun arkadaşlarına ikramda bulunurdu.</li>
+                                <li>• Eşine güzel isimlerle (Hümeyra) hitap ederdi.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Baba İçerik -->
+                <div id="content-baba" class="role-content hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-green-100 p-4 rounded-full text-green-500 text-3xl"><i class="fas fa-child"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Şefkat ve Adalet</h3>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Kız ve erkek çocukları arasında asla ayrım yapmazdı.</li>
+                                <li>• Kızı Hz. Fatıma geldiğinde ayağa kalkar, onu karşılardı.</li>
+                                <li>• Çocuklarını öper, koklar ve onlarla oynardı.</li>
+                                <li>• Evlat acısına sabretmiş, 6 çocuğunu kendi elleriyle toprağa vermiştir.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dede İçerik -->
+                <div id="content-dede" class="role-content hidden">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-100 p-4 rounded-full text-blue-500 text-3xl"><i class="fas fa-user-clock"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Oyun ve Merhamet</h3>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li>• Torunlarını (Hasan ve Hüseyin) sırtına alır, gezdirirdi.</li>
+                                <li>• Hutbe okurken onları görünce minberden inip kucaklamıştır.</li>
+                                <li>• Namazda secdeye gittiklerinde sırtından inmelerini beklerdi.</li>
+                                <li>• "Merhamet etmeyene merhamet edilmez" diyerek onları öperdi.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. KONU: AİLE AĞACI -->
+        <section id="aile-agaci" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-orange-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#431407] flex items-center justify-center text-white font-bold">2</div>
+                <h2 class="text-2xl font-bold text-[#431407]">Peygamberimizin Ailesi</h2>
+            </div>
+
+            <div class="overflow-x-auto pb-4">
+                <div class="flex flex-col items-center min-w-[600px]">
+                    <!-- Hz. Muhammed -->
+                    <div class="bg-[#431407] text-white px-8 py-4 rounded-xl font-bold mb-8 shadow-lg">HZ. MUHAMMED (S.A.V)</div>
+                    
+                    <!-- Eşler -->
+                    <div class="flex gap-16 mb-8 w-full justify-center">
+                        <div class="text-center">
+                            <div class="bg-orange-200 px-6 py-2 rounded-lg font-bold text-orange-900 mb-2">Hz. Hatice</div>
+                            <div class="text-xs text-gray-500">(İlk Eşi - 6 Çocuğun Annesi)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-orange-200 px-6 py-2 rounded-lg font-bold text-orange-900 mb-2">Hz. Mariye</div>
+                            <div class="text-xs text-gray-500">(1 Çocuğun Annesi)</div>
+                        </div>
+                    </div>
+
+                    <!-- Çocuklar -->
+                    <div class="grid grid-cols-7 gap-2 w-full text-center text-sm">
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">Kasım<br><span class="text-[10px] text-gray-400">Vefat</span></div>
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">Zeyneb</div>
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">Rukıyye</div>
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">Ümmü Gülsüm</div>
+                        <div class="bg-green-100 p-2 rounded border border-green-300 shadow-sm font-bold">Hz. Fatıma<br><span class="text-[10px] text-green-700">Soyu devam etti</span></div>
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">Abdullah<br><span class="text-[10px] text-gray-400">Vefat</span></div>
+                        <div class="bg-white p-2 rounded border border-orange-200 shadow-sm">İbrahim<br><span class="text-[10px] text-gray-400">Vefat</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: HATIRALAR (Özet Kartlar) -->
+        <section id="hatiralar" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-orange-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#431407] flex items-center justify-center text-white font-bold">3</div>
+                <h2 class="text-2xl font-bold text-[#431407]">Unutulmaz Hatıralar</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-xl border-l-4 border-red-500">
+                    <h4 class="font-bold text-red-900 mb-2">Gerdanlık (Vefa)</h4>
+                    <p class="text-sm text-gray-600">Kızı Zeyneb'in gönderdiği fidyeler arasında eşi Hz. Hatice'nin gerdanlığını görünce ağlamış ve onu geri göndermiştir.</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl border-l-4 border-yellow-500">
+                    <h4 class="font-bold text-yellow-900 mb-2">Koşu Yarışı (Neşe)</h4>
+                    <p class="text-sm text-gray-600">Hz. Aişe ile koşu yarışı yapmış, bazen o geçmiş bazen Hz. Aişe geçmiştir. Ailesiyle eğlenmeyi severdi.</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl border-l-4 border-blue-500">
+                    <h4 class="font-bold text-blue-900 mb-2">Kalk Ebüttürab (Barış)</h4>
+                    <p class="text-sm text-gray-600">Hz. Ali ile Hz. Fatıma tartışınca aralarını bulmuş, toprağa yatan Hz. Ali'ye "Toprağın Babası" diyerek şaka yapmıştır.</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl border-l-4 border-green-500">
+                    <h4 class="font-bold text-green-900 mb-2">Minberden İniş (Sevgi)</h4>
+                    <p class="text-sm text-gray-600">Torunlarının düştüğünü görünce hutbeyi kesip aşağı inmiş ve onları kucağına almıştır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-[#431407] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-orange-200 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-[#431407] rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-orange-700 text-white px-6 py-2 rounded-lg hover:bg-orange-800 transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- TABS LOGIC ---
+        function openRole(roleId) {
+            // Hide all content
+            document.querySelectorAll('.role-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.role-content').forEach(el => el.classList.remove('block'));
+            
+            // Show selected
+            document.getElementById('content-' + roleId).classList.remove('hidden');
+            document.getElementById('content-' + roleId).classList.add('block');
+
+            // Button styles
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active', 'bg-orange-600', 'text-white'));
+            document.getElementById('btn-' + roleId).classList.add('active', 'bg-orange-600', 'text-white');
+        }
+
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Peygamberimizin ev halkına ne ad verilir?",
+                options: ["Ashab", "Ehlibeyt", "Muhacir", "Ensar"],
+                correct: 1
+            },
+            {
+                q: "2. Peygamberimizin soyu hangi çocuğundan devam etmiştir?",
+                options: ["Hz. Zeyneb", "Hz. İbrahim", "Hz. Fatıma", "Hz. Kasım"],
+                correct: 2
+            },
+            {
+                q: "3. 'Ebüttürab' lakabı kime takılmıştır?",
+                options: ["Hz. Ali", "Hz. Osman", "Hz. Ömer", "Hz. Zeyd"],
+                correct: 0
+            },
+            {
+                q: "4. Peygamberimizin ilk eşi ve 6 çocuğunun annesi kimdir?",
+                options: ["Hz. Aişe", "Hz. Hatice", "Hz. Mariye", "Hz. Sevde"],
+                correct: 1
+            },
+            {
+                q: "5. Peygamberimiz torunlarına nasıl davranırdı?",
+                options: ["Sert ve mesafeli", "Oyun oynar ve şefkat gösterirdi", "Sadece ders verirdi", "Hiç ilgilenmezdi"],
+                correct: 1
+            },
+            {
+                q: "6. Namazlarda okunan 'Salli ve Barik' dualarında kime dua edilir?",
+                options: ["Sadece Peygamberimize", "Peygamberimiz ve Ailesine", "Sadece sahabilere", "Tüm insanlara"],
+                correct: 1
+            },
+            {
+                q: "7. Peygamberimiz Hz. Aişe ile ne yaparken yarışmıştır?",
+                options: ["Ok atma", "Koşu", "Yemek yeme", "At binme"],
+                correct: 1
+            },
+            {
+                q: "8. Peygamberimiz kızı Fatıma odaya girdiğinde ne yapardı?",
+                options: ["Oturmaya devam ederdi", "Ayağa kalkıp onu karşılardı", "Odadan çıkardı", "Görmezden gelirdi"],
+                correct: 1
+            },
+            {
+                q: "9. Peygamberimizin toplam kaç çocuğu olmuştur?",
+                options: ["3", "5", "6", "7"],
+                correct: 3
+            },
+            {
+                q: "10. 'Merhamet etmeyene ......' hadisini tamamlayınız.",
+                options: ["ceza verilir", "kızılır", "merhamet edilmez", "ödül verilmez"],
+                correct: 2
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-orange-800/50 p-6 rounded-xl border border-orange-700";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-orange-900/50 hover:bg-orange-700 border border-orange-600/50 mb-2 transition flex items-center justify-between group text-orange-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-orange-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-orange-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-orange-900/50');
+                btn.classList.add('bg-green-600', 'border-green-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-orange-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-orange-900/50');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

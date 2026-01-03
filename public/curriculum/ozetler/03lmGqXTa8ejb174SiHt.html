@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Ünite Özeti: Toplum ve Çevre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4; /* Emerald-50 */
+            color: #064e3b; /* Emerald-900 */
+            scroll-behavior: smooth;
+        }
+        .fun-font { font-family: 'Fredoka', sans-serif; }
+        
+        .section-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
+        }
+
+        .gradient-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .nav-item.active {
+            background-color: #064e3b;
+            color: white;
+            border-left: 4px solid #34d399;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0fdf4; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="antialiased flex bg-[#f0fdf4]">
+
+    <!-- Sidebar Navigation -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-white text-emerald-900 p-6 z-50 shadow-xl border-r border-emerald-100">
+        <div class="mb-10 flex items-center gap-3 text-emerald-600">
+            <i class="fas fa-heart text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide uppercase">4. Ünite Özeti</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#giris" class="nav-item block p-3 rounded-lg hover:bg-emerald-50 transition flex items-center gap-3">
+                <i class="fas fa-star w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#toplum" class="nav-item block p-3 rounded-lg hover:bg-emerald-50 transition flex items-center gap-3">
+                <i class="fas fa-users w-5 text-center"></i> Toplumsal İlişkiler
+            </a>
+            <a href="#cevre" class="nav-item block p-3 rounded-lg hover:bg-emerald-50 transition flex items-center gap-3">
+                <i class="fas fa-leaf w-5 text-center"></i> Çevre Bilinci
+            </a>
+            <a href="#ozet-tablo" class="nav-item block p-3 rounded-lg hover:bg-emerald-50 transition flex items-center gap-3">
+                <i class="fas fa-table w-5 text-center"></i> Kavram Tablosu
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-emerald-600 text-white mt-6 font-bold text-center shadow-lg hover:bg-emerald-700 transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-emerald-400 mt-auto pt-6 border-t border-emerald-100">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-white text-emerald-900 p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-heart mr-2 text-emerald-600"></i> Toplum & Çevre</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-emerald-600 text-white px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- BÖLÜM 1: GİRİŞ -->
+        <header id="giris" class="text-center py-10 scroll-mt-24 fade-in">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-emerald-900 mb-4 tracking-tight fun-font">
+                ERDEMLİ BİR <span class="text-emerald-600">HAYAT</span>
+            </h1>
+            <p class="text-lg text-emerald-700 max-w-3xl mx-auto italic">
+                "Peygamberimiz (sav), hem insanların kalplerini hem de yaşadığımız dünyayı güzelleştirmek için gönderilmiş bir rahmet elçisidir."
+            </p>
+        </header>
+
+        <!-- BÖLÜM 2: TOPLUMSAL İLİŞKİLER ÖZETİ -->
+        <section id="toplum" class="scroll-mt-24 space-y-8">
+            <div class="flex items-center gap-4 border-b border-emerald-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">1</div>
+                <h2 class="text-2xl font-bold text-emerald-900">Peygamberimizin Toplumsal İlişkileri</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Nezaket ve Selam -->
+                <div class="section-card bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-comments"></i> İletişim Dili
+                    </h3>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Selamlaşmak:</strong> Tanıdık tanımadık herkese selam vererek sevgiyi yayardı.</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Tebessüm:</strong> "Müslüman kardeşine tebessüm etmen sadakadır" buyururdu.</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Değer Vermek:</strong> Bir cenaze geçerken "insan olduğu için" ayağa kalkardı.</li>
+                    </ul>
+                </div>
+
+                <!-- Akraba ve Komşu -->
+                <div class="section-card bg-white p-6 rounded-2xl shadow-sm">
+                    <h3 class="font-bold text-lg text-emerald-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-home"></i> Sosyal Bağlar
+                    </h3>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Sılayırahim:</strong> Akraba bağlarını korumak rızkı ve ömrü bereketlendirir.</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Komşuluk:</strong> "Komşusu açken tok yatan bizden değildir" uyarısını yapardı.</li>
+                        <li><i class="fas fa-check text-emerald-500 mr-2"></i> <strong>Vefa:</strong> Kendisine iyilik yapanları (sütannesi, dadısı) asla unutmazdı.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: ÇEVRE BİLİNCİ ÖZETİ -->
+        <section id="cevre" class="scroll-mt-24 space-y-8">
+            <div class="flex items-center gap-4 border-b border-emerald-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white font-bold shadow-md">2</div>
+                <h2 class="text-2xl font-bold text-emerald-900">Peygamberimiz ve Çevre Bilinci</h2>
+            </div>
+
+            <!-- Emanet Bilinci -->
+            <div class="bg-emerald-900 text-white p-8 rounded-3xl shadow-xl flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/4 text-center">
+                    <i class="fas fa-globe-europe text-7xl text-emerald-400 opacity-80"></i>
+                </div>
+                <div class="md:w-3/4">
+                    <h3 class="text-xl font-bold text-emerald-200 mb-2">Doğa Bize Bir Emanettir</h3>
+                    <p class="text-sm text-emerald-50 leading-relaxed">
+                        Yeryüzündeki denge (mizan) Allah tarafından kurulmuştur. İnsan, bu dengeyi bozmamakla sorumludur. Bitkiler, hayvanlar, su ve toprak Allah'ın kuluna teslim ettiği birer <strong>emanettir</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <!-- Ağaçlandırma -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-green-600">
+                    <i class="fas fa-tree text-3xl text-green-600 mb-3"></i>
+                    <h4 class="font-bold text-gray-800">Yeşil Miras</h4>
+                    <p class="text-xs text-gray-500 mt-2">"Kıyamet kopsa bile elindeki fidanı dik." Emriyle ağaçlandırmayı teşvik etmiştir.</p>
+                </div>
+                <!-- Su Tasarrufu -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-blue-500">
+                    <i class="fas fa-tint text-3xl text-blue-500 mb-3"></i>
+                    <h4 class="font-bold text-gray-800">Su Tasarrufu</h4>
+                    <p class="text-xs text-gray-500 mt-2">"Akan bir nehirde bile olsan suyu israf etme." uyarısıyla israfı yasaklamıştır.</p>
+                </div>
+                <!-- Hayvan Merhameti -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-t-4 border-orange-500">
+                    <i class="fas fa-paw text-3xl text-orange-500 mb-3"></i>
+                    <h4 class="font-bold text-gray-800">Can Dostlarımız</h4>
+                    <p class="text-xs text-gray-500 mt-2">Devesi Kasva'ya ve tüm hayvanlara merhametle yaklaşmış, onlara fazla yük yüklemeyi yasaklamıştır.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: ÖZET KAVRAM TABLOSU -->
+        <section id="ozet-tablo" class="scroll-mt-24">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-100">
+                <div class="gradient-green p-4 text-center">
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider">Ünite Anahtar Kelimeleri</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-emerald-50 text-emerald-900">
+                            <tr>
+                                <th class="p-4 border-b border-emerald-100">Kavram</th>
+                                <th class="p-4 border-b border-emerald-100">Kısa Açıklama</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="hover:bg-emerald-50/50">
+                                <td class="p-4 border-b border-emerald-100 font-bold">Sılayırahim</td>
+                                <td class="p-4 border-b border-emerald-100">Akrabaları ziyaret etmek ve onlarla bağı koparmamak.</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/50">
+                                <td class="p-4 border-b border-emerald-100 font-bold">Vefa</td>
+                                <td class="p-4 border-b border-emerald-100">Sevgiyi sürdürmek, yapılan iyiliği unutmamak, sözünde durmak.</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/50">
+                                <td class="p-4 border-b border-emerald-100 font-bold">Mizan (Denge)</td>
+                                <td class="p-4 border-b border-emerald-100">Allah'ın evrende kurduğu hassas denge ve ölçü.</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/50">
+                                <td class="p-4 border-b border-emerald-100 font-bold">İsraf</td>
+                                <td class="p-4 border-b border-emerald-100">Nimetleri, zamanı veya emeği gereksiz yere harcamak.</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/50">
+                                <td class="p-4 border-b border-emerald-100 font-bold">Kasva</td>
+                                <td class="p-4 border-b border-emerald-100">Peygamberimizin çok sevdiği ve merhametle yaklaştığı devesi.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: TEST (QUIZ) -->
+        <section id="quiz" class="py-10">
+            <div class="bg-emerald-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2 fun-font">Ünite Tarama Testi</h2>
+                        <p class="text-emerald-200 mt-2">Öğrendiklerini test etmeye hazır mısın?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-emerald-900 rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Harika!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-emerald-800 text-white px-6 py-2 rounded-lg hover:bg-black transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Akrabaları ziyaret etmek ve onlarla bağı koparmamak hangi kavramla ifade edilir?",
+                options: ["Vefa", "Sılayırahim", "Sadaka", "İhsan"],
+                correct: 1
+            },
+            {
+                q: "2. Peygamberimiz kimin cenazesi geçerken 'O da bir insan değil mi?' diyerek ayağa kalkmıştır?",
+                options: ["Bir Müslüman", "Bir Yahudi", "Bir akrabası", "Bir sahabi"],
+                correct: 1
+            },
+            {
+                q: "3. 'Komşusu açken tok yatan bizden değildir' hadisi neyin önemini vurgular?",
+                options: ["Temizlik", "Dayanışma ve Komşuluk", "Ağaç dikme", "İbadet"],
+                correct: 1
+            },
+            {
+                q: "4. Peygamberimiz ormanları ve yeşil alanları korumak için neyi teşvik etmiştir?",
+                options: ["Ağaç dikmeyi", "Hayvancılığı", "Ticareti", "Ev yapmayı"],
+                correct: 0
+            },
+            {
+                q: "5. 'Akan bir nehirde bile olsan ...... yapma.' hadisindeki boşluğa ne gelmelidir?",
+                options: ["Gürültü", "Şaka", "İsraf", "Kavga"],
+                correct: 2
+            },
+            {
+                q: "6. Peygamberimizin çok sevdiği ve merhametle yaklaştığı devesinin adı nedir?",
+                options: ["Burak", "Düldül", "Kasva", "Hamra"],
+                correct: 2
+            },
+            {
+                q: "7. Yapılan bir iyiliği unutmamak ve sözünde durmak hangi ahlaki ilkedir?",
+                options: ["Cömertlik", "Vefa", "Adalet", "Sabır"],
+                correct: 1
+            },
+            {
+                q: "8. Yeryüzünün ve içindeki tüm varlıkların insana verilmesine ne denir?",
+                options: ["Emanet", "Mülk", "Ödül", "Hazine"],
+                correct: 0
+            },
+            {
+                q: "9. Selamlaşmak toplumda neyi artırır?",
+                options: ["Kıskançlığı", "Zenginliği", "Sevgi ve güveni", "Tartışmayı"],
+                correct: 2
+            },
+            {
+                q: "10. 'Yeryüzündekilere merhamet edin ki ...... de size merhamet etsin.'",
+                options: ["İnsanlar", "Gökyüzündekiler (Allah ve melekler)", "Akrabalar", "Komşular"],
+                correct: 1
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-emerald-800/50 p-6 rounded-xl border border-emerald-700 shadow-sm";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-emerald-900/50 hover:bg-emerald-700 border border-emerald-600 mb-2 transition flex items-center justify-between group text-emerald-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-emerald-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-emerald-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-emerald-900/50');
+                btn.classList.add('bg-green-600', 'border-green-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-emerald-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-emerald-900/50');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musikimizde Dinin İzleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fafaf9; /* Stone-50 */
+            color: #1c1917; /* Stone-900 */
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .music-pattern {
+            background-color: #57534e;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d6d3d1' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .music-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .music-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .note-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
+            100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+        }
+        .highlight-word {
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .highlight-word:hover {
+            background-color: #fef3c7;
+            border-bottom-color: #d97706;
+        }
+        .highlight-word.found {
+            background-color: #dcfce7;
+            color: #166534;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        .category-box {
+            min-height: 150px;
+            transition: background-color 0.3s;
+        }
+        .drag-item {
+            cursor: grab;
+            transition: transform 0.2s;
+        }
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="music-pattern text-[#f5f5f4] py-16 px-4 text-center rounded-b-[50px] shadow-2xl mb-12 border-b-8 border-[#44403c] relative overflow-hidden">
+        <div class="absolute top-10 left-10 text-6xl opacity-10 note-float" style="animation-delay: 0s;">♪</div>
+        <div class="absolute bottom-10 right-10 text-8xl opacity-10 note-float" style="animation-delay: 1s;">♫</div>
+        <div class="absolute top-20 right-1/4 text-5xl opacity-10 note-float" style="animation-delay: 2s;">♩</div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-[#f5f5f4]/10 border border-[#f5f5f4]/30 text-[#f5f5f4] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
+            <h1 class="text-4xl md:text-6xl serif-font font-bold mb-4 tracking-wide">MUSİKİMİZDE DİNİN İZLERİ</h1>
+            <p class="text-xl text-[#d6d3d1] font-light max-w-2xl mx-auto italic">
+                "Musiki; insanları dinlendirir, rahatlatır ve gönülleri birleştirir."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: SESLİ SÖZLÜK (Kavramlar) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#44403c] mb-2 serif-font">Manevi Sesler</h2>
+                <div class="h-1 w-20 bg-amber-500 mx-auto rounded"></div>
+                <p class="text-gray-600 mt-4">Camilerimizden yükselen bu sesleri tanıyalım.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Ezan -->
+                <div class="music-card bg-white p-6 rounded-2xl border-t-4 border-emerald-500 shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-2xl">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <span class="bg-emerald-50 text-emerald-800 text-xs px-2 py-1 rounded font-bold">5 Vakit</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">EZAN</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Namaz vakitlerinin girdiğini duyurmak için minarelerden okunan çağrıdır. Her vaktin makamı farklıdır.
+                    </p>
+                </div>
+
+                <!-- Sela -->
+                <div class="music-card bg-white p-6 rounded-2xl border-t-4 border-blue-500 shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <span class="bg-blue-50 text-blue-800 text-xs px-2 py-1 rounded font-bold">Haber</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">SELA</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Cuma namazını, kandilleri veya bir cenazeyi haber vermek için okunan dua ve selamdır.
+                    </p>
+                </div>
+
+                <!-- Kamet -->
+                <div class="music-card bg-white p-6 rounded-2xl border-t-4 border-purple-500 shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 text-2xl">
+                            <i class="fas fa-praying-hands"></i>
+                        </div>
+                        <span class="bg-purple-50 text-purple-800 text-xs px-2 py-1 rounded font-bold">Namaz Öncesi</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">KAMET</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Farz namazlardan hemen önce, namazın başladığını duyurmak için cami içinde hızlıca okunan ezandır.
+                    </p>
+                </div>
+
+                <!-- İlahi -->
+                <div class="music-card bg-white p-6 rounded-2xl border-t-4 border-rose-500 shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 text-2xl">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <span class="bg-rose-50 text-rose-800 text-xs px-2 py-1 rounded font-bold">Sanat</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">İLAHİ</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Allah'ı övmek ve O'na dua etmek amacıyla bestelenen dinî şiirlerdir. Duyguları coşturur.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: USTA BESTEKARLAR (Itri) -->
+        <section class="bg-[#1c1917] text-[#f5f5f4] rounded-3xl p-8 shadow-2xl relative overflow-hidden fade-in">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-amber-600 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+            
+            <div class="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="w-48 h-48 bg-stone-700 rounded-full border-4 border-amber-600 flex items-center justify-center text-6xl shadow-2xl">
+                        <i class="fas fa-user-music text-amber-500"></i>
+                    </div>
+                </div>
+                <div class="md:w-2/3">
+                    <span class="text-amber-500 font-bold tracking-widest text-sm">BÜYÜK ÜSTAT</span>
+                    <h2 class="text-3xl font-bold mb-4 serif-font">Buhurizade Mustafa Itri</h2>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Klasik Türk musikisinin en önemli bestekârlarındandır. Bayramlarda, kurban kesiminde ve önemli günlerde hep bir ağızdan okuduğumuz o meşhur <strong>"Segah Tekbir"</strong>in (Allahü ekber, Allahü ekber...) bestecisidir. Aynı zamanda "Salat-ı Ümmiye"nin de bestekârıdır.
+                    </p>
+                    <div class="inline-flex items-center gap-4 bg-stone-800 p-4 rounded-xl border border-stone-700">
+                        <div class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center"><i class="fas fa-play text-white text-xs"></i></div>
+                        <div>
+                            <p class="font-bold text-sm text-white">Segah Tekbir</p>
+                            <p class="text-xs text-gray-500">Makam: Segah | Beste: Itri</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: ŞİİR ANALİZİ (Neşet Ertaş) -->
+        <section class="max-w-3xl mx-auto fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#44403c] mb-2 serif-font">Halk Ozanının Dilinden</h2>
+                <p class="text-gray-600">Aşağıdaki şiirde geçen <span class="font-bold text-amber-600">4 dinî kavramı</span> bularak üzerine tıkla.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-stone-200 relative">
+                <!-- Book Spine Effect -->
+                <div class="absolute left-0 top-0 bottom-0 w-2 bg-amber-700 rounded-l-3xl"></div>
+                
+                <h3 class="text-xl font-bold text-center mb-6 text-[#292524] border-b pb-2">Dinle Sana Bir Sözüm Var</h3>
+                
+                <div class="text-center text-lg leading-loose text-gray-700 font-serif" id="poem-container">
+                    <p>Dinle, sana bir sözüm var:</p>
+                    <p>Kimseyi hor görme kardaş!</p>
+                    <p>Kim nasıldır, <span class="highlight-word" onclick="checkWord(this, true)">Allah</span> bilir</p>
+                    <p>Kötüleyip yerme kardaş!</p>
+                    <br>
+                    <p>Tek hâkimdir; ulu gani</p>
+                    <p>Bir <span class="highlight-word" onclick="checkWord(this, true)">yaratmış</span> seni, beni</p>
+                    <p>Veren alır, tatlı canı</p>
+                    <p>Ötesini sorma kardaş!</p>
+                    <br>
+                    <p>Gönül bilmeyenler çoktur</p>
+                    <p>Bilmeyende, gönül yoktur</p>
+                    <p>Bilmiş ol ki, gönül <span class="highlight-word" onclick="checkWord(this, true)">Hak</span>'tır</p>
+                    <p>Sakın ol ha, kırma kardaş!</p>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p id="poem-feedback" class="font-bold text-amber-600 h-6"></p>
+                    <p class="text-xs text-gray-400 mt-2">Şiir: Neşet Ertaş</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: KAVRAM AYRIŞTIRMA (Etkinlik 9 Uyarlaması) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#44403c] mb-2 serif-font">Kültür Dedektifi</h2>
+                <p class="text-gray-600">Kelimeleri doğru kutuya gönder.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Kaynak -->
+                <div class="lg:w-1/4 flex flex-col gap-3 justify-center">
+                    <button onclick="moveItem(this, 'musiki')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="musiki">ILAHİ</button>
+                    <button onclick="moveItem(this, 'gelenek')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="gelenek">MEVLİT</button>
+                    <button onclick="moveItem(this, 'edebiyat')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="edebiyat">SÜLEYMAN ÇELEBİ</button>
+                    <button onclick="moveItem(this, 'gelenek')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="gelenek">SECCADE</button>
+                    <button onclick="moveItem(this, 'musiki')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="musiki">EZAN</button>
+                    <button onclick="moveItem(this, 'gelenek')" class="drag-item bg-white border-2 border-stone-300 p-3 rounded-lg text-center font-bold text-stone-700 shadow-sm hover:bg-stone-50" data-cat="gelenek">TESPİH</button>
+                </div>
+
+                <!-- Kutular -->
+                <div class="lg:w-3/4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Gelenek -->
+                    <div class="category-box bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
+                        <h3 class="font-bold text-orange-800 text-center mb-4 border-b border-orange-200 pb-2"><i class="fas fa-hand-holding-heart mr-2"></i> GELENEK</h3>
+                        <div id="box-gelenek" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Edebiyat -->
+                    <div class="category-box bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                        <h3 class="font-bold text-blue-800 text-center mb-4 border-b border-blue-200 pb-2"><i class="fas fa-book mr-2"></i> EDEBİYAT</h3>
+                        <div id="box-edebiyat" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Musiki -->
+                    <div class="category-box bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                        <h3 class="font-bold text-green-800 text-center mb-4 border-b border-green-200 pb-2"><i class="fas fa-music mr-2"></i> MUSİKİ</h3>
+                        <div id="box-musiki" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-sm text-gray-400 mt-4 italic">* Butona tıkladığında otomatik olarak doğru kutuya gidecektir.</p>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#1c1917] text-stone-400 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Musiki ve Din</p>
+    </footer>
+
+    <script>
+        // --- POEM GAME LOGIC ---
+        let foundCount = 0;
+        const totalWords = 3; // Allah, Yaratmış, Hak (Basitleştirilmiş)
+
+        function checkWord(span, isCorrect) {
+            if (span.classList.contains('found')) return;
+
+            if (isCorrect) {
+                span.classList.add('found');
+                foundCount++;
+                const feedback = document.getElementById('poem-feedback');
+                
+                if (foundCount === totalWords) {
+                    feedback.innerHTML = "<i class='fas fa-trophy'></i> Tebrikler! Tüm dinî kavramları buldun.";
+                    feedback.className = "font-bold text-green-600 h-6 text-center mt-6";
+                } else {
+                    feedback.innerText = `${foundCount} / ${totalWords} bulundu. Devam et!`;
+                }
+            }
+        }
+
+        // --- CATEGORY GAME LOGIC ---
+        function moveItem(btn, category) {
+            const itemCat = btn.getAttribute('data-cat');
+            
+            // Visual Effect for Selection (simulating drag/drop logic for button click)
+            if (itemCat) { // Basitlik için her tıkta doğru yere gitsin
+                const targetBox = document.getElementById('box-' + itemCat);
+                
+                // Clone and append style
+                const newItem = document.createElement('div');
+                newItem.className = "bg-white p-2 rounded shadow-sm text-sm font-bold text-center border animate-pulse";
+                newItem.innerText = btn.innerText;
+                
+                if(itemCat === 'gelenek') newItem.classList.add('text-orange-700', 'border-orange-200');
+                if(itemCat === 'edebiyat') newItem.classList.add('text-blue-700', 'border-blue-200');
+                if(itemCat === 'musiki') newItem.classList.add('text-green-700', 'border-green-200');
+
+                targetBox.appendChild(newItem);
+                btn.remove();
+                
+                setTimeout(() => newItem.classList.remove('animate-pulse'), 500);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamber Kıssaları: Mesajlar ve Değerlendirme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdf8f6; /* Warm off-white */
+            color: #4a4a4a;
+        }
+        .serif-font {
+            font-family: 'Merriweather', serif;
+        }
+        .wood-texture {
+            background-color: #5d4037;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236d4c41' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .card-flip {
+            perspective: 1000px;
+            height: 200px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .card-flip.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        /* Grid Highlight Animations */
+        .concept-item {
+            transition: all 0.3s ease;
+        }
+        .concept-item.dimmed {
+            opacity: 0.3;
+            transform: scale(0.95);
+        }
+        .concept-item.highlighted {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #d97706;
+            background-color: #fffbeb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="wood-texture text-[#efebe9] py-10 px-4 text-center shadow-xl mb-10 border-b-8 border-[#3e2723]">
+        <div class="max-w-4xl mx-auto">
+            <span class="bg-[#efebe9]/20 border border-[#efebe9]/40 text-[#efebe9] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">Değerlendirme</span>
+            <h1 class="text-3xl md:text-5xl serif-font font-bold mb-4">KISSADAN HİSSE</h1>
+            <p class="text-lg text-[#d7ccc8] italic max-w-2xl mx-auto">
+                "Andolsun ki, onların kıssalarında akıl sahipleri için ibret vardır." (Yusuf, 111)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: İPUCU DEDEKTİFİ (Flip Cards - Etkinlik 7) -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 serif-font">1. İpucu Dedektifi</h2>
+                <p class="text-[#5d4037]">Kelimelerin hangi peygamberi işaret ettiğini bulmak için karta tıkla.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Nuh -->
+                <div class="card-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front bg-white border-2 border-blue-200">
+                            <div class="bg-blue-100 p-3 rounded-full mb-3 text-blue-600"><i class="fas fa-search"></i></div>
+                            <ul class="text-[#5d4037] font-bold space-y-2">
+                                <li>Tufan</li>
+                                <li>Cudi Dağı</li>
+                                <li>İkinci Ata</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4">(Çevir)</p>
+                        </div>
+                        <div class="card-back bg-blue-600 text-white border-2 border-blue-800">
+                            <i class="fas fa-ship text-4xl mb-2"></i>
+                            <h3 class="text-2xl font-bold">Hz. Nuh</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İbrahim -->
+                <div class="card-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front bg-white border-2 border-orange-200">
+                            <div class="bg-orange-100 p-3 rounded-full mb-3 text-orange-600"><i class="fas fa-search"></i></div>
+                            <ul class="text-[#5d4037] font-bold space-y-2">
+                                <li>Ateş</li>
+                                <li>Hz. İsmail</li>
+                                <li>Kâbe</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4">(Çevir)</p>
+                        </div>
+                        <div class="card-back bg-orange-600 text-white border-2 border-orange-800">
+                            <i class="fas fa-fire text-4xl mb-2"></i>
+                            <h3 class="text-2xl font-bold">Hz. İbrahim</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Musa -->
+                <div class="card-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front bg-white border-2 border-amber-200">
+                            <div class="bg-amber-100 p-3 rounded-full mb-3 text-amber-600"><i class="fas fa-search"></i></div>
+                            <ul class="text-[#5d4037] font-bold space-y-2">
+                                <li>Rüya / Firavun</li>
+                                <li>Hz. Harun</li>
+                                <li>Tur Dağı</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4">(Çevir)</p>
+                        </div>
+                        <div class="card-back bg-amber-600 text-white border-2 border-amber-800">
+                            <i class="fas fa-scroll text-4xl mb-2"></i>
+                            <h3 class="text-2xl font-bold">Hz. Musa</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İsa -->
+                <div class="card-flip" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front bg-white border-2 border-teal-200">
+                            <div class="bg-teal-100 p-3 rounded-full mb-3 text-teal-600"><i class="fas fa-search"></i></div>
+                            <ul class="text-[#5d4037] font-bold space-y-2">
+                                <li>Hz. Meryem</li>
+                                <li>Tuzak</li>
+                                <li>Hz. Muhammed (Müjde)</li>
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-4">(Çevir)</p>
+                        </div>
+                        <div class="card-back bg-teal-600 text-white border-2 border-teal-800">
+                            <i class="fas fa-dove text-4xl mb-2"></i>
+                            <h3 class="text-2xl font-bold">Hz. İsa</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: KAVRAMLARI YERLEŞTİR (Kontrol Noktası 2) -->
+        <section class="bg-white rounded-3xl shadow-xl border border-[#d7ccc8] p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 serif-font">2. Kavramları Sınıflandır</h2>
+                <p class="text-[#5d4037]">Aşağıdaki butonlara tıkla, o peygamberle ilgili kavramlar parlasın.</p>
+            </div>
+
+            <!-- Kontrol Butonları -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button onclick="highlightConcepts('nuh')" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-blue-700 transition">Hz. Nuh</button>
+                <button onclick="highlightConcepts('ibrahim')" class="bg-orange-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-orange-700 transition">Hz. İbrahim</button>
+                <button onclick="highlightConcepts('musa')" class="bg-amber-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-amber-700 transition">Hz. Musa</button>
+                <button onclick="highlightConcepts('isa')" class="bg-teal-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-teal-700 transition">Hz. İsa</button>
+                <button onclick="highlightConcepts('ortak')" class="bg-gray-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-gray-700 transition">Ortak Değerler</button>
+                <button onclick="resetGrid()" class="bg-white text-gray-600 border border-gray-300 px-6 py-2 rounded-full font-bold hover:bg-gray-50 transition">Sıfırla</button>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="concept-grid">
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="musa">1. Firavun</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ibrahim">2. Hanif</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ortak">3. Sabır</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="nuh">4. Gemi</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="isa">5. Hz. Zekeriyya</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ortak">6. Sorumluluk</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ibrahim">7. Babil</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ortak">8. Azim</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="isa">9. Beytülmakdis</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="nuh">10. Yağmur</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="musa">11. Kızıldeniz</div>
+                <div class="concept-item bg-gray-50 border border-gray-200 p-4 rounded-xl text-center font-bold text-[#5d4037]" data-groups="ortak">12. Cesaret</div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: AYET - PEYGAMBER EŞLEŞTİRME (Kontrol Noktası 1) -->
+        <section class="max-w-3xl mx-auto bg-[#3e2723] rounded-3xl p-8 text-[#fff8e1] shadow-2xl relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute -right-12 -bottom-12 text-[#5d4037] opacity-50 text-9xl transform rotate-12">
+                <i class="fas fa-quran"></i>
+            </div>
+
+            <div class="relative z-10">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold mb-2">3. Bu Ayet Kimin Hakkında?</h2>
+                    <p class="text-[#d7ccc8]">Ayetleri okuyun ve ilgili peygamberi seçin.</p>
+                </div>
+
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Soru 1 -->
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                        <p class="italic mb-3">"Gözetimimiz altında ve vahyimize göre gemiyi yap. Zulmedenler hakkında bana bir şey söyleme..." (Hud 11/37)</p>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, true)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. Nuh</button>
+                            <button onclick="checkAnswer(this, false)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. Musa</button>
+                        </div>
+                        <div class="feedback mt-2 font-bold hidden"></div>
+                    </div>
+
+                    <!-- Soru 2 -->
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                        <p class="italic mb-3">"Meryem oğlu Mesih sadece bir peygamberdir. Ondan önce de nice peygamberler geldi geçti..." (Maide 5/75)</p>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, false)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. İbrahim</button>
+                            <button onclick="checkAnswer(this, true)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. İsa</button>
+                        </div>
+                        <div class="feedback mt-2 font-bold hidden"></div>
+                    </div>
+
+                    <!-- Soru 3 -->
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                        <p class="italic mb-3">"Hani o babasına ve kavmine, 'Ne bu tapınıp durduğunuz heykeller?' demişti." (Enbiya 21/52)</p>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, true)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. İbrahim</button>
+                            <button onclick="checkAnswer(this, false)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. Nuh</button>
+                        </div>
+                        <div class="feedback mt-2 font-bold hidden"></div>
+                    </div>
+
+                    <!-- Soru 4 -->
+                    <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                        <p class="italic mb-3">"Bunun üzerine Firavun askerleriyle birlikte onların peşine düştü de deniz onları görülmedik bir şekilde kuşatıp yuttu." (Taha 20/78)</p>
+                        <div class="flex gap-2">
+                            <button onclick="checkAnswer(this, false)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. İsa</button>
+                            <button onclick="checkAnswer(this, true)" class="bg-[#5d4037] hover:bg-[#6d4c41] px-4 py-2 rounded text-sm transition border border-[#8d6e63]">Hz. Musa</button>
+                        </div>
+                        <div class="feedback mt-2 font-bold hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: ÖĞÜTLER (Bilgi Görseli 4.7 Özet) -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 serif-font">Kıssaların Ortak Mesajı</h2>
+                <div class="h-1 w-24 bg-[#3e2723] mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-emerald-500">
+                    <div class="text-4xl text-emerald-500 mb-4"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Güzel Ahlak</h3>
+                    <p class="text-sm text-gray-600">Peygamberlerin güzel ahlakını kendi hayatımızda örnek almalıyız.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-amber-500">
+                    <div class="text-4xl text-amber-500 mb-4"><i class="fas fa-fist-raised"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Mücadele</h3>
+                    <p class="text-sm text-gray-600">İnancımız uğruna sabırla ve cesaretle mücadele etmeliyiz.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-md border-b-4 border-red-500">
+                    <div class="text-4xl text-red-500 mb-4"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="font-bold text-gray-800 mb-2">Zorluklara Sabır</h3>
+                    <p class="text-sm text-gray-600">Her insan gibi peygamberler de sıkıntı çekmiştir, pes etmemeliyiz.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- YANSITMA / DEĞERLENDİRME -->
+        <section class="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm max-w-2xl mx-auto text-center">
+            <h3 class="text-xl font-bold text-[#5d4037] mb-4">Sıra Sende</h3>
+            <p class="text-gray-600 mb-6">"Beni en çok etkileyen peygamber kıssası hangisi? Neden?"</p>
+            <textarea class="w-full bg-[#fcfaf9] border border-gray-300 rounded-lg p-4 h-32 focus:ring-2 focus:ring-[#8d6e63] outline-none" placeholder="Düşüncelerini buraya not alabilirsin..."></textarea>
+        </section>
+
+    </main>
+
+    <footer class="wood-texture text-[#d7ccc8] py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Kıssadan Hisse</p>
+    </footer>
+
+    <script>
+        // --- CONCEPT GRID LOGIC ---
+        function highlightConcepts(group) {
+            const items = document.querySelectorAll('.concept-item');
+            
+            items.forEach(item => {
+                const itemGroups = item.getAttribute('data-groups');
+                // Reset styles
+                item.classList.remove('highlighted', 'dimmed');
+                
+                // Logic
+                if (group === 'reset') {
+                    // Do nothing, already reset
+                } else if (itemGroups.includes(group)) {
+                    item.classList.add('highlighted');
+                } else {
+                    item.classList.add('dimmed');
+                }
+            });
+        }
+
+        function resetGrid() {
+            highlightConcepts('reset');
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.nextElementSibling;
+            
+            // Disable buttons
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            feedback.classList.remove('hidden');
+            
+            if (isCorrect) {
+                btn.classList.remove('bg-[#5d4037]');
+                btn.classList.add('bg-green-600', 'border-green-800');
+                feedback.innerHTML = '<span class="text-green-300">Doğru Cevap! <i class="fas fa-check"></i></span>';
+            } else {
+                btn.classList.remove('bg-[#5d4037]');
+                btn.classList.add('bg-red-600', 'border-red-800');
+                feedback.innerHTML = '<span class="text-red-300">Yanlış. <i class="fas fa-times"></i></span>';
+                
+                // Show correct one (find sibling with opposite onClick value logic implies if one is false, other is true in this 2-choice setup)
+                // Simplified: Just mark the user's choice visual.
+            }
+        }
+    </script>
+</body>
+</html>

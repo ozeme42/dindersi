@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camileri Tanıyalım</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background-color: #f5f5f4; /* Stone-100 */
+            color: #44403c; /* Stone-700 */
+        }
+        .art-font {
+            font-family: 'Scheherazade New', serif;
+        }
+        .arch-pattern {
+            background-color: #0d9488;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ccfbf1' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .part-btn {
+            transition: all 0.3s ease;
+        }
+        .part-btn:hover {
+            transform: translateX(5px);
+            background-color: #f0fdfa; /* Teal-50 */
+            border-color: #0d9488;
+        }
+        .part-btn.active {
+            background-color: #0d9488;
+            color: white;
+            border-color: #0f766e;
+        }
+        .story-select {
+            border: none;
+            border-bottom: 2px solid #0d9488;
+            background: transparent;
+            color: #0d9488;
+            font-weight: bold;
+            padding: 0 5px;
+            cursor: pointer;
+            outline: none;
+        }
+        .story-select.correct {
+            border-bottom-color: #22c55e;
+            color: #15803d;
+        }
+        .story-select.wrong {
+            border-bottom-color: #ef4444;
+            color: #b91c1c;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="arch-pattern text-white py-12 px-4 text-center shadow-lg relative overflow-hidden rounded-b-[40px] mb-12">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-teal-900/30 border border-teal-200/30 text-teal-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">5. Ünite</span>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 art-font leading-tight">CAMİLERİ TANIYALIM</h1>
+            <p class="text-xl text-teal-100 font-light max-w-2xl mx-auto">
+                "Şüphesiz mescitler Allah'ındır. O halde, Allah ile birlikte başkasına kulluk etmeyin." (Cin, 18)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: TEMEL KAVRAMLAR -->
+        <section class="grid md:grid-cols-3 gap-6">
+            <!-- Cami -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-teal-500 hover:-translate-y-2 transition duration-300">
+                <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 text-2xl mb-4">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">CAMİ</h3>
+                <p class="text-sm text-gray-600">"Toplayan, bir araya getiren" demektir. Cuma namazı kılınan, minberli büyük ibadethanelerdir.</p>
+            </div>
+
+            <!-- Mescit -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-blue-500 hover:-translate-y-2 transition duration-300">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mb-4">
+                    <i class="fas fa-praying-hands"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">MESCİT</h3>
+                <p class="text-sm text-gray-600">"Secde edilen yer" demektir. İçinde minber bulunmayan, daha küçük ibadet yerleridir.</p>
+            </div>
+
+            <!-- Külliye -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border-t-4 border-amber-500 hover:-translate-y-2 transition duration-300">
+                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 text-2xl mb-4">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">KÜLLİYE</h3>
+                <p class="text-sm text-gray-600">Merkezinde cami olan; medrese, aşevi, şifahane, hamam gibi yapıların bütünüdür.</p>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: MİMARİ REHBER (İç ve Dış Bölümler) -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center flex-wrap gap-4">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-search-location text-teal-600"></i> Caminin Bölümleri
+                </h2>
+                <div class="flex bg-white rounded-lg p-1 shadow-sm border border-gray-200">
+                    <button onclick="filterParts('all')" class="px-4 py-2 rounded-md text-sm font-bold bg-teal-500 text-white transition" id="btn-all">Tümü</button>
+                    <button onclick="filterParts('dis')" class="px-4 py-2 rounded-md text-sm font-bold text-gray-600 hover:bg-gray-100 transition" id="btn-dis">Dış Bölümler</button>
+                    <button onclick="filterParts('ic')" class="px-4 py-2 rounded-md text-sm font-bold text-gray-600 hover:bg-gray-100 transition" id="btn-ic">İç Bölümler</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row min-h-[450px]">
+                <!-- Sol Liste -->
+                <div class="md:w-1/3 border-r border-gray-100 p-4 space-y-2 bg-gray-50 h-full overflow-y-auto">
+                    <!-- Dış -->
+                    <button onclick="showDetail('minare')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Minare</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <button onclick="showDetail('serefe')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Şerefe</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <button onclick="showDetail('kubbe')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Kubbe</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <button onclick="showDetail('sadirvan')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="dis">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Şadırvan</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <!-- İç -->
+                    <button onclick="showDetail('mihrap')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Mihrap</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <button onclick="showDetail('minber')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Minber</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                    <button onclick="showDetail('kursu')" class="part-btn w-full text-left p-4 rounded-lg border border-gray-200 bg-white flex items-center justify-between group" data-category="ic">
+                        <span class="font-bold text-gray-700 group-hover:text-teal-700">Vaaz Kürsüsü</span>
+                        <i class="fas fa-arrow-right text-gray-300 group-hover:text-teal-500"></i>
+                    </button>
+                </div>
+
+                <!-- Sağ Detay -->
+                <div class="md:w-2/3 p-8 flex items-center justify-center bg-white relative">
+                    <!-- Default State -->
+                    <div id="default-view" class="text-center text-gray-400">
+                        <i class="fas fa-hand-pointer text-6xl mb-4 animate-bounce"></i>
+                        <p>Öğrenmek istediğiniz bölümü soldaki listeden seçin.</p>
+                    </div>
+
+                    <!-- Dynamic Content -->
+                    <div id="detail-view" class="hidden text-center max-w-lg fade-in">
+                        <div class="w-24 h-24 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 text-teal-600 text-4xl shadow-inner" id="detail-icon">
+                            <i class="fas fa-mosque"></i>
+                        </div>
+                        <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block" id="detail-tag">Dış Bölüm</span>
+                        <h3 class="text-4xl font-bold text-teal-900 mb-4 art-font" id="detail-title">Başlık</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed" id="detail-desc">Açıklama buraya gelecek.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: HİKAYE TAMAMLAMA OYUNU -->
+        <section class="max-w-4xl mx-auto bg-[#fefce8] p-8 rounded-3xl border-2 border-yellow-200 shadow-lg relative overflow-hidden">
+            <!-- Decoration -->
+            <div class="absolute -top-6 -left-6 w-24 h-24 bg-yellow-300 rounded-full opacity-50 blur-xl"></div>
+            
+            <div class="relative z-10">
+                <div class="text-center mb-8">
+                    <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
+                    <h2 class="text-3xl font-bold text-gray-800 mt-2">Mahallemizdeki Cami</h2>
+                    <p class="text-gray-600">Zeynep'in hikayesindeki boşlukları doğru kelimelerle doldur.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-inner border border-yellow-100 text-lg leading-loose text-gray-700 text-justify">
+                    <p>
+                        Zeynep babasıyla camiye gittiğinde ilk olarak avluda insanların abdest aldığı
+                        <select class="story-select" id="q1">
+                            <option value="">Seç...</option>
+                            <option value="şadırvan">Şadırvan</option>
+                            <option value="kubbe">Kubbe</option>
+                            <option value="minare">Minare</option>
+                        </select>
+                        adı verilen yeri gördü. Caminin üzerini örten yarım küre şeklindeki yapıya
+                        <select class="story-select" id="q2">
+                            <option value="">Seç...</option>
+                            <option value="mihrap">Mihrap</option>
+                            <option value="kubbe">Kubbe</option>
+                            <option value="şerefe">Şerefe</option>
+                        </select>
+                        dendiğini öğrendi.
+                    </p>
+                    <p class="mt-4">
+                        Caminin yanındaki yüksek ve ince yapı olan
+                        <select class="story-select" id="q3">
+                            <option value="">Seç...</option>
+                            <option value="minare">Minare</option>
+                            <option value="minber">Minber</option>
+                            <option value="kürsü">Kürsü</option>
+                        </select>
+                        dikkatini çekti. Bu yapının etrafındaki balkon gibi yere ise
+                        <select class="story-select" id="q4">
+                            <option value="">Seç...</option>
+                            <option value="şerefe">Şerefe</option>
+                            <option value="mihrap">Mihrap</option>
+                            <option value="avlu">Avlu</option>
+                        </select>
+                        deniliyordu.
+                    </p>
+                    <p class="mt-4">
+                        İçeri girdiklerinde babası, imamın namaz kıldırırken durduğu oyuk yeri göstererek "Burası
+                        <select class="story-select" id="q5">
+                            <option value="">Seç...</option>
+                            <option value="minber">Minber</option>
+                            <option value="mihrap">Mihrap</option>
+                            <option value="kürsü">Kürsü</option>
+                        </select>
+                        " dedi. Cuma günü hutbe okunan merdivenli yerin
+                        <select class="story-select" id="q6">
+                            <option value="">Seç...</option>
+                            <option value="minber">Minber</option>
+                            <option value="şadırvan">Şadırvan</option>
+                            <option value="mihrap">Mihrap</option>
+                        </select>
+                        olduğunu, vaaz verilen yüksekçe koltuğun ise
+                        <select class="story-select" id="q7">
+                            <option value="">Seç...</option>
+                            <option value="minare">Minare</option>
+                            <option value="kürsü">Vaaz Kürsüsü</option>
+                            <option value="kubbe">Kubbe</option>
+                        </select>
+                        olduğunu öğrendi.
+                    </p>
+                </div>
+
+                <div class="text-center mt-6">
+                    <button onclick="checkStory()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:scale-105">Kontrol Et</button>
+                    <p id="story-feedback" class="mt-3 font-bold text-lg hidden"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: GİZLİ KELİME AVI (Kontrol Noktası) -->
+        <section class="max-w-2xl mx-auto bg-teal-900 rounded-3xl p-8 text-white relative shadow-2xl">
+            <h2 class="text-2xl font-bold mb-6 text-center"><i class="fas fa-question-circle text-teal-300"></i> Kontrol Noktası</h2>
+            
+            <div class="space-y-6">
+                <!-- Soru 1 -->
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <p class="text-sm text-teal-100 mb-2">1. Müslümanların bir araya gelip ibadet ettiği yer:</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="ans1" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="C _ _ _">
+                        <button onclick="checkAnswer(1, 'CAMİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
+                    </div>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <p class="text-sm text-teal-100 mb-2">2. Hz. Peygamber'in hicret ederken Kuba'da inşa ettiği yer:</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="ans2" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="K _ _ _  M _ _ _ _ _ _">
+                        <button onclick="checkAnswer(2, 'KUBA MESCİDİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
+                    </div>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                    <p class="text-sm text-teal-100 mb-2">3. Medine'de inşa edilen Peygamber Mescidi:</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="ans3" class="bg-teal-800 border border-teal-600 rounded px-3 py-2 w-full text-white placeholder-teal-500/50 uppercase" placeholder="M _ _ _ _ _ - İ  N _ _ _ _ _">
+                        <button onclick="checkAnswer(3, 'MESCİD-İ NEBEVİ')" class="bg-teal-500 px-4 rounded hover:bg-teal-400 font-bold">✓</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Cami Mimarisi</p>
+    </footer>
+
+    <script>
+        // --- ARCHITECTURE EXPLORER LOGIC ---
+        const partsData = {
+            'minare': {
+                title: "Minare",
+                tag: "Dış Bölüm",
+                desc: "Caminin yanında bulunan, yüksek ve ince yapıdır. Müezzin buradan ezan okur.",
+                icon: "fa-bullhorn"
+            },
+            'serefe': {
+                title: "Şerefe",
+                tag: "Dış Bölüm",
+                desc: "Minarenin etrafını saran balkon şeklindeki bölümdür. Müezzin ezanı buradan okur.",
+                icon: "fa-circle-notch"
+            },
+            'kubbe': {
+                title: "Kubbe",
+                tag: "Dış Bölüm",
+                desc: "Caminin üzerini örten yarım küre şeklindeki yapıdır. Gökyüzünü ve birliği simgeler.",
+                icon: "fa-globe-americas" // Abstract for dome
+            },
+            'sadirvan': {
+                title: "Şadırvan",
+                tag: "Dış Bölüm",
+                desc: "Genellikle cami avlusunda bulunan, abdest almak için yapılmış su akan yerdir.",
+                icon: "fa-faucet"
+            },
+            'mihrap': {
+                title: "Mihrap",
+                tag: "İç Bölüm",
+                desc: "Kıble yönünü gösteren, imamın namaz kıldırırken durduğu duvardaki oyuk kısımdır.",
+                icon: "fa-compass"
+            },
+            'minber': {
+                title: "Minber",
+                tag: "İç Bölüm",
+                desc: "Cuma ve bayram namazlarında imamın hutbe okumak için çıktığı merdivenli yerdir.",
+                icon: "fa-signal" // Resembles steps
+            },
+            'kursu': {
+                title: "Vaaz Kürsüsü",
+                tag: "İç Bölüm",
+                desc: "Camide vaaz verip cemaati bilgilendiren kişinin oturduğu yüksekçe yerdir.",
+                icon: "fa-chair"
+            }
+        };
+
+        function showDetail(partId) {
+            const data = partsData[partId];
+            const defaultView = document.getElementById('default-view');
+            const detailView = document.getElementById('detail-view');
+            
+            // Buttons visual update
+            document.querySelectorAll('.part-btn').forEach(btn => btn.classList.remove('active'));
+            // Find button by onclick attribute containing partId
+            const activeBtn = document.querySelector(`button[onclick="showDetail('${partId}')"]`);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            // Content update
+            document.getElementById('detail-title').innerText = data.title;
+            document.getElementById('detail-desc').innerText = data.desc;
+            document.getElementById('detail-tag').innerText = data.tag;
+            document.getElementById('detail-icon').innerHTML = `<i class="fas ${data.icon}"></i>`;
+
+            // Display Logic
+            defaultView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+            
+            // Re-trigger animation
+            detailView.classList.remove('fade-in');
+            void detailView.offsetWidth;
+            detailView.classList.add('fade-in');
+        }
+
+        function filterParts(filter) {
+            // Button styles
+            ['all', 'dis', 'ic'].forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === filter) {
+                    btn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100');
+                    btn.classList.add('bg-teal-500', 'text-white');
+                } else {
+                    btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100');
+                    btn.classList.remove('bg-teal-500', 'text-white');
+                }
+            });
+
+            // List filtering
+            const buttons = document.querySelectorAll('.part-btn');
+            buttons.forEach(btn => {
+                if (filter === 'all' || btn.getAttribute('data-category') === filter) {
+                    btn.classList.remove('hidden');
+                } else {
+                    btn.classList.add('hidden');
+                }
+            });
+        }
+
+        // --- STORY GAME LOGIC ---
+        function checkStory() {
+            const answers = {
+                q1: "şadırvan",
+                q2: "kubbe",
+                q3: "minare",
+                q4: "şerefe",
+                q5: "mihrap",
+                q6: "minber",
+                q7: "kürsü"
+            };
+
+            let score = 0;
+            let total = 7;
+
+            for (let i = 1; i <= total; i++) {
+                const select = document.getElementById('q' + i);
+                const userVal = select.value;
+                const correctVal = answers['q' + i];
+
+                select.classList.remove('correct', 'wrong');
+
+                if (userVal === correctVal) {
+                    select.classList.add('correct');
+                    score++;
+                } else {
+                    select.classList.add('wrong');
+                }
+            }
+
+            const feedback = document.getElementById('story-feedback');
+            feedback.classList.remove('hidden', 'text-green-600', 'text-red-600');
+            
+            if (score === total) {
+                feedback.innerText = "Harika! Hikayeyi eksiksiz tamamladın. 🎉";
+                feedback.classList.add('text-green-600');
+            } else {
+                feedback.innerText = `${score} / ${total} doğru. Kırmızı olanları tekrar dene.`;
+                feedback.classList.add('text-red-600');
+            }
+        }
+
+        // --- ANSWER CHECK LOGIC ---
+        function checkAnswer(id, correct) {
+            const input = document.getElementById('ans' + id);
+            // Normalize input: uppercase, replace Turkish chars
+            let val = input.value.toLocaleUpperCase('tr-TR').trim();
+            
+            // Allow minor variations if needed, but exact match for now
+            // Replacing spacing issues for multi-word answers
+            val = val.replace(/\s+/g, ' '); 
+
+            if (val === correct) {
+                input.classList.add('bg-green-100', 'text-green-800', 'border-green-500');
+                input.classList.remove('bg-teal-800', 'text-white');
+                input.disabled = true;
+            } else {
+                input.classList.add('animate-pulse', 'border-red-500');
+                setTimeout(() => input.classList.remove('animate-pulse', 'border-red-500'), 1000);
+            }
+        }
+
+    </script>
+</body>
+</html>

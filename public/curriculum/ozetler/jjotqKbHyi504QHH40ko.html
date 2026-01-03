@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Ünite Özeti: Allah İnancı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            scroll-behavior: smooth;
+        }
+        .arabic { font-family: 'Amiri', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .topic-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .topic-card:hover .topic-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Fixed Sidebar / Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-slate-900 text-slate-300 p-6 z-50">
+        <div class="mb-10 flex items-center gap-3 text-emerald-400">
+            <i class="fas fa-kaaba text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide text-white">1. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1">
+            <a href="#konu1" class="block p-3 rounded-lg hover:bg-slate-800 hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-brain w-6 text-center"></i> Varlık ve Birlik
+            </a>
+            <a href="#konu2" class="block p-3 rounded-lg hover:bg-slate-800 hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-atom w-6 text-center"></i> Evrendeki Düzen
+            </a>
+            <a href="#konu3" class="block p-3 rounded-lg hover:bg-slate-800 hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-star w-6 text-center"></i> Esma-i Hüsna
+            </a>
+            <a href="#konu4" class="block p-3 rounded-lg hover:bg-slate-800 hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-heart w-6 text-center"></i> İhlas Suresi
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-emerald-600 text-white mt-4 font-bold text-center shadow-lg hover:bg-emerald-500 transition">
+                <i class="fas fa-pencil-alt mr-2"></i> Kendini Dene
+            </a>
+        </div>
+
+        <div class="text-xs text-slate-500 mt-auto pt-6 border-t border-slate-800">
+            © 2024 Din Kültürü ve Ahlak Bilgisi<br>Özet Paneli
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-kaaba text-emerald-400 mr-2"></i> 1. Ünite Özeti</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView({behavior: 'smooth'})" class="bg-emerald-600 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="lg:ml-64 p-4 md:p-8 max-w-5xl mx-auto space-y-16 pb-32">
+
+        <!-- Hero Section -->
+        <header class="text-center py-10">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 mb-4 tracking-tight">
+                ALLAH <span class="text-emerald-600">İNANCI</span>
+            </h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Bu ünite boyunca kâinattaki düzenden yola çıkarak Yaratıcı'yı tanıdık, O'nun güzel isimlerini öğrendik ve İhlas Suresi ile tevhit inancını pekiştirdik.
+            </p>
+        </header>
+
+        <!-- KONU 1: Allah'ın Varlığı ve Birliği -->
+        <section id="konu1" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 text-2xl font-bold shadow-sm">1</div>
+                <h2 class="text-3xl font-bold text-slate-800">Allah'ın Varlığı ve Birliği</h2>
+            </div>
+            
+            <div class="glass-card rounded-2xl p-6 shadow-lg border-l-4 border-blue-500 relative overflow-hidden">
+                <i class="fas fa-book-reader absolute -right-6 -bottom-6 text-9xl text-blue-50 opacity-50"></i>
+                
+                <div class="grid md:grid-cols-2 gap-8 relative z-10">
+                    <div>
+                        <h3 class="font-bold text-blue-900 mb-3 text-lg">Mantıksal Çıkarım (Akıl Yürütme)</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 bg-white/50 p-2 rounded-lg">
+                                <i class="fas fa-pen-nib text-blue-500 mt-1"></i>
+                                <span class="text-sm text-slate-700">Her kitabın bir yazarı, her resmin bir ressamı vardır.</span>
+                            </li>
+                            <li class="flex items-start gap-3 bg-white/50 p-2 rounded-lg">
+                                <i class="fas fa-city text-blue-500 mt-1"></i>
+                                <span class="text-sm text-slate-700">Şehirler plansız kurulamaz, bir mimarı vardır.</span>
+                            </li>
+                            <li class="flex items-start gap-3 bg-blue-100 p-2 rounded-lg font-semibold border border-blue-200">
+                                <i class="fas fa-globe text-blue-700 mt-1"></i>
+                                <span class="text-sm text-blue-900">Sonuç: Bu mükemmel kâinat da tesadüf olamaz, bir Yaratıcısı vardır. O da Allah'tır.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                        <h3 class="font-bold text-slate-800 mb-2 border-b pb-2">Kilit Kavramlar</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-bold text-slate-700">Tevhit:</span>
+                                <span class="text-slate-500 text-right">Allah'ın bir ve tek olması.</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-bold text-slate-700">Şirk:</span>
+                                <span class="text-slate-500 text-right">Allah'a ortak koşmak.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONU 2: Evrendeki Düzen -->
+        <section id="konu2" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600 text-2xl font-bold shadow-sm">2</div>
+                <h2 class="text-3xl font-bold text-slate-800">Evrendeki Mükemmel Düzen</h2>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 shadow-lg border-l-4 border-purple-500">
+                <p class="text-slate-600 mb-6 italic border-l-2 border-purple-200 pl-4">
+                    "Güneş ve Ay bir hesaba göre hareket etmektedir... O, göğü yükseltti ve dengeyi koydu." (Rahman Suresi)
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm text-center hover:-translate-y-1 transition duration-300">
+                        <i class="fas fa-atom text-4xl text-purple-400 mb-3"></i>
+                        <h4 class="font-bold text-slate-800 mb-1">Atomdan...</h4>
+                        <p class="text-xs text-slate-500">En küçük parça bile bir yörünge ve düzen içindedir.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm text-center hover:-translate-y-1 transition duration-300 transform scale-105 border border-purple-100">
+                        <i class="fas fa-user-astronaut text-4xl text-purple-600 mb-3"></i>
+                        <h4 class="font-bold text-slate-800 mb-1">...İnsana...</h4>
+                        <p class="text-xs text-slate-500">Göz, kulak, kalp... Her organ yerli yerindedir.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm text-center hover:-translate-y-1 transition duration-300">
+                        <i class="fas fa-globe-americas text-4xl text-purple-400 mb-3"></i>
+                        <h4 class="font-bold text-slate-800 mb-1">...Kâinata</h4>
+                        <p class="text-xs text-slate-500">Gezegenler çarpışmadan milyonlarca yıldır döner.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONU 3: Esma-i Hüsna -->
+        <section id="konu3" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 text-2xl font-bold shadow-sm">3</div>
+                <h2 class="text-3xl font-bold text-slate-800">Allah'ın Güzel İsimleri</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Merhamet</span>
+                    <h3 class="text-xl font-bold text-slate-800">RAHMAN</h3>
+                    <p class="text-xs text-slate-500 mt-2">Dünyada ayrım yapmadan herkese merhamet eden.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Özel Lütuf</span>
+                    <h3 class="text-xl font-bold text-slate-800">RAHÎM</h3>
+                    <p class="text-xs text-slate-500 mt-2">Ahirette sadece müminlere merhamet eden.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Bilgi</span>
+                    <h3 class="text-xl font-bold text-slate-800">ÂLİM</h3>
+                    <p class="text-xs text-slate-500 mt-2">Gizli ve açık her şeyi en ince ayrıntısına kadar bilen.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Görme</span>
+                    <h3 class="text-xl font-bold text-slate-800">BASİR</h3>
+                    <p class="text-xs text-slate-500 mt-2">Her şeyi gören. Karanlıkta saklı olanı bile.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">İşitme</span>
+                    <h3 class="text-xl font-bold text-slate-800">SEMİ</h3>
+                    <p class="text-xs text-slate-500 mt-2">Her şeyi işiten. Fısıltıları ve duaları duyan.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <span class="block text-xs font-bold text-amber-500 uppercase tracking-wider mb-1">Güç</span>
+                    <h3 class="text-xl font-bold text-slate-800">KADİR</h3>
+                    <p class="text-xs text-slate-500 mt-2">Sonsuz güç sahibi. Her şeye gücü yeten.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONU 4: İhlas Suresi -->
+        <section id="konu4" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600 text-2xl font-bold shadow-sm">4</div>
+                <h2 class="text-3xl font-bold text-slate-800">İhlas Suresi</h2>
+            </div>
+
+            <div class="glass-card rounded-2xl p-8 border-t-4 border-emerald-500 text-center">
+                <h3 class="text-2xl font-bold text-emerald-800 mb-2">Tevhit İnancının Özü</h3>
+                <p class="text-slate-600 mb-6 text-sm">İhlas; samimiyet demektir. Allah'ın birliğini en güzel anlatan suredir.</p>
+
+                <div class="inline-block bg-white rounded-xl p-6 shadow-inner border border-slate-100">
+                    <p class="font-bold text-lg text-slate-800 mb-2">"De ki: O Allah tektir."</p>
+                    <p class="font-bold text-lg text-slate-800 mb-2">"Allah Samed'dir. <span class="text-sm font-normal text-slate-500">(Muhtaç olmayan, her şeyin O'na muhtaç olduğu)</span>"</p>
+                    <p class="font-bold text-lg text-slate-800 mb-2">"O, doğurmamış ve doğmamıştır."</p>
+                    <p class="font-bold text-lg text-slate-800">"O'nun hiçbir dengi yoktur."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-slate-800 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-slate-400 mt-2">Tüm konuları ne kadar iyi anladın?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-6">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-slate-800 rounded-xl p-6 text-center mt-8 animate-bounce-in">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Tebrikler!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-slate-800 text-white px-6 py-2 rounded-lg hover:bg-slate-700 transition">Testi Tekrarla</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. 'Her resmin bir ressamı vardır' örneği, hangi konuyu kanıtlamak için kullanılır?",
+                options: ["Allah'ın isimlerini", "Allah'ın varlığını", "Peygamberleri", "Melekleri"],
+                correct: 1
+            },
+            {
+                q: "2. 'Samed' ismi ne anlama gelir?",
+                options: ["Her şeyi işiten", "Çok merhametli olan", "Hiçbir şeye muhtaç olmayan", "Her şeyi gören"],
+                correct: 2
+            },
+            {
+                q: "3. Aşağıdakilerden hangisi Allah'ın 'Her şeyi bilen' ismidir?",
+                options: ["Kadir", "Basir", "Rahman", "Âlim"],
+                correct: 3
+            },
+            {
+                q: "4. İhlas Suresi'nin ana konusu nedir?",
+                options: ["Tevhit (Allah'ın birliği)", "Namaz kılmak", "Oruç tutmak", "Anne-baba hakkı"],
+                correct: 0
+            },
+            {
+                q: "5. 'Allah'ın bilgisi olmadan bir yaprak bile düşmez' ayeti hangi isimle ilgilidir?",
+                options: ["Semi", "Âlim", "Basir", "Rahim"],
+                correct: 1
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-slate-700/50 p-6 rounded-xl border border-slate-600";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-slate-800 hover:bg-slate-600 border border-slate-700 mb-2 transition flex items-center justify-between group">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-slate-400 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4"><span class="text-emerald-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            // Disable buttons for this question
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-slate-800');
+                btn.classList.add('bg-emerald-600', 'border-emerald-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-emerald-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-slate-800');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.add('bg-emerald-600/50', 'border-emerald-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 20} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            // Scroll to result
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

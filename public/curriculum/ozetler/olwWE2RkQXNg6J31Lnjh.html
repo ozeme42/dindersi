@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Hayatında Şükür</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fffbeb; /* Amber-50 */
+            color: #78350f; /* Amber-900 */
+        }
+        .hand-font {
+            font-family: 'Caveat', cursive;
+        }
+        .sun-pattern {
+            background-color: #f59e0b;
+            background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fffbeb' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 300px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .note-paper {
+            background-color: #fef3c7;
+            background-image: linear-gradient(#fcd34d 1px, transparent 1px);
+            background-size: 100% 1.2em;
+            line-height: 1.2em;
+            box-shadow: 5px 5px 7px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+        }
+        .note-paper:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+        .jar-container {
+            position: relative;
+            width: 200px;
+            height: 250px;
+            border: 4px solid #9ca3af;
+            border-radius: 20px 20px 40px 40px;
+            background: rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .jar-lid {
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            width: 220px;
+            height: 20px;
+            background: #6b7280;
+            border-radius: 5px;
+        }
+        .folded-note {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+            animation: dropNote 0.5s ease-out forwards;
+        }
+        @keyframes dropNote {
+            0% { top: -50px; opacity: 0; transform: rotate(0deg); }
+            100% { top: var(--final-top); opacity: 1; transform: rotate(var(--final-rot)); }
+        }
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="sun-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-amber-800">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-amber-900/30 border border-amber-200/30 text-amber-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 tracking-wide hand-font">ŞÜKÜR VE MUTLULUK</h1>
+            <p class="text-xl text-amber-100 font-medium max-w-2xl mx-auto italic">
+                "Şükreden bir kul olmayayım mı?" (Hz. Muhammed s.a.v)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: ELİF'İN HİKAYESİ (Flip Card) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-amber-900 mb-2 title-font">Mutluluğun Sırrı</h2>
+                <p class="text-gray-600">Elif'in bakış açısı nasıl değişti? Karta tıkla ve gör.</p>
+            </div>
+
+            <div class="max-w-3xl mx-auto flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <!-- Ön Yüz: Kıyaslama -->
+                    <div class="flip-card-front bg-white border-2 border-gray-200">
+                        <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center text-4xl mb-4 text-gray-500">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-700 mb-2">Mutsuz Elif</h3>
+                        <p class="text-gray-600 italic">"Başkaları benden daha iyi..."</p>
+                        <p class="text-sm text-gray-500 mt-4 px-8">
+                            Elif sürekli kendini başkalarıyla kıyaslıyor, sahip olduklarını değil, eksiklerini görüyordu. Bu yüzden hep mutsuz ve yetersiz hissediyordu.
+                        </p>
+                        <p class="text-xs text-amber-500 mt-6 animate-bounce font-bold">DEĞİŞİM İÇİN TIKLA ↻</p>
+                    </div>
+
+                    <!-- Arka Yüz: Şükür -->
+                    <div class="flip-card-back bg-gradient-to-br from-amber-400 to-orange-500 text-white">
+                        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-4xl mb-4 text-white">
+                            <i class="fas fa-smile-beam"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Şükreden Elif</h3>
+                        <p class="italic">"Sahip olduklarım ne kadar değerli!"</p>
+                        <p class="text-sm mt-4 px-8">
+                            Ailesinin hazırladığı "Güzel Özellikler Kutusu"nu okuyunca bakış açısı değişti. Şikayet etmeyi bırakıp şükretmeye başladı. Artık daha özgüvenli ve başarılı.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: KAVRAMLAR (Hamt vs Şükür) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-amber-900 mb-2">Kelimelerin Gücü</h2>
+                <div class="h-1 w-20 bg-amber-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-green-500 flex flex-col items-center text-center hover:scale-105 transition">
+                    <i class="fas fa-praying-hands text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-green-800 mb-2">HAMT</h3>
+                    <p class="text-gray-600">"Elhamdülillah"</p>
+                    <p class="text-sm text-gray-500 mt-4">Sadece Allah'a (cc) yapılan övgüdür. Her türlü nimeti ve iyiliği O'ndan bilmektir. Fatiha suresi bununla başlar.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-blue-500 flex flex-col items-center text-center hover:scale-105 transition">
+                    <i class="fas fa-hand-holding-heart text-5xl text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-blue-800 mb-2">ŞÜKÜR</h3>
+                    <p class="text-gray-600">"Teşekkür Ederim"</p>
+                    <p class="text-sm text-gray-500 mt-4">Gelen bir iyiliğin kıymetini bilmektir. Hem Allah'a hem de vesile olan insanlara (anne, baba, öğretmen) yapılır.</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-amber-100 p-4 rounded-xl text-center text-amber-900 font-bold max-w-2xl mx-auto border border-amber-200">
+                <i class="fas fa-info-circle mr-2"></i> "İnsanlara teşekkür etmeyen, Allah'a şükredemez." (Hadis-i Şerif)
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: ŞÜKÜR KAVANOZU (Etkinlik) -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 border border-amber-100 fade-in max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                
+                <!-- Kavanoz Alanı -->
+                <div class="w-full md:w-1/3 flex flex-col items-center">
+                    <div class="jar-container" id="jar">
+                        <div class="jar-lid"></div>
+                        <!-- Notlar buraya düşecek -->
+                    </div>
+                    <p class="text-center text-gray-500 mt-4 text-sm">Senin Şükür Kavanozun</p>
+                    <div class="mt-2 text-amber-600 font-bold text-xl"><span id="note-count">0</span> Şükür Sebebi</div>
+                </div>
+
+                <!-- Yazı Alanı -->
+                <div class="w-full md:w-2/3">
+                    <h2 class="text-3xl font-bold text-amber-900 mb-4">Bugün neye şükrediyorsun?</h2>
+                    <p class="text-gray-600 mb-6">Hayatındaki güzellikleri fark et. Sağlığın, ailen, güneş, bir bardak su...</p>
+                    
+                    <div class="flex gap-2 mb-6">
+                        <input type="text" id="gratitude-input" placeholder="Örn: Annemin yaptığı yemek için..." class="w-full border-2 border-amber-200 rounded-xl p-4 focus:outline-none focus:border-amber-500 bg-amber-50 text-amber-900 placeholder-amber-300">
+                        <button onclick="addNote()" class="bg-amber-500 text-white px-6 py-4 rounded-xl font-bold hover:bg-amber-600 transition shadow-lg whitespace-nowrap">
+                            Kavanoza At <i class="fas fa-arrow-down ml-2"></i>
+                        </button>
+                    </div>
+
+                    <!-- Örnekler -->
+                    <div class="flex gap-2 flex-wrap text-xs text-gray-500">
+                        <span class="bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-amber-100" onclick="quickAdd('Gören gözlerim için')">Gören gözlerim</span>
+                        <span class="bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-amber-100" onclick="quickAdd('Sıcak yuvam için')">Sıcak yuvam</span>
+                        <span class="bg-gray-100 px-3 py-1 rounded-full cursor-pointer hover:bg-amber-100" onclick="quickAdd('Arkadaşım olduğu için')">Arkadaşlarım</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: ŞÜKÜR SECDESİ (Rehber) -->
+        <section class="fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-amber-900">Şükür Secdesi Nasıl Yapılır?</h2>
+                <p class="text-sm text-gray-600">Mutlu bir haber aldığında veya bir nimete kavuştuğunda...</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-green-500 w-40 text-center">
+                    <div class="text-green-500 text-2xl mb-2">1</div>
+                    <div class="text-gray-700 text-sm font-bold">Niyet Et</div>
+                    <div class="text-xs text-gray-500">Kıbleye dön</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-green-500 w-40 text-center">
+                    <div class="text-green-500 text-2xl mb-2">2</div>
+                    <div class="text-gray-700 text-sm font-bold">Tekbir Al</div>
+                    <div class="text-xs text-gray-500">Allahü Ekber</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-green-500 w-40 text-center">
+                    <div class="text-green-500 text-2xl mb-2">3</div>
+                    <div class="text-gray-700 text-sm font-bold">Secdeye Git</div>
+                    <div class="text-xs text-gray-500">Şükret ve Dua et</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-green-500 w-40 text-center">
+                    <div class="text-green-500 text-2xl mb-2">4</div>
+                    <div class="text-gray-700 text-sm font-bold">Kalk</div>
+                    <div class="text-xs text-gray-500">Tekbir alarak</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: KELİME BULMACA (Kontrol Noktası) -->
+        <section class="max-w-2xl mx-auto bg-amber-900 text-amber-50 rounded-3xl p-8 shadow-2xl relative overflow-hidden fade-in">
+            <h2 class="text-2xl font-bold mb-6 text-center border-b border-amber-700 pb-4">Kavramları Bul</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20">
+                    <p class="text-sm mb-2 opacity-80">1. "Elhamdülillah" diyerek yapılan övgü.</p>
+                    <div class="flex gap-2">
+                        <button onclick="checkAnswer(this, true)" class="w-full py-2 bg-amber-800 rounded hover:bg-green-600 transition">HAMT</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full py-2 bg-amber-800 rounded hover:bg-red-600 transition">ŞÜKÜR</button>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20">
+                    <p class="text-sm mb-2 opacity-80">2. İbadetleri gösteriş için yapma hastalığı.</p>
+                    <div class="flex gap-2">
+                        <button onclick="checkAnswer(this, true)" class="w-full py-2 bg-amber-800 rounded hover:bg-green-600 transition">RİYA</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full py-2 bg-amber-800 rounded hover:bg-red-600 transition">İHLAS</button>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20">
+                    <p class="text-sm mb-2 opacity-80">3. Allah'ı her an anmak, hatırlamak.</p>
+                    <div class="flex gap-2">
+                        <button onclick="checkAnswer(this, false)" class="w-full py-2 bg-amber-800 rounded hover:bg-red-600 transition">FİKİR</button>
+                        <button onclick="checkAnswer(this, true)" class="w-full py-2 bg-amber-800 rounded hover:bg-green-600 transition">ZİKİR</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-amber-900 text-amber-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Şükür Ünitesi</p>
+    </footer>
+
+    <script>
+        // --- GRATITUDE JAR LOGIC ---
+        const colors = ['#fecaca', '#bbf7d0', '#bfdbfe', '#fde68a', '#e9d5ff'];
+        let count = 0;
+
+        function addNote() {
+            const input = document.getElementById('gratitude-input');
+            const text = input.value.trim();
+            if (text) {
+                createNoteElement();
+                input.value = '';
+                count++;
+                document.getElementById('note-count').innerText = count;
+            }
+        }
+
+        function quickAdd(text) {
+            document.getElementById('gratitude-input').value = text;
+            addNote();
+        }
+
+        function createNoteElement() {
+            const jar = document.getElementById('jar');
+            const note = document.createElement('div');
+            note.className = 'folded-note';
+            
+            // Random visual properties
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const randomLeft = Math.floor(Math.random() * 140) + 10; // Random horizontal position
+            const randomRot = Math.floor(Math.random() * 360); // Final rotation
+            // Calculate stacking: simple logic, just pile them up visually by limiting bottom range
+            // For a real physics effect we'd need a library, here we just randomize 'top' within the jar visually
+            const randomTop = Math.floor(Math.random() * 150) + 50; // Place somewhere in the jar body
+
+            note.style.backgroundColor = randomColor;
+            note.style.left = randomLeft + 'px';
+            note.style.setProperty('--final-top', randomTop + 'px');
+            note.style.setProperty('--final-rot', randomRot + 'deg');
+
+            jar.appendChild(note);
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            // Disable siblings
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.remove('bg-amber-800', 'hover:bg-green-600');
+                btn.classList.add('bg-green-500', 'font-bold');
+                btn.innerHTML += ' <i class="fas fa-check"></i>';
+            } else {
+                btn.classList.remove('bg-amber-800', 'hover:bg-red-600');
+                btn.classList.add('bg-red-500');
+                btn.innerHTML += ' <i class="fas fa-times"></i>';
+            }
+        }
+    </script>
+</body>
+</html>

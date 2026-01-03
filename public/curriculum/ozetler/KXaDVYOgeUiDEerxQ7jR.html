@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Ünite Özeti: Rehberim Peygamberim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #ecfeff; /* Cyan-50 */
+            color: #164e63; /* Cyan-900 */
+            scroll-behavior: smooth;
+        }
+        .hand-font { font-family: 'Patrick Hand', cursive; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #ecfeff; }
+        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0891b2; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .nav-item.active {
+            background-color: #155e75;
+            color: white;
+            border-left: 4px solid #67e8f9;
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#ecfeff]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-cyan-900 text-cyan-100 p-6 z-50 shadow-xl">
+        <div class="mb-10 flex items-center gap-3 text-cyan-400">
+            <i class="fas fa-compass text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide">3. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="block p-3 rounded-lg hover:bg-cyan-800 transition flex items-center gap-3 nav-item">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#temizlik" class="block p-3 rounded-lg hover:bg-cyan-800 transition flex items-center gap-3 nav-item">
+                <i class="fas fa-hand-sparkles w-5 text-center"></i> Temizlik Adabı
+            </a>
+            <a href="#yeme-icme" class="block p-3 rounded-lg hover:bg-cyan-800 transition flex items-center gap-3 nav-item">
+                <i class="fas fa-utensils w-5 text-center"></i> Yeme İçme Adabı
+            </a>
+            <a href="#giyim" class="block p-3 rounded-lg hover:bg-cyan-800 transition flex items-center gap-3 nav-item">
+                <i class="fas fa-tshirt w-5 text-center"></i> Giyim Kuşam Adabı
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-cyan-500 text-white mt-6 font-bold text-center shadow-lg hover:bg-cyan-600 transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-cyan-400 mt-auto pt-6 border-t border-cyan-800">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-cyan-900 text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-compass mr-2 text-cyan-400"></i> Rehberim Peygamberim</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-cyan-600 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-cyan-900 mb-4 tracking-tight hand-font">
+                REHBERİM <span class="text-cyan-500">PEYGAMBERİM</span>
+            </h1>
+            <p class="text-lg text-cyan-700 max-w-2xl mx-auto italic">
+                "Andolsun ki, Allah'ın Resulü'nde sizin için güzel bir örnek vardır." (Ahzab, 21)
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto text-left">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-teal-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-teal-800 mb-2 flex items-center gap-2"><i class="fas fa-soap"></i> Temizlik</h3>
+                    <p class="text-sm text-gray-600">İmanın yarısıdır. Hem bedeni hem ruhu arındırır.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-orange-800 mb-2 flex items-center gap-2"><i class="fas fa-utensils"></i> Beslenme</h3>
+                    <p class="text-sm text-gray-600">Helal lokma, şükür ve ölçülü yemek esastır.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-purple-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-purple-800 mb-2 flex items-center gap-2"><i class="fas fa-user-tie"></i> Giyim</h3>
+                    <p class="text-sm text-gray-600">Temiz, sade ve gösterişten uzak olmak gerekir.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: TEMİZLİK ADABI -->
+        <section id="temizlik" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-cyan-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-cyan-700 flex items-center justify-center text-white font-bold">1</div>
+                <h2 class="text-2xl font-bold text-cyan-900">Temizlik Adabı</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Maddi Temizlik -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-cyan-100">
+                    <h3 class="text-lg font-bold text-cyan-800 mb-4 flex items-center"><i class="fas fa-shower mr-2"></i> Maddi Temizlik</h3>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Beden:</strong> Diş (Misvak), el, yüz, gusül.</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Elbise:</strong> Namazın şartıdır. "Elbiseni temiz tut."</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> <strong>Çevre:</strong> Evi, okulu, sokağı temiz tutmak sadakadır.</li>
+                    </ul>
+                </div>
+
+                <!-- Manevi Temizlik -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-cyan-100">
+                    <h3 class="text-lg font-bold text-cyan-800 mb-4 flex items-center"><i class="fas fa-heart mr-2"></i> Manevi Temizlik</h3>
+                    <p class="text-sm text-gray-600 mb-3">Kalbin kötülüklerden (yalan, kin, kıskançlık) arındırılmasıdır.</p>
+                    <div class="bg-cyan-50 p-3 rounded-lg border-l-4 border-cyan-400 text-sm italic">
+                        "Tövbe eden, hiç günah işlememiş gibidir."
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 bg-teal-600 text-white p-4 rounded-xl flex items-center justify-between shadow-lg">
+                <span class="font-bold text-lg"><i class="fas fa-key mr-2"></i> Abdest</span>
+                <span class="text-sm">Namazın anahtarıdır. Hem maddi hem manevi temizlik sağlar.</span>
+            </div>
+        </section>
+
+        <!-- 2. KONU: YEME İÇME ADABI -->
+        <section id="yeme-icme" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-cyan-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-cyan-700 flex items-center justify-center text-white font-bold">2</div>
+                <h2 class="text-2xl font-bold text-cyan-900">Yeme İçme Adabı</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow border border-orange-100 text-center hover:-translate-y-1 transition">
+                    <i class="fas fa-check-circle text-3xl text-green-500 mb-2"></i>
+                    <h4 class="font-bold text-orange-900">Helal</h4>
+                    <p class="text-xs text-gray-500 mt-1">Emekle kazanılan temiz rızık.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-orange-100 text-center hover:-translate-y-1 transition">
+                    <i class="fas fa-hand-paper text-3xl text-orange-500 mb-2"></i>
+                    <h4 class="font-bold text-orange-900">Sağ El</h4>
+                    <p class="text-xs text-gray-500 mt-1">Sağ elle ve önünden yemek.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-orange-100 text-center hover:-translate-y-1 transition">
+                    <i class="fas fa-comment text-3xl text-blue-500 mb-2"></i>
+                    <h4 class="font-bold text-orange-900">Besmele</h4>
+                    <p class="text-xs text-gray-500 mt-1">Başta Besmele, sonda Şükür.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-orange-100 text-center hover:-translate-y-1 transition">
+                    <i class="fas fa-ban text-3xl text-red-500 mb-2"></i>
+                    <h4 class="font-bold text-orange-900">İsraf Yok</h4>
+                    <p class="text-xs text-gray-500 mt-1">Tabağı sünnetlemek.</p>
+                </div>
+            </div>
+
+            <!-- Mide Kuralı -->
+            <div class="mt-6 bg-orange-50 p-6 rounded-2xl border border-orange-200 flex flex-col md:flex-row gap-6 items-center">
+                <div class="w-32 h-32 rounded-full border-4 border-orange-300 flex flex-col overflow-hidden text-xs text-white font-bold text-center">
+                    <div class="h-1/3 bg-orange-400 flex items-center justify-center">1/3 YEMEK</div>
+                    <div class="h-1/3 bg-blue-400 flex items-center justify-center">1/3 SU</div>
+                    <div class="h-1/3 bg-green-400 flex items-center justify-center">1/3 HAVA</div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-orange-900 text-lg mb-2">Ölçülü Beslenme Kuralı</h3>
+                    <p class="text-gray-700 text-sm">Peygamberimiz midenin tıka basa doldurulmamasını, üçte birinin boş bırakılmasını tavsiye etmiştir. Bu sağlık için çok önemlidir.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: GİYİM KUŞAM ADABI -->
+        <section id="giyim" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-cyan-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-cyan-700 flex items-center justify-center text-white font-bold">3</div>
+                <h2 class="text-2xl font-bold text-cyan-900">Giyim Kuşam Adabı</h2>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border-l-4 border-purple-500">
+                    <div class="text-purple-600 text-2xl mt-1"><i class="fas fa-sparkles"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Temiz ve Düzenli</h4>
+                        <p class="text-sm text-gray-600">Allah nimetinin eserini kulunun üzerinde görmek ister. Kirli ve dağınık olmak hoş görülmez.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border-l-4 border-indigo-500">
+                    <div class="text-indigo-600 text-2xl mt-1"><i class="fas fa-feather-alt"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Sade ve Mütevazı</h4>
+                        <p class="text-sm text-gray-600">Gösterişten, kibirden ve marka takıntısından uzak durulmalıdır. "Sadelik imandandır."</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border-l-4 border-pink-500">
+                    <div class="text-pink-600 text-2xl mt-1"><i class="fas fa-user-shield"></i></div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Örtünme (Tesettür)</h4>
+                        <p class="text-sm text-gray-600">Vücut hatlarını belli etmeyen, dinen örtülmesi gereken yerleri kapatan kıyafetler tercih edilmelidir.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-cyan-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-cyan-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-cyan-200 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-cyan-900 rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-cyan-700 text-white px-6 py-2 rounded-lg hover:bg-cyan-800 transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Peygamberimiz temizliği ne olarak tanımlamıştır?",
+                options: ["İbadetin tamamı", "İmanın yarısı", "Sadece sağlık", "Zenginlik"],
+                correct: 1
+            },
+            {
+                q: "2. 'Taharet' ne anlama gelir?",
+                options: ["Yemek yemek", "Namaz kılmak", "Temizlenmek/Arınmak", "Oruç tutmak"],
+                correct: 2
+            },
+            {
+                q: "3. Aşağıdakilerden hangisi manevi temizliğe örnektir?",
+                options: ["Diş fırçalamak", "Tövbe etmek", "Banyo yapmak", "Elbise yıkamak"],
+                correct: 1
+            },
+            {
+                q: "4. Yemeğe başlarken ne söylenir?",
+                options: ["Elhamdülillah", "Afiyet olsun", "Bismillah", "Şükür"],
+                correct: 2
+            },
+            {
+                q: "5. Peygamberimizin mide doluluğu ile ilgili tavsiyesi nasıldır?",
+                options: ["Tamamen doldurmalı", "Hiç yememeli", "1/3 Yemek, 1/3 Su, 1/3 Hava", "Yarısı yemek, yarısı su"],
+                correct: 2
+            },
+            {
+                q: "6. 'İsraf' ne demektir?",
+                options: ["Tasarruf etmek", "Gereksiz harcama yapmak", "Cömert olmak", "Zekat vermek"],
+                correct: 1
+            },
+            {
+                q: "7. Peygamberimizin diş temizliği için kullandığı alet nedir?",
+                options: ["Fırça", "Misvak", "Kürdan", "İp"],
+                correct: 1
+            },
+            {
+                q: "8. Giyim kuşamda en önemli ilke nedir?",
+                options: ["En pahalısını giymek", "Marka giyinmek", "Temiz ve sade olmak", "Renkli giyinmek"],
+                correct: 2
+            },
+            {
+                q: "9. Yemeği hangi elle yemeliyiz?",
+                options: ["Sol el", "İki el", "Sağ el", "Fark etmez"],
+                correct: 2
+            },
+            {
+                q: "10. 'Adap' kelimesinin anlamı nedir?",
+                options: ["Yol, yordam, görgü", "Zorluk", "İbadet", "Temizlik"],
+                correct: 0
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-cyan-800/50 p-6 rounded-xl border border-cyan-700";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-cyan-900/50 hover:bg-cyan-700 border border-cyan-600/50 mb-2 transition flex items-center justify-between group text-cyan-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-cyan-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-cyan-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-cyan-900/50');
+                btn.classList.add('bg-green-600', 'border-green-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-cyan-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-cyan-900/50');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

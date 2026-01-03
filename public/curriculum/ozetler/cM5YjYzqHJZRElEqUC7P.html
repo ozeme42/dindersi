@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kur'an-ı Kerim'in Ana Konuları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Quicksand:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0fdf4;
+            color: #14532d;
+        }
+        .arabic-font {
+            font-family: 'Amiri', serif;
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #059669;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+        .correct-anim {
+            animation: pulse-green 0.5s;
+        }
+        .wrong-anim {
+            animation: shake 0.5s;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white py-12 px-4 rounded-b-[40px] shadow-xl mb-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <span class="bg-emerald-700/50 border border-emerald-400/30 text-emerald-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">KUR'AN-I KERİM'İN ANA KONULARI</h1>
+            <p class="text-lg text-emerald-100 max-w-2xl mx-auto font-light">
+                "Biz bu Kitabı sana, her şeyin açıklayıcısı, bir hidayet ve rahmet kaynağı olarak indirdik." (Nahl, 89)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: 5 ANA KONU (Sekmeli Yapı) -->
+        <section class="bg-white rounded-3xl shadow-xl border border-emerald-100 overflow-hidden">
+            <div class="flex flex-col md:flex-row h-full min-h-[500px]">
+                
+                <!-- Sol Menü -->
+                <div class="md:w-1/3 bg-emerald-50 p-6 border-r border-emerald-100 flex flex-col gap-3">
+                    <h3 class="text-xl font-bold text-emerald-900 mb-4 px-2">Konular</h3>
+                    
+                    <button onclick="switchTab('inanc')" class="tab-btn active w-full text-left p-4 rounded-xl font-bold flex items-center gap-3 text-emerald-800 hover:bg-emerald-100" id="btn-inanc">
+                        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700"><i class="fas fa-moon"></i></div>
+                        1. İNANÇ (İman)
+                    </button>
+
+                    <button onclick="switchTab('ibadet')" class="tab-btn w-full text-left p-4 rounded-xl font-bold flex items-center gap-3 text-emerald-800 hover:bg-emerald-100" id="btn-ibadet">
+                        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700"><i class="fas fa-praying-hands"></i></div>
+                        2. İBADET
+                    </button>
+
+                    <button onclick="switchTab('ahlak')" class="tab-btn w-full text-left p-4 rounded-xl font-bold flex items-center gap-3 text-emerald-800 hover:bg-emerald-100" id="btn-ahlak">
+                        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700"><i class="fas fa-heart"></i></div>
+                        3. AHLAK
+                    </button>
+
+                    <button onclick="switchTab('sosyal')" class="tab-btn w-full text-left p-4 rounded-xl font-bold flex items-center gap-3 text-emerald-800 hover:bg-emerald-100" id="btn-sosyal">
+                        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700"><i class="fas fa-users"></i></div>
+                        4. SOSYAL HAYAT
+                    </button>
+
+                    <button onclick="switchTab('kissa')" class="tab-btn w-full text-left p-4 rounded-xl font-bold flex items-center gap-3 text-emerald-800 hover:bg-emerald-100" id="btn-kissa">
+                        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center text-emerald-700"><i class="fas fa-book-open"></i></div>
+                        5. KISSALAR
+                    </button>
+                </div>
+
+                <!-- Sağ İçerik -->
+                <div class="md:w-2/3 p-8 relative">
+                    
+                    <!-- İNANÇ -->
+                    <div id="content-inanc" class="content-section active">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-3xl shadow-sm"><i class="fas fa-moon"></i></div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-slate-800">İnanç (İtikad)</h2>
+                                <p class="text-slate-500">İmanın altı şartı ve Tevhit</p>
+                            </div>
+                        </div>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                            Allah'ın birliğine, meleklerine, kitaplarına, peygamberlerine, ahiret gününe ve kadere inanmak konularını kapsar. Temeli <strong>Tevhit</strong> (Allah'ın birliği) inancıdır.
+                        </p>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                            <p class="italic text-blue-900 font-serif">"Ey iman edenler! Allah’a, Peygamberine, Peygamberine indirdiği kitaba... iman edin." (Nisa, 136)</p>
+                        </div>
+                    </div>
+
+                    <!-- İBADET -->
+                    <div id="content-ibadet" class="content-section">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-3xl shadow-sm"><i class="fas fa-praying-hands"></i></div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-slate-800">İbadet</h2>
+                                <p class="text-slate-500">Allah'a kulluk ve saygı</p>
+                            </div>
+                        </div>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                            Allah'ın emrettiği davranışlardır. Namaz, oruç, zekât ve hac temel ibadetlerdir. Ancak Allah rızası için yapılan her güzel iş (gülümsemek, çalışmak, yardım etmek) de ibadettir.
+                        </p>
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                            <p class="italic text-amber-900 font-serif">"Ben cinleri ve insanları, ancak bana kulluk etsinler diye yarattım." (Zariyat, 56)</p>
+                        </div>
+                    </div>
+
+                    <!-- AHLAK -->
+                    <div id="content-ahlak" class="content-section">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600 text-3xl shadow-sm"><i class="fas fa-heart"></i></div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-slate-800">Ahlak</h2>
+                                <p class="text-slate-500">İyi huy ve güzel davranış</p>
+                            </div>
+                        </div>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                            İnsanın kendisine ve çevresine karşı sorumluluklarıdır. Adalet, doğruluk, sabır, cömertlik gibi erdemleri kapsar. Kötü huylardan (yalan, iftira, gıybet) uzak durmayı öğütler.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                <h4 class="font-bold text-green-700 mb-2"><i class="fas fa-check-circle"></i> Yapılması Gerekenler</h4>
+                                <ul class="text-sm list-disc list-inside text-green-800">
+                                    <li>Adaletli olmak</li>
+                                    <li>Sözünde durmak</li>
+                                    <li>Yardımlaşmak</li>
+                                </ul>
+                            </div>
+                            <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                <h4 class="font-bold text-red-700 mb-2"><i class="fas fa-times-circle"></i> Yasaklananlar</h4>
+                                <ul class="text-sm list-disc list-inside text-red-800">
+                                    <li>Yalan söylemek</li>
+                                    <li>Gıybet etmek</li>
+                                    <li>İsraf etmek</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SOSYAL HAYAT -->
+                    <div id="content-sosyal" class="content-section">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 text-3xl shadow-sm"><i class="fas fa-users"></i></div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-slate-800">Sosyal Hayat (Muamelat)</h2>
+                                <p class="text-slate-500">Toplumsal ilişkiler ve hukuk</p>
+                            </div>
+                        </div>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                            İnsanların birbiriyle olan ilişkilerini düzenler. Aile hayatı, ticaret, miras, suç ve ceza, komşuluk ilişkileri bu kapsamdadır. Temel amaç, toplumda güven ve huzuru sağlamaktır.
+                        </p>
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg">
+                            <p class="italic text-indigo-900 font-serif">"Ölçtüğünüzde ölçmeyi tam yapın, doğru terazi ile tartın..." (İsra, 35)</p>
+                        </div>
+                    </div>
+
+                    <!-- KISSALAR -->
+                    <div id="content-kissa" class="content-section">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 text-3xl shadow-sm"><i class="fas fa-book-open"></i></div>
+                            <div>
+                                <h2 class="text-3xl font-bold text-slate-800">Kıssalar</h2>
+                                <p class="text-slate-500">Geçmiş toplulukların ibretlik hikayeleri</p>
+                            </div>
+                        </div>
+                        <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                            Geçmiş peygamberlerin ve kavimlerin başından geçen olaylardır. Masal değil, ders alınması gereken gerçeklerdir. Hz. Yusuf, Hz. Musa, Hz. Nuh kıssaları örnektir.
+                        </p>
+                        <div class="bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg">
+                            <p class="italic text-teal-900 font-serif">"Andolsun ki, onların kıssalarında akıl sahipleri için ibret vardır..." (Yusuf, 111)</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: AYET AYRIŞTIRMA OYUNU -->
+        <section class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Etkinlik</span>
+                <h2 class="text-3xl font-bold text-slate-800 mt-2">Bu Ayet Hangi Konuyla İlgili?</h2>
+                <p class="text-slate-500">Ekrana gelen ayeti doğru kategoriye sürükle veya tıkla.</p>
+            </div>
+
+            <div class="bg-slate-800 rounded-3xl p-8 relative overflow-hidden shadow-2xl">
+                <!-- Arka plan dekoru -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+
+                <div class="relative z-10 text-center">
+                    
+                    <!-- Soru Kartı -->
+                    <div class="bg-white rounded-xl p-8 shadow-lg mb-8 min-h-[160px] flex items-center justify-center flex-col transition-all duration-300" id="verse-card">
+                        <p class="text-xl md:text-2xl font-serif text-slate-800 italic mb-4" id="verse-text">Yükleniyor...</p>
+                        <span class="text-sm text-slate-400 font-bold" id="verse-source"></span>
+                    </div>
+
+                    <!-- Seçenekler -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <button onclick="checkAnswer('inanc')" class="game-btn bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-bold shadow-lg border-b-4 border-blue-700">İNANÇ</button>
+                        <button onclick="checkAnswer('ibadet')" class="game-btn bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-bold shadow-lg border-b-4 border-amber-700">İBADET</button>
+                        <button onclick="checkAnswer('ahlak')" class="game-btn bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-lg font-bold shadow-lg border-b-4 border-rose-700">AHLAK</button>
+                        <button onclick="checkAnswer('sosyal')" class="game-btn bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg font-bold shadow-lg border-b-4 border-indigo-700">SOSYAL</button>
+                        <button onclick="checkAnswer('kissa')" class="game-btn bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg font-bold shadow-lg border-b-4 border-teal-700">KISSA</button>
+                    </div>
+
+                    <div id="game-feedback" class="mt-6 font-bold text-white h-6"></div>
+                    <div class="mt-4 text-slate-400 text-sm">Puan: <span id="score" class="text-white font-bold text-lg">0</span></div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: KAVRAM BULMACA (Kontrol Noktası) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg p-8 border border-emerald-100">
+            <h2 class="text-2xl font-bold text-emerald-900 mb-6 flex items-center gap-2">
+                <i class="fas fa-puzzle-piece"></i> Kavramları Bul
+            </h2>
+            <div class="space-y-4">
+                
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-slate-600">1. Geçmiş peygamberlerin ibret verici hayat hikayeleri:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="puzzle-1" class="border-2 border-slate-200 rounded-lg px-3 py-2 w-full focus:outline-none focus:border-emerald-500 uppercase" placeholder="K _ _ _ A">
+                        <button onclick="checkPuzzle(1, 'KISSA')" class="bg-emerald-100 text-emerald-700 px-4 rounded-lg hover:bg-emerald-200"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-slate-600">2. Kur'an'ın bölümlerine (surelere) verilen ad:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="puzzle-2" class="border-2 border-slate-200 rounded-lg px-3 py-2 w-full focus:outline-none focus:border-emerald-500 uppercase" placeholder="S _ _ E">
+                        <button onclick="checkPuzzle(2, 'SURE')" class="bg-emerald-100 text-emerald-700 px-4 rounded-lg hover:bg-emerald-200"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-slate-600">3. Allah'ın emrettiği, yapılması gereken davranışlar:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="puzzle-3" class="border-2 border-slate-200 rounded-lg px-3 py-2 w-full focus:outline-none focus:border-emerald-500 uppercase" placeholder="İ _ _ _ E T">
+                        <button onclick="checkPuzzle(3, 'İBADET')" class="bg-emerald-100 text-emerald-700 px-4 rounded-lg hover:bg-emerald-200"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-bold text-slate-600">4. Ayet numaralarının yazılı olduğu yuvarlak işaret:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="puzzle-4" class="border-2 border-slate-200 rounded-lg px-3 py-2 w-full focus:outline-none focus:border-emerald-500 uppercase" placeholder="D _ _ A K">
+                        <button onclick="checkPuzzle(4, 'DURAK')" class="bg-emerald-100 text-emerald-700 px-4 rounded-lg hover:bg-emerald-200"><i class="fas fa-check"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-emerald-900 text-emerald-300 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Kur'an'ın Konuları</p>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            // Remove active style from all buttons
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+                el.classList.remove('bg-emerald-600');
+                el.classList.remove('text-white');
+                el.classList.add('text-emerald-800');
+            });
+
+            // Show selected content
+            document.getElementById(`content-${tabId}`).classList.add('active');
+            
+            // Add active style to button
+            const btn = document.getElementById(`btn-${tabId}`);
+            btn.classList.add('active');
+            btn.classList.remove('text-emerald-800');
+        }
+
+        // --- GAME LOGIC ---
+        const verses = [
+            { text: "Ben cinleri ve insanları, ancak bana kulluk etsinler diye yarattım.", source: "(Zariyat, 56)", type: "ibadet" },
+            { text: "Ölçtüğünüzde ölçmeyi tam yapın, doğru terazi ile tartın.", source: "(İsra, 35)", type: "sosyal" },
+            { text: "Birbirinizin kusurunu araştırmayın, gıybet etmeyin.", source: "(Hucurat, 12)", type: "ahlak" },
+            { text: "Allah'a, peygamberine ve indirdiğimiz nûra (Kur'an'a) iman edin.", source: "(Teğabün, 8)", type: "inanc" },
+            { text: "Sana bu Kur'an'ı vahyetmekle kıssaların en güzelini anlatıyoruz.", source: "(Yusuf, 3)", type: "kissa" },
+            { text: "Ana babaya, akrabaya, yetimlere... iyilik edin.", source: "(Nisa, 36)", type: "ahlak" }, // Could be social or moral, mapping to ahlak primary here
+            { text: "Ramazana ulaşan onu oruçla geçirsin.", source: "(Bakara, 185)", type: "ibadet" }
+        ];
+
+        let currentVerse = 0;
+        let score = 0;
+
+        function loadVerse() {
+            if (currentVerse < verses.length) {
+                document.getElementById('verse-text').innerText = `"${verses[currentVerse].text}"`;
+                document.getElementById('verse-source').innerText = verses[currentVerse].source;
+                document.getElementById('game-feedback').innerText = "";
+            } else {
+                document.getElementById('verse-card').innerHTML = `<div class="text-center"><i class="fas fa-trophy text-5xl text-yellow-500 mb-4"></i><h3 class="text-2xl font-bold">Oyun Bitti!</h3><p>Skorun: ${score}</p></div>`;
+            }
+        }
+
+        function checkAnswer(selectedType) {
+            if (currentVerse >= verses.length) return;
+
+            const correctType = verses[currentVerse].type;
+            const card = document.getElementById('verse-card');
+            
+            // Handle ambiguous cases (Like Nisa 36 which is both moral and social)
+            let isCorrect = (selectedType === correctType);
+            if (verses[currentVerse].text.includes("Ana babaya") && (selectedType === 'sosyal' || selectedType === 'ahlak')) isCorrect = true;
+
+            if (isCorrect) {
+                score += 10;
+                document.getElementById('score').innerText = score;
+                document.getElementById('game-feedback').innerHTML = '<span class="text-green-400">Doğru!</span>';
+                card.classList.add('correct-anim');
+                
+                setTimeout(() => {
+                    card.classList.remove('correct-anim');
+                    currentVerse++;
+                    loadVerse();
+                }, 600);
+            } else {
+                document.getElementById('game-feedback').innerHTML = '<span class="text-red-400">Yanlış, tekrar dene.</span>';
+                card.classList.add('wrong-anim');
+                setTimeout(() => card.classList.remove('wrong-anim'), 500);
+            }
+        }
+
+        // --- PUZZLE LOGIC ---
+        function checkPuzzle(id, answer) {
+            const input = document.getElementById(`puzzle-${id}`);
+            if (input.value.trim().toUpperCase() === answer) {
+                input.classList.remove('border-slate-200', 'border-red-500');
+                input.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+            } else {
+                input.classList.add('border-red-500', 'bg-red-50');
+                setTimeout(() => input.classList.remove('border-red-500', 'bg-red-50'), 1000);
+            }
+        }
+
+        // Initialize
+        loadVerse();
+    </script>
+</body>
+</html>

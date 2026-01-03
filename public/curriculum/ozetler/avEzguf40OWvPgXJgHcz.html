@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Hayatında Namaz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #134e4a; /* Teal-900 */
+        }
+        .title-font {
+            font-family: 'Amiri', serif;
+        }
+        .prayer-pattern {
+            background-color: #115e59;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235eead4' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #fff;
+            border: 2px solid #0f766e;
+        }
+        .water-flow {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #3b82f6 100%);
+            background-size: 200% 100%;
+            animation: flow 2s linear infinite;
+        }
+        @keyframes flow {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+        .fade-in { animation: fadeIn 0.8s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="prayer-pattern text-white py-16 px-4 text-center rounded-b-[50px] shadow-2xl mb-12 border-b-8 border-teal-900 relative overflow-hidden">
+        <div class="absolute top-10 left-10 opacity-10 text-8xl"><i class="fas fa-mosque"></i></div>
+        <div class="absolute bottom-10 right-10 opacity-10 text-8xl"><i class="fas fa-praying-hands"></i></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-teal-900/30 border border-teal-200/30 text-teal-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">3. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-6 tracking-wide">GÖZÜMÜN NURU NAMAZ</h1>
+            <p class="text-xl text-teal-200 font-light max-w-2xl mx-auto italic">
+                "Kalk ey Bilal! Ezan okuyup da namaz kılmamızı sağlayarak bizi rahatlat!"
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: HİKMET İNCİLERİ (Hadis Kartları) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2 title-font">Peygamberimizin Dilinden Namaz</h2>
+                <div class="h-1 w-20 bg-teal-500 mx-auto rounded"></div>
+                <p class="text-teal-700 mt-4">Kartlara tıklayarak hadisleri oku.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Kart 1 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-teal-600 text-white">
+                            <i class="fas fa-key text-5xl mb-4"></i>
+                            <h3 class="text-xl font-bold">ANAHTAR</h3>
+                            <p class="text-xs mt-2 border border-teal-400 px-2 py-1 rounded">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-lg font-serif italic">"Cennetin anahtarı namazdır."</p>
+                            <p class="text-xs text-gray-500 mt-2">(Tirmizi, Taharet, 1)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 2 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-emerald-600 text-white">
+                            <i class="fas fa-archway text-5xl mb-4"></i>
+                            <h3 class="text-xl font-bold">DİREK</h3>
+                            <p class="text-xs mt-2 border border-emerald-400 px-2 py-1 rounded">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-lg font-serif italic">"Namaz dinin direğidir."</p>
+                            <p class="text-xs text-gray-500 mt-2">(Tirmizi, İman, 8)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 3 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-cyan-600 text-white">
+                            <i class="fas fa-eye text-5xl mb-4"></i>
+                            <h3 class="text-xl font-bold">NUR</h3>
+                            <p class="text-xs mt-2 border border-cyan-400 px-2 py-1 rounded">(Çevir)</p>
+                        </div>
+                        <div class="flip-card-back text-gray-800">
+                            <p class="text-lg font-serif italic">"Namaz gözümün nuru kılındı."</p>
+                            <p class="text-xs text-gray-500 mt-2">(Nesâî, İşretu’n-Nisâ, 1)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: NEHİR TEMSİLİ (Simülasyon) -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border border-blue-100 fade-in">
+            <div class="bg-blue-50 p-8 text-center border-b border-blue-100">
+                <h2 class="text-3xl font-bold text-blue-900 mb-2">Arınma Nehri</h2>
+                <p class="text-blue-700 italic max-w-2xl mx-auto">
+                    "Kapısının önünden bir nehir aksa ve o kimse günde 5 defa yıkansa, kirinden eser kalır mı?"
+                </p>
+            </div>
+
+            <div class="p-8 flex flex-col items-center">
+                <!-- Kir Göstergesi -->
+                <div class="w-full max-w-lg mb-6">
+                    <div class="flex justify-between text-sm font-bold text-gray-600 mb-1">
+                        <span>Manevi Kirler (Günahlar)</span>
+                        <span id="sin-level-text">100%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden border border-gray-300">
+                        <div id="sin-bar" class="bg-gray-600 h-6 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <!-- Nehir Alanı -->
+                <div class="relative w-full h-32 bg-blue-100 rounded-xl overflow-hidden mb-8 border-4 border-blue-200 shadow-inner flex items-center justify-center">
+                    <div class="absolute inset-0 water-flow opacity-50"></div>
+                    <i class="fas fa-water text-6xl text-blue-500 relative z-10 animate-bounce"></i>
+                </div>
+
+                <!-- Butonlar -->
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="wash(20)" class="bg-teal-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-teal-700 transition transform active:scale-95" id="btn-wash">
+                        <i class="fas fa-pray mr-2"></i> Bir Vakit Namaz Kıl
+                    </button>
+                    <button onclick="resetWash()" class="bg-gray-400 text-white px-6 py-3 rounded-full font-bold shadow hover:bg-gray-500 transition hidden" id="btn-reset">
+                        Başa Dön
+                    </button>
+                </div>
+
+                <div id="wash-feedback" class="mt-6 font-bold text-xl text-teal-700 h-8"></div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: DOĞA VE İBADET (Görsel Anlatım) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-teal-900 mb-2 title-font">Kâinatın Tesbihi</h2>
+                <p class="text-gray-600">Her varlık kendi diliyle Allah'ı zikreder ve şükreder.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Güneş -->
+                <div class="bg-orange-50 p-6 rounded-3xl border border-orange-200 text-center hover:shadow-lg transition">
+                    <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-5xl animate-pulse">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3 class="font-bold text-orange-900 text-xl mb-2">GÜNEŞ</h3>
+                    <p class="text-sm text-gray-600 italic">"Isıtarak ve aydınlatarak görevimi yaparım. Bu benim şükrümdür."</p>
+                </div>
+
+                <!-- Su/Yağmur -->
+                <div class="bg-blue-50 p-6 rounded-3xl border border-blue-200 text-center hover:shadow-lg transition">
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-5xl">
+                        <i class="fas fa-cloud-showers-heavy"></i>
+                    </div>
+                    <h3 class="font-bold text-blue-900 text-xl mb-2">SU</h3>
+                    <p class="text-sm text-gray-600 italic">"Canlılara hayat vererek Rabbimi tesbih ederim."</p>
+                </div>
+
+                <!-- Toprak/Bitki -->
+                <div class="bg-green-50 p-6 rounded-3xl border border-green-200 text-center hover:shadow-lg transition">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-500 text-5xl">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="font-bold text-green-900 text-xl mb-2">TOPRAK</h3>
+                    <p class="text-sm text-gray-600 italic">"Tohumları yeşerterek, nimet sunarak ibadet ederim."</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 bg-teal-800 text-teal-100 p-4 rounded-xl text-center shadow-lg">
+                <i class="fas fa-quote-left mr-2"></i> Yedi gök, yer ve bunlarda bulunanlar O’nu tesbih eder. (İsra, 44)
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: VAKİT PLANLAYICI (Etkinlik) -->
+        <section class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-8 border-t-8 border-indigo-500 fade-in">
+            <h2 class="text-2xl font-bold text-center text-indigo-900 mb-6">Günün Planı</h2>
+            <p class="text-center text-gray-500 mb-8 text-sm">Müslüman, zamanını namaz vakitlerine göre planlar. Aşağıdaki vakitleri sırala.</p>
+
+            <div class="space-y-3 relative" id="time-container">
+                <!-- Visual line -->
+                <div class="absolute left-6 top-4 bottom-4 w-1 bg-gray-200 rounded"></div>
+                
+                <!-- Items -->
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold z-10 border-4 border-white shadow">1</div>
+                    <div class="bg-indigo-50 p-4 rounded-xl w-full flex justify-between items-center">
+                        <span class="font-bold text-indigo-900">Sabah</span>
+                        <span class="text-xs bg-white px-2 py-1 rounded text-indigo-600">Güne Başlama</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 font-bold z-10 border-4 border-white shadow">2</div>
+                    <div class="bg-yellow-50 p-4 rounded-xl w-full flex justify-between items-center">
+                        <span class="font-bold text-yellow-900">Öğle</span>
+                        <span class="text-xs bg-white px-2 py-1 rounded text-yellow-600">Gün Ortası</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold z-10 border-4 border-white shadow">3</div>
+                    <div class="bg-orange-50 p-4 rounded-xl w-full flex justify-between items-center">
+                        <span class="font-bold text-orange-900">İkindi</span>
+                        <span class="text-xs bg-white px-2 py-1 rounded text-orange-600">İş Bitimi</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold z-10 border-4 border-white shadow">4</div>
+                    <div class="bg-red-50 p-4 rounded-xl w-full flex justify-between items-center">
+                        <span class="font-bold text-red-900">Akşam</span>
+                        <span class="text-xs bg-white px-2 py-1 rounded text-red-600">Eve Dönüş</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold z-10 border-4 border-white shadow">5</div>
+                    <div class="bg-slate-50 p-4 rounded-xl w-full flex justify-between items-center">
+                        <span class="font-bold text-slate-900">Yatsı</span>
+                        <span class="text-xs bg-white px-2 py-1 rounded text-slate-600">Günün Sonu</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center text-sm text-gray-500 italic">
+                * Namaz vakitleri hayatı disipline eder ve bereketi artırır.
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-teal-900 text-teal-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Peygamberimiz ve Namaz</p>
+    </footer>
+
+    <script>
+        // --- RIVER SIMULATION LOGIC ---
+        let currentSinLevel = 100;
+        let washes = 0;
+
+        function wash(amount) {
+            if (currentSinLevel > 0) {
+                currentSinLevel -= amount;
+                washes++;
+                
+                // Update Bar
+                const bar = document.getElementById('sin-bar');
+                const text = document.getElementById('sin-level-text');
+                const feedback = document.getElementById('wash-feedback');
+                
+                bar.style.width = currentSinLevel + '%';
+                
+                // Change color based on level
+                if(currentSinLevel > 60) bar.className = "h-6 rounded-full transition-all duration-1000 bg-gray-600";
+                else if(currentSinLevel > 30) bar.className = "h-6 rounded-full transition-all duration-1000 bg-gray-400";
+                else bar.className = "h-6 rounded-full transition-all duration-1000 bg-teal-200";
+
+                text.innerText = currentSinLevel + '%';
+
+                if (currentSinLevel <= 0) {
+                    currentSinLevel = 0;
+                    bar.style.width = '0%';
+                    text.innerText = '0%';
+                    feedback.innerText = "Tertemiz! İşte 5 vakit namaz böyledir.";
+                    document.getElementById('btn-wash').classList.add('hidden');
+                    document.getElementById('btn-reset').classList.remove('hidden');
+                } else {
+                    const messages = ["Bir vakit kılındı...", "Arınma devam ediyor...", "Günahlar dökülüyor...", "Az kaldı..."];
+                    feedback.innerText = messages[washes-1] || "Arınma sürüyor...";
+                }
+            }
+        }
+
+        function resetWash() {
+            currentSinLevel = 100;
+            washes = 0;
+            document.getElementById('sin-bar').style.width = '100%';
+            document.getElementById('sin-bar').className = "h-6 rounded-full transition-all duration-1000 bg-gray-600";
+            document.getElementById('sin-level-text').innerText = '100%';
+            document.getElementById('wash-feedback').innerText = "";
+            document.getElementById('btn-wash').classList.remove('hidden');
+            document.getElementById('btn-reset').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allah'ın Huzurunda Olmak: Namaz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comfortaa', cursive;
+            background-color: #ecfdf5;
+            color: #064e3b;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .pillar-card {
+            transition: all 0.3s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-emerald-800 text-white py-12 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">NAMAZ İBADETİ</h1>
+            <p class="text-xl text-emerald-100">"Cennetin anahtarı namaz, namazın anahtarı ise abdesttir."</p>
+            <div class="mt-6 inline-block bg-emerald-700 px-4 py-2 rounded-full text-sm">
+                <i class="fas fa-mosque mr-2"></i> 2. Ünite: İbadetler
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-16">
+
+        <!-- 1. Bölüm: Tanımlar (Flip Cards) -->
+        <section>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-emerald-800">Kavramları Öğrenelim</h2>
+                <p class="text-emerald-600">Kartların üzerine gelerek anlamlarını keşfet.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Namaz Kartı -->
+                <div class="flip-card h-64 cursor-pointer">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white shadow-lg border-b-4 border-emerald-500">
+                            <i class="fas fa-praying-hands text-5xl text-emerald-600 mb-4"></i>
+                            <h3 class="text-2xl font-bold">NAMAZ (Salat)</h3>
+                            <p class="text-gray-400 text-sm mt-2">(Çevirmek için üzerine gel)</p>
+                        </div>
+                        <div class="flip-card-back bg-emerald-600 text-white shadow-xl">
+                            <h4 class="font-bold text-xl mb-2">Anlamı:</h4>
+                            <p class="text-sm leading-relaxed">
+                                <strong>Sözlükte:</strong> Dua, rahmet, yardım.<br>
+                                <strong>Dinde:</strong> Tekbirle başlayıp selamla biten, belirli hareket ve sözlerden oluşan bedenî ibadettir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İbadet Kartı -->
+                <div class="flip-card h-64 cursor-pointer">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white shadow-lg border-b-4 border-amber-500">
+                            <i class="fas fa-heart text-5xl text-amber-500 mb-4"></i>
+                            <h3 class="text-2xl font-bold">İBADET</h3>
+                            <p class="text-gray-400 text-sm mt-2">(Çevirmek için üzerine gel)</p>
+                        </div>
+                        <div class="flip-card-back bg-amber-500 text-white shadow-xl">
+                            <h4 class="font-bold text-xl mb-2">Anlamı:</h4>
+                            <p class="text-sm leading-relaxed">
+                                Allah'ın hoşnutluğunu kazanmak için yapılan her türlü güzel davranış. Allah'a teşekkür etmenin en güzel yoludur.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Bölüm: İslam'ın Şartları -->
+        <section class="bg-white rounded-3xl p-8 shadow-sm border border-emerald-100">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-emerald-800">İslam'ın 5 Temel Esası</h2>
+                <p class="text-gray-600">Hz. Peygamber'in bildirdiği esaslar:</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="pillar-card bg-emerald-50 p-4 rounded-xl text-center border border-emerald-200">
+                    <div class="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-800 font-bold">1</div>
+                    <i class="fas fa-fingerprint text-2xl text-emerald-600 mb-2"></i>
+                    <p class="font-bold text-sm">Kelime-i Şehadet</p>
+                </div>
+                <div class="pillar-card bg-emerald-100 p-4 rounded-xl text-center border border-emerald-300 transform scale-105 shadow-md">
+                    <div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">2</div>
+                    <i class="fas fa-user-clock text-2xl text-emerald-800 mb-2"></i>
+                    <p class="font-bold text-emerald-900">Namaz Kılmak</p>
+                    <span class="text-xs text-emerald-700 block mt-1">Dinin direği</span>
+                </div>
+                <div class="pillar-card bg-emerald-50 p-4 rounded-xl text-center border border-emerald-200">
+                    <div class="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-800 font-bold">3</div>
+                    <i class="fas fa-utensils text-2xl text-emerald-600 mb-2"></i>
+                    <p class="font-bold text-sm">Oruç Tutmak</p>
+                </div>
+                <div class="pillar-card bg-emerald-50 p-4 rounded-xl text-center border border-emerald-200">
+                    <div class="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-800 font-bold">4</div>
+                    <i class="fas fa-hand-holding-usd text-2xl text-emerald-600 mb-2"></i>
+                    <p class="font-bold text-sm">Zekât Vermek</p>
+                </div>
+                <div class="pillar-card bg-emerald-50 p-4 rounded-xl text-center border border-emerald-200">
+                    <div class="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-800 font-bold">5</div>
+                    <i class="fas fa-kaaba text-2xl text-emerald-600 mb-2"></i>
+                    <p class="font-bold text-sm">Hacca Gitmek</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Bölüm: Namaz Çeşitleri - Teori -->
+        <section>
+            <h2 class="text-3xl font-bold text-center text-emerald-800 mb-8">Namaz Çeşitleri</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Farz -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle"></i> FARZ
+                    </h3>
+                    <p class="text-sm text-blue-900 mb-4">Allah'ın kesin olarak emrettiği namazlardır.</p>
+                    <ul class="text-sm space-y-2 text-blue-800">
+                        <li>• 5 Vakit Namaz</li>
+                        <li>• Cuma Namazı</li>
+                        <li>• Cenaze Namazı</li>
+                    </ul>
+                </div>
+
+                <!-- Vacip -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-amber-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-star"></i> VACİP
+                    </h3>
+                    <p class="text-sm text-amber-900 mb-4">Farz kadar kesin olmamakla birlikte emredilen namazlardır.</p>
+                    <ul class="text-sm space-y-2 text-amber-800">
+                        <li>• Bayram Namazları</li>
+                        <li>• Vitir Namazı</li>
+                    </ul>
+                </div>
+
+                <!-- Nafile -->
+                <div class="bg-rose-50 border-l-4 border-rose-500 p-6 rounded-r-xl shadow-sm">
+                    <h3 class="text-xl font-bold text-rose-800 mb-3 flex items-center gap-2">
+                        <i class="fas fa-heart"></i> NAFİLE (Sünnet)
+                    </h3>
+                    <p class="text-sm text-rose-900 mb-4">Peygamberimizin kıldığı ve tavsiye ettiği namazlardır.</p>
+                    <ul class="text-sm space-y-2 text-rose-800">
+                        <li>• Vakit namazlarının sünnetleri</li>
+                        <li>• Teravih Namazı</li>
+                        <li>• Teheccüt Namazı</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Bölüm: Oyun (Sınıflandırma) -->
+        <section class="bg-emerald-900 rounded-3xl p-8 text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-10 opacity-10">
+                <i class="fas fa-puzzle-piece text-9xl"></i>
+            </div>
+            
+            <div class="relative z-10 max-w-3xl mx-auto text-center">
+                <h2 class="text-2xl font-bold mb-2">ETKİNLİK: Hangi Namaz Hangi Grupta?</h2>
+                <p class="text-emerald-200 mb-6">Aşağıda ismi çıkan namazın türünü seç.</p>
+                
+                <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 mb-6 border border-white/20">
+                    <h3 id="game-question" class="text-3xl font-bold text-yellow-300 mb-6 drop-shadow-md">Başlatılıyor...</h3>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <button onclick="checkGame('farz')" class="bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-bold transition shadow-lg border-b-4 border-blue-700 active:border-b-0 active:translate-y-1">
+                            FARZ
+                        </button>
+                        <button onclick="checkGame('vacip')" class="bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-bold transition shadow-lg border-b-4 border-amber-700 active:border-b-0 active:translate-y-1">
+                            VACİP
+                        </button>
+                        <button onclick="checkGame('nafile')" class="bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-lg font-bold transition shadow-lg border-b-4 border-rose-700 active:border-b-0 active:translate-y-1">
+                            NAFİLE (Sünnet)
+                        </button>
+                    </div>
+
+                    <p id="game-feedback" class="mt-4 font-bold min-h-[24px]"></p>
+                </div>
+                
+                <div class="flex justify-between text-sm text-emerald-300">
+                    <span>Soru: <span id="q-count">0</span>/10</span>
+                    <span>Puan: <span id="score">0</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Bölüm: Kontrol Noktası (Quiz) -->
+        <section class="max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold text-center text-emerald-800 mb-6">Kontrol Noktası</h2>
+            <div class="bg-white rounded-xl shadow-sm border border-emerald-100 overflow-hidden">
+                <div id="quiz-container" class="divide-y divide-emerald-50">
+                    <!-- Quiz Items JS ile buraya gelecek -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-emerald-950 text-emerald-400 py-6 text-center text-sm mt-12">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Namaz Ünitesi</p>
+    </footer>
+
+    <script>
+        // --- OYUN VERİLERİ VE MANTIĞI ---
+        const gameData = [
+            { name: "Sabah Namazı", type: "farz" },
+            { name: "Vitir Namazı", type: "vacip" },
+            { name: "Teravih Namazı", type: "nafile" },
+            { name: "Cuma Namazı", type: "farz" },
+            { name: "Bayram Namazı", type: "vacip" },
+            { name: "Teheccüt Namazı", type: "nafile" },
+            { name: "Cenaze Namazı", type: "farz" },
+            { name: "Öğle Namazının Sünneti", type: "nafile" },
+            { name: "Akşam Namazı (Farzı)", type: "farz" },
+            { name: "Kurban Bayramı Namazı", type: "vacip" }
+        ];
+
+        let currentGameIndex = 0;
+        let score = 0;
+
+        function loadGameQuestion() {
+            if(currentGameIndex < gameData.length) {
+                document.getElementById('game-question').textContent = gameData[currentGameIndex].name;
+                document.getElementById('q-count').textContent = currentGameIndex + 1;
+                document.getElementById('game-feedback').textContent = "";
+            } else {
+                document.getElementById('game-question').innerHTML = `<i class="fas fa-trophy text-yellow-400"></i> Oyun Bitti! Skorun: ${score}`;
+                document.getElementById('game-feedback').textContent = "Tebrikler!";
+            }
+        }
+
+        function checkGame(selectedType) {
+            if(currentGameIndex >= gameData.length) return;
+
+            const correctType = gameData[currentGameIndex].type;
+            const feedbackEl = document.getElementById('game-feedback');
+
+            if(selectedType === correctType) {
+                feedbackEl.innerHTML = '<span class="text-green-400"><i class="fas fa-check"></i> Doğru!</span>';
+                score += 10;
+            } else {
+                feedbackEl.innerHTML = `<span class="text-red-400"><i class="fas fa-times"></i> Yanlış. Doğrusu: ${correctType.toUpperCase()} olacaktı.</span>`;
+            }
+            
+            document.getElementById('score').textContent = score;
+            currentGameIndex++;
+            setTimeout(loadGameQuestion, 1000);
+        }
+
+        // --- QUIZ MANTIĞI (Doğru/Yanlış) ---
+        const quizData = [
+            { q: "Namaz, imanın altı temel esası arasında yer alır.", a: false, fix: "İslam'ın 5 şartı arasındadır." },
+            { q: "Namaz kılan kişi Allah'a (cc) teşekkür etmiş olur.", a: true, fix: "" },
+            { q: "Günde beş vakit namaz kılmak ergenlik çağına gelmiş, akıllı her Müslüman'a farzdır.", a: true, fix: "" },
+            { q: "Namazlar farz, vacip ve nafile olmak üzere üç şekilde sınıflandırılır.", a: true, fix: "" },
+            { q: "Teravih, vacip namazlardan biridir.", a: false, fix: "Teravih, nafile (sünnet) namazdır." }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            quizData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "p-4 hover:bg-emerald-50 transition";
+                div.innerHTML = `
+                    <div class="flex items-start justify-between gap-4">
+                        <p class="font-semibold text-gray-700"><span class="text-emerald-600 font-bold">${index+1}.</span> ${item.q}</p>
+                        <div class="flex gap-2 shrink-0">
+                            <button onclick="checkQuiz(${index}, true, this)" class="px-3 py-1 border border-emerald-200 rounded text-sm hover:bg-emerald-200 text-emerald-800 font-bold">D</button>
+                            <button onclick="checkQuiz(${index}, false, this)" class="px-3 py-1 border border-red-200 rounded text-sm hover:bg-red-200 text-red-800 font-bold">Y</button>
+                        </div>
+                    </div>
+                    <p id="q-feedback-${index}" class="text-sm mt-2 hidden pl-6"></p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkQuiz(index, userAns, btn) {
+            const item = quizData[index];
+            const feedbackEl = document.getElementById(`q-feedback-${index}`);
+            
+            // Disable buttons
+            const buttons = btn.parentElement.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if(userAns === item.a) {
+                btn.classList.add(userAns ? 'bg-green-500' : 'bg-green-500', 'text-white', 'border-transparent');
+                feedbackEl.className = "text-sm mt-2 pl-6 font-bold text-green-600 block fade-in";
+                feedbackEl.textContent = "Doğru!";
+            } else {
+                btn.classList.add('bg-red-500', 'text-white', 'border-transparent');
+                feedbackEl.className = "text-sm mt-2 pl-6 font-bold text-red-600 block fade-in";
+                feedbackEl.textContent = item.a ? "Yanlış. Bu ifade Doğruydu." : `Yanlış. Doğrusu: ${item.fix}`;
+            }
+        }
+
+        // Başlat
+        loadGameQuestion();
+        initQuiz();
+
+    </script>
+</body>
+</html>

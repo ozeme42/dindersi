@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5. Ünite Özeti: Çevremizde Dinin İzleri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #134e4a; /* Teal-900 */
+            scroll-behavior: smooth;
+        }
+        .art-font { font-family: 'Aref Ruqaa', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0fdfa; }
+        ::-webkit-scrollbar-thumb { background: #0d9488; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #115e59; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .nav-item.active {
+            background-color: #134e4a; /* Teal-900 */
+            color: white;
+            border-left: 4px solid #2dd4bf; /* Teal-400 */
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#f0fdfa]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-white text-teal-900 p-6 z-50 shadow-xl border-r border-teal-100">
+        <div class="mb-10 flex items-center gap-3 text-teal-600">
+            <i class="fas fa-palette text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide">5. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="nav-item block p-3 rounded-lg hover:bg-teal-50 transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#mimari" class="nav-item block p-3 rounded-lg hover:bg-teal-50 transition flex items-center gap-3">
+                <i class="fas fa-mosque w-5 text-center"></i> Mimari ve Camiler
+            </a>
+            <a href="#edebiyat" class="nav-item block p-3 rounded-lg hover:bg-teal-50 transition flex items-center gap-3">
+                <i class="fas fa-book-open w-5 text-center"></i> Edebiyatın İzleri
+            </a>
+            <a href="#musiki" class="nav-item block p-3 rounded-lg hover:bg-teal-50 transition flex items-center gap-3">
+                <i class="fas fa-music w-5 text-center"></i> Musikinin Sesi
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-teal-600 text-white mt-6 font-bold text-center shadow-lg hover:bg-teal-700 transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-teal-400 mt-auto pt-6 border-t border-teal-100">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-teal-900 text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-palette mr-2 text-teal-300"></i> Kültür ve Sanat</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-teal-500 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-teal-900 mb-4 tracking-tight art-font">
+                KÜLTÜR VE <span class="text-teal-600">MEDENİYET</span>
+            </h1>
+            <p class="text-lg text-teal-700 max-w-2xl mx-auto italic">
+                "Din, kültürün özü; kültür ise dinin somutlaşmış halidir."
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto text-left">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-teal-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-teal-800 mb-2">Mimari</h3>
+                    <p class="text-sm text-gray-600">İslam şehirleri cami merkezli kurulur. Camiler sadece ibadet değil, hayatın merkezidir.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-amber-800 mb-2">Sanat ve Estetik</h3>
+                    <p class="text-sm text-gray-600">Hat, Tezhip, Ebru ve Musiki gibi sanatlar dinin güzelliğini yansıtır.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: MİMARİ VE CAMİLER -->
+        <section id="mimari" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-teal-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-800 flex items-center justify-center text-white font-bold">1</div>
+                <h2 class="text-2xl font-bold text-teal-900">Mimari ve Camiler</h2>
+            </div>
+            
+            <!-- Yapı Türleri -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl shadow border border-teal-100 text-center">
+                    <i class="fas fa-layer-group text-3xl text-purple-600 mb-2"></i>
+                    <h4 class="font-bold text-teal-900">Külliye</h4>
+                    <p class="text-xs text-gray-500">Cami merkezli yapılar topluluğu.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-teal-100 text-center">
+                    <i class="fas fa-university text-3xl text-blue-600 mb-2"></i>
+                    <h4 class="font-bold text-teal-900">Medrese</h4>
+                    <p class="text-xs text-gray-500">Eğitim kurumu.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-teal-100 text-center">
+                    <i class="fas fa-heartbeat text-3xl text-rose-600 mb-2"></i>
+                    <h4 class="font-bold text-teal-900">Şifahane</h4>
+                    <p class="text-xs text-gray-500">Hastane.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-teal-100 text-center">
+                    <i class="fas fa-hotel text-3xl text-amber-600 mb-2"></i>
+                    <h4 class="font-bold text-teal-900">Kervansaray</h4>
+                    <p class="text-xs text-gray-500">Yolcu konaklama.</p>
+                </div>
+            </div>
+
+            <!-- Cami Bölümleri -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-teal-100 mb-8">
+                <h3 class="font-bold text-lg text-teal-800 mb-4">Caminin Bölümleri</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-500 mb-2">İÇ BÖLÜMLER</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-teal-500 rounded-full"></div> <strong>Mihrap:</strong> İmamın namaz kıldırdığı yer (Kıble yönü).</li>
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-teal-500 rounded-full"></div> <strong>Minber:</strong> Cuma hutbesinin okunduğu merdiven.</li>
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-teal-500 rounded-full"></div> <strong>Kürsü:</strong> Vaaz verilen koltuk.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-gray-500 mb-2">DIŞ BÖLÜMLER</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-amber-500 rounded-full"></div> <strong>Minare:</strong> Ezan okunan kule.</li>
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-amber-500 rounded-full"></div> <strong>Şerefe:</strong> Minaredeki balkon.</li>
+                            <li class="flex items-center gap-2"><div class="w-2 h-2 bg-amber-500 rounded-full"></div> <strong>Şadırvan:</strong> Abdest alınan yer.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kutsal Mescitler -->
+            <div class="flex gap-4 overflow-x-auto pb-2">
+                <div class="bg-black text-white p-4 rounded-xl min-w-[200px] text-center">
+                    <i class="fas fa-kaaba text-3xl mb-2"></i>
+                    <h4 class="font-bold">Mescid-i Haram</h4>
+                    <p class="text-xs text-gray-400">Mekke (Kâbe)</p>
+                </div>
+                <div class="bg-emerald-600 text-white p-4 rounded-xl min-w-[200px] text-center">
+                    <i class="fas fa-mosque text-3xl mb-2"></i>
+                    <h4 class="font-bold">Mescid-i Nebevi</h4>
+                    <p class="text-xs text-emerald-100">Medine (Peygamberimiz)</p>
+                </div>
+                <div class="bg-amber-600 text-white p-4 rounded-xl min-w-[200px] text-center">
+                    <i class="fas fa-place-of-worship text-3xl mb-2"></i>
+                    <h4 class="font-bold">Mescid-i Aksa</h4>
+                    <p class="text-xs text-amber-100">Kudüs (İlk Kıble)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. KONU: EDEBİYATIN İZLERİ -->
+        <section id="edebiyat" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-teal-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-800 flex items-center justify-center text-white font-bold">2</div>
+                <h2 class="text-2xl font-bold text-teal-900">Edebiyatımızda Dinin İzleri</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Edebi Türler -->
+                <div class="glass-card p-6 rounded-xl border-l-4 border-blue-500">
+                    <h3 class="font-bold text-blue-900 mb-3">Edebi Türler</h3>
+                    <div class="space-y-3">
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <span class="font-bold text-blue-700 block">Tevhit:</span>
+                            <span class="text-sm text-gray-600">Allah'ın birliğini anlatan şiirler.</span>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <span class="font-bold text-blue-700 block">Münacat:</span>
+                            <span class="text-sm text-gray-600">Allah'a yakarış ve dua şiirleri.</span>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <span class="font-bold text-blue-700 block">Naat:</span>
+                            <span class="text-sm text-gray-600">Hz. Peygamber'i öven şiirler.</span>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <span class="font-bold text-blue-700 block">Mevlit:</span>
+                            <span class="text-sm text-gray-600">Hz. Peygamber'in doğumunu anlatan eserler (Süleyman Çelebi).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Önemli Eserler -->
+                <div class="glass-card p-6 rounded-xl border-l-4 border-rose-500">
+                    <h3 class="font-bold text-rose-900 mb-3">Önemli Eserler ve Kişiler</h3>
+                    <ul class="space-y-3 text-sm text-gray-700 list-disc list-inside">
+                        <li><strong>İstiklal Marşı:</strong> M. Akif Ersoy (Şehadet, Ezan, Hak, Mabed).</li>
+                        <li><strong>Vesiletü'n Necat (Mevlit):</strong> Süleyman Çelebi.</li>
+                        <li><strong>Yunus Emre:</strong> İlahi aşkı anlatan şiirler.</li>
+                        <li><strong>Atasözleri:</strong> "Allah dağına göre kar verir."</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: MUSİKİNİN SESİ -->
+        <section id="musiki" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-teal-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-800 flex items-center justify-center text-white font-bold">3</div>
+                <h2 class="text-2xl font-bold text-teal-900">Musikimizde Dinin İzleri</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <i class="fas fa-volume-up text-2xl text-teal-600 mb-2"></i>
+                    <h4 class="font-bold text-gray-800">Ezan</h4>
+                    <p class="text-xs text-gray-500">Namaza çağrı.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <i class="fas fa-bell text-2xl text-teal-600 mb-2"></i>
+                    <h4 class="font-bold text-gray-800">Sela</h4>
+                    <p class="text-xs text-gray-500">Haber verme / Dua.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <i class="fas fa-music text-2xl text-teal-600 mb-2"></i>
+                    <h4 class="font-bold text-gray-800">İlahi</h4>
+                    <p class="text-xs text-gray-500">Allah'ı öven besteler.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm text-center">
+                    <i class="fas fa-praying-hands text-2xl text-teal-600 mb-2"></i>
+                    <h4 class="font-bold text-gray-800">Tekbir</h4>
+                    <p class="text-xs text-gray-500">Allahü Ekber.</p>
+                </div>
+            </div>
+
+            <div class="bg-[#1c1917] text-white p-6 rounded-2xl flex items-center gap-6 shadow-lg">
+                <div class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center text-2xl shrink-0"><i class="fas fa-user-music"></i></div>
+                <div>
+                    <h3 class="font-bold text-lg text-amber-500">Buhurizade Mustafa Itri</h3>
+                    <p class="text-sm text-gray-300">Klasik Türk musikisinin büyük bestekarı. Bayramlarda okuduğumuz "Segah Tekbir" ve "Salat-ı Ümmiye"nin bestecisidir.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-teal-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-teal-200 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-teal-900 rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-teal-700 text-white px-6 py-2 rounded-lg hover:bg-teal-800 transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. 'Allah'ın birliğini' anlatan şiir türü hangisidir?",
+                options: ["Naat", "Tevhit", "Münacat", "Mevlit"],
+                correct: 1
+            },
+            {
+                q: "2. Cuma ve bayram namazlarında hutbe okunan merdivenli yer neresidir?",
+                options: ["Mihrap", "Kürsü", "Minber", "Minare"],
+                correct: 2
+            },
+            {
+                q: "3. 'Segah Tekbir'in bestekarı kimdir?",
+                options: ["Dede Efendi", "Yunus Emre", "Itri", "Mimar Sinan"],
+                correct: 2
+            },
+            {
+                q: "4. Caminin yanındaki, ezan okunan yüksek yapı nedir?",
+                options: ["Minare", "Şerefe", "Kubbe", "Alem"],
+                correct: 0
+            },
+            {
+                q: "5. Hz. Peygamber'i övmek için yazılan şiirlere ne denir?",
+                options: ["Tevhit", "Naat", "İlahi", "Gazel"],
+                correct: 1
+            },
+            {
+                q: "6. Aşağıdakilerden hangisi bir İslam sanatıdır?",
+                options: ["Heykel", "Bale", "Hüsnühat", "Opera"],
+                correct: 2
+            },
+            {
+                q: "7. Merkezinde cami olan yapılar topluluğuna ne ad verilir?",
+                options: ["Külliye", "Bedesten", "Kervansaray", "Medrese"],
+                correct: 0
+            },
+            {
+                q: "8. Müslümanların ilk kıblesi olan mescit hangisidir?",
+                options: ["Mescid-i Haram", "Mescid-i Nebi", "Mescid-i Aksa", "Ayasofya"],
+                correct: 2
+            },
+            {
+                q: "9. 'Mevlit' (Vesiletü'n Necat) eserinin yazarı kimdir?",
+                options: ["Yunus Emre", "Mevlana", "Süleyman Çelebi", "Mehmet Akif"],
+                correct: 2
+            },
+            {
+                q: "10. Camide imamın namaz kıldırırken durduğu oyuk yer neresidir?",
+                options: ["Minber", "Mihrap", "Kürsü", "Mahfil"],
+                correct: 1
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-teal-800/50 p-6 rounded-xl border border-teal-700";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-teal-900/50 hover:bg-teal-700 border border-teal-600/50 mb-2 transition flex items-center justify-between group text-teal-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-teal-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-teal-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-teal-900/50');
+                btn.classList.add('bg-green-600', 'border-green-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-teal-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-teal-900/50');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

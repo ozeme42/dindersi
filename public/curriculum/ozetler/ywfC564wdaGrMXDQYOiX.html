@@ -4,154 +4,412 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oruç İbadetinin Kazandırdıkları</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Tailwind gray-100 */
+            font-family: 'Nunito', sans-serif;
+            background-color: #ecfccb; /* Lime-100 */
+            color: #365314; /* Lime-900 */
         }
-        
-        .infographic-card {
-            background-color: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            /* Her karta renkli bir sol kenarlık ekleyelim */
-            border-left: 6px solid;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 16px; /* İkon ve metin arası boşluk */
+        .hand-font {
+            font-family: 'Handlee', cursive;
         }
-        
-        .infographic-card:hover {
+        .leaf-pattern {
+            background-color: #65a30d;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ecfccb' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .benefit-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .benefit-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 15px 30px -5px rgba(101, 163, 13, 0.3);
         }
-        
-        .icon-box {
-            flex-shrink: 0;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
+        .scenario-option {
+            transition: all 0.2s;
+        }
+        .scenario-option:active {
+            transform: scale(0.98);
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Puzzle Styles */
+        .puzzle-cell {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #84cc16;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            background: white;
+        }
+        .puzzle-cell:focus {
+            outline: none;
+            border-color: #3f6212;
+            box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.3);
+        }
+        .puzzle-key {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            background-color: #3f6212;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-
+        .sort-zone {
+            min-height: 150px;
+            transition: background-color 0.3s;
+        }
+        .sort-zone.drag-over {
+            background-color: #d9f99d;
+        }
+        .draggable {
+            cursor: grab;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
     </style>
 </head>
-<body class="p-4 md:p-10">
-    <div class="max-w-4xl mx-auto">
+<body>
 
-        <!-- Ana Başlık -->
-        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-blue-900 mb-4">
-            Oruç İbadetinin İnsana Kazandırdıkları
-        </h1>
-        <p class="text-xl text-center text-gray-600 mb-12">
-            Oruç, ahlaki değerlerden sağlığa kadar birey ve topluma birçok fayda sağlar.
-        </p>
+    <!-- Header -->
+    <header class="leaf-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-lime-800 relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-lime-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite Sonu</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 hand-font tracking-wide drop-shadow-md">ORUCUN KAZANDIRDIKLARI</h1>
+            <p class="text-xl text-lime-100 font-bold max-w-2xl mx-auto">
+                "Oruç tutunuz ki sıhhat bulasınız."
+            </p>
+        </div>
+    </header>
 
-        <!-- İnfografik Kartları -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
 
-            <!-- 1. Sabrı Öğretir -->
-            <div class="infographic-card border-blue-500">
-                <div class="icon-box bg-blue-100 text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-blue-800 mb-2">1. Sabrı Öğretir</h3>
-                    <p class="text-gray-700 text-lg">
-                        Oruç, "sabrın yarısıdır." Olumsuz durumlar karşısında duygu, düşünce ve davranışları kontrol ederek sabırlı olmayı öğretir.
-                    </p>
-                </div>
+        <!-- BÖLÜM 1: FAYDALAR AĞACI (Kartlar) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-lime-900 mb-2 hand-font">Bize Neler Katar?</h2>
+                <div class="h-1 w-20 bg-lime-500 mx-auto rounded"></div>
+                <p class="text-lime-700 mt-2">Orucun hayatımıza dokunan yönleri.</p>
             </div>
 
-            <!-- 2. Empati ve Yardımlaşmayı Güçlendirir -->
-            <div class="infographic-card border-emerald-500">
-                <div class="icon-box bg-emerald-100 text-emerald-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" />
-                    </svg>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Sabır -->
+                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-orange-400 text-center relative overflow-hidden">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-orange-100 rounded-full opacity-50"></div>
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-3xl">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Sabır Eğitimi</h3>
+                    <p class="text-sm text-gray-600">Açlığa ve susuzluğa dayanarak irademizi güçlendirir. Peygamberimiz "Oruç sabrın yarısıdır" buyurmuştur.</p>
                 </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-emerald-800 mb-2">2. Empati ve Yardımlaşmayı Güçlendirir</h3>
-                    <p class="text-gray-700 text-lg">
-                        Oruç tutan insan aç kimselerin hâlinden daha iyi anlar. İftar davetleri, fitre ve sadakalar ile cömertlik ve dayanışma duyguları güçlenir.
-                    </p>
+
+                <!-- Sağlık -->
+                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-green-500 text-center relative overflow-hidden">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-green-100 rounded-full opacity-50"></div>
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-3xl">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Beden Sağlığı</h3>
+                    <p class="text-sm text-gray-600">Mideyi dinlendirir, hücreleri yeniler. Vücut direncini artırır ve beslenme alışkanlıklarını düzenler.</p>
+                </div>
+
+                <!-- Empati -->
+                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-blue-400 text-center relative overflow-hidden">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-blue-100 rounded-full opacity-50"></div>
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500 text-3xl">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Empati ve Şükür</h3>
+                    <p class="text-sm text-gray-600">Aç kalarak yoksulların halini anlarız. Sahip olduğumuz nimetlerin kıymetini bilir, şükrederiz.</p>
+                </div>
+
+                <!-- Ahlak -->
+                <div class="benefit-card bg-white p-6 rounded-3xl shadow-md border-b-8 border-purple-400 text-center relative overflow-hidden">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-purple-100 rounded-full opacity-50"></div>
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-500 text-3xl">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Güzel Ahlak</h3>
+                    <p class="text-sm text-gray-600">Kötü söz ve davranışlardan uzak dururuz. Oruç bizi kötülüklere karşı bir kalkan gibi korur.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- 3. Şükretmeyi ve İsraf Etmemeyi Öğretir -->
-            <div class="infographic-card border-amber-500">
-                <div class="icon-box bg-amber-100 text-amber-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.31h5.518a.562.562 0 01.31 1.004l-4.12 3.016a.563.563 0 00-.178.528l1.558 4.907a.562.562 0 01-.812.622l-4.12-3.016a.563.563 0 00-.676 0l-4.12 3.016a.562.562 0 01-.812-.622l1.558-4.907a.563.563 0 00-.178-.528l-4.12-3.016a.562.562 0 01.31-1.004h5.518a.563.563 0 00.475-.31l2.125-5.111z" />
-                    </svg>
+        <!-- BÖLÜM 2: NASIL DAVRANIRDIM? (Simülasyon) -->
+        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-lime-200 fade-in">
+            <div class="bg-lime-50 p-6 border-b border-lime-100 text-center">
+                <h2 class="text-2xl font-bold text-lime-900 flex items-center justify-center gap-2">
+                    <i class="fas fa-question-circle text-lime-600"></i> Nasıl Davranırdım?
+                </h2>
+                <p class="text-sm text-lime-700 mt-1">Oruçlu olduğun bir günde bu durumlarla karşılaşsan ne yapardın?</p>
+            </div>
+
+            <div class="p-8">
+                <div id="scenario-container" class="text-center">
+                    <!-- Scenario Content -->
+                    <div class="mb-8">
+                        <span class="inline-block bg-lime-100 text-lime-800 px-3 py-1 rounded-full text-xs font-bold mb-4">Senaryo <span id="s-num">1</span>/4</span>
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed" id="s-text">
+                            Yükleniyor...
+                        </h3>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <button onclick="checkScenario(0)" class="scenario-option bg-white border-2 border-gray-200 p-4 rounded-xl text-left hover:border-lime-500 hover:bg-lime-50 group transition">
+                            <span class="font-bold text-lg text-gray-700 group-hover:text-lime-700 block mb-1">A)</span>
+                            <span class="text-gray-600 text-sm" id="opt-a">...</span>
+                        </button>
+                        <button onclick="checkScenario(1)" class="scenario-option bg-white border-2 border-gray-200 p-4 rounded-xl text-left hover:border-lime-500 hover:bg-lime-50 group transition">
+                            <span class="font-bold text-lg text-gray-700 group-hover:text-lime-700 block mb-1">B)</span>
+                            <span class="text-gray-600 text-sm" id="opt-b">...</span>
+                        </button>
+                    </div>
+
+                    <div id="s-feedback" class="mt-6 font-bold text-lg hidden"></div>
+                    <button onclick="nextScenario()" id="s-next" class="mt-4 bg-lime-600 text-white px-8 py-2 rounded-full font-bold hover:bg-lime-700 transition hidden">İlerle</button>
                 </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-amber-800 mb-2">3. Şükretmeyi Öğretir</h3>
-                    <p class="text-gray-700 text-lg">
-                        İnsan, elindeki imkânları başkalarıyla paylaşır ve kendisine verilen tüm nimetler için Allah’a (cc) şükretmeyi hatırlar, israftan kaçınır.
-                    </p>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: ŞİFRELİ MESAJ (Bulmaca) -->
+        <section class="max-w-3xl mx-auto bg-lime-900 rounded-3xl p-8 text-white relative shadow-2xl overflow-hidden fade-in">
+            <div class="absolute top-0 right-0 p-10 opacity-10"><i class="fas fa-key text-9xl"></i></div>
+            
+            <div class="relative z-10 text-center">
+                <h2 class="text-2xl font-bold mb-6 text-lime-200">Şifreyi Çöz</h2>
+                <p class="text-lime-100 mb-8 text-sm">Aşağıdaki sayılara karşılık gelen harfleri bul ve şifreyi çöz.</p>
+
+                <!-- Key Map (Simplified Visual) -->
+                <div class="flex justify-center gap-2 mb-8 flex-wrap text-black">
+                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">1</span><b>A</b></div>
+                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">2</span><b>B</b></div>
+                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">3</span><b>R</b></div>
+                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">4</span><b>I</b></div>
+                    <div class="flex flex-col items-center bg-white p-2 rounded"><span class="text-xs text-gray-500">5</span><b>S</b></div>
+                </div>
+
+                <!-- Puzzle Inputs -->
+                <div class="flex justify-center gap-1 mb-2">
+                    <div class="flex flex-col items-center gap-1">
+                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="S">
+                        <span class="text-xs">5</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="A">
+                        <span class="text-xs">1</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="B">
+                        <span class="text-xs">2</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="I">
+                        <span class="text-xs">4</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <input type="text" maxlength="1" class="puzzle-cell text-black" data-ans="R">
+                        <span class="text-xs">3</span>
+                    </div>
+                </div>
+
+                <p class="mt-6 italic text-lime-300">"Oruç ......'ın yarısıdır."</p>
+                <button onclick="checkPuzzle()" class="mt-4 bg-lime-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-lime-400 transition shadow-lg">Kontrol Et</button>
+                <p id="puzzle-feedback" class="mt-2 font-bold hidden"></p>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: BİREYSEL Mİ TOPLUMSAL MI? (Kategorize Etme) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-lime-900 mb-2">Faydaları Ayırt Et</h2>
+                <p class="text-gray-600">Aşağıdaki kutulara tıklayarak doğru kategoriye gönder.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Bireysel Kutu -->
+                <div class="w-full md:w-1/3 bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 min-h-[200px]">
+                    <h3 class="text-center font-bold text-blue-800 mb-4 border-b border-blue-200 pb-2">BİREYSEL FAYDA</h3>
+                    <div id="individual-zone" class="space-y-2"></div>
+                </div>
+
+                <!-- Kaynak (Seçim) Alanı -->
+                <div class="w-full md:w-1/3 flex flex-col gap-3 justify-center items-center" id="source-zone">
+                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Sabırlı Olmak</button>
+                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Yardımlaşma</button>
+                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Sağlık (Sıhhat)</button>
+                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Paylaşma</button>
+                    <button onclick="moveItem(this, 'ind')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="ind">Şükretmek</button>
+                    <button onclick="moveItem(this, 'soc')" class="bg-white border-2 border-gray-300 px-6 py-3 rounded-xl font-bold text-gray-700 shadow-sm w-full hover:bg-gray-50" data-type="soc">Dayanışma</button>
+                </div>
+
+                <!-- Toplumsal Kutu -->
+                <div class="w-full md:w-1/3 bg-orange-50 border-2 border-orange-200 rounded-2xl p-4 min-h-[200px]">
+                    <h3 class="text-center font-bold text-orange-800 mb-4 border-b border-orange-200 pb-2">TOPLUMSAL FAYDA</h3>
+                    <div id="social-zone" class="space-y-2"></div>
                 </div>
             </div>
             
-            <!-- 4. Sağlığa Faydalıdır -->
-            <div class="infographic-card border-red-500">
-                <div class="icon-box bg-red-100 text-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-red-800 mb-2">4. Sağlığa Faydalıdır</h3>
-                    <p class="text-gray-700 text-lg">
-                        Oruç sayesinde hücreler yenilenir, vücut hastalıklara karşı daha dirençli hâle gelir ve beslenme alışkanlıkları düzene girer.
-                    </p>
-                    <blockquote class="mt-3 pl-4 border-l-4 border-red-300 italic text-red-900">
-                        "Oruç tutunuz ki sıhhat bulasınız." (Hadîs-i Şerîf)
-                    </blockquote>
-                </div>
-            </div>
+            <p class="text-center text-sm text-gray-500 mt-4 italic">* Butonlara tıklandığında otomatik olarak doğru kutuya yerleşecektir.</p>
+        </section>
 
-            <!-- 5. Manevi Yönden Temizler -->
-            <div class="infographic-card border-purple-500">
-                <div class="icon-box bg-purple-100 text-purple-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-6.364-.386l1.591-1.591M3 12H5.25m.386-6.364l1.591 1.591M12 12a2.25 2.25 0 00-2.25 2.25v.01c0 .317.05.62.146.919l.01.024L10.5 17.25H13.5l.604-1.996a.75.75 0 00-.01-.024c.096-.299.146-.602.146-.919v.01a2.25 2.25 0 00-2.25-2.25z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-purple-800 mb-2">5. Manevi Yönden Temizler</h3>
-                    <p class="text-gray-700 text-lg">
-                        Okunan mukabeleler, kılınan teravihler ve edilen tövbeler insanı manevi yönden arındırır. Bu durum Allah'ın (cc) rızasını kazanmaya vesile olur.
-                    </p>
-                </div>
-            </div>
+    </main>
 
-            <!-- 6. Birlik ve Beraberliği Artırır -->
-            <div class="infographic-card border-cyan-500">
-                <div class="icon-box bg-cyan-100 text-cyan-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-4.682 2.72a3 3 0 01-4.682-2.72 3 3 0 014.682 2.72zm4.682 2.72V18a3 3 0 01-3-3H9a3 3 0 01-3 3v.72a9.094 9.094 0 006 2.083m6-2.083a9 9 0 00-3.741-.479V18a3 3 0 01-3 3H9a3 3 0 01-3-3v.72a9.094 9.094 0 003.741.479zM12 12c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-cyan-800 mb-2">6. Birlik ve Beraberliği Artırır</h3>
-                    <p class="text-gray-700 text-lg">
-                        Birlikte yapılan iftarlar, eş, dost ve akraba ziyaretleri, camide kılınan teravih namazları toplumsal birlik ve beraberliği pekiştirir.
-                    </p>
-                </div>
-            </div>
+    <footer class="bg-lime-900 text-lime-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Orucun Kazandırdıkları</p>
+    </footer>
 
-        </div> <!-- grid sonu -->
-    </div>
+    <script>
+        // --- SCENARIO LOGIC ---
+        const scenarios = [
+            {
+                text: "Arkadaşınla tartışırken sana bağırmaya başladı. Ne yaparsın?",
+                opts: ["Ben de ona bağırırım.", "Sakin kalır, 'Ben oruçluyum' derim."],
+                correct: 1,
+                feedback: "Harika! Oruç sabır işidir. Kötü söze kötü sözle karşılık verilmez."
+            },
+            {
+                text: "Fırında pide sırasında birisi önüne geçti. Ne yaparsın?",
+                opts: ["Kavga çıkarırım.", "Nazikçe uyarır veya sabrederim."],
+                correct: 1,
+                feedback: "Doğru! Oruçlu insan öfkesini kontrol etmelidir."
+            },
+            {
+                text: "Mahallede yardıma muhtaç birini gördün. Ne yaparsın?",
+                opts: ["Görmezden gelirim.", "Fitre veya sadaka ile yardım ederim."],
+                correct: 1,
+                feedback: "Mükemmel! Ramazan yardımlaşma ve paylaşma ayıdır."
+            },
+            {
+                text: "İftara davet edildin ama yemeği çok beğenmedin. Ne yaparsın?",
+                opts: ["Yemekte kusur bulmam, teşekkür ederim.", "Beğenmediğimi söylerim."],
+                correct: 0,
+                feedback: "Çok naziksin! Peygamberimiz yemeği asla kötülemezdi."
+            }
+        ];
+
+        let currentScenario = 0;
+
+        function loadScenario() {
+            if (currentScenario < scenarios.length) {
+                const s = scenarios[currentScenario];
+                document.getElementById('s-num').innerText = currentScenario + 1;
+                document.getElementById('s-text').innerText = s.text;
+                document.getElementById('opt-a').innerText = s.opts[0];
+                document.getElementById('opt-b').innerText = s.opts[1];
+                document.getElementById('s-feedback').classList.add('hidden');
+                document.getElementById('s-next').classList.add('hidden');
+                
+                // Enable buttons
+                document.querySelectorAll('.scenario-option').forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500');
+                    btn.classList.add('bg-white', 'border-gray-200');
+                });
+            } else {
+                document.getElementById('scenario-container').innerHTML = `
+                    <div class="py-10 text-lime-600">
+                        <i class="fas fa-award text-6xl mb-4"></i>
+                        <h3 class="text-2xl font-bold">Tebrikler!</h3>
+                        <p>Oruç ahlakını çok iyi kavramışsın.</p>
+                        <button onclick="location.reload()" class="mt-4 bg-lime-600 text-white px-4 py-2 rounded-lg font-bold">Tekrar Oyna</button>
+                    </div>
+                `;
+            }
+        }
+
+        function checkScenario(choice) {
+            const s = scenarios[currentScenario];
+            const btns = document.querySelectorAll('.scenario-option');
+            const feedback = document.getElementById('s-feedback');
+            const nextBtn = document.getElementById('s-next');
+
+            btns.forEach(btn => btn.disabled = true);
+
+            if (choice === s.correct) {
+                btns[choice].classList.remove('bg-white', 'border-gray-200');
+                btns[choice].classList.add('bg-green-100', 'border-green-500');
+                feedback.innerText = s.feedback;
+                feedback.className = "mt-6 font-bold text-lg text-green-600 block";
+            } else {
+                btns[choice].classList.remove('bg-white', 'border-gray-200');
+                btns[choice].classList.add('bg-red-100', 'border-red-500');
+                feedback.innerText = "Daha sabırlı ve nazik olmak gerekir.";
+                feedback.className = "mt-6 font-bold text-lg text-red-500 block";
+            }
+
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextScenario() {
+            currentScenario++;
+            loadScenario();
+        }
+
+        // --- PUZZLE LOGIC ---
+        function checkPuzzle() {
+            const inputs = document.querySelectorAll('.puzzle-cell');
+            let allCorrect = true;
+            inputs.forEach(inp => {
+                if (inp.value.toUpperCase() !== inp.getAttribute('data-ans')) {
+                    allCorrect = false;
+                    inp.style.borderColor = "red";
+                } else {
+                    inp.style.borderColor = "#84cc16";
+                }
+            });
+
+            const fb = document.getElementById('puzzle-feedback');
+            fb.classList.remove('hidden');
+            if (allCorrect) {
+                fb.innerText = "Tebrikler! Şifre: SABIR";
+                fb.className = "mt-2 font-bold text-lime-300";
+            } else {
+                fb.innerText = "Hatalı harfler var, tekrar dene.";
+                fb.className = "mt-2 font-bold text-red-300";
+            }
+        }
+
+        // --- CATEGORY GAME LOGIC ---
+        function moveItem(btn, type) {
+            const targetId = type === 'ind' ? 'individual-zone' : 'social-zone';
+            const targetZone = document.getElementById(targetId);
+            const itemType = btn.getAttribute('data-type');
+            const colorClass = type === 'ind' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-orange-100 text-orange-800 border-orange-300';
+
+            if (itemType === type) {
+                // Correct Move (Simulated)
+                const newItem = document.createElement('div');
+                newItem.className = `p-3 rounded-xl border font-bold text-center ${colorClass} fade-in`;
+                newItem.innerHTML = btn.innerText + ' <i class="fas fa-check ml-1"></i>';
+                targetZone.appendChild(newItem);
+                btn.remove();
+            } else {
+                // Wrong
+                btn.classList.add('bg-red-100', 'border-red-400');
+                setTimeout(() => {
+                    btn.classList.remove('bg-red-100', 'border-red-400');
+                }, 500);
+            }
+        }
+
+        // Initialize
+        loadScenario();
+    </script>
 </body>
 </html>

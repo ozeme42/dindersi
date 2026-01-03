@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hz. Muhammed'in (sav) Doğduğu Çevre</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #fdf8f6; /* Warm sand color */
+            color: #4a4a4a;
+        }
+        .title-font {
+            font-family: 'Amiri', serif;
+        }
+        .sand-pattern {
+            background-color: #d7ccc8;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238d6e63' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .info-card {
+            transition: all 0.3s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tab-btn {
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background-color: #8d6e63;
+            color: white;
+            border-color: #8d6e63;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .flip-card {
+            perspective: 1000px;
+            height: 180px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #5d4037;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="sand-pattern text-[#3e2723] py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-[#5d4037]">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-[#5d4037]/10 border border-[#5d4037]/30 text-[#3e2723] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">4. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4 tracking-wide">DOĞDUĞU ÇEVRE</h1>
+            <p class="text-xl text-[#5d4037] font-medium max-w-2xl mx-auto italic">
+                "Şüphesiz, insanlar için kurulan ilk ibadet evi; elbette Mekke’de... kurulan Kâbe’dir." (Al-i İmran, 96)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: COĞRAFYA VE KÂBE -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">Kutsal Topraklar</h2>
+                <div class="h-1 w-20 bg-[#a1887f] mx-auto rounded"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-l-8 border-[#8d6e63]">
+                    <h3 class="text-2xl font-bold text-[#5d4037] mb-4 flex items-center gap-2">
+                        <i class="fas fa-map-marked-alt"></i> Mekke ve Hicaz
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        Peygamberimiz, Arap Yarımadası'nın <strong>Hicaz</strong> bölgesindeki Mekke şehrinde doğmuştur. Mekke, "Şehirlerin Anası" (<strong>Ümmülkura</strong>) olarak bilinir. Sıcak, kurak ve tarıma elverişsiz bir iklimi vardır.
+                    </p>
+                    <div class="bg-[#efebe9] p-4 rounded-xl text-sm font-bold text-[#4e342e]">
+                        <i class="fas fa-info-circle mr-2"></i> Hicaz Bölgesi: Mekke, Medine ve Taif şehirlerini kapsar.
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-r-8 border-black">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-kaaba"></i> Kâbe'nin Tarihi
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start gap-2"><i class="fas fa-history mt-1 text-[#8d6e63]"></i> İlk inşa eden: <strong>Hz. Âdem</strong></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-hammer mt-1 text-[#8d6e63]"></i> Yeniden inşa edenler: <strong>Hz. İbrahim ve Hz. İsmail</strong></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-star mt-1 text-[#8d6e63]"></i> Önemi: Yeryüzündeki ilk mabet ve Müslümanların kıblesidir.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: YAŞAM TARZLARI (Bedevi vs Hadari) -->
+        <section class="max-w-4xl mx-auto bg-[#efebe9] rounded-3xl p-8 shadow-xl border border-[#d7ccc8] fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-[#3e2723] mb-2">Çölde Yaşam: İki Farklı Tarz</h2>
+                <p class="text-gray-600 text-sm">O dönemde insanlar yaşam şekillerine göre ikiye ayrılırdı.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Bedevi -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:bg-[#fff3e0] transition">
+                    <div class="w-16 h-16 bg-[#ffe0b2] rounded-full flex items-center justify-center mx-auto mb-4 text-[#e65100] text-3xl">
+                        <i class="fas fa-camel"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#e65100] mb-2">BEDEVİ</h3>
+                    <p class="text-gray-500 font-bold mb-4">Göçebeler</p>
+                    <ul class="text-sm text-gray-600 text-left space-y-2 list-disc pl-4">
+                        <li>Çölde çadırlarda yaşarlar.</li>
+                        <li>Geçimleri hayvancılıktır.</li>
+                        <li>Sert tabiatlıdırlar.</li>
+                    </ul>
+                </div>
+
+                <!-- Hadari -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm text-center group hover:bg-[#e3f2fd] transition">
+                    <div class="w-16 h-16 bg-[#bbdefb] rounded-full flex items-center justify-center mx-auto mb-4 text-[#0d47a1] text-3xl">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#0d47a1] mb-2">HADARİ</h3>
+                    <p class="text-gray-500 font-bold mb-4">Şehirliler</p>
+                    <ul class="text-sm text-gray-600 text-left space-y-2 list-disc pl-4">
+                        <li>Şehirde yerleşik yaşarlar.</li>
+                        <li>Ticaret ve el sanatlarıyla uğraşırlar.</li>
+                        <li>Daha düzenli bir hayatları vardır.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: MEKKE'DE HAYAT (4 Alan - Tabs) -->
+        <section class="max-w-5xl mx-auto fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">Cahiliye Dönemi'nde Mekke</h2>
+                <p class="text-gray-600">O dönemin şartlarını 4 başlıkta inceleyelim.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#d7ccc8]">
+                <div class="flex flex-wrap border-b border-[#d7ccc8] bg-[#efebe9]">
+                    <button onclick="openTab('dini')" class="tab-btn active flex-1 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition" id="btn-dini">
+                        <i class="fas fa-praying-hands mr-2"></i> DİNİ HAYAT
+                    </button>
+                    <button onclick="openTab('eko')" class="tab-btn flex-1 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition" id="btn-eko">
+                        <i class="fas fa-coins mr-2"></i> EKONOMİK
+                    </button>
+                    <button onclick="openTab('siyasi')" class="tab-btn flex-1 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition" id="btn-siyasi">
+                        <i class="fas fa-users-cog mr-2"></i> SİYASİ
+                    </button>
+                    <button onclick="openTab('sosyal')" class="tab-btn flex-1 py-4 font-bold text-[#5d4037] hover:bg-[#d7ccc8] transition" id="btn-sosyal">
+                        <i class="fas fa-users mr-2"></i> SOSYAL
+                    </button>
+                </div>
+
+                <div class="p-8 min-h-[300px]">
+                    
+                    <!-- Dini Hayat -->
+                    <div id="dini" class="tab-content block">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="md:w-1/2">
+                                <h3 class="text-2xl font-bold text-[#3e2723] mb-4">İnanç Karmaşası</h3>
+                                <p class="text-gray-600 mb-4">En yaygın inanç <strong>Putperestlik</strong> (Şirk) idi. İnsanlar kendi elleriyle yaptıkları putlara tapardı. Allah'a ortak koşanlara <strong>Müşrik</strong> denirdi.</p>
+                                <div class="bg-green-50 p-4 rounded-xl border-l-4 border-green-500">
+                                    <h4 class="font-bold text-green-800">Hanifler</h4>
+                                    <p class="text-sm text-green-700">Hz. İbrahim'in tevhit (tek Allah) inancını sürdüren az sayıda insan da vardı.</p>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 flex justify-center text-[#8d6e63] opacity-20">
+                                <i class="fas fa-star-and-crescent text-9xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ekonomik Hayat -->
+                    <div id="eko" class="tab-content hidden">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="md:w-1/2">
+                                <h3 class="text-2xl font-bold text-[#3e2723] mb-4">Ticaret Merkezi</h3>
+                                <p class="text-gray-600 mb-4">Tarım elverişsiz olduğu için temel geçim kaynağı <strong>Ticaret</strong> idi. Kâbe sayesinde Mekke canlı bir ticaret merkeziydi.</p>
+                                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                    <li>Şam ve Yemen'e kervanlar giderdi.</li>
+                                    <li>Yılın belli zamanlarında <strong>Panayırlar</strong> kurulurdu.</li>
+                                    <li>Panayırlar hem ticaret hem de şiir yarışmaları için toplanma yeriydi.</li>
+                                </ul>
+                            </div>
+                            <div class="md:w-1/2 flex justify-center text-[#8d6e63] opacity-20">
+                                <i class="fas fa-balance-scale text-9xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Siyasi Hayat -->
+                    <div id="siyasi" class="tab-content hidden">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="md:w-1/2">
+                                <h3 class="text-2xl font-bold text-[#3e2723] mb-4">Kabile Sistemi</h3>
+                                <p class="text-gray-600 mb-4">Devlet yoktu, <strong>Kabilecilik</strong> hakimdi. Her kabile kendi reisi tarafından yönetilirdi. Kabileler arası savaşlar çok yaygındı.</p>
+                                <div class="bg-red-50 p-4 rounded-xl border-l-4 border-red-500">
+                                    <h4 class="font-bold text-red-800">Haram Aylar</h4>
+                                    <p class="text-sm text-red-700">Sadece "Haram Aylar"da savaş durur, panayırlar kurulurdu. (Muharrem, Recep, Zilkade, Zilhicce)</p>
+                                </div>
+                            </div>
+                            <div class="md:w-1/2 flex justify-center text-[#8d6e63] opacity-20">
+                                <i class="fas fa-flag text-9xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sosyal Hayat -->
+                    <div id="sosyal" class="tab-content hidden">
+                        <div class="flex flex-col md:flex-row gap-8 items-center">
+                            <div class="md:w-1/2">
+                                <h3 class="text-2xl font-bold text-[#3e2723] mb-4">Cahiliye Adetleri</h3>
+                                <p class="text-gray-600 mb-4">İnsanlar <strong>Hürler ve Köleler</strong> olarak ayrılırdı. Kadınlara ve kız çocuklarına değer verilmezdi. İçki, kumar ve haksızlık yaygındı.</p>
+                                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                    <li>Soy üstünlüğü ile övünülürdü.</li>
+                                    <li>Şiir ve hitabet çok önemliydi.</li>
+                                    <li>Güçlü olan zayıfı ezerdi.</li>
+                                </ul>
+                            </div>
+                            <div class="md:w-1/2 flex justify-center text-[#8d6e63] opacity-20">
+                                <i class="fas fa-users text-9xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: KAVRAM KARTLARI (Eşleştirme/Öğrenme) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">Kavram Kartları</h2>
+                <p class="text-gray-600">Kartlara tıklayarak tanımlarını gör.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <!-- Kart 1 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-[#8d6e63]">
+                            <h3 class="text-xl font-bold text-[#5d4037]">CAHİLİYE</h3>
+                            <p class="text-xs text-gray-400 mt-2">Dönem</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm">İslamiyet öncesi Arapların bilgisizlik ve kötü adetlerinin olduğu dönem.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 2 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-[#8d6e63]">
+                            <h3 class="text-xl font-bold text-[#5d4037]">MÜŞRİK</h3>
+                            <p class="text-xs text-gray-400 mt-2">Kişi</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm">Allah'a ortak koşan, putlara tapan kimse.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 3 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-[#8d6e63]">
+                            <h3 class="text-xl font-bold text-[#5d4037]">HANİF</h3>
+                            <p class="text-xs text-gray-400 mt-2">İnanç</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm">Hz. İbrahim'in getirdiği tek Allah (Tevhit) inancını sürdüren kişi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kart 4 -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-white border-2 border-[#8d6e63]">
+                            <h3 class="text-xl font-bold text-[#5d4037]">KABİLE</h3>
+                            <p class="text-xs text-gray-400 mt-2">Topluluk</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm">Aynı atadan gelen, kan bağıyla bağlı insan topluluğu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: KONTROL NOKTASI (Quiz) -->
+        <section class="max-w-2xl mx-auto bg-white rounded-3xl shadow-lg p-8 border border-[#d7ccc8] fade-in">
+            <h2 class="text-2xl font-bold text-center text-[#5d4037] mb-6 flex items-center justify-center gap-3">
+                <i class="fas fa-clipboard-check text-orange-500"></i> Kavram Kontrolü
+            </h2>
+
+            <div class="space-y-4" id="quiz-container">
+                <!-- Soru 1 -->
+                <div class="bg-[#efebe9] p-4 rounded-xl">
+                    <p class="font-bold text-[#3e2723] mb-3">1. Mekke'de kurulan büyük pazarlara ve şenliklere ne ad verilirdi?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Kervan</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Panayır</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 2 -->
+                <div class="bg-[#efebe9] p-4 rounded-xl">
+                    <p class="font-bold text-[#3e2723] mb-3">2. "Şehirlerin Anası" (Ümmülkura) hangi şehirdir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Mekke</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Medine</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+
+                <!-- Soru 3 -->
+                <div class="bg-[#efebe9] p-4 rounded-xl">
+                    <p class="font-bold text-[#3e2723] mb-3">3. Putperestliğin diğer adı nedir?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Şirk</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn bg-white border border-[#d7ccc8] p-3 rounded-lg text-sm hover:bg-[#d7ccc8] transition text-left">Tevhit</button>
+                    </div>
+                    <p class="feedback mt-2 text-sm font-bold hidden"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Hz. Muhammed'in Doğduğu Çevre</p>
+    </footer>
+
+    <script>
+        // --- TAB LOGIC ---
+        function openTab(tabId) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            // Show selected content
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+
+            // Reset buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('bg-[#8d6e63]', 'text-white');
+                btn.classList.add('text-[#5d4037]');
+            });
+
+            // Activate button
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-[#5d4037]');
+        }
+
+        // --- QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.parentElement.querySelector('.feedback');
+            const buttons = parent.querySelectorAll('button');
+
+            // Disable buttons
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.remove('bg-white', 'border-[#d7ccc8]');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                feedback.innerText = "Doğru! Harikasın.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-green-600');
+            } else {
+                btn.classList.remove('bg-white', 'border-[#d7ccc8]');
+                btn.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                feedback.innerText = "Yanlış Cevap.";
+                feedback.classList.remove('hidden');
+                feedback.classList.add('text-red-600');
+            }
+        }
+    </script>
+</body>
+</html>

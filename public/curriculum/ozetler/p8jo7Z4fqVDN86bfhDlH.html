@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Çocuklarla İletişimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdf2f8; /* Soft Pink/Rose background */
+            color: #4a4a4a;
+        }
+        .arabic {
+            font-family: 'Amiri', serif;
+        }
+        .value-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .value-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .story-btn {
+            background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            transition: transform 0.2s;
+        }
+        .story-btn:hover {
+            transform: scale(1.05);
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-rose-400 to-orange-400 text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-white/20 border border-white/40 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-md">SEVGİ VE MERHAMET ELÇİSİ</h1>
+            <p class="text-xl text-rose-50 font-semibold max-w-2xl mx-auto">
+                "Küçüğümüze merhamet etmeyen bizden değildir."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-20">
+
+        <!-- BÖLÜM 1: İLETİŞİMİN TEMEL TAŞLARI (Değerler) -->
+        <section class="fade-in-up">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-rose-800 mb-2">İletişimin Temel Taşları</h2>
+                <p class="text-gray-600">Peygamberimizin çocuklarla ilişkisindeki 6 altın kural.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Sevgi -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-red-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 text-red-500 text-2xl group-hover:bg-red-500 group-hover:text-white transition">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">SEVGİ</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Yakın ilgi ve bağlılık gösterme, muhabbet.</p>
+                </div>
+
+                <!-- Merhamet -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-green-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 text-green-500 text-2xl group-hover:bg-green-500 group-hover:text-white transition">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">MERHAMET</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">İnsanların sıkıntıları karşısında duyarlı olma.</p>
+                </div>
+
+                <!-- Güven -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-blue-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 text-blue-500 text-2xl group-hover:bg-blue-500 group-hover:text-white transition">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">GÜVEN</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Kuşku duymadan inanma ve bağlanma.</p>
+                </div>
+
+                <!-- Şefkat -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-pink-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 text-pink-500 text-2xl group-hover:bg-pink-500 group-hover:text-white transition">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">ŞEFKAT</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Koruma duygusuyla karışık sevgi, sevecenlik.</p>
+                </div>
+
+                <!-- Adalet -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-purple-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 text-purple-500 text-2xl group-hover:bg-purple-500 group-hover:text-white transition">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">ADALET</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Herkese kendi hakkı olanı verme, eşitlik.</p>
+                </div>
+
+                <!-- Tevazu -->
+                <div class="value-card bg-white p-6 rounded-2xl border-b-4 border-amber-400 shadow-md text-center group cursor-pointer">
+                    <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3 text-amber-500 text-2xl group-hover:bg-amber-500 group-hover:text-white transition">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-gray-800">TEVAZU</h3>
+                    <p class="text-xs text-gray-500 mt-2 opacity-0 group-hover:opacity-100 transition">Alçak gönüllü olma, büyüklük taslamama.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: HATIRALAR GALERİSİ (Hikayeler) -->
+        <section class="fade-in-up delay-100">
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-rose-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-40 h-40 bg-orange-100 rounded-full -mr-20 -mt-20 opacity-50"></div>
+                
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <i class="fas fa-book-open text-orange-500"></i> Hatıralar Galerisi
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    
+                    <!-- Hikaye 1 -->
+                    <div class="bg-orange-50 p-6 rounded-xl border border-orange-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-xl text-orange-900">Kuş Babası</h3>
+                            <i class="fas fa-feather-alt text-orange-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Zeyd'in küçük kardeşi Ebu Umeyr'in minik kuşu öldüğünde Peygamberimiz ne yaptı?</p>
+                        <button onclick="openModal('story1')" class="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition w-full">Hikayeyi Oku</button>
+                    </div>
+
+                    <!-- Hikaye 2 -->
+                    <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-xl text-blue-900">Küçük Müezzin</h3>
+                            <i class="fas fa-microphone-alt text-blue-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Ezanla alay eden bir çocuğu Peygamberimiz nasıl Mekke'nin müezzini yaptı?</p>
+                        <button onclick="openModal('story2')" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-600 transition w-full">Hikayeyi Oku</button>
+                    </div>
+
+                    <!-- Hikaye 3 -->
+                    <div class="bg-green-50 p-6 rounded-xl border border-green-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-xl text-green-900">Hurma Ağacı</h3>
+                            <i class="fas fa-tree text-green-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Aç olduğu için hurma ağacını taşlayan Rafi'ye Peygamberimiz nasıl davrandı?</p>
+                        <button onclick="openModal('story3')" class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-600 transition w-full">Hikayeyi Oku</button>
+                    </div>
+
+                    <!-- Hikaye 4 -->
+                    <div class="bg-purple-50 p-6 rounded-xl border border-purple-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-bold text-xl text-purple-900">Adalet Terazisi</h3>
+                            <i class="fas fa-gift text-purple-400 text-2xl"></i>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">Bir babanın çocukları arasında mal ayrımı yapmasına Peygamberimiz ne dedi?</p>
+                        <button onclick="openModal('story4')" class="bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-purple-600 transition w-full">Hikayeyi Oku</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: SEN OLSAN NE YAPARDIN? (İnteraktif Test) -->
+        <section class="max-w-3xl mx-auto fade-in-up delay-200">
+            <div class="bg-gray-900 text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <i class="fas fa-question-circle text-9xl"></i>
+                </div>
+
+                <h2 class="text-2xl font-bold mb-6 text-yellow-400">Sen Olsan Ne Yapardın?</h2>
+                
+                <div id="quiz-container">
+                    <!-- Soru Alanı -->
+                    <div class="bg-white/10 p-6 rounded-xl backdrop-blur-sm border border-white/20 mb-6">
+                        <p class="text-lg font-medium leading-relaxed" id="question-text">Yükleniyor...</p>
+                    </div>
+
+                    <!-- Seçenekler -->
+                    <div class="space-y-3" id="options-container">
+                        <!-- JS ile dolacak -->
+                    </div>
+
+                    <!-- Sonuç/Feedback -->
+                    <div id="feedback" class="mt-4 font-bold text-lg hidden"></div>
+                    
+                    <button onclick="nextQuestion()" id="next-btn" class="mt-6 bg-yellow-500 text-gray-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-400 transition hidden">
+                        Sonraki Soru <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: HADİS KARTLARI -->
+        <section class="fade-in-up delay-300">
+            <h2 class="text-3xl font-bold text-center text-rose-800 mb-8">Peygamberimizden Öğütler</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                
+                <div class="bg-gradient-to-br from-rose-500 to-pink-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
+                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
+                    <div>
+                        <p class="font-bold text-lg">"Küçüğümüze merhamet etmeyen ve büyüğümüzün saygınlığını kabul etmeyen bizden değildir."</p>
+                        <p class="text-xs mt-2 opacity-80">(Tirmizi, Birr, 15)</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
+                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
+                    <div>
+                        <p class="font-bold text-lg">"Allah'tan korkunuz, çocuklarınız arasında adaletli olunuz."</p>
+                        <p class="text-xs mt-2 opacity-80">(Müslim, Hibat, 13)</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-500 to-teal-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
+                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
+                    <div>
+                        <p class="font-bold text-lg">"Kim üç kız çocuğunun geçimini üstlenir, onları güzelce terbiye ederse ona cennet vardır."</p>
+                        <p class="text-xs mt-2 opacity-80">(Ebu Davud, Edeb, 121)</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-orange-500 to-amber-600 p-6 rounded-xl text-white shadow-lg flex items-center gap-4">
+                    <i class="fas fa-quote-left text-4xl opacity-30"></i>
+                    <div>
+                        <p class="font-bold text-lg">"Ben ve yetime kol kanat geren kimse cennette böyle (iki parmak gibi) yan yana olacağız."</p>
+                        <p class="text-xs mt-2 opacity-80">(Buhari, Talak, 25)</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - İletişim Ünitesi</p>
+    </footer>
+
+    <!-- MODALS (Hidden by default) -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/70 hidden z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300" id="modal-content">
+            <!-- Content Injected via JS -->
+        </div>
+    </div>
+
+    <script>
+        // --- STORY DATA ---
+        const stories = {
+            'story1': {
+                title: "Kuş Babası (Ebu Umeyr)",
+                content: `
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-orange-600">Ebu Umeyr ve Kuşu</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Zeyd’in küçük kardeşi Ebu Umeyr'in serçeye benzeyen, kırmızı gagalı "Nugayr" adında minik bir kuşu vardı. Peygamberimiz (sav) onu her gördüğünde kuşu sorar, onunla ilgilenirdi.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Bir gün kuş öldü. Ebu Umeyr çok üzüldü, evden çıkmaz oldu. Peygamberimiz durumu öğrenince hemen arkadaşlarını topladı: "Kalkınız, Ebu Umeyr'e taziyeye (başsağlığına) gidiyoruz" dedi.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                            <strong>Ders:</strong> Çocuğun yanına gitti, onu teselli etti. "Ey Ebu Umeyr! Minik kuşa ne oldu böyle?" diyerek onun acısını paylaştı. Bu olay, Peygamberimizin bir çocuğun küçücük hüznünü bile ne kadar ciddiye aldığını gösterir.
+                        </p>
+                    </div>
+                `
+            },
+            'story2': {
+                title: "Küçük Müezzin (Ebu Mahzure)",
+                content: `
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-blue-600">Ebu Mahzure'nin Hikayesi</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Bir gün Müslümanlar namaz için ezan okurken, Ebu Mahzure ve arkadaşları ezan sesiyle alay etmeye, taklit yapıp gülmeye başladılar. Peygamberimiz onları fark etti.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Onları yanına çağırdı. Çocuklar korkuyla azar beklerken, Peygamberimiz "İçinizde sesi güzel olan kimdi?" diye sordu. Ebu Mahzure'yi gösterdiler. Peygamberimiz ona kızmadı, aksine başını okşadı ve ona ezanı bizzat öğretti. Sonra "Haydi şimdi oku" dedi.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                            <strong>Sonuç:</strong> Ebu Mahzure o kadar güzel okudu ki, Peygamberimiz ona dua etti ve hediye verdi. O günden sonra Ebu Mahzure, Mekke'nin en sevilen müezzini oldu. Bir hatayı yeteneğe dönüştürmek işte budur!
+                        </p>
+                    </div>
+                `
+            },
+            'story3': {
+                title: "Hurma Ağacı (Rafi)",
+                content: `
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-green-600">Hurmaları Taşlayan Çocuk</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Rafi adında bir çocuk, Medine'de hurma ağaçlarını taşlarken yakalandı. Bahçe sahibi onu Peygamberimize getirdi. Rafi korkuyordu.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Peygamberimiz yumuşak bir sesle sordu: "Yavrucuğum, ağaçları neden taşlıyorsun?" Rafi, "Karnım açtı, yemek için" dedi. Peygamberimiz onu azarlamadı.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                            <strong>Öğüt:</strong> "Hurmaları taşlama, altına dökülenlerden ye" dedi ve başını okşayarak "Allah'ım bu çocuğun karnını doyur" diye dua etti. Rafi hatasını anladı ve bir daha yapmadı.
+                        </p>
+                    </div>
+                `
+            },
+            'story4': {
+                title: "Adalet",
+                content: `
+                    <div class="p-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold text-purple-600">Adalet Terazisi</h3>
+                            <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-2xl"></i></button>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Bir gün Numan bin Beşir'in babası, malının bir kısmını sadece oğlu Numan'a hediye etti, diğer çocuklarına vermedi. Sonra bunu onaylatmak için Peygamberimize gitti.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Peygamberimiz sordu: "Bütün çocuklarına aynı hediyeyi verdin mi?" Adam "Hayır" deyince, Peygamberimizin yüzü değişti.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                            <strong>Uyarı:</strong> "Allah'tan korkun ve çocuklarınız arasında adaletli olun. Beni bu adaletsizliğe şahit tutmayın" dedi. Baba hatasını anladı ve hediyeyi geri aldı.
+                        </p>
+                    </div>
+                `
+            }
+        };
+
+        function openModal(id) {
+            const modal = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            content.innerHTML = stories[id].content;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "Yolda yürürken bir çocuğun ağaçtaki meyveleri düşürmek için taş attığını gördün. Peygamberimizi örnek alarak ne yaparsın?",
+                opts: ["Kulağını çekerim.", "Görmezden gelirim.", "Yanına gidip nedenini sorar, altına dökülenleri yemesini söylerim.", "Bahçe sahibine şikayet ederim."],
+                a: 2
+            },
+            {
+                q: "Kardeşin çok sevdiği oyuncağını kaybetti ve ağlıyor. Ne yaparsın?",
+                opts: ["'Aman boşver yenisini alırız' derim.", "Onunla dalga geçerim.", "Onun üzüntüsünü paylaşır, teselli ederim.", "Odadan çıkar giderim."],
+                a: 2
+            },
+            {
+                q: "Baban sana harçlık verdi ama kardeşine vermedi. Adaletli olmak için ne yaparsın?",
+                opts: ["Sessizce harçlığı cebime atarım.", "Babana 'Kardeşime de vermelisin, yoksa bu adil olmaz' dersin.", "Kardeşime hava atarım.", "Hepsini hemen harcarım."],
+                a: 1
+            }
+        ];
+
+        let qIndex = 0;
+
+        function loadQuestion() {
+            if (qIndex >= questions.length) {
+                document.getElementById('quiz-container').innerHTML = `
+                    <div class="text-center py-10">
+                        <i class="fas fa-trophy text-6xl text-yellow-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold">Harikasın!</h3>
+                        <p>Peygamberimizin ahlakını çok iyi anlamışsın.</p>
+                        <button onclick="location.reload()" class="mt-4 bg-white text-gray-900 px-4 py-2 rounded-lg font-bold">Tekrar Başla</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = questions[qIndex];
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            let optsHtml = '';
+            q.opts.forEach((opt, idx) => {
+                optsHtml += `<button onclick="checkAnswer(${idx})" class="quiz-opt w-full text-left p-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition border border-gray-700 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-sm font-bold">${idx + 1}</span>
+                    ${opt}
+                </button>`;
+            });
+            document.getElementById('options-container').innerHTML = optsHtml;
+        }
+
+        function checkAnswer(selectedIdx) {
+            const q = questions[qIndex];
+            const btns = document.querySelectorAll('.quiz-opt');
+            const feedback = document.getElementById('feedback');
+
+            btns.forEach(btn => btn.disabled = true);
+
+            if (selectedIdx === q.a) {
+                btns[selectedIdx].classList.remove('bg-gray-800');
+                btns[selectedIdx].classList.add('bg-green-600', 'border-green-400');
+                feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle"></i> Doğru! Peygamberimiz böyle yapardı.</span>';
+            } else {
+                btns[selectedIdx].classList.remove('bg-gray-800');
+                btns[selectedIdx].classList.add('bg-red-600', 'border-red-400');
+                btns[q.a].classList.add('bg-green-600', 'border-green-400'); // Show correct
+                feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-times-circle"></i> Yanlış. Doğru davranış işaretlendi.</span>';
+            }
+
+            feedback.classList.remove('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            qIndex++;
+            loadQuestion();
+        }
+
+        // Initialize
+        loadQuestion();
+
+        // Close modal on outside click
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal-overlay')) closeModal();
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evrendeki Mükemmel Düzen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.1;
+            background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .card-hover {
+            transition: all 0.4s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .interaction-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .interaction-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .interaction-btn:hover::after {
+            left: 100%;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero-bg text-white min-h-[60vh] flex items-center justify-center relative px-4">
+        <div class="hero-pattern"></div>
+        <div class="text-center max-w-4xl z-10 fade-in-up">
+            <div class="inline-block mb-4 p-2 px-4 rounded-full border border-slate-600 bg-slate-800/50 backdrop-blur-sm text-sm tracking-widest uppercase text-sky-300">
+                Gözlem ve Tefekkür
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold serif-font mb-6 leading-tight">
+                Evrendeki <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 to-emerald-300">Mükemmel Düzen</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+                "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır. Sorgular, gözlemler ve kâinattaki o büyük ahengi fark eder."
+            </p>
+            <div class="mt-10 animate-bounce">
+                <i class="fas fa-chevron-down text-2xl text-slate-500"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Definition Section (Âlem) -->
+    <section class="max-w-5xl mx-auto -mt-16 relative z-20 px-4 mb-20">
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 border-b-4 border-emerald-500 flex flex-col md:flex-row items-center gap-8 fade-in-up delay-200">
+            <div class="md:w-1/3 text-center md:text-right border-r-0 md:border-r border-slate-200 md:pr-8">
+                <h2 class="text-6xl font-bold text-slate-800 serif-font">Âlem</h2>
+                <span class="text-slate-400 text-sm italic">İsim (Arapça)</span>
+            </div>
+            <div class="md:w-2/3">
+                <p class="text-xl text-slate-600 font-light">
+                    <i class="fas fa-quote-left text-emerald-200 text-3xl mr-2"></i>
+                    Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır. İnsan bu âlemin gözlemcisi ve en değerli parçasıdır.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Concept: Micro vs Macro Analogy -->
+    <section class="max-w-6xl mx-auto px-4 mb-24">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">İnsan ve Evrenin Uyumu</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-400 to-emerald-400 mx-auto rounded-full"></div>
+            <p class="mt-4 text-slate-600 max-w-2xl mx-auto">
+                İnsan vücudu küçük bir evren (mikro âlem), evren ise büyük bir insandır (makro âlem). İkisi de aynı mükemmel düzenin eseridir.
+            </p>
+        </div>
+
+        <!-- Interactive Comparison -->
+        <div class="grid md:grid-cols-2 gap-8 items-stretch">
+            
+            <!-- Left: Human Body -->
+            <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition">
+                    <i class="fas fa-user-astronaut text-9xl text-indigo-600"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg"><i class="fas fa-user"></i> İnsan</span>
+                        <h3 class="text-2xl font-bold text-slate-800">İçsel Denge</h3>
+                    </div>
+                    <p class="text-slate-600 mb-6">
+                        İnsan vücudundaki sistemler birbiriyle etkileşime girerek vücut dengesini korur.
+                    </p>
+                    
+                    <div class="bg-indigo-50 rounded-xl p-4 mb-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-tint text-indigo-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-indigo-900">Susama Hissi</h4>
+                                <p class="text-sm text-indigo-800/80">Vücudun suya ihtiyacı olduğunda beyin uyarılır ve insan su içer.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-50 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-eye text-indigo-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-indigo-900">Organların Yeri</h4>
+                                <p class="text-sm text-indigo-800/80">Göz, kulak ve burun gibi organlar tam olması gereken yerdedir.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Universe -->
+            <div class="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition">
+                    <i class="fas fa-globe-americas text-9xl text-emerald-600"></i>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-emerald-100 text-emerald-700 p-2 rounded-lg"><i class="fas fa-globe"></i> Evren</span>
+                        <h3 class="text-2xl font-bold text-slate-800">Doğal Denge</h3>
+                    </div>
+                    <p class="text-slate-600 mb-6">
+                        Evrendeki tabiat olayları da doğal dengenin korunmasını sağlar. Hiçbir şey başıboş değildir.
+                    </p>
+                    
+                    <div class="bg-emerald-50 rounded-xl p-4 mb-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-cloud-rain text-emerald-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-emerald-900">Su Döngüsü</h4>
+                                <p class="text-sm text-emerald-800/80">Canlıların su ihtiyacı için yağmur yağar, sular buharlaşır ve döngü sürer.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-dove text-emerald-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-emerald-900">Canlıların Tasarımı</h4>
+                                <p class="text-sm text-emerald-800/80">Havada, karada ve suda yaşayan her canlı, ortamına uygun donanımla yaratılmıştır.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Observation Gallery -->
+    <section class="bg-slate-900 text-white py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Düşünen İnsan İçin İpuçları</h2>
+                    <p class="text-slate-400">İnsan çevresini gözlemler ve şu soruları sorar: "Bu düzen nasıl işliyor?"</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-full transition text-sm font-bold tracking-wide">
+                        GÖZLEMLERİMİZ
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
+                    <div class="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-500 text-xl mb-4">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Toprak Fabrikası</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Toprağın cansız ve basit görünümüne rağmen, bir tohumu alıp nasıl koca bir ağaca dönüştürdüğünü, o ağacın nasıl meyve verdiğini düşünürüz.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
+                    <div class="w-12 h-12 bg-sky-500/20 rounded-full flex items-center justify-center text-sky-500 text-xl mb-4">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Hava Olayları</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Yağmurun ve karın yağışı, rüzgarın esişi... Hepsi bir amaca hizmet eder. Bulutların hareketi bile tesadüfi değildir.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-800 rounded-2xl p-6 card-hover border border-slate-700">
+                    <div class="w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-rose-500 text-xl mb-4">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Canlıların Hareketi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Kuşların nasıl uçtuğunu, balıkların suda nasıl nefes alıp yüzdüğünü merak ederiz. Her canlı kendi ortamına mükemmel uyum sağlar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conclusion Banner -->
+    <section class="max-w-4xl mx-auto px-4 py-20 text-center">
+        <i class="fas fa-infinity text-4xl text-slate-300 mb-6 block"></i>
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 mb-6 leading-snug">
+            "İnsan, varlıkların bir <span class="text-emerald-600 underline decoration-wavy">amaç</span> için yaratıldığını fark eder. Bunların kendiliğinden meydana gelemeyeceğini anlar."
+        </h2>
+        <p class="text-slate-500">
+            Evrendeki hiçbir şey tesadüf değildir. Her şey mükemmel bir düzenin parçasıdır.
+        </p>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="mt-8 text-sm text-slate-400 hover:text-emerald-600 transition">
+            <i class="fas fa-arrow-up mr-1"></i> Başa Dön
+        </button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-8 text-center text-slate-400 text-sm">
+        <p>© 2024 Din Kültürü ve Ahlak Bilgisi - Evren ve Düzen</p>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer to trigger animations on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Select elements to animate
+        document.querySelectorAll('section > div').forEach(el => {
+            el.classList.add('opacity-0'); // Initially hide
+            el.classList.remove('fade-in-up'); // Remove class to re-add later if needed, mostly for logic clarity
+            observer.observe(el);
+        });
+        
+        // Manual override for hero elements as they animate on load
+        document.querySelectorAll('.hero-bg .fade-in-up').forEach(el => {
+            el.classList.remove('opacity-0');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Hayatı: Tarih Şeridi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fdfbf7; /* Old Paper */
+            color: #3f2e18; /* Dark Sepia */
+        }
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+        .timeline-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: #d4af37 #f3f4f6;
+            scroll-behavior: smooth;
+        }
+        .timeline-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .timeline-container::-webkit-scrollbar-thumb {
+            background-color: #d4af37;
+            border-radius: 4px;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            z-index: 0;
+            transform: translateY(-50%);
+        }
+        .event-node {
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .event-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid #d4af37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .event-node:hover .event-circle {
+            transform: scale(1.2);
+            background: #d4af37;
+            color: white;
+        }
+        .event-node.active .event-circle {
+            background: #b45309;
+            border-color: #b45309;
+            color: white;
+            transform: scale(1.2);
+        }
+        .event-date {
+            font-weight: bold;
+            color: #b45309;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        .detail-card {
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .maze-path {
+            transition: all 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-[#3e2723] text-[#fdfbf7] py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-[#d4af37]">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-[#fdfbf7]/10 border border-[#fdfbf7]/30 text-[#fdfbf7] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">1. Ünite Özeti</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4">KUTLU YOLCULUK</h1>
+            <p class="text-xl text-yellow-100 font-light max-w-2xl mx-auto italic">
+                "Biz seni ancak âlemlere rahmet olarak gönderdik."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: İNTERAKTİF TARİH ŞERİDİ -->
+        <section>
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">Zaman Tüneli</h2>
+                <p class="text-gray-600">Olayları görmek için tarihlere tıkla.</p>
+            </div>
+
+            <!-- Timeline Scroll Area -->
+            <div class="relative py-10 mb-8">
+                <div class="timeline-line"></div>
+                <div class="timeline-container px-4" id="timeline-wrapper">
+                    <!-- JS ile doldurulacak -->
+                </div>
+            </div>
+
+            <!-- Detail Display Area -->
+            <div id="event-display" class="bg-white rounded-3xl shadow-xl border border-yellow-200 p-8 max-w-4xl mx-auto min-h-[250px] flex items-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-10 opacity-5">
+                    <i class="fas fa-history text-9xl text-[#3e2723]"></i>
+                </div>
+                
+                <div class="w-full">
+                    <div id="default-msg" class="text-center text-gray-400">
+                        <i class="fas fa-hand-pointer text-4xl mb-4 animate-bounce"></i>
+                        <p class="text-lg">Yukarıdaki tarihlerden birini seçin.</p>
+                    </div>
+
+                    <div id="content-area" class="hidden flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 text-center">
+                            <div class="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-[#b45309] text-4xl border-4 border-yellow-300 shadow-inner">
+                                <i id="event-icon" class="fas fa-star"></i>
+                            </div>
+                            <span id="event-year" class="bg-[#3e2723] text-white px-4 py-1 rounded-full text-sm font-bold shadow"></span>
+                        </div>
+                        <div class="md:w-2/3 text-center md:text-left">
+                            <h3 id="event-title" class="text-2xl font-bold text-[#3e2723] mb-3 title-font"></h3>
+                            <p id="event-desc" class="text-gray-700 leading-relaxed text-lg"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 2: DÖNEMLER (Mekke vs Medine) -->
+        <section class="max-w-5xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-[#3e2723] mb-2 title-font">İki Büyük Dönem</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Mekke -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-gray-600 hover:-translate-y-2 transition duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-700 text-2xl">
+                            <i class="fas fa-kaaba"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Mekke Dönemi</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>571:</strong> Doğum (Mevlit)</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>610:</strong> İlk Vahiy (Hira Mağarası)</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>615:</strong> Habeşistan Hicreti</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>616-619:</strong> Boykot Yılları</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>620:</strong> Taif ve Miraç</li>
+                    </ul>
+                </div>
+
+                <!-- Medine -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-green-600 hover:-translate-y-2 transition duration-300">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-700 text-2xl">
+                            <i class="fas fa-mosque"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-green-800">Medine Dönemi</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>622:</strong> Hicret ve Mescid-i Nebevi</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>624:</strong> Bedir Savaşı (İlk Zafer)</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>625:</strong> Uhud Savaşı</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>628:</strong> Hudeybiye Barışı</li>
+                        <li class="flex items-start gap-2"><i class="fas fa-dot-circle text-xs mt-2"></i> <strong>630:</strong> Mekke'nin Fethi</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: DOĞRU ÇIKIŞI BUL (Labirent Oyunu) -->
+        <section class="max-w-3xl mx-auto bg-[#3e2723] rounded-3xl p-8 text-white relative shadow-2xl overflow-hidden">
+            <div class="absolute top-0 right-0 p-10 opacity-10">
+                <i class="fas fa-route text-9xl"></i>
+            </div>
+
+            <div class="relative z-10 text-center">
+                <span class="bg-yellow-500 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Değerlendirme</span>
+                <h2 class="text-3xl font-bold mt-2 mb-8">Doğru Çıkışı Bul</h2>
+
+                <div id="maze-container" class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 min-h-[300px] flex flex-col justify-center items-center">
+                    
+                    <!-- Soru Alanı -->
+                    <div id="maze-question" class="w-full">
+                        <h3 class="text-xl md:text-2xl font-bold mb-8" id="q-text">1. Peygamber Efendimiz'e Muhammed ismini babası vermiştir.</h3>
+                        
+                        <div class="flex justify-center gap-8">
+                            <button onclick="nextStep('D')" class="bg-green-600 hover:bg-green-700 text-white w-32 py-3 rounded-xl font-bold shadow-lg border-b-4 border-green-800 active:border-b-0 transition">
+                                DOĞRU
+                            </button>
+                            <button onclick="nextStep('Y')" class="bg-red-600 hover:bg-red-700 text-white w-32 py-3 rounded-xl font-bold shadow-lg border-b-4 border-red-800 active:border-b-0 transition">
+                                YANLIŞ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Sonuç Alanı -->
+                    <div id="maze-result" class="hidden text-center">
+                        <div class="text-6xl mb-4" id="result-icon"></div>
+                        <h3 class="text-3xl font-bold mb-2 text-yellow-300" id="result-title"></h3>
+                        <p class="text-gray-200 mb-6 text-lg" id="result-desc"></p>
+                        <button onclick="resetMaze()" class="text-yellow-300 underline hover:text-white">Başa Dön</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#3e2723] text-[#d7ccc8] py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - 1. Ünite Sonu</p>
+    </footer>
+
+    <script>
+        // --- TIMELINE DATA ---
+        const events = [
+            { year: "571", title: "Kutlu Doğum", desc: "Mekke'de dünyaya geldi. Babası Abdullah, O doğmadan vefat etmişti.", icon: "fa-star" },
+            { year: "0-4 Yaş", title: "Sütanne", desc: "Sadoğulları yurdunda Halime Hatun'un yanında kaldı. Evlerine bereket geldi.", icon: "fa-baby" },
+            { year: "6 Yaş", title: "Annenin Vefatı", desc: "Annesi Amine ile Medine ziyaretinden dönerken Ebva köyünde annesini kaybetti.", icon: "fa-female" },
+            { year: "8 Yaş", title: "Dedenin Vefatı", desc: "Dedesi Abdülmuttalib vefat etti. Bakımını amcası Ebu Talib üstlendi.", icon: "fa-user-clock" },
+            { year: "12 Yaş", title: "Şam Yolculuğu", desc: "Amcasıyla ticarete gitti. Rahip Bahira O'ndaki peygamberlik alametlerini gördü.", icon: "fa-route" },
+            { year: "20 Yaş", title: "Hilfülfudul", desc: "Haksızlığa uğrayanları korumak için kurulan 'Erdemliler Birliği'ne katıldı.", icon: "fa-balance-scale" },
+            { year: "25 Yaş", title: "Evlilik", desc: "Hz. Hatice ile evlendi. Bu evlilikten 6 çocuğu oldu.", icon: "fa-ring" },
+            { year: "610", title: "İlk Vahiy", desc: "40 yaşında, Nur Dağı Hira Mağarası'nda Cebrail (as) 'Oku!' emrini getirdi.", icon: "fa-book-open" },
+            { year: "615-616", title: "Habeşistan", desc: "Müşriklerin baskısı artınca bir grup Müslüman Habeşistan'a hicret etti.", icon: "fa-ship" },
+            { year: "619", title: "Hüzün Yılı", desc: "Amcası Ebu Talib ve eşi Hz. Hatice vefat etti. Taif'te taşlandı.", icon: "fa-cloud-rain" },
+            { year: "620", title: "İsra ve Miraç", desc: "Mescid-i Haram'dan Mescid-i Aksa'ya, oradan göğe yükseldi. Namaz farz kılındı.", icon: "fa-pray" },
+            { year: "622", title: "Hicret", desc: "Mekke'den Medine'ye göç etti. Mescid-i Nebevi inşa edildi.", icon: "fa-shoe-prints" },
+            { year: "630", title: "Mekke'nin Fethi", desc: "Mekke barış yoluyla fethedildi. Kâbe putlardan temizlendi.", icon: "fa-flag" },
+            { year: "632", title: "Vefat", desc: "Veda Haccı'nı yaptı ve Medine'de vefat etti.", icon: "fa-bed" }
+        ];
+
+        // --- RENDER TIMELINE ---
+        const container = document.getElementById('timeline-wrapper');
+        
+        events.forEach((evt, index) => {
+            const node = document.createElement('div');
+            node.className = "event-node text-center w-32";
+            node.innerHTML = `
+                <div class="event-circle shadow-md" onclick="showDetail(${index})">
+                    <i class="fas ${evt.icon} text-gray-300 text-lg"></i>
+                </div>
+                <div class="event-date">${evt.year}</div>
+            `;
+            container.appendChild(node);
+        });
+
+        function showDetail(index) {
+            // Update UI Active State
+            const nodes = document.querySelectorAll('.event-node');
+            nodes.forEach(n => n.classList.remove('active'));
+            nodes[index].classList.add('active');
+
+            // Update Content
+            const evt = events[index];
+            document.getElementById('default-msg').classList.add('hidden');
+            const contentArea = document.getElementById('content-area');
+            
+            contentArea.classList.remove('hidden');
+            // Re-trigger animation
+            contentArea.classList.remove('detail-card');
+            void contentArea.offsetWidth;
+            contentArea.classList.add('detail-card');
+
+            document.getElementById('event-year').innerText = evt.year;
+            document.getElementById('event-title').innerText = evt.title;
+            document.getElementById('event-desc').innerText = evt.desc;
+            document.getElementById('event-icon').className = `fas ${evt.icon}`;
+        }
+
+        // --- MAZE GAME LOGIC (Kitaptaki Şemaya Göre) ---
+        const mazeData = {
+            'start': {
+                text: "1. Peygamber Efendimiz'e Muhammed ismini babası vermiştir.",
+                D: 'fail_1', // Yanlış bilgi, D derse kaybeder (veya diğer soruya geçer, metne göre)
+                Y: 'q2'      // Yanlış bilgiye Y dedi, Doğru yol -> Q2
+            },
+            'fail_1': { // Yanlış kol
+                text: "Fil Vakası Peygamberimiz doğmadan kısa süre önce gerçekleşmiştir.",
+                D: 'exit_2',
+                Y: 'exit_1'
+            },
+            'q2': { // Doğru kol (1. soruya Y dedikten sonra)
+                text: "Fil Vakası Peygamberimiz doğmadan kısa süre önce gerçekleşmiştir.", // Aynı soru metinde iki kolda da var
+                D: 'q3', // Doğru -> Q3
+                Y: 'exit_4' // Yanlış -> Çıkış 4
+            },
+            'q3': {
+                text: "Hz. Muhammed (sav) dört yaşındayken annesi vefat etmiştir.", // Yanlış (6 yaşında)
+                D: 'exit_6',
+                Y: 'q4' // Yanlış bilgiye Y dedi -> Doğru yol -> Q4
+            },
+            'q4': {
+                text: "Peygamber Efendimiz'in bakımını annesinin vefatından sonra dedesi üstlenmiştir.", // Doğru
+                D: 'exit_7', // TEBRİKLER (7. Çıkış)
+                Y: 'exit_8'
+            },
+            
+            // Çıkışlar
+            'exit_1': { type: 'end', title: "1. ÇIKIŞ", correct: false, msg: "Yanlış yoldasın. İsim babası değil dedesidir." },
+            'exit_2': { type: 'end', title: "2. ÇIKIŞ", correct: false, msg: "Yanlış yoldasın. İlk soruda hata yaptın." },
+            'exit_3': { type: 'end', title: "3. ÇIKIŞ", correct: false, msg: "Hata." },
+            'exit_4': { type: 'end', title: "4. ÇIKIŞ", correct: false, msg: "Fil Vakası gerçekten de doğumdan hemen önce oldu. Buna Yanlış dememeliydin." },
+            'exit_5': { type: 'end', title: "5. ÇIKIŞ", correct: false, msg: "Hata." },
+            'exit_6': { type: 'end', title: "6. ÇIKIŞ", correct: false, msg: "Annesi vefat ettiğinde 4 değil 6 yaşındaydı." },
+            'exit_7': { type: 'end', title: "7. ÇIKIŞ (TEBRİKLER)", correct: true, msg: "Harika! Tüm soruları doğru cevaplayarak doğru çıkışa ulaştın." },
+            'exit_8': { type: 'end', title: "8. ÇIKIŞ", correct: false, msg: "Dedesinin bakımını üstlendiği doğrudur. Yanlış dememeliydin." }
+        };
+
+        let currentStep = 'start';
+
+        function nextStep(choice) {
+            const node = mazeData[currentStep];
+            const nextKey = node[choice];
+            
+            // Eğer nextKey bir obje değil string ise devam et
+            if (mazeData[nextKey]) {
+                const nextNode = mazeData[nextKey];
+                
+                if (nextNode.type === 'end') {
+                    showResult(nextNode);
+                } else {
+                    currentStep = nextKey;
+                    document.getElementById('q-text').innerText = nextNode.text;
+                }
+            } else {
+                // Yedek durum (Veri eksikse)
+                console.log("Yol tanımlı değil: " + nextKey);
+            }
+        }
+
+        function showResult(node) {
+            document.getElementById('maze-question').classList.add('hidden');
+            const resDiv = document.getElementById('maze-result');
+            resDiv.classList.remove('hidden');
+
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+
+            title.innerText = node.title;
+            desc.innerText = node.msg;
+
+            if (node.correct) {
+                icon.innerHTML = '<i class="fas fa-trophy text-yellow-400"></i>';
+                title.className = "text-3xl font-bold mb-2 text-green-400";
+            } else {
+                icon.innerHTML = '<i class="fas fa-times-circle text-red-400"></i>';
+                title.className = "text-3xl font-bold mb-2 text-red-400";
+            }
+        }
+
+        function resetMaze() {
+            currentStep = 'start';
+            document.getElementById('maze-result').classList.add('hidden');
+            document.getElementById('maze-question').classList.remove('hidden');
+            document.getElementById('q-text').innerText = mazeData['start'].text;
+        }
+
+    </script>
+</body>
+</html>

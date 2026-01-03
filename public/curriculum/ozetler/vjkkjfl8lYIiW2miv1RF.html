@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2. Ünite Özeti: Namaz İbadeti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #134e4a; /* Teal-900 */
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0fdfa; }
+        ::-webkit-scrollbar-thumb { background: #14b8a6; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0d9488; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .topic-icon {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover .topic-icon {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-slate-50">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-teal-900 text-teal-100 p-6 z-50 shadow-2xl">
+        <div class="mb-10 flex items-center gap-3 text-teal-400">
+            <i class="fas fa-mosque text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide text-white">2. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="block p-3 rounded-lg hover:bg-teal-800 transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#namaz-cesitleri" class="block p-3 rounded-lg hover:bg-teal-800 transition flex items-center gap-3">
+                <i class="fas fa-list-ul w-5 text-center"></i> Namaz Çeşitleri
+            </a>
+            <a href="#12-farz" class="block p-3 rounded-lg hover:bg-teal-800 transition flex items-center gap-3">
+                <i class="fas fa-tasks w-5 text-center"></i> Namazın 12 Farzı
+            </a>
+            <a href="#faydalar" class="block p-3 rounded-lg hover:bg-teal-800 transition flex items-center gap-3">
+                <i class="fas fa-users w-5 text-center"></i> Faydalar & Abdest
+            </a>
+            <a href="#tahiyyat" class="block p-3 rounded-lg hover:bg-teal-800 transition flex items-center gap-3">
+                <i class="fas fa-praying-hands w-5 text-center"></i> Tahiyyat Duası
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-teal-600 text-white mt-6 font-bold text-center shadow-lg hover:bg-teal-500 transition">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-teal-500 mt-auto pt-6 border-t border-teal-800">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-teal-900 text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-mosque mr-2"></i> Namaz İbadeti</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-teal-600 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-teal-900 mb-4 tracking-tight">
+                NAMAZ <span class="text-teal-600">İBADETİ</span>
+            </h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto italic">
+                "Namaz dinin direği, müminin miracıdır."
+            </p>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100 flex items-center gap-3">
+                    <div class="bg-teal-100 p-2 rounded-full text-teal-700"><i class="fas fa-star"></i></div>
+                    <div class="text-left">
+                        <h4 class="font-bold text-gray-800">İslam'ın Şartı</h4>
+                        <p class="text-xs text-gray-500">Kelime-i Şehadet'ten sonra gelir.</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100 flex items-center gap-3">
+                    <div class="bg-blue-100 p-2 rounded-full text-blue-700"><i class="fas fa-calendar-day"></i></div>
+                    <div class="text-left">
+                        <h4 class="font-bold text-gray-800">Günde 5 Vakit</h4>
+                        <p class="text-xs text-gray-500">Sabah, Öğle, İkindi, Akşam, Yatsı</p>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100 flex items-center gap-3">
+                    <div class="bg-amber-100 p-2 rounded-full text-amber-700"><i class="fas fa-door-open"></i></div>
+                    <div class="text-left">
+                        <h4 class="font-bold text-gray-800">Cennet Anahtarı</h4>
+                        <p class="text-xs text-gray-500">Hz. Peygamber'in müjdesi.</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: NAMAZ ÇEŞİTLERİ -->
+        <section id="namaz-cesitleri" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 font-bold">1</div>
+                <h2 class="text-2xl font-bold text-gray-800">Namaz Çeşitleri</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Farz -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-blue-500 card-hover">
+                    <div class="topic-icon bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center text-blue-600 text-xl mb-4">
+                        <i class="fas fa-exclamation"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">FARZ NAMAZLAR</h3>
+                    <p class="text-sm text-gray-600 mb-4">Allah'ın kesin emridir. Terki günahtır.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> 5 Vakit Namaz</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> Cuma Namazı</li>
+                        <li><i class="fas fa-check text-blue-400 mr-2"></i> Cenaze Namazı (Farz-ı Kifaye)</li>
+                    </ul>
+                </div>
+
+                <!-- Vacip -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-amber-500 card-hover">
+                    <div class="topic-icon bg-amber-100 w-12 h-12 rounded-full flex items-center justify-center text-amber-600 text-xl mb-4">
+                        <i class="fas fa-equals"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">VACİP NAMAZLAR</h3>
+                    <p class="text-sm text-gray-600 mb-4">Farz kadar kesin olmasa da gereklidir.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-amber-400 mr-2"></i> Bayram Namazları</li>
+                        <li><i class="fas fa-check text-amber-400 mr-2"></i> Vitir Namazı</li>
+                    </ul>
+                </div>
+
+                <!-- Nafile -->
+                <div class="glass-card rounded-2xl p-6 border-t-4 border-rose-500 card-hover">
+                    <div class="topic-icon bg-rose-100 w-12 h-12 rounded-full flex items-center justify-center text-rose-600 text-xl mb-4">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">NAFİLE (SÜNNET)</h3>
+                    <p class="text-sm text-gray-600 mb-4">Peygamberimizin tavsiye ettiği namazlar.</p>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li><i class="fas fa-check text-rose-400 mr-2"></i> Vakit Sünnetleri</li>
+                        <li><i class="fas fa-check text-rose-400 mr-2"></i> Teravih Namazı</li>
+                        <li><i class="fas fa-check text-rose-400 mr-2"></i> Teheccüt Namazı</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. KONU: NAMAZIN 12 FARZI -->
+        <section id="12-farz" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 font-bold">2</div>
+                <h2 class="text-2xl font-bold text-gray-800">Namazın 12 Farzı (Şartları)</h2>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Dışındakiler -->
+                <div class="flex-1 bg-white rounded-2xl p-6 shadow-sm border border-indigo-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5"><i class="fas fa-door-open text-9xl"></i></div>
+                    <h3 class="text-lg font-bold text-indigo-800 mb-4 border-b border-indigo-100 pb-2">HAZIRLIK (Dışındakiler)</h3>
+                    <div class="grid gap-3">
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">1.</span>
+                            <div><span class="font-bold">Hadesten Taharet:</span> <span class="text-xs text-gray-500">Abdest almak.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">2.</span>
+                            <div><span class="font-bold">Necasetten Taharet:</span> <span class="text-xs text-gray-500">Temiz kıyafet/yer.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">3.</span>
+                            <div><span class="font-bold">Setriavret:</span> <span class="text-xs text-gray-500">Örtünmek.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">4.</span>
+                            <div><span class="font-bold">İstikbalikıble:</span> <span class="text-xs text-gray-500">Kıbleye yönelmek.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">5.</span>
+                            <div><span class="font-bold">Vakit:</span> <span class="text-xs text-gray-500">Zamanın girmesi.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-indigo-50/50 rounded">
+                            <span class="font-bold text-indigo-600 w-6">6.</span>
+                            <div><span class="font-bold">Niyet:</span> <span class="text-xs text-gray-500">Hangi namaz olduğunu bilmek.</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İçindekiler -->
+                <div class="flex-1 bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-5"><i class="fas fa-praying-hands text-9xl"></i></div>
+                    <h3 class="text-lg font-bold text-emerald-800 mb-4 border-b border-emerald-100 pb-2">KILINIŞ (İçindekiler)</h3>
+                    <div class="grid gap-3">
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">1.</span>
+                            <div><span class="font-bold">İftitah Tekbiri:</span> <span class="text-xs text-gray-500">Başlangıç tekbiri.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">2.</span>
+                            <div><span class="font-bold">Kıyam:</span> <span class="text-xs text-gray-500">Ayakta durmak.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">3.</span>
+                            <div><span class="font-bold">Kıraat:</span> <span class="text-xs text-gray-500">Kur'an okumak.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">4.</span>
+                            <div><span class="font-bold">Rükû:</span> <span class="text-xs text-gray-500">Eğilmek.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">5.</span>
+                            <div><span class="font-bold">Secde:</span> <span class="text-xs text-gray-500">Yere kapanmak.</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 bg-emerald-50/50 rounded">
+                            <span class="font-bold text-emerald-600 w-6">6.</span>
+                            <div><span class="font-bold">Ka'de-i Ahîre:</span> <span class="text-xs text-gray-500">Son oturuş.</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: FAYDALAR & ABDEST -->
+        <section id="faydalar" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 font-bold">3</div>
+                <h2 class="text-2xl font-bold text-gray-800">Faydalar & Abdest</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Faydalar -->
+                <div class="bg-gradient-to-br from-teal-600 to-teal-800 rounded-2xl p-6 text-white shadow-lg">
+                    <h3 class="font-bold text-xl mb-4 border-b border-teal-500 pb-2">Namazın Kazandırdıkları</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div class="bg-teal-500/30 p-2 rounded h-fit"><i class="fas fa-user"></i></div>
+                            <div>
+                                <p class="font-bold text-sm">Bireysel:</p>
+                                <p class="text-xs text-teal-100">Temizlik alışkanlığı, zaman yönetimi, iç huzur, sorumluluk bilinci.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-teal-500/30 p-2 rounded h-fit"><i class="fas fa-users"></i></div>
+                            <div>
+                                <p class="font-bold text-sm">Toplumsal:</p>
+                                <p class="text-xs text-teal-100">Eşitlik (aynı safta durma), kaynaşma, dayanışma ve birlik.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abdest Özet -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-xl text-gray-800 mb-4 border-b pb-2">Abdestin Farzları (4)</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-smile text-blue-500 text-2xl mb-2"></i>
+                            <p class="text-xs font-bold text-gray-700">Yüzü Yıkamak</p>
+                        </div>
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-hands text-blue-500 text-2xl mb-2"></i>
+                            <p class="text-xs font-bold text-gray-700">Kolları Yıkamak</p>
+                        </div>
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-user text-blue-500 text-2xl mb-2"></i>
+                            <p class="text-xs font-bold text-gray-700">Başı Mesh Etmek</p>
+                        </div>
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-shoe-prints text-blue-500 text-2xl mb-2"></i>
+                            <p class="text-xs font-bold text-gray-700">Ayakları Yıkamak</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. KONU: TAHİYYAT DUASI -->
+        <section id="tahiyyat" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center text-teal-700 font-bold">4</div>
+                <h2 class="text-2xl font-bold text-gray-800">Tahiyyat Duası</h2>
+            </div>
+
+            <div class="bg-amber-50 rounded-2xl p-8 text-center border border-amber-200 relative">
+                <i class="fas fa-quote-left absolute top-4 left-4 text-amber-200 text-4xl"></i>
+                <h3 class="font-bold text-amber-900 mb-2">Anlamı</h3>
+                <p class="text-gray-700 text-lg italic leading-relaxed mb-4">
+                    "Selam, rahmet ve bütün güzellikler Allah içindir. Ey Peygamber! Allah'ın rahmeti, bereketi ve selamı senin üzerine olsun. Selam bize ve Allah'ın iyi kullarına olsun..."
+                </p>
+                <div class="inline-block bg-amber-200 text-amber-900 px-4 py-1 rounded-full text-sm font-bold">
+                    Nerede Okunur? Namazların oturuşlarında (Ka'de).
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-teal-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-teal-200 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-teal-900 rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-teal-700 text-white px-6 py-2 rounded-lg hover:bg-teal-800 transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Aşağıdakilerden hangisi farz namazlardan biridir?",
+                options: ["Bayram Namazı", "Cuma Namazı", "Teravih Namazı", "Vitir Namazı"],
+                correct: 1
+            },
+            {
+                q: "2. Namaza başlamadan önce yapılması gereken hazırlıklara ne denir?",
+                options: ["Namazın İçindeki Farzlar", "Namazın Sünnetleri", "Namazın Dışındaki Farzlar", "Namazın Vacipleri"],
+                correct: 2
+            },
+            {
+                q: "3. 'Setriavret' ne demektir?",
+                options: ["Abdest almak", "Kıbleye dönmek", "Niyet etmek", "Örtünmek"],
+                correct: 3
+            },
+            {
+                q: "4. Aşağıdakilerden hangisi abdestin farzlarından biri DEĞİLDİR?",
+                options: ["Yüzü yıkamak", "Ağza su vermek", "Ayakları yıkamak", "Başı mesh etmek"],
+                correct: 1
+            },
+            {
+                q: "5. Tahiyyat duası namazın neresinde okunur?",
+                options: ["Rükûda", "Secdede", "Oturuşlarda", "Kıyamda"],
+                correct: 2
+            },
+            {
+                q: "6. Ramazan ayında yatsıdan sonra kılınan sünnet namaz hangisidir?",
+                options: ["Teravih", "Teheccüt", "Cuma", "Cenaze"],
+                correct: 0
+            },
+            {
+                q: "7. Namazın içindeki farzlardan 'Kıraat' ne demektir?",
+                options: ["Ayakta durmak", "Eğilmek", "Kur'an okumak", "Selam vermek"],
+                correct: 2
+            },
+            {
+                q: "8. Hangisi namazın bireysel faydalarından biridir?",
+                options: ["Toplumsal kaynaşma", "Eşitlik duygusu", "Zamanı planlama", "Dayanışma"],
+                correct: 2
+            },
+            {
+                q: "9. Cenaze namazının diğer namazlardan en belirgin farkı nedir?",
+                options: ["Abdest gerekmez", "Rükû ve secdesi yoktur", "Camide kılınmaz", "Dua okunmaz"],
+                correct: 1
+            },
+            {
+                q: "10. 'Namaz dinin ......' hadisinde boşluğa ne gelmelidir?",
+                options: ["temelidir", "yarısıdır", "direğidir", "anahtarıdır"],
+                correct: 2
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-teal-800/50 p-6 rounded-xl border border-teal-700";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-teal-900/50 hover:bg-teal-700 border border-teal-600/50 mb-2 transition flex items-center justify-between group text-teal-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-teal-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-teal-400 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-teal-900/50');
+                btn.classList.add('bg-green-600', 'border-green-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-teal-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

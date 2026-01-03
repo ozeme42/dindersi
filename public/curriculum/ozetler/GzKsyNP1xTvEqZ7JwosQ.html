@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Ünite Özeti: Kur'an-ı Kerim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #fdfbf7; /* Warm paper tone */
+            color: #4a4a4a;
+            scroll-behavior: smooth;
+        }
+        .arabic { font-family: 'Amiri', serif; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdfbf7; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b5952f; }
+
+        .gold-border {
+            border: 1px solid #d4af37;
+            box-shadow: 0 4px 6px -1px rgba(212, 175, 55, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#fcfaf5]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-[#1e3a3a] text-gray-300 p-6 z-50 shadow-2xl">
+        <div class="mb-10 flex items-center gap-3 text-[#d4af37]">
+            <i class="fas fa-quran text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide text-white">3. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="block p-3 rounded-lg hover:bg-[#2a4d4d] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#ic-duzen" class="block p-3 rounded-lg hover:bg-[#2a4d4d] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-layer-group w-5 text-center"></i> İç Düzeni (Yapısı)
+            </a>
+            <a href="#ozellikler" class="block p-3 rounded-lg hover:bg-[#2a4d4d] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-star w-5 text-center"></i> Temel Özellikleri
+            </a>
+            <a href="#konular" class="block p-3 rounded-lg hover:bg-[#2a4d4d] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-list-ul w-5 text-center"></i> Ana Konuları
+            </a>
+            <a href="#kevser" class="block p-3 rounded-lg hover:bg-[#2a4d4d] hover:text-white transition flex items-center gap-3">
+                <i class="fas fa-water w-5 text-center"></i> Kevser Suresi
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-[#d4af37] text-[#1e3a3a] mt-6 font-bold text-center shadow-lg hover:bg-[#c5a028] transition">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-gray-500 mt-auto pt-6 border-t border-[#2a4d4d]">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-[#1e3a3a] text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg text-[#d4af37]"><i class="fas fa-quran mr-2"></i> Kur'an-ı Kerim</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-[#d4af37] text-[#1e3a3a] px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#1e3a3a] mb-4 tracking-tight">
+                KUR'AN-I <span class="text-[#d4af37]">KERİM</span>
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto italic">
+                "O, insanları karanlıklardan aydınlığa çıkaran son ilahi kitaptır."
+            </p>
+            <div class="mt-8 flex justify-center gap-4 flex-wrap">
+                <span class="bg-white border border-[#d4af37] px-4 py-2 rounded-full text-sm font-bold text-[#1e3a3a] shadow-sm">Son İlahi Kitap</span>
+                <span class="bg-white border border-[#d4af37] px-4 py-2 rounded-full text-sm font-bold text-[#1e3a3a] shadow-sm">Hz. Muhammed (s.a.v)</span>
+                <span class="bg-white border border-[#d4af37] px-4 py-2 rounded-full text-sm font-bold text-[#1e3a3a] shadow-sm">610 Yılı (Kadir Gecesi)</span>
+            </div>
+        </header>
+
+        <!-- 1. KONU: İÇ DÜZEN -->
+        <section id="ic-duzen" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-300 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#1e3a3a] flex items-center justify-center text-[#d4af37] font-bold">1</div>
+                <h2 class="text-2xl font-bold text-gray-800">Kur'an'ın İç Düzeni</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Ayet -->
+                <div class="bg-white p-6 rounded-xl gold-border relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                    <div class="absolute -right-4 -top-4 bg-emerald-100 w-16 h-16 rounded-full opacity-50 group-hover:scale-150 transition"></div>
+                    <h3 class="text-xl font-bold text-[#1e3a3a] mb-2 relative z-10">AYET</h3>
+                    <p class="text-sm text-gray-600 mb-2 relative z-10">Kur'an'ın her bir cümlesidir. Duraklarla ayrılır.</p>
+                    <div class="text-xs font-bold text-emerald-600 relative z-10 bg-emerald-50 inline-block px-2 py-1 rounded">Yaklaşık 6666 Ayet</div>
+                </div>
+
+                <!-- Sure -->
+                <div class="bg-white p-6 rounded-xl gold-border relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                    <div class="absolute -right-4 -top-4 bg-amber-100 w-16 h-16 rounded-full opacity-50 group-hover:scale-150 transition"></div>
+                    <h3 class="text-xl font-bold text-[#1e3a3a] mb-2 relative z-10">SURE</h3>
+                    <p class="text-sm text-gray-600 mb-2 relative z-10">Ayetlerden oluşan bölümlerdir. Besmele ile başlar (Tevbe hariç).</p>
+                    <div class="text-xs font-bold text-amber-600 relative z-10 bg-amber-50 inline-block px-2 py-1 rounded">114 Sure</div>
+                </div>
+
+                <!-- Cüz -->
+                <div class="bg-white p-6 rounded-xl gold-border relative overflow-hidden group hover:-translate-y-1 transition duration-300">
+                    <div class="absolute -right-4 -top-4 bg-indigo-100 w-16 h-16 rounded-full opacity-50 group-hover:scale-150 transition"></div>
+                    <h3 class="text-xl font-bold text-[#1e3a3a] mb-2 relative z-10">CÜZ</h3>
+                    <p class="text-sm text-gray-600 mb-2 relative z-10">20 sayfalık bölümlerdir. Ezberlemeyi kolaylaştırır.</p>
+                    <div class="text-xs font-bold text-indigo-600 relative z-10 bg-indigo-50 inline-block px-2 py-1 rounded">30 Cüz</div>
+                </div>
+            </div>
+            
+            <div class="mt-4 bg-gray-100 p-4 rounded-lg text-sm text-center text-gray-600">
+                <span class="font-bold">Hatim:</span> Baştan sona okumak | <span class="font-bold">Hafız:</span> Tamamını ezberlemek
+            </div>
+        </section>
+
+        <!-- 2. KONU: TEMEL ÖZELLİKLER -->
+        <section id="ozellikler" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-300 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#1e3a3a] flex items-center justify-center text-[#d4af37] font-bold">2</div>
+                <h2 class="text-2xl font-bold text-gray-800">Temel Özellikleri</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 text-center">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <i class="fas fa-compass text-2xl text-emerald-500 mb-2"></i>
+                    <p class="text-xs font-bold">Yol Göstericidir</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <i class="fas fa-lightbulb text-2xl text-amber-500 mb-2"></i>
+                    <p class="text-xs font-bold">Açıklayıcıdır</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <i class="fas fa-heart text-2xl text-rose-500 mb-2"></i>
+                    <p class="text-xs font-bold">İyiye Yöneltir</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                    <i class="fas fa-shield-alt text-2xl text-blue-500 mb-2"></i>
+                    <p class="text-xs font-bold">Kötülükten Sakındırır</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 col-span-2 md:col-span-1">
+                    <i class="fas fa-brain text-2xl text-indigo-500 mb-2"></i>
+                    <p class="text-xs font-bold">Düşünmeye Sevk Eder</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: ANA KONULAR -->
+        <section id="konular" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-300 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#1e3a3a] flex items-center justify-center text-[#d4af37] font-bold">3</div>
+                <h2 class="text-2xl font-bold text-gray-800">Ana Konuları</h2>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <!-- İnanç -->
+                <div class="flex items-start gap-4 p-4 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+                    <div class="mt-1 font-bold text-blue-700 w-20">İNANÇ</div>
+                    <div class="text-sm text-gray-700">Allah'a, meleklere, kitaplara iman. Temeli Tevhittir.</div>
+                </div>
+                <!-- İbadet -->
+                <div class="flex items-start gap-4 p-4 bg-amber-50 rounded-xl border-l-4 border-amber-500">
+                    <div class="mt-1 font-bold text-amber-700 w-20">İBADET</div>
+                    <div class="text-sm text-gray-700">Namaz, oruç, hac, zekât ve Allah rızası için yapılan her şey.</div>
+                </div>
+                <!-- Ahlak -->
+                <div class="flex items-start gap-4 p-4 bg-green-50 rounded-xl border-l-4 border-green-500">
+                    <div class="mt-1 font-bold text-green-700 w-20">AHLAK</div>
+                    <div class="text-sm text-gray-700">Güzel huy, dürüstlük, adalet, merhamet.</div>
+                </div>
+                <!-- Sosyal Hayat -->
+                <div class="flex items-start gap-4 p-4 bg-indigo-50 rounded-xl border-l-4 border-indigo-500">
+                    <div class="mt-1 font-bold text-indigo-700 w-20">SOSYAL</div>
+                    <div class="text-sm text-gray-700">Aile, komşuluk, ticaret, hukuk ve insan ilişkileri.</div>
+                </div>
+                <!-- Kıssalar -->
+                <div class="flex items-start gap-4 p-4 bg-teal-50 rounded-xl border-l-4 border-teal-500">
+                    <div class="mt-1 font-bold text-teal-700 w-20">KISSALAR</div>
+                    <div class="text-sm text-gray-700">Geçmiş peygamberlerin ve toplulukların ibretlik hikayeleri.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. KONU: KEVSER SURESİ -->
+        <section id="kevser" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-gray-300 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-[#1e3a3a] flex items-center justify-center text-[#d4af37] font-bold">4</div>
+                <h2 class="text-2xl font-bold text-gray-800">Kevser Suresi</h2>
+            </div>
+
+            <div class="bg-cyan-50 p-8 rounded-2xl border border-cyan-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-6 opacity-10"><i class="fas fa-water text-8xl text-cyan-800"></i></div>
+                
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold text-cyan-900 mb-2">Anlamı ve Önemi</h3>
+                    <p class="text-sm text-cyan-800 mb-4">
+                        Kur'an'ın en kısa suresidir (3 ayet). Kevser; "Bolluk, bereket ve Cennet'teki nehir" demektir. 
+                        Müşriklerin Peygamberimize "Ebter" (soyu kesik) demesi üzerine teselli olarak inmiştir.
+                    </p>
+                    
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-cyan-500">
+                        <p class="text-sm italic text-gray-700">
+                            1. "Şüphesiz biz sana Kevser'i verdik." <br>
+                            2. "Öyleyse Rabbin için namaz kıl ve kurban kes." <br>
+                            3. "Asıl soyu kesik olan, sana düşmanlık besleyendir."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÜYÜK QUIZ -->
+        <section id="quiz" class="py-10">
+            <div class="bg-[#1e3a3a] rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#d4af37] rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-[#d4af37] text-[#1e3a3a] text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-gray-300 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-[#1e3a3a] rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-[#1e3a3a] text-white px-6 py-2 rounded-lg hover:bg-black transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Kur'an-ı Kerim'in 20 sayfalık her bir bölümüne ne ad verilir?",
+                options: ["Sure", "Ayet", "Cüz", "Durak"],
+                correct: 2
+            },
+            {
+                q: "2. Kur'an-ı Kerim'in en uzun suresi hangisidir?",
+                options: ["Fatiha", "Bakara", "Kevser", "Yasin"],
+                correct: 1
+            },
+            {
+                q: "3. 'Kur'an'ın kalbi' olarak da bilinen ve düşünmeye sevk eden özellik hangisidir?",
+                options: ["Ayet", "Akıl", "Kıssa", "İnanç"], // Soru biraz yoruma açık, metne göre düzeltelim:
+                // Let's change to a clearer one from text:
+                // "Geçmiş toplulukların başından geçen olaylara ne denir?"
+                q: "3. Kur'an'da anlatılan geçmiş peygamberlerin ve kavimlerin hayat hikayelerine ne denir?",
+                options: ["Masal", "Kıssa", "Hikaye", "Efsane"],
+                correct: 1
+            },
+            {
+                q: "4. Aşağıdakilerden hangisi Kur'an'ın ana konularından biri DEĞİLDİR?",
+                options: ["İbadet", "Ticaret Hukuku", "Kıssalar", "Tarih Kitabı"], 
+                // "Tarih Kitabı" is not a subject, it's a genre it is NOT.
+                // Let's make it simpler based on the 5 topics.
+                // "Hangisi ana konulardan biridir?" -> "Sosyal Hayat"
+                q: "4. Kur'an'da insanların birbiriyle ilişkilerini düzenleyen konu başlığı hangisidir?",
+                options: ["İbadet", "İnanç", "Sosyal Hayat", "Kıssa"],
+                correct: 2
+            },
+            {
+                q: "5. Kevser Suresi'nde emredilen iki ibadet hangisidir?",
+                options: ["Namaz ve Oruç", "Hac ve Zekat", "Namaz ve Kurban", "Oruç ve Sadaka"],
+                correct: 2
+            },
+            {
+                q: "6. 'Ebter' kelimesinin anlamı nedir?",
+                options: ["Çok zengin", "Soyu kesik", "Çok güçlü", "Cömert"],
+                correct: 1
+            },
+            {
+                q: "7. Mekki ayetlerin genel özelliği nedir?",
+                options: ["Uzun olmaları", "İbadetleri anlatmaları", "İnanç ve ahlakı konu edinmeleri", "Medine'de inmeleri"],
+                correct: 2
+            },
+            {
+                q: "8. Kur'an-ı Kerim'in indirilmeye başlandığı yıl hangisidir?",
+                options: ["571", "610", "622", "632"],
+                correct: 1
+            },
+            {
+                q: "9. Kur'an-ı Kerim'i baştan sona ezberleyen kişiye ne denir?",
+                options: ["Hacı", "Hoca", "Hafız", "İmam"],
+                correct: 2
+            },
+            {
+                q: "10. Aşağıdakilerden hangisi Kur'an'ın isimlerinden biridir?",
+                options: ["Furkan", "Tevrat", "İncil", "Zebur"],
+                correct: 0
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-[#2a4d4d] p-6 rounded-xl border border-[#3e6666]";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-[#1e3a3a] hover:bg-[#152929] border border-[#3e6666] mb-2 transition flex items-center justify-between group text-gray-200">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-[#d4af37] text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-[#d4af37] mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-[#1e3a3a]');
+                btn.classList.add('bg-green-600', 'border-green-500', 'text-white');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-400">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-[#1e3a3a]');
+                btn.classList.add('bg-red-500/80', 'border-red-500', 'text-white');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-400">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-[#1e3a3a]');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

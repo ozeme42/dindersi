@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bir Dua Öğreniyorum: Tahiyyat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #fffbeb;
+            color: #451a03;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            line-height: 2.2;
+        }
+        .dialogue-box {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .dialogue-box:hover {
+            transform: scale(1.02);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background-color: #fff7ed;
+        }
+        .highlight-word {
+            background-color: #fcd34d;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-amber-600 to-orange-700 text-white py-12 px-4 relative overflow-hidden shadow-lg">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-block border border-amber-300 px-4 py-1 rounded-full text-sm mb-4 bg-amber-800/30 backdrop-blur-sm">
+                2. Ünite: Namaz Duaları
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">TAHİYYAT DUASI</h1>
+            <p class="text-xl text-amber-100 font-light max-w-2xl mx-auto">
+                "Selam, rahmet ve bütün güzellikler Allah içindir."
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-12 space-y-20">
+
+        <!-- BÖLÜM 1: KAVRAMLAR (Anlam Dünyası) -->
+        <section class="text-center fade-in-up">
+            <h2 class="text-3xl font-bold text-amber-900 mb-8">Tahiyyat Ne Demektir?</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="bg-white p-6 rounded-xl shadow border-b-4 border-amber-500 hover:bg-amber-50 transition group">
+                    <i class="fas fa-handshake text-3xl text-amber-600 mb-3 group-hover:scale-110 transition"></i>
+                    <h3 class="font-bold text-gray-800">SELAM</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border-b-4 border-amber-500 hover:bg-amber-50 transition group">
+                    <i class="fas fa-gift text-3xl text-amber-600 mb-3 group-hover:scale-110 transition"></i>
+                    <h3 class="font-bold text-gray-800">İKRAM</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border-b-4 border-amber-500 hover:bg-amber-50 transition group">
+                    <i class="fas fa-heart text-3xl text-amber-600 mb-3 group-hover:scale-110 transition"></i>
+                    <h3 class="font-bold text-gray-800">İHSAN</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border-b-4 border-amber-500 hover:bg-amber-50 transition group">
+                    <i class="fas fa-praying-hands text-3xl text-amber-600 mb-3 group-hover:scale-110 transition"></i>
+                    <h3 class="font-bold text-gray-800">HÜRMET</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow border-b-4 border-amber-500 hover:bg-amber-50 transition group">
+                    <i class="fas fa-mosque text-3xl text-amber-600 mb-3 group-hover:scale-110 transition"></i>
+                    <h3 class="font-bold text-gray-800">İBADET</h3>
+                </div>
+            </div>
+            <p class="mt-6 text-gray-600 max-w-3xl mx-auto">
+                Tahiyyat duası, namazların oturuşlarında okunan ve içinde <span class="font-bold text-amber-700">Kelime-i Şehadet</span> barındıran çok özel bir duadır.
+            </p>
+        </section>
+
+        <!-- BÖLÜM 2: İLAHİ SOHBET (Hikaye Modu) -->
+        <section class="bg-white rounded-3xl p-8 shadow-xl border border-amber-100 fade-in-up" style="animation-delay: 0.2s;">
+            <div class="text-center mb-8">
+                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded text-sm font-bold uppercase">Duanın Hikayesi</span>
+                <h2 class="text-3xl font-bold text-gray-800 mt-2">İlahi Bir Sohbet</h2>
+                <p class="text-gray-500">Bu dua, Miraç'ta Hz. Peygamber ile Yüce Allah arasındaki bir konuşmadır.</p>
+            </div>
+
+            <div class="space-y-6 max-w-3xl mx-auto relative">
+                <!-- Timeline Line -->
+                <div class="absolute left-8 top-0 bottom-0 w-1 bg-amber-100 hidden md:block"></div>
+
+                <!-- 1. Hz. Peygamber -->
+                <div class="flex flex-col md:flex-row gap-6 relative">
+                    <div class="md:w-16 md:h-16 w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center border-4 border-white shadow z-10 shrink-0">
+                        <i class="fas fa-user text-emerald-600"></i>
+                    </div>
+                    <div class="dialogue-box bg-emerald-50 p-5 rounded-2xl rounded-tl-none border border-emerald-100 w-full">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-1">HZ. MUHAMMED (S.A.V) Söyler:</h4>
+                        <p class="italic text-gray-700 font-medium">"Selam, rahmet ve bütün güzellikler, iyilikler Allah içindir."</p>
+                        <p class="text-xs text-gray-400 mt-2">(Ettehıyyâtü lillâhi vessalavâtü vettayyibât)</p>
+                    </div>
+                </div>
+
+                <!-- 2. Allah -->
+                <div class="flex flex-col md:flex-row gap-6 relative">
+                    <div class="md:w-16 md:h-16 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center border-4 border-white shadow z-10 shrink-0">
+                        <i class="fas fa-kaaba text-amber-600"></i>
+                    </div>
+                    <div class="dialogue-box bg-amber-50 p-5 rounded-2xl rounded-tl-none border border-amber-100 w-full">
+                        <h4 class="text-amber-800 font-bold text-sm mb-1">YÜCE ALLAH Buyurur:</h4>
+                        <p class="italic text-gray-700 font-medium">"Ey Peygamber! Allah’ın rahmeti, bereketi ve selamı senin üzerine olsun."</p>
+                        <p class="text-xs text-gray-400 mt-2">(Esselâmü aleyke eyyühen-Nebiyyü ve rahmetullâhi ve berekâtüh)</p>
+                    </div>
+                </div>
+
+                <!-- 3. Hz. Peygamber (Cevap) -->
+                <div class="flex flex-col md:flex-row gap-6 relative">
+                    <div class="md:w-16 md:h-16 w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center border-4 border-white shadow z-10 shrink-0">
+                        <i class="fas fa-user text-emerald-600"></i>
+                    </div>
+                    <div class="dialogue-box bg-emerald-50 p-5 rounded-2xl rounded-tl-none border border-emerald-100 w-full">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-1">HZ. MUHAMMED (S.A.V) Cevap Verir:</h4>
+                        <p class="italic text-gray-700 font-medium">"Selam, bize ve Allah’ın iyi kullarının üzerine olsun."</p>
+                        <p class="text-xs text-gray-400 mt-2">(Esselâmü aleynâ ve alâ ibâdillâhis-Sâlihîn)</p>
+                    </div>
+                </div>
+
+                <!-- 4. Şahitlik (Melekler/Biz) -->
+                <div class="flex flex-col md:flex-row gap-6 relative">
+                    <div class="md:w-16 md:h-16 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center border-4 border-white shadow z-10 shrink-0">
+                        <i class="fas fa-users text-blue-600"></i>
+                    </div>
+                    <div class="dialogue-box bg-blue-50 p-5 rounded-2xl rounded-tl-none border border-blue-100 w-full">
+                        <h4 class="text-blue-800 font-bold text-sm mb-1">BÜTÜN VARLIKLAR Şahitlik Eder:</h4>
+                        <p class="italic text-gray-700 font-medium">"Tanıklık ederim ki Allah’tan başka ilah yoktur. Yine tanıklık ederim ki Muhammed onun kulu ve elçisidir."</p>
+                        <p class="text-xs text-gray-400 mt-2">(Eşhedü en lâ ilâhe illallâh ve eşhedü enne Muhammeden abdühû ve Resûlüh)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 3: ADIM ADIM EZBERLEME -->
+        <section class="fade-in-up" style="animation-delay: 0.4s;">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-amber-900">Parça Parça Öğren</h2>
+                <p class="text-gray-600">Okunuşunu ve anlamını pekiştirmek için kartlara tıkla.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Part 1 -->
+                <div class="card-hover bg-white border border-amber-200 p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-bl">1</div>
+                    <p class="arabic-text text-3xl text-right mb-4 text-gray-800">اَلتَّحِيَّاتُ لِلّٰهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ</p>
+                    <p class="text-lg font-bold text-amber-700 mb-2">Ettehıyyâtü lillâhi vessalavâtü vettayyibât</p>
+                    <p class="text-gray-600 text-sm italic">"Selam, rahmet ve bütün güzellikler, iyilikler Allah içindir."</p>
+                </div>
+
+                <!-- Part 2 -->
+                <div class="card-hover bg-white border border-amber-200 p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-bl">2</div>
+                    <p class="arabic-text text-3xl text-right mb-4 text-gray-800">اَلسَّلَامُ عَلَيْكَ اَيُّهَا النَّبِيُّ وَرَحْمَةُ اللّٰهِ وَبَرَكَاتُهُ</p>
+                    <p class="text-lg font-bold text-amber-700 mb-2">Esselâmü aleyke eyyühen-Nebiyyü ve rahmetullâhi ve berekâtüh</p>
+                    <p class="text-gray-600 text-sm italic">"Ey Peygamber! Allah’ın rahmeti, bereketi ve selamı senin üzerine olsun."</p>
+                </div>
+
+                <!-- Part 3 -->
+                <div class="card-hover bg-white border border-amber-200 p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-bl">3</div>
+                    <p class="arabic-text text-3xl text-right mb-4 text-gray-800">اَلسَّلَامُ عَلَيْنَا وَعَلٰى عِبَادِ اللّٰهِ الصَّالِحِينَ</p>
+                    <p class="text-lg font-bold text-amber-700 mb-2">Esselâmü aleynâ ve alâ ibâdillâhis-Sâlihîn</p>
+                    <p class="text-gray-600 text-sm italic">"Selam, bize ve Allah’ın iyi kullarının üzerine olsun."</p>
+                </div>
+
+                <!-- Part 4 -->
+                <div class="card-hover bg-white border border-amber-200 p-6 rounded-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded-bl">4</div>
+                    <p class="arabic-text text-3xl text-right mb-4 text-gray-800">اَشْهَدُ اَنْ لَٓا اِلٰهَ اِلَّا اللّٰهُ وَاَشْهَدُ اَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ</p>
+                    <p class="text-lg font-bold text-amber-700 mb-2">Eşhedü en lâ ilâhe illallâh ve eşhedü enne Muhammeden abdühû ve Resûlüh</p>
+                    <p class="text-gray-600 text-sm italic">"Tanıklık ederim ki Allah’tan başka ilah yoktur. Yine tanıklık ederim ki Muhammed onun kulu ve elçisidir."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: REFLEKSİYON (Değerlendirme) -->
+        <section class="fade-in-up" style="animation-delay: 0.6s;">
+            <div class="bg-orange-50 rounded-2xl p-8 border border-orange-200 shadow-inner">
+                <h3 class="text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
+                    <i class="fas fa-pen-nib"></i> Benim İçin Anlamı
+                </h3>
+                <p class="text-gray-700 mb-4">
+                    Tahiyyat duasını okurken Allah'ı ve bütün iyi kulları selamladığını biliyorsun. Bu sana ne hissettiriyor?
+                </p>
+                <div class="relative">
+                    <textarea id="reflection-text" class="w-full h-32 p-4 rounded-xl border border-orange-300 focus:ring-2 focus:ring-orange-400 focus:outline-none bg-white text-gray-700 resize-none" placeholder="Düşüncelerini buraya not alabilirsin..."></textarea>
+                    <button onclick="saveReflection()" class="absolute bottom-4 right-4 bg-orange-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-orange-700 transition shadow-lg">
+                        Kaydet
+                    </button>
+                </div>
+                <p id="save-msg" class="text-green-600 font-bold mt-2 hidden text-right"><i class="fas fa-check"></i> Notun kaydedildi.</p>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 5: OYUN (Ayırt Etme - Kontrol Noktası) -->
+        <section class="max-w-3xl mx-auto fade-in-up" style="animation-delay: 0.8s;">
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                <div class="text-center mb-6">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-1 rounded uppercase">Etkinlik</span>
+                    <h2 class="text-2xl font-bold text-gray-800 mt-2">Hangisi Tahiyyat'ta Geçer?</h2>
+                    <p class="text-gray-500">Sadece Tahiyyat duasının içinde geçen cümleleri işaretle.</p>
+                </div>
+
+                <div id="quiz-container" class="space-y-3">
+                    <!-- JS ile doldurulacak -->
+                </div>
+                
+                <div id="result-box" class="hidden mt-6 text-center bg-green-50 p-4 rounded-xl border border-green-200">
+                    <p class="text-green-800 font-bold text-lg">Tebrikler! Seçimlerini yaptın.</p>
+                    <button onclick="initQuiz()" class="text-green-600 underline text-sm mt-1">Tekrar Dene</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-amber-900 text-amber-200 py-8 text-center text-sm mt-12">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Namaz Duaları</p>
+    </footer>
+
+    <script>
+        // --- QUIZ DATA ---
+        const quizItems = [
+            { text: "Selam, rahmet ve bütün güzellikler, iyilikler Allah içindir.", isCorrect: true },
+            { text: "Allah'ım! Sen eksik sıfatlardan pak ve uzaksın.", isCorrect: false }, // Sübhaneke
+            { text: "Selam, bize ve Allah’ın iyi kullarının üzerine olsun.", isCorrect: true },
+            { text: "Seni daima böyle tenzih eder ve överim.", isCorrect: false }, // Sübhaneke
+            { text: "Senin adın mübarektir.", isCorrect: false }, // Sübhaneke
+            { text: "Varlığın her şeyden üstündür.", isCorrect: false }, // Sübhaneke
+            { text: "Ey Peygamber! Allah’ın rahmeti, bereketi ve selamı senin üzerine olsun.", isCorrect: true },
+            { text: "Şüphesiz övülmeye layık yalnız sensin.", isCorrect: false } // Salli-Barik
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            const resultBox = document.getElementById('result-box');
+            
+            container.innerHTML = '';
+            resultBox.classList.add('hidden');
+
+            quizItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-transparent";
+                div.onclick = () => checkItem(div, item.isCorrect);
+                
+                div.innerHTML = `
+                    <span class="text-gray-700 font-medium select-none">${item.text}</span>
+                    <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0 status-icon"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkItem(element, isCorrect) {
+            // Prevent multiple clicks
+            if(element.classList.contains('checked')) return;
+            element.classList.add('checked');
+
+            const icon = element.querySelector('.status-icon');
+
+            if (isCorrect) {
+                element.classList.remove('bg-gray-50', 'hover:bg-gray-100');
+                element.classList.add('bg-green-100', 'border-green-300');
+                icon.classList.remove('border-gray-300');
+                icon.classList.add('bg-green-500', 'border-green-500', 'text-white');
+                icon.innerHTML = '<i class="fas fa-check text-xs"></i>';
+            } else {
+                element.classList.remove('bg-gray-50', 'hover:bg-gray-100');
+                element.classList.add('bg-red-50', 'border-red-200');
+                icon.classList.remove('border-gray-300');
+                icon.classList.add('bg-red-400', 'border-red-400', 'text-white');
+                icon.innerHTML = '<i class="fas fa-times text-xs"></i>';
+                
+                // Add shake animation
+                element.classList.add('animate-pulse');
+            }
+
+            // Check if all correct answers are found (Simple visual feedback here, logic can be extended)
+            const allClicked = document.querySelectorAll('.checked').length;
+            if (allClicked === quizItems.length) {
+               document.getElementById('result-box').classList.remove('hidden');
+            }
+        }
+
+        // --- REFLECTION SAVE ---
+        function saveReflection() {
+            const text = document.getElementById('reflection-text').value;
+            if(text.trim() === "") return;
+            
+            localStorage.setItem('tahiyyatReflection', text);
+            
+            const msg = document.getElementById('save-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        window.onload = function() {
+            initQuiz();
+            const savedText = localStorage.getItem('tahiyyatReflection');
+            if(savedText) {
+                document.getElementById('reflection-text').value = savedText;
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Toplumsal İlişkileri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4; /* Green-50 */
+            color: #14532d; /* Green-900 */
+        }
+        .hand-font { font-family: 'Handlee', cursive; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0fdf4; }
+        ::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #15803d; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .check-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            height: 250px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #fff;
+            border: 2px solid #16a34a;
+        }
+
+        .nav-item.active {
+            background-color: #14532d;
+            color: white;
+            border-left: 4px solid #4ade80;
+        }
+    </style>
+</head>
+<body class="antialiased flex bg-[#f0fdf4]">
+
+    <!-- Sidebar Navigation (Desktop) -->
+    <nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full w-64 bg-white text-green-900 p-6 z-50 shadow-xl border-r border-green-100">
+        <div class="mb-10 flex items-center gap-3 text-green-600">
+            <i class="fas fa-users text-2xl"></i>
+            <span class="font-bold text-xl tracking-wide">4. ÜNİTE</span>
+        </div>
+        
+        <div class="space-y-2 flex-1 text-sm font-semibold">
+            <a href="#genel-bakis" class="nav-item block p-3 rounded-lg hover:bg-green-50 transition flex items-center gap-3">
+                <i class="fas fa-info-circle w-5 text-center"></i> Genel Bakış
+            </a>
+            <a href="#degerler" class="nav-item block p-3 rounded-lg hover:bg-green-50 transition flex items-center gap-3">
+                <i class="fas fa-heart w-5 text-center"></i> Değerler Sözlüğü
+            </a>
+            <a href="#hikayeler" class="nav-item block p-3 rounded-lg hover:bg-green-50 transition flex items-center gap-3">
+                <i class="fas fa-book-open w-5 text-center"></i> İyilik Hikayeleri
+            </a>
+            <a href="#iletisim" class="nav-item block p-3 rounded-lg hover:bg-green-50 transition flex items-center gap-3">
+                <i class="fas fa-comments w-5 text-center"></i> İletişim Dili
+            </a>
+            <a href="#quiz" class="block p-3 rounded-lg bg-green-600 text-white mt-6 font-bold text-center shadow-lg hover:bg-green-700 transition transform hover:scale-105">
+                <i class="fas fa-pencil-alt mr-2"></i> Üniteyi Test Et
+            </a>
+        </div>
+        <div class="text-xs text-green-400 mt-auto pt-6 border-t border-green-100">
+            © 2024 Din Kültürü Özeti
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden fixed top-0 w-full bg-green-900 text-white p-4 z-50 shadow-md flex justify-between items-center">
+        <span class="font-bold text-lg"><i class="fas fa-users mr-2 text-green-300"></i> Toplumsal Hayat</span>
+        <button onclick="document.getElementById('quiz').scrollIntoView()" class="bg-green-500 px-3 py-1 rounded text-sm font-bold">Teste Git</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 w-full p-4 md:p-10 space-y-16 lg:mt-0 mt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header id="genel-bakis" class="text-center py-10 scroll-mt-24">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-green-900 mb-4 tracking-tight hand-font">
+                TOPLUMSAL <span class="text-green-600">DAYANIŞMA</span>
+            </h1>
+            <p class="text-lg text-green-700 max-w-2xl mx-auto italic">
+                "İnsanlara teşekkür etmeyen, Allah'a şükredemez."
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto text-left">
+                <div class="bg-white p-6 rounded-xl border-l-4 border-green-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-green-800 mb-2">En Hayırlı Amel</h3>
+                    <p class="text-sm text-gray-600">Bir sahabi sordu: "Hangi amel hayırlıdır?" Peygamberimiz cevap verdi: "Yemek yedirmen ve tanıdığın tanımadığın herkese selam vermendir."</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                    <h3 class="font-bold text-lg text-amber-800 mb-2">Toplumsal Bağ</h3>
+                    <p class="text-sm text-gray-600">Sevgi, saygı, güven, merhamet ve şefkat; toplumu bir arada tutan harç gibidir.</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. KONU: DEĞERLER SÖZLÜĞÜ -->
+        <section id="degerler" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-green-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-green-800 flex items-center justify-center text-white font-bold">1</div>
+                <h2 class="text-2xl font-bold text-green-900">Değerler Sözlüğü</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Sılayırahim -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-100 border-2 border-green-200">
+                            <i class="fas fa-people-arrows text-5xl text-green-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-green-900">SILAYIRAHİM</h3>
+                            <p class="text-xs text-gray-500 mt-2 bg-white px-2 py-1 rounded">(Anlamı için tıkla)</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm text-gray-700">Akraba ziyareti, onları gözetmek ve bağları koparmamaktır. "Rızkının artmasını isteyen akrabasını gözetsin."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vefa -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-amber-100 border-2 border-amber-200">
+                            <i class="fas fa-hand-holding-heart text-5xl text-amber-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-amber-900">VEFA</h3>
+                            <p class="text-xs text-gray-500 mt-2 bg-white px-2 py-1 rounded">(Anlamı için tıkla)</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm text-gray-700">Sevgiyi sürdürmek, yapılan iyiliği unutmamak ve sözünde durmaktır. Hz. Peygamber sütannesini ve dadısını hiç unutmamıştır.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Komşuluk -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-blue-100 border-2 border-blue-200">
+                            <i class="fas fa-home text-5xl text-blue-600 mb-4"></i>
+                            <h3 class="text-xl font-bold text-blue-900">KOMŞULUK</h3>
+                            <p class="text-xs text-gray-500 mt-2 bg-white px-2 py-1 rounded">(Anlamı için tıkla)</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="text-sm text-gray-700">Yakın çevremizle iyi geçinmektir. "Komşusu açken tok yatan bizden değildir."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. KONU: İYİLİK HİKAYELERİ -->
+        <section id="hikayeler" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-green-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-green-800 flex items-center justify-center text-white font-bold">2</div>
+                <h2 class="text-2xl font-bold text-green-900">İyilik Hikayeleri</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Ebu Talha -->
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-200 rounded-full opacity-50"></div>
+                    <h3 class="text-xl font-bold text-green-900 mb-3"><i class="fas fa-tree mr-2"></i> Ebu Talha'nın Bahçesi</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                        Ebu Talha, Mescid-i Nebevi'nin karşısındaki en sevdiği "Beyrahâ" bahçesini Allah rızası için bağışlamak istedi. Peygamberimiz ona: "Bu malını akrabaların arasında paylaştırmanı uygun görüyorum" dedi.
+                    </p>
+                    <div class="bg-green-50 p-3 rounded-lg border border-green-200 text-xs font-bold text-green-800">
+                        Ders: İyiliğe en yakınlardan (akrabadan) başlanmalıdır.
+                    </div>
+                </div>
+
+                <!-- Sad bin Ebu Vakkas -->
+                <div class="glass-card p-6 rounded-xl relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-200 rounded-full opacity-50"></div>
+                    <h3 class="text-xl font-bold text-blue-900 mb-3"><i class="fas fa-coins mr-2"></i> Mirasın Ölçüsü</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                        Sad bin Ebu Vakkas hastalanınca malının tamamını bağışlamak istedi. Peygamberimiz izin vermedi. Sadece 1/3'ünü bağışlayabileceğini söyledi.
+                    </p>
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 text-xs font-bold text-blue-800">
+                        Ders: Aileni başkasına muhtaç bırakmamak da bir sorumluluktur.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. KONU: İLETİŞİM DİLİ -->
+        <section id="iletisim" class="scroll-mt-24">
+            <div class="flex items-center gap-4 mb-6 border-b border-green-200 pb-2">
+                <div class="w-10 h-10 rounded-lg bg-green-800 flex items-center justify-center text-white font-bold">3</div>
+                <h2 class="text-2xl font-bold text-green-900">İletişim Dili</h2>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-1/2 p-8 bg-green-50 flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold text-green-900 mb-4">Zeynep'in Selamı</h3>
+                    <p class="text-gray-700 mb-4 italic">"Yüzünde tatlı bir tebessümle 'Selamünaleyküm Mehmet Amca!' dedi. Şoförün gerginliği gitti, yüzünde güller açtı."</p>
+                    <div class="flex gap-4">
+                        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm">
+                            <i class="fas fa-smile text-yellow-500 text-xl"></i> <span class="text-sm font-bold">Tebessüm</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm">
+                            <i class="fas fa-hand-paper text-blue-500 text-xl"></i> <span class="text-sm font-bold">Selam</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 p-8">
+                    <h4 class="font-bold text-gray-800 mb-3 border-b pb-2">İletişimin Anahtarları</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div class="bg-green-100 p-2 rounded text-green-600"><i class="fas fa-volume-up"></i></div>
+                            <div>
+                                <strong class="text-gray-800 text-sm">Selamlaşmak:</strong>
+                                <p class="text-xs text-gray-500">Aramızdaki sevgiyi artırır. Tanıdık tanımadık herkese verilmelidir.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-yellow-100 p-2 rounded text-yellow-600"><i class="fas fa-smile-beam"></i></div>
+                            <div>
+                                <strong class="text-gray-800 text-sm">Tebessüm Etmek:</strong>
+                                <p class="text-xs text-gray-500">Sadakadır. Kalpleri yumuşatır, huzur verir.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="bg-purple-100 p-2 rounded text-purple-600"><i class="fas fa-user-friends"></i></div>
+                            <div>
+                                <strong class="text-gray-800 text-sm">Ziyaretleşmek:</strong>
+                                <p class="text-xs text-gray-500">Hasta, akraba ve komşu ziyareti bağları güçlendirir.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: KONTROL NOKTASI (Test) -->
+        <section id="quiz" class="py-10">
+            <div class="bg-green-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-green-500 rounded-full blur-3xl opacity-20 -mr-16 -mt-16 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Değerlendirme</span>
+                        <h2 class="text-3xl font-bold mt-2">Ünite Tarama Testi</h2>
+                        <p class="text-green-200 mt-2">Bu ünitede neler öğrendin?</p>
+                    </div>
+
+                    <div id="quiz-container" class="space-y-4">
+                        <!-- JS ile sorular buraya eklenecek -->
+                    </div>
+
+                    <div id="result-box" class="hidden bg-white text-green-900 rounded-xl p-6 text-center mt-8 animate-bounce-in shadow-xl">
+                        <div class="text-4xl mb-2">🏆</div>
+                        <h3 class="text-2xl font-bold mb-2">Test Tamamlandı!</h3>
+                        <p id="result-text" class="text-lg mb-4"></p>
+                        <button onclick="location.reload()" class="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800 transition font-bold">Tekrar Çöz</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- QUIZ DATA ---
+        const questions = [
+            {
+                q: "1. Akrabalarla ilişkiyi sürdürmeye, onları ziyaret etmeye ne denir?",
+                options: ["Sılayırahim", "Vefa", "İhsan", "Zekat"],
+                correct: 0
+            },
+            {
+                q: "2. Peygamberimiz 'İman etmedikçe cennete giremezsiniz, ...... sevmedikçe de iman etmiş olmazsınız' buyurmuştur.",
+                options: ["kendinizi", "birbirinizi", "malınızı", "dünyayı"],
+                correct: 1
+            },
+            {
+                q: "3. Sevginin artması için Peygamberimiz neyi tavsiye etmiştir?",
+                options: ["Çok konuşmayı", "Hediyeleşmeyi ve Selamlaşmayı", "Zengin olmayı", "Uzak durmayı"],
+                correct: 1
+            },
+            {
+                q: "4. Ebu Talha en sevdiği bahçesini bağışlamak istediğinde Peygamberimiz ne önerdi?",
+                options: ["Akrabalarına dağıtmasını", "Kendine saklamasını", "Satmasını", "Devlete vermesini"],
+                correct: 0
+            },
+            {
+                q: "5. 'Komşusu açken ...... yatan bizden değildir.'",
+                options: ["uyuyan", "tok", "zengin", "rahat"],
+                correct: 1
+            },
+            {
+                q: "6. Aşağıdakilerden hangisi toplumsal ilişkileri güçlendirir?",
+                options: ["Gıybet", "Haset", "Tebessüm", "Kibir"],
+                correct: 2
+            },
+            {
+                q: "7. Verilen sözü tutmak ve yapılan iyiliği unutmamak hangi kavramdır?",
+                options: ["Vefa", "Cömertlik", "Sabır", "Adalet"],
+                correct: 0
+            },
+            {
+                q: "8. Hasta ziyareti yapmak ne kazandırır?",
+                options: ["Para", "Makam", "Allah'ın rızası ve sevap", "Şöhret"],
+                correct: 2
+            },
+            {
+                q: "9. Akrabaya yapılan yardımın sevabı nasıldır?",
+                options: ["Sadece sadaka sevabı", "İki sevap (Sadaka + Sılayırahim)", "Sevabı yoktur", "Az sevap"],
+                correct: 1
+            },
+            {
+                q: "10. Peygamberimiz bir cenaze geçerken neden ayağa kalkmıştır?",
+                options: ["Tanıdığı için", "Korktuğu için", "İnsana saygı duyduğu için", "Yorulduğu için"],
+                correct: 2
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            questions.forEach((item, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-green-800/50 p-6 rounded-xl border border-green-700";
+                
+                let optsHtml = '';
+                item.options.forEach((opt, optIndex) => {
+                    optsHtml += `
+                        <button onclick="checkAnswer(${index}, ${optIndex}, this)" 
+                            class="w-full text-left p-3 rounded-lg bg-green-900/50 hover:bg-green-700 border border-green-600/50 mb-2 transition flex items-center justify-between group text-green-50">
+                            <span>${opt}</span>
+                            <span class="hidden group-hover:inline text-green-300 text-sm"><i class="far fa-circle"></i></span>
+                        </button>
+                    `;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-white"><span class="text-green-300 mr-2">Soru ${index + 1}:</span> ${item.q}</p>
+                    <div class="space-y-1">
+                        ${optsHtml}
+                    </div>
+                    <div id="feedback-${index}" class="mt-3 text-sm font-bold hidden"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        let score = 0;
+        let answered = 0;
+
+        function checkAnswer(qIndex, optIndex, btn) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+            
+            const feedback = document.getElementById(`feedback-${qIndex}`);
+            feedback.classList.remove('hidden');
+
+            if(optIndex === questions[qIndex].correct) {
+                btn.classList.remove('bg-green-900/50');
+                btn.classList.add('bg-green-500', 'border-green-400');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-check"></i>`;
+                feedback.innerHTML = '<span class="text-green-300">Doğru Cevap!</span>';
+                score++;
+            } else {
+                btn.classList.remove('bg-green-900/50');
+                btn.classList.add('bg-red-500/80', 'border-red-500');
+                btn.innerHTML = `<span>${questions[qIndex].options[optIndex]}</span> <i class="fas fa-times"></i>`;
+                feedback.innerHTML = `<span class="text-red-300">Yanlış. Doğru cevap: ${questions[qIndex].options[questions[qIndex].correct]}</span>`;
+                
+                // Show correct one
+                buttons[questions[qIndex].correct].classList.remove('bg-green-900/50');
+                buttons[questions[qIndex].correct].classList.add('bg-green-600/50', 'border-green-500');
+            }
+
+            answered++;
+            if(answered === questions.length) {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            const resultBox = document.getElementById('result-box');
+            const resultText = document.getElementById('result-text');
+            resultBox.classList.remove('hidden');
+            resultText.innerText = `Toplam Puanın: ${score * 10} / 100 (${questions.length} soruda ${score} doğru)`;
+            
+            resultBox.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        // Initialize
+        initQuiz();
+    </script>
+</body>
+</html>

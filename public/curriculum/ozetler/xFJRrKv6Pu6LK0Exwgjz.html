@@ -4,208 +4,424 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oruç İbadeti ve Ramazan</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Comfortaa:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f3ff; /* Hafif mor/lavanta arka plan */
+            font-family: 'Comfortaa', cursive;
+            background-color: #f0fdf4; /* Green-50 */
+            color: #064e3b; /* Green-900 */
         }
-        
-        .infographic-card {
-            background-color: white;
-            border-radius: 16px;
-            padding: 24px 28px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.07);
-            border: 1px solid #e9d5ff; /* Mor-200 kenarlık */
-            transition: all 0.3s ease;
+        .title-font {
+            font-family: 'Amiri', serif;
         }
-        
-        .infographic-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px -5px rgba(76, 29, 149, 0.1);
+        .lantern-pattern {
+            background-color: #15803d;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23dcfce7' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-
-        .card-title {
-            font-size: 1.5rem; /* 24px */
-            font-weight: 700;
-            color: #5b21b6; /* Mor-700 */
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
+        .flip-card {
+            perspective: 1000px;
+            height: 220px;
+            cursor: pointer;
         }
-        
-        .card-title svg {
-            width: 28px;
-            height: 28px;
-            margin-right: 12px;
-            stroke-width: 2;
-        }
-        
-        /* Liste elemanları için özel stil */
-        .custom-list li {
+        .flip-card-inner {
             position: relative;
-            padding-left: 32px;
-            margin-bottom: 12px;
-            font-size: 1.05rem; /* Biraz daha büyük font */
-            color: #374151; /* gray-700 */
-        }
-        
-        .custom-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            top: 1px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: #e9d5ff; /* Mor-200 */
-            color: #5b21b6; /* Mor-700 */
-            font-weight: bold;
+            width: 100%;
+            height: 100%;
             text-align: center;
-            line-height: 24px;
-            font-size: 14px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
         }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background-color: #fff;
+            border: 2px solid #15803d;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .select-word {
+            border-bottom: 2px solid #16a34a;
+            color: #15803d;
+            font-weight: bold;
+            background: transparent;
+            outline: none;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+        .select-word.correct { border-bottom-color: #22c55e; color: #166534; }
+        .select-word.wrong { border-bottom-color: #ef4444; color: #b91c1c; }
     </style>
 </head>
-<body class="p-4 md:p-10">
-    <div class="max-w-4xl mx-auto">
+<body>
 
-        <!-- Ana Başlık -->
-        <h1 class="text-4xl md:text-5xl font-extrabold text-center text-purple-900 mb-4">
-            Oruç İbadeti ve Ramazan
-        </h1>
-        <p class="text-xl text-center text-gray-600 mb-12">
-            Ramazan ayı ve oruçla ilgili bilmemiz gerekenler.
-        </p>
+    <!-- Header -->
+    <header class="lantern-pattern text-white py-12 px-4 text-center rounded-b-[50px] shadow-xl mb-12 border-b-8 border-green-900 relative overflow-hidden">
+        <!-- Decoration -->
+        <div class="absolute top-4 left-10 text-yellow-300 opacity-30 text-8xl rotate-12"><i class="fas fa-moon"></i></div>
+        <div class="absolute bottom-4 right-10 text-yellow-300 opacity-30 text-6xl -rotate-12"><i class="fas fa-star"></i></div>
 
-        <!-- İnfografik Kartları -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <span class="bg-green-900/30 border border-green-200/30 text-green-50 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">2. Ünite</span>
+            <h1 class="text-4xl md:text-6xl title-font font-bold mb-4 tracking-wide">ORUÇ VE RAMAZAN</h1>
+            <p class="text-xl text-green-100 font-light max-w-2xl mx-auto italic">
+                "Sahura kalkınız, çünkü sahurda bereket vardır."
+            </p>
+        </div>
+    </header>
 
-            <!-- BÖLÜM 1: Temel Kavramlar -->
-            <div class="infographic-card md:col-span-2">
-                <h2 class="card-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                    </svg>
-                    Ramazan ve Oruçla İlgili Temel Kavramlar
-                </h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">Sahur</h3>
-                        <p class="text-gray-700">Oruç tutmak için imsaktan önce yenilen yemek.</p>
+    <main class="max-w-6xl mx-auto px-4 pb-20 space-y-24">
+
+        <!-- BÖLÜM 1: RAMAZAN SÖZLÜĞÜ (Kavramlar) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-green-900 mb-2 title-font">Ramazan Sözlüğü</h2>
+                <div class="h-1 w-20 bg-green-500 mx-auto rounded"></div>
+                <p class="text-green-700 mt-2">Kartlara tıklayarak anlamlarını öğren.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Sahur -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-indigo-500 to-blue-600 text-white">
+                            <i class="fas fa-moon text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">SAHUR</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Gece Yemeği</h4>
+                            <p class="text-sm">Oruç tutmak için imsaktan önce kalkılıp yemek yenilen vakittir. Bereketlidir.</p>
+                        </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">İmsak</h3>
-                        <p class="text-gray-700">Oruca başlama vaktidir. Sabah namazının da vaktidir.</p>
+                </div>
+
+                <!-- İmsak -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-blue-400 to-cyan-500 text-white">
+                            <i class="fas fa-clock text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">İMSAK</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Başlangıç Vakti</h4>
+                            <p class="text-sm">Orucun başladığı, yeme-içmenin kesildiği vakittir. Sabah namazı vakti de girmiş olur.</p>
+                        </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">İftar</h3>
-                        <p class="text-gray-700">Akşam ezanıyla birlikte orucu açma vaktidir.</p>
+                </div>
+
+                <!-- İftar -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-orange-400 to-red-500 text-white">
+                            <i class="fas fa-utensils text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">İFTAR</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Oruç Açma</h4>
+                            <p class="text-sm">Güneşin batmasıyla (akşam ezanı) orucun sona erdiği, yemek yenen vakittir.</p>
+                        </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">Teravih</h3>
-                        <p class="text-gray-700">Ramazan ayında yatsıdan sonra kılınan sünnet namazdır.</p>
+                </div>
+
+                <!-- Teravih -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+                            <i class="fas fa-mosque text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">TERAVİH</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Ramazan Namazı</h4>
+                            <p class="text-sm">Yatsıdan sonra kılınan, genellikle 20 rekat olan sünnet namazdır.</p>
+                        </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">Mukabele</h3>
-                        <p class="text-gray-700">Birinin Kur'an okuması, diğerlerinin takip etmesidir.</p>
+                </div>
+
+                <!-- Mukabele -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-green-500 to-emerald-600 text-white">
+                            <i class="fas fa-quran text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">MUKABELE</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Karşılıklı Okuma</h4>
+                            <p class="text-sm">Birinin Kur'an okuyup diğerlerinin takip etmesidir. Cebrail (as) ile Peygamberimizin sünnetidir.</p>
+                        </div>
                     </div>
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <h3 class="font-bold text-lg text-purple-800">Fitre (Fıtır Sadakası)</h3>
-                        <p class="text-gray-700">Sağlığın şükrü için verilen vacip bir sadakadır.</p>
+                </div>
+
+                <!-- Fitre -->
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-yellow-400 to-orange-500 text-white">
+                            <i class="fas fa-hand-holding-heart text-5xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">FİTRE</h3>
+                            <p class="text-xs mt-2 opacity-80 border px-2 py-1 rounded-full">Tıkla</p>
+                        </div>
+                        <div class="flip-card-back text-green-900">
+                            <h4 class="font-bold text-lg mb-2">Fıtır Sadakası</h4>
+                            <p class="text-sm">Ramazan'da bayramdan önce verilmesi gereken vacip sadakadır. Bir kişinin günlük yiyecek bedelidir.</p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- BÖLÜM 2: Oruçlunun Sorumlulukları -->
-            <div class="infographic-card">
-                <h2 class="card-title text-emerald-700" style="color: #047857;">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Oruçlunun Dikkat Etmesi Gerekenler
-                </h2>
-                <ul class="custom-list">
-                    <style>
-                        .card-2 li::before { background-color: #d1fae5; color: #047857; } /* Emerald */
-                    </style>
-                    <div class="card-2">
-                        <li><b>Niyet Etmek:</b> "Niyet ettim Allah rızası için..." diyerek oruca niyetlenmek gerekir.</li>
-                        <li><b>Güzel Ahlak:</b> Yalandan, kötü sözden ve kavgadan kaçınmak gerekir.</li>
-                        <li><b>Sabırlı Olmak:</b> Oruç bir kalkan gibidir, sahibini korur. Öfkeye kapılmamalıdır.</li>
-                        <li><b>Orucu Bozanlar:</b> Bilerek yiyip içmek orucu bozar.</li>
-                        <li><b>Orucu Bozmayanlar:</b> Unutarak yiyip içmek, banyo yapmak, koku sürmek orucu bozmaz.</li>
-                    </div>
-                </ul>
+        <!-- BÖLÜM 2: ORUÇ DEDEKTİFİ (Oyun) -->
+        <section class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border-t-8 border-green-600 overflow-hidden fade-in">
+            <div class="bg-green-50 p-8 text-center border-b border-green-100">
+                <h2 class="text-3xl font-bold text-green-900 mb-2">Oruç Dedektifi 🕵️‍♂️</h2>
+                <p class="text-green-700">Aşağıdaki durumlar orucu bozar mı, bozmaz mı?</p>
             </div>
 
-            <!-- BÖLÜM 3: Özel Durumlar ve Kolaylıklar -->
-            <div class="infographic-card">
-                <h2 class="card-title text-amber-700" style="color: #b45309;">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                    Özel Durumlar ve Kolaylıklar
-                </h2>
-                <ul class="custom-list">
-                    <style>
-                        .card-3 li::before { background-color: #fef3c7; color: #b45309; } /* Amber */
-                    </style>
-                    <div class="card-3">
-                        <li><b>Hastalık ve Yolculuk:</b> Bu durumlarda oruç tutulamayabilir.</li>
-                        <li><b>Kaza Orucu:</b> Ramazan'da tutulamayan oruçların daha sonra gününe gün tutulmasıdır.</li>
-                        <li><b>Fidye:</b> Sürekli hasta olup iyileşemeyecek olanların, tutamadığı her gün için bir fakiri doyurmasıdır.</li>
+            <div class="p-8">
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Soru Kartı -->
+                    <div class="bg-green-900 text-white p-6 rounded-2xl text-center shadow-md min-h-[120px] flex items-center justify-center">
+                        <p id="question-text" class="text-xl font-bold">Yükleniyor...</p>
                     </div>
-                </ul>
+
+                    <!-- Butonlar -->
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="checkAnswer(true)" class="w-1/2 bg-red-500 hover:bg-red-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition transform active:scale-95 border-b-4 border-red-700">
+                            BOZAR <i class="fas fa-times-circle ml-2"></i>
+                        </button>
+                        <button onclick="checkAnswer(false)" class="w-1/2 bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition transform active:scale-95 border-b-4 border-green-700">
+                            BOZMAZ <i class="fas fa-check-circle ml-2"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="feedback" class="text-center font-bold text-xl h-8 hidden"></div>
+                </div>
             </div>
-            
-            <!-- BÖLÜM 4: Oruç Çeşitleri (Kullanıcının isteğini vurgulayan bölüm) -->
-            <div class="infographic-card md:col-span-2">
-                <h2 class="card-title text-blue-700" style="color: #1d4ed8;">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25m10.5-2.25v2.25m-10.5 0H17.25m-10.5 0H17.25m-10.5 0H17.25m-10.5 0H17.25M6.75 8.25h10.5v8.25a2.25 2.25 0 01-2.25 2.25H9a2.25 2.25 0 01-2.25-2.25V8.25z" />
-                    </svg>
-                    Oruç Çeşitleri Nelerdir?
-                </h2>
+        </section>
+
+        <!-- BÖLÜM 3: ORUÇ ÇEŞİTLERİ (Grid) -->
+        <section class="fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-green-900 mb-2 title-font">Oruç Çeşitleri</h2>
+                <p class="text-gray-600">Sadece Ramazan'da mı oruç tutulur?</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Farz -->
+                <div class="bg-red-50 p-6 rounded-2xl border-l-4 border-red-500 hover:shadow-lg transition">
+                    <h3 class="text-xl font-bold text-red-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle"></i> FARZ ORUÇ
+                    </h3>
+                    <ul class="text-sm text-gray-700 list-disc list-inside space-y-2">
+                        <li>Ramazan ayı orucu</li>
+                        <li>Ramazan orucunun kazası</li>
+                        <li>Kefaret orucu (Bozulan orucun cezası)</li>
+                    </ul>
+                </div>
+
+                <!-- Vacip -->
+                <div class="bg-orange-50 p-6 rounded-2xl border-l-4 border-orange-500 hover:shadow-lg transition">
+                    <h3 class="text-xl font-bold text-orange-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-check-square"></i> VACİP ORUÇ
+                    </h3>
+                    <ul class="text-sm text-gray-700 list-disc list-inside space-y-2">
+                        <li>Adak (Nezir) orucu (Bir dilek gerçekleşince tutulan)</li>
+                        <li>Başlanıp bozulan nafile orucun kazası</li>
+                    </ul>
+                </div>
+
+                <!-- Sünnet -->
+                <div class="bg-green-50 p-6 rounded-2xl border-l-4 border-green-500 hover:shadow-lg transition">
+                    <h3 class="text-xl font-bold text-green-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-heart"></i> SÜNNET ORUÇ
+                    </h3>
+                    <ul class="text-sm text-gray-700 list-disc list-inside space-y-2">
+                        <li>Muharrem ayı (Aşure günü) orucu</li>
+                        <li>Şevval ayı (6 gün) orucu</li>
+                        <li>Pazartesi - Perşembe oruçları</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BÖLÜM 4: METİN TAMAMLAMA (Etkinlik) -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-green-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full -mr-16 -mt-16 opacity-50"></div>
                 
-                <div class="space-y-5 mt-4">
-                    <!-- Farz Oruç -->
-                    <div class="border-l-4 border-red-500 bg-red-50 p-5 rounded-r-lg">
-                        <h3 class="font-bold text-xl text-red-800 mb-2">1. Farz Oruç (Zorunlu)</h3>
-                        <p class="text-gray-700">Allah'ın (cc) kesinlikle tutulmasını emrettiği oruçtur.</p>
-                        <ul class="list-disc pl-5 mt-2 text-red-700">
-                            <li><b>Ramazan Orucu:</b> Ramazan ayında tutulur.</li>
-                            <li><b>Kaza Orucu:</b> Ramazan'da tutulamayanların kazasıdır.</li>
-                            <li><b>Kefaret Orucu:</b> Ramazan'da bilerek bozulan orucun cezasıdır.</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Vacip Oruç -->
-                    <div class="border-l-4 border-orange-500 bg-orange-50 p-5 rounded-r-lg">
-                        <h3 class="font-bold text-xl text-orange-800 mb-2">2. Vacip Oruç (Gerekli)</h3>
-                        <p class="text-gray-700">Farz kadar kesin olmasa da tutulması gereken oruçtur.</p>
-                        <ul class="list-disc pl-5 mt-2 text-orange-700">
-                            <li><b>Adak (Nezir) Orucu:</b> Bir dileğin gerçekleşmesi şartıyla tutmaya söz verilen oruçtur.</li>
-                        </ul>
-                    </div>
-                    
-                    <!-- Sünnet Oruç (Kullanıcının vurguladığı) -->
-                    <div class="border-l-4 border-green-500 bg-green-50 p-5 rounded-r-lg">
-                        <h3 class="font-bold text-xl text-green-800 mb-2">3. Sünnet Oruç (Gönüllü)</h3>
-                        <p class="text-gray-700">Peygamber Efendimizin (sav) tuttuğu ve tavsiye ettiği oruçlardır.</p>
-                        <ul class="list-disc pl-5 mt-2 text-green-700">
-                            <li><b>Muharrem Orucu:</b> Muharrem ayının 9, 10 ve 11. günlerinde tutulur.</li>
-                            <li><b>Şevval Orucu:</b> Ramazan ayından sonra, Şevval ayında tutulan 6 gün oruçtur. (Peygamberimiz bunu "bütün yılı oruçlu geçirmiş gibi" müjdelemiştir.)</li>
-                        </ul>
-                    </div>
+                <h2 class="text-2xl font-bold text-green-900 mb-6 text-center">Hikayeyi Tamamla</h2>
+                <p class="text-center text-gray-500 mb-8 text-sm">Kutucuklardaki kelimeleri seçerek metni doğru şekilde oluştur.</p>
+
+                <div class="text-lg leading-loose text-gray-800 text-justify">
+                    <p>
+                        Oruç ve Kur'an ayı ramazan geldi. Ramazanın rahmet ve bereketi her yerde hissediliyor. Bugün ilk kez 
+                        <select class="select-word" id="q1">
+                            <option value="">Seç...</option>
+                            <option value="iftar">iftara</option>
+                            <option value="sahur">sahura</option>
+                        </select>
+                        kalkacak olmanın heyecanını yaşıyoruz. Bu yüzden evde tatlı bir telaş var. 
+                        Sahur için hazırlıklar akşamdan başladı bile. Annem sahurda bizi uyandıracak davulcunun sesini duymamızı istedi. 
+                        <select class="select-word" id="q2">
+                            <option value="">Seç...</option>
+                            <option value="İmsak">İmsak</option>
+                            <option value="İftar">İftar</option>
+                        </select>
+                        vakti girmeden yemeğimizi yiyip niyet ettik.
+                    </p>
+                    <p class="mt-4">
+                        Gün boyu sabırla bekledik. Akşam ezanı okunup 
+                        <select class="select-word" id="q3">
+                            <option value="">Seç...</option>
+                            <option value="iftar">iftar</option>
+                            <option value="teravih">teravih</option>
+                        </select>
+                        vakti gelince dualarla orucumuzu açtık. Yemekten sonra babamla camiye gidip 
+                        <select class="select-word" id="q4">
+                            <option value="">Seç...</option>
+                            <option value="cuma">cuma</option>
+                            <option value="teravih">teravih</option>
+                        </select>
+                        namazını kıldık. Camide hafızlar Kur'an okuyor, cemaat takip ediyordu. Buna 
+                        <select class="select-word" id="q5">
+                            <option value="">Seç...</option>
+                            <option value="mukabele">mukabele</option>
+                            <option value="mevlit">mevlit</option>
+                        </select>
+                        denildiğini öğrendim. Ayrıca babam yoksullara verilmek üzere 
+                        <select class="select-word" id="q6">
+                            <option value="">Seç...</option>
+                            <option value="zekat">zekat</option>
+                            <option value="fitre">fitre</option>
+                        </select>
+                        (fıtır sadakası) hazırladı.
+                    </p>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button onclick="checkStory()" class="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-green-700 transition transform hover:scale-105">
+                        Kontrol Et
+                    </button>
+                    <p id="story-feedback" class="mt-4 font-bold text-lg hidden"></p>
                 </div>
             </div>
+        </section>
 
-        </div> <!-- grid sonu -->
-    </div>
+    </main>
+
+    <footer class="bg-green-900 text-green-200 py-8 text-center text-sm">
+        <p>2024 Din Kültürü ve Ahlak Bilgisi - Ramazan ve Oruç</p>
+    </footer>
+
+    <script>
+        // --- QUIZ LOGIC ---
+        const questions = [
+            { text: "Bilerek ve isteyerek yemek yemek.", isBreak: true },
+            { text: "Unutarak bir şey yiyip içmek.", isBreak: false },
+            { text: "Diş fırçalarken suyu yutmak.", isBreak: true },
+            { text: "Duş almak / Banyo yapmak.", isBreak: false },
+            { text: "Güzel koku sürünmek.", isBreak: false },
+            { text: "Ağız dolusu kendi isteğiyle kusmak.", isBreak: true },
+            { text: "Güneş battı sanıp erkenden iftar etmek.", isBreak: true }
+        ];
+
+        let qIndex = 0;
+
+        function loadQuestion() {
+            if (qIndex < questions.length) {
+                document.getElementById('question-text').innerText = questions[qIndex].text;
+                document.getElementById('feedback').classList.add('hidden');
+                document.querySelectorAll('button').forEach(b => b.disabled = false);
+            } else {
+                document.getElementById('question-text').innerHTML = "<span class='text-yellow-400'>Tebrikler! Test Bitti.</span>";
+                document.querySelectorAll('button').forEach(b => b.classList.add('hidden')); // Hide buttons
+            }
+        }
+
+        function checkAnswer(userSaysBreaks) {
+            const q = questions[qIndex];
+            const feedback = document.getElementById('feedback');
+            
+            feedback.classList.remove('hidden');
+            
+            if (userSaysBreaks === q.isBreak) {
+                feedback.innerText = "Doğru! ✔️";
+                feedback.className = "text-center font-bold text-xl h-8 text-green-400 block mb-4";
+                setTimeout(() => {
+                    qIndex++;
+                    loadQuestion();
+                }, 1000);
+            } else {
+                feedback.innerText = "Yanlış Cevap. ❌";
+                feedback.className = "text-center font-bold text-xl h-8 text-red-400 block mb-4";
+            }
+        }
+
+        // --- STORY LOGIC ---
+        function checkStory() {
+            const answers = {
+                q1: "sahur",
+                q2: "İmsak",
+                q3: "iftar",
+                q4: "teravih",
+                q5: "mukabele",
+                q6: "fitre"
+            };
+
+            let score = 0;
+            let total = 6;
+
+            for (let i = 1; i <= total; i++) {
+                const select = document.getElementById('q' + i);
+                const val = select.value;
+                
+                select.classList.remove('correct', 'wrong');
+
+                if (val === answers['q' + i]) {
+                    select.classList.add('correct');
+                    score++;
+                } else {
+                    select.classList.add('wrong');
+                }
+            }
+
+            const fb = document.getElementById('story-feedback');
+            fb.classList.remove('hidden');
+            if (score === total) {
+                fb.innerHTML = "<span class='text-green-600'>Harika! Hikayeyi eksiksiz tamamladın.</span>";
+            } else {
+                fb.innerHTML = `<span class='text-red-600'>${score} / ${total} doğru. Kırmızı olanları düzeltmelisin.</span>`;
+            }
+        }
+
+        // Start
+        loadQuestion();
+
+    </script>
 </body>
 </html>
