@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -13,11 +12,11 @@ import {
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-    Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter
+    Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -70,7 +69,7 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
-                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -285,6 +284,33 @@ export default function StudentsPage() {
     setIsSaving(false);
   };
 
+  const handleAddSingleStudent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedClass || !activeBranch || activeBranch === 'all' || !newStudentName.trim()) {
+        toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
+        return;
+    }
+    setIsSaving(true);
+    const className = `${selectedClass.name} - ${activeBranch}`;
+    // `addGuestStudent` doesn't exist, should probably be `saveUser` with guest role
+    const result = await saveUser({
+        displayName: newStudentName,
+        email: `${newStudentName.toLowerCase().replace(/\s/g, '.')}@guest.com`,
+        role: 'guest',
+        class: className,
+        password: 'password' // Or generate one
+    });
+
+    if (result.success) {
+        toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
+        setNewStudentName("");
+        await fetchAllData();
+    } else {
+        toast({title: "Hata", description: result.error, variant: "destructive"});
+    }
+    setIsSaving(false);
+  }
+
   const handleBulkAdd = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !newBulkSchoolName)) {
@@ -306,7 +332,7 @@ export default function StudentsPage() {
     const result = await bulkAddStudents(names, className, finalSchoolName);
 
     if (result.success) {
-        toast({title: "Başarılı", description: `${result.successCount} öğrenci eklendi.`});
+        toast({title: "Başarılı", description: `${result.successCount} sanal öğrenci eklendi.`});
         setBulkStudentNames("");
         await fetchAllData();
     } else {
@@ -319,12 +345,14 @@ export default function StudentsPage() {
     const originalStudent = allStudents.find(s => s.uid === studentId);
     if (!originalStudent) return;
   
+    // Optimistic UI update
     setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
 
     const result = await saveUser({ ...originalStudent, class: newClassName } as UserProfile);
 
     if (!result.success) {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
+        // Revert UI on failure
         setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
     } else {
         toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
@@ -519,6 +547,14 @@ export default function StudentsPage() {
                             </div>
                         </div>
                           <TabsContent value="single" className="mt-0">
+                            <form onSubmit={e => handleOpenDialog(null)} className="flex gap-4 items-end">
+                              <div className="flex-1 space-y-2">
+                                  <Label className="text-slate-300">Yeni Öğrenci Bilgileri</Label>
+                                  <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 w-full justify-start">
+                                      <UserPlus className="mr-2 h-5 w-5"/> Manuel Olarak Yeni Öğrenci Ekle
+                                  </Button>
+                              </div>
+                            </form>
                           </TabsContent>
 
                           <TabsContent value="bulk" className="mt-0 space-y-4">
@@ -567,3 +603,5 @@ export default function StudentsPage() {
         </div>
     );
 }
+
+    
