@@ -36,7 +36,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { updateUser, deleteUserFromFirestore, resetAllGeneralScores, getAllUsers } from '@/app/teacher/superadmin/actions';
 import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
 
 
@@ -121,9 +121,27 @@ function StudentTable({
                                             <Send className="mr-2 h-4 w-4" /> Detaylar
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer"><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onDelete(student.uid)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10 cursor-pointer">
-                                            <Trash2 className="mr-2 h-4 w-4"/> Sil
-                                        </DropdownMenuItem>
+                                         <AlertDialog>
+                                             <AlertDialogTrigger asChild>
+                                                 <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
+                                                     <Trash2 className="mr-2 h-4 w-4" /> Sil
+                                                 </div>
+                                             </AlertDialogTrigger>
+                                             <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                 <AlertDialogHeader>
+                                                     <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
+                                                     <AlertDialogDescription className="text-slate-400">
+                                                         "{student.displayName}" adlı öğrenci kalıcı olarak silinecektir.
+                                                     </AlertDialogDescription>
+                                                 </AlertDialogHeader>
+                                                 <AlertDialogFooter>
+                                                     <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                                     <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white">
+                                                         Evet, Sil
+                                                     </AlertDialogAction>
+                                                 </AlertDialogFooter>
+                                             </AlertDialogContent>
+                                         </AlertDialog>
                                      </DropdownMenuContent>
                                  </DropdownMenu>
                             </TableCell>
@@ -216,6 +234,7 @@ const UserEditorSchema = z.object({
 });
 
 export default function StudentsPage() {
+  const router = useRouter();
   const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
@@ -275,7 +294,7 @@ export default function StudentsPage() {
          setAllStudents(originalStudents);
     }
   }
-
+  
   const handleApproveStudent = async (uid: string) => {
     const originalStudents = [...allStudents];
     setAllStudents(prev => prev.map(s => s.uid === uid ? { ...s, role: 'student' } : s)); // Optimistic UI
@@ -403,6 +422,30 @@ export default function StudentsPage() {
     return list;
   }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
   
+  const filteredGuestStudents = useMemo(() => {
+    if (!allStudents) return [];
+    let list = allStudents.filter(s => s.role === 'guest');
+    
+    if (activeClassId !== 'all' && selectedClass) {
+        if (activeBranch === 'all') {
+             list = list.filter(s => s.class?.startsWith(selectedClass.name));
+        } else {
+             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        }
+    }
+    
+    if (searchTerm) {
+        const lowercasedTerm = searchTerm.toLowerCase();
+        list = list.filter(s => 
+            (s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm))
+        );
+    }
+    
+    list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
+    return list;
+  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
+
+  
   const pendingStudents = useMemo(() => {
       return allStudents.filter(s => s.role === 'pending').sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
   }, [allStudents]);
@@ -440,7 +483,7 @@ export default function StudentsPage() {
                         {pendingStudents.length > 0 && <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">{pendingStudents.length}</span>}
                     </TabsTrigger>
                     <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
-                        <UserPlus className="mr-2 h-4 w-4"/> Yeni Öğrenci Ekle
+                        <UserPlus className="mr-2 h-4 w-4"/> Yeni Ekle
                     </TabsTrigger>
                     <TabsTrigger value="guest" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
                         <UserCog className="mr-2 h-4 w-4"/> Sanal Öğrenciler
@@ -542,9 +585,7 @@ export default function StudentsPage() {
                             <Label className="text-slate-300 text-xs">Sınıf</Label>
                             <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                                </SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-1">
@@ -622,5 +663,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-    
