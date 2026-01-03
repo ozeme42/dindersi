@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -36,7 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { getAllUsers, saveUser, bulkAddStudents } from "./actions";
+import { getStudentData, saveUser, bulkAddStudents } from "./actions";
 
 
 // Types
@@ -221,18 +222,13 @@ export default function StudentsPage() {
   const fetchAllData = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [usersData, classesData, schoolsData] = await Promise.all([
-           getAllUsers(),
-           getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
-           getDocs(query(collection(db, "schools"), orderBy("name", "asc")))
-      ]);
+      const { students, classes, schools } = await getStudentData();
       
-      setAllStudents(usersData);
-
-      const classesList = classesData.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-      const sortedClasses = classesList.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+      setAllStudents(students);
+      const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
       setClasses(sortedClasses);
-      setSchools(schoolsData.docs.map(doc => ({ id: doc.id, ...doc.data() } as School)));
+      setSchools(schools);
+
     } catch (error) {
       console.error("Error fetching data:", error);
       toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
