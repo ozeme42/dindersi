@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -296,7 +297,7 @@ function QuestionBankCoursePageComponent() {
 
         const checkLevel = (key: 'easy' | 'medium' | 'hard') => {
             const total = Math.ceil((counts[key] || 0) / 10);
-            if (total === 0) return true; // If no tests for this level, it's considered "complete" for unlock purposes.
+            if (total === 0) return true;
             const passed = Object.values(progress[key] || {}).filter(res => res.status === 'passed').length;
             return passed >= total;
         }
@@ -350,7 +351,6 @@ function QuestionBankCoursePageComponent() {
         if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
         if (!course?.units) return false;
     
-        // Tüm konuları al ve sıralı bir liste oluştur.
         const allTopics = course.units
             .flatMap(u => 
                 (u.topics || []).map(t => ({...t, unitTitle: u.title}))
@@ -365,14 +365,11 @@ function QuestionBankCoursePageComponent() {
     
         const topicIndex = allTopics.findIndex(t => t.id === topicId);
         
-        // İlk konu her zaman açıktır.
         if (topicIndex <= 0) return true;
     
-        // Önceki konunun ID'sini bul.
         const previousTopic = allTopics[topicIndex - 1];
-        if (!previousTopic) return true; // Eğer bir önceki konu yoksa (ki bu olmamalı), kilidi aç.
+        if (!previousTopic) return true; 
     
-        // Önceki konunun tamamlanıp tamamlanmadığını kontrol et.
         return isTopicCompleted(previousTopic.id);
     }, [course?.units, isTopicCompleted, user?.role]);
     
@@ -382,7 +379,6 @@ function QuestionBankCoursePageComponent() {
         const difficultyKey = difficultyMap[difficulty];
         const result: TestResult = { status: passed ? 'passed' : 'failed', correct: correctCount, total: totalQuestions, score: score };
         
-        // Optimistic update
         setTopicProgress(prev => ({
             ...prev,
             [topic.id]: {
@@ -403,12 +399,15 @@ function QuestionBankCoursePageComponent() {
         }
     }, [user, courseId, activeTest, course?.title]);
     
-     useEffect(() => {
+    useEffect(() => {
         if (isLoading || isCountsLoading || !course || activeTopic) return;
-        const allTopics = course.units?.flatMap(u => u.topics || []) || [];
-        const firstUncompletedTopic = allTopics.find(t => !isTopicCompleted(t.id));
-        setActiveTopic(firstUncompletedTopic || allTopics[0]);
-    }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic]);
+        const allTopics = course.units
+            ?.flatMap(u => u.topics || [])
+            .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })) || [];
+
+        const firstUncompletedAndUnlockedTopic = allTopics.find(t => !isTopicCompleted(t.id) && isTopicUnlocked(t.id));
+        setActiveTopic(firstUncompletedAndUnlockedTopic || allTopics[0] || null);
+    }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic, isTopicUnlocked]);
 
      const courseStats = useMemo(() => {
         if (isCountsLoading || !course) return { totalTests: 0, passedTests: 0, completionPercentage: 0, totalScore: 0, classRank: 0, totalStudents: 0 };
@@ -476,11 +475,15 @@ function QuestionBankCoursePageComponent() {
                 const prevDifficultyKey = level === 'Orta' ? 'easy' : 'medium';
                 const totalPrev = Math.ceil((counts[prevDifficultyKey] || 0) / 10);
                 if (totalPrev === 0) {
-                     if (level === 'Orta') {
+                     // If easy has no tests, medium should be unlocked.
+                     if (level === 'Orta') return false;
+                     // If medium has no tests, but easy does, check if easy is complete.
+                     if (level === 'Zor') {
                         const totalEasy = Math.ceil((counts.easy || 0) / 10);
-                        if (totalEasy === 0) return false;
+                        if (totalEasy === 0) return false; // if easy also has no tests, unlock hard
+                        const passedEasy = Object.values(progress?.['easy'] || {}).filter(res => res.status === 'passed').length;
+                        return passedEasy < totalEasy;
                      }
-                     return false;
                 }
                 
                 const passedPrev = Object.values(progress?.[prevDifficultyKey] || {}).filter(res => res.status === 'passed').length;
@@ -659,25 +662,7 @@ function QuestionBankCoursePageComponent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={(topic) => { setActiveTopic(topic); setActiveTest(null); }}
-                        isTopicUnlocked={(topicIndex, unitIndex) => {
-                            if (!course?.units) return false;
-                            const allTopics = course.units
-                                .flatMap(u => 
-                                    (u.topics || []).map(t => ({...t, unitTitle: u.title}))
-                                )
-                                .sort((a,b) => {
-                                    const unitCompare = a.unitTitle.localeCompare(b.unitTitle, 'tr', { numeric: true });
-                                    if (unitCompare !== 0) return unitCompare;
-                                    return (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true });
-                                });
-
-                            const globalIndex = allTopics.findIndex(t => t.id === course.units[unitIndex]?.topics?.[topicIndex]?.id);
-                            
-                            if (globalIndex <= 0) return true;
-                            
-                            const prevTopic = allTopics[globalIndex - 1];
-                            return prevTopic ? isTopicCompleted(prevTopic.id) : true;
-                        }}
+                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(course.units![unitIndex].topics![topicIndex].id)}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={topicProgress}
                         testCounts={testCounts}
@@ -704,5 +689,3 @@ function Page() {
 }
 
 export default Page;
-
-    

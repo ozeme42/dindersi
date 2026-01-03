@@ -114,7 +114,7 @@ export async function saveBulkQuestions(input: unknown, context: { classId?: str
         return { success: true, count: validation.data.questions.length };
 
     } catch (error: any) {
-        console.error("Error adding bulk exam questions:", error);
+        console.error("Error adding bulk questions:", error);
         return { success: false, error: "Sorular eklenirken bir hata oluştu." };
     }
 }

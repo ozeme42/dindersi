@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -20,7 +18,7 @@ interface CourseSidebarProps {
     isTopicUnlocked: (topicIndex: number, unitIndex: number) => boolean;
     isTopicCompleted: (topicId: string) => boolean;
     topicProgress?: { [topicId: string]: any }; 
-    testCounts?: { [topicId: string]: any }; 
+    testCounts?: { [topicId: string]: { easy: number, medium: number, hard: number } };
 }
 
 export function CourseSidebar({
@@ -30,6 +28,7 @@ export function CourseSidebar({
     onSelectUnitFlow,
     isTopicUnlocked,
     isTopicCompleted,
+    testCounts,
 }: CourseSidebarProps) {
     
     const activeRef = useRef<HTMLDivElement>(null);
@@ -128,6 +127,10 @@ export function CourseSidebar({
                                             const isLocked = !isTopicUnlocked(topicIndex, unitIndex);
                                             const isCompleted = isTopicCompleted(topic.id);
                                             const isActive = activeTopic?.id === topic.id;
+                                            
+                                            // ** The Core Fix **
+                                            const topicTestCounts = testCounts ? testCounts[topic.id] : null;
+                                            const hasTests = topicTestCounts ? (topicTestCounts.easy > 0 || topicTestCounts.medium > 0 || topicTestCounts.hard > 0) : false;
 
                                             return (
                                                 <div 
@@ -154,12 +157,12 @@ export function CourseSidebar({
 
                                                     <button
                                                         onClick={() => !isLocked && onSelectTopic(topic)}
-                                                        disabled={isLocked}
+                                                        disabled={isLocked || !hasTests}
                                                         className={cn(
                                                             "w-full text-left p-3 rounded-xl border transition-all duration-300 flex items-center justify-between group/card relative overflow-hidden",
                                                             isActive 
                                                                 ? "bg-cyan-950/30 border-cyan-500/50 shadow-[0_0_15px_rgba(8,145,178,0.1)]" 
-                                                                : isLocked 
+                                                                : isLocked || !hasTests
                                                                     ? "bg-transparent border-transparent opacity-50 cursor-not-allowed" 
                                                                     : "bg-slate-900/20 border-white/5 hover:bg-slate-800 hover:border-white/10"
                                                         )}
@@ -176,12 +179,12 @@ export function CourseSidebar({
                                                             <div className="flex flex-col min-w-0">
                                                                 <span className={cn(
                                                                     "text-sm font-medium truncate pr-2",
-                                                                    isActive ? "text-white" : isLocked ? "text-slate-500" : "text-slate-300 group-hover/card:text-white"
+                                                                    isActive ? "text-white" : isLocked || !hasTests ? "text-slate-500" : "text-slate-300 group-hover/card:text-white"
                                                                 )}>
                                                                     {topic.title}
                                                                 </span>
-                                                                {isActive && (
-                                                                    <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider animate-pulse">Şu an buradasın</span>
+                                                                {!hasTests && !isLocked && (
+                                                                     <span className="text-[10px] text-red-500 font-bold">Test Yok</span>
                                                                 )}
                                                             </div>
                                                         </div>
