@@ -184,7 +184,11 @@ export default function RegisterPage() {
                         <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); }}>
                             <SelectTrigger id="class" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {classes && classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                {isLoading ? (
+                                    <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
+                                ) : (
+                                    classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)
+                                )}
                             </SelectContent>
                         </Select>
                     </div>
@@ -193,7 +197,7 @@ export default function RegisterPage() {
                         <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass || !selectedClass.branches || selectedClass.branches.length === 0}>
                             <SelectTrigger id="branch" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                {selectedClass && selectedClass.branches && selectedClass.branches.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -241,3 +245,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    
