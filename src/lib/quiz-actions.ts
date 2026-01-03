@@ -19,14 +19,20 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     if (isStatic) {
         let items: (Question | ActivityItem)[] = [];
         
-        // Önce soru bankasından çekmeyi dene
+        // Önce soru bankasından çekmeyi dene (dataType: 'questions')
         const questionResult = await getStaticQuestionsForGame({ topicId });
-        items = questionResult.map(q => ({...q, source: 'questions'} as any));
+        if(questionResult && questionResult.length > 0) {
+            items = questionResult.map(q => ({...q, source: 'questions'} as any));
+        }
 
-        // Eğer soru bulunamazsa, etkinlik verilerinden çekmeyi dene
-        if (items.length === 0) {
+        // Eğer soru bulunamazsa veya oyunlar için özel veri gerekiyorsa, etkinlik verilerinden çekmeyi dene
+        if (items.length === 0 || questionTypes?.some(qt => ['concept', 'definition', 'sentence'].includes(qt))) {
             const activityResult = await getStaticQuestionsForGame({ topicId, dataType: 'activities' });
-            items = activityResult.map(q => ({...q, source: 'activities'} as any));
+             if (activityResult && activityResult.length > 0) {
+                // Sadece etkinlik verileriyle ilgili olanları ekle, diğerlerini koru
+                const activityItems = activityResult.map(q => ({...q, source: 'activities'} as any));
+                items = [...items.filter(item => item.source !== 'activities'), ...activityItems];
+            }
         }
 
         const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
@@ -38,7 +44,14 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         }
         
         if (mappedTypes && mappedTypes.length > 0) {
-            filteredItems = filteredItems.filter(item => isQuestion(item) && mappedTypes.includes(item.type));
+            filteredItems = filteredItems.filter(item => {
+                 if (isQuestion(item)) {
+                     return mappedTypes.includes(item.type);
+                 } else if ('type' in item) { // ActivityItem
+                     return mappedTypes.includes(item.type);
+                 }
+                 return false;
+            });
         }
 
         const shuffled = filteredItems.sort(() => 0.5 - Math.random());
@@ -137,7 +150,7 @@ export async function getStaticQuestionsForGame(params: {
     };
     
     // Determine directory based on dataType
-    const dataDir = dataType === 'questions' ? 'questions' : 'activities';
+    const dataDir = dataType; // Directly use 'questions' or 'activities'
     const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataDir);
 
     if (topicId && topicId !== 'all') {

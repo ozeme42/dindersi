@@ -6,15 +6,15 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, writeBatch, serverTimestamp, increment, getCountFromServer, setDoc } from "firebase/firestore";
 import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats, Topic } from "@/lib/types";
 import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import fs from 'fs/promises';
+import path from 'path';
 
 
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
-        const manifestRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/manifest.json`, { next: { revalidate: 60 } });
-        if (!manifestRes.ok) {
-            throw new Error("Müfredat manifestosu bulunamadı.");
-        }
-        const manifest = await manifestRes.json();
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const manifest = JSON.parse(fileContent);
         
         let courseData: any = null;
         for (const group of manifest.classGroups) {
