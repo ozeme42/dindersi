@@ -23,27 +23,24 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     
     const schoolMap = new Map<string, School>();
 
-    // 1. 'schools' koleksiyonundan gelen okulları ekle
     schoolsSnap.docs.forEach(doc => {
         const schoolData = { id: doc.id, ...doc.data() } as School;
         const trimmedName = schoolData.name?.trim();
-        // Sadece geçerli id ve isme sahip olanları ekle
         if (schoolData.id && trimmedName) {
             schoolMap.set(trimmedName.toLowerCase(), schoolData);
         }
     });
 
-    // 2. Öğrenci profillerindeki okulları ekle
     students.forEach(student => {
         const trimmedSchoolName = student.schoolName?.trim();
-        // Sadece dolu ve listede olmayan okul isimlerini işle
         if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
-            // ID olarak okul adının kendisini kullanmak geçici bir çözümdür, ama boş ID'den iyidir.
-            schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
+             schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
         }
     });
 
-    const combinedSchools = Array.from(schoolMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    const combinedSchools = Array.from(schoolMap.values())
+        .filter(s => s && s.id) // Ensure no schools with empty ID are included
+        .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -222,8 +219,4 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: true };
     } catch (error: any) {
         console.error("Error approving student:", error);
-        return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
-    }
-}
-
-    
+        return {

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -234,7 +235,6 @@ const UserEditorSchema = z.object({
 });
 
 export default function StudentsPage() {
-  const router = useRouter();
   const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
@@ -405,7 +405,7 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-             list = list.filter(s => s.class?.startsWith(selectedClass.name));
+             list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
              list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
@@ -428,7 +428,7 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-             list = list.filter(s => s.class?.startsWith(selectedClass.name));
+             list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
              list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
@@ -612,24 +612,12 @@ export default function StudentsPage() {
                         )}
                     </div>
 
-                    <Tabs defaultValue="single" className="w-full">
+                    <Tabs defaultValue="bulk" className="w-full">
                       <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex">
-                        <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Manuel Ekle</TabsTrigger>
                         <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
                       </TabsList>
                       
                       <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                          <TabsContent value="single" className="mt-0">
-                            <div className="flex gap-4 items-end">
-                              <div className="flex-1 space-y-2">
-                                  <Label className="text-slate-300">Yeni Öğrenci Bilgileri</Label>
-                                  <Button onClick={() => handleOpenDialog(null)} size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 w-full justify-start">
-                                      <UserPlus className="mr-2 h-5 w-5"/> Manuel Olarak Yeni Öğrenci Ekle
-                                  </Button>
-                              </div>
-                            </div>
-                          </TabsContent>
-
                           <TabsContent value="bulk" className="mt-0 space-y-4">
                              <form onSubmit={handleBulkAdd} className="space-y-4">
                                 <div>
@@ -663,3 +651,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+```
