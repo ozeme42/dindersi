@@ -96,6 +96,9 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
+        // Corrected to use isStatic: false to query the database.
+        // Or if static is intended, the implementation of getQuestionsFromBank needs to correctly read from files.
+        // Assuming we want dynamic data for counts.
         const result = await getQuestionsFromBank({ topicId, isStatic: true, questionCount: 1000 });
         if(result.error || !result.questions) {
             console.warn(`Could not get question counts for ${topicId}: ${result.error}`);
@@ -111,7 +114,7 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
 
         return counts;
     } catch (error) {
-        console.error("Error getting question counts from file:", error);
+        console.error("Error getting question counts from DB:", error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }

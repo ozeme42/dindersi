@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -17,7 +18,8 @@ export async function saveQuestion(questionToSave: Question): Promise<{ success:
                 ...questionData,
                 createdAt: serverTimestamp(),
             });
-            return { success: true, question: { ...questionData, id: newDocRef.id, createdAt: new Date().toISOString() } };
+            const createdDate = new Date().toISOString();
+            return { success: true, question: { ...questionData, id: newDocRef.id, createdAt: createdDate } };
         } else if (id) {
             await updateDoc(doc(db, "questions", id), questionData);
             return { success: true, question: { ...questionToSave, createdAt: new Date().toISOString() } };

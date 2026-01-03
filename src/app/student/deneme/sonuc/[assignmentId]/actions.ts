@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -61,7 +62,7 @@ export async function getExamResultDetails(assignmentId: string, userId: string)
         }
 
         const questionDocs = await Promise.all(
-            assignment.questionIds.map(id => getDoc(doc(db, 'examQuestions', id)))
+            assignment.questionIds.map(id => getDoc(doc(db, 'questions', id)))
         );
 
         const questions = questionDocs
