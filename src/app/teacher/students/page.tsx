@@ -87,7 +87,7 @@ function StudentTable({
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
-                            <TableCell>
+                             <TableCell>
                                 <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">
                                     {student.schoolName || '-'}
                                 </Badge>
@@ -267,6 +267,9 @@ export default function StudentsPage() {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
+  
+  const [schoolFilter, setSchoolFilter] = useState<string>('all');
+
 
   const { toast } = useToast();
 
@@ -389,6 +392,13 @@ export default function StudentsPage() {
   const filteredStudents = useMemo(() => {
     if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'student');
+
+    if (schoolFilter !== 'all') {
+        const selectedSchool = schools.find(s => s.id === schoolFilter);
+        if (selectedSchool) {
+            list = list.filter(s => s.schoolName === selectedSchool.name);
+        }
+    }
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
@@ -404,7 +414,7 @@ export default function StudentsPage() {
     }
     
     return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
-  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
+  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools]);
   
   const filteredGuestStudents = useMemo(() => {
     if (!allStudents) return [];
@@ -492,7 +502,14 @@ export default function StudentsPage() {
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sisteme kayıtlı öğrencileri görüntüleyin ve yönetin.</CardDescription>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                             <Select value={schoolFilter} onValueChange={setSchoolFilter}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    <SelectItem value="all">Tüm Okullar</SelectItem>
+                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
@@ -580,9 +597,9 @@ export default function StudentsPage() {
                         <div className="p-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
                             <UserPlus className="h-6 w-6 text-emerald-400" />
                         </div>
-                        <CardTitle className="text-2xl text-white">Yeni Öğrenci Ekle</CardTitle>
+                        <CardTitle className="text-2xl text-white">Toplu Öğrenci Ekle</CardTitle>
                     </div>
-                    <CardDescription className="text-slate-400 text-base">Oluşturulan öğrenciler seçtiğiniz sınıf ve şubeye atanacaktır. Şifre, sistem tarafından rastgele atanır.</CardDescription>
+                    <CardDescription className="text-slate-400 text-base">Öğrencileri listelerini yapıştırarak sisteme hızlıca kaydedin. Her öğrenciye varsayılan bir şifre atanacaktır.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8">
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -649,3 +666,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+```
