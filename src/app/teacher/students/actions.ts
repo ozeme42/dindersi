@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -20,27 +21,23 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    // Start with schools from the dedicated collection
     const schoolMap = new Map<string, School>();
     schoolsSnap.docs.forEach(doc => {
         const schoolData = { id: doc.id, ...doc.data() } as School;
-        if (schoolData.name && schoolData.id) { // Ensure name and id are not empty
-            schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
+        const trimmedName = schoolData.name?.trim();
+        if (trimmedName && schoolData.id) {
+            schoolMap.set(trimmedName.toLowerCase(), schoolData);
         }
     });
 
-    // Add any school from student profiles that isn't already in the map
     students.forEach(student => {
-        const schoolName = student.schoolName?.trim();
-        if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
-            // Create a pseudo-school object. Use schoolName as ID if no other ID is available.
-            schoolMap.set(schoolName.toLowerCase(), { id: schoolName, name: schoolName });
+        const trimmedSchoolName = student.schoolName?.trim();
+        if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
+            schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
         }
     });
 
-    const combinedSchools = Array.from(schoolMap.values())
-        .filter(school => school.id && school.name) // **CRITICAL FIX**: Filter out any object that might have an empty id or name
-        .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    const combinedSchools = Array.from(schoolMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -72,7 +69,6 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
         const auth = getAdminAuth();
         const db = getAdminDb();
 
-        // If a new school is added, ensure it exists in the 'schools' collection.
         if (schoolName) {
             const schoolsRef = db.collection('schools');
             const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
@@ -223,3 +219,5 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
     }
 }
+
+    

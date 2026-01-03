@@ -36,7 +36,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
+import { deleteBulkUsers as deleteUsersAction } from '@/app/teacher/superadmin/actions';
 import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
 
 
@@ -531,3 +531,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+    

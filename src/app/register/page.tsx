@@ -59,21 +59,21 @@ export default function RegisterPage() {
             const schoolMap = new Map<string, School>();
             schoolsSnapshot.docs.forEach(doc => {
                 const schoolData = { id: doc.id, ...doc.data() } as School;
-                 if (schoolData.name && schoolData.id) {
-                    schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
+                 const trimmedName = schoolData.name?.trim();
+                 if (trimmedName && schoolData.id) {
+                    schoolMap.set(trimmedName.toLowerCase(), schoolData);
                 }
             });
 
             usersSnapshot.docs.forEach(doc => {
                 const user = doc.data() as UserProfile;
-                const schoolName = user.schoolName?.trim();
-                if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
-                    schoolMap.set(schoolName.toLowerCase(), { id: schoolName, name: schoolName });
+                const trimmedSchoolName = user.schoolName?.trim();
+                if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
+                    schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
                 }
             });
 
             const combinedSchools = Array.from(schoolMap.values())
-              .filter(school => school.id && school.name)
               .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
             setSchools(combinedSchools);
 
@@ -257,3 +257,5 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+    
