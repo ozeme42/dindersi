@@ -235,7 +235,7 @@ function QuestionTest({
                                 const isCorrect = (currentQuestion.correctAnswer === 'Doğru') === answerValue;
                                 
                                 return (
-                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isSelected && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && "opacity-50" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
+                                    <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
                                         {option}
                                     </Button>
                                 );
@@ -351,26 +351,48 @@ function QuestionBankCoursePageComponent() {
         if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
         if (!course?.units) return false;
     
-        const allTopics = course.units
-            .flatMap(u => 
-                (u.topics || []).map(t => ({...t, unitTitle: u.title}))
-            )
-            .sort((a,b) => {
-                const unitCompare = a.unitTitle.localeCompare(b.unitTitle, 'tr', { numeric: true });
-                if (unitCompare !== 0) return unitCompare;
-                return (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true });
-            });
-    
-        if (allTopics.length === 0) return true;
-    
-        const topicIndex = allTopics.findIndex(t => t.id === topicId);
+        const allUnits = [...(course.units || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+
+        let currentTopic: Topic | undefined;
+        let currentTopicIndex = -1;
+        let currentUnit: Unit | undefined;
+        let currentUnitIndex = -1;
+
+        // Find the topic and its unit
+        for(let i = 0; i < allUnits.length; i++) {
+            const unit = allUnits[i];
+            const sortedTopics = [...(unit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+            const topicIndex = sortedTopics.findIndex(t => t.id === topicId);
+            if (topicIndex !== -1) {
+                currentTopic = sortedTopics[topicIndex];
+                currentTopicIndex = topicIndex;
+                currentUnit = unit;
+                currentUnitIndex = i;
+                break;
+            }
+        }
+
+        if (!currentUnit) return false; // Topic not found in any unit
+
+        // Check if previous units are completed
+        for (let i = 0; i < currentUnitIndex; i++) {
+            const prevUnit = allUnits[i];
+            const allTopicsInPrevUnitCompleted = (prevUnit.topics || []).every(topic => isTopicCompleted(topic.id));
+            if (!allTopicsInPrevUnitCompleted) {
+                return false; // A previous unit is not completed
+            }
+        }
         
-        if (topicIndex <= 0) return true;
-    
-        const previousTopic = allTopics[topicIndex - 1];
-        if (!previousTopic) return true; 
-    
-        return isTopicCompleted(previousTopic.id);
+        // If it's not the first topic in its unit, check the previous topic in the same unit
+        if (currentTopicIndex > 0) {
+            const sortedTopicsInUnit = [...(currentUnit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+            const previousTopicInUnit = sortedTopicsInUnit[currentTopicIndex - 1];
+            return isTopicCompleted(previousTopicInUnit.id);
+        }
+
+        // If it's the first topic of its unit, it's unlocked if all previous units are complete (which we already checked)
+        return true;
+
     }, [course?.units, isTopicCompleted, user?.role]);
     
     const handleTestComplete = useCallback(async (difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number, score: number, passed: boolean, correctCount: number, totalQuestions: number) => {
@@ -662,7 +684,7 @@ function QuestionBankCoursePageComponent() {
                         course={course}
                         activeTopic={activeTopic}
                         onSelectTopic={(topic) => { setActiveTopic(topic); setActiveTest(null); }}
-                        isTopicUnlocked={(topicIndex, unitIndex) => isTopicUnlocked(course.units![unitIndex].topics![topicIndex].id)}
+                        isTopicUnlocked={isTopicUnlocked}
                         isTopicCompleted={isTopicCompleted}
                         topicProgress={topicProgress}
                         testCounts={testCounts}
@@ -689,3 +711,4 @@ function Page() {
 }
 
 export default Page;
+
