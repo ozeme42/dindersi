@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -96,25 +95,23 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
-        // Corrected to use isStatic: false to query the database.
-        // Or if static is intended, the implementation of getQuestionsFromBank needs to correctly read from files.
-        // Assuming we want dynamic data for counts.
-        const result = await getQuestionsFromBank({ topicId, isStatic: true, questionCount: 1000 });
-        if(result.error || !result.questions) {
-            console.warn(`Could not get question counts for ${topicId}: ${result.error}`);
-            return { easy: 0, medium: 0, hard: 0 };
-        }
-        
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const questions = JSON.parse(fileContent) as Question[];
+
         const counts = { easy: 0, medium: 0, hard: 0 };
-        (result.questions as Question[]).forEach(q => {
+        questions.forEach(q => {
             if (q.difficulty === 'Kolay') counts.easy++;
             else if (q.difficulty === 'Orta') counts.medium++;
             else if (q.difficulty === 'Zor') counts.hard++;
         });
 
         return counts;
-    } catch (error) {
-        console.error("Error getting question counts from DB:", error);
+    } catch (error: any) {
+        if (error.code === 'ENOENT') { // File not found
+            return { easy: 0, medium: 0, hard: 0 };
+        }
+        console.error(`Error reading question counts for topic ${topicId} from static file:`, error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }

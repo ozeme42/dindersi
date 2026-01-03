@@ -1,3 +1,4 @@
+
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
@@ -8,56 +9,43 @@ import { collection, query, where, getDocs, limit as firestoreLimit, Query, and 
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
-    return obj && typeof obj.type === 'string';
+    return obj && typeof obj.type === 'string' && ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'].includes(obj.type);
 }
 
-// Centralized function to fetch questions - DYNAMIC DB-BASED
+// Centralized function to fetch questions
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic } = params;
 
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
-        let items: (Question | ActivityItem)[] = [];
-        
-        // Önce soru bankasından çekmeyi dene (dataType: 'questions')
-        const questionResult = await getStaticQuestionsForGame({ topicId });
-        if(questionResult && questionResult.length > 0) {
-            items = questionResult.map(q => ({...q, source: 'questions'} as any));
-        }
+        try {
+            const questions = await getStaticQuestionsForGame({ topicId });
 
-        // Eğer soru bulunamazsa veya oyunlar için özel veri gerekiyorsa, etkinlik verilerinden çekmeyi dene
-        if (items.length === 0 || questionTypes?.some(qt => ['concept', 'definition', 'sentence'].includes(qt))) {
-            const activityResult = await getStaticQuestionsForGame({ topicId, dataType: 'activities' });
-             if (activityResult && activityResult.length > 0) {
-                // Sadece etkinlik verileriyle ilgili olanları ekle, diğerlerini koru
-                const activityItems = activityResult.map(q => ({...q, source: 'activities'} as any));
-                items = [...items.filter(item => item.source !== 'activities'), ...activityItems];
+            const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
+
+            let filteredItems = questions;
+
+            if (difficulty && difficulty.length > 0) {
+                filteredItems = filteredItems.filter(item => isQuestion(item) && difficulty.includes(item.difficulty));
             }
+            
+            if (mappedTypes && mappedTypes.length > 0) {
+                filteredItems = filteredItems.filter(item => {
+                    if (isQuestion(item)) {
+                        return mappedTypes.includes(item.type);
+                    }
+                    return false; // ActivityItem'lar bu aşamada filtrelenir
+                });
+            }
+
+            const shuffled = filteredItems.sort(() => 0.5 - Math.random());
+            const selectedItems = shuffled.slice(0, questionCount);
+
+            return { questions: JSON.parse(JSON.stringify(selectedItems)) };
+        } catch (e: any) {
+            console.error("Error in static question retrieval:", e);
+            return { questions: [], error: e.message };
         }
-
-        const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
-
-        let filteredItems = items;
-
-        if (difficulty && difficulty.length > 0) {
-            filteredItems = filteredItems.filter(item => isQuestion(item) && difficulty.includes(item.difficulty));
-        }
-        
-        if (mappedTypes && mappedTypes.length > 0) {
-            filteredItems = filteredItems.filter(item => {
-                 if (isQuestion(item)) {
-                     return mappedTypes.includes(item.type);
-                 } else if ('type' in item) { // ActivityItem
-                     return mappedTypes.includes(item.type);
-                 }
-                 return false;
-            });
-        }
-
-        const shuffled = filteredItems.sort(() => 0.5 - Math.random());
-        const selectedItems = shuffled.slice(0, questionCount);
-
-        return { questions: JSON.parse(JSON.stringify(selectedItems)) };
     }
     
     // --- DYNAMIC DB LOGIC ---
@@ -130,11 +118,9 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
  * It will try to fetch from a topic-specific file first, then fall back.
  */
 export async function getStaticQuestionsForGame(params: {
-  courseId?: string;
-  unitId?: string;
   topicId?: string;
   dataType?: 'questions' | 'activities';
-}): Promise<(Question | ActivityItem)[]> {
+}): Promise<Question[]> {
     const { topicId, dataType = 'questions' } = params;
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
@@ -149,17 +135,14 @@ export async function getStaticQuestionsForGame(params: {
         }
     };
     
-    // Determine directory based on dataType
-    const dataDir = dataType; // Directly use 'questions' or 'activities'
+    const dataDir = dataType;
     const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataDir);
 
     if (topicId && topicId !== 'all') {
         const topicPath = path.join(baseDir, `${topicId}.json`);
         const topicData = await readJsonFile(topicPath);
-        if (topicData) return topicData;
+        if (topicData) return topicData as Question[];
     }
 
-    // Fallback or broader searches can be added here if needed,
-    // for now, we just return empty if the specific file isn't found.
     return [];
 }

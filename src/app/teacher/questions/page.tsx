@@ -184,7 +184,7 @@ export default function ExamQuestionBankPage() {
     setIsLoading(true);
     try {
       const [questionsQuerySnapshot, classesSnapshot, coursesSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "questions"))), // Corrected collection name
+        getDocs(query(collection(db, "questions"))),
         getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
         getDocs(collection(db, "courses"))
       ]);
@@ -319,7 +319,7 @@ export default function ExamQuestionBankPage() {
     } else if (selection.courseId && selection.courseId !== 'all') {
         tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
     } else if (selection.classId && selection.classId !== 'all') {
-        const courseIdsInClass = new Set(allData.courses.filter(c => c.classId === selection.classId).map(c => c.id));
+        const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
         tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
     }
 
@@ -350,7 +350,7 @@ export default function ExamQuestionBankPage() {
         }
     });
 
-  }, [allData, selection, searchTerm, selectedQuestionTypes, selectedDifficulties, sortBy]);
+  }, [allData.questions, selection, searchTerm, selectedQuestionTypes, selectedDifficulties, filteredCourses, sortBy]);
   
   useEffect(() => {
     setCurrentPage(1);
