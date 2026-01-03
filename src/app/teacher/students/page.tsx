@@ -37,7 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { getStudentData, saveUser, bulkAddStudents } from "./actions";
+import { getStudentData, saveUser, bulkAddStudents, updateStudentClass } from "./actions";
 
 
 // Types
@@ -428,7 +428,7 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
+                          <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
                             <Table>
                                 <TableHeader className="bg-slate-900/80">
                                     <TableRow className="border-white/5 hover:bg-transparent">
@@ -513,14 +513,14 @@ export default function StudentsPage() {
                       
                       <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
                           <TabsContent value="single" className="mt-0">
-                            <form onSubmit={e => { e.preventDefault(); handleOpenDialog(null); }} className="flex gap-4 items-end">
+                            <div className="flex gap-4 items-end">
                               <div className="flex-1 space-y-2">
                                   <Label className="text-slate-300">Yeni Öğrenci Bilgileri</Label>
-                                  <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 w-full justify-start">
+                                  <Button onClick={() => handleOpenDialog(null)} size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20 w-full justify-start">
                                       <UserPlus className="mr-2 h-5 w-5"/> Manuel Olarak Yeni Öğrenci Ekle
                                   </Button>
                               </div>
-                            </form>
+                            </div>
                           </TabsContent>
 
                           <TabsContent value="bulk" className="mt-0 space-y-4">

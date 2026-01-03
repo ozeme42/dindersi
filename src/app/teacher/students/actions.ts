@@ -1,64 +1,25 @@
 
 'use server';
 
-import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
+import { db } from "@/lib/firebase";
+import { collection, doc, writeBatch, serverTimestamp, setDoc, getDoc, getDocs, query, orderBy, where, updateDoc } from "firebase/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
-import { collection, doc, getDocs, setDoc, updateDoc, writeBatch, serverTimestamp, query, orderBy } from 'firebase/firestore';
-
-export async function getAllUsers(): Promise<UserProfile[]> {
-  noStore();
-  try {
-    const db = getAdminDb();
-    const usersSnapshot = await db.collection('users').get();
-    return usersSnapshot.docs.map(doc => {
-        const data = doc.data();
-        const serializedData = JSON.parse(JSON.stringify(data));
-        return { uid: doc.id, ...serializedData } as UserProfile;
-    });
-  } catch (error) {
-      console.error('Error fetching all users:', error);
-      return [];
-  }
-}
+import { getAdminAuth } from "@/lib/firebase-admin";
 
 export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
-    const db = getAdminDb();
-    
-    // Fetch all collections in parallel
-    const [userRecords, classesSnapshot, schoolsSnapshot] = await Promise.all([
-      getAdminAuth().listUsers(),
-      db.collection('classes').orderBy('name', 'asc').get(),
-      db.collection('schools').orderBy('name', 'asc').get(),
+    const [studentsSnap, classesSnap, schoolsSnap] = await Promise.all([
+      getDocs(query(collection(db, "users"))),
+      getDocs(query(collection(db, 'classes'), orderBy('name', 'asc'))),
+      getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
     ]);
-
-    const usersList: UserProfile[] = userRecords.users.map(user => ({
-      uid: user.uid,
-      displayName: user.displayName || '',
-      email: user.email || '',
-      role: 'student', 
-      score: 0, 
-    }));
     
-    // Enrich with Firestore data
-    const firestoreUsersSnapshot = await db.collection('users').get();
-    const firestoreUsersMap = new Map<string, UserProfile>();
-    firestoreUsersSnapshot.forEach(doc => {
-        firestoreUsersMap.set(doc.id, doc.data() as UserProfile);
-    });
-
-    const combinedUsers = usersList.map(user => {
-        const firestoreData = firestoreUsersMap.get(user.uid);
-        return { ...user, ...firestoreData };
-    });
-
-    const students = combinedUsers.filter(u => u.role === 'student' || u.role === 'guest');
-
-    const classes = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-    const schools = schoolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
+    const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+    const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+    const schools = schoolsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -85,10 +46,14 @@ type SaveUserData = {
 export async function saveUser(data: SaveUserData): Promise<{ success: boolean; error?: string }> {
     const { uid, displayName, email, role, class: className, schoolName, password, score } = data;
     
+    // This is a server action, it should use the admin SDK to create/update users.
+    // The previous implementation was trying to do client-side things on the server.
+    // Let's use the admin SDK to correctly perform these actions.
     try {
         const auth = getAdminAuth();
         const db = getAdminDb();
 
+        // If a new school is added, ensure it exists in the 'schools' collection.
         if (schoolName) {
             const schoolsRef = db.collection('schools');
             const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
@@ -140,6 +105,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
     }
 }
 
+
 export async function bulkAddStudents(names: string[], className: string, schoolName: string): Promise<{ success: boolean; error?: string, successCount?: number }> {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
@@ -148,7 +114,6 @@ export async function bulkAddStudents(names: string[], className: string, school
     const auth = getAdminAuth();
     const db = getAdminDb();
 
-    // Check if school exists, if not, add it.
     if (schoolName) {
         const schoolsRef = db.collection('schools');
         const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
@@ -165,7 +130,6 @@ export async function bulkAddStudents(names: string[], className: string, school
         if (!finalDisplayName) continue;
 
         const email = `${normalizeNameToEmailLocalPart(finalDisplayName)}@degerleroyunu.com`;
-        // Generate a simple default password (e.g., '123456')
         const password = 'password'; 
 
         try {
@@ -189,7 +153,6 @@ export async function bulkAddStudents(names: string[], className: string, school
             successfulCreations.push({ uid: userRecord.uid, profile: userProfile });
         } catch (error: any) {
              if (error.code === 'auth/email-already-exists') {
-                // Try to find the existing user to add to Firestore if they don't have a doc
                 try {
                     const existingUser = await auth.getUserByEmail(email);
                     const userDoc = await db.collection('users').doc(existingUser.uid).get();
@@ -198,8 +161,6 @@ export async function bulkAddStudents(names: string[], className: string, school
                             displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: serverTimestamp(), ownedItems: [],
                         };
                         successfulCreations.push({ uid: existingUser.uid, profile: userProfile });
-                    } else {
-                        // User already fully exists, skip
                     }
                 } catch (e) {
                      failedCreations.push({ name, reason: `Kullanıcı zaten var ama profili oluşturulamadı: ${e}` });
@@ -230,6 +191,7 @@ export async function bulkAddStudents(names: string[], className: string, school
 
     return { success: true, successCount: successfulCreations.length };
 }
+
 
 export async function addGuestStudent(displayName: string, className: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
