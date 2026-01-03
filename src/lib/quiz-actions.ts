@@ -126,13 +126,13 @@ export async function getStaticQuestionsForGame(params: {
 }): Promise<(Question | ActivityItem)[]> {
     const { topicId, unitId, courseId, dataType = 'questions' } = params;
     const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataType);
+    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
         try {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
-            // ENOENT means file not found, which is okay, we'll try the next fallback.
             if (e.code !== 'ENOENT') {
                 console.error(`Error reading or parsing ${filePath}:`, e);
             }
@@ -140,25 +140,56 @@ export async function getStaticQuestionsForGame(params: {
         }
     };
     
-    // 1. Attempt to fetch by specific topicId
+    // 1. Specific Topic ID
     if (topicId && topicId !== 'all') {
-        const topicPath = path.join(baseDir, `${topicId}.json`);
-        const topicData = await readJsonFile(topicPath);
-        if (topicData) return topicData as Question[];
+        const data = await readJsonFile(path.join(baseDir, `${topicId}.json`));
+        return data || [];
     }
 
-    // 2. Fallback: If topicId is 'all' or file not found, fetch all questions under the unit
-    if (unitId && unitId !== 'all') {
-        // This requires a manifest or a way to know which topics belong to a unit.
-        // A better static build would create unit_{unitId}.json files.
-        // For now, we assume this logic is handled by getQuestionCounts.
-    }
+    // --- HIERARCHICAL FETCHING LOGIC FOR 'ALL' ---
+    try {
+        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+        const manifest = JSON.parse(manifestContent);
+        
+        let targetTopics: any[] = [];
 
-    // 3. Fallback: Fetch all for the course
-    if (courseId && courseId !== 'all') {
-        // Similar limitation.
+        // Find the right scope from the manifest
+        if (unitId && unitId !== 'all') {
+            // Find all topics within a specific unit
+             for (const group of manifest.classGroups) {
+                for (const course of group.courses) {
+                    const foundUnit = course.units.find((u: any) => u.id === unitId);
+                    if (foundUnit) {
+                        targetTopics = foundUnit.topics;
+                        break;
+                    }
+                }
+                if (targetTopics.length > 0) break;
+            }
+        } else if (courseId && courseId !== 'all') {
+            // Find all topics within a specific course
+             for (const group of manifest.classGroups) {
+                const foundCourse = group.courses.find((c: any) => c.id === courseId);
+                if (foundCourse) {
+                    targetTopics = foundCourse.units.flatMap((u: any) => u.topics);
+                    break;
+                }
+             }
+        }
+        
+        if (targetTopics.length > 0) {
+            // Fetch content for all found topics and flatten them
+            const allTopicContents = await Promise.all(
+                targetTopics.map(topic => readJsonFile(path.join(baseDir, `${topic.id}.json`)))
+            );
+            return allTopicContents.flat().filter(Boolean) as (Question | ActivityItem)[];
+        }
+    } catch (e) {
+        console.error("Manifest could not be read. Cannot perform 'all' lookup.", e);
+        return [];
     }
-
-    // If we reach here, it means no specific file was found or applicable.
+    
+    // If no specific hierarchy matched, it means something went wrong or no filter was provided that we can use.
+    // Return empty to avoid loading all data from all files.
     return [];
 }
