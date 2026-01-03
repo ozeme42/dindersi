@@ -4,13 +4,13 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
     Crown, Award, Trophy, Users, List, Flame, Search, 
-    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2, BookOpenCheck, LogIn
+    Calendar, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Medal, Star, Sparkles, Loader2, BookOpenCheck, LogIn, School
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
 import Link from 'next/link';
-import { getHallOfFameData, getLiveLeaderboard, getGradeLeaderboard, getBranchLeaderboard, HallOfFamePeriod, ClassLeaderboardEntry } from './actions';
+import { getHallOfFameData, getLiveLeaderboard, getGradeLeaderboard, getBranchLeaderboard, getSchoolLeaderboard, HallOfFamePeriod, ClassLeaderboardEntry } from './actions';
 import type { UserProfile } from "@/lib/types";
 import { UserAvatar } from "@/components/user-avatar";
 
@@ -256,13 +256,21 @@ function CurrentLeaderboardTab() {
 
 // 2. CLASS LEADERBOARD
 function ClassLeaderboardTab() {
-    const [view, setView] = useState<'grade' | 'branch'>('grade');
+    const [view, setView] = useState<'grade' | 'branch' | 'school'>('school');
     const [leaderboard, setLeaderboard] = useState<ClassLeaderboardEntry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
-        const fetcher = view === 'grade' ? getGradeLeaderboard : getBranchLeaderboard;
+        let fetcher;
+        if (view === 'grade') {
+            fetcher = getGradeLeaderboard;
+        } else if (view === 'branch') {
+            fetcher = getBranchLeaderboard;
+        } else {
+            fetcher = getSchoolLeaderboard;
+        }
+
         fetcher().then(data => {
             setLeaderboard(data);
             setIsLoading(false);
@@ -273,6 +281,7 @@ function ClassLeaderboardTab() {
         <div className="animate-in fade-in slide-in-from-right-8 duration-500">
             <div className="flex justify-center mb-6">
                 <div className="flex p-1 rounded-xl bg-black/30 border border-white/10">
+                    <button onClick={() => setView('school')} className={cn("px-4 py-2 rounded-lg text-sm font-semibold", view === 'school' ? 'bg-indigo-600 text-white' : 'text-slate-400')}>Okul Ligi</button>
                     <button onClick={() => setView('grade')} className={cn("px-4 py-2 rounded-lg text-sm font-semibold", view === 'grade' ? 'bg-indigo-600 text-white' : 'text-slate-400')}>Sınıf Düzeyi</button>
                     <button onClick={() => setView('branch')} className={cn("px-4 py-2 rounded-lg text-sm font-semibold", view === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400')}>Şube Bazında</button>
                 </div>
@@ -284,7 +293,7 @@ function ClassLeaderboardTab() {
              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {leaderboard.map((cls, index) => (
-                        <div key={cls.className} className="relative overflow-hidden bg-gradient-to-br from-indigo-900/40 to-slate-900/40 border border-white/10 p-6 rounded-2xl group hover:border-indigo-500/50 transition-all">
+                        <div key={cls.name} className="relative overflow-hidden bg-gradient-to-br from-indigo-900/40 to-slate-900/40 border border-white/10 p-6 rounded-2xl group hover:border-indigo-500/50 transition-all">
                             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                                 <Users className="h-24 w-24 text-indigo-400" />
                             </div>
@@ -298,8 +307,8 @@ function ClassLeaderboardTab() {
                                 </div>
                             </div>
 
-                            <h3 className="text-3xl font-black text-white mb-1 relative z-10">{cls.className}</h3>
-                            <p className="text-indigo-200/60 text-sm mb-4 relative z-10">Sınıf Toplam Puanı</p>
+                            <h3 className="text-3xl font-black text-white mb-1 relative z-10">{cls.name}</h3>
+                            <p className="text-indigo-200/60 text-sm mb-4 relative z-10">Toplam Puan</p>
                             
                             <div className="flex items-end gap-2 relative z-10">
                                 <div className="text-4xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-white">
@@ -507,8 +516,8 @@ export default function LeaderboardPage() {
                             )}
                         >
                             <Users className="h-4 w-4" />
-                            <span className="hidden sm:inline">Sınıf Ligi</span>
-                            <span className="sm:hidden">Sınıflar</span>
+                            <span className="hidden sm:inline">Sınıf & Okul Ligi</span>
+                            <span className="sm:hidden">Ligler</span>
                         </button>
                         <button
                             onClick={() => setActiveTab("hall-of-fame")}
@@ -537,3 +546,5 @@ export default function LeaderboardPage() {
         </div>
     );
 }
+
+    

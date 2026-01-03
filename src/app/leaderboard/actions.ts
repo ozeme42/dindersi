@@ -332,10 +332,48 @@ export async function getHallOfFameData(): Promise<{ daily: HallOfFamePeriod[], 
 }
 
 export type ClassLeaderboardEntry = {
-    className: string;
+    name: string;
     totalScore: number;
     studentCount: number;
 };
+
+export async function getSchoolLeaderboard(): Promise<ClassLeaderboardEntry[]> {
+    noStore();
+    try {
+        const studentsQuery = query(collection(db, 'users'), where("role", "==", "student"));
+        const studentsSnapshot = await getDocs(studentsQuery);
+        
+        const scoresBySchool: Record<string, { totalScore: number, studentCount: number }> = {};
+
+        studentsSnapshot.forEach(doc => {
+            const student = doc.data() as UserProfile;
+            const schoolName = student.schoolName;
+
+            if (schoolName) {
+                if (!scoresBySchool[schoolName]) {
+                    scoresBySchool[schoolName] = { totalScore: 0, studentCount: 0 };
+                }
+                scoresBySchool[schoolName].totalScore += (student.score || 0);
+                scoresBySchool[schoolName].studentCount += 1;
+            }
+        });
+
+        const schoolLeaderboard = Object.entries(scoresBySchool)
+            .map(([schoolName, data]) => ({
+                name: schoolName,
+                totalScore: data.totalScore,
+                studentCount: data.studentCount,
+            }))
+            .sort((a, b) => b.totalScore - a.totalScore);
+        
+        return JSON.parse(JSON.stringify(schoolLeaderboard));
+
+    } catch (error) {
+        console.error("Error fetching school leaderboard:", error);
+        return [];
+    }
+}
+
 
 export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
     noStore();
@@ -360,7 +398,7 @@ export async function getGradeLeaderboard(): Promise<ClassLeaderboardEntry[]> {
 
         const classLeaderboard = Object.entries(scoresByClass)
             .map(([className, data]) => ({
-                className: `${className}. Sınıflar`,
+                name: `${className}. Sınıflar`,
                 totalScore: data.totalScore,
                 studentCount: data.studentCount,
             }))
@@ -397,7 +435,7 @@ export async function getBranchLeaderboard(): Promise<ClassLeaderboardEntry[]> {
 
         const branchLeaderboard = Object.entries(scoresByBranch)
             .map(([className, data]) => ({
-                className: className,
+                name: className,
                 totalScore: data.totalScore,
                 studentCount: data.studentCount,
             }))
@@ -452,3 +490,5 @@ export async function deleteAnnouncement(id: string): Promise<{ success: boolean
         return { success: false, error: "Duyuru silinemedi." };
     }
 }
+
+    
