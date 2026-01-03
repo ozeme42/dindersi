@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -23,23 +22,26 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     
     const schoolMap = new Map<string, School>();
 
+    // 1. Add schools from the 'schools' collection
     schoolsSnap.docs.forEach(doc => {
         const schoolData = { id: doc.id, ...doc.data() } as School;
         const trimmedName = schoolData.name?.trim();
-        if (schoolData.id && trimmedName) {
+        if (schoolData.id && trimmedName) { // Ensure both id and name are valid
             schoolMap.set(trimmedName.toLowerCase(), schoolData);
         }
     });
 
+    // 2. Add schools from user profiles only if they don't already exist in the map
     students.forEach(student => {
         const trimmedSchoolName = student.schoolName?.trim();
+        // Ensure schoolName is a non-empty string before processing
         if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
              schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
         }
     });
 
     const combinedSchools = Array.from(schoolMap.values())
-        .filter(s => s && s.id && s.name) // Ensure no invalid entries
+        .filter(s => s && s.id && s.name) // Final defensive filter
         .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 

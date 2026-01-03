@@ -68,12 +68,14 @@ export default function RegisterPage() {
             usersSnapshot.docs.forEach(doc => {
                 const user = doc.data() as UserProfile;
                 const trimmedSchoolName = user.schoolName?.trim();
+                // Ensure schoolName is a non-empty string before processing
                 if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
                     schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
                 }
             });
 
             const combinedSchools = Array.from(schoolMap.values())
+              .filter(s => s && s.id && s.name) // Defensive filter for any invalid data
               .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
             setSchools(combinedSchools);
 
@@ -224,7 +226,7 @@ export default function RegisterPage() {
                                 <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
                             ) : (
                                 <>
-                                    {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    {schools.filter(s => s && s.id && s.name).map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                     <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                 </>
                             )}
@@ -257,5 +259,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    
