@@ -398,7 +398,7 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-             if(list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+             if(list.length > 0 && list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
              list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
@@ -490,7 +490,7 @@ export default function StudentsPage() {
                     <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
                         <UserPlus className="mr-2 h-4 w-4"/> Yeni Ekle
                     </TabsTrigger>
-                    <TabsTrigger value="guest" className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
+                    <TabsTrigger value="guest" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
                         <UserCog className="mr-2 h-4 w-4"/> Sanal Öğrenciler
                     </TabsTrigger>
                 </TabsList>
@@ -589,62 +589,75 @@ export default function StudentsPage() {
                  </Card>
             </TabsContent>
           
-          <TabsContent value="add" className="outline-none space-y-6">
+            <TabsContent value="add" className="outline-none">
               <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                 <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
                             <UserPlus className="h-6 w-6 text-emerald-400" />
                         </div>
-                        <CardTitle className="text-2xl text-white">Toplu Öğrenci Ekle</CardTitle>
+                        <CardTitle className="text-2xl text-white">Öğrenci Ekle</CardTitle>
                     </div>
-                    <CardDescription className="text-slate-400 text-base">Öğrencileri listelerini yapıştırarak sisteme hızlıca kaydedin. Her öğrenciye varsayılan bir şifre atanacaktır.</CardDescription>
+                    <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8">
-                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div className="space-y-1">
-                            <Label className="text-slate-300 text-xs">Sınıf</Label>
-                            <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-1">
-                            <Label className="text-slate-300 text-xs">Şube</Label>
-                            <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-1">
-                            <Label htmlFor="bulk-school">Okul</Label>
-                            <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
-                                <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                    <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        {bulkSchoolId === 'new' && (
-                            <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
-                                <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
-                                <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
+                    <Tabs defaultValue="single" className="w-full">
+                         <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex mb-6">
+                            <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
+                            <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
+                         </TabsList>
+                         <TabsContent value="single" className="mt-0">
+                             <Button onClick={() => handleOpenDialog(null)} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+                                <UserPlus className="mr-2 h-5 w-5"/> Yeni Öğrenci Formunu Aç
+                            </Button>
+                         </TabsContent>
+                         <TabsContent value="bulk" className="mt-0 space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="space-y-1">
+                                    <Label className="text-slate-300 text-xs">Sınıf</Label>
+                                    <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
+                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-1">
+                                    <Label className="text-slate-300 text-xs">Şube</Label>
+                                    <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
+                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                            {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-1">
+                                    <Label htmlFor="bulk-school">Okul</Label>
+                                    <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
+                                        <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                            {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                            <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                {bulkSchoolId === 'new' && (
+                                    <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
+                                        <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
+                                        <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
 
-                    <div className="bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                        <Label className="text-slate-300">Öğrenci Listesi</Label>
-                        <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50 mt-2" />
-                    </div>
-                    <div className="flex justify-end mt-6">
-                        <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || !bulkSchoolId || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
-                            {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
-                        </Button>
-                    </div>
+                            <div className="bg-slate-950/50 p-6 rounded-2xl border border-white/5">
+                                <Label className="text-slate-300">Öğrenci Listesi</Label>
+                                <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50 mt-2" />
+                            </div>
+                            <div className="flex justify-end mt-6">
+                                <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || !bulkSchoolId || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
+                                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
+                                </Button>
+                            </div>
+                         </TabsContent>
+                    </Tabs>
                 </CardContent>
               </Card>
           </TabsContent>
