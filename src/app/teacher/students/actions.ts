@@ -20,34 +20,15 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const students = studentsSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    const schoolMap = new Map<string, School>();
-
-    // 1. Add schools from the 'schools' collection
-    schoolsSnap.docs.forEach(doc => {
-        const schoolData = { id: doc.id, ...doc.data() } as School;
-        const trimmedName = schoolData.name?.trim();
-        if (schoolData.id && trimmedName) { // Ensure both id and name are valid
-            schoolMap.set(trimmedName.toLowerCase(), schoolData);
-        }
-    });
-
-    // 2. Add schools from user profiles only if they don't already exist in the map
-    students.forEach(student => {
-        const trimmedSchoolName = student.schoolName?.trim();
-        // Ensure schoolName is a non-empty string before processing
-        if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
-             schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
-        }
-    });
-
-    const combinedSchools = Array.from(schoolMap.values())
-        .filter(s => s && s.id && s.name) // Final defensive filter
-        .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    // SIMPLIFIED AND SAFE SCHOOL FETCHING
+    const schoolsData = schoolsSnap.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as School))
+        .filter(school => school.id && school.name && school.name.trim()); // Ensure valid data
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
         classes: JSON.parse(JSON.stringify(classes)),
-        schools: JSON.parse(JSON.stringify(combinedSchools)),
+        schools: JSON.parse(JSON.stringify(schoolsData)),
     };
   } catch (error) {
     console.error('Error fetching student data:', error);
