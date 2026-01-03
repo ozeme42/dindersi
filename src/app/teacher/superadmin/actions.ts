@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -199,7 +198,7 @@ export async function exportAllData(
         
         if (course) {
             newItem.courseName = course.title;
-            const className = classesMap.get(course.classId);
+            const className = classesMap.get(course.classId || '')
             if(className) {
                 newItem.className = className;
             }

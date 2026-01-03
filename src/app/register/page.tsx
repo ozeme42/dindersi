@@ -96,7 +96,8 @@ export default function RegisterPage() {
     try {
         let finalSchoolName = '';
         if (selectedSchoolId === 'new') {
-            finalSchoolName = newSchoolName.trim();
+            // Capitalize each word for new school name
+            finalSchoolName = newSchoolName.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
             if (!schools.some(s => s.name.toLowerCase() === finalSchoolName.toLowerCase())) {
                  await addDoc(collection(db, "schools"), { name: finalSchoolName });
             }
@@ -111,7 +112,7 @@ export default function RegisterPage() {
             uid: user.uid,
             displayName,
             email,
-            role: 'student',
+            role: 'pending', // Set role to 'pending' for approval
             class: `${selectedClass?.name} - ${selectedBranch}`,
             schoolName: finalSchoolName,
             score: 0,
@@ -121,7 +122,7 @@ export default function RegisterPage() {
 
         await setDoc(doc(db, "users", user.uid), userProfile);
         
-        toast({ title: "Kayıt Başarılı!", description: "Hesabınız oluşturuldu. Giriş sayfasına yönlendiriliyorsunuz..." });
+        toast({ title: "Kayıt Başarılı!", description: "Hesabınız oluşturuldu. Öğretmeninizin onayı sonrası giriş yapabilirsiniz." });
         router.push('/login');
 
     } catch (error: any) {
@@ -213,7 +214,8 @@ export default function RegisterPage() {
                 {selectedSchoolId === 'new' && (
                     <div className="space-y-2 group animate-in slide-in-from-top-2">
                         <Label htmlFor="new-school-name">Yeni Okul Adı</Label>
-                        <Input id="new-school-name" name="new-school-name" value={newSchoolName} onChange={e => setNewSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-black/20 border-white/10 text-white h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500"/>
+                        <Input id="new-school-name" name="new-school-name" value={newSchoolName} onChange={e => setNewSchoolName(e.target.value)} placeholder="Örn: Yunus Emre Ortaokulu" className="bg-black/20 border-white/10 text-white h-12 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500"/>
+                        <p className="text-xs text-indigo-300/60 px-2">Lütfen okul adının her kelimesinin baş harfini büyük yazın.</p>
                     </div>
                 )}
 

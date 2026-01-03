@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn } from 'lucide-react';
+import { Loader2, Info, Gamepad2, User, Lock, ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -34,6 +34,7 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [loginAttemptFailed, setLoginAttemptFailed] = useState(false);
+  const [pendingApproval, setPendingApproval] = useState(false);
 
   // If in static mode, redirect to home immediately.
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setLoginAttemptFailed(false);
+    setPendingApproval(false);
 
     const formData = new FormData(e.currentTarget);
     const displayNameInput = (formData.get('display-name') as string).trim();
@@ -70,6 +72,12 @@ export default function LoginPage() {
 
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data() as UserProfile;
+        
+        if (userData.role === 'pending') {
+            setPendingApproval(true);
+            setIsLoading(false);
+            return;
+        }
 
         if (!userData.email) {
             toast({ title: "Giriş Hatası", description: "Bu kullanıcı için bir e-posta adresi kayıtlı değil.", variant: "destructive" });
@@ -133,7 +141,7 @@ export default function LoginPage() {
 
         <GlassCard className="p-8">
             
-            {/* ALERT BOX */}
+            {/* ALERT BOXES */}
             {loginAttemptFailed && (
                 <div className="mb-6 bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3 animate-in slide-in-from-top-2">
                     <Info className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
@@ -145,6 +153,18 @@ export default function LoginPage() {
                     </div>
                 </div>
             )}
+             {pendingApproval && (
+                <div className="mb-6 bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 flex items-start gap-3 animate-in slide-in-from-top-2">
+                    <Info className="h-5 w-5 text-yellow-400 shrink-0 mt-0.5" />
+                    <div>
+                        <h4 className="font-bold text-yellow-300 text-sm">Onay Bekleniyor</h4>
+                        <p className="text-xs text-yellow-200/70 mt-1">
+                           Hesabınız henüz öğretmeniniz tarafından onaylanmamış. Lütfen daha sonra tekrar deneyin.
+                        </p>
+                    </div>
+                </div>
+            )}
+
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 
@@ -193,6 +213,14 @@ export default function LoginPage() {
                         </>
                     )}
                 </Button>
+                
+                 <div className="text-center pt-2">
+                    <Button variant="link" asChild className="text-cyan-300 hover:text-white transition-colors text-sm">
+                        <Link href="/register">
+                            Hesabın yok mu? <UserPlus className="ml-2 h-4 w-4"/> Kayıt Ol
+                        </Link>
+                    </Button>
+                </div>
 
                 {/* BACK LINK */}
                 <div className="pt-2 text-center">

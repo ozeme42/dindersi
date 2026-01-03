@@ -5,7 +5,7 @@ export type UserProfile = {
     username?: string; // Unique username for login
     displayName: string;
     email: string;
-    role: 'student' | 'teacher' | 'superadmin' | 'guest';
+    role: 'student' | 'teacher' | 'superadmin' | 'guest' | 'pending';
     class?: string; // e.g. "5/A" or "Yaz Okulu Havuzu"
     schoolName?: string; // e.g. "Değerler Okulu"
     studentNumber?: string; // Add student number

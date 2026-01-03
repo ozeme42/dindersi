@@ -1,5 +1,4 @@
 
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -206,14 +205,16 @@ export async function bulkAddStudents(names: string[], className: string, school
     return { success: true, successCount: successfulCreations.length };
 }
 
-
-export async function getAllUsers(): Promise<UserProfile[]> {
-  noStore();
-  try {
-    const usersSnap = await getDocs(query(collection(db, "users")));
-    return usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-  } catch (error) {
-    console.error('Error fetching all users:', error);
-    return [];
-  }
+export async function approveStudent(uid: string): Promise<{ success: boolean; error?: string }> {
+    if (!uid) {
+        return { success: false, error: 'Kullanıcı ID\'si eksik.' };
+    }
+    try {
+        const userDocRef = doc(db, 'users', uid);
+        await updateDoc(userDocRef, { role: 'student' });
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error approving student:", error);
+        return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
+    }
 }
