@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -37,7 +38,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { getStudentData, saveUser, bulkAddStudents, updateStudentClass } from "./actions";
+import { getStudentData, saveUser, bulkAddStudents } from "./actions";
 
 
 // Types
@@ -72,50 +73,35 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
-                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Okul</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {students.length > 0 ? students.map((student) => {
-                        const [currentClassName, currentBranch] = student.class?.split(' - ') || ['', ''];
-                        const studentClass = allClasses.find(c => c.name === currentClassName);
-
-                        return (
+                    {students.length > 0 ? students.map((student) => (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
-                            <TableCell>
+                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-slate-800 rounded-full border border-white/10 group-hover:border-purple-400 transition-colors">
-                                        <UserCog className="h-6 w-6 text-purple-400" />
-                                    </div>
+                                    <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700 group-hover:border-purple-400 transition-colors"/>
                                     <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
                             <TableCell>
-                                {studentClass && studentClass.branches ? (
-                                     <Select 
-                                         value={currentBranch || ''}
-                                         onValueChange={(newBranch) => {
-                                             if (newBranch) {
-                                                 onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
-                                             }
-                                         }}
-                                     >
-                                         <SelectTrigger className="w-40 bg-slate-950 border-white/10 text-white h-9 text-xs focus:border-indigo-500/50">
-                                             <SelectValue />
-                                         </SelectTrigger>
-                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                             {studentClass.branches.map(b => (
-                                                 <SelectItem key={b} value={b}>{b}</SelectItem>
-                                             ))}
-                                         </SelectContent>
-                                     </Select>
-                                ) : (
-                                     <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
-                                        {student.class || 'Sınıfsız'}
-                                     </Badge>
-                                )}
+                                <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">{student.schoolName || '-'}</Badge>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
+                                    {student.class || 'Sınıfsız'}
+                                </Badge>
+                            </TableCell>
+                             <TableCell>
+                                <span className="font-bold text-lg text-amber-400 flex items-center gap-1.5">
+                                    <DollarSign className="w-4 h-4 text-amber-600"/>
+                                    {student.score || 0}
+                                </span>
                             </TableCell>
                             <TableCell className="text-right">
                                  <DropdownMenu>
@@ -125,39 +111,20 @@ function StudentTable({
                                          </Button>
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                         <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
-                                         <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                             <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
-                                         </DropdownMenuItem>
-                                         <AlertDialog>
-                                             <AlertDialogTrigger asChild>
-                                                 <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
-                                                     <Trash2 className="mr-2 h-4 w-4" /> Sil
-                                                 </div>
-                                             </AlertDialogTrigger>
-                                             <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                                 <AlertDialogHeader>
-                                                     <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
-                                                     <AlertDialogDescription className="text-slate-400">
-                                                         "{student.displayName}" adlı sanal öğrenci kalıcı olarak silinecektir.
-                                                     </AlertDialogDescription>
-                                                 </AlertDialogHeader>
-                                                 <AlertDialogFooter>
-                                                     <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                                     <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white">
-                                                         Evet, Sil
-                                                     </AlertDialogAction>
-                                                 </AlertDialogFooter>
-                                             </AlertDialogContent>
-                                         </AlertDialog>
+                                        <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)}>
+                                            <Send className="mr-2 h-4 w-4" /> Detaylar
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleOpenDialog(student)}><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleDeleteUser(student.uid)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10">
+                                            <Trash2 className="mr-2 h-4 w-4"/> Sil
+                                        </DropdownMenuItem>
                                      </DropdownMenuContent>
                                  </DropdownMenu>
                             </TableCell>
                         </TableRow>
-                        )
-                    }) : (
+                    )) : (
                         <TableRow>
-                            <TableCell colSpan={3} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -194,6 +161,7 @@ const UserEditorSchema = z.object({
 });
 
 export default function StudentsPage() {
+  const router = useRouter();
   const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
