@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -198,7 +199,8 @@ export async function exportAllData(
         let relevantCourseIds: string[] = [];
         let relevantUnitIds: string[] = [];
         let relevantTopicIds: string[] = [];
-    
+
+        // 1. Determine relevant courses
         if (courseId && courseId !== 'all') {
             relevantCourseIds = [courseId];
         } else if (classId && classId !== 'all') {
@@ -208,44 +210,27 @@ export async function exportAllData(
         } else {
             relevantCourseIds = coursesSnap.docs.map(doc => doc.id);
         }
-    
-        const courseUnitMap: { [courseId: string]: string[] } = {};
-        for (const courseDocId of relevantCourseIds) {
-            const courseUnits = unitsSnap.docs
-                .filter(unitDoc => unitDoc.ref.path.startsWith(`courses/${courseDocId}/`))
-                .map(unitDoc => unitDoc.id);
-            courseUnitMap[courseDocId] = courseUnits;
-        }
-    
+
+        // 2. Determine relevant units from courses
+        const unitsFromCourses = unitsSnap.docs
+            .filter(doc => relevantCourseIds.includes(doc.ref.parent.parent!.id))
+            .map(doc => doc.id);
+
         if (unitId && unitId !== 'all') {
             relevantUnitIds = [unitId];
         } else {
-            relevantUnitIds = relevantCourseIds.flatMap(cId => courseUnitMap[cId] || []);
+            relevantUnitIds = unitsFromCourses;
         }
-    
+
+        // 3. Determine relevant topics from units
+         const topicsFromUnits = topicsSnap.docs
+            .filter(doc => relevantUnitIds.includes(doc.ref.parent.parent!.id))
+            .map(doc => doc.id);
+
         if (topicId && topicId !== 'all') {
             relevantTopicIds = [topicId];
-        } else if (relevantUnitIds.length > 0) {
-            const topicIdPromises = relevantCourseIds.flatMap(courseDocId => {
-                const courseUnits = courseUnitMap[courseDocId] || [];
-                return courseUnits
-                    .filter(unitDocId => relevantUnitIds.includes(unitDocId))
-                    .map(unitDocId => 
-                        db.collection(`courses/${courseDocId}/units/${unitDocId}/topics`).get()
-                    );
-            });
-            const topicSnaps = await Promise.all(topicIdPromises);
-            relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
-        } else if (relevantCourseIds.length > 0) {
-            // Case where no unit is selected but course is
-            const topicIdPromises = relevantCourseIds.flatMap(courseDocId => {
-                const courseUnits = courseUnitMap[courseDocId] || [];
-                return courseUnits.map(unitDocId => 
-                    db.collection(`courses/${courseDocId}/units/${unitDocId}/topics`).get()
-                );
-            });
-            const topicSnaps = await Promise.all(topicIdPromises);
-            relevantTopicIds = topicSnaps.flatMap(snap => snap.docs.map(doc => doc.id));
+        } else {
+            relevantTopicIds = topicsFromUnits;
         }
         
         return { relevantCourseIds, relevantUnitIds, relevantTopicIds };
@@ -269,7 +254,12 @@ export async function exportAllData(
             newItem.topicName = topicsMap.get(newItem.topicId)?.title;
         }
         
-        const fieldsToRemove = ['id', 'createdAt', 'classId', 'courseId', 'unitId', 'topicId', 'teacherId', 'topic', 'uid', 'password'];
+        // Add classId to questions and activity items for better filtering
+        if (course && course.classId) {
+            newItem.classId = course.classId;
+        }
+
+        const fieldsToRemove = ['id', 'createdAt', 'teacherId', 'topic', 'uid', 'password'];
         fieldsToRemove.forEach(field => delete newItem[field]);
 
 
@@ -319,6 +309,7 @@ export async function exportAllData(
     const { relevantTopicIds } = await getRelevantIds();
     
     const fetchCollectionByFilter = async (collectionName: string, field: string, ids: string[]) => {
+        // If filters are set but result in no IDs, return empty to avoid fetching all.
         if (ids.length === 0 && (topicId || unitId || courseId || classId)) {
             return [];
         }
@@ -327,6 +318,7 @@ export async function exportAllData(
         let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.collection(collectionName);
         
         if (ids.length > 0) {
+            // Firestore 'in' queries are limited to 30 items per query. 
             const chunks: string[][] = [];
             for (let i = 0; i < ids.length; i += 30) {
                 chunks.push(ids.slice(i, i + 30));
@@ -337,6 +329,7 @@ export async function exportAllData(
                 allItems.push(...items);
             }
         } else {
+            // No filters, fetch everything
             const snapshot = await query.get();
             allItems = snapshot.docs.map(doc => addNamesToItem(serialize({ id: doc.id, ...doc.data() })));
         }
@@ -582,6 +575,7 @@ export async function exportManifestAndContent() {
         await fs.mkdir(path.join(curriculumPath, 'ozetler'), { recursive: true });
         await fs.mkdir(path.join(curriculumPath, 'yazilacaklar'), { recursive: true });
         await fs.mkdir(path.join(curriculumPath, 'flows'), { recursive: true }); // DERS AKIŞI KLASÖRÜ
+        await fs.mkdir(path.join(curriculumPath, 'questions'), { recursive: true }); // SORU BANKASI KLASÖRÜ
 
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
@@ -597,45 +591,49 @@ export async function exportManifestAndContent() {
 }
 
 /**
- * Stage 2: Exports activityItems for games. This can be a heavy operation.
+ * Stage 2: Exports activityItems and questions for games.
  */
 export async function exportActivityData() {
     const db = getAdminDb();
-    const curriculumPath = path.join(process.cwd(), 'public', 'curriculum');
-    const exportPath = path.join(curriculumPath, 'activities');
     const allDocsToWrite: { path: string, content: string }[] = [];
     const CHUNK_SIZE = 100;
+    const curriculumPath = path.join(process.cwd(), 'public', 'curriculum');
 
-    try {
+    const processCollection = async (collectionName: string) => {
+        const exportPath = path.join(curriculumPath, collectionName);
         await fs.mkdir(exportPath, { recursive: true });
 
-        const activitiesSnapshot = await db.collection('activityItems').get();
-        const activitiesByTopic: { [key: string]: any[] } = {};
-        activitiesSnapshot.docs.forEach((doc) => {
+        const snapshot = await db.collection(collectionName).get();
+        const itemsByTopic: { [key: string]: any[] } = {};
+        snapshot.docs.forEach((doc) => {
             const item = serialize({ id: doc.id, ...doc.data() });
             if (item.topicId) {
-                if (!activitiesByTopic[item.topicId]) activitiesByTopic[item.topicId] = [];
-                activitiesByTopic[item.topicId].push(item);
+                if (!itemsByTopic[item.topicId]) itemsByTopic[item.topicId] = [];
+                itemsByTopic[item.topicId].push(item);
             }
         });
         
-        for (const topicId in activitiesByTopic) {
+        for (const topicId in itemsByTopic) {
             allDocsToWrite.push({
                 path: path.join(exportPath, `${topicId}.json`),
-                content: JSON.stringify(activitiesByTopic[topicId])
+                content: JSON.stringify(itemsByTopic[topicId])
             });
         }
-        
+        return Object.keys(itemsByTopic).length;
+    };
+
+    try {
+        const activityCount = await processCollection('activityItems');
+        const questionCount = await processCollection('questions');
+
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
             await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
         }
         
-        return { success: true, message: `${allDocsToWrite.length} konu için oyun verisi başarıyla oluşturuldu.` };
+        return { success: true, message: `${activityCount} konu için etkinlik ve ${questionCount} konu için soru verisi oluşturuldu.` };
     } catch (e: any) {
-        console.error("Error exporting activity data:", e);
+        console.error("Error exporting game data:", e);
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
     }
 }
-
-    

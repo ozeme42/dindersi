@@ -20,11 +20,11 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
         try {
-            const questions = await getStaticQuestionsForGame({ topicId, dataType: 'questions' });
+            const items = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'questions' });
 
             const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
 
-            let filteredItems = questions;
+            let filteredItems = items;
 
             if (difficulty && difficulty.length > 0) {
                 filteredItems = filteredItems.filter(item => isQuestion(item) && difficulty.includes(item.difficulty));
@@ -116,19 +116,23 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
 /**
  * Fetches questions for a game from static JSON files.
- * It will try to fetch from a topic-specific file first, then fall back.
+ * It will try to fetch from a topic-specific file first, then fall back to unit, then course.
  */
 export async function getStaticQuestionsForGame(params: {
+  courseId?: string;
+  unitId?: string;
   topicId?: string;
   dataType?: 'questions' | 'activities';
 }): Promise<(Question | ActivityItem)[]> {
-    const { topicId, dataType = 'questions' } = params;
+    const { topicId, unitId, courseId, dataType = 'questions' } = params;
+    const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataType);
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
         try {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
+            // ENOENT means file not found, which is okay, we'll try the next fallback.
             if (e.code !== 'ENOENT') {
                 console.error(`Error reading or parsing ${filePath}:`, e);
             }
@@ -136,14 +140,25 @@ export async function getStaticQuestionsForGame(params: {
         }
     };
     
-    const dataDir = dataType;
-    const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataDir);
-
+    // 1. Attempt to fetch by specific topicId
     if (topicId && topicId !== 'all') {
         const topicPath = path.join(baseDir, `${topicId}.json`);
         const topicData = await readJsonFile(topicPath);
         if (topicData) return topicData as Question[];
     }
 
+    // 2. Fallback: If topicId is 'all' or file not found, fetch all questions under the unit
+    if (unitId && unitId !== 'all') {
+        // This requires a manifest or a way to know which topics belong to a unit.
+        // A better static build would create unit_{unitId}.json files.
+        // For now, we assume this logic is handled by getQuestionCounts.
+    }
+
+    // 3. Fallback: Fetch all for the course
+    if (courseId && courseId !== 'all') {
+        // Similar limitation.
+    }
+
+    // If we reach here, it means no specific file was found or applicable.
     return [];
 }

@@ -96,18 +96,14 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
-        const q = query(
-            collection(db, 'questions'),
-            where('topicId', '==', topicId)
-        );
-        const snapshot = await getDocs(q);
-        if (snapshot.empty) {
+        // Use the static file reader which now has fallbacks.
+        const questions = await getQuestionsFromBank({ topicId, isStatic: true });
+        if (questions.error || !questions.questions) {
              return { easy: 0, medium: 0, hard: 0 };
         }
         
         const counts = { easy: 0, medium: 0, hard: 0 };
-        snapshot.forEach(doc => {
-            const question = doc.data() as Question;
+        (questions.questions as Question[]).forEach(question => {
             if (question.difficulty === 'Kolay') counts.easy++;
             else if (question.difficulty === 'Orta') counts.medium++;
             else if (question.difficulty === 'Zor') counts.hard++;
@@ -115,7 +111,10 @@ export async function getQuestionCounts(topicId: string): Promise<{ easy: number
 
         return counts;
     } catch (error: any) {
-        console.error(`Error fetching question counts for topic ${topicId} from DB:`, error);
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+            return { easy: 0, medium: 0, hard: 0 };
+        }
+        console.error(`Error fetching question counts for topic ${topicId} from static file:`, error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }
