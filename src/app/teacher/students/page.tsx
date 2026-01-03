@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -75,10 +74,8 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
-                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
-                        <TableHead className="text-slate-300 font-bold">Okul</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
-                        <TableHead className="text-slate-300 font-bold">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -89,25 +86,38 @@ function StudentTable({
 
                         return (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
-                             <TableCell>
+                            <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700 group-hover:border-purple-400 transition-colors"/>
+                                    <div className="p-2 bg-slate-800 rounded-full border border-white/10 group-hover:border-purple-400 transition-colors">
+                                        <UserCog className="h-6 w-6 text-purple-400" />
+                                    </div>
                                     <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">{student.schoolName || '-'}</Badge>
-                            </TableCell>
-                            <TableCell>
-                                <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
-                                    {student.class || 'Sınıfsız'}
-                                </Badge>
-                            </TableCell>
-                             <TableCell>
-                                <span className="font-bold text-lg text-amber-400 flex items-center gap-1.5">
-                                    <DollarSign className="w-4 h-4 text-amber-600"/>
-                                    {student.score || 0}
-                                </span>
+                                {studentClass && studentClass.branches ? (
+                                     <Select 
+                                         value={currentBranch || ''}
+                                         onValueChange={(newBranch) => {
+                                             if (newBranch) {
+                                                 onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
+                                             }
+                                         }}
+                                     >
+                                         <SelectTrigger className="w-40 bg-slate-950 border-white/10 text-white h-9 text-xs focus:border-indigo-500/50">
+                                             <SelectValue />
+                                         </SelectTrigger>
+                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                             {studentClass.branches.map(b => (
+                                                 <SelectItem key={b} value={b}>{b}</SelectItem>
+                                             ))}
+                                         </SelectContent>
+                                     </Select>
+                                ) : (
+                                     <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
+                                        {student.class || 'Sınıfsız'}
+                                     </Badge>
+                                )}
                             </TableCell>
                             <TableCell className="text-right">
                                  <DropdownMenu>
@@ -117,11 +127,10 @@ function StudentTable({
                                          </Button>
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                        <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
-                                        <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                            <Send className="mr-2 h-4 w-4" /> Detaylar
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer"><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
+                                         <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                         <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                             <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
+                                         </DropdownMenuItem>
                                          <AlertDialog>
                                              <AlertDialogTrigger asChild>
                                                  <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 text-red-400 hover:bg-red-500/10 hover:text-red-300 w-full cursor-pointer">
@@ -132,7 +141,7 @@ function StudentTable({
                                                  <AlertDialogHeader>
                                                      <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
                                                      <AlertDialogDescription className="text-slate-400">
-                                                         "{student.displayName}" adlı öğrenci kalıcı olarak silinecektir.
+                                                         "{student.displayName}" adlı sanal öğrenci kalıcı olarak silinecektir.
                                                      </AlertDialogDescription>
                                                  </AlertDialogHeader>
                                                  <AlertDialogFooter>
@@ -150,7 +159,7 @@ function StudentTable({
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={3} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -394,6 +403,7 @@ export default function StudentsPage() {
   const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
   const filteredStudents = useMemo(() => {
+    if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'student');
     if (activeSchoolId !== 'all') {
         const school = schools.find(s => s.id === activeSchoolId);
@@ -411,10 +421,14 @@ export default function StudentsPage() {
   }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
   
   const filteredGuestStudents = useMemo(() => {
+    if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'guest');
     if (activeClassId !== 'all' && selectedClass) {
-        if (activeBranch === 'all') list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
-        else list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        if (activeBranch === 'all') {
+             list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+        } else {
+             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        }
     }
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
@@ -425,6 +439,7 @@ export default function StudentsPage() {
 
   
   const pendingStudents = useMemo(() => {
+      if (!allStudents) return [];
       return allStudents.filter(s => s.role === 'pending').sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
   }, [allStudents]);
 
@@ -434,6 +449,7 @@ export default function StudentsPage() {
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
+       {/* Arka Plan */}
        <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
@@ -619,3 +635,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+    
