@@ -2,237 +2,151 @@
 
 'use server';
 
-import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
-import { collection, doc, writeBatch, Timestamp, setDoc, updateDoc } from "firebase-admin/firestore";
-import { firestore } from 'firebase-admin';
-import type { UserProfile } from "@/lib/types";
-import { normalizeNameToEmailLocalPart } from "@/lib/utils";
+import { getAdminAuth, getAdminDb } from '@/lib/firebase-admin';
+import type { UserProfile, SchoolClass, School } from '@/lib/types';
+import { unstable_noStore as noStore } from 'next/cache';
+import { normalizeNameToEmailLocalPart } from '@/lib/utils';
+import { collection, doc, getDocs, setDoc, updateDoc, deleteDoc, writeBatch, serverTimestamp, query, orderBy } from 'firebase/firestore';
 
-export async function addStudentToClass(displayName: string, className: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
-    const finalDisplayName = displayName.trim();
-    if (!finalDisplayName) {
-        return { success: false, error: "Öğrenci adı boş olamaz." };
-    }
-    if (!className) {
-        return { success: false, error: "Sınıf adı belirtilmedi." };
-    }
+export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
+  noStore();
+  try {
+    const db = getAdminDb();
+    
+    // Fetch all collections in parallel
+    const [userRecords, classesSnapshot, schoolsSnapshot] = await Promise.all([
+      getAdminAuth().listUsers(),
+      db.collection('classes').orderBy('name', 'asc').get(),
+      db.collection('schools').orderBy('name', 'asc').get(),
+    ]);
 
+    const usersList: UserProfile[] = userRecords.users.map(user => ({
+      uid: user.uid,
+      displayName: user.displayName || '',
+      email: user.email || '',
+      role: 'student', 
+      score: 0, 
+    }));
+    
+    // Enrich with Firestore data
+    const firestoreUsersSnapshot = await db.collection('users').get();
+    const firestoreUsersMap = new Map<string, UserProfile>();
+    firestoreUsersSnapshot.forEach(doc => {
+        firestoreUsersMap.set(doc.id, doc.data() as UserProfile);
+    });
+
+    const combinedUsers = usersList.map(user => {
+        const firestoreData = firestoreUsersMap.get(user.uid);
+        return { ...user, ...firestoreData };
+    });
+
+    const students = combinedUsers.filter(u => u.role === 'student' || u.role === 'guest');
+
+    const classes = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+    const schools = schoolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
+
+    return { 
+        students: JSON.parse(JSON.stringify(students)),
+        classes: JSON.parse(JSON.stringify(classes)),
+        schools: JSON.parse(JSON.stringify(schools)),
+    };
+  } catch (error) {
+    console.error('Error fetching student data:', error);
+    return { students: [], classes: [], schools: [] };
+  }
+}
+
+type SaveUserData = {
+    uid?: string;
+    displayName: string;
+    email: string;
+    role: 'student' | 'teacher' | 'superadmin' | 'guest';
+    class?: string;
+    schoolName?: string;
+    password?: string;
+    score?: number;
+};
+
+export async function saveUser(data: SaveUserData): Promise<{ success: boolean; error?: string }> {
+    const { uid, displayName, email, role, class: className, schoolName, password, score } = data;
+    
     try {
         const auth = getAdminAuth();
         const db = getAdminDb();
 
-        const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
-        let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
-        let attempts = 0;
-        
-        while (true) {
-            try {
-                await auth.getUserByEmail(finalEmail);
-                attempts++;
-                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-                 if (attempts > 100) {
-                    throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
-                }
-            } catch (error: any) {
-                if (error.code === 'auth/user-not-found') {
-                    break;
-                }
-                throw error;
+        if (schoolName) {
+            const schoolsRef = db.collection('schools');
+            const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
+            if (schoolQuery.empty) {
+                await schoolsRef.add({ name: schoolName });
             }
         }
 
-        const password = Math.random().toString(36).slice(-8);
-        
-        const userRecord = await auth.createUser({
-            email: finalEmail,
-            password: password,
-            displayName: finalDisplayName,
-        });
+        if (uid) { // Update existing user
+            const updatePayload: any = { displayName };
+            if (password) {
+                updatePayload.password = password;
+            }
+            await auth.updateUser(uid, updatePayload);
+            
+            const userDocRef = doc(db, 'users', uid);
+            await updateDoc(userDocRef, {
+                displayName,
+                role,
+                class: className || '',
+                schoolName: schoolName || '',
+                score: score || 0,
+            });
 
-        const newUserProfile: Omit<UserProfile, 'uid'> = {
-            displayName: finalDisplayName,
-            email: finalEmail,
-            role: 'student',
-            class: className,
-            score: 0,
-            createdAt: Timestamp.now(),
-        };
+        } else { // Create new user
+            const newUserRecord = await auth.createUser({
+                email,
+                password,
+                displayName,
+            });
 
-        await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
-        
-        const serializableNewUser: UserProfile = {
-            ...newUserProfile,
-            uid: userRecord.uid,
-            createdAt: new Date().toISOString(),
-        };
-        
-        return { success: true, newUser: serializableNewUser };
-
+            const userProfile: Omit<UserProfile, 'uid'> = {
+                displayName,
+                email,
+                role,
+                class: className || '',
+                schoolName: schoolName || '',
+                score: 0,
+                createdAt: serverTimestamp(),
+                ownedItems: [],
+            };
+            
+            await setDoc(doc(db, 'users', newUserRecord.uid), userProfile);
+        }
+        return { success: true };
     } catch (error: any) {
-        console.error("Error creating new student:", error);
-        return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
+        console.error("Error saving user: ", error);
+        return { success: false, error: error.message };
     }
 }
 
-export async function bulkAddStudentsToClass(names: string[], className: string): Promise<{ success: boolean; error?: string; successCount?: number; errorDetails?: {name: string, error: string}[] }> {
-    if (!names || names.length === 0) {
-        return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
+export async function deleteStudents(studentIds: string[]): Promise<{ success: boolean; error?: string }> {
+    if (!studentIds || studentIds.length === 0) {
+        return { success: false, error: "No students selected." };
     }
-    if (!className) {
-        return { success: false, error: "Sınıf adı belirtilmedi." };
-    }
-    
-    const auth = getAdminAuth();
-    const db = getAdminDb();
-    const successDetails: { name: string; email: string; pass: string }[] = [];
-    const errorDetails: { name: string; error: string }[] = [];
-    
-    for (const name of names) {
-        const finalDisplayName = name.trim();
-        if (finalDisplayName) {
-            try {
-                const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
-                let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
-                let attempts = 0;
-                 while (true) {
-                    try {
-                        await auth.getUserByEmail(finalEmail);
-                        attempts++;
-                        finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-                         if (attempts > 100) {
-                            throw new Error("Bu isimle çok fazla kullanıcı mevcut.");
-                        }
-                    } catch (error: any) {
-                        if (error.code === 'auth/user-not-found') {
-                            break;
-                        }
-                        throw error;
-                    }
-                }
-                
-                const password = Math.random().toString(36).slice(-8);
-
-                const userRecord = await auth.createUser({
-                    email: finalEmail,
-                    password: password,
-                    displayName: finalDisplayName,
-                });
-                
-                const newUserProfile: Omit<UserProfile, 'uid'> = {
-                    displayName: finalDisplayName,
-                    email: finalEmail,
-                    role: 'student',
-                    class: className,
-                    score: 0,
-                    createdAt: Timestamp.now(),
-                };
-
-                await setDoc(doc(db, "users", userRecord.uid), newUserProfile);
-                successDetails.push({ name: finalDisplayName, email: finalEmail, pass: password });
-
-            } catch (error: any) {
-                errorDetails.push({ name: finalDisplayName, error: error.message });
-            }
-        }
-    }
-    
-    if (successDetails.length > 0) {
-         return { success: true, successCount: successDetails.length, errorDetails: errorDetails.length > 0 ? errorDetails : undefined };
-    }
-
-    return { success: false, error: "Hiç öğrenci oluşturulamadı.", errorDetails };
-}
-
-export async function addManualScore(studentId: string, points: number, reason: string): Promise<{ success: boolean; error?: string }> {
-    if (!studentId || !reason.trim() || points === 0) {
-        return { success: false, error: 'Eksik bilgi.' };
-    }
-
     try {
+        const auth = getAdminAuth();
         const db = getAdminDb();
-        const batch = db.batch();
         
-        const userRef = db.collection('users').doc(studentId);
-        batch.update(userRef, { score: firestore.FieldValue.increment(points) });
-
-        const eventRef = db.collection('scoreEvents').doc();
-        batch.set(eventRef, {
-            userId: studentId,
-            points: points,
-            timestamp: Timestamp.now(),
-            gameType: 'Manuel Puan',
-            context: reason,
+        // Delete from Auth
+        await auth.deleteUsers(studentIds);
+        
+        // Delete from Firestore
+        const batch = db.batch();
+        studentIds.forEach(id => {
+            const docRef = doc(db, 'users', id);
+            batch.delete(docRef);
         });
-
         await batch.commit();
 
         return { success: true };
-    } catch(e: any) {
-        console.error("Error adding manual score:", e)
-        return { success: false, error: 'Puan eklenirken bir hata oluştu.' };
-    }
-}
-export async function createNewStudent(data: Omit<UserProfile, 'uid' | 'createdAt' | 'score'> & { password?: string }): Promise<{ success: boolean; error?: string; user?: UserProfile }> {
-    const finalDisplayName = data.displayName.trim();
-    if (!finalDisplayName) {
-        return { success: false, error: "Öğrenci adı boş olamaz." };
-    }
-    if (!data.password || data.password.length < 6) {
-        return { success: false, error: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır." };
-    }
-
-    try {
-        const auth = getAdminAuth();
-
-        const baseLocalPart = normalizeNameToEmailLocalPart(finalDisplayName);
-        let finalEmail = `${baseLocalPart}@degerleroyunu.app`;
-        let attempts = 0;
-        
-        while (true) {
-            try {
-                await auth.getUserByEmail(finalEmail);
-                attempts++;
-                finalEmail = `${baseLocalPart}${attempts}@degerleroyunu.app`;
-                 if (attempts > 100) {
-                    throw new Error("Bu isimle çok fazla kullanıcı mevcut, lütfen farklı bir isim deneyin.");
-                }
-            } catch (error: any) {
-                if (error.code === 'auth/user-not-found') {
-                    break; // Email is available
-                }
-                throw error; // Other errors
-            }
-        }
-        
-        const userRecord = await auth.createUser({
-            email: finalEmail,
-            password: data.password,
-            displayName: finalDisplayName,
-        });
-        
-        const firestoreDB = getAdminDb();
-        
-        const newUserProfile: Omit<UserProfile, 'uid'> = {
-            displayName: finalDisplayName,
-            email: finalEmail,
-            role: data.role || 'student',
-            class: data.class,
-            score: 0,
-            createdAt: Timestamp.now(),
-        };
-
-        await firestoreDB.collection("users").doc(userRecord.uid).set(newUserProfile);
-        
-        const serializableNewUser: UserProfile = {
-            ...newUserProfile,
-            uid: userRecord.uid,
-            createdAt: new Date().toISOString(),
-        };
-        
-        return { success: true, user: serializableNewUser };
-
     } catch (error: any) {
-        console.error("Error creating new student:", error);
-        return { success: false, error: `Öğrenci oluşturulurken hata: ${error.message}` };
+        console.error("Error deleting students: ", error);
+        return { success: false, error: error.message };
     }
 }

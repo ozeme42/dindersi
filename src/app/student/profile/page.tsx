@@ -1,21 +1,21 @@
 
+
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { db, auth } from '@/lib/firebase';
-import { doc, updateDoc, collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import type { UserProfile, SchoolClass } from '@/lib/types';
+import { doc, updateDoc, collection, getDocs, query, orderBy } from 'firebase/firestore';
+import type { UserProfile, SchoolClass, School } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-// DÜZELTME: ShieldCheck ve diğer tüm gerekli ikonlar buraya eklendi
 import { 
   Loader2, ArrowLeft, Mail, GraduationCap, Trophy, Award, Medal, 
   BookOpen, Edit, KeySquare, LogOut, Crown, Save, Shield, Star, 
-  Lock, ShieldCheck 
+  Lock, ShieldCheck, School as SchoolIcon, PlusCircle
 } from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -39,10 +39,19 @@ import { useRouter } from 'next/navigation';
 import { getReviewQuestions } from '@/app/student/tekrar-et/actions';
 
 // --- Edit Profile Form Component ---
-function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: UserProfile, classes: SchoolClass[], onSave: (data: any) => void, onCancel: () => void, isSaving: boolean }) {
+function EditProfileForm({ user, classes, schools, onSave, onCancel, isSaving }: { 
+    user: UserProfile, 
+    classes: SchoolClass[], 
+    schools: School[],
+    onSave: (data: any) => void, 
+    onCancel: () => void, 
+    isSaving: boolean 
+}) {
     const [displayName, setDisplayName] = useState(user.displayName || ''); 
     const [selectedClassId, setSelectedClassId] = useState('');
     const [selectedBranch, setSelectedBranch] = useState('');
+    const [selectedSchoolId, setSelectedSchoolId] = useState('');
+    const [newSchoolName, setNewSchoolName] = useState('');
 
     useEffect(() => {
         if (user.class) {
@@ -55,18 +64,30 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
                 setSelectedBranch(branchName);
             }
         }
-    }, [user.class, classes]);
+        if (user.schoolName) {
+            const userSchool = schools.find(s => s.name === user.schoolName);
+            setSelectedSchoolId(userSchool?.id || '');
+        }
+    }, [user, classes, schools]);
 
     const handleSave = () => {
         const selectedClass = classes.find(c => c.id === selectedClassId);
         const newClassString = selectedClass ? `${selectedClass.name} - ${selectedBranch}` : user.class;
         
-        if (displayName === user.displayName && newClassString === user.class) {
+        let newSchoolString = user.schoolName;
+        if(selectedSchoolId === 'new') {
+            newSchoolString = newSchoolName.trim();
+        } else {
+            const selectedSchool = schools.find(s => s.id === selectedSchoolId);
+            if(selectedSchool) newSchoolString = selectedSchool.name;
+        }
+
+        if (displayName === user.displayName && newClassString === user.class && newSchoolString === user.schoolName) {
             onCancel();
             return;
         }
 
-        onSave({ displayName, class: newClassString });
+        onSave({ displayName, class: newClassString, schoolName: newSchoolString });
     };
 
     const selectedClassData = classes.find(c => c.id === selectedClassId);
@@ -75,17 +96,30 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 p-4 bg-slate-900/50 rounded-xl border border-white/5 backdrop-blur-md"> 
             <div className="space-y-2 group">
                 <Label htmlFor="displayName" className="text-slate-300 font-medium">Ad Soyad</Label>
-                <Input 
-                    id="displayName" 
-                    value={displayName} 
-                    onChange={(e) => setDisplayName(e.target.value)} 
-                    placeholder="Ad Soyad Giriniz"
-                    className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50 rounded-lg transition-all"
-                />
+                <Input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="Ad Soyad Giriniz" className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50 rounded-lg transition-all"/>
             </div>
+            
+             <div className="space-y-2">
+                <Label htmlFor="school">Okul</Label>
+                <Select value={selectedSchoolId} onValueChange={setSelectedSchoolId}>
+                    <SelectTrigger id="school" className="bg-slate-950 border-white/10 text-white h-11 rounded-lg"><SelectValue placeholder="Okulunuzu seçin..." /></SelectTrigger>
+                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                        {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                        <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                    </SelectContent>
+                </Select>
+             </div>
+
+            {selectedSchoolId === 'new' && (
+                <div className="space-y-2 group animate-in slide-in-from-top-2">
+                    <Label htmlFor="new-school-name">Yeni Okul Adı</Label>
+                    <Input id="new-school-name" value={newSchoolName} onChange={e => setNewSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl focus-visible:ring-cyan-500/50 focus-visible:border-cyan-500"/>
+                </div>
+            )}
+
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="class" className="text-slate-300 font-medium">Sınıf</Label>
+                    <Label htmlFor="class">Sınıf</Label>
                     <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); }}>
                         <SelectTrigger id="class" className="bg-slate-950 border-white/10 text-white h-11 rounded-lg"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -94,7 +128,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
                     </Select>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="branch" className="text-slate-300 font-medium">Şube</Label>
+                    <Label htmlFor="branch">Şube</Label>
                     <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClassData || selectedClassData.branches?.length === 0}>
                         <SelectTrigger id="branch" className="bg-slate-950 border-white/10 text-white h-11 rounded-lg"><SelectValue placeholder="Seçiniz" /></SelectTrigger>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -105,7 +139,7 @@ function EditProfileForm({ user, classes, onSave, onCancel, isSaving }: { user: 
             </div>
             <div className="flex justify-end gap-3 pt-4 border-t border-white/5 mt-2">
                 <Button variant="ghost" onClick={onCancel} disabled={isSaving} className="text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">İptal</Button>
-                <Button onClick={handleSave} disabled={isSaving || !displayName || !selectedClassId || !selectedBranch} className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-lg shadow-indigo-900/20">
+                <Button onClick={handleSave} disabled={isSaving || !displayName || (!selectedSchoolId && !newSchoolName) || !selectedClassId || !selectedBranch} className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg shadow-lg shadow-indigo-900/20">
                     {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                     <Save className="mr-2 h-4 w-4"/> Kaydet
                 </Button>
@@ -231,22 +265,30 @@ function ProfilePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [classes, setClasses] = useState<SchoolClass[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Fetch classes
+  // Fetch classes and schools
   useEffect(() => {
     async function fetchData() {
         if (!user) return;
         try {
             const classesQuery = query(collection(db, "classes"), orderBy("createdAt", "asc"));
+            const schoolsQuery = query(collection(db, "schools"), orderBy("name", "asc"));
             
-            const classesSnapshot = await getDocs(classesQuery);
+            const [classesSnapshot, schoolsSnapshot] = await Promise.all([
+                getDocs(classesQuery),
+                getDocs(schoolsQuery)
+            ]);
 
             const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
             classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(classesData);
+
+            const schoolsData = schoolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as School));
+            setSchools(schoolsData);
 
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -258,7 +300,7 @@ function ProfilePage() {
     }
   }, [user]);
 
-  const handleSaveProfile = async (data: { displayName: string, class: string }) => {
+  const handleSaveProfile = async (data: { displayName: string, class: string, schoolName: string }) => {
     if (!user) return;
     setIsSaving(true);
     try {
@@ -266,10 +308,16 @@ function ProfilePage() {
         await updateDoc(userRef, {
             displayName: data.displayName,
             class: data.class,
+            schoolName: data.schoolName,
         });
+
+        if (data.schoolName && !schools.some(s => s.name === data.schoolName)) {
+            await addDoc(collection(db, "schools"), { name: data.schoolName });
+        }
+        
         toast({ title: "Başarılı", description: "Profil bilgileriniz güncellendi." });
         setIsEditMode(false);
-        router.refresh(); 
+        // Let onSnapshot handle the update
     } catch (error) {
         console.error("Error updating profile: ", error);
         toast({ title: "Hata", description: "Profil güncellenirken bir sorun oluştu.", variant: "destructive" });
@@ -376,6 +424,7 @@ function ProfilePage() {
                                     <EditProfileForm 
                                         user={user as UserProfile} 
                                         classes={classes} 
+                                        schools={schools}
                                         onSave={handleSaveProfile} 
                                         onCancel={() => setIsEditMode(false)}
                                         isSaving={isSaving}
@@ -394,11 +443,14 @@ function ProfilePage() {
                                             </p>
                                         </div>
 
-                                        <div className="flex flex-wrap items-center justify-center gap-3">
-                                             <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium">
+                                        <div className="flex flex-col gap-2 items-center justify-center">
+                                            <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
+                                                <SchoolIcon className="h-4 w-4 mr-2 text-cyan-400"/> {user.schoolName || 'Okul Belirtilmemiş'}
+                                            </Badge>
+                                            <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
                                                 <GraduationCap className="h-4 w-4 mr-2 text-indigo-400"/> {user.class || 'Sınıf Belirtilmemiş'}
                                              </Badge>
-                                             <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/10 py-2 px-4 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                             <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/10 py-2 px-4 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.1)] w-fit">
                                                 <Star className="h-4 w-4 mr-2 fill-amber-400/20"/> {user.score?.toLocaleString() || 0} Puan
                                              </Badge>
                                         </div>

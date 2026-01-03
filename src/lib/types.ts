@@ -7,6 +7,7 @@ export type UserProfile = {
     email: string;
     role: 'student' | 'teacher' | 'superadmin' | 'guest';
     class?: string; // e.g. "5/A" or "Yaz Okulu Havuzu"
+    schoolName?: string; // e.g. "Değerler Okulu"
     studentNumber?: string; // Add student number
     score?: number;
     avatar?: string;
@@ -248,7 +249,12 @@ export type SchoolClass = {
     students?: UserProfile[]; // Now holds student data directly
     createdAt?: any;
     isPublished?: boolean;
-}
+};
+
+export type School = {
+    id: string;
+    name: string;
+};
 
 export type DailyQuest = {
     completed: boolean;
