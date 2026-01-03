@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -341,8 +342,8 @@ export default function StudentsPage() {
     return allStudents.filter(s => s.role === 'guest');
   }, [allStudents]);
 
-  const validSchools = schools.filter(s => s.id && s.name);
-  const validClasses = classes.filter(c => c.id && c.name);
+  const validSchools = schools.filter(s => s && s.id);
+  const validClasses = classes.filter(c => c && c.id);
   
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
@@ -361,9 +362,6 @@ export default function StudentsPage() {
                 </div>
                 Öğrenci Yönetimi
             </h1>
-            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-              <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
-            </Button>
         </div>
 
         <Tabs defaultValue="list" className="space-y-6">
@@ -513,7 +511,7 @@ export default function StudentsPage() {
                              <form onSubmit={handleBulkAdd} className="space-y-4">
                                 <div>
                                      <Label htmlFor="bulk-names">Öğrenci Adları</Label>
-                                     <Textarea id="bulk-names" value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50"/>
+                                     <Textarea id="bulk-names" value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
                                 </div>
                                 <Button type="submit" size="lg" className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkSchoolId || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
                                     {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar

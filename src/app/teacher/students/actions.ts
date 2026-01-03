@@ -22,17 +22,23 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
     const schoolMap = new Map<string, School>();
+
+    // 1. 'schools' koleksiyonundan gelen okulları ekle
     schoolsSnap.docs.forEach(doc => {
         const schoolData = { id: doc.id, ...doc.data() } as School;
         const trimmedName = schoolData.name?.trim();
-        if (trimmedName && schoolData.id) {
+        // Sadece geçerli id ve isme sahip olanları ekle
+        if (schoolData.id && trimmedName) {
             schoolMap.set(trimmedName.toLowerCase(), schoolData);
         }
     });
 
+    // 2. Öğrenci profillerindeki okulları ekle
     students.forEach(student => {
         const trimmedSchoolName = student.schoolName?.trim();
+        // Sadece dolu ve listede olmayan okul isimlerini işle
         if (trimmedSchoolName && !schoolMap.has(trimmedSchoolName.toLowerCase())) {
+            // ID olarak okul adının kendisini kullanmak geçici bir çözümdür, ama boş ID'den iyidir.
             schoolMap.set(trimmedSchoolName.toLowerCase(), { id: trimmedSchoolName, name: trimmedSchoolName });
         }
     });
