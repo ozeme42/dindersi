@@ -25,11 +25,11 @@ import {
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 
@@ -72,6 +72,7 @@ function StudentTable({
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Okul</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf-Şube</TableHead>
                         <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
@@ -85,6 +86,11 @@ function StudentTable({
                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">
+                                    {student.schoolName || '-'}
+                                </Badge>
                             </TableCell>
                             <TableCell>
                                 <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
@@ -137,7 +143,7 @@ function StudentTable({
                         )
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -546,7 +552,7 @@ export default function StudentsPage() {
                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                             </Select>
                             <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
