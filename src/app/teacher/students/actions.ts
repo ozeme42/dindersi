@@ -23,7 +23,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     // Sadece 'schools' koleksiyonundan gelen veriyi kullan, böylece ID'si olmayan veri olmaz.
     const schoolsData = schoolsSnap.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as School))
-        .filter(school => school.id && school.name && school.name.trim()); 
+        .filter(school => school && school.id && school.name && school.name.trim()); 
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -80,6 +80,9 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
             });
 
         } else { // Create new user
+             if (!password) {
+                return { success: false, error: 'Yeni kullanıcı için şifre zorunludur.' };
+            }
             const newUserRecord = await auth.createUser({
                 email,
                 password,

@@ -131,7 +131,7 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                             {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
                         </div>
                          <div>
-                            <Label htmlFor="password">{user?.uid ? 'Yeni Şifre (isteğe bağlı)' : 'Şifre'}</Label>
+                            <Label htmlFor="password">{user?.uid ? 'Yeni Şifre (değişmeyecekse boş bırakın)' : 'Şifre'}</Label>
                             <Input id="password" type="password" {...register("password")} placeholder={user?.uid ? 'Değiştirmek istemiyorsanız boş bırakın' : ''} />
                             {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
                         </div>
