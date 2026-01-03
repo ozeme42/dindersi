@@ -29,7 +29,8 @@ import {
     ArrowDownAZ,
     CalendarClock,
     Search,
-    Filter
+    Filter,
+    Home
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -318,9 +319,9 @@ export default function ExamQuestionBankPage() {
         tempQuestions = tempQuestions.filter((q) => q.unitId === selection.unitId);
     } else if (selection.courseId && selection.courseId !== 'all') {
         tempQuestions = tempQuestions.filter((q) => q.courseId === selection.courseId);
-    } else if (selection.classId && selection.classId !== 'all') {
-        const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
-        tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
+    } else if (selection.classId) {
+         const courseIdsInClass = new Set(filteredCourses.map(c => c.id));
+         tempQuestions = tempQuestions.filter(q => q.courseId && courseIdsInClass.has(q.courseId));
     }
 
     if (searchTerm) {

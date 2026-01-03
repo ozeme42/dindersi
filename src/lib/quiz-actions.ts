@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
@@ -19,7 +20,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
         try {
-            const questions = await getStaticQuestionsForGame({ topicId });
+            const questions = await getStaticQuestionsForGame({ topicId, dataType: 'questions' });
 
             const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
 
@@ -120,7 +121,7 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 export async function getStaticQuestionsForGame(params: {
   topicId?: string;
   dataType?: 'questions' | 'activities';
-}): Promise<Question[]> {
+}): Promise<(Question | ActivityItem)[]> {
     const { topicId, dataType = 'questions' } = params;
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
