@@ -31,7 +31,8 @@ const GlassCard = ({ children, className }: { children: React.ReactNode, classNa
 export default function RegisterPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Başlangıçta true
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [classes, setClasses] = useState<SchoolClass[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   
@@ -43,15 +44,13 @@ export default function RegisterPage() {
   const selectedClass = classes.find(c => c.id === selectedClassId);
 
   const fetchData = useCallback(async () => {
-    setIsLoading(true);
     try {
       const [classesSnapshot, schoolsSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "classes"), orderBy("createdAt", "asc"))),
+        getDocs(query(collection(db, "classes"), orderBy("name", "asc"))),
         getDocs(query(collection(db, "schools"), orderBy("name", "asc"))),
       ]);
 
       const classesData = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
-      classesData.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
       setClasses(classesData);
 
       const schoolsData = schoolsSnapshot.docs
@@ -74,7 +73,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
     const displayName = (formData.get('display-name') as string).trim();
@@ -82,13 +81,13 @@ export default function RegisterPage() {
     
     if (!displayName || !password || !selectedClassId || !selectedBranch || (!selectedSchoolId && !newSchoolName)) {
         toast({ title: "Eksik Bilgi", description: "Lütfen tüm alanları doldurun.", variant: "destructive" });
-        setIsLoading(false);
+        setIsSubmitting(false);
         return;
     }
     
     if (password.length < 6) {
         toast({ title: "Zayıf Şifre", description: "Şifre en az 6 karakter olmalıdır.", variant: "destructive" });
-        setIsLoading(false);
+        setIsSubmitting(false);
         return;
     }
     
@@ -98,7 +97,7 @@ export default function RegisterPage() {
         let finalSchoolName = '';
         if (selectedSchoolId === 'new') {
             finalSchoolName = newSchoolName.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
-            if (!schools.some(s => s.name.toLowerCase() === finalSchoolName.toLowerCase())) {
+            if (finalSchoolName && !schools.some(s => s.name.toLowerCase() === finalSchoolName.toLowerCase())) {
                  await addDoc(collection(db, "schools"), { name: finalSchoolName });
             }
         } else {
@@ -132,14 +131,14 @@ export default function RegisterPage() {
             toast({ title: "Beklenmedik Hata", description: "Kayıt sırasında bir sorun oluştu.", variant: "destructive" });
         }
     } finally {
-        setIsLoading(false);
+        setIsSubmitting(false);
     }
   };
   
-  if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') {
+  if (isLoading) {
       return (
         <div className="flex h-screen items-center justify-center bg-slate-950">
-            <p>Statik modda kayıt yapılamaz.</p>
+            <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
         </div>
       )
   }
@@ -184,11 +183,7 @@ export default function RegisterPage() {
                         <Select value={selectedClassId} onValueChange={(value) => { setSelectedClassId(value); setSelectedBranch(''); }}>
                             <SelectTrigger id="class" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {isLoading ? (
-                                    <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
-                                ) : (
-                                    classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)
-                                )}
+                                {classes && classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -197,7 +192,7 @@ export default function RegisterPage() {
                         <Select value={selectedBranch} onValueChange={setSelectedBranch} disabled={!selectedClass || !selectedClass.branches || selectedClass.branches.length === 0}>
                             <SelectTrigger id="branch" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Seçiniz..." /></SelectTrigger>
                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                {selectedClass && selectedClass.branches && selectedClass.branches.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                {selectedClass?.branches && selectedClass.branches.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -208,14 +203,8 @@ export default function RegisterPage() {
                     <Select value={selectedSchoolId} onValueChange={setSelectedSchoolId}>
                         <SelectTrigger id="school" className="bg-black/20 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Okulunuzu seçin..." /></SelectTrigger>
                         <SelectContent className="bg-slate-900 border-white/10 text-white">
-                            {isLoading ? (
-                                <div className="flex justify-center p-4"><Loader2 className="h-6 w-6 animate-spin"/></div>
-                            ) : (
-                                <>
-                                    {schools && schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                    <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
-                                </>
-                            )}
+                            {schools && schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                            <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -228,8 +217,8 @@ export default function RegisterPage() {
                     </div>
                 )}
 
-                <Button type="submit" disabled={isLoading} className="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-cyan-900/20 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all">
-                    {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Yükleniyor...</> : <><UserPlus className="mr-2 h-5 w-5" /> Kayıt Ol</>}
+                <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-cyan-900/20 border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 transition-all">
+                    {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Yükleniyor...</> : <><UserPlus className="mr-2 h-5 w-5" /> Kayıt Ol</>}
                 </Button>
 
                 <div className="pt-2 text-center">
@@ -245,5 +234,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-    
