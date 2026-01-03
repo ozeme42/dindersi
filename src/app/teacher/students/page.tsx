@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -44,6 +43,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { UserEditorDialog } from "@/components/user-editor-dialog";
+import { UserAvatar } from "@/components/user-avatar";
 
 function StudentTable({ 
     students, 
@@ -69,7 +69,7 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
-                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -214,7 +214,7 @@ export default function StudentsPage() {
 
   const { toast } = useToast();
 
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [usersData, classesData, schoolsData] = await Promise.all([
@@ -224,22 +224,22 @@ export default function StudentsPage() {
       ]);
       
       setAllStudents(usersData);
+
       const classesList = classesData.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
       const sortedClasses = classesList.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
       setClasses(sortedClasses);
       setSchools(schoolsData.docs.map(doc => ({ id: doc.id, ...doc.data() } as School)));
-
     } catch (error) {
       console.error("Error fetching data:", error);
       toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchAllData();
-  }, []);
+  }, [fetchAllData]);
   
   const handleDeleteUser = async (userId: string) => {
     try {
@@ -447,7 +447,7 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
+                         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
                             <Table>
                                 <TableHeader className="bg-slate-900/80">
                                     <TableRow className="border-white/5 hover:bg-transparent">
@@ -527,25 +527,6 @@ export default function StudentsPage() {
                       </TabsList>
                       
                       <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div className="space-y-1">
-                                <Label className="text-slate-300 text-xs">Sınıf</Label>
-                                <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
-                                    <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                    <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-1">
-                                <Label className="text-slate-300 text-xs">Şube</Label>
-                                <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
-                                    <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                        <SelectItem value="" disabled>Lütfen bir şube seçin</SelectItem>
-                                        {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
                           <TabsContent value="single" className="mt-0">
                             <form onSubmit={e => handleOpenDialog(null)} className="flex gap-4 items-end">
                               <div className="flex-1 space-y-2">
@@ -559,6 +540,25 @@ export default function StudentsPage() {
 
                           <TabsContent value="bulk" className="mt-0 space-y-4">
                              <form onSubmit={handleBulkAdd} className="space-y-4">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300 text-xs">Sınıf</Label>
+                                        <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300 text-xs">Şube</Label>
+                                        <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
+                                            <SelectTrigger className="bg-slate-900 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="" disabled>Lütfen bir şube seçin</SelectItem>
+                                                {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
                                  <div className="space-y-2">
                                     <Label htmlFor="bulk-school">Okul</Label>
                                     <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
@@ -576,7 +576,7 @@ export default function StudentsPage() {
                                      <Label htmlFor="bulk-names">Öğrenci Adları</Label>
                                      <Textarea id="bulk-names" value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50"/>
                                 </div>
-                                <Button type="submit" size="lg" className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch}>
+                                <Button type="submit" size="lg" className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkSchoolId || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
                                     {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                                 </Button>
                              </form>
@@ -586,22 +586,20 @@ export default function StudentsPage() {
                 </CardContent>
               </Card>
           </TabsContent>
-            </Tabs>
-          </div>
+        </Tabs>
+      </div>
 
-          {dialogState.isOpen && (
-             <UserEditorDialog 
-                 isOpen={dialogState.isOpen}
-                 onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
-                 user={dialogState.user}
-                 onSave={handleSaveUser}
-                 isSaving={isSaving}
-                 classes={classes}
-                 schools={schools}
-             />
-          )}
-        </div>
-    );
+      {dialogState.isOpen && (
+         <UserEditorDialog 
+             isOpen={dialogState.isOpen}
+             onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
+             user={dialogState.user}
+             onSave={handleSaveUser}
+             isSaving={isSaving}
+             classes={classes}
+             schools={schools}
+         />
+      )}
+    </div>
+  );
 }
-
-    
