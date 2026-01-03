@@ -4,41 +4,31 @@
 
 import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, writeBatch, serverTimestamp, increment, getCountFromServer, setDoc } from "firebase/firestore";
-import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats } from "@/lib/types";
+import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats, Topic } from "@/lib/types";
+import { getQuestionsFromBank } from "@/lib/quiz-actions";
 
 
 export async function getCourseForSoruBankasi(courseId: string): Promise<{ course: (Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] }) | null, error?: string }> {
     try {
-        const courseRef = doc(db, 'courses', courseId);
-        const courseSnap = await getDoc(courseRef);
-
-        if (!courseSnap.exists()) {
+        const manifestRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/curriculum/manifest.json`, { next: { revalidate: 60 } });
+        if (!manifestRes.ok) {
+            throw new Error("Müfredat manifestosu bulunamadı.");
+        }
+        const manifest = await manifestRes.json();
+        
+        let courseData: any = null;
+        for (const group of manifest.classGroups) {
+            const foundCourse = group.courses.find((c: any) => c.id === courseId);
+            if (foundCourse) {
+                courseData = foundCourse;
+                break;
+            }
+        }
+        
+        if (!courseData) {
             return { course: null, error: 'Ders bulunamadı.' };
         }
 
-        const courseData = { id: courseSnap.id, ...courseSnap.data() } as Course & { units: { id: string; title: string; topics: { id: string; title: string; }[] }[] };
-
-        const unitsRef = collection(db, 'courses', courseId, 'units');
-        const unitsQuery = query(unitsRef); // Order by name client-side for locale-aware numeric sort
-        const unitsSnap = await getDocs(unitsQuery);
-        
-        const unitsData = unitsSnap.docs.map(unitDoc => ({
-            id: unitDoc.id,
-            ...unitDoc.data()
-        } as Unit));
-        
-        unitsData.sort((a, b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
-
-        courseData.units = await Promise.all(unitsData.map(async (unitData) => {
-            const unit = { id: unitData.id, title: unitData.title, topics: [] };
-            const topicsRef = collection(db, 'courses', courseId, 'units', unitData.id, 'topics');
-            const topicsQuery = query(topicsRef); // Order client-side
-            const topicsSnap = await getDocs(topicsQuery);
-            const topicsData = topicsSnap.docs.map(topicDoc => ({ id: topicDoc.id, ...topicDoc.data() } as Topic));
-            unit.topics = topicsData.sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
-            return unit;
-        }));
-        
         return { course: JSON.parse(JSON.stringify(courseData)) };
     } catch (e: any) {
         console.error("Error getting course for Soru Bankasi: ", e);
@@ -64,18 +54,18 @@ export async function getQuestionBankProgress(courseId: string, userId: string):
 
 export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number): Promise<{ questions: Question[], error?: string }> {
     try {
-        const q = query(
-            collection(db, 'questions'), 
-            where('topicId', '==', topicId),
-            where('difficulty', '==', difficulty),
-            where('type', 'in', ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'])
-        );
+        const result = await getQuestionsFromBank({
+            topicId: topicId,
+            difficulty: [difficulty],
+            questionCount: 100, // Fetch a large number to sort and slice
+            isStatic: true, // Use static files
+        });
 
-        const snapshot = await getDocs(q);
-        const allQuestions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Question));
+        if (result.error || !result.questions) {
+            return { questions: [], error: result.error || 'Sorular yüklenemedi.' };
+        }
         
-        // This makes the question order deterministic for each test.
-        allQuestions.sort((a, b) => a.text.localeCompare(b.text, 'tr'));
+        const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
         
         const startIndex = testIndex * 10;
         const endIndex = startIndex + 10;
@@ -106,23 +96,22 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
-        const easyQuery = query(collection(db, 'questions'), where('topicId', '==', topicId), where('difficulty', '==', 'Kolay'));
-        const mediumQuery = query(collection(db, 'questions'), where('topicId', '==', topicId), where('difficulty', '==', 'Orta'));
-        const hardQuery = query(collection(db, 'questions'), where('topicId', '==', topicId), where('difficulty', '==', 'Zor'));
+        const result = await getQuestionsFromBank({ topicId, isStatic: true, questionCount: 1000 });
+        if(result.error || !result.questions) {
+            console.warn(`Could not get question counts for ${topicId}: ${result.error}`);
+            return { easy: 0, medium: 0, hard: 0 };
+        }
+        
+        const counts = { easy: 0, medium: 0, hard: 0 };
+        (result.questions as Question[]).forEach(q => {
+            if (q.difficulty === 'Kolay') counts.easy++;
+            else if (q.difficulty === 'Orta') counts.medium++;
+            else if (q.difficulty === 'Zor') counts.hard++;
+        });
 
-        const [easySnapshot, mediumSnapshot, hardSnapshot] = await Promise.all([
-            getDocs(easyQuery),
-            getDocs(mediumQuery),
-            getDocs(hardQuery)
-        ]);
-
-        return {
-            easy: easySnapshot.size,
-            medium: mediumSnapshot.size,
-            hard: hardSnapshot.size
-        };
+        return counts;
     } catch (error) {
-        console.error("Error getting question counts:", error);
+        console.error("Error getting question counts from file:", error);
         return { easy: 0, medium: 0, hard: 0 };
     }
 }
@@ -249,14 +238,14 @@ export async function getPreviousTestAttemptCount(userId: string, context: strin
 // Placeholder to satisfy student dashboard import
 export async function getCourseQuestionBankStats(courseId: string, userId: string): Promise<QuestionBankStats> {
      const progress = await getQuestionBankProgress(courseId, userId);
-     const course = await getCourseForSoruBankasi(courseId);
+     const courseResult = await getCourseForSoruBankasi(courseId);
 
     let passedTests = 0;
     let totalTests = 0;
     let totalScore = 0;
 
-    if (course.course?.units) {
-        for (const unit of course.course.units) {
+    if (courseResult.course?.units) {
+        for (const unit of courseResult.course.units) {
             for (const topic of unit.topics) {
                 const counts = await getQuestionCounts(topic.id);
                 if (counts) {
@@ -281,7 +270,7 @@ export async function getCourseQuestionBankStats(courseId: string, userId: strin
     
     return {
         courseId,
-        courseName: course.course?.title || '',
+        courseName: courseResult.course?.title || '',
         totalTests,
         passedTests,
         completionPercentage: totalTests > 0 ? Math.round((passedTests / totalTests) * 100) : 0,
