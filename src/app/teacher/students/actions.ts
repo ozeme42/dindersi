@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, doc, writeBatch, serverTimestamp, setDoc, getDoc, getDocs, query, orderBy, where, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, writeBatch, serverTimestamp, setDoc, orderBy } from "firebase/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
@@ -25,15 +25,17 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const schoolMap = new Map<string, School>();
     schoolsSnap.docs.forEach(doc => {
         const schoolData = { id: doc.id, ...doc.data() } as School;
-        schoolMap.set(schoolData.name, schoolData);
+        if (schoolData.name && schoolData.id) { // Ensure name and id are not empty
+            schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
+        }
     });
 
     // Add any school from student profiles that isn't already in the map
     students.forEach(student => {
-        if (student.schoolName && !schoolMap.has(student.schoolName)) {
-            // Create a pseudo-school object. The ID doesn't have to match Firestore
-            // if we are just using it for filtering by name.
-            schoolMap.set(student.schoolName, { id: student.schoolName, name: student.schoolName });
+        const schoolName = student.schoolName?.trim();
+        if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
+            // Create a pseudo-school object. Use schoolName as ID if no other ID is available.
+            schoolMap.set(schoolName.toLowerCase(), { id: student.schoolName!, name: student.schoolName! });
         }
     });
 
@@ -219,5 +221,3 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
     }
 }
-
-    

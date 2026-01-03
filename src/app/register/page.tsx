@@ -59,13 +59,16 @@ export default function RegisterPage() {
             const schoolMap = new Map<string, School>();
             schoolsSnapshot.docs.forEach(doc => {
                 const schoolData = { id: doc.id, ...doc.data() } as School;
-                schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
+                 if (schoolData.name && schoolData.id) { // Ensure name and id are not empty
+                    schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
+                }
             });
 
             usersSnapshot.docs.forEach(doc => {
                 const user = doc.data() as UserProfile;
-                if (user.schoolName && !schoolMap.has(user.schoolName.trim().toLowerCase())) {
-                    schoolMap.set(user.schoolName.trim().toLowerCase(), { id: user.schoolName, name: user.schoolName.trim() });
+                const schoolName = user.schoolName?.trim();
+                if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
+                    schoolMap.set(schoolName.toLowerCase(), { id: user.schoolName!, name: user.schoolName! });
                 }
             });
 
