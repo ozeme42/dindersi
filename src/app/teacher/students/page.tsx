@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -37,7 +37,7 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteBulkUsers as deleteUsersAction, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { getStudentData, saveUser, bulkAddStudents } from "./actions";
+import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
 
 
 // Types
@@ -112,11 +112,12 @@ function StudentTable({
                                          </Button>
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                        <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)}>
+                                        <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                        <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                             <Send className="mr-2 h-4 w-4" /> Detaylar
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onEdit(student)}><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => onDelete(student.uid)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10">
+                                        <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer"><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => onDelete(student.uid)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10 cursor-pointer">
                                             <Trash2 className="mr-2 h-4 w-4"/> Sil
                                         </DropdownMenuItem>
                                      </DropdownMenuContent>
@@ -330,7 +331,7 @@ export default function StudentsPage() {
     list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
     return list;
   }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
-
+  
   const filteredGuestStudents = useMemo(() => {
     return allStudents.filter(s => s.role === 'guest');
   }, [allStudents]);
@@ -352,6 +353,9 @@ export default function StudentsPage() {
                 </div>
                 Öğrenci Yönetimi
             </h1>
+            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+              <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+            </Button>
         </div>
 
         <Tabs defaultValue="list" className="space-y-6">
@@ -527,5 +531,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-    

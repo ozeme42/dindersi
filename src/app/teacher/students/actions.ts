@@ -38,7 +38,9 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
         }
     });
 
-    const combinedSchools = Array.from(schoolMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    const combinedSchools = Array.from(schoolMap.values())
+        .filter(school => school.id && school.name) // **CRITICAL FIX**: Filter out any object that might have an empty id or name
+        .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
         students: JSON.parse(JSON.stringify(students)),
@@ -50,6 +52,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     return { students: [], classes: [], schools: [] };
   }
 }
+
 
 type SaveUserData = {
     uid?: string;

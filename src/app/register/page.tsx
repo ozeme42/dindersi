@@ -59,7 +59,7 @@ export default function RegisterPage() {
             const schoolMap = new Map<string, School>();
             schoolsSnapshot.docs.forEach(doc => {
                 const schoolData = { id: doc.id, ...doc.data() } as School;
-                 if (schoolData.name && schoolData.id) { // Ensure name and id are not empty
+                 if (schoolData.name && schoolData.id) {
                     schoolMap.set(schoolData.name.trim().toLowerCase(), schoolData);
                 }
             });
@@ -68,11 +68,13 @@ export default function RegisterPage() {
                 const user = doc.data() as UserProfile;
                 const schoolName = user.schoolName?.trim();
                 if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
-                    schoolMap.set(schoolName.toLowerCase(), { id: user.schoolName!, name: user.schoolName! });
+                    schoolMap.set(schoolName.toLowerCase(), { id: schoolName, name: schoolName });
                 }
             });
 
-            const combinedSchools = Array.from(schoolMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+            const combinedSchools = Array.from(schoolMap.values())
+              .filter(school => school.id && school.name)
+              .sort((a, b) => a.name.localeCompare(b.name, 'tr'));
             setSchools(combinedSchools);
 
         } catch (error) {
