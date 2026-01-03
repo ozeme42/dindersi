@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -17,7 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 // ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -53,15 +54,11 @@ function StudentTable({
     isLoading, 
     onEdit, 
     onDelete, 
-    onClassChange,
-    allClasses 
 }: { 
     students: UserProfile[], 
     isLoading: boolean, 
     onEdit: (student: UserProfile) => void,
     onDelete: (studentId: string) => void,
-    onClassChange: (studentId: string, newClassName: string) => void,
-    allClasses: SchoolClass[],
 }) {
     const router = useRouter();
 
@@ -74,50 +71,28 @@ function StudentTable({
             <Table>
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
-                        <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
+                        <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {students.length > 0 ? students.map((student) => {
-                        const [currentClassName, currentBranch] = student.class?.split(' - ') || ['', ''];
-                        const studentClass = allClasses.find(c => c.name === currentClassName);
-
-                        return (
+                    {students.length > 0 ? students.map((student) => (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                             <TableCell>
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-slate-800 rounded-full border border-white/10 group-hover:border-purple-400 transition-colors">
-                                        <UserCog className="h-6 w-6 text-purple-400" />
-                                    </div>
-                                    <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
+                                    <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
+                                    <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
                             <TableCell>
-                                {studentClass && studentClass.branches ? (
-                                     <Select 
-                                         value={currentBranch || ''}
-                                         onValueChange={(newBranch) => {
-                                             if (newBranch) {
-                                                 onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
-                                             }
-                                         }}
-                                     >
-                                         <SelectTrigger className="w-40 bg-slate-950 border-white/10 text-white h-9 text-xs focus:border-indigo-500/50">
-                                             <SelectValue />
-                                         </SelectTrigger>
-                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                             {studentClass.branches.map(b => (
-                                                 <SelectItem key={b} value={b}>{b}</SelectItem>
-                                             ))}
-                                         </SelectContent>
-                                     </Select>
-                                ) : (
-                                     <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
-                                        {student.class || 'Sınıfsız'}
-                                     </Badge>
-                                )}
+                                <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
+                                    {student.class || 'Sınıfsız'}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-lg text-amber-400 font-mono">
+                                {student.score || 0}
                             </TableCell>
                             <TableCell className="text-right">
                                  <DropdownMenu>
@@ -128,6 +103,9 @@ function StudentTable({
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
                                          <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                         <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)} className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                            <User className="mr-2 h-4 w-4 text-cyan-400" /> Detayları Görüntüle
+                                         </DropdownMenuItem>
                                          <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                              <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
                                          </DropdownMenuItem>
@@ -141,7 +119,7 @@ function StudentTable({
                                                  <AlertDialogHeader>
                                                      <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
                                                      <AlertDialogDescription className="text-slate-400">
-                                                         "{student.displayName}" adlı sanal öğrenci kalıcı olarak silinecektir.
+                                                         "{student.displayName}" adlı öğrenci ve tüm verileri (skor, ilerleme vb.) kalıcı olarak silinecektir. Bu işlem geri alınamaz.
                                                      </AlertDialogDescription>
                                                  </AlertDialogHeader>
                                                  <AlertDialogFooter>
@@ -157,9 +135,9 @@ function StudentTable({
                             </TableCell>
                         </TableRow>
                         )
-                    }) : (
+                    ) : (
                         <TableRow>
-                            <TableCell colSpan={3} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -168,7 +146,7 @@ function StudentTable({
     );
 }
 
-function PendingStudentTable({ students, onApprove }: { students: UserProfile[], onApprove: (uid: string) => void }) {
+function PendingStudentTable({ students, onApprove, onDelete }: { students: UserProfile[], onApprove: (uid: string) => void, onDelete: (uid: string) => void }) {
     return (
         <div className="rounded-2xl border border-white/10 overflow-hidden bg-slate-900/40 backdrop-blur-sm shadow-xl">
              <Table>
@@ -178,7 +156,7 @@ function PendingStudentTable({ students, onApprove }: { students: UserProfile[],
                         <TableHead className="text-slate-300 font-bold">Okul</TableHead>
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-slate-300 font-bold">Kayıt Tarihi</TableHead>
-                        <TableHead className="text-right text-slate-300 font-bold">Eylem</TableHead>
+                        <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -199,10 +177,27 @@ function PendingStudentTable({ students, onApprove }: { students: UserProfile[],
                             <TableCell className="text-slate-400 text-sm">
                                 {student.createdAt ? format(new Date(student.createdAt), 'dd MMMM yyyy', { locale: tr }) : 'Bilinmiyor'}
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="text-right space-x-2">
                                 <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold" onClick={() => onApprove(student.uid)}>
                                     <UserCheck className="mr-2 h-4 w-4"/> Onayla
                                 </Button>
+                                <AlertDialog>
+                                     <AlertDialogTrigger asChild>
+                                        <Button size="sm" variant="destructive" className="bg-red-900 hover:bg-red-800 text-red-300 border border-red-500/30">
+                                            <Trash2 className="mr-2 h-4 w-4"/> Reddet
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>İsteği Reddet</AlertDialogTitle>
+                                            <AlertDialogDescription className="text-slate-400">"{student.displayName}" adlı öğrencinin kayıt isteğini reddetmek istediğinize emin misiniz? Kullanıcı kalıcı olarak silinecektir.</AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel className="bg-transparent border-white/10">İptal</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500">Evet, Reddet ve Sil</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </TableCell>
                         </TableRow>
                      )) : (
@@ -251,21 +246,21 @@ export default function StudentsPage() {
   
   const [activeClassId, setActiveClassId] = useState<string>('all');
   const [activeBranch, setActiveBranch] = useState<string>('all');
-  const [activeSchoolId, setActiveSchoolId] = useState<string>('all');
-
+  
   const [bulkClassId, setBulkClassId] = useState<string>('');
   const [bulkBranch, setBulkBranch] = useState<string>('');
   const [bulkSchoolId, setBulkSchoolId] = useState('');
   const [newBulkSchoolName, setNewBulkSchoolName] = useState('');
   
-  const [isAdding, setIsAdding] = useState(false);
-  const [newStudentName, setNewStudentName] = useState("");
-  const [isBulkAdding, setIsBulkAdding] = useState(false);
-  const [bulkStudentNames, setBulkStudentNames] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [bulkStudentNames, setBulkStudentNames] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
 
   const { toast } = useToast();
 
@@ -296,10 +291,10 @@ export default function StudentsPage() {
     setAllStudents(prev => prev.filter(s => s.uid !== userId)); // Optimistic update
     try {
         await deleteUserFromFirestore(userId);
-        toast({ title: "Başarılı", description: "Öğrenci silindi." });
+        toast({ title: "Başarılı", description: "Kullanıcı silindi." });
         await fetchAllData();
     } catch(e) {
-         toast({ title: "Hata", description: "Öğrenci silinirken bir hata oluştu.", variant: "destructive" });
+         toast({ title: "Hata", description: "Kullanıcı silinirken bir hata oluştu.", variant: "destructive" });
          setAllStudents(originalStudents);
     }
   }
@@ -381,23 +376,6 @@ export default function StudentsPage() {
     }
     setIsSaving(false);
   }
-  
-  const handleClassChange = async (studentId: string, newClassName: string) => {
-    const originalStudent = allStudents.find(s => s.uid === studentId);
-    if (!originalStudent) return;
-  
-    // Optimistic UI update
-    setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
-
-    const result = await saveUser({ ...originalStudent, class: newClassName } as UserProfile);
-
-    if (!result.success) {
-        toast({ title: "Hata", description: result.error, variant: "destructive" });
-        setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
-    } else {
-        toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
-    }
-};
 
   const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
   const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
@@ -405,32 +383,40 @@ export default function StudentsPage() {
   const filteredStudents = useMemo(() => {
     if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'student');
-    if (activeSchoolId !== 'all') {
-        const school = schools.find(s => s.id === activeSchoolId);
-        if (school) list = list.filter(s => s.schoolName === school.name);
-    }
+    
     if (activeClassId !== 'all' && selectedClass) {
-        if (activeBranch === 'all') list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
-        else list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        if (activeBranch === 'all') {
+             if(s.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+        } else {
+             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        }
     }
+    
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
         list = list.filter(s => s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm));
     }
+    
     return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
-  }, [allStudents, activeClassId, activeBranch, activeSchoolId, selectedClass, searchTerm, schools]);
+  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
   
   const filteredGuestStudents = useMemo(() => {
     if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'guest');
+    
     if (activeClassId !== 'all' && selectedClass) {
-        if (activeBranch === 'all') list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
-        else list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        if (activeBranch === 'all') {
+             if(s.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+        } else {
+             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+        }
     }
+    
     if (searchTerm) {
         const lowercasedTerm = searchTerm.toLowerCase();
         list = list.filter(s => s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm));
     }
+    
     return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
   }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
 
@@ -443,6 +429,19 @@ export default function StudentsPage() {
   const validSchools = schools.filter(s => s && s.id && s.name);
   const validClasses = classes.filter(c => c && c.id && c.name);
   
+  const paginatedStudents = useMemo(() => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      return filteredStudents.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredStudents, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+          setCurrentPage(newPage);
+      }
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
@@ -487,14 +486,7 @@ export default function StudentsPage() {
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sisteme kayıtlı öğrencileri görüntüleyin ve yönetin.</CardDescription>
-                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                            <Select value={activeSchoolId} onValueChange={v => setActiveSchoolId(v)}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="all">Tüm Okullar</SelectItem>
-                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
+                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
@@ -513,8 +505,24 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={handleClassChange} allClasses={classes} />
+                        <StudentTable students={paginatedStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
                     </CardContent>
+                    {totalPages > 1 && (
+                         <CardFooter className="flex justify-between items-center bg-slate-900/50 border-t border-white/5 py-3">
+                             <span className="text-sm text-slate-400">{filteredStudents.length} öğrenci bulundu.</span>
+                             <div className="flex items-center gap-2">
+                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                                    <ArrowLeftIcon className="h-4 w-4 mr-2"/> Önceki
+                                </Button>
+                                <span className="font-bold text-sm bg-slate-800 border border-white/10 px-3 py-1 rounded-md">
+                                    {currentPage} / {totalPages}
+                                </span>
+                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                                    Sonraki <ArrowRight className="h-4 w-4 ml-2"/>
+                                </Button>
+                            </div>
+                        </CardFooter>
+                    )}
                  </Card>
             </TabsContent>
 
@@ -525,7 +533,7 @@ export default function StudentsPage() {
                         <CardDescription className="text-slate-400 text-sm">Yeni kayıt olan ve sisteme girmek için onayınızı bekleyen öğrenciler.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <PendingStudentTable students={pendingStudents} onApprove={handleApproveStudent} />
+                        <PendingStudentTable students={pendingStudents} onApprove={handleApproveStudent} onDelete={handleDeleteUser} />
                     </CardContent>
                 </Card>
             </TabsContent>
@@ -554,7 +562,7 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                         <StudentTable students={filteredGuestStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={handleClassChange} allClasses={classes} />
+                         <StudentTable students={filteredGuestStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={() => {}} allClasses={classes} />
                     </CardContent>
                  </Card>
             </TabsContent>
@@ -591,7 +599,7 @@ export default function StudentsPage() {
                         <div className="space-y-1">
                             <Label htmlFor="bulk-school">Okul</Label>
                             <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
-                                <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-12 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
+                                <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white">
                                     {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                     <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
@@ -599,9 +607,9 @@ export default function StudentsPage() {
                             </Select>
                         </div>
                         {bulkSchoolId === 'new' && (
-                            <div className="space-y-1 animate-in slide-in-from-top-2">
+                            <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
                                 <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
-                                <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-12 rounded-xl"/>
+                                <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
                             </div>
                         )}
                     </div>
