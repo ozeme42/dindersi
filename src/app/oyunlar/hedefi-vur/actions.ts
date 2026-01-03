@@ -18,6 +18,8 @@ import {
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { ActivityItem } from '@/lib/types';
+import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
+
 
 export type HitTheTargetRound = {
     definition: string;
@@ -32,20 +34,16 @@ export async function getHitTheTargetAction(
 ): Promise<{ data: HitTheTargetRound[] | null; error?: string }> {
     noStore();
     try {
-        let baseQuery = query(collection(db, 'activityItems'), where('type', '==', 'definition'));
+        const allItems: ActivityItem[] = await getStaticQuestionsForGame({
+            courseId,
+            unitId,
+            topicId,
+            dataType: 'activities'
+        });
 
-        if (topicId && topicId !== 'all') {
-            baseQuery = query(baseQuery, where("topicId", "==", topicId));
-        } else if (unitId && unitId !== 'all') {
-            baseQuery = query(baseQuery, where("unitId", "==", unitId));
-        } else if (courseId && courseId !== 'all') {
-            baseQuery = query(baseQuery, where("courseId", "==", courseId));
-        }
-
-        const querySnapshot = await getDocs(baseQuery);
-        
-        const allDefinitions = querySnapshot.docs.map(doc => doc.data() as ActivityItem)
+        const allDefinitions = allItems
              .filter(item => 
+                item.type === 'definition' &&
                 item.content &&
                 item.content.term && 
                 item.content.definition &&

@@ -7,6 +7,7 @@ import type { ActivityItem } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import fs from 'fs/promises';
 import path from 'path';
+import { getStaticQuestionsForGame } from "@/lib/quiz-actions";
 
 export type DogruYolQuestion = {
     q: string;
@@ -15,46 +16,31 @@ export type DogruYolQuestion = {
 }
 
 export async function getDogruYolKosucusuAction(
-    { topicId }: { topicId?: string; }
+    { topicId, courseId, unitId }: { topicId?: string; courseId?: string, unitId?: string }
 ): Promise<{ questions: DogruYolQuestion[]; error?: string }> {
     noStore();
     try {
-        if (!topicId || topicId === 'all') {
-             return { error: "Oyun oynamak için bir konu seçmelisiniz.", questions: [] };
-        }
-
-        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicId}.json`);
+        const allItems: ActivityItem[] = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'activities' });
         
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const allItems: ActivityItem[] = JSON.parse(fileContent);
+        const allDefinitions = allItems
+            .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
 
-            const allDefinitions = allItems
-                .filter(item => item.type === 'definition' && item.content?.term && item.content?.definition);
-
-            if (allDefinitions.length < 2) {
-                return { error: "Bu oyun için en az 2 farklı tanım/kavram gereklidir.", questions: [] };
-            }
-            
-            const gameQuestions: DogruYolQuestion[] = allDefinitions.map((item, index, arr) => {
-                const wrongOptions = arr.filter((_, i) => i !== index);
-                const wrongAnswerItem = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
-
-                return {
-                    q: item.content.definition!,
-                    correct: item.content.term!,
-                    wrong: wrongAnswerItem.content.term!
-                };
-            });
-
-            return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
-
-        } catch (fileError: any) {
-            if (fileError.code === 'ENOENT') {
-                return { error: "Bu konu için etkinlik verisi bulunamadı.", questions: [] };
-            }
-            throw fileError;
+        if (allDefinitions.length < 2) {
+            return { error: "Bu oyun için en az 2 farklı tanım/kavram gereklidir.", questions: [] };
         }
+            
+        const gameQuestions: DogruYolQuestion[] = allDefinitions.map((item, index, arr) => {
+            const wrongOptions = arr.filter((_, i) => i !== index);
+            const wrongAnswerItem = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+
+            return {
+                q: item.content.definition!,
+                correct: item.content.term!,
+                wrong: wrongAnswerItem.content.term!
+            };
+        });
+
+        return { questions: JSON.parse(JSON.stringify(gameQuestions)) };
 
     } catch (error: any) {
         console.error("Error getting Dogru Yol Kosucusu questions:", error);

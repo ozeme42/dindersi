@@ -31,7 +31,7 @@ export async function getConceptQuizAction(
 ): Promise<{ questions: ConceptQuizQuestion[] | null; error?: string }> {
     noStore();
     try {
-        let itemsForTopic: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let itemsForTopic: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
 
         // Sadece 'definition' tipindeki verileri al
         const allDefinitions = itemsForTopic.filter((item): item is ActivityItem & { content: { term: string, definition: string } } => 

@@ -124,72 +124,26 @@ export async function getStaticQuestionsForGame(params: {
   topicId?: string;
   dataType?: 'questions' | 'activities';
 }): Promise<(Question | ActivityItem)[]> {
-    const { topicId, unitId, courseId, dataType = 'questions' } = params;
+    const { topicId, unitId, courseId, dataType = 'activities' } = params;
     const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataType);
-    const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
         try {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
-            if (e.code !== 'ENOENT') {
+            if (e.code !== 'ENOENT') { // "File not found" hatalarını yoksay
                 console.error(`Error reading or parsing ${filePath}:`, e);
             }
-            return null;
+            return null; // Dosya yoksa veya hata varsa null dön
         }
     };
     
-    // 1. Specific Topic ID
+    // Sadece belirtilen topicId'den veri çek
     if (topicId && topicId !== 'all') {
         const data = await readJsonFile(path.join(baseDir, `${topicId}.json`));
-        return data || [];
+        return data || []; // Veri bulunamazsa boş dizi döndür
     }
 
-    // --- HIERARCHICAL FETCHING LOGIC FOR 'ALL' ---
-    try {
-        const manifestContent = await fs.readFile(manifestPath, 'utf-8');
-        const manifest = JSON.parse(manifestContent);
-        
-        let targetTopics: any[] = [];
-
-        // Find the right scope from the manifest
-        if (unitId && unitId !== 'all') {
-            // Find all topics within a specific unit
-             for (const group of manifest.classGroups) {
-                for (const course of group.courses) {
-                    const foundUnit = course.units.find((u: any) => u.id === unitId);
-                    if (foundUnit) {
-                        targetTopics = foundUnit.topics;
-                        break;
-                    }
-                }
-                if (targetTopics.length > 0) break;
-            }
-        } else if (courseId && courseId !== 'all') {
-            // Find all topics within a specific course
-             for (const group of manifest.classGroups) {
-                const foundCourse = group.courses.find((c: any) => c.id === courseId);
-                if (foundCourse) {
-                    targetTopics = foundCourse.units.flatMap((u: any) => u.topics);
-                    break;
-                }
-             }
-        }
-        
-        if (targetTopics.length > 0) {
-            // Fetch content for all found topics and flatten them
-            const allTopicContents = await Promise.all(
-                targetTopics.map(topic => readJsonFile(path.join(baseDir, `${topic.id}.json`)))
-            );
-            return allTopicContents.flat().filter(Boolean) as (Question | ActivityItem)[];
-        }
-    } catch (e) {
-        console.error("Manifest could not be read. Cannot perform 'all' lookup.", e);
-        return [];
-    }
-    
-    // If no specific hierarchy matched, it means something went wrong or no filter was provided that we can use.
-    // Return empty to avoid loading all data from all files.
-    return [];
+    return []; // Belirli bir konu seçilmediyse veya "Tümü" seçildiyse şimdilik boş döndür.
 }
