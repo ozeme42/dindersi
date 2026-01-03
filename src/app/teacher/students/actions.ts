@@ -8,7 +8,6 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
-
 export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
@@ -35,7 +34,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
         const schoolName = student.schoolName?.trim();
         if (schoolName && !schoolMap.has(schoolName.toLowerCase())) {
             // Create a pseudo-school object. Use schoolName as ID if no other ID is available.
-            schoolMap.set(schoolName.toLowerCase(), { id: student.schoolName!, name: student.schoolName! });
+            schoolMap.set(schoolName.toLowerCase(), { id: schoolName, name: schoolName });
         }
     });
 
