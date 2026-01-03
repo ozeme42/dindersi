@@ -17,6 +17,7 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+// ADDED Search ICON
 import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon, User } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
@@ -226,19 +227,22 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
+    // Yeni kullanıcı için şifre zorunluluğu
     if (!data.uid && (!data.password || data.password.length < 6)) {
       return false;
     }
+    // Varolan kullanıcıyı güncellerken şifre girilmişse, uzunluk kontrolü
     if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
       return false;
     }
+    // Yeni okul seçilmişse, okul adı zorunluluğu
     if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
         return false;
     }
     return true;
 }, {
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
-    path: ["password"],
+    path: ["password"], // Path to an element that will be highlighted
 });
 
 export default function StudentsPage() {
@@ -418,9 +422,9 @@ export default function StudentsPage() {
     
     if (activeClassId !== 'all' && selectedClass) {
         if (activeBranch === 'all') {
-            if(list.length > 0 && list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
+             if(list.length > 0 && list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
         } else {
-            list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
+             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
         }
     }
     
@@ -500,7 +504,7 @@ export default function StudentsPage() {
                  <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
-                        <CardDescription className="text-slate-400 text-sm">Sisteme kayıtlı öğrencileri görüntüleyin ve yönetin.</CardDescription>
+                        <CardDescription className="text-slate-400 text-sm">Sistemdeki öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                             <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>

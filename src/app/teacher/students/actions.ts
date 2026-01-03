@@ -66,7 +66,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
 type SaveUserData = {
     uid?: string;
     displayName: string;
-    email: string;
+    email?: string;
     role: 'student' | 'teacher' | 'superadmin' | 'guest';
     class?: string;
     schoolName?: string;
@@ -107,18 +107,22 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
             });
 
         } else { // Create new user
-             if (!password) {
+            if (!password) {
                 return { success: false, error: 'Yeni kullanıcı için şifre zorunludur.' };
             }
+            
+            // Use provided email or generate one if not present
+            const finalEmail = email || `${normalizeNameToEmailLocalPart(displayName)}@degerleroyunu.com`;
+            
             const newUserRecord = await auth.createUser({
-                email,
+                email: finalEmail,
                 password,
                 displayName,
             });
 
             const userProfile: Omit<UserProfile, 'uid'> = {
                 displayName,
-                email,
+                email: finalEmail,
                 role,
                 class: className || '',
                 schoolName: schoolName || '',

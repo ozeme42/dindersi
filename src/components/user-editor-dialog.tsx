@@ -25,7 +25,7 @@ import { Loader2, PlusCircle } from "lucide-react";
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi.").optional(),
+  email: z.string().optional(),
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -34,19 +34,22 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
+    // Yeni kullanıcı için şifre zorunluluğu
     if (!data.uid && (!data.password || data.password.length < 6)) {
       return false;
     }
+    // Varolan kullanıcıyı güncellerken şifre girilmişse, uzunluk kontrolü
     if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
       return false;
     }
+    // Yeni okul seçilmişse, okul adı zorunluluğu
     if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
         return false;
     }
     return true;
 }, {
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
-    path: ["password"],
+    path: ["password"], // Path to an element that will be highlighted
 });
 
 
@@ -63,7 +66,6 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
         resolver: zodResolver(UserEditorSchema),
         defaultValues: {
             displayName: '',
-            email: '',
             role: 'student',
             classId: '',
             branch: '',
@@ -125,14 +127,9 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                             <Input id="displayName" {...register("displayName")} />
                             {errors.displayName && <p className="text-sm text-destructive mt-1">{errors.displayName.message}</p>}
                         </div>
-                        <div>
-                            <Label htmlFor="email">E-posta</Label>
-                            <Input id="email" type="email" {...register("email")} disabled={!!user?.uid} />
-                            {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
-                        </div>
                          <div>
                             <Label htmlFor="password">{user?.uid ? 'Yeni Şifre (değişmeyecekse boş bırakın)' : 'Şifre'}</Label>
-                            <Input id="password" type="password" {...register("password")} placeholder={user?.uid ? 'Değiştirmek istemiyorsanız boş bırakın' : ''} />
+                            <Input id="password" type="password" {...register("password")} placeholder={user?.uid ? 'Değiştirmek istemiyorsanız boş bırakın' : 'En az 6 karakter'} />
                             {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
                         </div>
                         <div>
