@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -312,8 +313,8 @@ export default function StudentsPage() {
     }
   };
   
-  const handleOpenDialog = (user: Partial<UserProfile> | null = null) => {
-      const defaultUser = { role: 'student', schoolName: currentUser?.schoolName || '' };
+  const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher' | 'guest' = 'student') => {
+      const defaultUser = { role: role, schoolName: currentUser?.schoolName || '' };
       setDialogState({ isOpen: true, user: user || defaultUser });
   };
   
@@ -393,9 +394,9 @@ export default function StudentsPage() {
   const filteredStudents = useMemo(() => {
     let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
     
-    if (currentUser?.role === 'teacher' && currentUser.schoolName) {
-        // Already filtered in getStudentData
-    } else if (schoolFilter !== 'all') {
+    // School filter is already applied in `getStudentData` for teachers.
+    // Superadmin needs a manual filter here.
+    if (currentUser?.role === 'superadmin' && schoolFilter !== 'all') {
         const selectedSchool = schools.find(s => s.id === schoolFilter);
         if (selectedSchool) {
             list = list.filter(s => s.schoolName === selectedSchool.name);
@@ -420,14 +421,19 @@ export default function StudentsPage() {
   
   const pendingStudents = useMemo(() => {
       if (!allStudents) return [];
+      // School filter for pending students is already handled by `getStudentData` for teachers.
       let pending = allStudents.filter(s => s.role === 'pending');
       
-      if(currentUser?.role === 'teacher' && currentUser.schoolName) {
-          pending = pending.filter(s => s.schoolName === currentUser.schoolName);
-      }
+      // Additional filter for superadmin
+       if (currentUser?.role === 'superadmin' && schoolFilter !== 'all') {
+        const selectedSchool = schools.find(s => s.id === schoolFilter);
+        if (selectedSchool) {
+            pending = pending.filter(s => s.schoolName === selectedSchool.name);
+        }
+    }
       
       return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
-  }, [allStudents, currentUser]);
+  }, [allStudents, currentUser, schoolFilter, schools]);
 
   const schoolFilterOptions = currentUser?.role === 'teacher' ? [] : schools;
 
@@ -479,7 +485,7 @@ export default function StudentsPage() {
                  <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
                     <CardHeader className="border-b border-white/5 pb-4">
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
-                        <CardDescription className="text-slate-400 text-sm">Sistemdeki öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
+                        <CardDescription className="text-slate-400 text-sm">Öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
                             {currentUser?.role !== 'teacher' && (
                                 <Select value={schoolFilter} onValueChange={setSchoolFilter}>
@@ -501,7 +507,7 @@ export default function StudentsPage() {
                                     {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                                 </SelectContent>
                             </Select>
-                             <div className="relative md:col-span-2">
+                             <div className="relative md:col-span-1">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                 <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
                              </div>
@@ -534,19 +540,21 @@ export default function StudentsPage() {
                         </div>
                         <CardTitle className="text-2xl text-white">Öğrenci Ekle</CardTitle>
                     </div>
-                    <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin.</CardDescription>
+                    <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin. Şifreleri otomatik olarak "password" şeklinde atanacaktır.</CardDescription>
                 </CardHeader>
                 <CardContent className="p-8">
-                    <Tabs defaultValue="single" className="w-full">
+                    <Tabs defaultValue="bulk" className="w-full">
                          <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex mb-6">
-                            <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
                             <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
+                            <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
                          </TabsList>
+                         
                          <TabsContent value="single" className="mt-0">
-                             <Button onClick={() => handleOpenDialog(null)} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+                             <Button onClick={() => handleOpenDialog(null, 'student')} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
                                 <UserPlus className="mr-2 h-5 w-5"/> Yeni Öğrenci Formunu Aç
                             </Button>
                          </TabsContent>
+                         
                          <TabsContent value="bulk" className="mt-0 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {currentUser?.role !== 'teacher' && (
@@ -586,7 +594,7 @@ export default function StudentsPage() {
                             </div>
 
                             <div className="bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                                <Label className="text-slate-300">Öğrenci Listesi</Label>
+                                <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
                                 <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50 mt-2" />
                             </div>
                             <div className="flex justify-end mt-6">
@@ -616,5 +624,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-
-    

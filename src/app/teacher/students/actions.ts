@@ -12,13 +12,27 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 export async function getStudentData(teacher?: UserProfile): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
-    const [studentsSnap, classesSnap, schoolsSnap] = await Promise.all([
-      getDocs(query(collection(db, "users"))),
+    const [classesSnap, schoolsSnap] = await Promise.all([
       getDocs(query(collection(db, 'classes'), orderBy('name', 'asc'))),
       getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
     ]);
     
-    let allStudents = studentsSnap.docs.map(doc => {
+    let studentsQuery;
+    // If a teacher is making the request, filter students by their school name directly in the query.
+    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
+      studentsQuery = query(
+        collection(db, "users"),
+        where("schoolName", "==", teacher.schoolName),
+        where("role", "in", ["student", "guest", "pending"])
+      );
+    } else {
+      // For superadmins, fetch all students, guests, and pending users.
+      studentsQuery = query(collection(db, "users"));
+    }
+
+    const studentsSnap = await getDocs(studentsQuery);
+    
+    const allStudents = studentsSnap.docs.map(doc => {
         const data = doc.data();
         return { 
             uid: doc.id, 
@@ -27,15 +41,10 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         } as UserProfile
     });
 
-    // If a teacher is making the request, filter students by their school.
-    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
-        allStudents = allStudents.filter(student => student.schoolName === teacher.schoolName);
-    }
-
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
+    // School list should be comprehensive based on schools collection and what's in use by users.
     const schoolSet = new Map<string, School>();
-
     schoolsSnap.docs.forEach(doc => {
         const schoolData = doc.data() as { name: string };
         if (schoolData.name && !schoolSet.has(schoolData.name.toLowerCase())) {
@@ -95,7 +104,10 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
             if (password) {
                 updatePayload.password = password;
             }
-            await auth.updateUser(uid, updatePayload);
+            // Only update auth user if necessary.
+            if (Object.keys(updatePayload).length > 0) {
+              await auth.updateUser(uid, updatePayload);
+            }
             
             const userDocRef = db.collection('users').doc(uid);
             await userDocRef.update({
