@@ -1,14 +1,10 @@
-
-
 'use server';
 
-import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
-import { collection, doc, serverTimestamp, setDoc } from "firebase-admin/firestore";
+import { getAdminDb } from "@/lib/firebase-admin";
+import { FieldValue } from "firebase-admin/firestore"; // Admin SDK timestamp
 import type { UserProfile } from "@/lib/types";
-import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
-// This is a simplified version of student creation that does NOT create an auth user.
-// It only creates a document in Firestore.
+// Auth kullanıcısı OLUŞTURMADAN sadece Firestore kaydı oluşturur.
 export async function addGuestStudent(displayName: string, className: string, teacherId: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
     if (!finalDisplayName) {
@@ -20,24 +16,29 @@ export async function addGuestStudent(displayName: string, className: string, te
 
     try {
         const db = getAdminDb();
-        const docRef = doc(collection(db, "users"));
+        // Admin SDK syntax: db.collection().doc()
+        const docRef = db.collection("users").doc(); 
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
-            email: `${docRef.id}@guest.degerleroyunu.app`, // A dummy email
-            role: 'guest', // The key difference
+            email: `${docRef.id}@guest.degerleroyunu.app`, // Dummy email
+            role: 'guest',
             class: className,
             score: 0,
-            createdAt: serverTimestamp(),
-            teacherId: teacherId, // Associate with the teacher
+            // Admin SDK timestamp syntax
+            createdAt: FieldValue.serverTimestamp() as any,
+            teacherId: teacherId,
+            ownedItems: [],
         };
 
-        await setDoc(docRef, newUserProfile);
+        // Admin SDK syntax: docRef.set()
+        await docRef.set(newUserProfile);
         
+        // Serileştirilebilir (Client'a dönebilir) veri hazırlama
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
             uid: docRef.id,
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(), // Timestamp'i string'e çeviriyoruz
         };
         
         return { success: true, newUser: serializableNewUser };
@@ -47,7 +48,6 @@ export async function addGuestStudent(displayName: string, className: string, te
         return { success: false, error: `Sanal öğrenci oluşturulurken hata: ${error.message}` };
     }
 }
-
 
 export async function bulkAddGuestStudents(names: string[], className: string, teacherId: string): Promise<{ success: boolean; error?: string; successCount?: number; errorDetails?: {name: string, error: string}[] }> {
     if (!names || names.length === 0) {
@@ -60,27 +60,34 @@ export async function bulkAddGuestStudents(names: string[], className: string, t
     try {
         const db = getAdminDb();
         const batch = db.batch();
-        const usersCollection = collection(db, "users");
+        const usersCollection = db.collection("users"); // Admin SDK
+
+        let operationCount = 0;
 
         names.forEach(name => {
             const finalDisplayName = name.trim();
             if (finalDisplayName) {
-                const docRef = doc(usersCollection);
+                const docRef = usersCollection.doc(); // Yeni ID üretir
                 const newUserProfile: Omit<UserProfile, 'uid'> = {
                     displayName: finalDisplayName,
                     email: `${docRef.id}@guest.degerleroyunu.app`,
                     role: 'guest',
                     class: className,
                     score: 0,
-                    createdAt: serverTimestamp(),
+                    createdAt: FieldValue.serverTimestamp() as any,
                     teacherId: teacherId,
+                    ownedItems: [],
                 };
                 batch.set(docRef, newUserProfile);
+                operationCount++;
             }
         });
 
-        await batch.commit();
-        return { success: true, successCount: names.filter(Boolean).length };
+        if (operationCount > 0) {
+            await batch.commit();
+        }
+        
+        return { success: true, successCount: operationCount };
     } catch (error: any) {
         console.error("Error creating bulk guest students:", error);
         return { success: false, error: `Sanal öğrenciler oluşturulurken hata: ${error.message}` };
@@ -94,8 +101,7 @@ export async function updateStudentClass(studentId: string, newClassName: string
 
     try {
         const db = getAdminDb();
-        const studentRef = db.collection('users').doc(studentId);
-        await studentRef.update({
+        await db.collection('users').doc(studentId).update({
             class: newClassName
         });
         return { success: true };
