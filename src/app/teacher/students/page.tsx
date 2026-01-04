@@ -247,6 +247,7 @@ export default function StudentsPage() {
   
     const [activeClassId, setActiveClassId] = useState<string>('all');
     const [activeBranch, setActiveBranch] = useState<string>('all');
+    const [schoolFilter, setSchoolFilter] = useState('all');
   
     const [bulkClassId, setBulkClassId] = useState<string>('');
     const [bulkBranch, setBulkBranch] = useState<string>('');
@@ -264,18 +265,16 @@ export default function StudentsPage() {
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
-        const { students, classes, schools } = await getStudentData(currentUser || undefined);
-        
-        setAllStudents(students);
-        const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-        setClasses(sortedClasses);
-        setSchools(schools);
-
+            const { students, classes, schools } = await getStudentData(currentUser || undefined);
+            setAllStudents(students);
+            const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            setClasses(sortedClasses);
+            setSchools(schools);
         } catch (error) {
-        console.error("Error fetching data:", error);
-        toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
+            console.error("Error fetching data:", error);
+            toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
         } finally {
-        setIsLoading(false);
+            setIsLoading(false);
         }
     }, [toast, currentUser]);
 
@@ -395,7 +394,7 @@ export default function StudentsPage() {
     let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
     
     if (currentUser?.role === 'teacher' && currentUser.schoolName) {
-        // Zaten `getStudentData` içinde filtrelendi, burada tekrar filtrelemeye gerek yok.
+        // Already filtered in getStudentData
     } else if (schoolFilter !== 'all') {
         const selectedSchool = schools.find(s => s.id === schoolFilter);
         if (selectedSchool) {
@@ -454,7 +453,7 @@ export default function StudentsPage() {
         <div className="flex items-center justify-between border-b border-white/10 pb-8">
              <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
                 <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
-                    <Users className="h-8 w-8 text-purple-400" />
+                    <UserCog className="h-8 w-8 text-purple-400" />
                 </div>
                 Öğrenci Yönetimi
             </h1>
@@ -591,7 +590,7 @@ export default function StudentsPage() {
                                 <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50 mt-2" />
                             </div>
                             <div className="flex justify-end mt-6">
-                                <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || !bulkSchoolId || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
+                                <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !currentUser?.schoolName) || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
                                     {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                                 </Button>
                             </div>
@@ -617,3 +616,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+    
