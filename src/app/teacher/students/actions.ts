@@ -26,7 +26,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         // We will filter by role in the code to avoid composite index requirement
       );
     } else {
-      // For superadmins, fetch all users. We will filter client-side.
+      // For superadmins, fetch all users.
       studentsQuery = query(collection(db, "users"));
     }
 
@@ -52,7 +52,9 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         }
     });
 
-    usersSnap.docs.forEach(userDoc => {
+    // Also get school names from all users in case they are not in the schools collection
+    const allUsersSnap = await getDocs(query(collection(db, "users")));
+    allUsersSnap.docs.forEach(userDoc => {
         const student = userDoc.data() as UserProfile;
         if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
             const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
@@ -287,4 +289,6 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: true };
     } catch (error: any) {
         console.error("Error approving student:", error);
-        return { success: false, error: 'Öğrenci
+        return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
+    }
+}
