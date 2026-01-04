@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -37,7 +36,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { updateUser, deleteUserFromFirestore, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
 import { addGuestStudent, bulkAddGuestStudents, updateStudentClass, getStudentData } from "./actions";
 
 
@@ -55,14 +54,16 @@ function StudentTable({
     isLoading, 
     onEdit, 
     onDelete, 
+    onClassChange,
+    allClasses 
 }: { 
     students: UserProfile[], 
     isLoading: boolean, 
     onEdit: (student: UserProfile) => void,
     onDelete: (studentId: string) => void,
+    onClassChange: (studentId: string, newClassName: string) => void,
+    allClasses: SchoolClass[],
 }) {
-    const router = useRouter();
-
     if (isLoading) {
         return <div className="flex justify-center items-center h-48"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
     }
@@ -79,7 +80,11 @@ function StudentTable({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {students.length > 0 ? students.map((student) => (
+                    {students.length > 0 ? students.map((student) => {
+                        const [currentClassName, currentBranch] = student.class?.split(' - ') || ['', ''];
+                        const studentClass = allClasses.find(c => c.name === currentClassName);
+
+                        return (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                             <TableCell>
                                 <div className="flex items-center gap-3">
@@ -136,7 +141,7 @@ function StudentTable({
                             </TableCell>
                         </TableRow>
                         )
-                    ) : (
+                    }) : (
                         <TableRow>
                             <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
@@ -276,7 +281,7 @@ export default function StudentsPage() {
             if (currentUser?.role === 'teacher' && currentUser.schoolName) {
                 const teacherSchool = schools.find(s => s.name === currentUser.schoolName);
                 if (teacherSchool) {
-                    setSchoolFilter(teacherSchool.id); // Set the filter for teacher
+                    setSchoolFilter(teacherSchool.id); 
                     setBulkSchoolId(teacherSchool.id);
                 }
             }
@@ -364,7 +369,7 @@ export default function StudentsPage() {
     };
 
     const handleBulkAdd = async (e: React.FormEvent) => {
-        e.preventDefault();
+      e.preventDefault();
       
         let schoolNameForBulk: string | undefined;
         if (currentUser?.role === 'teacher') {
@@ -397,6 +402,24 @@ export default function StudentsPage() {
         }
         setIsSaving(false);
     }
+  
+    const handleClassChange = async (studentId: string, newClassName: string) => {
+        const originalStudent = allStudents.find(s => s.uid === studentId);
+        if (!originalStudent) return;
+    
+        // Optimistic UI update
+        setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
+
+        const result = await updateStudentClass(studentId, newClassName);
+
+        if (!result.success) {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            // Revert UI on failure
+            setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
+        } else {
+            toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
+        }
+    };
 
     const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
     const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
@@ -404,7 +427,6 @@ export default function StudentsPage() {
     const filteredStudents = useMemo(() => {
         let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
     
-        // Teacher role is already pre-filtered by the server action
         if (currentUser?.role !== 'teacher') {
             const selectedSchool = schools.find(s => s.id === schoolFilter);
             if (schoolFilter !== 'all' && selectedSchool) {
@@ -436,8 +458,6 @@ export default function StudentsPage() {
       }
       return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
     }, [allStudents, currentUser]);
-
-    const schoolFilterOptions = currentUser?.role === 'teacher' ? [] : schools;
 
     if (isLoading) {
         return (
@@ -489,7 +509,7 @@ export default function StudentsPage() {
                                 <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                                 <CardDescription className="text-slate-400 text-sm">Öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                                     <Select value={schoolFilter} onValueChange={setSchoolFilter} disabled={currentUser?.role === 'teacher'}>
+                                    <Select value={schoolFilter} onValueChange={setSchoolFilter} disabled={currentUser?.role === 'teacher'}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50">
                                             <SelectValue placeholder="Okul Seç..." />
                                         </SelectTrigger>
@@ -516,7 +536,7 @@ export default function StudentsPage() {
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
+                                <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={handleClassChange} allClasses={classes} />
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -545,71 +565,77 @@ export default function StudentsPage() {
                                 <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin. Şifreleri otomatik olarak "password" şeklinde atanacaktır.</CardDescription>
                             </CardHeader>
                             <CardContent className="p-8">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                    {currentUser?.role !== 'teacher' ? (
+                                        <div className="space-y-1">
+                                            <Label htmlFor="bulk-school">Okul</Label>
+                                            <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
+                                                <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
+                                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                    {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                                    <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-1">
+                                            <Label>Okul</Label>
+                                            <Input value={currentUser.schoolName || 'Okul atanmamış'} disabled className="bg-slate-950 border-white/10"/>
+                                        </div>
+                                    )}
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300">Sınıf</Label>
+                                        <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-slate-300">Şube</Label>
+                                        <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    {bulkSchoolId === 'new' && currentUser?.role !== 'teacher' && (
+                                        <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
+                                            <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
+                                            <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
+                                        </div>
+                                    )}
+                                </div>
                                 <Tabs defaultValue="bulk" className="w-full">
-                                    <TabsList className="bg-slate-950 border border-white/10 p-1 rounded-xl h-auto w-full flex mb-6">
-                                        <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
-                                        <TabsTrigger value="single" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
+                                    <TabsList className="grid w-full grid-cols-2 bg-slate-950 border border-white/10 p-1 rounded-xl h-auto">
+                                        <TabsTrigger value="bulk" className="py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
+                                        <TabsTrigger value="single" className="py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
                                     </TabsList>
-                         
-                                    <TabsContent value="single" className="mt-0">
-                                        <Button onClick={() => handleOpenDialog(null, 'student')} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
-                                            <UserPlus className="mr-2 h-5 w-5"/> Yeni Öğrenci Formunu Aç
-                                        </Button>
-                                    </TabsContent>
-                         
-                                    <TabsContent value="bulk" className="mt-0 space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                            {currentUser?.role !== 'teacher' ? (
-                                                <div className="space-y-1">
-                                                    <Label htmlFor="bulk-school">Okul</Label>
-                                                    <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
-                                                        <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
-                                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                            {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                                            <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-1">
-                                                    <Label>Okul</Label>
-                                                    <Input value={currentUser.schoolName || 'Okul atanmamış'} disabled className="bg-slate-950 border-white/10"/>
-                                                </div>
-                                            )}
-                                            <div className="space-y-1">
-                                                <Label className="text-slate-300">Sınıf</Label>
-                                                <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
-                                                    <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                                                </Select>
+                                    
+                                    <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
+                                        <TabsContent value="single" className="mt-0">
+                                            <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
+                                              <div className="flex-1 space-y-2">
+                                                  <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
+                                                  <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
+                                              </div>
+                                              <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
+                                                  {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
+                                              </Button>
+                                            </form>
+                                        </TabsContent>
+                                        <TabsContent value="bulk" className="mt-0 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
+                                                <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
                                             </div>
-                                            <div className="space-y-1">
-                                                <Label className="text-slate-300">Şube</Label>
-                                                <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
-                                                    <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                        {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                                    </SelectContent>
-                                                </Select>
+                                            <div className="flex justify-end mt-6">
+                                                <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !currentUser?.schoolName) || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
+                                                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
+                                                </Button>
                                             </div>
-                                            {bulkSchoolId === 'new' && currentUser?.role !== 'teacher' && (
-                                                <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
-                                                    <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
-                                                    <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                                            <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
-                                            <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50 mt-2" />
-                                        </div>
-                                        <div className="flex justify-end mt-6">
-                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !currentUser?.schoolName) || (bulkSchoolId === 'new' && !newBulkSchoolName)}>
-                                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
-                                            </Button>
-                                        </div>
-                                    </TabsContent>
+                                        </TabsContent>
+                                    </div>
                                 </Tabs>
                             </CardContent>
                         </Card>
@@ -627,238 +653,7 @@ export default function StudentsPage() {
                      classes={classes}
                      schools={schools}
                  />
-              )}
+            )}
         </div>
     );
 }
-
-```
-- src/components/ui/input.tsx
-- src/components/ui/card.tsx
-- src/components/ui/badge.tsx
-- src/components/ui/button.tsx
-- src/components/ui/textarea.tsx
-- src/components/ui/label.tsx
-- src/components/ui/sheet.tsx
-- src/components/ui/progress.tsx
-- src/components/ui/dropdown-menu.tsx
-- src/components/ui/select.tsx
-- src/components/ui/tabs.tsx
-- src/components/ui/skeleton.tsx
-- src/components/ui/dialog.tsx
-- src/components/ui/accordion.tsx
-- src/components/ui/alert-dialog.tsx
-- src/components/ui/popover.tsx
-- src/components/ui/calendar.tsx
-- src/components/ui/separator.tsx
-- src/components/ui/radio-group.tsx
-- src/components/ui/slider.tsx
-- src/components/ui/alert.tsx
-- src/components/ui/checkbox.tsx
-- src/components/ui/tooltip.tsx
-- src/components/ui/form.tsx
-- src/components/ui/toaster.tsx
-- src/components/ui/avatar.tsx
-- src/components/ui/scroll-area.tsx
-- src/components/ui/menubar.tsx
-- src/context/theme-provider.tsx
-- src/lib/utils.ts
-- src/app/layout.tsx
-- src/lib/firebase.ts
-- src/hooks/use-auth.ts
-- src/lib/types.ts
-- src/components/providers.tsx
-- src/components/auth-guard.tsx
-- src/app/login/page.tsx
-- src/app/login/layout.tsx
-- src/app/page-content.tsx
-- src/components/bottom-nav-bar.tsx
-- src/app/student/layout.tsx
-- src/app/student/page.tsx
-- src/app/student/profile/page.tsx
-- src/app/student/shop/page.tsx
-- src/app/student/yarismalar/page.tsx
-- src/app/student/yarismalar/bireysel/client-page.tsx
-- src/app/student/yarismalar/bireysel/oyun/page.tsx
-- src/app/student/yarismalar/takim/client-page.tsx
-- src/app/student/yarismalar/takim/oyun/page.tsx
-- src/app/student/yarismalar/duello/client-page.tsx
-- src/app/student/yarismalar/duello/oyun/page.tsx
-- src/app/student/soru-bankasi/page.tsx
-- src/app/student/soru-bankasi/coz/page.tsx
-- src/app/student/soru-bankasi/[courseId]/page.tsx
-- src/app/student/deneme/page.tsx
-- src/app/student/deneme/coz/page.tsx
-- src/app/student/deneme/sonuc/[assignmentId]/page.tsx
-- src/app/student/ders/[ders-adi]/[unitId]/page.tsx
-- src/app/student/ders/[ders-adi]/page.tsx
-- src/app/student/tekrar-et/page.tsx
-- src/app/student/wheel/page.tsx
-- src/app/student/yarismalar/ayarlar/page.tsx
-- src/app/teacher/layout.tsx
-- src/app/teacher/page.tsx
-- src/app/teacher/content-creation/page.tsx
-- src/app/teacher/content-creation/edit/page.tsx
-- src/app/teacher/content-creation/edit-unit/[unitId]/page.tsx
-- src/app/teacher/questions/page.tsx
-- src/app/teacher/exam-questions/page.tsx
-- src/app/teacher/activity-data/page.tsx
-- src/app/teacher/exams/page.tsx
-- src/app/teacher/exams/new/page.tsx
-- src/app/teacher/exams/edit/[assignmentId]/page.tsx
-- src/app/teacher/assignments/[assignmentId]/page.tsx
-- src/app/teacher/scales/page.tsx
-- src/app/teacher/scales/[scaleId]/page.tsx
-- src/app/teacher/scales/students/page.tsx
-- src/app/teacher/stats/page.tsx
-- src/app/teacher/score-events/page.tsx
-- src/app/teacher/image-library/page.tsx
-- src/app/teacher/video-library/page.tsx
-- src/app/teacher/smartboard/page.tsx
-- src/app/teacher/smartboard/bireysel/page.tsx
-- src/app/teacher/smartboard/bireysel/oyun/page.tsx
-- src/app/teacher/smartboard/takim/page.tsx
-- src/app/teacher/smartboard/takim/oyun/page.tsx
-- src/app/teacher/smartboard/duello/page.tsx
-- src/app/teacher/smartboard/duello/oyun/page.tsx
-- src/app/teacher/smartboard/kavram-yarismasi/page.tsx
-- src/app/teacher/smartboard/kavram-yarismasi/oyun/page.tsx
-- src/app/teacher/smartboard/kutu-ac/page.tsx
-- src/app/teacher/smartboard/kutu-ac/oyun/page.tsx
-- src/app/teacher/smartboard/tornado/page.tsx
-- src/app/teacher/smartboard/tornado/oyun/page.tsx
-- src/app/teacher/smartboard/yazilacaklar/page.tsx
-- src/app/teacher/smartboard/yazilacaklar/oyun/page.tsx
-- src/app/teacher/smartboard/ozetler/page.tsx
-- src/app/teacher/smartboard/ozetler/goruntule/page.tsx
-- src/app/teacher/smartboard/ozetler/goruntule/[...slug]/page.tsx
-- src/app/teacher/smartboard/fetih-oyunu/page.tsx
-- src/app/teacher/smartboard/fetih-oyunu/oyun/page.tsx
-- src/app/teacher/smartboard/anlik-geri-bildirim/page.tsx
-- src/app/teacher/smartboard/carkifelek/page.tsx
-- src/app/teacher/smartboard/ayarlar/page.tsx
-- src/app/teacher/ders-akisi/page.tsx
-- src/app/teacher/ders-akisi/ozet/[topicId]/page.tsx
-- src/app/curriculum/page.tsx
-- src/app/curriculum/layout.tsx
-- src/app/ozetler/[...slug]/page.tsx
-- src/app/yazilacaklar/[...slug]/page.tsx
-- src/app/student/yazilacaklar/page.tsx
-- src/app/student/yazilacaklar/[...slug]/page.tsx
-- src/app/student/ozetler/page.tsx
-- src/app/student/ozetler/[...slug]/page.tsx
-- src/components/teacher-main-buttons.tsx
-- src/components/selection-grid.tsx
-- src/components/announcements-section.tsx
-- src/components/oyun-kurulum.tsx
-- src/components/question-dialog.tsx
-- src/components/game-end-screen.tsx
-- src/components/step-editor-dialog.tsx
-- src/components/bulk-import-dialog.tsx
-- src/components/bulk-step-import-dialog.tsx
-- src/components/ai-generation-dialog.tsx
-- src/components/ai-activity-generation-panel.tsx
-- src/components/activity-item-editor-dialog.tsx
-- src/components/library-import-dialog.tsx
-- src/components/bulk-image-upload-dialog.tsx
-- src/components/course-sidebar.tsx
-- src/app/teacher/veri-editoru/page.tsx
-- src/app/teacher/veri-editoru/actions.ts
-- src/components/json-data-editor.tsx
-- src/components/text-data-editor.tsx
-- src/app/teacher/static-data-editor/page.tsx
-- src/app/teacher/static-data-editor/actions.ts
-- src/app/teacher/guest-students/page.tsx
-- src/app/teacher/guest-students/actions.ts
-- src/lib/shop-config.tsx
-- src/components/image-editor-dialog.tsx
-- src/components/wheel-of-fortune.tsx
-- src/components/app-header.tsx
-- src/components/theme-switcher.tsx
-- src/components/mode-switcher.tsx
-- src/components/error-report-dialog.tsx
-- src/lib/audio-service.ts
-- src/app/actions/report-error.ts
-- src/app/leaderboard/actions.ts
-- src/app/leaderboard/page.tsx
-- src/app/student/actions.ts
-- src/app/student/profile/actions.ts
-- src/app/student/shop/actions.ts
-- src/app/student/yarismalar/bireysel/actions.ts
-- src/app/student/yarismalar/duello/actions.ts
-- src/app/student/yarismalar/takim/actions.ts
-- src/app/student/soru-bankasi/actions.ts
-- src/app/student/deneme/actions.ts
-- src/app/student/deneme/sonuc/[assignmentId]/actions.ts
-- src/app/student/tekrar-et/actions.ts
-- src/app/student/wheel/actions.ts
-- src/app/student/yazilacaklar/actions.ts
-- src/app/student/ozetler/actions.ts
-- src/app/teacher/actions.ts
-- src/app/teacher/content-creation/actions.ts
-- src/app/teacher/content-creation/edit/actions.ts
-- src/app/teacher/content-creation/edit/library-actions.ts
-- src/app/teacher/content-creation/edit-unit/actions.ts
-- src/app/teacher/questions/actions.ts
-- src/app/teacher/exam-questions/actions.ts
-- src/app/teacher/activity-data/actions.ts
-- src/app/teacher/exams/actions.ts
-- src/app/teacher/assignments/actions.ts
-- src/app/teacher/assignments/[assignmentId]/actions.ts
-- src/app/teacher/scales/actions.ts
-- src/app/teacher/scales/[scaleId]/actions.ts
-- src/app/teacher/scales/students/actions.ts
-- src/app/teacher/stats/actions.ts
-- src/app/teacher/score-events/actions.ts
-- src/app/teacher/image-library/actions.ts
-- src/app/teacher/video-library/actions.ts
-- src/app/teacher/smartboard/actions.ts
-- src/app/teacher/smartboard/bireysel/client-page.tsx
-- src/app/teacher/smartboard/takim/client-page.tsx
-- src/app/teacher/smartboard/duello/client-page.tsx
-- src/app/teacher/smartboard/kavram-duellosu/client-page.tsx
-- src/app/teacher/smartboard/kavram-duellosu/actions.ts
-- src/app/teacher/smartboard/kutu-ac/client-page.tsx
-- src/app/teacher/smartboard/tornado/client-page.tsx
-- src/app/teacher/smartboard/tornado/actions.ts
-- src/app/teacher/smartboard/yazilacaklar/oyun/page.tsx
-- src/app/teacher/smartboard/ozetler/goruntule/page.tsx
-- src/app/teacher/smartboard/fetih-oyunu/actions.ts
-- src/app/teacher/smartboard/anlik-geri-bildirim/page.tsx
-- src/app/teacher/smartboard/carkifelek/page.tsx
-- src/app/teacher/smartboard/ayarlar/actions.ts
-- src/app/teacher/ders-akisi/actions.ts
-- src/components/actions/get-curriculum-for-selection.ts
-- next.config.ts
-- src/next.config.ts
-- package.json
-- firebase.json
-- firestore.rules
-- firestore.indexes.json
-- src/firestore.indexes.json
-- storage.rules
-- apphosting.yaml
-- components.json
-- .env
-- tsconfig.json
-- src/tsconfig.json
-- README.md
-- src/globals.css
-- tailwind.config.ts
-- src/tailwind.config.ts
-- src/lib/firebase-admin.ts
-- src/lib/game-config.ts
-- src/lib/shop-config.ts
-- src/ai/genkit.ts
-- src/ai/dev.ts
-- src/ai/flows/generate-lesson-content.ts
-- src/ai/flows/generate-questions-flow.ts
-- src/ai/flows/generate-activity-data-flow.ts
-- src/ai/flows/generate-concept-map-flow.ts
-- src/ai/flows/generate-html-slide-flow.ts
-- src/ai/flows/generate-infographic-flow.ts
-- src/ai/flows/generate-topic-summary-flow.ts
-- src/ai/flows/update-user-password-flow.ts
-- src/ai/flows/delete-user-flow.ts
-- src/ai/flows/text-to-speech-flow.ts
-- src/lib/generic-words.ts
