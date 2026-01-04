@@ -38,6 +38,7 @@ import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "fire
 import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 import { addGuestStudent, bulkAddGuestStudents, updateStudentClass } from "./actions";
 import { getStudentData, saveUser } from "@/app/teacher/students/actions";
+import { useAuth } from "@/context/auth-context";
 
 
 // Types
@@ -339,6 +340,14 @@ export default function GuestStudentManagementPage() {
         return list;
     }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
   
+    if (isLoading) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+                <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
+            </div>
+        );
+    }
+  
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
@@ -442,9 +451,9 @@ export default function GuestStudentManagementPage() {
                                         <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
                                           <div className="flex-1 space-y-2">
                                               <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
-                                              <Input placeholder="Örn: Misafir 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
+                                              <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
                                           </div>
-                                          <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
+                                          <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()}>
                                               {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
                                           </Button>
                                         </form>
@@ -456,7 +465,7 @@ export default function GuestStudentManagementPage() {
                                             <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
                                         </div>
                                         <div className="flex justify-end mt-6">
-                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim()}>
+                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()}>
                                                 {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                                             </Button>
                                         </div>
