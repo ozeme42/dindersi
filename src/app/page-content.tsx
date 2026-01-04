@@ -308,7 +308,8 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   };
 
   const getManagementButtons = () => {
-      const buttons = [
+      const superAdminButtons = [
+          managementButtons.superAdmin,
           managementButtons.contentTeacher,
           managementButtons.studentsTeacher,
           managementButtons.questionsTeacher,
@@ -323,10 +324,22 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
           managementButtons.scoreEvents,
           managementButtons.veriEditoru,
       ];
+      
+      const teacherButtons = [
+          managementButtons.studentsTeacher,
+          managementButtons.evaluationScales,
+          managementButtons.leaderboard,
+      ];
+
       if(user.role === 'superadmin') {
-          buttons.unshift(managementButtons.superAdmin);
+          return superAdminButtons;
       }
-      return buttons;
+      
+      if(user.role === 'teacher') {
+          return teacherButtons;
+      }
+      
+      return [];
   }
   
   return (

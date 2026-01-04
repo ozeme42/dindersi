@@ -9,7 +9,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
-export async function getStudentData(): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
+export async function getStudentData(teacher?: UserProfile): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
     const [studentsSnap, classesSnap, schoolsSnap] = await Promise.all([
@@ -18,7 +18,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
       getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
     ]);
     
-    const students = studentsSnap.docs.map(doc => {
+    let allStudents = studentsSnap.docs.map(doc => {
         const data = doc.data();
         return { 
             uid: doc.id, 
@@ -27,12 +27,15 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
         } as UserProfile
     });
 
+    // If a teacher is making the request, filter students by their school.
+    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
+        allStudents = allStudents.filter(student => student.schoolName === teacher.schoolName);
+    }
+
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    // Combine schools from the dedicated collection and from user profiles
     const schoolSet = new Map<string, School>();
 
-    // 1. Add from 'schools' collection
     schoolsSnap.docs.forEach(doc => {
         const schoolData = doc.data() as { name: string };
         if (schoolData.name && !schoolSet.has(schoolData.name.toLowerCase())) {
@@ -40,10 +43,8 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
         }
     });
 
-    // 2. Add from 'users' collection (if not already present)
-    students.forEach(student => {
+    allStudents.forEach(student => {
         if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
-            // For schools coming from users, the ID can be the slugified name as a stable key
             const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
             schoolSet.set(student.schoolName.toLowerCase(), { id: pseudoId, name: student.schoolName });
         }
@@ -52,7 +53,7 @@ export async function getStudentData(): Promise<{ students: UserProfile[], class
     const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
-        students: JSON.parse(JSON.stringify(students)),
+        students: JSON.parse(JSON.stringify(allStudents)),
         classes: JSON.parse(JSON.stringify(classes)),
         schools: JSON.parse(JSON.stringify(combinedSchools)),
     };
@@ -81,7 +82,6 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
         const auth = getAdminAuth();
         const db = getAdminDb();
 
-        // Ensure the school exists, if provided
         if (schoolName) {
             const schoolsRef = db.collection('schools');
             const schoolQuery = await schoolsRef.where('name', '==', schoolName).limit(1).get();
@@ -111,7 +111,6 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
                 return { success: false, error: 'Yeni kullanıcı için şifre zorunludur.' };
             }
             
-            // Use provided email or generate one if not present
             const finalEmail = email || `${normalizeNameToEmailLocalPart(displayName)}@degerleroyunu.com`;
             
             const newUserRecord = await auth.createUser({
