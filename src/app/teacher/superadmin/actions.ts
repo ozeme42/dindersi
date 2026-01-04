@@ -327,7 +327,11 @@ export async function exportAllData(
                         return topicDoc.ref.path.startsWith(`courses/${courseDoc.id}/units/${unitDoc.id}/`) && (topicData.isPublished ?? true);
                     });
 
-                    return hasVisibleTopics ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: !!unitData.htmlContent } : null;
+                    const unitHasOzet = !!unitData.htmlContent;
+                    const unitHasFlow = (unitData.steps || []).some(s => s.isPublished ?? true);
+                    const hasContent = unitHasOzet || unitHasFlow || hasVisibleTopics;
+
+                    return hasContent ? { id: unitDoc.id, title: unitData.title, hasUnitOzet: unitHasOzet, hasFlowContent: unitHasFlow, topics: [] } : null;
                 }));
 
                 const validUnits = units.filter(Boolean);

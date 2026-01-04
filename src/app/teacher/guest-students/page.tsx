@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -24,11 +23,11 @@ import {
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 
@@ -36,8 +35,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteUserFromFirestore, resetAllGeneralScores, getAllUsers } from '@/app/teacher/superadmin/actions';
+import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 import { addGuestStudent, bulkAddGuestStudents, updateStudentClass } from "./actions";
+import { getStudentData, saveUser } from "@/app/teacher/students/actions";
 
 
 // Types
@@ -241,10 +241,8 @@ export default function GuestStudentManagementPage() {
             : data.classId 
             ? classes.find(c => c.id === data.classId)?.name 
             : undefined;
-
-        const result = data.uid
-            ? await updateUser({ ...data, class: fullClassName, teacherId: user.uid } as UserProfile)
-            : await addGuestStudent(data.displayName, fullClassName || '', user.uid);
+        
+        const result = await saveUser({ ...data, class: fullClassName, teacherId: user.uid, role: 'guest' } as any);
       
         if (result.success) {
             toast({ title: "Başarılı", description: `Kullanıcı ${data.uid ? 'güncellendi' : 'oluşturuldu'}.` });
@@ -258,12 +256,12 @@ export default function GuestStudentManagementPage() {
 
     const handleAddSingleStudent = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user || !selectedClass || !activeBranch || activeBranch === 'all' || !newStudentName.trim()) {
+        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()) {
             toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
             return;
         }
         setIsSaving(true);
-        const className = `${selectedClass.name} - ${activeBranch}`;
+        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
         const result = await addGuestStudent(newStudentName, className, user.uid);
         if (result.success) {
             toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
@@ -277,12 +275,12 @@ export default function GuestStudentManagementPage() {
 
     const handleBulkAdd = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user || !selectedClass || !activeBranch || activeBranch === 'all' || !bulkStudentNames.trim()) {
+        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()) {
             toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adları girin.", variant: "destructive"});
             return;
         }
         setIsSaving(true);
-        const className = `${selectedClass.name} - ${activeBranch}`;
+        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
         const names = bulkStudentNames.split('\n').map(name => name.trim()).filter(Boolean);
         const result = await bulkAddGuestStudents(names, className, user.uid);
 
@@ -315,6 +313,9 @@ export default function GuestStudentManagementPage() {
     };
 
     const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
+    const [bulkClassId, setBulkClassId] = useState('');
+    const [bulkBranch, setBulkBranch] = useState('');
+    const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
     const filteredStudents = useMemo(() => {
         let list = allStudents;
@@ -373,18 +374,22 @@ export default function GuestStudentManagementPage() {
                             <CardHeader className="border-b border-white/5 pb-4">
                                 <CardTitle className="text-xl text-white">Filtreleme</CardTitle>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-                                    <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                                    </Select>
-                                    <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                            {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                     <div className="relative">
+                                    <div className="md:col-span-1">
+                                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="md:col-span-1">
+                                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                     <div className="relative md:col-span-1">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                         <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
                                      </div>
@@ -411,26 +416,25 @@ export default function GuestStudentManagementPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Sınıf</Label>
-                                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch(''); }}>
+                                        <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
                                             <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                            <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all" disabled>Lütfen bir sınıf seçin</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                                         </Select>
                                     </div>
                                     <div className="space-y-1">
                                         <Label className="text-slate-300">Şube</Label>
-                                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                                        <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
                                             <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                <SelectItem value="all" disabled>Lütfen bir şube seçin</SelectItem>
-                                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                                {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                                             </SelectContent>
                                         </Select>
                                     </div>
                                 </div>
-                                <Tabs defaultValue="single" className="w-full">
+                                <Tabs defaultValue="bulk" className="w-full">
                                   <TabsList className="grid w-full grid-cols-2 bg-slate-950 border border-white/10 p-1 rounded-xl h-auto">
-                                    <TabsTrigger value="single" className="py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
                                     <TabsTrigger value="bulk" className="py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
+                                    <TabsTrigger value="single" className="py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
                                   </TabsList>
                                   
                                   <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
@@ -440,7 +444,7 @@ export default function GuestStudentManagementPage() {
                                               <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
                                               <Input placeholder="Örn: Misafir 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
                                           </div>
-                                          <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || activeClassId === 'all' || !activeBranch || activeBranch === 'all' || !newStudentName.trim()}>
+                                          <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !newStudentName.trim()}>
                                               {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
                                           </Button>
                                         </form>
@@ -452,7 +456,7 @@ export default function GuestStudentManagementPage() {
                                             <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
                                         </div>
                                         <div className="flex justify-end mt-6">
-                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || activeClassId === 'all' || !activeBranch || activeBranch === 'all' || !bulkStudentNames.trim()}>
+                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim()}>
                                                 {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
                                             </Button>
                                         </div>
@@ -475,8 +479,7 @@ export default function GuestStudentManagementPage() {
                      classes={classes}
                      schools={[]}
                  />
-            )}
+              )}
         </div>
     );
 }
-
