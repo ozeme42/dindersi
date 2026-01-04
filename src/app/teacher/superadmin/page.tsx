@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 // EKLENDİ: Search ikonu import listesine eklendi
-import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, HardDriveDownload, Search, Checkbox } from "lucide-react";
+import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, HardDriveDownload, Search } from "lucide-react";
 import { getStudentData } from "@/app/teacher/students/actions";
 import { exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers } from "./actions";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
@@ -24,6 +24,9 @@ import { z } from "zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Check } from 'lucide-react';
+
 
 // --- YARDIMCI FONKSİYONLAR ---
 function downloadJson(data: any, filename: string) {
@@ -189,7 +192,7 @@ export default function SuperAdminPage() {
     setIsSaving(true);
     const fullClassName = data.classId && data.branch ? `${allClasses.find(c => c.id === data.classId)?.name} - ${data.branch}` : data.classId ? allClasses.find(c => c.id === data.classId)?.name : undefined;
     let schoolName = data.schoolId === 'new' ? data.newSchoolName : schools.find(s => s.id === data.schoolId)?.name;
-    const dataToSave = { ...data, class: fullClassName, schoolName };
+    const dataToSave = { ...data, class: fullClassName, schoolName: schoolName };
 
     const result = await saveUser(dataToSave);
     if (result.success) {
@@ -358,12 +361,12 @@ export default function SuperAdminPage() {
                             </div>
                             
                             {/* FILTERS */}
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
-                                <div className="md:col-span-6 relative">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div className="relative">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                     <Input placeholder="İsim veya e-posta ile ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 pl-10 h-10" />
                                 </div>
-                                <div className="md:col-span-6">
+                                <div>
                                     <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 h-10"><SelectValue placeholder="Okul Filtrele" /></SelectTrigger>
                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
