@@ -6,6 +6,7 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc, collection, query, where, getDocs, updateDoc, writeBatch, serverTimestamp, orderBy, Timestamp } from "firebase/firestore";
 import type { EvaluationScale, UserProfile, SchoolClass, ScaleEntry, Course, Unit, Topic, EvaluationScaleColumn } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
+import { getAdminAuth } from "@/lib/firebase-admin";
 
 export type ScaleDetails = {
     scale: EvaluationScale;
@@ -27,6 +28,10 @@ export async function getUnitScaleDetails(courseId: string, unitId: string, bran
     if (!branchName) return { success: false, error: 'Şube bilgisi eksik.' };
 
     try {
+        const auth = getAdminAuth();
+        const user = await auth.getUser(auth.currentUser!.uid)
+        const teacherSchoolName = user.customClaims?.schoolName || null;
+        
         const courseRef = doc(db, 'courses', courseId);
         const unitRef = doc(db, `courses/${courseId}/units`, unitId);
         const [courseSnap, unitSnap] = await Promise.all([getDoc(courseRef), getDoc(unitRef)]);
@@ -45,7 +50,11 @@ export async function getUnitScaleDetails(courseId: string, unitId: string, bran
             a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' })
         );
         
-        let students: UserProfile[] = [];
+        let studentsQuery = query(
+            collection(db, 'users'), 
+            where('role', 'in', ['student', 'guest'])
+        );
+        
         if (course.classId) {
              const classRef = doc(db, 'classes', course.classId);
              const classSnap = await getDoc(classRef);
@@ -53,15 +62,17 @@ export async function getUnitScaleDetails(courseId: string, unitId: string, bran
                 const className = classSnap.data().name;
                 const fullClassName = `${className} - ${branchName}`;
                 const poolClassName = `${fullClassName} (Havuz)`;
-                const studentsQuery = query(
-                    collection(db, 'users'), 
-                    where('role', 'in', ['student', 'guest']),
-                    where('class', 'in', [fullClassName, poolClassName])
-                );
-                const studentsSnapshot = await getDocs(studentsQuery);
-                students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+                 studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
              }
         }
+        
+        // Öğretmen kendi okuluyla sınırlı
+        if (teacherSchoolName && user.customClaims?.role === 'teacher') {
+            studentsQuery = query(studentsQuery, where('schoolName', '==', teacherSchoolName));
+        }
+
+        const studentsSnapshot = await getDocs(studentsQuery);
+        const students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         
         const entriesRef = collection(db, `evaluationScales/${unitId}/entries`);
         const entriesSnapshot = await getDocs(entriesRef);
@@ -88,6 +99,10 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
     if (!scaleId) return { success: false, error: 'Ölçek ID\'si bulunamadı.' };
 
     try {
+        const auth = getAdminAuth();
+        const user = await auth.getUser(auth.currentUser!.uid)
+        const teacherSchoolName = user.customClaims?.schoolName || null;
+
         const scaleRef = doc(db, 'evaluationScales', scaleId);
         const scaleSnap = await getDoc(scaleRef);
 
@@ -112,19 +127,22 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
         const scaleClassNameMatch = scale.name.match(/\(([^)]+)\)/);
         const scaleFullClassName = scaleClassNameMatch ? scaleClassNameMatch[1] : null;
         
-        let students: UserProfile[] = [];
+        let studentsQuery = query(
+            collection(db, 'users'), 
+            where('role', 'in', ['student', 'guest'])
+        );
+        
         if (scaleFullClassName) {
             const poolClassName = `${scaleFullClassName} (Havuz)`;
-            const studentsQuery = query(
-                collection(db, 'users'), 
-                where('role', 'in', ['student', 'guest']),
-                where('class', 'in', [scaleFullClassName, poolClassName])
-            );
-            const studentsSnapshot = await getDocs(studentsQuery);
-            students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-        } else {
-            console.warn(`Could not extract class name from scale: ${scale.name}`);
+            studentsQuery = query(studentsQuery, where('class', 'in', [scaleFullClassName, poolClassName]));
         }
+
+        if (teacherSchoolName && user.customClaims?.role === 'teacher') {
+            studentsQuery = query(studentsQuery, where('schoolName', '==', teacherSchoolName));
+        }
+
+        const studentsSnapshot = await getDocs(studentsQuery);
+        const students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         
         const entriesQuery = query(collection(db, `evaluationScales/${scaleId}/entries`));
         const entriesSnapshot = await getDocs(entriesQuery);
@@ -140,7 +158,7 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
             course: course,
         })) };
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error fetching assignment details:", error);
         return { success: false, error: 'Ölçek detayları alınırken bir hata oluştu.' };
     }

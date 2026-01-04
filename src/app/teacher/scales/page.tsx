@@ -26,7 +26,7 @@ import { Progress } from '@/components/ui/progress';
 // Lucide Icons
 import { 
     Loader2, Scale as ScaleIcon, BookOpen, ListChecks, PlusCircle, Trash2, 
-    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home
+    AlertTriangle, FolderOpen, UserCheck, Filter, Trophy, BarChart3, Home, UserCog
 } from 'lucide-react';
 
 // Firebase and Actions
@@ -385,6 +385,9 @@ export default function ScalesPage() {
                      <div className="flex gap-3">
                          <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
                            <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+                         </Button>
+                         <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
+                           <Link href="/teacher/guest-students"><UserCog className="mr-2 h-4 w-4"/>Sanal Öğrencileri Yönet</Link>
                          </Button>
                          <Button 
                              onClick={() => setIsCreateAccordionOpen(!isCreateAccordionOpen)} 
