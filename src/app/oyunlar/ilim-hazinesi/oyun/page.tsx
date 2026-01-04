@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, useRef, Suspense, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Lightbulb, RefreshCw, ChevronRight, Star, Loader2, AlertTriangle, PartyPopper, Repeat, ArrowLeft, Sparkles, Trophy, XOctagon } from 'lucide-react';
 import { getIlimHazinesiAction, submitIlimHazinesiScoreAction, type IlimHazinesiLevel } from '../actions';
@@ -12,6 +12,7 @@ import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { playSound } from '@/lib/audio-service';
+import { GameEndScreen } from '@/components/game-end-screen';
 
 // Harf Renk Paleti
 const LETTER_COLORS = [
@@ -45,11 +46,26 @@ function GameComponent() {
     const [error, setError] = useState<string | null>(null);
     const [isFinished, setIsFinished] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isScoreSaved, setIsScoreSaved] = useState(false);
+
 
     const wheelRef = useRef<HTMLDivElement>(null);
     
     const currentLevel = levels[levelIndex];
     const gameContext = `İlim Hazinesi - ${searchParams.get('topicName') || 'Genel'}`;
+
+    const backUrl = useMemo(() => {
+        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+        if (courseId && unitId && topicId) {
+             const params = new URLSearchParams({
+                courseName: courseName || '',
+                unitName: unitName || '',
+                topicName: topicName || '',
+            });
+            return `/konu/${courseId}/${unitId}/${topicId}?${params.toString()}`;
+        }
+        return '/oyunlar/ilim-hazinesi';
+    }, [searchParams]);
 
     const initLevel = useCallback(() => {
         if (!levels || levels.length === 0 || levelIndex >= levels.length) return;
@@ -154,8 +170,6 @@ function GameComponent() {
 
         if (formedWord === targetWord) {
             playSound('correct');
-            
-            // GÜNCELLEME: Harf başına 5 puan hesaplama mantığı
             const pointsEarned = targetWord.length * 5;
             setScore(prev => prev + pointsEarned);
             
@@ -168,15 +182,15 @@ function GameComponent() {
     };
     
     const handleSaveAndExit = async () => {
-        if (!user || score === 0 || isSaving) {
-            router.push('/oyunlar/ilim-hazinesi');
+        if (!user || score === 0 || isSaving || isScoreSaved) {
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
         const result = await submitIlimHazinesiScoreAction(user.uid, score, gameContext);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
-            router.push('/oyunlar/ilim-hazinesi');
+            setIsScoreSaved(true);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
@@ -189,6 +203,16 @@ function GameComponent() {
         } else {
             setIsFinished(true);
         }
+    };
+
+    const handleRestart = () => {
+        setLevelIndex(0);
+        setScore(0);
+        setIsFinished(false);
+        setIsScoreSaved(false);
+        setIsSaving(false);
+        // Re-shuffle levels for a new game
+        setLevels(prev => [...prev].sort(() => Math.random() - 0.5));
     };
 
     const currentWordString = currentSelection.map(idx => shuffledLetters[idx]).join("");
@@ -205,7 +229,7 @@ function GameComponent() {
                     <AlertTitle className="text-xl text-white font-bold mb-2">Hata</AlertTitle>
                     <AlertDescription className="text-slate-400 mb-6">{error}</AlertDescription>
                      <Button asChild variant="secondary" className="w-full bg-slate-800 text-white hover:bg-slate-700 border-white/10">
-                        <Link href="/oyunlar/ilim-hazinesi">Geri Dön</Link>
+                        <Link href={backUrl}>Geri Dön</Link>
                     </Button>
                 </Alert>
             </div>
@@ -214,37 +238,14 @@ function GameComponent() {
     
     if (isFinished) {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden pb-24 md:pb-4">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-fuchsia-900/20 via-slate-950 to-slate-950" />
-                <div className="relative z-10 w-full max-w-md text-center space-y-8 animate-in zoom-in-95 duration-500">
-                    <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-3xl animate-pulse" />
-                        <PartyPopper className="w-32 h-32 text-amber-400 mx-auto drop-shadow-[0_0_25px_rgba(251,191,36,0.6)] animate-bounce" />
-                    </div>
-                    
-                    <div>
-                        <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mb-2">TEBRİKLER!</h1>
-                        <p className="text-slate-400 text-lg">İlim Hazinesini Tamamladın</p>
-                    </div>
-
-                    <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden">
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-2 block">TOPLAM PUAN</span>
-                        <div className="text-7xl font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                            {score}
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <Button onClick={handleSaveAndExit} size="lg" disabled={isSaving || score === 0} className="w-full h-16 text-xl font-bold rounded-2xl bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 shadow-lg transition-all hover:scale-[1.02]">
-                            {isSaving ? <Loader2 className="mr-2 h-6 w-6 animate-spin"/> : <Star className="mr-2 h-6 w-6 fill-current"/>} 
-                            KAYDET VE ÇIK
-                        </Button>
-                        <Button onClick={() => window.location.reload()} variant="outline" className="w-full h-14 border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-2xl">
-                            <Repeat className="mr-2 h-5 w-5"/> Tekrar Oyna
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <GameEndScreen 
+                score={score}
+                onSave={handleSaveAndExit}
+                isSaving={isSaving}
+                scoreSaved={isScoreSaved}
+                onRestart={handleRestart}
+                backUrl={backUrl}
+            />
         )
     }
     
@@ -272,8 +273,14 @@ function GameComponent() {
             <div className="w-full flex-none relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 px-4 py-2">
                 <div className="max-w-4xl mx-auto flex justify-between items-center h-12">
                     <div className="flex items-center gap-2">
-                        <Button asChild variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
-                            <Link href="/oyunlar/ilim-hazinesi"><ArrowLeft className="h-5 w-5" /></Link>
+                        {/* DEĞİŞİKLİK BURADA: Geri butonu oyunu bitiriyor */}
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsFinished(true)}
+                            className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg"
+                        >
+                            <ArrowLeft className="h-5 w-5" />
                         </Button>
                         <div>
                             <h1 className="font-bold text-sm md:text-base text-white leading-tight">İlim Hazinesi</h1>
@@ -443,5 +450,5 @@ export default function IlimHazinesiPage() {
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-fuchsia-500" /></div>}>
             <GameComponent />
         </Suspense>
-    )
+    );
 }

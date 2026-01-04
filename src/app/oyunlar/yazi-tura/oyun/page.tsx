@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
@@ -66,9 +65,16 @@ export function YaziTuraClientPage() {
     const [questionsTura, setQuestionsTura] = useState<Question[]>([]);
     const [error, setError] = useState<string | null>(null);
     
-    const backUrl = '/oyunlar/yazi-tura';
     const gameContext = `Yazı Tura - ${searchParams.get('topicName') || 'Genel'}`;
     const topicName = searchParams.get('topicName') || 'Yazı Tura';
+
+    const backUrl = useMemo(() => {
+        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+        if (courseId && unitId && topicId) {
+            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
+        }
+        return '/oyunlar/yazi-tura';
+    }, [searchParams]);
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -95,13 +101,12 @@ export function YaziTuraClientPage() {
     const flipCoin = () => {
         setGameState('flipping');
         setSelectedOption(null);
-        playSound('coin-flip'); // Para sesi (varsa)
+        playSound('coin-flip'); 
         
         const isYazi = Math.random() < 0.5;
         const result = isYazi ? 'yazi' : 'tura';
         
-        // Çok turlu dönüş animasyonu
-        const baseRotation = 1800 + (360 * 5); // En az 5 tur
+        const baseRotation = 1800 + (360 * 5); 
         const targetRotation = isYazi ? baseRotation : baseRotation + 180;
         
         setRotation(prev => prev + targetRotation);
@@ -110,17 +115,15 @@ export function YaziTuraClientPage() {
             setCoinSide(result);
             setGameState('result');
             pickQuestion(result);
-            playSound(result === 'yazi' ? 'pop' : 'pop'); 
+            playSound('pop'); 
         }, 2500);
     };
 
     const pickQuestion = (side: string) => {
         const questionPool = side === 'yazi' ? questionsYazi : questionsTura;
-        // Basitçe rastgele seçelim, aynı soru gelebilir (daha gelişmiş mantık eklenebilir)
         const randomQ = questionPool[Math.floor(Math.random() * questionPool.length)];
         
         if(!randomQ) {
-             // Soru havuzu boşsa veya hata varsa
              toast({title: "Soru Bulunamadı", description: "Yeterli soru yok.", variant: "destructive"});
              setGameState('start');
              return;
@@ -160,7 +163,7 @@ export function YaziTuraClientPage() {
         if (result.success) {
             setIsScoreSaved(true);
             toast({ title: 'Başarılı!', description: `${score} puan kazandın ve profiline eklendi.` });
-            router.push('/oyunlar/yazi-tura');
+            router.push(backUrl);
         } else {
             toast({ title: 'Hata', description: result.error, variant: 'destructive' });
         }
@@ -223,8 +226,14 @@ export function YaziTuraClientPage() {
             <div className="w-full relative z-20 bg-slate-900/80 backdrop-blur-md border-b border-white/5 p-4">
                 <div className="max-w-4xl mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <Button asChild variant="ghost" size="icon" className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl">
-                            <Link href={backUrl}><ArrowLeft className="h-6 w-6" /></Link>
+                        {/* DEĞİŞİKLİK BURADA: Geri butonu artık oyunu bitiriyor */}
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setGameState('finished')}
+                            className="text-slate-400 hover:text-white hover:bg-white/10 rounded-xl"
+                        >
+                            <ArrowLeft className="h-6 w-6" />
                         </Button>
                         <div>
                             <h1 className="font-bold text-lg text-white leading-tight">{topicName}</h1>
@@ -254,7 +263,6 @@ export function YaziTuraClientPage() {
             {/* --- OYUN ALANI --- */}
             <div className="flex-grow flex flex-col items-center justify-center p-4 w-full relative z-10">
                 
-                {/* CSS for 3D Coin */}
                 <style jsx global>{`
                     .coin-container { perspective: 1000px; width: 180px; height: 180px; margin: 0 auto; cursor: pointer; }
                     .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -345,7 +353,7 @@ export function YaziTuraClientPage() {
                                         if (option === currentQuestion.correctAnswer) {
                                             btnClass += "bg-emerald-600 border-emerald-400 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-[1.02] z-10";
                                         } else if (option === selectedOption) {
-                                            btnClass += "bg-red-900/50 border-red-500/50 text-red-400 opacity-80";
+                                            btnClass += "bg-red-900/50 border-red-500/50 text-red-400 opacity-80 animate-shake";
                                         } else {
                                             btnClass += "bg-slate-900/30 border-transparent text-slate-600 opacity-50";
                                         }

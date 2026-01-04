@@ -1,13 +1,14 @@
-
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
-import { Play, RefreshCw, Heart, Zap, Loader2, Home } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback, Suspense, useMemo } from 'react';
+import { Play, RefreshCw, Heart, Zap, Loader2, Home, ArrowLeft } from 'lucide-react';
 import { getDogruYolKosucusuAction, submitDogruYolKosucusuScoreAction, type DogruYolQuestion } from '../actions';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const LANE_WIDTH = 50; // % olarak şerit genişliği
 
@@ -36,7 +37,13 @@ function Game() {
   const scoreRef = useRef(0);
 
   const gameContext = `Doğru Yol Koşucusu - ${searchParams.get('courseName')} > ${searchParams.get('topicName')}`;
-  const backUrl = '/oyunlar/dogru-yol-kosucusu';
+  const backUrl = useMemo(() => {
+    const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+    if (courseId && unitId && topicId) {
+        return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
+    }
+    return '/oyunlar/dogru-yol-kosucusu';
+  }, [searchParams]);
   
   useEffect(() => {
       const fetchQuestions = async () => {
@@ -211,6 +218,7 @@ function Game() {
             <div>
                 <h2 className="text-xl font-bold text-red-500 mb-4">Hata</h2>
                 <p>{error}</p>
+                 <Button asChild className="mt-4"><Link href={backUrl}>Geri Dön</Link></Button>
             </div>
         </div>
     );
@@ -248,6 +256,9 @@ function Game() {
         <div className="absolute top-0 bottom-0 left-1/2 w-2 bg-dashed border-l-2 border-slate-500 -translate-x-1/2 opacity-50"></div>
         
         <div className="absolute top-4 left-4 right-4 flex justify-between z-30">
+            <Button asChild variant="ghost" className="bg-black/10 hover:bg-black/20 text-white rounded-full h-10 w-10 p-0">
+               <Link href={backUrl}><ArrowLeft className="h-5 w-5"/></Link>
+            </Button>
             <div className="bg-slate-900/80 text-yellow-400 px-4 py-2 rounded-full font-bold border border-yellow-500 flex items-center gap-2">
                 <Zap size={18} className="fill-current" /> {score}
             </div>
@@ -330,3 +341,5 @@ export default function DogruYolKosucusuPage() {
         </Suspense>
     );
 }
+
+    

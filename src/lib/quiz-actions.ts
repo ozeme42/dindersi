@@ -1,52 +1,51 @@
 
-
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
 import path from 'path';
 import fs from 'fs/promises';
 import { db } from "@/lib/firebase"; 
-import { collection, query, where, getDocs, limit as firestoreLimit, Query, and } from "firebase/firestore";
+import { collection, query, where, getDocs, limit as firestoreLimit, Query, and, collectionGroup } from "firebase/firestore";
 
 // This is a type guard to check if an object is a valid Question.
 function isQuestion(obj: any): obj is Question {
-    return obj && typeof obj.type === 'string' && ['Çoktan Seçmeli', 'Doğru/Yanlış', 'Boşluk Doldurma'].includes(obj.type);
+    return obj && typeof obj.type === 'string';
 }
 
-// Centralized function to fetch questions
+// Centralized function to fetch questions - DYNAMIC DB-BASED
 export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQuizOutput> {
     const { courseId, unitId, topicId, questionCount = 100, difficulty, questionTypes, isStatic } = params;
 
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
-        try {
-            const items = await getStaticQuestionsForGame({ topicId, courseId, unitId, dataType: 'questions' });
+        const staticItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        
+        let filteredItems: (Question | ActivityItem)[] = staticItems;
+        const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
 
-            const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
-
-            let filteredItems = items;
-
-            if (difficulty && difficulty.length > 0) {
-                filteredItems = filteredItems.filter(item => isQuestion(item) && difficulty.includes(item.difficulty));
-            }
-            
-            if (mappedTypes && mappedTypes.length > 0) {
-                filteredItems = filteredItems.filter(item => {
-                    if (isQuestion(item)) {
-                        return mappedTypes.includes(item.type);
-                    }
-                    return false; // ActivityItem'lar bu aşamada filtrelenir
-                });
-            }
-
-            const shuffled = filteredItems.sort(() => 0.5 - Math.random());
-            const selectedItems = shuffled.slice(0, questionCount);
-
-            return { questions: JSON.parse(JSON.stringify(selectedItems)) };
-        } catch (e: any) {
-            console.error("Error in static question retrieval:", e);
-            return { questions: [], error: e.message };
+        if (mappedTypes && mappedTypes.length > 0) {
+            filteredItems = filteredItems.filter(item => {
+                 if('type' in item) {
+                    return mappedTypes.includes(item.type);
+                 }
+                 return false;
+            });
         }
+        if (difficulty && difficulty.length > 0) {
+            filteredItems = filteredItems.filter(item => {
+                if('difficulty' in item) {
+                    return difficulty.includes(item.difficulty);
+                }
+                return true; // Keep activity items that don't have difficulty
+            });
+        }
+
+        // Shuffle all found items
+        const shuffled = filteredItems.sort(() => 0.5 - Math.random());
+        // Take the requested number of items
+        const selectedItems = shuffled.slice(0, questionCount);
+
+        return { questions: JSON.parse(JSON.stringify(selectedItems)) };
     }
     
     // --- DYNAMIC DB LOGIC ---
@@ -115,35 +114,68 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
 
 /**
- * Fetches questions for a game from static JSON files.
- * It will try to fetch from a topic-specific file first, then fall back to unit, then course.
+ * Fetches all activity items for a given context. If topicId is 'all', it fetches for the entire unit.
  */
 export async function getStaticQuestionsForGame(params: {
   courseId?: string;
   unitId?: string;
   topicId?: string;
-  dataType?: 'questions' | 'activities';
-}): Promise<(Question | ActivityItem)[]> {
-    const { topicId, unitId, courseId, dataType = 'activities' } = params;
-    const baseDir = path.join(process.cwd(), 'public', 'curriculum', dataType);
+}): Promise<(ActivityItem | Question)[]> {
+    const { unitId, topicId } = params;
 
     const readJsonFile = async (filePath: string): Promise<any[] | null> => {
         try {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
-            if (e.code !== 'ENOENT') { // "File not found" hatalarını yoksay
-                console.error(`Error reading or parsing ${filePath}:`, e);
+            if (e.code !== 'ENOENT') {
+                console.error(`Error reading ${filePath}:`, e);
             }
-            return null; // Dosya yoksa veya hata varsa null dön
+            return null;
         }
     };
     
-    // Sadece belirtilen topicId'den veri çek
+    const activityBaseDir = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+
     if (topicId && topicId !== 'all') {
-        const data = await readJsonFile(path.join(baseDir, `${topicId}.json`));
-        return data || []; // Veri bulunamazsa boş dizi döndür
+        // Fetch for a single topic
+        const topicPath = path.join(activityBaseDir, `${topicId}.json`);
+        const topicData = await readJsonFile(topicPath);
+        return topicData || [];
+    } else if (unitId && unitId !== 'all') {
+        // Fetch for all topics in a unit
+        let allUnitItems: (ActivityItem | Question)[] = [];
+        try {
+            const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
+            const manifestContent = await fs.readFile(manifestPath, 'utf-8');
+            const manifest = JSON.parse(manifestContent);
+            
+            let targetUnit;
+            for (const group of manifest.classGroups) {
+                for (const course of group.courses) {
+                    const foundUnit = course.units.find((u: any) => u.id === unitId);
+                    if (foundUnit) {
+                        targetUnit = foundUnit;
+                        break;
+                    }
+                }
+                if (targetUnit) break;
+            }
+
+            if (targetUnit && targetUnit.topics) {
+                for (const topic of targetUnit.topics) {
+                    const topicPath = path.join(activityBaseDir, `${topic.id}.json`);
+                    const topicData = await readJsonFile(topicPath);
+                    if (topicData) {
+                        allUnitItems = [...allUnitItems, ...topicData];
+                    }
+                }
+            }
+        } catch(e) {
+            console.error("Error reading manifest to get topics for unit:", e);
+        }
+        return allUnitItems;
     }
 
-    return []; // Belirli bir konu seçilmediyse veya "Tümü" seçildiyse şimdilik boş döndür.
+    return [];
 }

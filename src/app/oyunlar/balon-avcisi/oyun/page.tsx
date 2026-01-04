@@ -1,10 +1,9 @@
-
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { 
-    Play, Zap, Loader2, Target, AlertTriangle, Heart
+    Play, Zap, Loader2, Target, AlertTriangle, Heart, ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -52,7 +51,14 @@ function Game() {
     const [isScoreSaved, setIsScoreSaved] = useState(false);
 
     const gameContext = `Balon Avcısı - ${searchParams.get('courseName') || 'Genel'} > ${searchParams.get('topicName') || 'Genel'}`;
-    const backUrl = '/oyunlar/balon-avcisi';
+    
+    const backUrl = useMemo(() => {
+        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+        if (courseId && unitId && topicId) {
+            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
+        }
+        return '/oyunlar/balon-avcisi';
+    }, [searchParams]);
 
     // Fetch data on load
     useEffect(() => {
@@ -374,11 +380,22 @@ function Game() {
                 className="w-full h-full absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500 cursor-crosshair"
                 onMouseMove={handleInput} onMouseDown={handleInput} onTouchMove={handleInput} onTouchStart={handleInput}
             >
-                <div className="absolute top-4 left-4 flex gap-1 z-50">
-                    {[...Array(3)].map((_, i) => (
-                        <Heart key={i} size={28} className={`transition-all duration-300 ${i < lives ? 'text-red-500 fill-current' : 'text-gray-600/50'} drop-shadow-md`} />
-                    ))}
+                {/* DEĞİŞİKLİK BURADA: Buton artık link değil, gameState'i gameover yapıyor */}
+                <div className="absolute top-4 left-4 flex items-center gap-2 z-50">
+                    <Button 
+                        variant="ghost" 
+                        className="bg-black/10 hover:bg-black/20 text-white rounded-full h-10 w-10 p-0"
+                        onClick={() => setGameState('gameover')}
+                    >
+                        <ArrowLeft className="h-5 w-5"/>
+                    </Button>
+                    <div className="flex gap-1">
+                        {[...Array(3)].map((_, i) => (
+                            <Heart key={i} size={28} className={`transition-all duration-300 ${i < lives ? 'text-red-500 fill-current' : 'text-gray-600/50'} drop-shadow-md`} />
+                        ))}
+                    </div>
                 </div>
+
                 <div className="absolute top-4 right-4 bg-white text-sky-600 px-4 py-2 rounded-full font-bold shadow-lg z-50 border-2 border-sky-200 flex items-center gap-2">
                     <Zap size={18} className="fill-yellow-400 text-yellow-500" /> {score}
                 </div>

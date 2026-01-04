@@ -8,11 +8,13 @@ import type { Anagram } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
 import { Loader2, ArrowLeft, Save, Trophy, Repeat, Home, Ghost, Zap, Crosshair, XOctagon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
 import { GameEndScreen } from '@/components/game-end-screen';
+import { playSound } from '@/lib/audio-service';
+import { cn } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Link from 'next/link';
+
 
 // --- RENK PALETİ ---
 const LETTER_COLORS = [
@@ -28,7 +30,7 @@ const LETTER_COLORS = [
 const GameBackground = () => (
     <div className="fixed inset-0 pointer-events-none z-0 bg-slate-950 overflow-hidden">
         <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] bg-teal-900/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-cyan-900/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] bg-cyan-900/10 rounded-full blur-[120px]" style={{ animationDelay: '2s' }} />
         {/* Izgara Efekti */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_70%,transparent_100%)]" />
     </div>
@@ -66,10 +68,10 @@ const GameHUD = ({ score, current, total, onFinish }: { score: number, current: 
 
 // --- ANA OYUN ---
 
-function ConceptHuntGame() {
+function KavramAviGame() {
     const { user } = useAuth();
-    const searchParams = useSearchParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     
     // State
@@ -82,7 +84,7 @@ function ConceptHuntGame() {
     const [poolLetters, setPoolLetters] = useState<{ char: string; id: number, colorClass: string }[]>([]);
     
     const [score, setScore] = useState(0);
-    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished' | 'error'>('loading');
+    const [gameState, setGameState] = useState<'loading' | 'playing' | 'finished'>('loading');
     const [isSaving, setIsSaving] = useState(false);
     
     // Animasyon State'i
@@ -91,6 +93,14 @@ function ConceptHuntGame() {
     const [gameShake, setGameShake] = useState(false);
 
     const gameContext = useMemo(() => `Kavram Avı - ${searchParams.get('courseName') || ''} > ${searchParams.get('topicName') || ''}`, [searchParams]);
+
+    const backUrl = useMemo(() => {
+        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
+        if (courseId && unitId && topicId) {
+            return `/konu/${courseId}/${unitId}/${topicId}?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
+        }
+        return '/oyunlar/kavram-avi';
+    }, [searchParams]);
 
     // Seviye Hazırlama
     const setupLevel = useCallback((question: Anagram) => {
@@ -106,28 +116,37 @@ function ConceptHuntGame() {
     }, []);
 
     // Veri Çekme
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            setIsLoading(true);
-            const params = {
-                topicId: searchParams.get('topicId') || undefined,
-            };
-            const result = await getConceptHuntAction(params);
-            if (result.error) {
-                setError(result.error);
-                setGameState('error');
-            } else if (result.questions && result.questions.length > 0) {
-                setQuestions(result.questions);
-                setupLevel(result.questions[0]);
-                setGameState('playing');
-            } else {
-                setError("Bu konu için uygun soru bulunamadı.");
-                setGameState('error');
-            }
-            setIsLoading(false);
+    const fetchGameData = useCallback(async () => {
+        setIsLoading(true);
+        const params = {
+            courseId: searchParams.get('courseId') || undefined,
+            unitId: searchParams.get('unitId') || undefined,
+            topicId: searchParams.get('topicId') || undefined,
         };
-        fetchQuestions();
+
+        if (!params.topicId && !params.unitId) {
+            setError("Geçerli bir konu veya ünite ID'si bulunamadı.");
+            setGameState('error');
+            setIsLoading(false);
+            return;
+        }
+
+        const result = await getConceptHuntAction(params);
+        if (result.error || !result.questions || result.questions.length === 0) {
+            setError(result.error || "Bu oyun için yeterli kelime bulunamadı.");
+            setGameState('error');
+        } else {
+            setQuestions(result.questions);
+            setupLevel(result.questions[0]);
+            setGameState('playing');
+        }
+        setIsLoading(false);
     }, [searchParams, setupLevel]);
+
+
+    useEffect(() => {
+        fetchGameData();
+    }, [fetchGameData]);
 
     const currentQuestion = questions[currentQuestionIndex];
 
@@ -186,47 +205,38 @@ function ConceptHuntGame() {
     // Kaydet ve Çık
     const handleSaveAndExit = async () => {
         if (!user || score === 0 || isSaving) {
-            router.push('/oyunlar/kavram-avi');
+            router.push(backUrl);
             return;
         }
         setIsSaving(true);
         const result = await submitConceptHuntScoreAction(user.uid, score, gameContext);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Puanın kaydedildi." });
-            router.push('/oyunlar/kavram-avi');
+            router.push(backUrl);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
-            setIsSaving(false);
         }
+        setIsSaving(false);
     }
 
     // --- RENDER ---
 
-    if (gameState === 'loading') {
-        return (
-            <div className="flex h-screen w-full items-center justify-center bg-slate-950">
-                <Loader2 className="h-16 w-16 animate-spin text-teal-500" />
-            </div>
-        );
-    }
+    if (isLoading) return <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /><span className="text-slate-400 font-medium">Oyun Yükleniyor...</span></div>;
 
-    if (error) {
-        return (
-             <div className="flex h-screen w-full items-center justify-center p-4 bg-slate-950">
-                 <div className="text-center space-y-4 max-w-md bg-teal-950/50 p-6 rounded-3xl border border-teal-500/30">
-                    <Ghost className="h-16 w-16 text-teal-500 mx-auto" />
-                    <h3 className="text-xl font-bold text-teal-100">Oyun Başlatılamadı</h3>
-                    <p className="text-teal-200/70">{error}</p>
-                     <Button asChild variant="secondary" className="w-full">
-                        <Link href="/oyunlar/kavram-avi">Geri Dön</Link>
-                    </Button>
-                </div>
-            </div>
-        );
-    }
+    if (error) return (
+        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+            <Alert variant="destructive" className="max-w-lg bg-red-950/30 border-red-900 text-red-200">
+                <AlertTitle className="text-red-400">Oyun Başlatılamadı</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+                <Button asChild variant="outline" className="mt-4 border-red-800 text-red-300 hover:bg-red-900/50">
+                    <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> Geri Dön</Link>
+                </Button>
+            </Alert>
+        </div>
+    );
 
     if (gameState === 'finished') {
-        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} onRestart={() => window.location.reload()} backUrl="/oyunlar/kavram-avi" />;
+        return <GameEndScreen score={score} onSave={handleSaveAndExit} isSaving={isSaving} onRestart={() => window.location.reload()} backUrl={backUrl} />;
     }
 
     return (
@@ -309,10 +319,12 @@ function ConceptHuntGame() {
 }
 
 // --- WRAPPER ---
-export default function ConceptHuntPage() {
+function KavramAviOyunPage() {
     return (
         <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-teal-500" /></div>}>
-            <ConceptHuntGame />
+            <KavramAviGame />
         </Suspense>
     );
 }
+
+export default KavramAviOyunPage;
