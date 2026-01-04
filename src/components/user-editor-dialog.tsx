@@ -67,9 +67,9 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
         defaultValues: {
             displayName: '',
             role: 'student',
-            classId: '',
-            branch: '',
-            schoolId: '',
+            classId: null,
+            branch: null,
+            schoolId: null,
             score: 0,
             password: '',
             newSchoolName: '',
@@ -94,16 +94,16 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                     displayName: user.displayName || '',
                     email: user.email || '',
                     role: user.role || 'student',
-                    classId: userClass?.id || '',
-                    branch: branch || '',
-                    schoolId: userSchool?.id || '',
+                    classId: userClass?.id || null,
+                    branch: branch || null,
+                    schoolId: userSchool?.id || null,
                     score: user.score || 0,
                     password: '',
                     newSchoolName: '',
                 });
             } else {
                 reset({
-                    displayName: '', email: '', role: 'student', classId: '', branch: '', score: 0, password: '', schoolId: '', newSchoolName: '',
+                    displayName: '', email: '', role: 'student', classId: null, branch: null, score: 0, password: '', schoolId: null, newSchoolName: '',
                 });
             }
         }
@@ -175,10 +175,10 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                                 <div className="space-y-1">
                                     <Label htmlFor="schoolId">Okul</Label>
                                     <Controller control={control} name="schoolId" render={({ field }) => (
-                                        <Select onValueChange={(value) => { field.onChange(value); if(value !== 'new') setValue('newSchoolName', ''); }} value={field.value || ''}>
-                                            <SelectTrigger id="schoolId"><SelectValue placeholder="Okul Seçin" /></SelectTrigger>
+                                        <Select onValueChange={(value) => { field.onChange(value === 'none' ? null : value); if(value !== 'new') setValue('newSchoolName', ''); }} value={field.value || 'none'}>
+                                            <SelectTrigger id="schoolId"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="">Okul Yok</SelectItem>
+                                                <SelectItem value="none">Okul Yok</SelectItem>
                                                 {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                                 <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                             </SelectContent>
