@@ -3,7 +3,8 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home } from "lucide-react";
-import { getAllUsers, exportAllData, exportManifestAndContent, exportActivityData } from "./actions";
+import { getStudentData } from "@/app/teacher/students/actions";
+import { exportAllData, exportManifestAndContent, exportActivityData } from "./actions";
 import type { UserProfile, SchoolClass, Course, Unit, Topic } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -70,12 +71,12 @@ export default function SuperAdminPage() {
     const fetchAllData = async () => {
       setIsLoading(true);
       try {
-        const [usersData, curriculumData] = await Promise.all([
-          getAllUsers(),
+        const [{ students, classes }, curriculumData] = await Promise.all([
+          getStudentData(),
           getExamCreationData(), // This fetches all curriculum data we need for filters
         ]);
-        setUsers(usersData);
-        setAllClasses(curriculumData.classes);
+        setUsers(students);
+        setAllClasses(classes);
         setAllCourses(curriculumData.courses);
       } catch (error) {
         console.error("Failed to fetch data:", error);
