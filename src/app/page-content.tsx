@@ -140,9 +140,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         <GameButton href="/login" variant="success" className="text-lg min-w-[180px] h-14">
                             <LogIn className="mr-2 h-5 w-5" /> Giriş Yap
                         </GameButton>
-                        <GameButton href="/leaderboard" variant="warning" className="text-lg min-w-[180px] h-14">
-                            <Trophy className="mr-2 h-5 w-5" /> Liderlik
-                        </GameButton>
                     </div>
                 </div>
              </main>
