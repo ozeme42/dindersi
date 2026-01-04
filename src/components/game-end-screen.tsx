@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, PartyPopper, Repeat, Save, CheckCircle2, Home, Trophy, Star } from "lucide-react";
 import Link from 'next/link';
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
 
 type GameEndScreenProps = {
     score: number;
@@ -26,6 +27,8 @@ export function GameEndScreen({
     scoreSaved,
     passThreshold = 50 
 }: GameEndScreenProps) {
+    const { user } = useAuth();
+    const isStudent = user?.role === 'student';
 
     // --- Ders Akışı ile Haberleşme (Sadece bilgi verir, kayıt yapmaz) ---
     useEffect(() => {
@@ -92,35 +95,36 @@ export function GameEndScreen({
                     {/* BUTONLAR ALANI */}
                     <div className="p-6 pt-0 space-y-3">
                         
-                        {/* 1. PUANI KAYDET BUTONU (Tıklanabilir) */}
-                        <Button 
-                            onClick={onSave} // Tıklayınca kaydet fonksiyonunu çalıştır
-                            disabled={isSaving || scoreSaved || score <= 0} // İşlem sürüyorsa veya bittiyse tıklatama
-                            className={cn(
-                                "w-full h-14 text-lg font-bold rounded-xl shadow-lg transition-all relative overflow-hidden",
-                                scoreSaved 
-                                    ? "bg-slate-800 text-slate-400 border border-white/5 cursor-default" // Kaydedildi stili
-                                    : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/20 hover:scale-[1.02]" // Normal stil
-                            )}
-                        >
-                            {/* Buton Durumları */}
-                            {isSaving ? (
-                                <>
-                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                    Kaydediliyor...
-                                </>
-                            ) : scoreSaved ? (
-                                <>
-                                    <CheckCircle2 className="mr-2 h-5 w-5 text-emerald-500" />
-                                    Kaydedildi!
-                                </>
-                            ) : (
-                                <>
-                                    <Save className="mr-2 h-5 w-5" />
-                                    Puanı Kaydet
-                                </>
-                            )}
-                        </Button>
+                        {/* 1. PUANI KAYDET BUTONU (Sadece öğrenciler için) */}
+                        {isStudent && (
+                            <Button 
+                                onClick={onSave}
+                                disabled={isSaving || scoreSaved || score <= 0}
+                                className={cn(
+                                    "w-full h-14 text-lg font-bold rounded-xl shadow-lg transition-all relative overflow-hidden",
+                                    scoreSaved 
+                                        ? "bg-slate-800 text-slate-400 border border-white/5 cursor-default" 
+                                        : "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-900/20 hover:scale-[1.02]"
+                                )}
+                            >
+                                {isSaving ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                        Kaydediliyor...
+                                    </>
+                                ) : scoreSaved ? (
+                                    <>
+                                        <CheckCircle2 className="mr-2 h-5 w-5 text-emerald-500" />
+                                        Kaydedildi!
+                                    </>
+                                ) : (
+                                    <>
+                                        <Save className="mr-2 h-5 w-5" />
+                                        Puanı Kaydet
+                                    </>
+                                )}
+                            </Button>
+                        )}
 
                         <div className="grid grid-cols-2 gap-3">
                             <Button 

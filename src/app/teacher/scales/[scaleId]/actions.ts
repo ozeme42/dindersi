@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { db } from "@/lib/firebase";
@@ -25,8 +23,8 @@ export async function getUnitScaleDetails(
     courseId: string, 
     unitId: string, 
     branchName: string | null,
-    teacherSchoolName: string | null, // ADDED
-    teacherRole: string | null       // ADDED
+    teacherSchoolName: string | null, 
+    teacherRole: string | null      
 ): Promise<{ success: boolean; data?: UnitScaleDetails; error?: string }> {
     noStore();
     if (!courseId || !unitId) return { success: false, error: 'Ders veya Ünite ID\'si bulunamadı.' };
@@ -51,6 +49,7 @@ export async function getUnitScaleDetails(
             a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' })
         );
         
+        // 1. ADIM: Sadece Rol ve Sınıf bazlı sorgu yapıyoruz (Okul filtresini buradan kaldırdık)
         let studentsQuery = query(
             collection(db, 'users'), 
             where('role', 'in', ['student', 'guest'])
@@ -63,17 +62,23 @@ export async function getUnitScaleDetails(
                 const className = classSnap.data().name;
                 const fullClassName = `${className} - ${branchName}`;
                 const poolClassName = `${fullClassName} (Havuz)`;
-                 studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
+                studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
              }
         }
         
-        // Use the passed-in teacher info for filtering
-        if (teacherSchoolName && teacherRole === 'teacher') {
-            studentsQuery = query(studentsQuery, where('schoolName', '==', teacherSchoolName));
-        }
-
+        // Verileri çekiyoruz
         const studentsSnapshot = await getDocs(studentsQuery);
-        const students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        let students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        
+        // 2. ADIM: Bellekte (RAM) filtreleme yapıyoruz.
+        // Eğer kullanıcı öğretmense:
+        // - Sanal öğrencileri (guest) göster.
+        // - Normal öğrencilerden sadece kendi okulundakileri göster.
+        if (teacherSchoolName && teacherRole === 'teacher') {
+            students = students.filter(student => 
+                student.role === 'guest' || (student.schoolName === teacherSchoolName)
+            );
+        }
         
         const entriesRef = collection(db, `evaluationScales/${unitId}/entries`);
         const entriesSnapshot = await getDocs(entriesRef);
@@ -123,6 +128,10 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
         
         const scaleClassNameMatch = scale.name.match(/\(([^)]+)\)/);
         const scaleFullClassName = scaleClassNameMatch ? scaleClassNameMatch[1] : null;
+        
+        // Burada da benzer mantık geçerli ancak 'teacherSchoolName' parametresi
+        // bu fonksiyona gelmediği için şimdilik sadece sınıf bazlı filtreleme yapıyoruz.
+        // Eğer scale oluşturulurken içine teacherId kaydediliyorsa guestler zaten gelir.
         
         let studentsQuery = query(
             collection(db, 'users'), 

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, Suspense, useRef } from 'react';
@@ -6,16 +5,25 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { getAcikUcluCevaplaAction, submitAcikUcluCevaplaScoreAction } from '../actions';
 import { useAuth } from '@/context/auth-context';
 import type { Question } from '@/lib/types';
-import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle, Send, XCircle, Lightbulb, Trophy, Keyboard, Sparkles, XOctagon } from 'lucide-react';
+import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle, Send, XCircle, Lightbulb, Trophy, Sparkles, XOctagon, PenTool, Pencil, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import Link from 'next/link';
 import { Textarea } from '@/components/ui/textarea';
 import { playSound } from '@/lib/audio-service';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import Link from 'next/link';
+
+// --- ORTAK ARKA PLAN (Light Theme) ---
+const MagnificentLightBackground = () => (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
+        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-200/40 rounded-full blur-[120px] animate-pulse-slow mix-blend-multiply" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-sky-200/40 rounded-full blur-[120px] animate-pulse-slow delay-700 mix-blend-multiply" />
+        <div className="absolute top-[40%] left-[50%] w-[400px] h-[400px] bg-purple-200/30 rounded-full blur-[100px] animate-pulse-slow delay-1000 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] mix-blend-overlay"></div>
+    </div>
+);
 
 const OpenEndedGame = () => {
     const { user } = useAuth();
@@ -53,7 +61,22 @@ const OpenEndedGame = () => {
     }), [searchParams]);
     
     const contextString = `Açık Uçlu Cevaplama - ${gameContext.courseName} > ${gameContext.topicName}`;
-    const backUrl = '/oyunlar/acik-uclu-cevapla';
+    
+    const backUrl = useMemo(() => {
+        const courseId = searchParams.get('courseId');
+        const unitId = searchParams.get('unitId');
+        const topicId = searchParams.get('topicId');
+        if (courseId && unitId && topicId) {
+             const params = new URLSearchParams({
+                courseName: gameContext.courseName,
+                unitName: gameContext.unitName,
+                topicName: gameContext.topicName,
+            });
+            return `/konu/${courseId}/${unitId}/${topicId}?${params.toString()}`;
+        }
+        return '/';
+    }, [searchParams, gameContext]);
+
 
     const fetchQuestions = useCallback(async () => {
         setGameState('loading');
@@ -81,21 +104,35 @@ const OpenEndedGame = () => {
         fetchQuestions();
     }, [fetchQuestions]);
 
+    // --- YARDIMCI FONKSİYON: Cevabı Normalize Et ---
+    const normalizeAnswer = (text: string) => {
+        if (!text) return "";
+        return text
+            .toLocaleLowerCase('tr-TR') // Türkçe küçük harfe çevir (İ->i, I->ı)
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Şapka ve aksanları kaldır (â->a, û->u, ş->s vb. esneklik sağlar)
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()'"?]/g,"") // Noktalama işaretlerini temizle
+            .replace(/\s+/g, ' ') // Birden fazla boşluğu teke indir
+            .trim(); // Baştaki ve sondaki boşlukları sil
+    };
+
     const handleSubmitAnswer = () => {
         if (!userAnswer.trim() || isAnswered) return;
         
         const currentQuestion = questions[currentQuestionIndex];
-        const correctAnswer = (currentQuestion.correctAnswer || '').trim().toLocaleLowerCase('tr-TR');
-        const submittedAnswer = userAnswer.trim().toLocaleLowerCase('tr-TR');
         
-        const correct = correctAnswer === submittedAnswer;
+        // Hem doğru cevabı hem kullanıcı cevabını normalize et
+        const normalizedCorrectAnswer = normalizeAnswer(currentQuestion.correctAnswer || '');
+        const normalizedUserAnswer = normalizeAnswer(userAnswer);
+        
+        // Karşılaştır
+        const correct = normalizedCorrectAnswer === normalizedUserAnswer;
 
         setIsAnswered(true);
         setIsCorrect(correct);
         
         if (correct) {
             playSound('correct');
-            setScore(prev => prev + 200);
+            setScore(prev => prev + 25);
         } else {
             playSound('incorrect');
         }
@@ -142,9 +179,15 @@ const OpenEndedGame = () => {
     // --- YÜKLENİYOR ---
     if (gameState === 'loading') {
         return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
-                <span className="text-slate-400 font-medium animate-pulse">Soru Hazırlanıyor...</span>
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4">
+                <MagnificentLightBackground />
+                <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-purple-500 blur-xl opacity-20 animate-pulse"></div>
+                        <Loader2 className="h-16 w-16 animate-spin text-purple-600 relative z-10" />
+                    </div>
+                    <span className="text-slate-600 font-black text-xl mt-6 animate-pulse tracking-widest uppercase">Soru Hazırlanıyor...</span>
+                </div>
             </div>
         );
     }
@@ -152,15 +195,16 @@ const OpenEndedGame = () => {
     // --- HATA ---
     if (gameState === 'error') {
          return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-                 <div className="bg-slate-900 border border-red-500/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl">
-                    <div className="bg-red-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <AlertTriangle className="h-8 w-8 text-red-500" />
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+                <MagnificentLightBackground />
+                 <div className="bg-white/80 backdrop-blur-xl border border-red-100 p-8 rounded-[2rem] max-w-md w-full text-center shadow-2xl relative z-10">
+                    <div className="bg-red-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                        <AlertTriangle className="h-10 w-10 text-red-500" />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-2">Hata Oluştu</h3>
-                    <p className="text-slate-400 mb-6">{error}</p>
-                    <Button asChild className="w-full bg-slate-800 text-white hover:bg-slate-700">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4" /> Geri Dön</Link>
+                    <h3 className="text-2xl font-black text-slate-800 mb-2">Hata Oluştu</h3>
+                    <p className="text-slate-500 mb-8 font-medium">{error}</p>
+                    <Button asChild className="w-full bg-slate-900 text-white hover:bg-slate-800 rounded-xl h-14 font-bold text-lg shadow-lg hover:scale-[1.02] transition-transform">
+                        <Link href={backUrl}><ArrowLeft className="mr-2 h-5 w-5" /> Geri Dön</Link>
                     </Button>
                 </div>
             </div>
@@ -188,164 +232,153 @@ const OpenEndedGame = () => {
         <div 
             ref={mainContentRef} 
             className={cn(
-                "w-full min-h-screen bg-slate-950 text-slate-100 flex flex-col relative overflow-hidden transition-all selection:bg-cyan-500/30",
-                !isFullscreen && "pb-24 md:pb-8"
+                "w-full min-h-screen bg-slate-50 text-slate-900 flex flex-col relative overflow-hidden transition-all",
+                !isFullscreen && "pb-8"
             )}
         >
-             {/* Arka Plan Efektleri */}
-             <div className="fixed inset-0 pointer-events-none z-0">
-                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]" />
-            </div>
+             <MagnificentLightBackground />
 
             {/* --- HEADER (HUD) --- */}
-            <div className="sticky top-0 z-30 w-full bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-lg">
-                <div className="container mx-auto px-4 py-3 md:py-4">
-                    <div className="flex justify-between items-center gap-4">
-                        {/* Sol: Başlık */}
-                        <div className="flex items-center gap-3 overflow-hidden">
-                             <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
-                                <Keyboard className="text-violet-400 h-5 w-5 md:h-6 md:w-6" />
-                            </div>
-                            <div className="flex flex-col">
-                                <h1 className="text-sm md:text-lg font-bold text-white truncate">Açık Uçlu</h1>
-                                <div className="flex items-center gap-2 text-xs md:text-sm text-slate-400 font-mono">
-                                    <span>SORU {currentQuestionIndex + 1}/{questions.length}</span>
+            <div className="fixed top-0 left-0 right-0 z-50 px-4 py-4 pointer-events-none">
+                <div className="container mx-auto max-w-6xl">
+                    <div className="flex justify-between items-start">
+                        {/* Sol: Geri & Bilgi */}
+                        <div className="flex flex-col gap-2 pointer-events-auto">
+                            <Button 
+                                onClick={() => setGameState('finished')}
+                                variant="ghost"
+                                className="h-12 w-12 rounded-full bg-white/80 backdrop-blur-md border border-slate-200 text-slate-500 hover:text-red-500 hover:bg-red-50 shadow-lg transition-all"
+                            >
+                                <XOctagon className="h-6 w-6" />
+                            </Button>
+                            
+                            {/* İlerleme */}
+                            <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-2xl px-4 py-2 shadow-lg flex items-center gap-3">
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">SORU</span>
+                                    <span className="text-xl font-black text-indigo-600 leading-none">
+                                        {currentQuestionIndex + 1}<span className="text-slate-300 text-base">/{questions.length}</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Sağ: Puan ve Kontroller */}
-                        <div className="flex items-center gap-2 md:gap-3">
-                            
-                            {/* --- YENİ EKLENEN BITIR TUŞU --- */}
-                            <Button 
-                                onClick={() => setGameState('finished')}
-                                variant="ghost"
-                                className="h-9 px-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-bold text-xs md:text-sm transition-colors border border-red-500/10"
-                            >
-                                <XOctagon className="h-4 w-4 mr-1.5" />
-                                <span className="hidden sm:inline">BİTİR</span>
-                            </Button>
-
-                            {/* Puan Rozeti */}
-                            <div className="bg-slate-950/50 border border-white/10 rounded-lg px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2">
-                                <Trophy className="h-4 w-4 md:h-5 md:w-5 text-yellow-500" />
-                                <span className="font-bold font-mono text-white text-sm md:text-lg">{score}</span>
+                        {/* Sağ: Puan */}
+                        <div className="flex flex-col gap-2 items-end pointer-events-auto">
+                            <div className="bg-white/80 backdrop-blur-md border border-slate-200 rounded-2xl p-2 pl-4 pr-4 shadow-lg flex items-center gap-3">
+                                <div className="text-right">
+                                    <div className="text-[10px] uppercase font-black text-slate-400 tracking-widest">PUAN</div>
+                                    <div className="text-2xl font-black text-amber-500 leading-none">{score}</div>
+                                </div>
+                                <div className="h-10 w-10 bg-amber-100 rounded-xl flex items-center justify-center text-amber-600">
+                                    <Trophy className="h-6 w-6" />
+                                </div>
                             </div>
-                            
-                            <FullscreenToggle elementRef={mainContentRef} className="bg-slate-800 border-white/10 text-slate-300 hover:text-white h-9 w-9 md:h-11 md:w-11 rounded-xl" />
+                            <FullscreenToggle elementRef={mainContentRef} className="bg-white/80 backdrop-blur-md border border-slate-200 text-slate-600 h-10 w-10 rounded-xl shadow-lg hover:bg-indigo-50 hover:text-indigo-600" />
                         </div>
                     </div>
-                </div>
-                {/* İlerleme Çubuğu */}
-                <div className="w-full h-1 bg-slate-800">
-                     <div 
-                        className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-[0_0_10px_rgba(168,85,247,0.5)] transition-all duration-500 ease-out"
-                        style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-                    />
                 </div>
             </div>
 
             {/* --- İÇERİK ALANI --- */}
             <div className={cn(
                 "flex-grow flex flex-col items-center justify-center p-4 relative z-10",
-                isFullscreen ? "h-full" : "container mx-auto max-w-3xl pt-8 md:pt-12"
+                isFullscreen ? "pt-20" : "pt-24 md:pt-32"
             )}>
-                
-                {/* Soru Kartı */}
-                <div className="w-full space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500">
-                    <div className="relative bg-slate-900/60 backdrop-blur-md border border-white/10 p-6 md:p-10 rounded-3xl shadow-2xl overflow-hidden group">
-                        {/* Dekoratif Işık */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+                <div className="w-full max-w-4xl mx-auto space-y-8 animate-in fade-in zoom-in duration-500">
+                    
+                    {/* SORU KARTI */}
+                    <div className="relative group">
+                         {/* Arka plan efektleri */}
+                         <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-[2.5rem] opacity-20 blur-lg group-hover:opacity-30 transition duration-1000"></div>
                         
-                        <div className="flex items-start gap-4 relative z-10">
-                            <div className="shrink-0 mt-1">
-                                <Lightbulb className="h-6 w-6 md:h-8 md:w-8 text-yellow-400 fill-yellow-400/20" />
+                        <div className="relative bg-white/80 backdrop-blur-xl border-2 border-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl flex flex-col items-center text-center gap-6">
+                            <div className="absolute -top-6 bg-gradient-to-br from-violet-500 to-indigo-600 text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30 rotate-3 group-hover:rotate-6 transition-transform duration-500">
+                                <MessageSquare className="h-7 w-7" />
                             </div>
-                            <p className="text-xl md:text-2xl font-bold text-white leading-relaxed">
+                            
+                            <h2 className="text-2xl md:text-4xl font-black text-slate-800 leading-tight mt-2">
                                 {currentQuestion.text}
-                            </p>
+                            </h2>
+                            
+                            <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 w-1/2 animate-pulse" />
+                            </div>
                         </div>
                     </div>
 
-                    {/* Cevap Alanı */}
-                    <div className="space-y-4">
-                        <div className="relative">
-                            <Textarea
-                                value={userAnswer}
-                                onChange={(e) => setUserAnswer(e.target.value)}
-                                placeholder="Cevabınızı buraya yazın..."
-                                disabled={isAnswered}
-                                className={cn(
-                                    "min-h-[160px] md:min-h-[200px] w-full text-lg md:text-xl p-6 rounded-2xl transition-all duration-300 resize-none font-medium",
-                                    "bg-slate-950/80 border-2",
-                                    isAnswered 
-                                        ? isCorrect 
-                                            ? "border-emerald-500/50 text-emerald-400 bg-emerald-950/20" 
-                                            : "border-red-500/50 text-red-400 bg-red-950/20"
-                                        : "border-white/10 text-slate-100 placeholder:text-slate-600 focus:border-violet-500 focus:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
-                                )}
-                            />
-                             {/* Yazarken çıkan parıltı ikonu */}
-                             {!isAnswered && userAnswer.length > 0 && (
-                                <div className="absolute bottom-4 right-4 animate-bounce">
-                                    <Sparkles className="h-5 w-5 text-violet-400" />
+                    {/* CEVAP ALANI & GERİ BİLDİRİM */}
+                    <div className="relative max-w-2xl mx-auto w-full">
+                        {/* INPUT */}
+                        <div className="relative group">
+                            <div className={cn(
+                                "absolute -inset-0.5 rounded-[2rem] blur opacity-30 transition duration-500",
+                                isAnswered 
+                                    ? (isCorrect ? "bg-emerald-500 opacity-50" : "bg-red-500 opacity-50")
+                                    : "bg-gradient-to-r from-indigo-500 to-purple-500 group-hover:opacity-50"
+                            )}></div>
+                            
+                            <div className="relative bg-white rounded-[2rem] p-1.5">
+                                <Textarea
+                                    value={userAnswer}
+                                    onChange={(e) => setUserAnswer(e.target.value)}
+                                    placeholder="Cevabınızı buraya yazın..."
+                                    disabled={isAnswered}
+                                    className={cn(
+                                        "min-h-[160px] md:min-h-[180px] w-full text-lg md:text-xl p-6 rounded-[1.7rem] resize-none font-medium border-0 focus:ring-0 bg-slate-50 focus:bg-white transition-all",
+                                        "placeholder:text-slate-400 text-slate-800",
+                                        // Yazı alanı durumları
+                                        !isAnswered && "focus:shadow-inner",
+                                        isAnswered && isCorrect && "bg-emerald-50 text-emerald-900",
+                                        isAnswered && !isCorrect && "bg-red-50 text-red-900"
+                                    )}
+                                />
+                                {/* İkon */}
+                                <div className="absolute bottom-6 right-6 pointer-events-none">
+                                    {isAnswered ? (
+                                        isCorrect ? <CheckCircle2 className="h-8 w-8 text-emerald-500 animate-bounce" /> : <XCircle className="h-8 w-8 text-red-500 animate-pulse" />
+                                    ) : (
+                                        <Pencil className={cn("h-6 w-6 text-slate-300 transition-colors", userAnswer && "text-indigo-500")} />
+                                    )}
                                 </div>
-                             )}
+                            </div>
                         </div>
 
-                        {/* Geri Bildirim Alanı */}
-                        {isAnswered && (
-                            <div className={cn(
-                                "p-4 md:p-5 rounded-2xl flex items-center justify-center gap-3 text-lg font-bold border animate-in zoom-in duration-300 shadow-lg",
-                                isCorrect 
-                                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-emerald-900/20" 
-                                    : "bg-red-500/10 border-red-500/30 text-red-400 shadow-red-900/20"
-                            )}>
-                                {isCorrect ? (
-                                    <>
-                                        <CheckCircle2 className="h-6 w-6 md:h-7 md:w-7"/>
-                                        <span>Harika! Doğru Cevap</span>
-                                    </>
-                                ) : (
-                                    <div className="flex flex-col items-center gap-1">
-                                        <div className="flex items-center gap-2">
-                                            <XCircle className="h-6 w-6 md:h-7 md:w-7"/>
-                                            <span>Yanlış Cevap</span>
-                                        </div>
-                                        <span className="text-sm font-normal text-slate-400">Doğru Cevap: <span className="text-white font-bold">{currentQuestion.correctAnswer}</span></span>
-                                    </div>
-                                )}
+                        {/* GERİ BİLDİRİM PANELİ (Yanlışsa doğru cevabı göster) */}
+                        {isAnswered && !isCorrect && (
+                            <div className="mt-4 bg-white/90 backdrop-blur-md border border-red-100 rounded-2xl p-6 shadow-xl animate-in slide-in-from-top-4 duration-300 text-center">
+                                <span className="text-xs font-bold text-red-400 uppercase tracking-widest mb-1 block">DOĞRU CEVAP</span>
+                                <p className="text-lg font-black text-slate-800">{currentQuestion.correctAnswer}</p>
                             </div>
                         )}
 
-                        {/* Butonlar */}
-                        <div className="pt-2">
-                             {isAnswered ? (
+                        {/* AKSİYON BUTONU */}
+                        <div className="mt-8">
+                            {isAnswered ? (
                                 <Button 
                                     onClick={handleNextQuestion} 
-                                    className="w-full h-14 md:h-16 text-lg md:text-xl font-bold rounded-2xl bg-white text-slate-900 hover:bg-cyan-50 shadow-lg shadow-white/10 transition-all hover:scale-[1.02]"
+                                    className="w-full h-16 md:h-20 text-xl md:text-2xl font-black rounded-3xl bg-slate-900 hover:bg-slate-800 text-white shadow-2xl shadow-slate-400/50 hover:scale-[1.02] active:scale-95 transition-all group"
                                 >
-                                    {currentQuestionIndex === questions.length - 1 ? 'Oyunu Bitir' : 'Sıradaki Soru'}
-                                    <ArrowLeft className="ml-2 h-5 w-5 rotate-180" />
+                                    {currentQuestionIndex === questions.length - 1 ? 'SONUÇLARI GÖR' : 'SIRADAKİ SORU'}
+                                    <ArrowLeft className="ml-3 h-6 w-6 rotate-180 group-hover:translate-x-1 transition-transform" />
                                 </Button>
                             ) : (
                                 <Button 
                                     onClick={handleSubmitAnswer} 
                                     disabled={!userAnswer.trim()} 
                                     className={cn(
-                                        "w-full h-14 md:h-16 text-lg md:text-xl font-bold rounded-2xl transition-all shadow-lg",
+                                        "w-full h-16 md:h-20 text-xl md:text-2xl font-black rounded-3xl shadow-2xl transition-all",
                                         userAnswer.trim()
-                                            ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white shadow-violet-900/30 hover:shadow-violet-500/40 hover:scale-[1.02]"
-                                            : "bg-slate-800 text-slate-500 border border-white/5 cursor-not-allowed"
+                                            ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-indigo-500/40 hover:scale-[1.02] active:scale-95"
+                                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
                                     )}
                                 >
-                                    Cevabı Gönder <Send className="ml-2 h-5 w-5" />
+                                    CEVABI GÖNDER <Send className={cn("ml-3 h-6 w-6 transition-transform", userAnswer.trim() && "group-hover:-translate-y-1 group-hover:translate-x-1")} />
                                 </Button>
                             )}
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -354,7 +387,7 @@ const OpenEndedGame = () => {
 
 const OpenEndedGamePage = () => {
      return (
-        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>}>
+        <Suspense fallback={<div className="flex h-screen w-full items-center justify-center bg-slate-50"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>}>
             <OpenEndedGame />
         </Suspense>
     );
