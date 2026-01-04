@@ -140,7 +140,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
     }
 }
 
-export async function bulkAddStudents(names: string[], className: string, schoolName: string): Promise<{ success: boolean; error?: string, successCount?: number }> {
+export async function bulkAddStudents(names: string[], className: string, schoolName: string, teacherId: string | null): Promise<{ success: boolean; error?: string, successCount?: number }> {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
     }
@@ -182,6 +182,7 @@ export async function bulkAddStudents(names: string[], className: string, school
                 score: 0,
                 createdAt: serverTimestamp(),
                 ownedItems: [],
+                teacherId: teacherId || undefined,
             };
             
             successfulCreations.push({ uid: userRecord.uid, profile: userProfile });
@@ -192,7 +193,7 @@ export async function bulkAddStudents(names: string[], className: string, school
                     const userDoc = await db.collection('users').doc(existingUser.uid).get();
                     if (!userDoc.exists) {
                          const userProfile: Omit<UserProfile, 'uid'> = {
-                            displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: serverTimestamp(), ownedItems: [],
+                            displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: serverTimestamp(), ownedItems: [], teacherId: teacherId || undefined,
                         };
                         successfulCreations.push({ uid: existingUser.uid, profile: userProfile });
                     }
@@ -225,6 +226,43 @@ export async function bulkAddStudents(names: string[], className: string, school
 
     return { success: true, successCount: successfulCreations.length };
 }
+
+export async function addStudentToClass(displayName: string, className: string, teacherId: string | null): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
+    const finalDisplayName = displayName.trim();
+    if (!finalDisplayName) {
+        return { success: false, error: "Öğrenci adı boş olamaz." };
+    }
+    
+    try {
+        const db = getAdminDb();
+        const docRef = doc(collection(db, "users"));
+        
+        const newUserProfile: Omit<UserProfile, 'uid'> = {
+            displayName: finalDisplayName,
+            email: `${docRef.id}@guest.degerleroyunu.app`,
+            role: 'guest',
+            class: className,
+            score: 0,
+            createdAt: serverTimestamp(),
+            teacherId: teacherId || undefined,
+        };
+
+        await setDoc(docRef, newUserProfile);
+        
+        const serializableNewUser: UserProfile = {
+            ...newUserProfile,
+            uid: docRef.id,
+            createdAt: new Date().toISOString(),
+        };
+        
+        return { success: true, newUser: serializableNewUser };
+
+    } catch (error: any) {
+        console.error("Error creating new guest student:", error);
+        return { success: false, error: `Sanal öğrenci oluşturulurken hata: ${error.message}` };
+    }
+}
+
 
 export async function approveStudent(uid: string): Promise<{ success: boolean; error?: string }> {
     if (!uid) {

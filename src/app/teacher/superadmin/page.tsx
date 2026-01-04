@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine } from "lucide-react";
 import { getStudentData } from "@/app/teacher/students/actions";
-import { exportAllData, exportManifestAndContent, exportActivityData, deleteUserFromFirestore, deleteBulkUsers } from "./actions";
+import { exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers } from "./actions";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
