@@ -1,12 +1,11 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine } from "lucide-react";
 import { getStudentData } from "@/app/teacher/students/actions";
-import { exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers } from "./actions";
-import type { UserProfile, SchoolClass, Course, Unit, Topic } from "@/lib/types";
+import { exportAllData, exportManifestAndContent, exportActivityData, deleteUserFromFirestore, deleteBulkUsers } from "./actions";
+import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -113,6 +112,7 @@ export default function SuperAdminPage() {
     setIsLoading(true);
     try {
       const { students, classes, schools } = await getStudentData();
+      
       setUsers(students);
       setAllClasses(classes);
       setSchools(schools);
@@ -218,6 +218,7 @@ export default function SuperAdminPage() {
   };
   
   const handleExportStatic = async (step: 'manifest' | 'activities') => {
+      setIsExportingStatic(true);
       setExportStep(step);
       try {
           const result = step === 'manifest' ? await exportManifestAndContent() : await exportActivityData();
@@ -231,6 +232,7 @@ export default function SuperAdminPage() {
          toast({ title: "Dışa Aktarma Hatası", description: `Statik site verileri oluşturulurken bir hata oluştu: ${e.message}`, variant: "destructive" });
       } finally {
         setExportStep(null);
+        setIsExportingStatic(false);
       }
   }
 
@@ -291,10 +293,10 @@ export default function SuperAdminPage() {
                         <CardContent>
                              <div className="border rounded-lg overflow-hidden border-white/10">
                                 <Table>
-                                    <TableHeader className="bg-slate-900/80"><TableRow className="border-white/5 hover:bg-transparent"><TableHead>Öğrenci</TableHead><TableHead>Sınıf</TableHead><TableHead>Puan</TableHead><TableHead className="text-right">Eylemler</TableHead></TableRow></TableHeader>
+                                    <TableHeader className="bg-slate-900/80"><TableRow className="border-white/5 hover:bg-transparent"><TableHead>Öğrenci</TableHead><TableHead>Okul</TableHead><TableHead>Sınıf</TableHead><TableHead>Puan</TableHead><TableHead className="text-right">Eylemler</TableHead></TableRow></TableHeader>
                                     <TableBody>
                                         {paginatedStudents.map(student => (
-                                            <TableRow key={student.uid} className="border-white/5"><TableCell><div className="flex items-center gap-3"><UserAvatar user={student} /><span className="font-medium">{student.displayName}</span></div></TableCell><TableCell><Badge variant="secondary">{student.class || 'N/A'}</Badge></TableCell><TableCell>{student.score}</TableCell><TableCell className="text-right"><Button variant="ghost" size="sm" onClick={() => handleOpenDialog(student, 'student')}>Düzenle</Button><Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeleteUser(student.uid)}>Sil</Button></TableCell></TableRow>
+                                            <TableRow key={student.uid} className="border-white/5"><TableCell><div className="flex items-center gap-3"><UserAvatar user={student} /><span className="font-medium">{student.displayName}</span></div></TableCell><TableCell><Badge variant="outline">{student.schoolName || '-'}</Badge></TableCell><TableCell><Badge variant="secondary">{student.class || 'N/A'}</Badge></TableCell><TableCell>{student.score}</TableCell><TableCell className="text-right"><Button variant="ghost" size="sm" onClick={() => handleOpenDialog(student, 'student')}>Düzenle</Button><Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeleteUser(student.uid)}>Sil</Button></TableCell></TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
@@ -326,7 +328,14 @@ export default function SuperAdminPage() {
                                     <TableHeader className="bg-slate-900/80"><TableRow className="border-white/5 hover:bg-transparent"><TableHead>Öğretmen</TableHead><TableHead>Okul</TableHead><TableHead className="text-right">Eylemler</TableHead></TableRow></TableHeader>
                                     <TableBody>
                                         {paginatedTeachers.map(teacher => (
-                                            <TableRow key={teacher.uid} className="border-white/5"><TableCell><div className="flex items-center gap-3"><UserAvatar user={teacher} /><span className="font-medium">{teacher.displayName}</span></div></TableCell><TableCell><Badge variant="secondary">{teacher.schoolName || 'Tüm Okullar'}</Badge></TableCell><TableCell className="text-right"><Button variant="ghost" size="sm" onClick={() => handleOpenDialog(teacher, 'teacher')}>Düzenle</Button><Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeleteUser(teacher.uid)}>Sil</Button></TableCell></TableRow>
+                                            <TableRow key={teacher.uid} className="border-white/5">
+                                                <TableCell><div className="flex items-center gap-3"><UserAvatar user={teacher} /><span className="font-medium">{teacher.displayName}</span></div></TableCell>
+                                                <TableCell><Badge variant="secondary">{teacher.schoolName || 'Tüm Okullar'}</Badge></TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button variant="ghost" size="sm" onClick={() => handleOpenDialog(teacher, 'teacher')}>Düzenle</Button>
+                                                    <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDeleteUser(teacher.uid)}>Sil</Button>
+                                                </TableCell>
+                                            </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
@@ -369,11 +378,11 @@ export default function SuperAdminPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col sm:flex-row gap-4">
-                    <Button onClick={() => handleExportStatic('manifest')} disabled={!!exportStep} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
+                    <Button onClick={() => handleExportStatic('manifest')} disabled={isExportingStatic} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
                         {exportStep === 'manifest' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
                         Yapıyı ve İçeriği Oluştur
                     </Button>
-                     <Button onClick={() => handleExportStatic('activities')} disabled={!!exportStep} className="bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-900/20">
+                     <Button onClick={() => handleExportStatic('activities')} disabled={isExportingStatic} className="bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-900/20">
                         {exportStep === 'activities' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
                         Oyun Verilerini Oluştur (Yavaş)
                     </Button>

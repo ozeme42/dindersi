@@ -168,12 +168,17 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                                         )}/>
                                     </div>
                                 </div>
+                            </>
+                        )}
+                        {(role === 'student' || role === 'guest' || role === 'teacher') && (
+                            <>
                                 <div className="space-y-1">
                                     <Label htmlFor="schoolId">Okul</Label>
                                     <Controller control={control} name="schoolId" render={({ field }) => (
                                         <Select onValueChange={(value) => { field.onChange(value); if(value !== 'new') setValue('newSchoolName', ''); }} value={field.value || ''}>
                                             <SelectTrigger id="schoolId"><SelectValue placeholder="Okul Seçin" /></SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem value="">Okul Yok</SelectItem>
                                                 {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                                 <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                             </SelectContent>
