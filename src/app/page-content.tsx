@@ -121,7 +121,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
             </div>
 
              {/* Hero Section */}
-             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
+             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10 flex flex-col justify-center">
                 <div className="flex flex-col items-center justify-center py-16 space-y-8 text-center">
                     <div className="relative group">
                         <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
@@ -145,87 +145,9 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                         </GameButton>
                     </div>
                 </div>
-
-                 {/* Content Groups */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                    {(!classGroups || classGroups.length === 0) ? (
-                        <div className="text-center py-10 bg-slate-900/50 backdrop-blur-md border border-dashed border-white/10 rounded-3xl md:col-span-2">
-                            <p className="text-xl text-slate-400">Görüntülenecek ders içeriği bulunamadı.</p>
-                        </div>
-                    ) : classGroups.map((group, groupIndex) => (
-                        <div key={group.name} className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
-                            <h2 className={cn(
-                                "px-8 py-6 text-3xl font-black text-white bg-gradient-to-r",
-                                getGradient(groupIndex)
-                            )}>
-                                <div className="flex items-center gap-3">
-                                    <Star className="h-8 w-8 text-yellow-300 fill-yellow-300 drop-shadow-md flex-shrink-0" />
-                                    {formatGroupName(group.name)}
-                                </div>
-                            </h2>
-                            
-                            <div className="p-4 md:p-6">
-                                <Accordion type="multiple" className="w-full space-y-4">
-                                    {group.courses.map((course) => (
-                                        <AccordionItem key={course.id} value={course.id} className="border-none bg-slate-800/40 rounded-2xl overflow-hidden border border-white/5 hover:bg-slate-800/60 transition-colors">
-                                            <AccordionTrigger className="px-6 py-4 hover:no-underline text-xl font-bold text-slate-200 group">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="p-2 bg-slate-900 border border-white/10 rounded-lg group-hover:scale-110 transition-transform">
-                                                        <Library className="h-6 w-6 text-cyan-400" />
-                                                    </div>
-                                                    {course.title}
-                                                </div>
-                                            </AccordionTrigger>
-                                            <AccordionContent className="px-6 pb-6 pt-2">
-                                                <Accordion type="multiple" className="w-full space-y-2">
-                                                    {course.units.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map(unit => (
-                                                        <AccordionItem key={unit.id} value={unit.id} className="border-none bg-slate-900/50 rounded-xl overflow-hidden">
-                                                            <AccordionTrigger className="px-4 py-3 hover:no-underline text-slate-300 font-semibold group/unit">
-                                                                <div className="flex items-center gap-3 w-full">
-                                                                    <ChevronRight className="h-4 w-4 text-slate-600 transition-transform duration-200 group-data-[state=open]/unit:rotate-90"/>
-                                                                    <span className="flex-1 text-left">{unit.title}</span>
-                                                                    {unit.hasUnitOzet && (
-                                                                        <Link href={`/ozetler/${course.id}/${unit.id}`} onClick={(e) => e.stopPropagation()}>
-                                                                            <span className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-6 px-2 bg-amber-900/50 hover:bg-amber-600 border border-amber-700 hover:border-amber-500 text-amber-200 hover:text-white">
-                                                                                <BookOpen className="h-3 w-3 mr-1"/> Ünite Özeti
-                                                                            </span>
-                                                                        </Link>
-                                                                    )}
-                                                                </div>
-                                                            </AccordionTrigger>
-                                                            <AccordionContent className="p-4 bg-black/20 space-y-2">
-                                                                {unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map(topic => (
-                                                                    <div key={topic.id} className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors">
-                                                                        <p className="font-medium text-sm text-slate-300">{topic.title}</p>
-                                                                        <div className="flex gap-2">
-                                                                            {topic.hasYazilacaklarContent && (
-                                                                                <Link href={`/yazilacaklar/${course.id}/${unit.id}/${topic.id}`}>
-                                                                                    <Button variant="secondary" size="sm" className="h-7 px-3 text-xs bg-sky-600 hover:bg-sky-500 text-white"><Columns className="mr-1.5 h-3 w-3"/> Notlar</Button>
-                                                                                </Link>
-                                                                            )}
-                                                                            {topic.hasOzetContent && (
-                                                                                <Link href={`/ozetler/${course.id}/${unit.id}/${topic.id}`}>
-                                                                                    <Button variant="secondary" size="sm" className="h-7 px-3 bg-purple-600 hover:bg-purple-500 text-white"><FileText className="mr-1.5 h-3 w-3"/> Özet</Button>
-                                                                                </Link>
-                                                                            )}
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </AccordionContent>
-                                                        </AccordionItem>
-                                                    ))}
-                                                </Accordion>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    ))}
-                                </Accordion>
-                            </div>
-                        </div>
-                    ))}
-                </div>
              </main>
 
-            <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-12 space-y-6">
+            <footer className="container mx-auto p-8 text-center relative z-10 border-t border-white/5 mt-auto space-y-6">
                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <a 
                         href="https://dosya.co/ug6tf9joqc7i/Değerler_Oyunu.apk.html" 
@@ -308,35 +230,31 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
   };
 
   const getManagementButtons = () => {
-      const superAdminButtons = [
-          managementButtons.superAdmin,
-          managementButtons.contentTeacher,
-          managementButtons.studentsTeacher,
-          managementButtons.questionsTeacher,
-          managementButtons.examQuestions,
-          managementButtons.activityDataBank,
-          managementButtons.exams,
-          managementButtons.evaluationScales,
-          managementButtons.leaderboard,
-          managementButtons.statsTeacher,
-          managementButtons.imageLibrary,
-          managementButtons.gameSettingsTeacher,
-          managementButtons.scoreEvents,
-          managementButtons.veriEditoru,
-      ];
-      
-      const teacherButtons = [
-          managementButtons.studentsTeacher,
-          managementButtons.evaluationScales,
-          managementButtons.leaderboard,
-      ];
-
-      if(user.role === 'superadmin') {
-          return superAdminButtons;
+      if (user.role === 'superadmin') {
+          return [
+              managementButtons.superAdmin,
+              managementButtons.contentTeacher,
+              managementButtons.studentsTeacher,
+              managementButtons.questionsTeacher,
+              managementButtons.examQuestions,
+              managementButtons.activityDataBank,
+              managementButtons.exams,
+              managementButtons.evaluationScales,
+              managementButtons.leaderboard,
+              managementButtons.statsTeacher,
+              managementButtons.imageLibrary,
+              managementButtons.gameSettingsTeacher,
+              managementButtons.scoreEvents,
+              managementButtons.veriEditoru,
+          ];
       }
       
-      if(user.role === 'teacher') {
-          return teacherButtons;
+      if (user.role === 'teacher') {
+          return [
+              managementButtons.studentsTeacher,
+              managementButtons.evaluationScales,
+              managementButtons.leaderboard,
+          ];
       }
       
       return [];

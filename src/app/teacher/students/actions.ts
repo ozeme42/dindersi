@@ -7,28 +7,23 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 
 // --- YARDIMCI FONKSİYON: RECURSIVE (DERİNLEMESİNE) SERIALIZER ---
-// Bu fonksiyon objenin ne kadar derinine inerse insin, tüm Timestamp'leri bulur ve string yapar.
 const deepSerialize = (data: any): any => {
     if (data === null || data === undefined) {
         return data;
     }
 
-    // Eğer veri bir Firestore Timestamp ise
     if (typeof data === 'object' && 'toDate' in data && typeof data.toDate === 'function') {
         return data.toDate().toISOString();
     }
     
-    // Eğer veri standart bir Date objesi ise
     if (data instanceof Date) {
         return data.toISOString();
     }
 
-    // Eğer veri bir Array ise
     if (Array.isArray(data)) {
         return data.map(item => deepSerialize(item));
     }
 
-    // Eğer veri bir Obje ise (ve yukarıdakilerden biri değilse)
     if (typeof data === 'object') {
         const newData: any = {};
         for (const key of Object.keys(data)) {
@@ -37,7 +32,6 @@ const deepSerialize = (data: any): any => {
         return newData;
     }
 
-    // String, Number, Boolean gibi primitive değerler olduğu gibi döner
     return data;
 };
 
@@ -55,18 +49,24 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     ]);
     
     // 1. KULLANICI VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
-    // deepSerialize fonksiyonu sayesinde 'last_changed', 'state' gibi iç içe alanlardaki Timestamp'ler de düzelir.
-    let allStudentsAndGuests = allUsersSnap.docs.map(doc => {
+    let allUsers = allUsersSnap.docs.map(doc => {
         const serializedData = deepSerialize(doc.data());
         return { 
             uid: doc.id, 
             ...serializedData, 
         } as UserProfile
-    }).filter(user => ['student', 'guest', 'pending'].includes(user.role));
+    }).filter(user => ['student', 'guest', 'pending', 'teacher', 'superadmin'].includes(user.role));
 
-    // Öğretmen filtresi
-    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
-        allStudentsAndGuests = allStudentsAndGuests.filter(s => s.schoolName === teacher.schoolName);
+    // Eğer istek yapan bir öğretmense (Süper Admin DEĞİLSE), sadece kendi okulunun ÖĞRENCİLERİNİ görsün.
+    if (teacher && teacher.role === 'teacher') {
+        if (teacher.schoolName) {
+            allUsers = allUsers.filter(u => 
+                u.schoolName === teacher.schoolName && 
+                ['student', 'guest', 'pending'].includes(u.role)
+            );
+        } else {
+            allUsers = [];
+        }
     }
     
     // 2. SINIF VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
@@ -98,7 +98,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
-        students: allStudentsAndGuests,
+        students: allUsers,
         classes: classes,
         schools: combinedSchools,
     };
@@ -212,7 +212,9 @@ export async function bulkAddStudents(names: string[], className: string, school
         if (!finalDisplayName) continue;
 
         const email = `${normalizeNameToEmailLocalPart(finalDisplayName)}@degerleroyunu.com`;
-        const password = 'password'; 
+        
+        // --- DEĞİŞİKLİK: TOPLU EKLEMEDE ŞİFRE 123456 ---
+        const password = '123456'; 
 
         try {
             const userRecord = await auth.createUser({

@@ -12,7 +12,7 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, UserCheck, UserCog, PlusCircle, User } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, UserCheck, UserCog, PlusCircle, User, ArrowLeft } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -202,12 +202,12 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
     )
 }
 
-// --- SCHEMA GÜNCELLENDİ ---
+// --- SCHEMA ---
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
   email: z.string().optional(),
-  // Rol alanı opsiyonel ve varsayılan 'student'. UI'dan gelmese bile sorun çıkmaz.
+  // Rol opsiyonel ve varsayılan 'student'
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']).optional().default('student'),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
@@ -263,6 +263,7 @@ export default function StudentsPage() {
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
+            // "RangeError" hatasını önlemek için currentUser'ı temizleyip gönderiyoruz
             const sanitizedTeacher = currentUser ? {
                 uid: currentUser.uid,
                 role: currentUser.role,
@@ -350,14 +351,20 @@ export default function StudentsPage() {
             ? classes.find(c => c.id === data.classId)?.name 
             : undefined;
 
-        // --- ROL DEĞİŞİKLİĞİ İPTAL EDİLDİ ---
-        // Kullanıcı bu sayfadan ekleniyorsa veya düzenleniyorsa, rolü KESİN OLARAK 'student' olur.
-        // Formdan başka bir veri gelse bile ezilir.
+        // --- GÜVENLİK VE ŞİFRE KONTROLÜ ---
+        const roleToSave = currentUser?.role === 'teacher' ? 'student' : data.role;
+        
+        let passwordToSave = data.password;
+        if (currentUser?.role === 'teacher' && !data.uid) {
+            passwordToSave = '123456';
+        }
+
         const dataToSave = {
             ...data,
-            role: 'student', // FORCE STUDENT ROLE
+            role: roleToSave,
             class: fullClassName,
             schoolName: schoolName,
+            password: passwordToSave,
         };
 
         const result = await saveUser(dataToSave);
@@ -403,10 +410,10 @@ export default function StudentsPage() {
         const fullClassName = `${selectedBulkClassData.name} - ${bulkBranch}`;
         const result = await saveUser({
             displayName: newStudentName,
-            role: 'student', // Burası zaten sabitti
+            role: 'student',
             class: fullClassName,
             schoolName: schoolNameToAdd,
-            password: 'password'
+            password: '123456'
         });
 
         if (result.success) {
@@ -523,12 +530,22 @@ export default function StudentsPage() {
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
                 <div className="flex items-center justify-between border-b border-white/10 pb-8">
-                     <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
-                        <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
-                            <UserCog className="h-8 w-8 text-purple-400" />
-                        </div>
-                        Öğrenci Yönetimi
-                    </h1>
+                     <div className="flex items-center gap-4">
+                        <Button 
+                            onClick={() => router.back()} 
+                            variant="ghost" 
+                            size="icon" 
+                            className="w-12 h-12 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                        >
+                            <ArrowLeft className="h-8 w-8" />
+                        </Button>
+                        <h1 className="text-4xl font-black text-white tracking-tight uppercase drop-shadow-md flex items-center gap-3">
+                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                                <UserCog className="h-8 w-8 text-purple-400" />
+                            </div>
+                            Öğrenci Yönetimi
+                        </h1>
+                     </div>
                 </div>
 
                 <Tabs defaultValue="list" className="space-y-6">
@@ -612,7 +629,7 @@ export default function StudentsPage() {
                                     </div>
                                     <CardTitle className="text-2xl text-white">Öğrenci Ekle</CardTitle>
                                 </div>
-                                <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin. Şifreleri otomatik olarak "password" şeklinde atanacaktır.</CardDescription>
+                                <CardDescription className="text-slate-400 text-base">Yeni öğrencileri tek tek veya toplu halde sisteme kaydedin. Şifreleri otomatik olarak "123456" şeklinde atanacaktır.</CardDescription>
                             </CardHeader>
                             <CardContent className="p-8">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
