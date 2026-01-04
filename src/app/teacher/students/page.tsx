@@ -266,6 +266,7 @@ export default function StudentsPage() {
   
     const [isSaving, setIsSaving] = useState(false);
     const [bulkStudentNames, setBulkStudentNames] = useState("");
+    const [newStudentName, setNewStudentName] = useState("");
 
     const [searchTerm, setSearchTerm] = useState("");
     const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
@@ -371,6 +372,53 @@ export default function StudentsPage() {
         setIsSaving(false);
     };
 
+    const handleAddSingleStudent = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!currentUser || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()) {
+            toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
+            return;
+        }
+
+        let schoolNameToAdd = newBulkSchoolName;
+        if(currentUser.role === 'teacher') {
+            schoolNameToAdd = currentUser.schoolName || '';
+        } else {
+            if(bulkSchoolId === 'new') {
+                if(!newBulkSchoolName.trim()) {
+                    toast({title: "Eksik Bilgi", description: "Yeni okul adını giriniz.", variant: "destructive"});
+                    return;
+                }
+                 schoolNameToAdd = newBulkSchoolName.trim();
+            } else {
+                schoolNameToAdd = schools.find(s => s.id === bulkSchoolId)?.name || '';
+            }
+        }
+        
+        if (!schoolNameToAdd) {
+            toast({title: "Eksik Bilgi", description: "Okul bilgisi bulunamadı.", variant: "destructive"});
+            return;
+        }
+
+        setIsSaving(true);
+        const fullClassName = `${selectedBulkClassData.name} - ${bulkBranch}`;
+        const result = await saveUser({
+            displayName: newStudentName,
+            role: 'student',
+            class: fullClassName,
+            schoolName: schoolNameToAdd,
+            password: 'password' // Default password
+        });
+
+        if (result.success) {
+            toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
+            setNewStudentName("");
+            await fetchAllData();
+        } else {
+            toast({title: "Hata", description: result.error, variant: "destructive"});
+        }
+        setIsSaving(false);
+    };
+
     const handleBulkAdd = async (e: React.FormEvent) => {
       e.preventDefault();
       
@@ -430,7 +478,10 @@ export default function StudentsPage() {
     const filteredStudents = useMemo(() => {
         let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
     
-        if (currentUser?.role !== 'teacher') {
+        if (currentUser?.role === 'teacher' && currentUser.schoolName) {
+            // No need to filter here again, as `getStudentData` already filters by teacher's school
+            list = list;
+        } else if (currentUser?.role === 'superadmin') {
             const selectedSchool = schools.find(s => s.id === schoolFilter);
             if (schoolFilter !== 'all' && selectedSchool) {
                 list = list.filter(s => s.schoolName === selectedSchool.name);
@@ -473,11 +524,9 @@ export default function StudentsPage() {
     return (
         <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
-            {/* Arka Plan */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-indigo-900/10 rounded-full blur-[150px]" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-purple-900/10 rounded-full blur-[150px]" />
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10 space-y-8">
@@ -512,7 +561,7 @@ export default function StudentsPage() {
                                 <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                                 <CardDescription className="text-slate-400 text-sm">Öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                                    {currentUser?.role !== 'teacher' && (
+                                    {currentUser?.role === 'superadmin' && (
                                         <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                             <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50">
                                                 <SelectValue placeholder="Okul Seç..." />
@@ -575,7 +624,7 @@ export default function StudentsPage() {
                             </CardHeader>
                             <CardContent className="p-8">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                                    {currentUser?.role !== 'teacher' ? (
+                                    {currentUser?.role === 'superadmin' && (
                                         <div className="space-y-1">
                                             <Label htmlFor="bulk-school">Okul</Label>
                                             <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
@@ -585,11 +634,6 @@ export default function StudentsPage() {
                                                     <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                                 </SelectContent>
                                             </Select>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-1">
-                                            <Label>Okul</Label>
-                                            <Input value={currentUser.schoolName || 'Okul atanmamış'} disabled className="bg-slate-950 border-white/10"/>
                                         </div>
                                     )}
                                     <div className="space-y-1">
@@ -633,6 +677,7 @@ export default function StudentsPage() {
                                               </Button>
                                             </form>
                                         </TabsContent>
+
                                         <TabsContent value="bulk" className="mt-0 space-y-4">
                                             <div className="space-y-2">
                                                 <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
@@ -666,3 +711,5 @@ export default function StudentsPage() {
         </div>
     );
 }
+
+```
