@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -120,34 +119,25 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     };
 
     const getManagementButtons = () => {
-        if (user.role === 'teacher') {
-            return [
-                managementButtons.studentsTeacher,
-                managementButtons.leaderboard,
-                managementButtons.evaluationScales,
-            ];
+        const buttons = [
+            managementButtons.contentTeacher,
+            managementButtons.studentsTeacher,
+            managementButtons.questionsTeacher,
+            managementButtons.examQuestions,
+            managementButtons.activityDataBank,
+            managementButtons.exams,
+            managementButtons.evaluationScales,
+            managementButtons.leaderboard,
+            managementButtons.statsTeacher,
+            managementButtons.imageLibrary,
+            managementButtons.gameSettingsTeacher,
+            managementButtons.scoreEvents,
+            managementButtons.veriEditoru,
+        ];
+        if(user.role === 'superadmin') {
+            buttons.unshift(managementButtons.superAdmin);
         }
-
-        if (user.role === 'superadmin') {
-            return [
-                managementButtons.superAdmin,
-                managementButtons.contentTeacher,
-                managementButtons.studentsTeacher,
-                managementButtons.questionsTeacher,
-                managementButtons.examQuestions,
-                managementButtons.activityDataBank,
-                managementButtons.exams,
-                managementButtons.evaluationScales,
-                managementButtons.leaderboard,
-                managementButtons.statsTeacher,
-                managementButtons.imageLibrary,
-                managementButtons.gameSettingsTeacher,
-                managementButtons.scoreEvents,
-                managementButtons.veriEditoru,
-            ];
-        }
-        
-        return [];
+        return buttons;
     }
   
   return (
@@ -179,7 +169,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                     <AlertDialogTrigger asChild>
                           <button className="block group h-full w-full">
                              <div className="h-full w-full rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all duration-300 border border-red-200 bg-red-50 hover:bg-red-100 hover:border-red-300 group-hover:-translate-y-1 backdrop-blur-md shadow-sm">
-                                 <div className="p-3 rounded-xl mb-4 transition-colors bg-gradient-to-br from-red-500 to-pink-600 shadow-lg group-hover:shadow-red-200">
+                                 <div className="p-3 rounded-xl mb-3 transition-colors bg-gradient-to-br from-red-500 to-pink-600 shadow-lg group-hover:shadow-red-200">
                                      <LogOut className="h-6 w-6 text-white" />
                                  </div>
                                  <h3 className="font-bold text-sm text-red-800 group-hover:text-red-900 transition-colors">Çıkış Yap</h3>
@@ -279,9 +269,30 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-6">
                         {/* Rozetler */}
                         <div className="flex flex-wrap justify-center gap-3">
-                            <Link href="/login" className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 text-white font-bold text-base shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:scale-105 transition-all">
-                                <LogIn className="w-5 h-5" />
-                                <span>Giriş Yap</span>
+                            {[
+                                { icon: BookOpen, title: "Özetler", color: "text-amber-600", bg: "bg-amber-50" },
+                                { icon: Gamepad2, title: "Oyunlar", color: "text-indigo-600", bg: "bg-indigo-50" },
+                                { icon: Sparkles, title: "Etkinlikler", color: "text-purple-600", bg: "bg-purple-50" }
+                            ].map((item, i) => (
+                                <div key={i} className={cn("flex items-center gap-2.5 px-4 py-2 rounded-full border border-white shadow-sm backdrop-blur-md transition-all hover:scale-105 select-none", item.bg)}>
+                                    <item.icon className={cn("h-4 w-4", item.color)} />
+                                    <span className="text-xs font-black text-slate-700">{item.title}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Ayırıcı (Mobil hariç görünür) */}
+                        <div className="hidden sm:block w-px h-6 bg-slate-200/60" />
+
+                        {/* Giriş ve Kayıt Ol Butonları */}
+                        <div className="flex items-center gap-3">
+                            <Link href="/login" className="flex items-center gap-2 px-4 py-2 rounded-xl text-slate-500 font-bold text-xs hover:text-indigo-600 hover:bg-white hover:shadow-sm transition-all">
+                                <LogIn className="w-4 h-4" />
+                                <span>Giriş</span>
+                            </Link>
+                            <Link href="/register" className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:scale-105 transition-all">
+                                <UserPlus className="w-4 h-4" />
+                                <span>Kayıt Ol</span>
                             </Link>
                         </div>
                     </div>
@@ -375,6 +386,81 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* ==================== CONTENT GRID ==================== */}
+                        <div className={cn("w-full mx-auto mt-16 px-4 sm:px-6 transition-all duration-700", gridConfig.wrapper)}>
+                            {activeCourseData && (
+                                <div className={cn("grid gap-10 gap-y-20 animate-in zoom-in-95 duration-1000", gridConfig.grid)}>
+                                    {activeCourseData.units.sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
+                                        const theme = getUnitTheme(index);
+                                        const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
+                                        return (
+                                            <div key={unit.id} className="flex flex-col gap-10 group/unit">
+                                                {/* ÜNİTE BAŞLIĞI */}
+                                                <div className="relative">
+                                                    <div className={cn("absolute -top-12 -left-4 text-[8rem] font-black opacity-[0.03] select-none pointer-events-none transition-all duration-1000 group-hover/unit:opacity-[0.07] group-hover/unit:-translate-y-4", theme.text)}>
+                                                        {index + 1}
+                                                    </div>
+                                                    <div className={cn("relative flex flex-col p-8 bg-white rounded-[2.5rem] border-b-4 shadow-2xl shadow-slate-200/50 overflow-hidden", theme.border)}>
+                                                        <div className="flex items-center justify-between mb-6">
+                                                            <div className={cn("px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] bg-white border shadow-sm", theme.text)}>
+                                                                Ünite Rehberi
+                                                            </div>
+                                                            {unit.hasUnitOzet && (
+                                                                <Link href={`/ozetler/${activeCourseData.id}/${unit.id}`} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-600 hover:text-white hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 font-bold text-xs">
+                                                                    <BookOpen className="h-4 w-4" />
+                                                                    <span>Ünite Özeti</span>
+                                                                </Link>
+                                                            )}
+                                                        </div>
+                                                        <h3 className="text-2xl font-black text-slate-800 leading-tight tracking-tight">{unit.title}</h3>
+                                                    </div>
+                                                </div>
+
+                                                {/* KONU KARTLARI */}
+                                                <div className="flex flex-col space-y-5">
+                                                    {unit.topics.length > 0 ? (
+                                                        unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
+                                                            <Link 
+                                                                key={topic.id} 
+                                                                href={`/konu/${activeCourseData.id}/${unit.id}/${topic.id}?courseName=${encodeURIComponent(courseFullName)}&unitName=${encodeURIComponent(unit.title)}&topicName=${encodeURIComponent(topic.title)}`} 
+                                                                className="group/card block relative"
+                                                            >
+                                                                <div className={cn(
+                                                                    "relative flex items-center justify-between min-h-[95px] p-6 pl-10 rounded-[2rem] bg-white/70 backdrop-blur-md border border-white shadow-md transition-all duration-500 overflow-hidden",
+                                                                    "hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 hover:border-indigo-100"
+                                                                )}>
+                                                                    <div className={cn("absolute left-0 top-0 bottom-0 w-2.5 transition-all duration-500 group-hover/card:w-4 opacity-80", theme.accent)} />
+                                                                    <div className={cn("absolute -bottom-8 -right-8 w-24 h-24 rounded-full blur-3xl opacity-0 group-hover/card:opacity-20 transition-all duration-700", theme.accent)} />
+
+                                                                    <div className="flex flex-col justify-center flex-1 pr-8 relative z-10 transition-transform duration-500 group-hover/card:translate-x-2">
+                                                                        <h4 className="text-[18px] font-black text-slate-700 leading-snug tracking-tight group-hover/card:text-indigo-900 transition-colors">
+                                                                            {topic.title}
+                                                                        </h4>
+                                                                        <div className="flex items-center gap-2 mt-2 opacity-0 -translate-x-4 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-500">
+                                                                            <span className="w-6 h-[2px] bg-indigo-500 rounded-full" />
+                                                                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Konu İçeriği</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div className="flex-shrink-0 relative z-10">
+                                                                        <div className="p-3.5 rounded-[1.2rem] bg-slate-50 text-slate-400 border border-slate-100 transition-all duration-500 group-hover/card:bg-indigo-600 group-hover/card:text-white group-hover/card:border-indigo-600 group-hover/card:shadow-xl group-hover/card:scale-110 group-hover/card:rotate-[-8deg]">
+                                                                            <ArrowRight className="h-6 w-6" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        ))
+                                                    ) : (
+                                                        <div className="p-10 rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-white/30 text-slate-400 text-sm font-bold italic text-center">Henüz içerik eklenmemiş.</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
                     </>
                 )}

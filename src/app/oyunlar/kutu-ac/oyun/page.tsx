@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { getMazeQuestionsAction, submitMazeScoreAction } from '../actions';
+import { getKutuAcQuestionsAction, submitKutuAcScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Loader2, ArrowRight, ArrowLeft, PartyPopper, Home, Flag, HelpCircle, ArrowUp, ArrowDown, Repeat, Trophy, XOctagon, Gamepad2, MapPin } from 'lucide-react';
@@ -63,7 +63,7 @@ const generateMaze = (width: number, height: number, questionDensity: number): {
 };
 
 
-function MazeGame() {
+function KutuAcGame() {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -88,13 +88,13 @@ function MazeGame() {
     const MAZE_WIDTH = 21;
     const MAZE_HEIGHT = 15;
     
-    const gameContext = `Labirent - ${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
+    const gameContext = `Kutu Aç - ${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
     const backUrl = useMemo(() => {
         const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
         if (courseId && unitId && topicId) {
             return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
         }
-        return '/oyunlar/labirent';
+        return '/oyunlar/kutu-ac';
     }, [searchParams]);
 
 
@@ -108,7 +108,7 @@ function MazeGame() {
             topicId: searchParams.get('topicId') || undefined,
         };
         
-        const result = await getMazeQuestionsAction(params);
+        const result = await getKutuAcQuestionsAction(params);
         if (result.error || result.questions.length === 0) {
             setError(result.error || "Bu konu için uygun soru bulunamadı.");
         } else {
@@ -194,7 +194,7 @@ function MazeGame() {
         }
 
         setIsSubmitting(true);
-        const result = await submitMazeScoreAction(user.uid, score, gameContext);
+        const result = await submitKutuAcScoreAction(user.uid, score, gameContext);
         if (result.success) {
             toast({ title: "Başarılı!", description: "Puanların kaydedildi." });
             setIsScoreSaved(true);
@@ -369,7 +369,7 @@ function MazeGame() {
 export default function LabirentOyunPage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-blue-500" /></div>}>
-            <MazeGame />
+            <KutuAcGame />
         </Suspense>
-    );
+    )
 }
