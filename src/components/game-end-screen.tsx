@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect } from "react";
@@ -141,9 +142,9 @@ export function GameEndScreen({
                                 variant="outline" 
                                 className="h-12 bg-transparent border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl"
                             >
-                                <Link href={backUrl}>
+                                <Link href={isStudent ? backUrl : '/'}>
                                     <Home className="mr-2 h-4 w-4" />
-                                    Ana Menü
+                                    {isStudent ? 'Ana Menü' : 'Ana Sayfa'}
                                 </Link>
                             </Button>
                         </div>
