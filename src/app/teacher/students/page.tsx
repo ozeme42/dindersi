@@ -197,8 +197,8 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
                                             <AlertDialogDescription className="text-slate-400">"{student.displayName}" adlı öğrencinin kayıt isteğini reddetmek istediğinize emin misiniz? Kullanıcı kalıcı olarak silinecektir.</AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            <AlertDialogCancel className="bg-transparent border-white/10">İptal</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500">Evet, Reddet ve Sil</AlertDialogAction>
+                                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Reddet ve Sil</AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
@@ -218,7 +218,7 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi.").optional(),
+  email: z.string().optional(),
   role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
