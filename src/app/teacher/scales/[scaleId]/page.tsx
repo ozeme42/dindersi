@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -145,11 +146,11 @@ export default function ScaleDetailPage() {
     const [selectedStudentUids, setSelectedStudentUids] = useState<Set<string>>(new Set());
 
     const fetchData = useCallback(async () => {
-        if (!scaleOrUnitId) return;
+        if (!scaleOrUnitId || !user) return;
         setIsLoading(true);
 
         const result = type === 'unit' && courseId 
-            ? await getUnitScaleDetails(courseId, scaleOrUnitId, branch) 
+            ? await getUnitScaleDetails(courseId, scaleOrUnitId, branch, user.schoolName || null, user.role || null) 
             : await getScaleDetails(scaleOrUnitId);
 
         if (result.success && result.data) {
@@ -181,7 +182,7 @@ export default function ScaleDetailPage() {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
         }
         setIsLoading(false);
-    }, [scaleOrUnitId, courseId, type, branch, toast]);
+    }, [scaleOrUnitId, courseId, type, branch, toast, user]);
 
     useEffect(() => {
         if (!type || (type === 'unit' && (!courseId || !branch))) {
@@ -255,10 +256,9 @@ export default function ScaleDetailPage() {
         if (!entry?.statuses) return null;
         const statuses = Object.values(entry.statuses);
         const pluses = statuses.filter(s => s === '+').length;
-        const minuses = statuses.filter(s => s === '-').length;
-        const total = pluses + minuses;
-        if (total === 0) return null;
-        return Math.round((pluses / total) * 100);
+        const totalGraded = pluses + statuses.filter(s => s === '-').length;
+        if (totalGraded === 0) return null;
+        return Math.round((pluses / totalGraded) * 100);
     }, []);
 
     const overallScore = useMemo(() => {
