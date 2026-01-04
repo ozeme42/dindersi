@@ -22,11 +22,11 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
       studentsQuery = query(
         collection(db, "users"),
-        where("schoolName", "==", teacher.schoolName),
-        where("role", "in", ["student", "guest", "pending"])
+        where("schoolName", "==", teacher.schoolName)
+        // We will filter by role in the code to avoid composite index requirement
       );
     } else {
-      // For superadmins, fetch all students, guests, and pending users.
+      // For superadmins, fetch all users. We will filter client-side.
       studentsQuery = query(collection(db, "users"));
     }
 
@@ -39,7 +39,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
             ...data,
             createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt,
         } as UserProfile
-    });
+    }).filter(user => ['student', 'guest', 'pending'].includes(user.role)); // Filter roles in code
 
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
@@ -52,7 +52,8 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         }
     });
 
-    allStudents.forEach(student => {
+    usersSnap.docs.forEach(userDoc => {
+        const student = userDoc.data() as UserProfile;
         if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
             const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
             schoolSet.set(student.schoolName.toLowerCase(), { id: pseudoId, name: student.schoolName });
@@ -286,6 +287,4 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
         return { success: true };
     } catch (error: any) {
         console.error("Error approving student:", error);
-        return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
-    }
-}
+        return { success: false, error: 'Öğrenci
