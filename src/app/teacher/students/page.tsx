@@ -39,7 +39,6 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteUserFromFirestore, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
 import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
-import { updateStudentClass } from "@/app/teacher/guest-students/actions";
 
 
 // Types
@@ -476,17 +475,16 @@ export default function StudentsPage() {
     const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
     const filteredStudents = useMemo(() => {
-        let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
+        let list = allStudents.filter(s => ['student', 'guest'].includes(s.role));
     
-        if (currentUser?.role === 'teacher' && currentUser.schoolName) {
-            // No need to filter here again, as `getStudentData` already filters by teacher's school
-            list = list;
-        } else if (currentUser?.role === 'superadmin') {
+        // Superadmin filters by school dropdown
+        if (currentUser?.role === 'superadmin' && schoolFilter !== 'all') {
             const selectedSchool = schools.find(s => s.id === schoolFilter);
-            if (schoolFilter !== 'all' && selectedSchool) {
+            if (selectedSchool) {
                 list = list.filter(s => s.schoolName === selectedSchool.name);
             }
         }
+        // Teacher data is pre-filtered by school in `getStudentData`, so no extra filter needed here.
 
         if (activeClassId !== 'all' && selectedClass) {
             if (activeBranch === 'all') {
@@ -506,7 +504,7 @@ export default function StudentsPage() {
   
     const pendingStudents = useMemo(() => {
       let pending = allStudents.filter(s => s.role === 'pending');
-      // If teacher, filter by their school
+      // If teacher, filter by their school (data is already pre-filtered, but for safety)
       if (currentUser?.role === 'teacher' && currentUser.schoolName) {
           pending = pending.filter(s => s.schoolName === currentUser.schoolName);
       }
@@ -711,5 +709,3 @@ export default function StudentsPage() {
         </div>
     );
 }
-
-```
