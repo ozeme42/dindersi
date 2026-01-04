@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -37,7 +38,8 @@ import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { updateUser, deleteUserFromFirestore, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { addGuestStudent, bulkAddGuestStudents, updateStudentClass, getStudentData } from "./actions";
+import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
+import { updateStudentClass } from "@/app/teacher/guest-students/actions";
 
 
 // Types
@@ -246,6 +248,7 @@ const UserEditorSchema = z.object({
 
 export default function StudentsPage() {
     const { user: currentUser } = useAuth();
+    const router = useRouter();
     const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
     const [classes, setClasses] = useState<SchoolClass[]>([]);
     const [schools, setSchools] = useState<School[]>([]);
@@ -509,34 +512,40 @@ export default function StudentsPage() {
                                 <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                                 <CardDescription className="text-slate-400 text-sm">Öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                                    <Select value={schoolFilter} onValueChange={setSchoolFilter} disabled={currentUser?.role === 'teacher'}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50">
-                                            <SelectValue placeholder="Okul Seç..." />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            {currentUser?.role === 'superadmin' && <SelectItem value="all">Tüm Okullar</SelectItem>}
-                                            {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                    <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                                    </Select>
-                                    <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                                        <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                            {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                     <div className="relative">
+                                    {currentUser?.role !== 'teacher' && (
+                                        <Select value={schoolFilter} onValueChange={setSchoolFilter}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50">
+                                                <SelectValue placeholder="Okul Seç..." />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="all">Tüm Okullar</SelectItem>
+                                                {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                    <div className={currentUser?.role === 'teacher' ? 'md:col-span-1' : ''}>
+                                        <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className={currentUser?.role === 'teacher' ? 'md:col-span-1' : ''}>
+                                        <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
+                                            <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                <SelectItem value="all">Tüm Şubeler</SelectItem>
+                                                {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                     <div className="relative md:col-span-2">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                         <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
                                      </div>
                                 </div>
                             </CardHeader>
                             <CardContent>
-                                <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={handleClassChange} allClasses={classes} />
+                                <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} onClassChange={() => {}} allClasses={classes} />
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -653,7 +662,7 @@ export default function StudentsPage() {
                      classes={classes}
                      schools={schools}
                  />
-            )}
+              )}
         </div>
     );
 }

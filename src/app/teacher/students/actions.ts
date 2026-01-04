@@ -12,27 +12,13 @@ import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 export async function getStudentData(teacher?: UserProfile): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
   try {
-    const [classesSnap, schoolsSnap] = await Promise.all([
+    const [classesSnap, schoolsSnap, allUsersSnap] = await Promise.all([
       getDocs(query(collection(db, 'classes'), orderBy('name', 'asc'))),
       getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
+      getDocs(query(collection(db, "users"))) // Fetch all users initially
     ]);
     
-    let studentsQuery;
-    // If a teacher is making the request, filter students by their school name directly in the query.
-    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
-      studentsQuery = query(
-        collection(db, "users"),
-        where("schoolName", "==", teacher.schoolName)
-        // We will filter by role in the code to avoid composite index requirement
-      );
-    } else {
-      // For superadmins, fetch all users.
-      studentsQuery = query(collection(db, "users"));
-    }
-
-    const studentsSnap = await getDocs(studentsQuery);
-    
-    const allStudents = studentsSnap.docs.map(doc => {
+    let allStudentsAndGuests = allUsersSnap.docs.map(doc => {
         const data = doc.data();
         return { 
             uid: doc.id, 
@@ -41,9 +27,13 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         } as UserProfile
     }).filter(user => ['student', 'guest', 'pending'].includes(user.role)); // Filter roles in code
 
+    // If a teacher is making the request, filter students by their school name
+    if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
+        allStudentsAndGuests = allStudentsAndGuests.filter(s => s.schoolName === teacher.schoolName);
+    }
+    
     const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
     
-    // School list should be comprehensive based on schools collection and what's in use by users.
     const schoolSet = new Map<string, School>();
     schoolsSnap.docs.forEach(doc => {
         const schoolData = doc.data() as { name: string };
@@ -52,8 +42,6 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
         }
     });
 
-    // Also get school names from all users in case they are not in the schools collection
-    const allUsersSnap = await getDocs(query(collection(db, "users")));
     allUsersSnap.docs.forEach(userDoc => {
         const student = userDoc.data() as UserProfile;
         if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
@@ -65,7 +53,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
-        students: JSON.parse(JSON.stringify(allStudents)),
+        students: JSON.parse(JSON.stringify(allStudentsAndGuests)),
         classes: JSON.parse(JSON.stringify(classes)),
         schools: JSON.parse(JSON.stringify(combinedSchools)),
     };
