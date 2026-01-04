@@ -99,16 +99,17 @@ const getGradient = (index: number) => {
     return gradients[index % gradients.length];
 };
 
+// Moved outside the component to prevent re-creation on every render
+const formatGroupName = (name: string) => {
+    if (!isNaN(parseInt(name))) {
+        return `${name}. Sınıf`;
+    }
+    return name;
+}
+
 // --- MAIN PAGES ---
 
 const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
-
-    const formatGroupName = (name: string) => {
-        if (!isNaN(parseInt(name))) {
-            return `${name}. Sınıf`;
-        }
-        return name;
-    }
 
     return (
         <div className="flex flex-col min-h-screen bg-slate-950 pb-20 md:pb-8 font-sans selection:bg-purple-500/30 text-white relative overflow-hidden">
