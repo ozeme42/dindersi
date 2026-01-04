@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -35,6 +34,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
 import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
 import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
 
@@ -46,6 +47,7 @@ import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { UserEditorDialog } from "@/components/user-editor-dialog";
 import { UserAvatar } from "@/components/user-avatar";
+import { useAuth } from "@/context/auth-context";
 
 function StudentTable({ 
     students, 
@@ -70,8 +72,7 @@ function StudentTable({
                 <TableHeader className="bg-slate-900/80">
                     <TableRow className="border-white/5 hover:bg-transparent">
                         <TableHead className="text-slate-300 font-bold">Öğrenci</TableHead>
-                        <TableHead className="text-slate-300 font-bold">Okul</TableHead>
-                        <TableHead className="text-slate-300 font-bold">Sınıf-Şube</TableHead>
+                        <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-slate-300 font-bold text-right">Puan</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -84,11 +85,6 @@ function StudentTable({
                                     <UserAvatar user={student} className="h-10 w-10 border-2 border-slate-700"/>
                                     <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{student.displayName}</span>
                                 </div>
-                            </TableCell>
-                             <TableCell>
-                                <Badge variant="outline" className="bg-slate-800/80 text-slate-400 border-white/5">
-                                    {student.schoolName || '-'}
-                                </Badge>
                             </TableCell>
                             <TableCell>
                                 <Badge variant="secondary" className="bg-slate-800 text-slate-400 border-white/10">
@@ -141,7 +137,7 @@ function StudentTable({
                         )
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -263,12 +259,6 @@ export default function StudentsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20;
-  
-    const [schoolFilter, setSchoolFilter] = useState<string>('all');
-
-
     const { toast } = useToast();
 
     const fetchAllData = useCallback(async () => {
@@ -323,8 +313,8 @@ export default function StudentsPage() {
     }
   };
   
-  const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher') => {
-      const defaultUser = { role, schoolName: currentUser?.schoolName || '' };
+  const handleOpenDialog = (user: Partial<UserProfile> | null = null) => {
+      const defaultUser = { role: 'student', schoolName: currentUser?.schoolName || '' };
       setDialogState({ isOpen: true, user: user || defaultUser });
   };
   
@@ -402,10 +392,10 @@ export default function StudentsPage() {
   const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
   const filteredStudents = useMemo(() => {
-    let list = allStudents.filter(s => s.role === 'student');
+    let list = allStudents.filter(s => s.role === 'student' || s.role === 'guest');
     
-    if(currentUser?.role === 'teacher' && currentUser.schoolName) {
-        list = list.filter(s => s.schoolName === currentUser.schoolName);
+    if (currentUser?.role === 'teacher' && currentUser.schoolName) {
+        // Zaten `getStudentData` içinde filtrelendi, burada tekrar filtrelemeye gerek yok.
     } else if (schoolFilter !== 'all') {
         const selectedSchool = schools.find(s => s.id === schoolFilter);
         if (selectedSchool) {
@@ -440,22 +430,16 @@ export default function StudentsPage() {
       return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
   }, [allStudents, currentUser]);
 
-  const validSchools = schools.filter(s => s && s.id && s.name);
-  const validClasses = classes.filter(c => c && c.id && c.name);
+  const schoolFilterOptions = currentUser?.role === 'teacher' ? [] : schools;
+
+  if (isLoading) {
+      return (
+          <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+              <Loader2 className="h-16 w-16 animate-spin text-indigo-500" />
+          </div>
+      );
+  }
   
-  const paginatedStudents = useMemo(() => {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      return filteredStudents.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredStudents, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
-
-  const handlePageChange = (newPage: number) => {
-      if (newPage >= 1 && newPage <= totalPages) {
-          setCurrentPage(newPage);
-      }
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 md:p-8 relative overflow-hidden">
         
@@ -474,9 +458,6 @@ export default function StudentsPage() {
                 </div>
                 Öğrenci Yönetimi
             </h1>
-            <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-                <Link href="/"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
-            </Button>
         </div>
 
         <Tabs defaultValue="list" className="space-y-6">
@@ -501,18 +482,18 @@ export default function StudentsPage() {
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sistemdeki öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                            {currentUser?.role === 'superadmin' && (
+                            {currentUser?.role !== 'teacher' && (
                                 <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                     <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
                                     <SelectContent className="bg-slate-900 border-white/10 text-white">
                                         <SelectItem value="all">Tüm Okullar</SelectItem>
-                                        {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                        {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                     </SelectContent>
                                 </Select>
                             )}
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                             </Select>
                             <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
@@ -528,22 +509,8 @@ export default function StudentsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <StudentTable students={paginatedStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
+                        <StudentTable students={filteredStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
                     </CardContent>
-                     {totalPages > 1 && (
-                         <CardFooter className="justify-between bg-slate-900/50 border-t border-white/5 py-3">
-                             <span className="text-sm text-slate-400">{filteredStudents.length} öğrenci bulundu.</span>
-                             <div className="flex gap-2">
-                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="bg-slate-800 border-white/10">
-                                    <ArrowLeftIcon className="h-4 w-4 mr-2"/> Önceki
-                                </Button>
-                                <span className="p-2 text-sm font-bold bg-slate-800 border border-white/10 rounded-md">{currentPage} / {totalPages}</span>
-                                <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="bg-slate-800 border-white/10">
-                                    Sonraki <ArrowRight className="h-4 w-4 ml-2"/>
-                                </Button>
-                            </div>
-                        </CardFooter>
-                    )}
                  </Card>
             </TabsContent>
 
@@ -577,19 +544,19 @@ export default function StudentsPage() {
                             <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
                          </TabsList>
                          <TabsContent value="single" className="mt-0">
-                             <Button onClick={() => handleOpenDialog(null, 'student')} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+                             <Button onClick={() => handleOpenDialog(null)} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
                                 <UserPlus className="mr-2 h-5 w-5"/> Yeni Öğrenci Formunu Aç
                             </Button>
                          </TabsContent>
                          <TabsContent value="bulk" className="mt-0 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {currentUser?.role === 'superadmin' && (
+                                {currentUser?.role !== 'teacher' && (
                                      <div className="space-y-1">
                                         <Label htmlFor="bulk-school">Okul</Label>
                                         <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
                                             <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
                                             <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                                {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                                {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
                                                 <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -599,7 +566,7 @@ export default function StudentsPage() {
                                     <Label className="text-slate-300">Sınıf</Label>
                                     <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                                        <SelectContent className="bg-slate-900 border-white/10 text-white">{classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-1">
@@ -611,7 +578,7 @@ export default function StudentsPage() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                {bulkSchoolId === 'new' && (
+                                {bulkSchoolId === 'new' && currentUser?.role !== 'teacher' && (
                                     <div className="space-y-1 animate-in slide-in-from-top-2 md:col-span-3">
                                         <Label htmlFor="new-bulk-school-name">Yeni Okul Adı</Label>
                                         <Input id="new-bulk-school-name" value={newBulkSchoolName} onChange={e => setNewBulkSchoolName(e.target.value)} placeholder="Okulun tam adını girin" className="bg-slate-900 border-white/10 text-white h-11 rounded-xl"/>
@@ -643,8 +610,8 @@ export default function StudentsPage() {
              user={dialogState.user}
              onSave={handleSaveUser}
              isSaving={isSaving}
-             classes={validClasses}
-             schools={validSchools}
+             classes={classes}
+             schools={schools}
          />
       )}
     </div>
