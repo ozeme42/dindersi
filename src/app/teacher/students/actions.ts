@@ -1,39 +1,84 @@
-
-
 'use server';
 
-import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs, doc, writeBatch, serverTimestamp, setDoc, orderBy, Timestamp } from "firebase/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 import { unstable_noStore as noStore } from 'next/cache';
 import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
+
+// --- YARDIMCI FONKSİYON: RECURSIVE (DERİNLEMESİNE) SERIALIZER ---
+// Bu fonksiyon objenin ne kadar derinine inerse insin, tüm Timestamp'leri bulur ve string yapar.
+const deepSerialize = (data: any): any => {
+    if (data === null || data === undefined) {
+        return data;
+    }
+
+    // Eğer veri bir Firestore Timestamp ise
+    if (typeof data === 'object' && 'toDate' in data && typeof data.toDate === 'function') {
+        return data.toDate().toISOString();
+    }
+    
+    // Eğer veri standart bir Date objesi ise
+    if (data instanceof Date) {
+        return data.toISOString();
+    }
+
+    // Eğer veri bir Array ise
+    if (Array.isArray(data)) {
+        return data.map(item => deepSerialize(item));
+    }
+
+    // Eğer veri bir Obje ise (ve yukarıdakilerden biri değilse)
+    if (typeof data === 'object') {
+        const newData: any = {};
+        for (const key of Object.keys(data)) {
+            newData[key] = deepSerialize(data[key]);
+        }
+        return newData;
+    }
+
+    // String, Number, Boolean gibi primitive değerler olduğu gibi döner
+    return data;
+};
+
+// --- VERİ ÇEKME İŞLEMLERİ (Sadece Admin SDK ile) ---
 
 export async function getStudentData(teacher?: UserProfile): Promise<{ students: UserProfile[], classes: SchoolClass[], schools: School[] }> {
   noStore();
+  const db = getAdminDb();
+
   try {
     const [classesSnap, schoolsSnap, allUsersSnap] = await Promise.all([
-      getDocs(query(collection(db, 'classes'), orderBy('name', 'asc'))),
-      getDocs(query(collection(db, 'schools'), orderBy('name', 'asc'))),
-      getDocs(query(collection(db, "users"))) // Fetch all users initially
+      db.collection('classes').orderBy('name', 'asc').get(),
+      db.collection('schools').orderBy('name', 'asc').get(),
+      db.collection('users').get()
     ]);
     
+    // 1. KULLANICI VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
+    // deepSerialize fonksiyonu sayesinde 'last_changed', 'state' gibi iç içe alanlardaki Timestamp'ler de düzelir.
     let allStudentsAndGuests = allUsersSnap.docs.map(doc => {
-        const data = doc.data();
+        const serializedData = deepSerialize(doc.data());
         return { 
             uid: doc.id, 
-            ...data,
-            createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate().toISOString() : data.createdAt,
+            ...serializedData, 
         } as UserProfile
-    }).filter(user => ['student', 'guest', 'pending'].includes(user.role)); // Filter roles in code
+    }).filter(user => ['student', 'guest', 'pending'].includes(user.role));
 
-    // If a teacher is making the request, filter students by their school name
+    // Öğretmen filtresi
     if (teacher && teacher.role === 'teacher' && teacher.schoolName) {
         allStudentsAndGuests = allStudentsAndGuests.filter(s => s.schoolName === teacher.schoolName);
     }
     
-    const classes = classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass));
+    // 2. SINIF VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
+    const classes = classesSnap.docs.map(doc => {
+        const serializedData = deepSerialize(doc.data());
+        return { 
+            id: doc.id, 
+            ...serializedData 
+        } as SchoolClass
+    });
     
+    // 3. OKUL VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
     const schoolSet = new Map<string, School>();
     schoolsSnap.docs.forEach(doc => {
         const schoolData = doc.data() as { name: string };
@@ -43,7 +88,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     });
 
     allUsersSnap.docs.forEach(userDoc => {
-        const student = userDoc.data() as UserProfile;
+        const student = userDoc.data() as any;
         if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
             const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
             schoolSet.set(student.schoolName.toLowerCase(), { id: pseudoId, name: student.schoolName });
@@ -53,9 +98,9 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
     const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
-        students: JSON.parse(JSON.stringify(allStudentsAndGuests)),
-        classes: JSON.parse(JSON.stringify(classes)),
-        schools: JSON.parse(JSON.stringify(combinedSchools)),
+        students: allStudentsAndGuests,
+        classes: classes,
+        schools: combinedSchools,
     };
   } catch (error) {
     console.error('Error fetching student data:', error);
@@ -63,6 +108,7 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
   }
 }
 
+// --- YAZMA İŞLEMLERİ (Admin SDK) ---
 
 type SaveUserData = {
     uid?: string;
@@ -90,12 +136,12 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
             }
         }
 
-        if (uid) { // Update existing user
+        if (uid) { // Güncelleme
             const updatePayload: any = { displayName };
             if (password) {
                 updatePayload.password = password;
             }
-            // Only update auth user if necessary.
+            
             if (Object.keys(updatePayload).length > 0) {
               await auth.updateUser(uid, updatePayload);
             }
@@ -109,7 +155,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
                 score: score || 0,
             });
 
-        } else { // Create new user
+        } else { // Yeni Kayıt
             if (!password) {
                 return { success: false, error: 'Yeni kullanıcı için şifre zorunludur.' };
             }
@@ -129,7 +175,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
                 class: className || '',
                 schoolName: schoolName || '',
                 score: 0,
-                createdAt: serverTimestamp(),
+                createdAt: FieldValue.serverTimestamp() as any, 
                 ownedItems: [],
             };
             
@@ -182,7 +228,7 @@ export async function bulkAddStudents(names: string[], className: string, school
                 class: className,
                 schoolName: schoolName,
                 score: 0,
-                createdAt: serverTimestamp(),
+                createdAt: FieldValue.serverTimestamp() as any,
                 ownedItems: [],
                 teacherId: teacherId || undefined,
             };
@@ -195,7 +241,7 @@ export async function bulkAddStudents(names: string[], className: string, school
                     const userDoc = await db.collection('users').doc(existingUser.uid).get();
                     if (!userDoc.exists) {
                          const userProfile: Omit<UserProfile, 'uid'> = {
-                            displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: serverTimestamp(), ownedItems: [], teacherId: teacherId || undefined,
+                            displayName: finalDisplayName, email, role: 'student', class: className, schoolName, score: 0, createdAt: FieldValue.serverTimestamp() as any, ownedItems: [], teacherId: teacherId || undefined,
                         };
                         successfulCreations.push({ uid: existingUser.uid, profile: userProfile });
                     }
@@ -237,7 +283,7 @@ export async function addStudentToClass(displayName: string, className: string, 
     
     try {
         const db = getAdminDb();
-        const docRef = doc(collection(db, "users"));
+        const docRef = db.collection("users").doc();
         
         const newUserProfile: Omit<UserProfile, 'uid'> = {
             displayName: finalDisplayName,
@@ -245,11 +291,12 @@ export async function addStudentToClass(displayName: string, className: string, 
             role: 'guest',
             class: className,
             score: 0,
-            createdAt: serverTimestamp(),
+            createdAt: FieldValue.serverTimestamp() as any,
             teacherId: teacherId || undefined,
+            ownedItems: [],
         };
 
-        await setDoc(docRef, newUserProfile);
+        await docRef.set(newUserProfile);
         
         const serializableNewUser: UserProfile = {
             ...newUserProfile,
@@ -265,7 +312,6 @@ export async function addStudentToClass(displayName: string, className: string, 
     }
 }
 
-
 export async function approveStudent(uid: string): Promise<{ success: boolean; error?: string }> {
     if (!uid) {
         return { success: false, error: 'Kullanıcı ID\'si eksik.' };
@@ -278,5 +324,18 @@ export async function approveStudent(uid: string): Promise<{ success: boolean; e
     } catch (error: any) {
         console.error("Error approving student:", error);
         return { success: false, error: 'Öğrenci onaylanırken bir hata oluştu.' };
+    }
+}
+
+export async function updateStudentClass(studentId: string, newClassName: string) {
+    try {
+      const db = getAdminDb();
+      await db.collection('users').doc(studentId).update({
+        class: newClassName
+      });
+      return { success: true };
+    } catch (error: any) {
+      console.error("Error updating student class:", error);
+      return { success: false, error: "Sınıf güncellenirken bir hata oluştu." };
     }
 }

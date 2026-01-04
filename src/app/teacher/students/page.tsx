@@ -1,12 +1,7 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 // UI Imports
@@ -14,11 +9,10 @@ import {
     Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
-    Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter,
+    Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowRight, ArrowLeft as ArrowLeftIcon, User } from "lucide-react";
+import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Search, UserCheck, UserCog, PlusCircle, User } from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -32,30 +26,26 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { updateUser, deleteUserFromFirestore, resetAllGeneralScores } from '@/app/teacher/superadmin/actions';
-import { getStudentData, saveUser, bulkAddStudents, approveStudent } from "./actions";
-
+import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
+import { getStudentData, saveUser, bulkAddStudents, approveStudent, updateStudentClass } from "./actions";
 
 // Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { UserEditorDialog } from "@/components/user-editor-dialog";
 import { UserAvatar } from "@/components/user-avatar";
 import { useAuth } from "@/context/auth-context";
 
+// --- COMPONENTS ---
+
 function StudentTable({ 
     students, 
     isLoading, 
     onEdit, 
     onDelete, 
-    onClassChange,
     allClasses 
 }: { 
     students: UserProfile[], 
@@ -82,9 +72,6 @@ function StudentTable({
                 </TableHeader>
                 <TableBody>
                     {students.length > 0 ? students.map((student) => {
-                        const [currentClassName, currentBranch] = student.class?.split(' - ') || ['', ''];
-                        const studentClass = allClasses.find(c => c.name === currentClassName);
-
                         return (
                         <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 transition-colors group">
                             <TableCell>
@@ -110,9 +97,6 @@ function StudentTable({
                                      </DropdownMenuTrigger>
                                      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
                                          <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
-                                         <DropdownMenuItem onClick={() => router.push(`/teacher/students/${student.uid}`)} className="focus:bg-white/10 focus:text-white cursor-pointer">
-                                             <User className="mr-2 h-4 w-4 text-cyan-400" /> Detayları Görüntüle
-                                         </DropdownMenuItem>
                                          <DropdownMenuItem onClick={() => onEdit(student)} className="focus:bg-white/10 focus:text-white cursor-pointer">
                                              <FilePenLine className="mr-2 h-4 w-4 text-emerald-400" /> Düzenle
                                          </DropdownMenuItem>
@@ -126,7 +110,7 @@ function StudentTable({
                                                  <AlertDialogHeader>
                                                      <AlertDialogTitle className="text-red-400">Emin misiniz?</AlertDialogTitle>
                                                      <AlertDialogDescription className="text-slate-400">
-                                                         "{student.displayName}" adlı öğrenci ve tüm verileri (skor, ilerleme vb.) kalıcı olarak silinecektir. Bu işlem geri alınamaz.
+                                                         "{student.displayName}" adlı öğrenci ve tüm verileri kalıcı olarak silinecektir.
                                                      </AlertDialogDescription>
                                                  </AlertDialogHeader>
                                                  <AlertDialogFooter>
@@ -193,17 +177,17 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
                                         <Button size="sm" variant="destructive" className="bg-red-900 hover:bg-red-800 text-red-300 border border-red-500/30">
                                             <Trash2 className="mr-2 h-4 w-4"/> Reddet
                                         </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>İsteği Reddet</AlertDialogTitle>
-                                            <AlertDialogDescription className="text-slate-400">"{student.displayName}" adlı öğrencinin kayıt isteğini reddetmek istediğinize emin misiniz? Kullanıcı kalıcı olarak silinecektir.</AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Reddet ve Sil</AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
+                                     </AlertDialogTrigger>
+                                     <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                         <AlertDialogHeader>
+                                             <AlertDialogTitle>İsteği Reddet</AlertDialogTitle>
+                                             <AlertDialogDescription className="text-slate-400">"{student.displayName}" adlı öğrencinin kayıt isteğini reddetmek istediğinize emin misiniz? Kullanıcı kalıcı olarak silinecektir.</AlertDialogDescription>
+                                         </AlertDialogHeader>
+                                         <AlertDialogFooter>
+                                             <AlertDialogCancel className="bg-transparent border-white/10 text-slate-300 hover:bg-white/5 hover:text-white">İptal</AlertDialogCancel>
+                                             <AlertDialogAction onClick={() => onDelete(student.uid)} className="bg-red-600 hover:bg-red-500 text-white border-none">Evet, Reddet ve Sil</AlertDialogAction>
+                                         </AlertDialogFooter>
+                                     </AlertDialogContent>
                                 </AlertDialog>
                             </TableCell>
                         </TableRow>
@@ -218,11 +202,13 @@ function PendingStudentTable({ students, onApprove, onDelete }: { students: User
     )
 }
 
+// --- SCHEMA GÜNCELLENDİ ---
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
   email: z.string().optional(),
-  role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
+  // Rol alanı opsiyonel ve varsayılan 'student'. UI'dan gelmese bile sorun çıkmaz.
+  role: z.enum(['student', 'teacher', 'superadmin', 'guest']).optional().default('student'),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
@@ -244,6 +230,8 @@ const UserEditorSchema = z.object({
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
     path: ["password"],
 });
+
+// --- PAGE COMPONENT ---
 
 export default function StudentsPage() {
     const { user: currentUser } = useAuth();
@@ -275,17 +263,26 @@ export default function StudentsPage() {
     const fetchAllData = useCallback(async () => {
         setIsLoading(true);
         try {
-            const { students, classes, schools } = await getStudentData(currentUser || undefined);
+            const sanitizedTeacher = currentUser ? {
+                uid: currentUser.uid,
+                role: currentUser.role,
+                schoolName: currentUser.schoolName,
+                displayName: currentUser.displayName || '',
+                email: currentUser.email || '',
+            } as any : undefined;
+
+            const { students, classes, schools } = await getStudentData(sanitizedTeacher);
             setAllStudents(students);
-            const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            
+            const sortedClasses = [...classes].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
             setClasses(sortedClasses);
             setSchools(schools);
 
             if (currentUser?.role === 'teacher' && currentUser.schoolName) {
                 const teacherSchool = schools.find(s => s.name === currentUser.schoolName);
                 if (teacherSchool) {
-                    setSchoolFilter(teacherSchool.id); 
-                    setBulkSchoolId(teacherSchool.id);
+                    setSchoolFilter(prev => prev !== teacherSchool.id ? teacherSchool.id : prev); 
+                    setBulkSchoolId(prev => prev !== teacherSchool.id ? teacherSchool.id : prev);
                 }
             }
 
@@ -295,13 +292,13 @@ export default function StudentsPage() {
         } finally {
             setIsLoading(false);
         }
-    }, [toast, currentUser]);
+    }, [toast, currentUser?.uid, currentUser?.role, currentUser?.schoolName]);
 
     useEffect(() => {
-        if(currentUser) {
+        if(currentUser?.uid) {
             fetchAllData();
         }
-    }, [fetchAllData, currentUser]);
+    }, [fetchAllData, currentUser?.uid]);
   
     const handleDeleteUser = async (userId: string) => {
         const originalUsers = [...allStudents];
@@ -311,8 +308,8 @@ export default function StudentsPage() {
             toast({ title: "Başarılı", description: "Kullanıcı silindi." });
             await fetchAllData();
         } else {
-             toast({ title: "Hata", description: "Kullanıcı silinirken bir hata oluştu.", variant: "destructive" });
-             setAllStudents(originalUsers);
+              toast({ title: "Hata", description: "Kullanıcı silinirken bir hata oluştu.", variant: "destructive" });
+              setAllStudents(originalUsers);
         }
     }
   
@@ -353,8 +350,12 @@ export default function StudentsPage() {
             ? classes.find(c => c.id === data.classId)?.name 
             : undefined;
 
+        // --- ROL DEĞİŞİKLİĞİ İPTAL EDİLDİ ---
+        // Kullanıcı bu sayfadan ekleniyorsa veya düzenleniyorsa, rolü KESİN OLARAK 'student' olur.
+        // Formdan başka bir veri gelse bile ezilir.
         const dataToSave = {
             ...data,
+            role: 'student', // FORCE STUDENT ROLE
             class: fullClassName,
             schoolName: schoolName,
         };
@@ -402,10 +403,10 @@ export default function StudentsPage() {
         const fullClassName = `${selectedBulkClassData.name} - ${bulkBranch}`;
         const result = await saveUser({
             displayName: newStudentName,
-            role: 'student',
+            role: 'student', // Burası zaten sabitti
             class: fullClassName,
             schoolName: schoolNameToAdd,
-            password: 'password' // Default password
+            password: 'password'
         });
 
         if (result.success) {
@@ -453,38 +454,27 @@ export default function StudentsPage() {
         setIsSaving(false);
     }
   
-    const handleClassChange = async (studentId: string, newClassName: string) => {
-        const originalStudent = allStudents.find(s => s.uid === studentId);
-        if (!originalStudent) return;
-    
-        // Optimistic UI update
-        setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
-
-        const result = await updateStudentClass(studentId, newClassName);
-
-        if (!result.success) {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-            // Revert UI on failure
-            setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
-        } else {
-            toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
-        }
-    };
-
     const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
     const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
     const filteredStudents = useMemo(() => {
         let list = allStudents.filter(s => ['student', 'guest'].includes(s.role));
     
-        // Superadmin filters by school dropdown
-        if (currentUser?.role === 'superadmin' && schoolFilter !== 'all') {
-            const selectedSchool = schools.find(s => s.id === schoolFilter);
-            if (selectedSchool) {
-                list = list.filter(s => s.schoolName === selectedSchool.name);
+        if (currentUser?.role === 'superadmin') {
+            if(schoolFilter !== 'all') {
+                const selectedSchool = schools.find(s => s.id === schoolFilter);
+                if (selectedSchool) {
+                    list = list.filter(s => s.schoolName === selectedSchool.name);
+                }
+            }
+        } 
+        else if (currentUser?.role === 'teacher') {
+            if (currentUser.schoolName) {
+                list = list.filter(s => s.schoolName === currentUser.schoolName);
+            } else {
+                list = [];
             }
         }
-        // Teacher data is pre-filtered by school in `getStudentData`, so no extra filter needed here.
 
         if (activeClassId !== 'all' && selectedClass) {
             if (activeBranch === 'all') {
@@ -500,16 +490,20 @@ export default function StudentsPage() {
         }
         
         return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
-    }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools, currentUser]);
+    }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools, currentUser?.role, currentUser?.schoolName]);
   
     const pendingStudents = useMemo(() => {
       let pending = allStudents.filter(s => s.role === 'pending');
-      // If teacher, filter by their school (data is already pre-filtered, but for safety)
+
       if (currentUser?.role === 'teacher' && currentUser.schoolName) {
-          pending = pending.filter(s => s.schoolName === currentUser.schoolName);
+          const teacherSchoolNormalized = currentUser.schoolName.trim().toLocaleLowerCase('tr');
+          pending = pending.filter(s => {
+              const studentSchoolNormalized = s.schoolName ? s.schoolName.trim().toLocaleLowerCase('tr') : '';
+              return studentSchoolNormalized === teacherSchoolNormalized;
+          });
       }
       return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
-    }, [allStudents, currentUser]);
+    }, [allStudents, currentUser?.role, currentUser?.schoolName]);
 
     if (isLoading) {
         return (

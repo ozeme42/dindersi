@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -132,20 +131,6 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                             <Label htmlFor="password">{user?.uid ? 'Yeni Şifre (değişmeyecekse boş bırakın)' : 'Şifre'}</Label>
                             <Input id="password" type="password" {...register("password")} placeholder={user?.uid ? 'Değiştirmek istemiyorsanız boş bırakın' : 'En az 6 karakter'} />
                             {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
-                        </div>
-                        <div>
-                            <Label htmlFor="role">Rol</Label>
-                            <Controller name="role" control={control} render={({ field }) => (
-                                <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger><SelectValue/></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="student">Öğrenci</SelectItem>
-                                        <SelectItem value="teacher">Öğretmen</SelectItem>
-                                        <SelectItem value="superadmin">Süper Admin</SelectItem>
-                                        <SelectItem value="guest">Misafir Öğrenci</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            )} />
                         </div>
                         {(role === 'student' || role === 'guest') && (
                             <>
