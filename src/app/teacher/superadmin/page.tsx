@@ -1,8 +1,9 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 // EKLENDİ: Search ikonu import listesine eklendi
-import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, HardDriveDownload, Search } from "lucide-react";
+import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, HardDriveDownload, Search, Checkbox } from "lucide-react";
 import { getStudentData } from "@/app/teacher/students/actions";
 import { exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers } from "./actions";
 import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
@@ -59,7 +60,7 @@ const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
   email: z.string().optional(),
-  role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
+  role: z.enum(['student', 'teacher', 'superadmin', 'guest', 'pending']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
@@ -67,9 +68,15 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
-    if (!data.uid && (!data.password || data.password.length < 6)) return false;
-    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) return false;
-    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) return false;
+    if (!data.uid && (!data.password || data.password.length < 6)) {
+      return false;
+    }
+    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
+      return false;
+    }
+    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
+        return false;
+    }
     return true;
 }, {
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
@@ -110,6 +117,8 @@ export default function SuperAdminPage() {
   const { toast } = useToast();
   const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
 
   // Pagination & Filter States
   const [studentsCurrentPage, setStudentsCurrentPage] = useState(1);
@@ -143,7 +152,7 @@ export default function SuperAdminPage() {
   }, [fetchAllData]);
 
   // Derived Data
-  const students = useMemo(() => users.filter(u => u.role === 'student' || u.role === 'guest' || u.role === 'pending'), [users]);
+  const students = useMemo(() => users.filter(u => u.role === 'student' || u.role === 'pending'), [users]);
   const teachers = useMemo(() => users.filter(u => u.role === 'teacher'), [users]);
   
   const filterList = (list: UserProfile[]) => {
@@ -154,8 +163,8 @@ export default function SuperAdminPage() {
       });
   };
 
-  const filteredStudents = useMemo(() => filterList(students), [students, searchTerm, schoolFilter]);
-  const filteredTeachers = useMemo(() => filterList(teachers), [teachers, searchTerm, schoolFilter]);
+  const filteredStudents = useMemo(() => filterList(students), [students, searchTerm, schoolFilter, schools]);
+  const filteredTeachers = useMemo(() => filterList(teachers), [teachers, searchTerm, schoolFilter, schools]);
   
   const paginatedStudents = useMemo(() => {
       const startIndex = (studentsCurrentPage - 1) * itemsPerPage;
@@ -201,9 +210,26 @@ export default function SuperAdminPage() {
         toast({ title: "Başarılı", description: "Kullanıcı silindi." });
         await fetchAllData();
     } else {
-        toast({ title: "Hata", description: result.error, variant: "destructive" });
-        setUsers(originalUsers);
+          toast({ title: "Hata", description: result.error, variant: "destructive" });
+          setUsers(originalUsers);
     }
+  };
+  
+   const handleBulkDelete = async () => {
+    setIsDeleting(true);
+    const originalUsers = [...users];
+    setUsers(prev => prev.filter(user => !selectedUserIds.has(user.uid)));
+
+    const result = await deleteBulkUsers(Array.from(selectedUserIds));
+    if (result.success) {
+        toast({ title: "Başarılı", description: `${result.deletedCount} kullanıcı silindi.` });
+        await fetchAllData(); // Refresh all data from server
+    } else {
+        toast({ title: "Hata", description: result.error, variant: "destructive" });
+        setUsers(originalUsers); // Revert UI on failure
+    }
+    setSelectedUserIds(new Set());
+    setIsDeleting(false);
   };
 
   const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar', baseFilename: string) => {
@@ -265,8 +291,17 @@ export default function SuperAdminPage() {
       );
   }
 
+  const handleSelectUser = (userId: string) => {
+    setSelectedUserIds(prev => {
+        const newSet = new Set(prev);
+        if (newSet.has(userId)) newSet.delete(userId);
+        else newSet.add(userId);
+        return newSet;
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100 p-4 sm:p-6 lg:p-8 relative overflow-hidden">
         <div className="fixed inset-0 pointer-events-none z-0">
              <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-900/10 rounded-full blur-[150px]" />
              <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-purple-900/10 rounded-full blur-[150px]" />
@@ -324,11 +359,11 @@ export default function SuperAdminPage() {
                             
                             {/* FILTERS */}
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
-                                <div className="md:col-span-4 relative">
+                                <div className="md:col-span-6 relative">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                     <Input placeholder="İsim veya e-posta ile ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 pl-10 h-10" />
                                 </div>
-                                <div className="md:col-span-3">
+                                <div className="md:col-span-6">
                                     <Select value={schoolFilter} onValueChange={setSchoolFilter}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 h-10"><SelectValue placeholder="Okul Filtrele" /></SelectTrigger>
                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -342,11 +377,37 @@ export default function SuperAdminPage() {
                         
                         <CardContent className="p-0">
                             <Tabs defaultValue="students_list" className="w-full">
-                                <div className="px-6 py-2 border-b border-white/5">
+                                <div className="px-6 py-2 border-b border-white/5 flex justify-between items-center">
                                     <TabsList className="bg-transparent h-10 gap-4">
                                         <TabsTrigger value="students_list" className="bg-transparent data-[state=active]:bg-slate-800 data-[state=active]:text-white border border-transparent data-[state=active]:border-white/10 rounded-full px-4 text-slate-400">Öğrenciler ({filteredStudents.length})</TabsTrigger>
                                         <TabsTrigger value="teachers_list" className="bg-transparent data-[state=active]:bg-slate-800 data-[state=active]:text-white border border-transparent data-[state=active]:border-white/10 rounded-full px-4 text-slate-400">Öğretmenler ({filteredTeachers.length})</TabsTrigger>
                                     </TabsList>
+                                     {selectedUserIds.size > 0 && (
+                                        <div className="flex items-center gap-2">
+                                            <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
+                                                {selectedUserIds.size} kullanıcı seçildi
+                                            </Badge>
+                                             <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button variant="destructive" size="sm" disabled={isDeleting}>
+                                                        <Trash2 className="mr-2 h-4 w-4" /> Seçilenleri Sil
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+                                                        <AlertDialogDescription>Seçilen {selectedUserIds.size} kullanıcı ve tüm verileri kalıcı olarak silinecek.</AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={handleBulkDelete} disabled={isDeleting}>
+                                                            {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null} Sil
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <TabsContent value="students_list" className="mt-0">
@@ -354,6 +415,14 @@ export default function SuperAdminPage() {
                                         <Table>
                                             <TableHeader className="bg-slate-950/50">
                                                 <TableRow className="border-white/5 hover:bg-transparent">
+                                                    <TableHead className="px-4"><Checkbox onCheckedChange={checked => {
+                                                        const currentIds = new Set(selectedUserIds);
+                                                        paginatedStudents.forEach(s => {
+                                                            if (checked) currentIds.add(s.uid);
+                                                            else currentIds.delete(s.uid);
+                                                        });
+                                                        setSelectedUserIds(currentIds);
+                                                    }} /></TableHead>
                                                     <TableHead className="text-slate-300">Öğrenci</TableHead>
                                                     <TableHead className="text-slate-300">Okul</TableHead>
                                                     <TableHead className="text-slate-300">Sınıf</TableHead>
@@ -364,6 +433,7 @@ export default function SuperAdminPage() {
                                             <TableBody>
                                                 {paginatedStudents.length > 0 ? paginatedStudents.map(student => (
                                                     <TableRow key={student.uid} className="border-white/5 hover:bg-white/5 group">
+                                                        <TableCell className="px-4"><Checkbox checked={selectedUserIds.has(student.uid)} onCheckedChange={() => handleSelectUser(student.uid)} /></TableCell>
                                                         <TableCell>
                                                             <div className="flex items-center gap-3">
                                                                 <UserAvatar user={student} className="h-9 w-9 border border-white/10" />
@@ -377,11 +447,11 @@ export default function SuperAdminPage() {
                                                         <TableCell><Badge className="bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30">{student.class || 'N/A'}</Badge></TableCell>
                                                         <TableCell className="font-mono text-amber-500">{student.score}</TableCell>
                                                         <TableCell className="text-right">
-                                                            <DropdownMenu>
+                                                             <DropdownMenu>
                                                                 <DropdownMenuTrigger asChild>
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-white"><MoreHorizontal className="h-4 w-4"/></Button>
                                                                 </DropdownMenuTrigger>
-                                                                <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
+                                                                <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
                                                                     <DropdownMenuItem onClick={() => handleOpenDialog(student, 'student')}><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
                                                                     <DropdownMenuItem onClick={() => handleDeleteUser(student.uid)} className="text-red-400 focus:text-red-300"><Trash2 className="mr-2 h-4 w-4"/> Sil</DropdownMenuItem>
                                                                 </DropdownMenuContent>
@@ -389,7 +459,7 @@ export default function SuperAdminPage() {
                                                         </TableCell>
                                                     </TableRow>
                                                 )) : (
-                                                    <TableRow><TableCell colSpan={5} className="h-24 text-center text-slate-500">Kayıt bulunamadı.</TableCell></TableRow>
+                                                    <TableRow><TableCell colSpan={6} className="h-24 text-center text-slate-500">Kayıt bulunamadı.</TableCell></TableRow>
                                                 )}
                                             </TableBody>
                                         </Table>
