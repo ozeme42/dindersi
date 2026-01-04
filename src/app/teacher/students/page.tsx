@@ -227,116 +227,123 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
-    // Yeni kullanıcı için şifre zorunluluğu
     if (!data.uid && (!data.password || data.password.length < 6)) {
       return false;
     }
-    // Varolan kullanıcıyı güncellerken şifre girilmişse, uzunluk kontrolü
     if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
       return false;
     }
-    // Yeni okul seçilmişse, okul adı zorunluluğu
     if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
         return false;
     }
     return true;
 }, {
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
-    path: ["password"], // Path to an element that will be highlighted
+    path: ["password"],
 });
 
 export default function StudentsPage() {
-  const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
-  const [classes, setClasses] = useState<SchoolClass[]>([]);
-  const [schools, setSchools] = useState<School[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+    const { user: currentUser } = useAuth();
+    const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
+    const [classes, setClasses] = useState<SchoolClass[]>([]);
+    const [schools, setSchools] = useState<School[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
   
-  const [activeClassId, setActiveClassId] = useState<string>('all');
-  const [activeBranch, setActiveBranch] = useState<string>('all');
+    const [activeClassId, setActiveClassId] = useState<string>('all');
+    const [activeBranch, setActiveBranch] = useState<string>('all');
   
-  const [bulkClassId, setBulkClassId] = useState<string>('');
-  const [bulkBranch, setBulkBranch] = useState<string>('');
-  const [bulkSchoolId, setBulkSchoolId] = useState('');
-  const [newBulkSchoolName, setNewBulkSchoolName] = useState('');
+    const [bulkClassId, setBulkClassId] = useState<string>('');
+    const [bulkBranch, setBulkBranch] = useState<string>('');
+    const [bulkSchoolId, setBulkSchoolId] = useState('');
+    const [newBulkSchoolName, setNewBulkSchoolName] = useState('');
   
-  const [isSaving, setIsSaving] = useState(false);
-  const [bulkStudentNames, setBulkStudentNames] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [bulkStudentNames, setBulkStudentNames] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
+    const [searchTerm, setSearchTerm] = useState("");
+    const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
   
-  const [schoolFilter, setSchoolFilter] = useState<string>('all');
+    const [schoolFilter, setSchoolFilter] = useState<string>('all');
 
 
-  const { toast } = useToast();
+    const { toast } = useToast();
 
-  const fetchAllData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const { students, classes, schools } = await getStudentData();
-      
-      setAllStudents(students);
-      const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-      setClasses(sortedClasses);
-      setSchools(schools);
+    const fetchAllData = useCallback(async () => {
+        setIsLoading(true);
+        try {
+        const { students, classes, schools } = await getStudentData(currentUser || undefined);
+        
+        setAllStudents(students);
+        const sortedClasses = classes.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+        setClasses(sortedClasses);
+        setSchools(schools);
 
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [toast]);
+        } catch (error) {
+        console.error("Error fetching data:", error);
+        toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
+        } finally {
+        setIsLoading(false);
+        }
+    }, [toast, currentUser]);
 
-  useEffect(() => {
-    fetchAllData();
-  }, [fetchAllData]);
+    useEffect(() => {
+        if(currentUser) {
+            fetchAllData();
+        }
+    }, [fetchAllData, currentUser]);
   
   const handleDeleteUser = async (userId: string) => {
-    const originalStudents = [...allStudents];
-    setAllStudents(prev => prev.filter(s => s.uid !== userId)); // Optimistic update
-    try {
-        await deleteUserFromFirestore(userId);
+    const originalUsers = [...allStudents];
+    setAllStudents(prev => prev.filter(s => s.uid !== userId));
+    const result = await deleteUserFromFirestore(userId);
+    if (result.success) {
         toast({ title: "Başarılı", description: "Kullanıcı silindi." });
         await fetchAllData();
-    } catch(e) {
+    } else {
          toast({ title: "Hata", description: "Kullanıcı silinirken bir hata oluştu.", variant: "destructive" });
-         setAllStudents(originalStudents);
+         setAllStudents(originalUsers);
     }
   }
   
   const handleApproveStudent = async (uid: string) => {
     const originalStudents = [...allStudents];
-    setAllStudents(prev => prev.map(s => s.uid === uid ? { ...s, role: 'student' } : s)); // Optimistic UI
+    setAllStudents(prev => prev.map(s => s.uid === uid ? { ...s, role: 'student' } : s));
     
     const result = await approveStudent(uid);
     
     if (result.success) {
         toast({ title: "Başarılı!", description: "Öğrenci hesabı onaylandı ve aktif hale getirildi." });
-        fetchAllData(); // Re-fetch to ensure data consistency
+        fetchAllData();
     } else {
         toast({ title: "Onaylama Hatası", description: result.error, variant: "destructive" });
-        setAllStudents(originalStudents); // Revert on failure
+        setAllStudents(originalStudents);
     }
   };
   
-  const handleOpenDialog = (user: Partial<UserProfile> | null = null) => {
-    setDialogState({ isOpen: true, user });
+  const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher') => {
+      const defaultUser = { role, schoolName: currentUser?.schoolName || '' };
+      setDialogState({ isOpen: true, user: user || defaultUser });
   };
   
   const handleSaveUser = async (data: z.infer<typeof UserEditorSchema>) => {
     setIsSaving(true);
     
+    let schoolName: string | undefined;
+
+    if(currentUser?.role === 'teacher') {
+        schoolName = currentUser.schoolName;
+    } else {
+        schoolName = data.schoolId === 'new' ? data.newSchoolName : schools.find(s => s.id === data.schoolId)?.name;
+    }
+
     const fullClassName = data.classId && data.branch 
         ? `${classes.find(c => c.id === data.classId)?.name} - ${data.branch}` 
         : data.classId 
         ? classes.find(c => c.id === data.classId)?.name 
         : undefined;
-
-    let schoolName = data.schoolId === 'new' ? data.newSchoolName : schools.find(s => s.id === data.schoolId)?.name;
 
     const dataToSave = {
         ...data,
@@ -358,23 +365,28 @@ export default function StudentsPage() {
 
   const handleBulkAdd = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || (!bulkSchoolId && !newBulkSchoolName)) {
+      
+      let schoolNameForBulk: string | undefined;
+      if (currentUser?.role === 'teacher') {
+          schoolNameForBulk = currentUser.schoolName;
+      } else {
+          if (bulkSchoolId === 'new') {
+              schoolNameForBulk = newBulkSchoolName.trim();
+          } else {
+              schoolNameForBulk = schools.find(s => s.id === bulkSchoolId)?.name;
+          }
+      }
+      
+      if (!selectedBulkClassData || !bulkBranch || !bulkStudentNames.trim() || !schoolNameForBulk) {
             toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube, okul seçin ve öğrenci adları girin.", variant: "destructive"});
             return;
         }
+
     setIsSaving(true);
     const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
     const names = bulkStudentNames.split('\n').map(name => name.trim()).filter(Boolean);
-    
-    let finalSchoolName = '';
-    if (bulkSchoolId === 'new') {
-        finalSchoolName = newBulkSchoolName.trim();
-    } else {
-        const selectedSchool = schools.find(s => s.id === bulkSchoolId);
-        finalSchoolName = selectedSchool?.name || '';
-    }
 
-    const result = await bulkAddStudents(names, className, finalSchoolName);
+    const result = await bulkAddStudents(names, className, schoolNameForBulk, currentUser?.uid || null);
 
     if (result.success) {
         toast({title: "Başarılı", description: `${result.successCount} öğrenci eklendi.`});
@@ -390,10 +402,11 @@ export default function StudentsPage() {
   const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
 
   const filteredStudents = useMemo(() => {
-    if (!allStudents) return [];
     let list = allStudents.filter(s => s.role === 'student');
-
-    if (schoolFilter !== 'all') {
+    
+    if(currentUser?.role === 'teacher' && currentUser.schoolName) {
+        list = list.filter(s => s.schoolName === currentUser.schoolName);
+    } else if (schoolFilter !== 'all') {
         const selectedSchool = schools.find(s => s.id === schoolFilter);
         if (selectedSchool) {
             list = list.filter(s => s.schoolName === selectedSchool.name);
@@ -414,33 +427,18 @@ export default function StudentsPage() {
     }
     
     return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
-  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools]);
-  
-  const filteredGuestStudents = useMemo(() => {
-    if (!allStudents) return [];
-    let list = allStudents.filter(s => s.role === 'guest');
-    
-    if (activeClassId !== 'all' && selectedClass) {
-        if (activeBranch === 'all') {
-             if(list.length > 0 && list[0]?.class) list = list.filter(s => s.class && s.class.startsWith(selectedClass.name));
-        } else {
-             list = list.filter(s => s.class === `${selectedClass?.name} - ${activeBranch}`);
-        }
-    }
-    
-    if (searchTerm) {
-        const lowercasedTerm = searchTerm.toLowerCase();
-        list = list.filter(s => s.displayName && s.displayName.toLowerCase().includes(lowercasedTerm));
-    }
-    
-    return list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
-  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
-
+  }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm, schoolFilter, schools, currentUser]);
   
   const pendingStudents = useMemo(() => {
       if (!allStudents) return [];
-      return allStudents.filter(s => s.role === 'pending').sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
-  }, [allStudents]);
+      let pending = allStudents.filter(s => s.role === 'pending');
+      
+      if(currentUser?.role === 'teacher' && currentUser.schoolName) {
+          pending = pending.filter(s => s.schoolName === currentUser.schoolName);
+      }
+      
+      return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
+  }, [allStudents, currentUser]);
 
   const validSchools = schools.filter(s => s && s.id && s.name);
   const validClasses = classes.filter(c => c && c.id && c.name);
@@ -477,7 +475,7 @@ export default function StudentsPage() {
                 Öğrenci Yönetimi
             </h1>
             <Button asChild variant="outline" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900">
-                <Link href="/teacher"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
+                <Link href="/"><Home className="mr-2 h-4 w-4"/>Panele Dön</Link>
             </Button>
         </div>
 
@@ -494,9 +492,6 @@ export default function StudentsPage() {
                     <TabsTrigger value="add" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
                         <UserPlus className="mr-2 h-4 w-4"/> Yeni Ekle
                     </TabsTrigger>
-                    <TabsTrigger value="guest" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-slate-400 px-6 py-2.5 rounded-lg transition-all font-bold">
-                        <UserCog className="mr-2 h-4 w-4"/> Sanal Öğrenciler
-                    </TabsTrigger>
                 </TabsList>
             </div>
             
@@ -506,13 +501,15 @@ export default function StudentsPage() {
                         <CardTitle className="text-xl text-white">Öğrenci Filtresi</CardTitle>
                         <CardDescription className="text-slate-400 text-sm">Sistemdeki öğrencileri okul, sınıf ve şubeye göre filtreleyin.</CardDescription>
                          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
-                            <Select value={schoolFilter} onValueChange={setSchoolFilter}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="all">Tüm Okullar</SelectItem>
-                                    {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
+                            {currentUser?.role === 'superadmin' && (
+                                <Select value={schoolFilter} onValueChange={setSchoolFilter}>
+                                    <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Okul Seç..." /></SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                        <SelectItem value="all">Tüm Okullar</SelectItem>
+                                        {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            )}
                             <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
                                 <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                 <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
@@ -524,7 +521,7 @@ export default function StudentsPage() {
                                     {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
                                 </SelectContent>
                             </Select>
-                             <div className="relative">
+                             <div className="relative md:col-span-2">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                                 <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
                              </div>
@@ -534,15 +531,13 @@ export default function StudentsPage() {
                         <StudentTable students={paginatedStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
                     </CardContent>
                      {totalPages > 1 && (
-                         <CardFooter className="flex justify-between items-center bg-slate-900/50 border-t border-white/5 py-3">
+                         <CardFooter className="justify-between bg-slate-900/50 border-t border-white/5 py-3">
                              <span className="text-sm text-slate-400">{filteredStudents.length} öğrenci bulundu.</span>
-                             <div className="flex items-center gap-2">
+                             <div className="flex gap-2">
                                 <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="bg-slate-800 border-white/10">
                                     <ArrowLeftIcon className="h-4 w-4 mr-2"/> Önceki
                                 </Button>
-                                <span className="font-bold text-sm bg-slate-800 border border-white/10 px-3 py-1 rounded-md">
-                                    {currentPage} / {totalPages}
-                                </span>
+                                <span className="p-2 text-sm font-bold bg-slate-800 border border-white/10 rounded-md">{currentPage} / {totalPages}</span>
                                 <Button size="sm" variant="outline" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="bg-slate-800 border-white/10">
                                     Sonraki <ArrowRight className="h-4 w-4 ml-2"/>
                                 </Button>
@@ -563,35 +558,6 @@ export default function StudentsPage() {
                     </CardContent>
                 </Card>
             </TabsContent>
-
-            <TabsContent value="guest" className="space-y-6 outline-none">
-                 <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden">
-                    <CardHeader className="border-b border-white/5 pb-4">
-                        <CardTitle className="text-xl text-white">Sanal Öğrenci Filtresi</CardTitle>
-                        <CardDescription className="text-slate-400 text-sm">Akıllı tahta yarışmalarında kullanılacak sanal öğrencileri görüntüleyin ve yönetin.</CardDescription>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
-                            <Select value={activeClassId} onValueChange={v => { setActiveClassId(v); setActiveBranch('all'); }}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white"><SelectItem value="all">Tüm Sınıflar</SelectItem>{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
-                            </Select>
-                            <Select value={activeBranch} onValueChange={setActiveBranch} disabled={activeClassId === 'all'}>
-                                <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
-                                <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                    <SelectItem value="all">Tüm Şubeler</SelectItem>
-                                    {selectedClass?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                </SelectContent>
-                            </Select>
-                             <div className="relative">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                                <Input placeholder="Öğrenci ara..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="bg-slate-950 border-white/10 text-white h-11 pl-10 focus:border-indigo-500/50 placeholder:text-slate-600" />
-                             </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                         <StudentTable students={filteredGuestStudents} isLoading={isLoading} onEdit={handleOpenDialog} onDelete={handleDeleteUser} />
-                    </CardContent>
-                 </Card>
-            </TabsContent>
           
             <TabsContent value="add" className="outline-none">
               <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
@@ -611,35 +577,37 @@ export default function StudentsPage() {
                             <TabsTrigger value="bulk" className="flex-1 py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
                          </TabsList>
                          <TabsContent value="single" className="mt-0">
-                             <Button onClick={() => handleOpenDialog(null)} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
+                             <Button onClick={() => handleOpenDialog(null, 'student')} className="w-full h-14 text-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20">
                                 <UserPlus className="mr-2 h-5 w-5"/> Yeni Öğrenci Formunu Aç
                             </Button>
                          </TabsContent>
                          <TabsContent value="bulk" className="mt-0 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {currentUser?.role === 'superadmin' && (
+                                     <div className="space-y-1">
+                                        <Label htmlFor="bulk-school">Okul</Label>
+                                        <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
+                                            <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
+                                            <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                                <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                )}
                                 <div className="space-y-1">
-                                    <Label className="text-slate-300 text-xs">Sınıf</Label>
+                                    <Label className="text-slate-300">Sınıf</Label>
                                     <Select value={bulkClassId} onValueChange={v => { setBulkClassId(v); setBulkBranch(''); }}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
                                         <SelectContent className="bg-slate-900 border-white/10 text-white">{validClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                                     </Select>
                                 </div>
                                 <div className="space-y-1">
-                                    <Label className="text-slate-300 text-xs">Şube</Label>
+                                    <Label className="text-slate-300">Şube</Label>
                                     <Select value={bulkBranch} onValueChange={setBulkBranch} disabled={!selectedBulkClassData}>
                                         <SelectTrigger className="bg-slate-950 border-white/10 text-white h-11 focus:border-indigo-500/50"><SelectValue placeholder="Şube Seç..." /></SelectTrigger>
                                         <SelectContent className="bg-slate-900 border-white/10 text-white">
                                             {selectedBulkClassData?.branches?.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-1">
-                                    <Label htmlFor="bulk-school">Okul</Label>
-                                    <Select value={bulkSchoolId} onValueChange={setBulkSchoolId}>
-                                        <SelectTrigger id="bulk-school" className="bg-slate-950 border-white/10 text-white h-11 rounded-xl"><SelectValue placeholder="Okul Seçin..." /></SelectTrigger>
-                                        <SelectContent className="bg-slate-900 border-white/10 text-white">
-                                            {validSchools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
-                                            <SelectItem value="new"><span className="flex items-center gap-2"><PlusCircle className="h-4 w-4 text-cyan-400"/>Diğer (Yeni Okul Ekle)</span></SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>

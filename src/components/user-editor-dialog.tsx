@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -21,6 +22,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, PlusCircle } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 const UserEditorSchema = z.object({
   uid: z.string().optional(),
@@ -34,22 +36,19 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
-    // Yeni kullanıcı için şifre zorunluluğu
     if (!data.uid && (!data.password || data.password.length < 6)) {
       return false;
     }
-    // Varolan kullanıcıyı güncellerken şifre girilmişse, uzunluk kontrolü
     if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
       return false;
     }
-    // Yeni okul seçilmişse, okul adı zorunluluğu
     if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
         return false;
     }
     return true;
 }, {
     message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
-    path: ["password"], // Path to an element that will be highlighted
+    path: ["password"],
 });
 
 
@@ -62,6 +61,8 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
     classes: SchoolClass[],
     schools: School[],
 }) {
+    const { user: currentUser } = useAuth();
+
     const { register, handleSubmit, control, watch, formState: { errors }, reset, setValue } = useForm<z.infer<typeof UserEditorSchema>>({
         resolver: zodResolver(UserEditorSchema),
         defaultValues: {
@@ -170,7 +171,7 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                                 </div>
                             </>
                         )}
-                        {(role === 'student' || role === 'guest' || role === 'teacher') && (
+                        {(currentUser?.role === 'superadmin' && (role === 'student' || role === 'guest' || role === 'teacher')) && (
                             <>
                                 <div className="space-y-1">
                                     <Label htmlFor="schoolId">Okul</Label>
@@ -192,6 +193,12 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                                     </div>
                                 )}
                             </>
+                        )}
+                         {currentUser?.role === 'teacher' && (role === 'student' || role === 'guest') && (
+                            <div className="space-y-1">
+                                <Label>Okul</Label>
+                                <Input value={currentUser.schoolName || 'Okul atanmamış'} disabled />
+                            </div>
                         )}
                     </div>
                     <DialogFooter>

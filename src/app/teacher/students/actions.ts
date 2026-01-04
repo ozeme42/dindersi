@@ -139,7 +139,7 @@ export async function saveUser(data: SaveUserData): Promise<{ success: boolean; 
     }
 }
 
-export async function bulkAddStudents(names: string[], className: string, schoolName: string, teacherId: string | null): Promise<{ success: boolean; error?: string, successCount?: number }> {
+export async function bulkAddStudents(names: string[], className: string, schoolName: string, teacherId?: string | null): Promise<{ success: boolean; error?: string, successCount?: number }> {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
     }
