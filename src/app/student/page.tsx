@@ -1,12 +1,11 @@
 
-
 'use client';
 
 import React, { useState, useEffect, useCallback } from "react";
 import { 
     Trophy, Star, Gamepad2, ShoppingCart, Columns, LayoutTemplate, 
     FileCog, Crown, Award, Target, Sparkles, Map, Swords, Backpack,
-    Loader2, ArrowRight, Flame, Gift, Timer
+    Loader2, ArrowRight, Flame, Gift, Timer, School
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/context/auth-context";
@@ -224,7 +223,12 @@ export default function StudentDashboard() {
                             {/* Sol Taraf: İsim ve Sınıf */}
                             <div>
                                 <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md">{user?.displayName}</h1>
-                                <div className="flex items-center justify-center md:justify-start gap-2 mt-2 text-slate-300 font-medium"><Backpack className="h-4 w-4 text-indigo-400" /><span>{user?.class || 'Sınıfsız'}</span><span className="mx-2">•</span><span className="text-indigo-300">{stats.totalCourses} Ders</span></div>
+                                <div className="flex items-center flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 mt-3 text-slate-300 font-medium">
+                                    <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
+                                    {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
+                                    <span className="text-slate-600">•</span>
+                                    <span className="text-indigo-300">{stats.totalCourses} Ders</span>
+                                </div>
                             </div>
                             
                             {/* İstatistik Kutucukları - YENİ TASARIM */}
@@ -409,3 +413,5 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+    
