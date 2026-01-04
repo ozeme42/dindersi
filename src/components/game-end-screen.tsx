@@ -8,6 +8,7 @@ import { Loader2, PartyPopper, Repeat, Save, CheckCircle2, Home, Trophy, Star } 
 import Link from 'next/link';
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
 
 type GameEndScreenProps = {
     score: number;
@@ -29,6 +30,7 @@ export function GameEndScreen({
     passThreshold = 50 
 }: GameEndScreenProps) {
     const { user } = useAuth();
+    const router = useRouter();
     const isStudent = user?.role === 'student';
 
     // --- Ders Akışı ile Haberleşme (Sadece bilgi verir, kayıt yapmaz) ---
@@ -41,6 +43,17 @@ export function GameEndScreen({
             }, '*');
         }
     }, [score, passThreshold]);
+
+    const handleBackNavigation = () => {
+      // If the user is not a student (e.g., guest or teacher), go to the main page.
+      if (!isStudent) {
+        router.push('/');
+      } else {
+        // For students, just go back to the previous page (the topic/unit view).
+        router.back();
+      }
+    };
+
 
     return (
         <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center p-4 pb-24 md:pb-4 relative overflow-hidden">
@@ -137,15 +150,13 @@ export function GameEndScreen({
                                 Tekrar Oyna
                             </Button>
                             
-                            <Button 
-                                asChild 
+                             <Button 
+                                onClick={handleBackNavigation}
                                 variant="outline" 
                                 className="h-12 bg-transparent border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl"
                             >
-                                <Link href={isStudent ? backUrl : '/'}>
-                                    <Home className="mr-2 h-4 w-4" />
-                                    {isStudent ? 'Ana Menü' : 'Ana Sayfa'}
-                                </Link>
+                                <Home className="mr-2 h-4 w-4" />
+                                {user ? 'Geri Dön' : 'Ana Sayfa'}
                             </Button>
                         </div>
                     </div>
