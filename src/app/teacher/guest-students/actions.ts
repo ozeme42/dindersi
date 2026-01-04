@@ -9,10 +9,13 @@ import { normalizeNameToEmailLocalPart } from "@/lib/utils";
 
 // This is a simplified version of student creation that does NOT create an auth user.
 // It only creates a document in Firestore.
-export async function addGuestStudent(displayName: string, className: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
+export async function addGuestStudent(displayName: string, className: string, teacherId: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
     if (!finalDisplayName) {
         return { success: false, error: "Öğrenci adı boş olamaz." };
+    }
+     if (!teacherId) {
+        return { success: false, error: "Öğretmen bilgisi eksik." };
     }
 
     try {
@@ -26,6 +29,7 @@ export async function addGuestStudent(displayName: string, className: string): P
             class: className,
             score: 0,
             createdAt: serverTimestamp(),
+            teacherId: teacherId, // Associate with the teacher
         };
 
         await setDoc(docRef, newUserProfile);
@@ -45,9 +49,12 @@ export async function addGuestStudent(displayName: string, className: string): P
 }
 
 
-export async function bulkAddGuestStudents(names: string[], className: string): Promise<{ success: boolean; error?: string; successCount?: number; errorDetails?: {name: string, error: string}[] }> {
+export async function bulkAddGuestStudents(names: string[], className: string, teacherId: string): Promise<{ success: boolean; error?: string; successCount?: number; errorDetails?: {name: string, error: string}[] }> {
     if (!names || names.length === 0) {
         return { success: false, error: "Eklenecek öğrenci adı bulunamadı." };
+    }
+     if (!teacherId) {
+        return { success: false, error: "Öğretmen bilgisi eksik." };
     }
     
     try {
@@ -66,6 +73,7 @@ export async function bulkAddGuestStudents(names: string[], className: string): 
                     class: className,
                     score: 0,
                     createdAt: serverTimestamp(),
+                    teacherId: teacherId,
                 };
                 batch.set(docRef, newUserProfile);
             }
