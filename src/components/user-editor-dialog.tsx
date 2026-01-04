@@ -27,7 +27,7 @@ const UserEditorSchema = z.object({
   uid: z.string().optional(),
   displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
   email: z.string().optional(),
-  role: z.enum(['student', 'teacher', 'superadmin', 'guest']),
+  role: z.enum(['student', 'teacher', 'superadmin', 'guest', 'pending']),
   password: z.string().optional(),
   classId: z.string().nullable().optional(),
   branch: z.string().nullable().optional(),
@@ -127,6 +127,29 @@ export function UserEditorDialog({ isOpen, onOpenChange, user, onSave, isSaving,
                             <Input id="displayName" {...register("displayName")} />
                             {errors.displayName && <p className="text-sm text-destructive mt-1">{errors.displayName.message}</p>}
                         </div>
+
+                        {currentUser?.role === 'superadmin' && (
+                            <div>
+                                <Label htmlFor="role">Rol</Label>
+                                <Controller
+                                    control={control}
+                                    name="role"
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger id="role"><SelectValue /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="student">Öğrenci</SelectItem>
+                                                <SelectItem value="guest">Misafir</SelectItem>
+                                                <SelectItem value="teacher">Öğretmen</SelectItem>
+                                                <SelectItem value="superadmin">Süper Admin</SelectItem>
+                                                <SelectItem value="pending">Onay Bekliyor</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+                        )}
+
                          <div>
                             <Label htmlFor="password">{user?.uid ? 'Yeni Şifre (değişmeyecekse boş bırakın)' : 'Şifre'}</Label>
                             <Input id="password" type="password" {...register("password")} placeholder={user?.uid ? 'Değiştirmek istemiyorsanız boş bırakın' : 'En az 6 karakter'} />

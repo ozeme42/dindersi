@@ -1,374 +1,497 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKutuAcQuestionsAction, submitKutuAcScoreAction } from '../actions';
 import type { Question } from '@/lib/types';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, PartyPopper, Home, Flag, HelpCircle, ArrowUp, ArrowDown, Repeat, Trophy, XOctagon, Gamepad2, MapPin } from 'lucide-react';
+import { Loader2, ArrowLeft, Package, Users, Trophy, Crown, Target, Sparkles, MonitorPlay, Zap, XOctagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Link from 'next/link';
-import { playSound } from '@/lib/audio-service';
 import { useToast } from '@/hooks/use-toast';
+import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { useAuth } from '@/context/auth-context';
 import { QuestionDialog } from '@/components/question-dialog';
 import { GameEndScreen } from '@/components/game-end-screen';
-import { FullscreenToggle } from '@/components/fullscreen-toggle';
+import { Badge } from "@/components/ui/badge";
 
-// Maze generation using Randomized Depth-First Search
-const generateMaze = (width: number, height: number, questionDensity: number): { grid: number[][], questions: [number, number][] } => {
-    const grid = Array(height).fill(null).map(() => Array(width).fill(1)); // 1 = wall
-    const questions: [number, number][] = [];
-
-    const carve = (x: number, y: number) => {
-        const directions = [[0, -2], [0, 2], [-2, 0], [2, 0]].sort(() => Math.random() - 0.5);
-        grid[y][x] = 0; // 0 = path
-
-        for (const [dx, dy] of directions) {
-            const nx = x + dx;
-            const ny = y + dy;
-
-            if (ny >= 0 && ny < height && nx >= 0 && nx < width && grid[ny][nx] === 1) {
-                grid[y + dy / 2][x + dx / 2] = 0;
-                carve(nx, ny);
-            }
-        }
-    };
-    
-    carve(1, 1);
-
-    // Place finish
-    grid[height - 2][width - 2] = 3; // 3 = finish
-
-    // Place questions randomly on path cells
-    const pathCells: [number, number][] = [];
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            if (grid[y][x] === 0 && !(x === 1 && y === 1)) { // Don't put a question on the start
-                pathCells.push([y, x]);
-            }
-        }
+// Soruları karıştıran yardımcı fonksiyon
+const shuffleArray = <T,>(array: T[]): T[] => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-    
-    pathCells.sort(() => Math.random() - 0.5);
-    const numQuestions = Math.floor(pathCells.length * questionDensity);
-    for (let i = 0; i < numQuestions && i < pathCells.length; i++) {
-        const [qy, qx] = pathCells[i];
-        grid[qy][qx] = 2; // 2 = question
-        questions.push([qy, qx]);
-    }
-    
-    return { grid, questions };
+    return newArray;
 };
 
+// Takım Renk ve İsim Ayarları
+const TEAMS = [
+    { name: 'A Takımı', short: 'A', color: 'text-red-400', border: 'border-red-500', bg: 'bg-red-500/20', from: 'from-red-600', to: 'to-orange-600', shadow: 'shadow-red-500/40' },
+    { name: 'B Takımı', short: 'B', color: 'text-blue-400', border: 'border-blue-500', bg: 'bg-blue-500/20', from: 'from-blue-600', to: 'to-cyan-600', shadow: 'shadow-blue-500/40' },
+    { name: 'C Takımı', short: 'C', color: 'text-emerald-400', border: 'border-emerald-500', bg: 'bg-emerald-500/20', from: 'from-emerald-600', to: 'to-green-600', shadow: 'shadow-emerald-500/40' },
+    { name: 'D Takımı', short: 'D', color: 'text-yellow-400', border: 'border-yellow-500', bg: 'bg-yellow-500/20', from: 'from-yellow-600', to: 'to-amber-600', shadow: 'shadow-yellow-500/40' },
+];
+
+type Player = {
+    id: number;
+    name: string;
+    score: number;
+    teamConfig?: typeof TEAMS[0];
+};
 
 function KutuAcGame() {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
     const { toast } = useToast();
+    
+    // Oyun Durumları
+    const [playerCount, setPlayerCount] = useState<number | null>(null);
+    const [players, setPlayers] = useState<Player[]>([]);
+    const [activePlayerIndex, setActivePlayerIndex] = useState(0);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [openedBoxes, setOpenedBoxes] = useState<Set<number>>(new Set());
+    const [openedQuestion, setOpenedQuestion] = useState<{ number: number; question: Question } | null>(null);
 
-    const [maze, setMaze] = useState<number[][] | null>(null);
-    const [playerPosition, setPlayerPosition] = useState({ x: 1, y: 1 });
-    const [openedQuestion, setOpenedQuestion] = useState<{ number: number, question: Question } | null>(null);
-    const [questionLocations, setQuestionLocations] = useState<[number, number][]>([]);
-    const [answeredQuestions, setAnsweredQuestions] = useState<Set<string>>(new Set());
-
-    const [score, setScore] = useState(0);
-    const [mistakeCount, setMistakeCount] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isScoreSaved, setIsScoreSaved] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const mainContentRef = useRef<HTMLDivElement>(null);
 
-    const MAZE_WIDTH = 21;
-    const MAZE_HEIGHT = 15;
-    
-    const gameContext = `Kutu Aç - ${searchParams.get('courseName') || ''} - ${searchParams.get('topicName') || ''}`
-    const backUrl = useMemo(() => {
-        const { courseId, unitId, topicId, courseName, unitName, topicName } = Object.fromEntries(searchParams.entries());
-        if (courseId && unitId && topicId) {
-            return `/konu/${courseId}/${unitId}/${topicId}/oyunlar?courseName=${encodeURIComponent(courseName || '')}&unitName=${encodeURIComponent(unitName || '')}&topicName=${encodeURIComponent(topicName || '')}`;
-        }
-        return '/oyunlar/kutu-ac';
-    }, [searchParams]);
+    const backUrl = "/"; // Her zaman ana sayfaya dönecek
 
+    const gameContext = `Kutu Aç - ${searchParams.get('topicName') || 'Genel'}`;
 
-    const fetchGame = useCallback(async () => {
+    useEffect(() => {
+        const handleFullscreenChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }, []);
+
+    const fetchQuestions = useCallback(async () => {
         setIsLoading(true);
         setError(null);
-        
         const params = {
             courseId: searchParams.get('courseId') || undefined,
             unitId: searchParams.get('unitId') || undefined,
             topicId: searchParams.get('topicId') || undefined,
         };
-        
         const result = await getKutuAcQuestionsAction(params);
         if (result.error || result.questions.length === 0) {
-            setError(result.error || "Bu konu için uygun soru bulunamadı.");
+            setError(result.error || "Bu konu için soru bulunamadı.");
         } else {
-            setQuestions(result.questions);
-            const { grid, questions: qLocations } = generateMaze(MAZE_WIDTH, MAZE_HEIGHT, 0.15); // 15% question density
-            setMaze(grid);
-            setQuestionLocations(qLocations);
-            setPlayerPosition({ x: 1, y: 1 });
-            setAnsweredQuestions(new Set());
-            setScore(0);
-            setMistakeCount(0);
-            setIsFinished(false);
-            setIsScoreSaved(false);
+            setQuestions(shuffleArray(result.questions));
         }
         setIsLoading(false);
     }, [searchParams]);
 
-    useEffect(() => {
-        fetchGame();
-    }, [fetchGame]);
-
-    const handleMove = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
-        if (!maze || openedQuestion || isFinished) return;
-    
-        let { x, y } = playerPosition;
-        let newPos = { x, y };
-
-        if (direction === 'up' && y > 0 && maze[y - 1][x] !== 1) newPos = { x, y: y - 1 };
-        else if (direction === 'down' && y < maze.length - 1 && maze[y + 1][x] !== 1) newPos = { x, y: y + 1 };
-        else if (direction === 'left' && x > 0 && maze[y][x - 1] !== 1) newPos = { x: x - 1, y };
-        else if (direction === 'right' && x < maze[0].length - 1 && maze[y][x + 1] !== 1) newPos = { x: x + 1, y };
-
-        if (newPos.x !== x || newPos.y !== y) {
-            setPlayerPosition(newPos);
-            playSound('pop'); // Hareket sesi
-            
-            const newCell = maze[newPos.y][newPos.x];
-            if (newCell === 2 && !answeredQuestions.has(`${newPos.y}-${newPos.x}`)) {
-                const questionIndex = questionLocations.findIndex(([qy, qx]) => qy === newPos.y && qx === newPos.x);
-                if (questionIndex !== -1 && questions[questionIndex]) {
-                     setOpenedQuestion({ number: questionIndex, question: questions[questionIndex] });
-                }
-            } else if (newCell === 3) {
-                 playSound('win');
-                 setIsFinished(true);
+    const startGame = (count: number) => {
+        setPlayerCount(count);
+        const newPlayers: Player[] = [];
+        
+        if (count === 1) {
+            newPlayers.push({ 
+                id: 1, 
+                name: user?.displayName || 'Yarışmacı', 
+                score: 0,
+                teamConfig: TEAMS[0] 
+            });
+        } else {
+            for (let i = 0; i < count; i++) {
+                newPlayers.push({ 
+                    id: i + 1, 
+                    name: TEAMS[i].name, 
+                    score: 0,
+                    teamConfig: TEAMS[i]
+                });
             }
         }
-    }, [maze, playerPosition, openedQuestion, isFinished, questions, questionLocations, answeredQuestions]);
+        setPlayers(newPlayers);
+        setActivePlayerIndex(0);
+        fetchQuestions();
+    };
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            switch (e.key) {
-                case 'ArrowUp': handleMove('up'); break;
-                case 'ArrowDown': handleMove('down'); break;
-                case 'ArrowLeft': handleMove('left'); break;
-                case 'ArrowRight': handleMove('right'); break;
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [handleMove]);
-
-    const handleAnswerQuestion = (qIndex: number, isCorrect: boolean, scoreChange: number) => {
+    const handleAnswerQuestion = (questionNumber: number, isCorrect: boolean, scoreChange: number) => {
         setOpenedQuestion(null);
+        setOpenedBoxes(prev => new Set(prev).add(questionNumber));
+        
         if (isCorrect) {
-            playSound('correct');
-            setAnsweredQuestions(prev => new Set(prev).add(`${questionLocations[qIndex][0]}-${questionLocations[qIndex][1]}`));
-            setScore(prev => prev + scoreChange);
-            toast({ title: 'Doğru Cevap!', description: `+${scoreChange} Puan kazandın. Yola devam!` });
-        } else {
-            playSound('incorrect');
-            setMistakeCount(prev => prev + 1);
-            toast({ title: 'Yanlış Cevap!', description: 'Labirentin başına döndün.', variant: 'destructive'});
-            setPlayerPosition({ x: 1, y: 1 });
+            setPlayers(prev => prev.map((p, index) => 
+                index === activePlayerIndex ? { ...p, score: p.score + scoreChange } : p
+            ));
+        }
+
+        if (openedBoxes.size + 1 >= questions.length) {
+            setIsFinished(true);
+        } else if (playerCount && playerCount > 1) {
+             setActivePlayerIndex(prev => (prev + 1) % playerCount);
         }
     };
-    
+
     const handleSaveAndExit = async () => {
-        if (isSubmitting || isScoreSaved || !user || score <= 0) {
+        const totalScore = players[0]?.score || 0;
+        if (isSubmitting || totalScore <= 0 || isScoreSaved || (playerCount && playerCount > 1)) {
             router.push(backUrl);
             return;
         }
 
         setIsSubmitting(true);
-        const result = await submitKutuAcScoreAction(user.uid, score, gameContext);
+        const result = await submitKutuAcScoreAction(user!.uid, totalScore, gameContext);
         if (result.success) {
-            toast({ title: "Başarılı!", description: "Puanların kaydedildi." });
+            toast({ title: "Başarılı", description: "Puanınız kaydedildi." });
             setIsScoreSaved(true);
+            router.push(backUrl);
         } else {
             toast({ title: "Hata", description: result.error, variant: "destructive"});
-            setIsSubmitting(false); 
+            setIsSubmitting(false);
         }
     };
-    
-    if (isLoading) {
-        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-blue-500" /></div>;
+
+    const handleRestart = () => {
+        setIsFinished(false);
+        setPlayers(prev => prev.map(p => ({ ...p, score: 0 })));
+        setOpenedBoxes(new Set());
+        setOpenedQuestion(null);
+        setIsScoreSaved(false);
+        setActivePlayerIndex(0);
+        setPlayerCount(null);
+    };
+
+    // --- RENDER ---
+
+    // 1. SEÇİM EKRANI
+    if (playerCount === null) {
+         return (
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px]" />
+                
+                <Card className="w-full max-w-5xl bg-slate-900/80 backdrop-blur-xl border-white/10 shadow-2xl relative z-10">
+                    <CardHeader className="text-center pb-8 pt-8">
+                        <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 mb-4">
+                            <Package className="h-10 w-10 text-white" />
+                        </div>
+                        <CardTitle className="text-4xl sm:text-5xl font-black text-white uppercase tracking-tighter">
+                            Kutu Aç
+                        </CardTitle>
+                        <CardDescription className="text-lg text-slate-400 font-medium mt-2">
+                            Yarışma formatını seçiniz
+                        </CardDescription>
+                    </CardHeader>
+
+                    <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-8">
+                        <Button onClick={() => startGame(1)} variant="outline" className="h-56 flex flex-col items-center justify-center gap-4 border-2 border-white/5 bg-slate-900/50 hover:bg-purple-600 hover:border-purple-500 text-white transition-all group hover:-translate-y-2">
+                            <div className="p-4 rounded-full bg-white/5 group-hover:bg-white/20">
+                                <MonitorPlay className="h-8 w-8 text-slate-300 group-hover:text-white" />
+                            </div>
+                            <div className="text-center">
+                                <span className="block font-black text-xl">TEK YARIŞMACI</span>
+                                <span className="text-xs font-medium text-slate-500 group-hover:text-purple-100 mt-1">Bireysel Puan</span>
+                            </div>
+                        </Button>
+
+                        <Button onClick={() => startGame(2)} variant="outline" className="h-56 flex flex-col items-center justify-center gap-4 border-2 border-white/5 bg-slate-900/50 hover:bg-red-600 hover:border-red-500 text-white transition-all group hover:-translate-y-2">
+                            <div className="flex -space-x-3">
+                                <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center border-2 border-slate-900 text-xs font-bold">A</div>
+                                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center border-2 border-slate-900 text-xs font-bold">B</div>
+                            </div>
+                            <div className="text-center">
+                                <span className="block font-black text-xl">2 TAKIM</span>
+                                <span className="text-xs font-medium text-slate-500 group-hover:text-red-100 mt-1">A vs B</span>
+                            </div>
+                        </Button>
+
+                        <Button onClick={() => startGame(3)} variant="outline" className="h-56 flex flex-col items-center justify-center gap-4 border-2 border-white/5 bg-slate-900/50 hover:bg-emerald-600 hover:border-emerald-500 text-white transition-all group hover:-translate-y-2">
+                            <div className="flex -space-x-3">
+                                <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center border-2 border-slate-900 text-xs font-bold">A</div>
+                                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center border-2 border-slate-900 text-xs font-bold">B</div>
+                                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center border-2 border-slate-900 text-xs font-bold">C</div>
+                            </div>
+                            <div className="text-center">
+                                <span className="block font-black text-xl">3 TAKIM</span>
+                                <span className="text-xs font-medium text-slate-500 group-hover:text-emerald-100 mt-1">Üçlü Yarış</span>
+                            </div>
+                        </Button>
+                        
+                        <Button onClick={() => startGame(4)} variant="outline" className="h-56 flex flex-col items-center justify-center gap-4 border-2 border-white/5 bg-slate-900/50 hover:bg-yellow-600 hover:border-yellow-500 text-white transition-all group hover:-translate-y-2">
+                            <Trophy className="h-10 w-10 text-slate-300 group-hover:text-white" />
+                            <div className="text-center">
+                                <span className="block font-black text-xl">4 TAKIM</span>
+                                <span className="text-xs font-medium text-slate-500 group-hover:text-yellow-100 mt-1">Turnuva Modu</span>
+                            </div>
+                        </Button>
+                    </CardContent>
+                    
+                    <CardFooter className="justify-center py-6 bg-black/20">
+                        <Button asChild variant="link" className="text-slate-400 hover:text-white">
+                            <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/> İptal</Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+         )
     }
-    
+
+    if (isLoading) {
+        return <div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>;
+    }
+
     if (error) {
         return (
-            <div className="w-full h-full min-h-screen flex items-center justify-center p-4 bg-slate-950">
-                <Alert variant="destructive" className="max-w-lg bg-slate-900 border-red-500/30 text-center">
-                    <AlertTitle className="text-xl text-white font-bold mb-2">Hata!</AlertTitle>
-                    <AlertDescription className="text-slate-400 mb-6">{error}</AlertDescription>
-                    <Button asChild variant="secondary" className="w-full bg-slate-800 text-white hover:bg-slate-700 border-white/10">
-                        <Link href={backUrl}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link>
-                    </Button>
+            <div className="min-h-screen flex items-center justify-center p-4 bg-slate-950">
+                <Alert variant="destructive" className="max-w-lg bg-red-950/30 border-red-500/30 text-red-200">
+                    <AlertTitle>Hata</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                    <Button asChild variant="outline" className="mt-4 border-red-500/30 text-red-200"><Link href={backUrl}>Geri Dön</Link></Button>
                 </Alert>
             </div>
         );
     }
     
+    // 2. BİTİŞ EKRANI
     if (isFinished) {
+        const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+        const winner = sortedPlayers[0];
+
+        if (playerCount === 1) {
+            return (
+                <GameEndScreen
+                    score={players[0].score}
+                    onSave={handleSaveAndExit}
+                    isSaving={isSubmitting}
+                    scoreSaved={isScoreSaved}
+                    onRestart={handleRestart}
+                    backUrl={backUrl}
+                />
+            )
+        }
+
         return (
-            <GameEndScreen
-                score={score}
-                onSave={handleSaveAndExit}
-                isSaving={isSubmitting}
-                scoreSaved={isScoreSaved}
-                onRestart={fetchGame}
-                backUrl={backUrl}
-            />
-        )
+             <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 overflow-hidden relative">
+                <div className="absolute inset-0 bg-[url('/confetti.svg')] opacity-10 bg-repeat animate-slide-up"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-yellow-500/10 rounded-full blur-[150px]"></div>
+
+                <Card className="w-full max-w-2xl bg-slate-900/90 backdrop-blur-xl border-white/10 shadow-2xl relative z-10">
+                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" />
+                    <CardHeader className="text-center pb-2 pt-12">
+                        <div className="mx-auto w-24 h-24 bg-gradient-to-b from-yellow-300 to-yellow-600 rounded-full p-1 shadow-lg shadow-yellow-500/30 mb-6 animate-bounce">
+                            <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
+                                <Trophy className="h-12 w-12 text-yellow-500" />
+                            </div>
+                        </div>
+                        <CardTitle className="font-black text-5xl text-white uppercase tracking-wider mb-2">
+                            Şampiyon
+                        </CardTitle>
+                        <div className={`text-4xl font-bold ${winner.teamConfig?.color || 'text-white'}`}>
+                            {winner.name}
+                        </div>
+                    </CardHeader>
+                    
+                    <CardContent className="space-y-6 p-8">
+                        <div className="space-y-3">
+                            {sortedPlayers.map((p, i) => (
+                                <div key={p.id} className={cn(
+                                    "flex justify-between items-center p-4 rounded-xl border transition-all",
+                                    i === 0 ? "bg-gradient-to-r from-yellow-500/20 to-transparent border-yellow-500/30" : "bg-white/5 border-white/5"
+                                )}>
+                                    <div className="flex items-center gap-4">
+                                        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center font-bold", i === 0 ? "bg-yellow-500 text-black" : "bg-slate-800 text-slate-500")}>
+                                            {i + 1}
+                                        </div>
+                                        <span className={cn("font-bold text-lg", p.teamConfig?.color || "text-white")}>{p.name}</span>
+                                    </div>
+                                    <span className="font-mono font-bold text-2xl text-white">{p.score}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                    
+                    <CardFooter className="justify-center gap-4 bg-black/20 p-8">
+                         <Button onClick={handleRestart} size="lg" className="bg-white text-black hover:bg-slate-200 font-bold min-w-[150px]">
+                             Tekrar Oyna
+                         </Button>
+                         <Button asChild variant="outline" size="lg" className="border-white/10 text-slate-300 hover:text-white hover:bg-white/5 min-w-[150px]">
+                             <Link href={backUrl}>Çıkış</Link>
+                         </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        );
     }
 
-    const answeredQuestionCount = answeredQuestions.size;
-    const totalQuestionCount = questionLocations.length;
+    const timerDuration = openedQuestion?.question.type === 'Doğru/Yanlış' ? 10 : 20;
+    const activePlayer = players[activePlayerIndex];
+    const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
 
     return (
-        <div className="w-full min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-slate-950 text-white gap-8 relative pb-24 md:pb-4">
-            
-            {/* Arka Plan Efektleri */}
-            <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+        <div 
+            ref={mainContentRef}
+            className={cn(
+            "w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col relative overflow-hidden transition-all",
+            isFullscreen ? "p-4" : "p-2 sm:p-2 md:p-4"
+        )}>
+            {/* Arka Plan */}
+            <div className="fixed inset-0 pointer-events-none z-0 transition-colors duration-1000">
+                {playerCount && playerCount > 1 && activeTeamConfig ? (
+                    <>
+                        <div className={`absolute top-[-20%] left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] ${activeTeamConfig.bg.replace('/20', '/10')} rounded-full blur-[150px] transition-all duration-1000`} />
+                    </>
+                ) : (
+                    <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-indigo-900/10 rounded-full blur-[150px]" />
+                )}
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* Sol Panel: Oyun Alanı */}
-            <div className="relative z-10 flex-grow flex flex-col items-center gap-4 w-full max-w-4xl flex-shrink-0">
+            <div className="w-full h-full mx-auto relative z-10 flex-grow flex flex-col">
                 
-                {/* HUD */}
-                <div className="w-full bg-slate-900/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl flex justify-between items-center shadow-lg shrink-0">
-                    <div className="flex items-center gap-3">
-                        {/* DEĞİŞİKLİK BURADA: Geri butonu artık oyunu bitirme ekranını açıyor */}
+                {/* HEADER - DEĞİŞİKLİK BURADA: ArrowLeft butonu artık GameEndScreen açıyor */}
+                <header className="flex justify-between items-center mb-4 gap-4 bg-slate-900/40 backdrop-blur-md p-3 rounded-xl border border-white/5 shadow-lg">
+                    <div className="flex items-center gap-4">
                         <Button 
                             variant="ghost" 
+                            size="icon" 
                             onClick={() => setIsFinished(true)}
-                            className="text-slate-400 hover:text-white hover:bg-white/5 h-10 w-10 p-0 rounded-full"
+                            className="h-8 w-8 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg"
                         >
-                           <ArrowLeft className="h-5 w-5"/>
+                            <ArrowLeft className="h-5 w-5" />
                         </Button>
-                        <div className="hidden md:block">
-                            <h1 className="font-bold text-lg text-white leading-tight">Labirent</h1>
-                            <p className="text-slate-400 text-xs">Soruları çöz, çıkışa ulaş!</p>
+                        <div>
+                             <h1 className="text-xl font-black text-white tracking-tight uppercase">Kutu Aç</h1>
+                             <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                <Sparkles className="w-3 h-3 text-yellow-500" />
+                                <span>{openedBoxes.size} / {questions.length} Kutu</span>
+                             </div>
                         </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <div className="hidden md:flex items-center gap-2 bg-slate-950/50 border border-yellow-500/20 px-3 py-1.5 rounded-xl">
-                            <Trophy className="h-4 w-4 text-yellow-400" />
-                            <span className="font-mono font-bold text-white">{score}</span>
-                        </div>
-                        <div className="flex items-center gap-2 bg-slate-950/50 border border-blue-500/20 px-3 py-1.5 rounded-xl text-sm font-bold text-blue-300">
-                            <HelpCircle className="h-4 w-4" /> {answeredQuestionCount}/{totalQuestionCount}
-                        </div>
-                        <Button variant="ghost" size="sm" onClick={() => setIsFinished(true)} className="text-red-400 hover:text-red-300 hover:bg-red-500/10">
-                            <XOctagon className="h-5 w-5" />
-                        </Button>
-                    </div>
-                </div>
-                
-                {/* Labirent Grid */}
-                <div className="relative aspect-[21/15] w-full bg-slate-900/60 backdrop-blur-sm border-2 border-white/10 rounded-3xl shadow-2xl overflow-hidden p-2 md:p-4">
-                    <div className="grid w-full h-full gap-[1px] md:gap-[2px]" style={{ gridTemplateColumns: `repeat(${MAZE_WIDTH}, 1fr)` }}>
-                        {maze?.map((row, y) => row.map((cell, x) => (
-                            <div key={`${y}-${x}`} className={cn(
-                                "flex items-center justify-center rounded-sm md:rounded-md transition-colors duration-300",
-                                cell === 1 && "bg-slate-800 shadow-inner", // Duvar
-                                cell === 0 && "bg-slate-900/50", // Yol
-                                cell === 2 && "bg-blue-900/30", // Soru Alanı
-                                cell === 3 && "bg-emerald-900/30" // Bitiş Alanı
-                            )}>
-                                {/* Oyuncu */}
-                                {playerPosition.x === x && playerPosition.y === y && (
-                                    <div className="w-3/4 h-3/4 rounded-full bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-pulse relative z-10">
-                                        <div className="absolute inset-0 bg-white/50 rounded-full animate-ping opacity-50" />
-                                    </div>
-                                )}
-                                
-                                {/* Soru İkonu */}
-                                {cell === 2 && !answeredQuestions.has(`${y}-${x}`) && (
-                                    <HelpCircle className="h-3/4 w-3/4 text-yellow-400 animate-bounce drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
-                                )}
-                                
-                                {/* Cevaplanmış Soru */}
-                                {cell === 2 && answeredQuestions.has(`${y}-${x}`) && (
-                                    <div className="w-1/2 h-1/2 rounded-full bg-slate-700/50 border border-slate-600" />
-                                )}
-                                
-                                {/* Bitiş Bayrağı */}
-                                {cell === 3 && (
-                                    <Flag className="h-3/4 w-3/4 text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.6)]" />
-                                )}
-                            </div>
-                        )))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Sağ Panel: Kontroller (D-Pad) */}
-            <div className="relative z-10 flex flex-col items-center justify-center shrink-0 p-4 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-white/5 shadow-xl">
-                <div className="grid grid-cols-3 grid-rows-3 gap-2 w-40 h-40 md:w-48 md:h-48">
-                    <div className="col-start-2 row-start-1 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('up')}>
-                            <ArrowUp className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-1 row-start-2 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('left')}>
-                            <ArrowLeft className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-3 row-start-2 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('right')}>
-                            <ArrowRight className="h-8 w-8 text-white"/>
-                        </Button>
-                    </div>
-                    <div className="col-start-2 row-start-3 flex justify-center">
-                        <Button size="icon" className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800 border border-white/10 hover:bg-blue-600 hover:border-blue-400 transition-all active:scale-95 shadow-lg" onClick={() => handleMove('down')}>
-                            <ArrowDown className="h-8 w-8 text-white"/>
-                        </Button>
                     </div>
                     
-                    {/* Orta Nokta (Dekoratif) */}
-                    <div className="col-start-2 row-start-2 flex justify-center items-center">
-                        <div className="w-4 h-4 bg-slate-700 rounded-full shadow-inner" />
+                    <div className="flex items-center gap-3">
+                        <Button variant="ghost" className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 text-xs" onClick={() => setIsFinished(true)}>Bitir</Button>
+                        <FullscreenToggle elementRef={mainContentRef} />
                     </div>
+                </header>
+
+                <div className="w-full flex justify-center mb-4 px-2">
+                    {playerCount && playerCount > 1 && (
+                        <div className="flex flex-wrap justify-center gap-4 w-full">
+                            {players.map((p, i) => {
+                                const isActive = i === activePlayerIndex;
+                                const config = p.teamConfig || TEAMS[i % TEAMS.length];
+                                
+                                return (
+                                    <div 
+                                        key={p.id} 
+                                        className={cn(
+                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center flex-1 min-w-[160px] max-w-[280px]",
+                                            isActive 
+                                                ? `bg-slate-900 ${config.border} shadow-[0_0_25px_-5px_rgba(0,0,0,0.5)] ${config.shadow} z-10 scale-[1.05]` 
+                                                : "bg-slate-900/40 border-white/5 opacity-60 grayscale-[0.5]"
+                                        )}
+                                    >
+                                        {isActive && (
+                                            <div className="absolute top-2 right-2">
+                                                 <Crown className="w-4 h-4 text-yellow-400 fill-yellow-400 animate-bounce drop-shadow-md" />
+                                            </div>
+                                        )}
+                                        <div className={cn("text-xs font-black uppercase tracking-widest mb-1", config.color)}>
+                                            {p.name}
+                                        </div>
+                                        <div className={cn("text-3xl font-black tabular-nums transition-all", isActive ? "text-white" : "text-slate-500")}>
+                                            {p.score}
+                                        </div>
+                                        {isActive && (
+                                            <div className={cn("absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r", config.from, config.to)}></div>
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    )}
+
+                    {playerCount === 1 && (
+                         <div className="w-full max-w-xl bg-slate-900/60 backdrop-blur-xl border border-purple-500/30 rounded-xl px-6 py-3 text-center shadow-xl relative overflow-hidden flex items-center justify-between gap-6">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                            <div className="flex items-center gap-4">
+                                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Yarışmacı</span>
+                                <span className="text-purple-300 font-bold text-sm">{players[0]?.name}</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <span className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Puan</span>
+                                <div className="text-3xl font-black text-white tabular-nums drop-shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+                                    {players[0]?.score || 0}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                
+                <div className="flex-grow flex flex-col h-full min-h-0">
+                     <Card className="bg-slate-900/60 backdrop-blur-xl border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
+                        <CardHeader className="border-b border-white/5 py-3 px-4 flex flex-row items-center justify-between bg-black/20">
+                            <CardTitle className="text-sm text-white font-bold flex items-center gap-2">
+                                <Target className="h-4 w-4 text-indigo-400"/>
+                                Soru Tablosu
+                            </CardTitle>
+                            {playerCount && playerCount > 1 && activeTeamConfig && (
+                                 <div className={cn("px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-2 animate-pulse", activeTeamConfig.bg, activeTeamConfig.border, activeTeamConfig.color)}>
+                                    <Zap className="w-3 h-3 fill-current" />
+                                    Sıra: {activePlayer.name}
+                                 </div>
+                            )}
+                        </CardHeader>
+                        <CardContent className="p-2 sm:p-4 overflow-y-auto flex-grow">
+                            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
+                                {questions.map((q, i) => {
+                                    const questionNumber = i + 1;
+                                    const isOpened = openedBoxes.has(questionNumber);
+                                    return (
+                                        <button 
+                                            key={i}
+                                            disabled={isOpened}
+                                            onClick={() => !isOpened && setOpenedQuestion({ number: questionNumber, question: q })}
+                                            className={cn(
+                                                "relative group aspect-square rounded-lg flex items-center justify-center text-xl sm:text-2xl font-black transition-all duration-300",
+                                                isOpened 
+                                                    ? "bg-slate-800/50 border border-slate-700/50 text-slate-600 shadow-none scale-95 cursor-default" 
+                                                    : "bg-gradient-to-b from-slate-700 to-slate-800 border-b-[4px] border-slate-900 text-white shadow-lg hover:-translate-y-0.5 hover:from-indigo-600 hover:to-indigo-700 hover:border-indigo-900 active:border-b-0 active:translate-y-[2px]"
+                                            )}
+                                        >
+                                            {!isOpened && <div className="absolute inset-0 rounded-lg bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>}
+                                            <span className="relative z-10 drop-shadow-sm">{isOpened ? "✓" : questionNumber}</span>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
-
-            {/* Soru Dialogu */}
+            
             {openedQuestion && (
                 <QuestionDialog
-                    isFullscreen={false}
+                    isFullscreen={isFullscreen}
                     isOpen={!!openedQuestion}
                     onClose={() => setOpenedQuestion(null)}
                     questionData={openedQuestion}
-                    onAnswer={(qIndex, isCorrect, score) => handleAnswerQuestion(qIndex, isCorrect, score)}
-                    showCorrectAnswerOnWrong={false}
+                    onAnswer={handleAnswerQuestion}
+                    timerDuration={timerDuration}
                     pointsConfig={{ default: { points: 10 }}}
+                    showCorrectAnswerOnWrong={true}
                 />
             )}
         </div>
     );
 }
 
-export default function LabirentOyunPage() {
+export default function KutuAcOyunPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-16 w-16 animate-spin text-blue-500" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-slate-950"><Loader2 className="h-12 w-12 animate-spin text-purple-500" /></div>}>
             <KutuAcGame />
         </Suspense>
     )
