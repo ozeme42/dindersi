@@ -25,11 +25,11 @@ export async function getUnitScaleDetails(
     courseId: string, 
     unitId: string, 
     branchName: string | null,
-    teacherSchoolName: string | null, 
-    teacherRole: string | null      
+    teacherId: string | null // teacherSchoolName ve teacherRole yerine doğrudan teacherId alıyoruz.
 ): Promise<{ success: boolean; data?: UnitScaleDetails; error?: string }> {
     noStore();
     if (!courseId || !unitId) return { success: false, error: 'Ders veya Ünite ID\'si bulunamadı.' };
+    if (!teacherId) return { success: false, error: 'Öğretmen bilgisi eksik.'};
     if (!branchName) return { success: false, error: 'Şube bilgisi eksik.' };
 
     try {
@@ -51,36 +51,29 @@ export async function getUnitScaleDetails(
             a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' })
         );
         
-        // 1. ADIM: Sadece Rol ve Sınıf bazlı sorgu yapıyoruz (Okul filtresini buradan kaldırdık)
+        // --- DEĞİŞİKLİK: Sorgu artık sadece öğretmenin sanal öğrencilerini (guest) getiriyor. ---
         let studentsQuery = query(
             collection(db, 'users'), 
-            where('role', 'in', ['student', 'guest'])
+            where('role', '==', 'guest'),
+            where('teacherId', '==', teacherId)
         );
         
-        if (course.classId) {
-             const classRef = doc(db, 'classes', course.classId);
-             const classSnap = await getDoc(classRef);
-             if (classSnap.exists()) {
-                const className = classSnap.data().name;
-                const fullClassName = `${className} - ${branchName}`;
-                const poolClassName = `${fullClassName} (Havuz)`;
-                studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
-             }
+        // Şube filtresini uygula
+        if (branchName !== 'all') {
+             if (course.classId) {
+                 const classRef = doc(db, 'classes', course.classId);
+                 const classSnap = await getDoc(classRef);
+                 if (classSnap.exists()) {
+                    const className = classSnap.data().name;
+                    const fullClassName = `${className} - ${branchName}`;
+                    const poolClassName = `${fullClassName} (Havuz)`;
+                    studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
+                 }
+            }
         }
         
-        // Verileri çekiyoruz
         const studentsSnapshot = await getDocs(studentsQuery);
         let students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
-        
-        // 2. ADIM: Bellekte (RAM) filtreleme yapıyoruz.
-        // Eğer kullanıcı öğretmense:
-        // - Sanal öğrencileri (guest) göster.
-        // - Normal öğrencilerden sadece kendi okulundakileri göster.
-        if (teacherSchoolName && teacherRole === 'teacher') {
-            students = students.filter(student => 
-                student.role === 'guest' || (student.schoolName === teacherSchoolName)
-            );
-        }
         
         const entriesRef = collection(db, `evaluationScales/${unitId}/entries`);
         const entriesSnapshot = await getDocs(entriesRef);
@@ -128,22 +121,12 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
 
         const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
         
-        const scaleClassNameMatch = scale.name.match(/\(([^)]+)\)/);
-        const scaleFullClassName = scaleClassNameMatch ? scaleClassNameMatch[1] : null;
-        
-        // Burada da benzer mantık geçerli ancak 'teacherSchoolName' parametresi
-        // bu fonksiyona gelmediği için şimdilik sadece sınıf bazlı filtreleme yapıyoruz.
-        // Eğer scale oluşturulurken içine teacherId kaydediliyorsa guestler zaten gelir.
-        
+        // --- DEĞİŞİKLİK: Sorgu sadece öğretmenin sanal öğrencilerini getirecek ---
         let studentsQuery = query(
             collection(db, 'users'), 
-            where('role', 'in', ['student', 'guest'])
+            where('role', '==', 'guest'),
+            where('teacherId', '==', scale.teacherId)
         );
-        
-        if (scaleFullClassName) {
-            const poolClassName = `${scaleFullClassName} (Havuz)`;
-            studentsQuery = query(studentsQuery, where('class', 'in', [scaleFullClassName, poolClassName]));
-        }
         
         const studentsSnapshot = await getDocs(studentsQuery);
         const students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
@@ -164,6 +147,11 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
 
     } catch (error: any) {
         console.error("Error fetching assignment details:", error);
+         if (error.code === 'failed-precondition') {
+             const urlRegex = /(https?:\/\/[^\s]+)/g;
+             const url = error.message.match(urlRegex)?.[0] || '#';
+             return { success: false, error: `Veritabanı indeksi eksik. Lütfen bu hatayı gidermek için geliştirici konsolundaki linki kullanın. Hata: ${error.message}` };
+        }
         return { success: false, error: 'Ölçek detayları alınırken bir hata oluştu.' };
     }
 }

@@ -151,7 +151,7 @@ export default function ScaleDetailPage() {
         setIsLoading(true);
 
         const result = type === 'unit' && courseId 
-            ? await getUnitScaleDetails(courseId, scaleOrUnitId, branch, user.schoolName || null, user.role || null) 
+            ? await getUnitScaleDetails(courseId, scaleOrUnitId, branch, user.uid) 
             : await getScaleDetails(scaleOrUnitId);
 
         if (result.success && result.data) {
