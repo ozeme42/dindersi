@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
     Loader2, BookOpen, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
@@ -77,10 +77,60 @@ const MagnificentLightBackground = () => (
     </div>
 );
 
+// --- YENİLENMİŞ İNCE FOOTER BİLEŞENİ ---
+const SiteFooter = () => {
+  return (
+    <footer className="w-full border-t border-slate-200 bg-white/90 backdrop-blur-md py-3 mt-auto relative z-20">
+      <div className="container mx-auto px-4 flex flex-row items-center justify-between">
+        
+        {/* Sol Taraf: Marka ve Telif */}
+        <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 text-left">
+          <span className="text-xs font-black text-slate-700 tracking-tight">
+            Din Dersi Atölyesi
+          </span>
+          <span className="hidden md:inline text-slate-300">|</span>
+          <span className="text-[10px] text-slate-500 font-medium">
+            © {new Date().getFullYear()} Tüm hakları saklıdır.
+          </span>
+        </div>
+
+        {/* Sağ Taraf: Telegram Butonu (Daha Kompakt) */}
+        <Link 
+          href="https://t.me/dindersiatolyesi" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 shadow-sm"
+        >
+          {/* Telegram SVG İkonu */}
+          <div className="relative flex items-center justify-center w-5 h-5 rounded-full bg-[#24A1DE] text-white group-hover:scale-110 transition-transform">
+            <svg 
+              viewBox="0 0 24 24" 
+              fill="currentColor" 
+              className="w-2.5 h-2.5 ml-[-1px] mt-[0.5px]" 
+            >
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+          </div>
+          
+          <span className="text-[11px] font-bold text-slate-600 group-hover:text-[#24A1DE] transition-colors">
+            DinDersiAtölyesi
+          </span>
+        </Link>
+      </div>
+    </footer>
+  );
+}
+
 const LoggedInDashboard = ({ user }: { user: any }) => {
     const router = useRouter();
     const { toast } = useToast();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+    useEffect(() => {
+        if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
+            router.replace('/student');
+        }
+    }, [user, router]);
 
     const handleLogout = async () => {
         setIsLoggingOut(true);
@@ -97,7 +147,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     };
 
     if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
-        router.replace('/student');
         return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>;
     }
   
@@ -119,6 +168,14 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
     };
 
     const getManagementButtons = () => {
+        if (user.role === 'teacher') {
+            return [
+                managementButtons.studentsTeacher,
+                managementButtons.leaderboard,
+                managementButtons.evaluationScales,
+            ];
+        }
+
         const buttons = [
             managementButtons.contentTeacher,
             managementButtons.studentsTeacher,
@@ -187,6 +244,9 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
             </div>
         </div>
       </main>
+      
+      {/* Footer Öğretmen Paneline de eklendi */}
+      <SiteFooter />
     </div>
   );
 };
@@ -247,12 +307,12 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#f8fafc] pb-20 md:pb-8 font-sans text-slate-900 relative overflow-hidden selection:bg-indigo-100">
+        <div className="flex flex-col min-h-screen bg-[#f8fafc] font-sans text-slate-900 relative overflow-hidden selection:bg-indigo-100">
              <MagnificentLightBackground />
 
-             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
+             <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10 pb-16">
                 
-                {/* --- HEADER (DÜZELTİLDİ: Orijinal yapıya sadık kalındı) --- */}
+                {/* --- HEADER --- */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <div className="flex items-center gap-4">
                          <div className="relative p-3 bg-white rounded-2xl shadow-xl shadow-indigo-100 border border-indigo-50">
@@ -265,9 +325,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                          </div>
                     </div>
                     
-                    {/* SAĞ TARAF: Rozetler ve Butonlar bir arada */}
+                    {/* SAĞ TARAF */}
                     <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-6">
-                        {/* Rozetler */}
                         <div className="flex flex-wrap justify-center gap-3">
                             {[
                                 { icon: BookOpen, title: "Özetler", color: "text-amber-600", bg: "bg-amber-50" },
@@ -281,10 +340,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             ))}
                         </div>
 
-                        {/* Ayırıcı (Mobil hariç görünür) */}
                         <div className="hidden sm:block w-px h-6 bg-slate-200/60" />
 
-                        {/* Giriş ve Kayıt Ol Butonları */}
                         <div className="flex items-center gap-3">
                             <Link href="/login" className="flex items-center gap-2 px-4 py-2 rounded-xl text-slate-500 font-bold text-xs hover:text-indigo-600 hover:bg-white hover:shadow-sm transition-all">
                                 <LogIn className="w-4 h-4" />
@@ -308,10 +365,10 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     </div>
                 ) : (
                     <>
-                        {/* --- NAVIGATION (Sınıf ve Ders Seçimi) - Dokunulmadı, en üstte sticky olarak duruyor --- */}
+                        {/* --- NAVIGATION (Sınıf ve Ders Seçimi) --- */}
                         <div className="sticky top-6 z-50 flex justify-center animate-in fade-in slide-in-from-top-8 duration-700 px-4 sm:px-0">
                             
-                            {/* --- MOBILE NAV (YENİLENMİŞ ŞIK TASARIM) --- */}
+                            {/* --- MOBILE NAV --- */}
                             <div className="md:hidden w-full flex flex-col gap-3 p-3 bg-white/90 backdrop-blur-2xl border border-white/80 rounded-[2.5rem] shadow-2xl shadow-indigo-100/30">
                                 <div className="flex items-center gap-3 px-2">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -348,7 +405,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 </div>
                             </div>
 
-                            {/* --- DESKTOP NAV (BAŞLIKLI VE İKONLU) --- */}
+                            {/* --- DESKTOP NAV --- */}
                             <div className="hidden md:flex flex-row items-center gap-6 animate-in fade-in duration-1000">
                                 <div className="flex items-center gap-4 p-2 pl-4 bg-white/80 backdrop-blur-2xl border border-white rounded-[2rem] shadow-xl shadow-slate-200/50">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -409,8 +466,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                             </div>
                                                             {unit.hasUnitOzet && (
                                                                 <Link href={`/ozetler/${activeCourseData.id}/${unit.id}`} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-600 hover:text-white hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 font-bold text-xs">
-                                                                    <BookOpen className="h-4 w-4" />
-                                                                    <span>Ünite Özeti</span>
+                                                                        <BookOpen className="h-4 w-4" />
+                                                                        <span>Ünite Özeti</span>
                                                                 </Link>
                                                             )}
                                                         </div>
@@ -436,17 +493,17 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
                                                                     <div className="flex flex-col justify-center flex-1 pr-8 relative z-10 transition-transform duration-500 group-hover/card:translate-x-2">
                                                                         <h4 className="text-[18px] font-black text-slate-700 leading-snug tracking-tight group-hover/card:text-indigo-900 transition-colors">
-                                                                            {topic.title}
+                                                                                {topic.title}
                                                                         </h4>
                                                                         <div className="flex items-center gap-2 mt-2 opacity-0 -translate-x-4 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-500">
-                                                                            <span className="w-6 h-[2px] bg-indigo-500 rounded-full" />
-                                                                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Konu İçeriği</span>
+                                                                                <span className="w-6 h-[2px] bg-indigo-500 rounded-full" />
+                                                                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Konu İçeriği</span>
                                                                         </div>
                                                                     </div>
                                                                     
                                                                     <div className="flex-shrink-0 relative z-10">
                                                                         <div className="p-3.5 rounded-[1.2rem] bg-slate-50 text-slate-400 border border-slate-100 transition-all duration-500 group-hover/card:bg-indigo-600 group-hover/card:text-white group-hover/card:border-indigo-600 group-hover/card:shadow-xl group-hover/card:scale-110 group-hover/card:rotate-[-8deg]">
-                                                                            <ArrowRight className="h-6 w-6" />
+                                                                                <ArrowRight className="h-6 w-6" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -466,10 +523,8 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 )}
              </main>
 
-            <footer className="container mx-auto p-10 text-center relative z-10 mt-20">
-                <div className="w-16 h-1 bg-slate-200 mx-auto mb-8 rounded-full" />
-                <p className="text-slate-400 text-[11px] font-black tracking-[0.3em] uppercase">Din Dersi Atölyesi © 2024</p>
-            </footer>
+            {/* YENİ EKLENEN İNCE FOOTER */}
+            <SiteFooter />
         </div>
     );
 };
@@ -480,3 +535,5 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return <LoggedOutPage classGroups={classGroups || []} />;
     return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
 }
+
+    
