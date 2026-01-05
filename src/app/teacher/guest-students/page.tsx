@@ -1,12 +1,6 @@
-
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import Link from "next/link";
 
 // UI Imports
 import {
@@ -16,14 +10,19 @@ import {
     Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// ADDED Search ICON
-import { FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, Shield, Upload, AlertTriangle, ArrowDownAZ, CalendarClock, DollarSign, Send, UserCog, Search, Filter, PlusCircle, Home, UserCheck, ArrowLeft as ArrowLeftIcon, User } from "lucide-react";
+import { 
+    FilePenLine, Trash2, Loader2, UserPlus, MoreHorizontal, Users, 
+    Search, UserCog, PencilRuler 
+} from "lucide-react";
 import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+    Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
+} from "@/components/ui/dialog";
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -32,24 +31,25 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 
-
 // Firebase and Actions
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, query, where, orderBy, deleteDoc } from "firebase/firestore";
-import { deleteUserFromFirestore } from '@/app/teacher/superadmin/actions';
-import { addGuestStudent, bulkAddGuestStudents, updateStudentClass, deleteBulkGuestStudents } from "./actions";
-import { getStudentData, saveUser } from "@/app/teacher/students/actions";
+import { 
+    addGuestStudent, 
+    bulkAddGuestStudents, 
+    updateStudentClass, 
+    deleteBulkGuestStudents, 
+    bulkUpdateGuestStudents 
+} from "./actions";
+import { saveUser } from "@/app/teacher/students/actions";
 import { useAuth } from "@/context/auth-context";
-
+import { UserEditorDialog } from "@/components/user-editor-dialog";
 
 // Types
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { tr } from "date-fns/locale";
-import { UserEditorDialog } from "@/components/user-editor-dialog";
 
+// --- STUDENT TABLE COMPONENT ---
 function StudentTable({ 
     students, 
     isLoading, 
@@ -58,7 +58,8 @@ function StudentTable({
     onClassChange,
     allClasses,
     selectedIds,
-    onSelect
+    onSelect,
+    isSuperAdmin
 }: { 
     students: UserProfile[], 
     isLoading: boolean, 
@@ -67,7 +68,8 @@ function StudentTable({
     onClassChange: (studentId: string, newClassName: string) => void,
     allClasses: SchoolClass[],
     selectedIds: Set<string>,
-    onSelect: (studentId: string) => void
+    onSelect: (action: string) => void,
+    isSuperAdmin: boolean
 }) {
     if (isLoading) {
         return <div className="flex justify-center items-center h-48"><Loader2 className="h-12 w-12 animate-spin text-indigo-500" /></div>;
@@ -82,17 +84,16 @@ function StudentTable({
                              <Checkbox
                                 checked={students.length > 0 && students.every(s => selectedIds.has(s.uid))}
                                 onCheckedChange={(checked) => {
-                                    const newSelectedIds = new Set(selectedIds);
                                     if (checked) {
-                                        students.forEach(s => newSelectedIds.add(s.uid));
+                                        onSelect('all-select'); 
                                     } else {
-                                        students.forEach(s => newSelectedIds.delete(s.uid));
+                                        onSelect('all-deselect');
                                     }
-                                    onSelect('all'); // Custom handler for page-level select all
                                 }}
                             />
                         </TableHead>
                         <TableHead className="text-slate-300 font-bold">Sanal Öğrenci</TableHead>
+                        {isSuperAdmin && <TableHead className="text-slate-300 font-bold">Okul</TableHead>}
                         <TableHead className="text-slate-300 font-bold">Sınıf/Şube</TableHead>
                         <TableHead className="text-right text-slate-300 font-bold">Eylemler</TableHead>
                     </TableRow>
@@ -118,15 +119,20 @@ function StudentTable({
                                     <span className="font-bold text-white group-hover:text-purple-400 transition-colors">{student.displayName}</span>
                                 </div>
                             </TableCell>
+                            {isSuperAdmin && (
+                                <TableCell>
+                                    <span className="text-slate-400 text-sm">{student.schoolName || '-'}</span>
+                                </TableCell>
+                            )}
                             <TableCell>
                                 {studentClass && studentClass.branches ? (
                                      <Select 
-                                         value={currentBranch || ''}
-                                         onValueChange={(newBranch) => {
+                                        value={currentBranch || ''}
+                                        onValueChange={(newBranch) => {
                                              if (newBranch) {
                                                  onClassChange(student.uid, `${currentClassName} - ${newBranch}`);
                                              }
-                                         }}
+                                        }}
                                      >
                                          <SelectTrigger className="w-40 bg-slate-950 border-white/10 text-white h-9 text-xs focus:border-indigo-500/50">
                                              <SelectValue />
@@ -183,7 +189,7 @@ function StudentTable({
                         )
                     }) : (
                         <TableRow>
-                            <TableCell colSpan={4} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
+                            <TableCell colSpan={isSuperAdmin ? 5 : 4} className="h-24 text-center text-slate-500 italic">Bu görünümde sanal öğrenci bulunmuyor.</TableCell>
                         </TableRow>
                     )}
                 </TableBody>
@@ -192,214 +198,128 @@ function StudentTable({
     );
 }
 
-const UserEditorSchema = z.object({
-  uid: z.string().optional(),
-  displayName: z.string().min(3, "Ad Soyad en az 3 karakter olmalıdır."),
-  email: z.string().email("Geçersiz e-posta adresi.").optional(),
-  role: z.enum(['student', 'teacher', 'superadmin', 'guest', 'pending']),
-  password: z.string().optional(),
-  classId: z.string().nullable().optional(),
-  branch: z.string().nullable().optional(),
-  schoolId: z.string().nullable().optional(),
-  newSchoolName: z.string().optional(),
-  score: z.coerce.number().optional().default(0),
-}).refine(data => {
-    if (!data.uid && (!data.password || data.password.length < 6)) {
-      return false;
-    }
-    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
-      return false;
-    }
-    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
-        return false;
-    }
-    return true;
-}, {
-    message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
-    path: ["password"],
-});
-
+// --- MAIN PAGE COMPONENT ---
 export default function GuestStudentManagementPage() {
     const { user } = useAuth();
+    const isSuperAdmin = user?.role === 'superadmin';
+
     const [allStudents, setAllStudents] = useState<UserProfile[]>([]);
     const [classes, setClasses] = useState<SchoolClass[]>([]);
     const [schools, setSchools] = useState<School[]>([]);
     const [isLoading, setIsLoading] = useState(true);
   
+    // Filter States
     const [activeClassId, setActiveClassId] = useState<string>('all');
     const [activeBranch, setActiveBranch] = useState<string>('all');
-  
-    const [isAdding, setIsAdding] = useState(false);
-    const [newStudentName, setNewStudentName] = useState("");
-    const [isBulkAdding, setIsBulkAdding] = useState(false);
-    const [bulkStudentNames, setBulkStudentNames] = useState("");
-    const [isSaving, setIsSaving] = useState(false);
-
     const [searchTerm, setSearchTerm] = useState("");
-    const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
-    const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
-    const [isDeleting, setIsDeleting] = useState(false);
-    
+  
+    // Add User States
+    const [newStudentName, setNewStudentName] = useState("");
+    const [bulkStudentNames, setBulkStudentNames] = useState("");
     const [bulkClassId, setBulkClassId] = useState<string>('');
     const [bulkBranch, setBulkBranch] = useState<string>('');
-    const [bulkSchoolId, setBulkSchoolId] = useState('');
-    const [newBulkSchoolName, setNewBulkSchoolName] = useState('');
+    const [selectedBulkClassData, setSelectedBulkClassData] = useState<SchoolClass | null>(null);
+
+    // Operations States
+    const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
+    const [selectedStudentIds, setSelectedStudentIds] = useState<Set<string>>(new Set());
+
+    // Bulk Edit States
+    const [isBulkEditOpen, setIsBulkEditOpen] = useState(false);
+    const [bulkEditSchoolId, setBulkEditSchoolId] = useState<string>("");
+    const [bulkEditClassId, setBulkEditClassId] = useState<string>("");
+    const [bulkEditBranch, setBulkEditBranch] = useState<string>("");
 
     const { toast } = useToast();
 
+    // --- DATA FETCHING ---
     const fetchAllData = useCallback(async () => {
         if (!user) return;
         setIsLoading(true);
+        
+        console.log("--- FETCH START ---");
+        console.log("Kullanıcı ID:", user.uid);
+        console.log("Kullanıcı Rolü:", user.role);
+        console.log("Kullanıcı Okul ID:", user.schoolId);
+
         try {
-            const [usersSnap, classesSnap] = await Promise.all([
-                getDocs(query(collection(db, "users"), where("teacherId", "==", user.uid), where("role", "==", "guest"))),
-                getDocs(query(collection(db, "classes"), orderBy("name", "asc")))
+            let userResults: UserProfile[] = [];
+            
+            if (isSuperAdmin) {
+                 const q = query(collection(db, "users"), where("role", "==", "guest"));
+                 const snap = await getDocs(q);
+                 userResults = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+            } else {
+                 // --- ÇİFT SORGULU MANTIK ---
+                 const queries: Promise<any>[] = [];
+                 
+                 // 1. Sorgu: Öğretmeni "BEN" olanlar
+                 console.log("Sorgu 1: teacherId == ", user.uid);
+                 queries.push(
+                    getDocs(query(collection(db, "users"), where("teacherId", "==", user.uid), where("role", "==", "guest")))
+                 );
+
+                 // 2. Sorgu: Okulu "BENİM OKULUM" olanlar
+                 if (user.schoolId) {
+                    console.log("Sorgu 2: schoolId == ", user.schoolId);
+                    queries.push(
+                        getDocs(query(collection(db, "users"), where("schoolId", "==", user.schoolId), where("role", "==", "guest")))
+                            .catch(err => {
+                                console.error("!!! OKUL SORGUSU HATASI !!!");
+                                console.error("Bu hata genellikle YETKİ (Security Rules) veya İNDEKS eksikliğinden kaynaklanır.");
+                                console.error("Hata detayı:", err);
+                                // Eğer indeks hatasıysa linki konsola basar
+                                return { docs: [] }; // Hata olsa bile patlamasın, boş dönsün
+                            })
+                    );
+                 } else {
+                    console.warn("Kullanıcının schoolId bilgisi yok, okul bazlı sorgu atlanıyor.");
+                 }
+
+                 const snapshots = await Promise.all(queries);
+                 
+                 console.log(`Sorgu 1 Sonuç Sayısı: ${snapshots[0]?.docs?.length || 0}`);
+                 if(user.schoolId) console.log(`Sorgu 2 Sonuç Sayısı: ${snapshots[1]?.docs?.length || 0}`);
+
+                 const allDocs = snapshots.flatMap(snap => snap.docs);
+
+                 // Deduplication (Tekilleştirme)
+                 const uniqueUsersMap = new Map();
+                 allDocs.forEach(doc => {
+                     if (!uniqueUsersMap.has(doc.id)) {
+                         uniqueUsersMap.set(doc.id, { uid: doc.id, ...doc.data() } as UserProfile);
+                     }
+                 });
+
+                 userResults = Array.from(uniqueUsersMap.values());
+            }
+
+            console.log("Toplam Gösterilecek Öğrenci:", userResults.length);
+
+            const [classesSnap, schoolsSnap] = await Promise.all([
+                getDocs(query(collection(db, "classes"), orderBy("name", "asc"))),
+                getDocs(query(collection(db, "schools"), orderBy("name", "asc")))
             ]);
-            setAllStudents(usersSnap.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile)));
+
+            setAllStudents(userResults);
             setClasses(classesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as SchoolClass)));
+            setSchools(schoolsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as School)));
+
         } catch (error) {
-            console.error("Error fetching data:", error);
-            toast({ title: "Hata", description: "Veri alınırken bir hata oluştu.", variant: "destructive" });
+            console.error("GENEL HATA:", error);
+            toast({ title: "Hata", description: "Veri alınırken hata oluştu. Lütfen konsolu kontrol ediniz.", variant: "destructive" });
         } finally {
             setIsLoading(false);
         }
-    }, [user, toast]);
+    }, [user, toast, isSuperAdmin]);
 
     useEffect(() => {
         fetchAllData();
     }, [fetchAllData]);
-  
-    const handleDeleteUser = async (userId: string) => {
-        try {
-            await deleteDoc(doc(db, "users", userId));
-            toast({ title: "Başarılı", description: "Sanal öğrenci silindi." });
-            await fetchAllData();
-        } catch(e) {
-             toast({ title: "Hata", description: "Sanal öğrenci silinirken bir hata oluştu.", variant: "destructive" });
-        }
-    }
-  
-    const handleOpenDialog = (user: Partial<UserProfile> | null = null) => {
-        setDialogState({ isOpen: true, user });
-    };
-  
-    const handleSaveUser = async (data: z.infer<typeof UserEditorSchema>) => {
-        if (!user) return;
-        setIsSaving(true);
-    
-        const fullClassName = data.classId && data.branch 
-            ? `${classes.find(c => c.id === data.classId)?.name} - ${data.branch}` 
-            : data.classId 
-            ? classes.find(c => c.id === data.classId)?.name 
-            : undefined;
-        
-        const result = await saveUser({ ...data, class: fullClassName, teacherId: user.uid, role: 'guest' } as any);
-      
-        if (result.success) {
-            toast({ title: "Başarılı", description: `Kullanıcı ${data.uid ? 'güncellendi' : 'oluşturuldu'}.` });
-            await fetchAllData();
-            setDialogState({ isOpen: false, user: null });
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsSaving(false);
-    };
 
-    const selectedBulkClassData = classes.find(c => c.id === bulkClassId);
-
-    const handleAddSingleStudent = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()) {
-            toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
-            return;
-        }
-        setIsSaving(true);
-        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
-        const result = await addGuestStudent(newStudentName, className, user.uid);
-        if (result.success) {
-            toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
-            setNewStudentName("");
-            await fetchAllData();
-        } else {
-            toast({title: "Hata", description: result.error, variant: "destructive"});
-        }
-        setIsSaving(false);
-    }
-
-    const handleBulkAdd = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()) {
-            toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adları girin.", variant: "destructive"});
-            return;
-        }
-        setIsSaving(true);
-        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
-        const names = bulkStudentNames.split('\n').map(name => name.trim()).filter(Boolean);
-        const result = await bulkAddGuestStudents(names, className, user.uid);
-
-        if (result.success) {
-            toast({title: "Başarılı", description: `${result.successCount} sanal öğrenci eklendi.`});
-            setBulkStudentNames("");
-            await fetchAllData();
-        } else {
-            toast({title: "Hata", description: result.error, variant: "destructive"});
-        }
-        setIsSaving(false);
-    }
-    
-    const handleClassChange = async (studentId: string, newClassName: string) => {
-        const originalStudent = allStudents.find(s => s.uid === studentId);
-        if (!originalStudent) return;
-    
-        // Optimistic UI update
-        setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
-
-        const result = await updateStudentClass(studentId, newClassName);
-
-        if (!result.success) {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-            // Revert UI on failure
-            setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
-        } else {
-            toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
-        }
-    };
-    
-     const handleBulkDelete = async () => {
-        setIsDeleting(true);
-        const result = await deleteBulkGuestStudents(Array.from(selectedStudentIds));
-        if (result.success) {
-            toast({ title: "Başarılı", description: `Seçilen sanal öğrenciler silindi.` });
-            setSelectedStudentIds(new Set());
-            await fetchAllData(); // Refresh data
-        } else {
-            toast({ title: "Hata", description: result.error, variant: "destructive" });
-        }
-        setIsDeleting(false);
-    };
-
-    const handleSelectUser = (userId: string) => {
-        if (userId === 'all') {
-            const newSelectedIds = new Set(selectedStudentIds);
-            const allOnPageAreSelected = filteredStudents.every(s => selectedStudentIds.has(s.uid));
-            filteredStudents.forEach(s => {
-                if (allOnPageAreSelected) {
-                    newSelectedIds.delete(s.uid);
-                } else {
-                    newSelectedIds.add(s.uid);
-                }
-            });
-            setSelectedStudentIds(newSelectedIds);
-        } else {
-            setSelectedStudentIds(prev => {
-                const newSet = new Set(prev);
-                if (newSet.has(userId)) newSet.delete(userId);
-                else newSet.add(userId);
-                return newSet;
-            });
-        }
-    };
-
+    // --- FILTERING LOGIC ---
     const selectedClass = useMemo(() => classes.find(c => c.id === activeClassId), [activeClassId, classes]);
     
     const filteredStudents = useMemo(() => {
@@ -423,19 +343,195 @@ export default function GuestStudentManagementPage() {
         list.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '', 'tr'));
         return list;
     }, [allStudents, activeClassId, activeBranch, selectedClass, searchTerm]);
-  
-    const pendingStudents = useMemo(() => {
-      let pending = allStudents.filter(s => s.role === 'pending');
 
-      if (user?.role === 'teacher' && user.schoolName) {
-          const teacherSchoolNormalized = user.schoolName.trim().toLocaleLowerCase('tr');
-          pending = pending.filter(s => {
-              const studentSchoolNormalized = s.schoolName ? s.schoolName.trim().toLocaleLowerCase('tr') : '';
-              return studentSchoolNormalized === teacherSchoolNormalized;
-          });
-      }
-      return pending.sort((a,b) => (b.createdAt || 0) < (a.createdAt || 0) ? -1 : 1);
-    }, [allStudents, user?.role, user.schoolName]);
+    // --- HANDLERS ---
+    const handleSelectUser = (action: string) => {
+        if (action === 'all-select') {
+            const newSelectedIds = new Set(selectedStudentIds);
+            filteredStudents.forEach(s => newSelectedIds.add(s.uid));
+            setSelectedStudentIds(newSelectedIds);
+        } else if (action === 'all-deselect') {
+            const newSelectedIds = new Set(selectedStudentIds);
+            filteredStudents.forEach(s => newSelectedIds.delete(s.uid));
+            setSelectedStudentIds(newSelectedIds);
+        } else {
+            const userId = action;
+            setSelectedStudentIds(prev => {
+                const newSet = new Set(prev);
+                if (newSet.has(userId)) newSet.delete(userId);
+                else newSet.add(userId);
+                return newSet;
+            });
+        }
+    };
+
+    const handleDeleteUser = async (userId: string) => {
+        try {
+            await deleteDoc(doc(db, "users", userId));
+            toast({ title: "Başarılı", description: "Sanal öğrenci silindi." });
+            await fetchAllData();
+        } catch(e) {
+             toast({ title: "Hata", description: "Sanal öğrenci silinirken bir hata oluştu.", variant: "destructive" });
+        }
+    }
+  
+    const handleOpenDialog = (user: Partial<UserProfile> | null = null) => {
+        setDialogState({ isOpen: true, user });
+    };
+  
+    const handleSaveUser = async (data: any) => {
+        if (!user) return;
+        setIsSaving(true);
+    
+        const fullClassName = data.classId && data.branch 
+            ? `${classes.find(c => c.id === data.classId)?.name} - ${data.branch}` 
+            : data.classId 
+            ? classes.find(c => c.id === data.classId)?.name 
+            : undefined;
+        
+        const updatedData = { 
+            ...data, 
+            class: fullClassName, 
+            teacherId: user.uid, 
+            role: 'guest',
+            ...(user.schoolId && { schoolId: user.schoolId }),
+            ...(user.schoolName && { schoolName: user.schoolName }),
+        };
+
+        const result = await saveUser(updatedData as any);
+      
+        if (result.success) {
+            toast({ title: "Başarılı", description: `Kullanıcı ${data.uid ? 'güncellendi' : 'oluşturuldu'}.` });
+            await fetchAllData();
+            setDialogState({ isOpen: false, user: null });
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    };
+
+    const handleAddSingleStudent = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()) {
+            toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adı girin.", variant: "destructive"});
+            return;
+        }
+        setIsSaving(true);
+        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
+        
+        const result = await addGuestStudent(
+            newStudentName, 
+            className, 
+            user.uid, 
+            user.schoolId || undefined, 
+            user.schoolName || undefined
+        );
+        
+        if (result.success) {
+            toast({title: "Başarılı", description: `${newStudentName} eklendi.`});
+            setNewStudentName("");
+            await fetchAllData();
+        } else {
+            toast({title: "Hata", description: result.error, variant: "destructive"});
+        }
+        setIsSaving(false);
+    }
+
+    const handleBulkAdd = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()) {
+            toast({title: "Eksik Bilgi", description: "Lütfen bir sınıf, şube seçin ve öğrenci adları girin.", variant: "destructive"});
+            return;
+        }
+        setIsSaving(true);
+        const className = `${selectedBulkClassData.name} - ${bulkBranch}`;
+        const names = bulkStudentNames.split('\n').map(name => name.trim()).filter(Boolean);
+        
+        const result = await bulkAddGuestStudents(
+            names, 
+            className, 
+            user.uid,
+            user.schoolId || undefined, 
+            user.schoolName || undefined
+        );
+
+        if (result.success) {
+            toast({title: "Başarılı", description: `${result.successCount} sanal öğrenci eklendi.`});
+            setBulkStudentNames("");
+            await fetchAllData();
+        } else {
+            toast({title: "Hata", description: result.error, variant: "destructive"});
+        }
+        setIsSaving(false);
+    }
+
+    const handleClassChange = async (studentId: string, newClassName: string) => {
+        const originalStudent = allStudents.find(s => s.uid === studentId);
+        if (!originalStudent) return;
+        setAllStudents(prev => prev.map(s => s.uid === studentId ? { ...s, class: newClassName } : s));
+        const result = await updateStudentClass(studentId, newClassName);
+        if (!result.success) {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+            setAllStudents(prev => prev.map(s => s.uid === studentId ? originalStudent : s));
+        } else {
+            toast({ title: "Başarılı", description: "Öğrencinin şubesi güncellendi." });
+        }
+    };
+    
+    const handleBulkDelete = async () => {
+        setIsDeleting(true);
+        const result = await deleteBulkGuestStudents(Array.from(selectedStudentIds));
+        if (result.success) {
+            toast({ title: "Başarılı", description: `Seçilen sanal öğrenciler silindi.` });
+            setSelectedStudentIds(new Set());
+            await fetchAllData(); 
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsDeleting(false);
+    };
+
+    const handleBulkEditSubmit = async () => {
+        const hasClassChange = bulkEditClassId && bulkEditBranch;
+        const hasSchoolChange = isSuperAdmin && bulkEditSchoolId;
+
+        if (!hasClassChange && !hasSchoolChange) {
+            toast({title: "Hata", description: "Lütfen güncellemek istediğiniz bilgileri seçiniz.", variant: "destructive"});
+            return;
+        }
+
+        setIsSaving(true);
+        
+        const updates: any = {};
+
+        if (hasClassChange) {
+             const selectedClass = classes.find(c => c.id === bulkEditClassId);
+             updates.className = selectedClass ? `${selectedClass.name} - ${bulkEditBranch}` : '';
+        }
+
+        if (hasSchoolChange) {
+            const selectedSchool = schools.find(s => s.id === bulkEditSchoolId);
+            if (selectedSchool) {
+                updates.schoolId = selectedSchool.id;
+                updates.schoolName = selectedSchool.name;
+            }
+        }
+
+        const result = await bulkUpdateGuestStudents(Array.from(selectedStudentIds), updates);
+
+        if (result.success) {
+            toast({ title: "Başarılı", description: "Toplu güncelleme yapıldı." });
+            await fetchAllData();
+            setIsBulkEditOpen(false);
+            setBulkEditClassId("");
+            setBulkEditBranch("");
+            setBulkEditSchoolId("");
+            setSelectedStudentIds(new Set());
+        } else {
+            toast({ title: "Hata", description: result.error, variant: "destructive" });
+        }
+        setIsSaving(false);
+    };
 
     if (isLoading) {
         return (
@@ -460,7 +556,7 @@ export default function GuestStudentManagementPage() {
                         <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
                             <UserCog className="h-8 w-8 text-purple-400" />
                         </div>
-                        Sanal Öğrenci Yönetimi
+                        {isSuperAdmin ? "Yönetici Öğrenci Paneli" : "Sanal Öğrenci Yönetimi"}
                     </h1>
                 </div>
 
@@ -506,26 +602,38 @@ export default function GuestStudentManagementPage() {
                                 {selectedStudentIds.size > 0 && (
                                     <div className="bg-slate-800/50 p-3 rounded-xl border border-white/10 flex items-center justify-between">
                                         <span className="text-sm font-bold text-indigo-300">{selectedStudentIds.size} sanal öğrenci seçildi.</span>
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                 <Button variant="destructive" size="sm" disabled={isDeleting}>
-                                                    {isDeleting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Trash2 className="h-4 w-4" />}
-                                                    <span className="ml-2">Seçilenleri Sil</span>
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
-                                                    <AlertDialogDescription>Seçili {selectedStudentIds.size} sanal öğrenci kalıcı olarak silinecektir. Bu işlem geri alınamaz.</AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={handleBulkDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-500">
-                                                        {isDeleting ? "Siliniyor..." : "Evet, Sil"}
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
+                                        <div className="flex gap-2">
+                                            {/* TOPLU DÜZENLEME BUTONU */}
+                                            <Button 
+                                                variant="secondary" 
+                                                size="sm" 
+                                                className="bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600/30 border border-indigo-500/30"
+                                                onClick={() => setIsBulkEditOpen(true)}
+                                            >
+                                                <PencilRuler className="h-4 w-4 mr-2" /> Toplu Düzenle
+                                            </Button>
+
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                     <Button variant="destructive" size="sm" disabled={isDeleting}>
+                                                        {isDeleting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Trash2 className="h-4 w-4" />}
+                                                        <span className="ml-2">Seçilenleri Sil</span>
+                                                     </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent className="bg-slate-900 border-white/10 text-white">
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>Emin misiniz?</AlertDialogTitle>
+                                                        <AlertDialogDescription>Seçili {selectedStudentIds.size} sanal öğrenci kalıcı olarak silinecektir.</AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                        <AlertDialogAction onClick={handleBulkDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-500">
+                                                            {isDeleting ? "Siliniyor..." : "Evet, Sil"}
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
                                     </div>
                                 )}
                                 <StudentTable 
@@ -537,13 +645,15 @@ export default function GuestStudentManagementPage() {
                                     allClasses={classes} 
                                     selectedIds={selectedStudentIds}
                                     onSelect={handleSelectUser}
+                                    isSuperAdmin={isSuperAdmin}
                                 />
                             </CardContent>
                         </Card>
                     </TabsContent>
                     
                     <TabsContent value="add" className="outline-none">
-                        <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                         {/* Ekleme Tabı İçeriği - Aynı Kalıyor */}
+                         <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
                             <CardHeader className="bg-white/5 border-b border-white/5 pb-6">
                                 <div className="flex items-center gap-3 mb-2">
                                     <div className="p-2 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
@@ -573,36 +683,36 @@ export default function GuestStudentManagementPage() {
                                     </div>
                                 </div>
                                 <Tabs defaultValue="bulk" className="w-full">
-                                  <TabsList className="grid w-full grid-cols-2 bg-slate-950 border border-white/10 p-1 rounded-xl h-auto">
-                                    <TabsTrigger value="bulk" className="py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
-                                    <TabsTrigger value="single" className="py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
-                                  </TabsList>
-                                  
-                                  <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
-                                      <TabsContent value="single" className="mt-0">
-                                        <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
-                                          <div className="flex-1 space-y-2">
-                                              <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
-                                              <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
-                                          </div>
-                                          <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()}>
-                                              {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
-                                          </Button>
-                                        </form>
-                                      </TabsContent>
+                                    <TabsList className="grid w-full grid-cols-2 bg-slate-950 border border-white/10 p-1 rounded-xl h-auto">
+                                        <TabsTrigger value="bulk" className="py-3 text-sm font-bold data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400">Toplu Liste Ekle</TabsTrigger>
+                                        <TabsTrigger value="single" className="py-3 text-sm font-bold data-[state=active]:bg-indigo-600 data-[state=active]:text-white text-slate-400">Tek Tek Ekle</TabsTrigger>
+                                    </TabsList>
+                                    
+                                    <div className="mt-6 bg-slate-950/50 p-6 rounded-2xl border border-white/5">
+                                        <TabsContent value="single" className="mt-0">
+                                            <form onSubmit={handleAddSingleStudent} className="flex gap-4 items-end">
+                                                <div className="flex-1 space-y-2">
+                                                    <Label className="text-slate-300">Öğrenci Adı Soyadı</Label>
+                                                    <Input placeholder="Örn: Savaşçı 1" value={newStudentName} onChange={e => setNewStudentName(e.target.value)} className="bg-slate-900 border-white/10 h-12 text-white focus:border-indigo-500/50"/>
+                                                </div>
+                                                <Button type="submit" size="lg" className="h-12 px-8 bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !newStudentName.trim()}>
+                                                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <UserPlus className="mr-2 h-5 w-5"/>} Ekle
+                                                </Button>
+                                            </form>
+                                        </TabsContent>
 
-                                      <TabsContent value="bulk" className="mt-0 space-y-4">
-                                        <div className="space-y-2">
-                                            <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
-                                            <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
-                                        </div>
-                                        <div className="flex justify-end mt-6">
-                                            <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()}>
-                                                {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
-                                            </Button>
-                                        </div>
-                                      </TabsContent>
-                                  </div>
+                                        <TabsContent value="bulk" className="mt-0 space-y-4">
+                                            <div className="space-y-2">
+                                                <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
+                                                <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
+                                            </div>
+                                            <div className="flex justify-end mt-6">
+                                                <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()}>
+                                                    {isSaving ? <Loader2 className="mr-2 h-5 w-5 animate-spin"/> : <Users className="mr-2 h-5 w-5"/>} Listeyi İçe Aktar
+                                                </Button>
+                                            </div>
+                                        </TabsContent>
+                                    </div>
                                 </Tabs>
                             </CardContent>
                         </Card>
@@ -610,17 +720,73 @@ export default function GuestStudentManagementPage() {
                 </Tabs>
             </div>
 
+            {/* --- TOPLU DÜZENLEME MODALI --- */}
+            <Dialog open={isBulkEditOpen} onOpenChange={setIsBulkEditOpen}>
+                <DialogContent className="bg-slate-900 border-white/10 text-white">
+                    <DialogHeader>
+                        <DialogTitle>Toplu Düzenleme</DialogTitle>
+                        <DialogDescription className="text-slate-400">
+                            Seçilen {selectedStudentIds.size} öğrenci için yeni bilgileri giriniz.
+                        </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="grid gap-6 py-4">
+                         {isSuperAdmin && (
+                            <div className="space-y-2 p-4 bg-slate-950/50 rounded-lg border border-white/5">
+                                <Label className="text-indigo-400 font-bold">Okul Değişikliği (Sadece Admin)</Label>
+                                <Select value={bulkEditSchoolId} onValueChange={setBulkEditSchoolId}>
+                                    <SelectTrigger className="bg-slate-900 border-white/10 h-10"><SelectValue placeholder="Okul Değiştir (Opsiyonel)..." /></SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                        {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                         )}
+
+                         <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Yeni Sınıf</Label>
+                                <Select value={bulkEditClassId} onValueChange={(val) => { setBulkEditClassId(val); setBulkEditBranch(""); }}>
+                                    <SelectTrigger className="bg-slate-950 border-white/10"><SelectValue placeholder="Sınıf Seç..." /></SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                        {classes.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Yeni Şube</Label>
+                                <Select value={bulkEditBranch} onValueChange={setBulkEditBranch} disabled={!bulkEditClassId}>
+                                    <SelectTrigger className="bg-slate-950 border-white/10"><SelectValue placeholder="Şube..." /></SelectTrigger>
+                                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                        {classes.find(c => c.id === bulkEditClassId)?.branches.map(b => (
+                                            <SelectItem key={b} value={b}>{b}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                         </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsBulkEditOpen(false)} className="border-white/10 hover:bg-white/5 text-slate-300">İptal</Button>
+                        <Button onClick={handleBulkEditSubmit} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-500 text-white">
+                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null} Güncelle
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
             {dialogState.isOpen && (
                  <UserEditorDialog 
-                     isOpen={dialogState.isOpen}
-                     onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
-                     user={dialogState.user}
-                     onSave={handleSaveUser as any}
-                     isSaving={isSaving}
-                     classes={classes}
-                     schools={schools}
-                 />
-              )}
+                      isOpen={dialogState.isOpen}
+                      onOpenChange={(isOpen) => setDialogState({ isOpen, user: null })}
+                      user={dialogState.user}
+                      onSave={handleSaveUser as any}
+                      isSaving={isSaving}
+                      classes={classes}
+                      schools={schools}
+                  />
+             )}
         </div>
     );
 }
