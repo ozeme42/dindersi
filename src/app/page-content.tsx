@@ -1,14 +1,13 @@
-
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
     Loader2, BookOpen, Shield, PenSquare, UserCog, 
     FileCog, FileQuestion, ClipboardList, ClipboardCheck, Scale, BarChart3, 
-    Image as ImageIcon, Settings, Trophy, DollarSign,  
+    ImageIcon, Settings, Trophy, DollarSign,  
     Gamepad2, StickyNote, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     Feather, CheckCircle2, Layers, Sparkles,
-    LogIn, UserPlus 
+    LogIn, UserPlus, Download
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -39,11 +38,43 @@ type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOze
 type PublicCourse = { id: string; title: string; units: PublicUnit[] };
 export type PublicClass = { name: string; courses: PublicCourse[] };
 
-// --- YARDIMCI FONKSİYONLAR ---
+// --- YARDIMCI BİLEŞENLER ---
+
+const MobileAppBanner = () => (
+    <div className="container mx-auto px-4 mb-12 relative z-20">
+        <div className="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-8 shadow-2xl shadow-indigo-200">
+            {/* Dekoratif Arka Plan Parıltıları */}
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl transition-transform duration-700 group-hover:scale-150" />
+            <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl" />
+            
+            <div className="relative z-10 flex flex-col items-center justify-between gap-8 md:flex-row">
+                <div className="flex items-center gap-6 text-center md:text-left">
+                    <div className="hidden rounded-3xl bg-white/10 p-5 backdrop-blur-xl border border-white/20 sm:block">
+                        <MonitorPlay className="h-10 w-10 text-white" />
+                    </div>
+                    <div>
+                        <h3 className="text-2xl font-black text-white md:text-3xl">Atölye Cebinizde!</h3>
+                        <p className="mt-2 font-medium text-indigo-100 opacity-90">
+                            Din Dersi Atölyesi Android uygulamasını indirerek içeriklere çok daha hızlı erişin.
+                        </p>
+                    </div>
+                </div>
+
+                <Link 
+                    href="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/DinDersi%20At%C3%B6lyesi.apk?alt=media&token=0421a76b-8ca8-404b-9b05-d5f88afb343f"
+                    className="flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-sm font-black text-indigo-700 shadow-xl transition-all hover:scale-105 hover:bg-indigo-50 active:scale-95 shrink-0"
+                >
+                    <Download className="h-5 w-5" />
+                    MOBİL UYGULAMAYI İNDİR (APK)
+                </Link>
+            </div>
+        </div>
+    </div>
+);
+
 const getCourseDisplayInfo = (name: string) => {
     if (!name) return { full: "", short: "" };
     const lowerName = name.toLocaleLowerCase('tr');
-    
     if (lowerName.includes('dkab') || lowerName === 'din' || lowerName.includes('din kültürü')) {
         return { full: "Din Kültürü ve Ahlak Bilgisi", short: "DKAB" };
     }
@@ -78,44 +109,27 @@ const MagnificentLightBackground = () => (
     </div>
 );
 
-// --- YENİLENMİŞ İNCE FOOTER BİLEŞENİ ---
 const SiteFooter = () => {
   return (
     <footer className="w-full border-t border-slate-200 bg-white/90 backdrop-blur-md py-3 mt-auto relative z-20">
       <div className="container mx-auto px-4 flex flex-row items-center justify-between">
-        
-        {/* Sol Taraf: Marka ve Telif */}
         <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 text-left">
-          <span className="text-xs font-black text-slate-700 tracking-tight">
-            Din Dersi Atölyesi
-          </span>
+          <span className="text-xs font-black text-slate-700 tracking-tight">Din Dersi Atölyesi</span>
           <span className="hidden md:inline text-slate-300">|</span>
-          <span className="text-[10px] text-slate-500 font-medium">
-            © {new Date().getFullYear()} Tüm hakları saklıdır.
-          </span>
+          <span className="text-[10px] text-slate-500 font-medium">© {new Date().getFullYear()} Tüm hakları saklıdır.</span>
         </div>
-
-        {/* Sağ Taraf: Telegram Butonu (Daha Kompakt) */}
         <Link 
           href="https://t.me/dindersiatolyesi" 
           target="_blank" 
           rel="noopener noreferrer"
           className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 shadow-sm"
         >
-          {/* Telegram SVG İkonu */}
           <div className="relative flex items-center justify-center w-5 h-5 rounded-full bg-[#24A1DE] text-white group-hover:scale-110 transition-transform">
-            <svg 
-              viewBox="0 0 24 24" 
-              fill="currentColor" 
-              className="w-2.5 h-2.5 ml-[-1px] mt-[0.5px]" 
-            >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 ml-[-1px] mt-[0.5px]">
               <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
             </svg>
           </div>
-          
-          <span className="text-[11px] font-bold text-slate-600 group-hover:text-[#24A1DE] transition-colors">
-            DinDersiAtölyesi
-          </span>
+          <span className="text-[11px] font-bold text-slate-600 group-hover:text-[#24A1DE] transition-colors">DinDersiAtölyesi</span>
         </Link>
       </div>
     </footer>
@@ -147,10 +161,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         }
     };
 
-    if (user.role === 'student' && process.env.NEXT_PUBLIC_STATIC_BUILD !== 'true') {
-        return <div className="flex h-screen items-center justify-center bg-slate-50"><Loader2 className="h-10 w-10 animate-spin text-indigo-500" /></div>;
-    }
-  
     const managementButtons = {
         superAdmin: { key: 'superAdmin', href: '/teacher/superadmin', title: 'Süper Admin', icon: <Shield />, color: "from-red-500 to-pink-600" },
         contentTeacher: { key: 'contentTeacher', href: "/teacher/content-creation", title: "İçerik Yönetimi", icon: <PenSquare />, color: "from-orange-500 to-amber-500" },
@@ -176,7 +186,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
                 managementButtons.evaluationScales,
             ];
         }
-
         const buttons = [
             managementButtons.contentTeacher,
             managementButtons.studentsTeacher,
@@ -246,7 +255,7 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         </div>
       </main>
       
-      {/* Footer Öğretmen Paneline de eklendi */}
+      <MobileAppBanner />
       <SiteFooter />
     </div>
   );
@@ -313,7 +322,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10 pb-16">
                 
-                {/* --- HEADER --- */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <div className="flex items-center gap-4">
                          <div className="relative p-3 bg-white rounded-2xl shadow-xl shadow-indigo-100 border border-indigo-50">
@@ -326,7 +334,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                          </div>
                     </div>
                     
-                    {/* SAĞ TARAF */}
                     <div className="flex flex-col sm:flex-row items-center gap-4 lg:gap-6">
                         <div className="flex flex-wrap justify-center gap-3">
                             {[
@@ -366,10 +373,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                     </div>
                 ) : (
                     <>
-                        {/* --- NAVIGATION (Sınıf ve Ders Seçimi) --- */}
                         <div className="sticky top-6 z-50 flex justify-center animate-in fade-in slide-in-from-top-8 duration-700 px-4 sm:px-0">
-                            
-                            {/* --- MOBILE NAV --- */}
                             <div className="md:hidden w-full flex flex-col gap-3 p-3 bg-white/90 backdrop-blur-2xl border border-white/80 rounded-[2.5rem] shadow-2xl shadow-indigo-100/30">
                                 <div className="flex items-center gap-3 px-2">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -406,7 +410,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 </div>
                             </div>
 
-                            {/* --- DESKTOP NAV --- */}
                             <div className="hidden md:flex flex-row items-center gap-6 animate-in fade-in duration-1000">
                                 <div className="flex items-center gap-4 p-2 pl-4 bg-white/80 backdrop-blur-2xl border border-white rounded-[2rem] shadow-xl shadow-slate-200/50">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -446,7 +449,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
 
-                        {/* ==================== CONTENT GRID ==================== */}
                         <div className={cn("w-full mx-auto mt-16 px-4 sm:px-6 transition-all duration-700", gridConfig.wrapper)}>
                             {activeCourseData && (
                                 <div className={cn("grid gap-10 gap-y-20 animate-in zoom-in-95 duration-1000", gridConfig.grid)}>
@@ -455,7 +457,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                         const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
                                         return (
                                             <div key={unit.id} className="flex flex-col gap-10 group/unit">
-                                                {/* ÜNİTE BAŞLIĞI */}
                                                 <div className="relative">
                                                     <div className={cn("absolute -top-12 -left-4 text-[8rem] font-black opacity-[0.03] select-none pointer-events-none transition-all duration-1000 group-hover/unit:opacity-[0.07] group-hover/unit:-translate-y-4", theme.text)}>
                                                         {index + 1}
@@ -476,7 +477,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                     </div>
                                                 </div>
 
-                                                {/* KONU KARTLARI */}
                                                 <div className="flex flex-col space-y-5">
                                                     {unit.topics.length > 0 ? (
                                                         unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
@@ -524,7 +524,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 )}
              </main>
 
-            {/* YENİ EKLENEN İNCE FOOTER */}
+            <MobileAppBanner />
             <SiteFooter />
         </div>
     );
@@ -536,4 +536,3 @@ export function PageContent({ classGroups }: { classGroups: PublicClass[] }) {
     if (process.env.NEXT_PUBLIC_STATIC_BUILD === 'true') return <LoggedOutPage classGroups={classGroups || []} />;
     return user ? <LoggedInDashboard user={user} /> : <LoggedOutPage classGroups={classGroups || []} />;
 }
-
