@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -10,19 +11,24 @@ import { getCourseQuestionBankStats } from '@/app/student/soru-bankasi/actions';
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Sparkles, Target, Book } from "lucide-react";
+import { BookOpen, ClipboardCheck, GraduationCap, PlayCircle, Sparkles, Target, Book, ArrowLeft } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
-// --- TİP TANIMLAMALARI ---
-type CourseWithAllProgress = Course & {
+// --- TİP TANIMLARI ---
+type EnrichedCourse = Course & {
     lessonProgress?: number;
     questionBankProgress?: number;
     topicsCount?: number;
     completedTopicsCount?: number;
     passedTests?: number;
     totalQuestionBankTests?: number;
+};
+
+type ClassGroup = { 
+    name: string; 
+    courses: EnrichedCourse[] 
 };
 
 // --- ÖZEL İLERLEME ÇUBUĞU (NEON EFEKTLİ) ---
@@ -165,7 +171,7 @@ export default function SoruBankasiPage() {
                     let completedTopicsCount = 0;
                     if(progressSnap.exists()){
                         const progressData = progressSnap.data() as UserProgress;
-                        completedTopicsCount = Object.keys(progressData).filter(topicId => progressData[topicId]?.completionCount > 0).length;
+                        completedTopicsCount = Object.values(progressData).filter(topic => topic.completionCount > 0).length;
                     }
                     
                     const unitsRef = collection(db, 'courses', course.id, 'units');
@@ -222,20 +228,27 @@ export default function SoruBankasiPage() {
             <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
                 
                 {/* Başlık Alanı */}
-                <div className="mb-10 md:mb-14 relative text-center md:text-left">
-                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl mb-2">
-                        Dersler <span className="text-slate-600">&</span> Soru Bankası
-                    </h1>
-                    <p className="text-slate-400 text-lg">
-                        Derslerini çalış, testlerini çöz ve <span className="text-cyan-400 font-bold">başarıya ulaş!</span>
-                    </p>
+                <div className="mb-10 md:mb-14 relative flex justify-between items-center">
+                    <div className="flex items-center gap-4">
+                        <Button asChild variant="ghost" size="icon" className="md:hidden">
+                            <Link href="/student"><ArrowLeft className="h-5 w-5"/></Link>
+                        </Button>
+                        <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl">
+                            Dersler <span className="text-slate-600">&</span> Soru Bankası
+                        </h1>
+                    </div>
+                     <Button asChild variant="outline" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 bg-slate-900/50 backdrop-blur-md">
+                        <Link href="/student">
+                            <ArrowLeft className="mr-2 h-4 w-4" /> Öğrenci Paneline Dön
+                        </Link>
+                    </Button>
                 </div>
                 
                 {/* Yükleniyor veya İçerik */}
                 {isLoading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {Array.from({ length: 3 }).map((_, i) => (
-                            <div key={i} className="rounded-[2rem] border border-white/5 bg-slate-900/50 p-6 space-y-6">
+                            <div key={i} className="rounded-[2rem] border border-white/5 bg-slate-900/50 p-6 space-y-6 animate-pulse">
                                 <div className="flex items-center gap-4">
                                     <Skeleton className="h-14 w-14 rounded-2xl bg-slate-800" />
                                     <div className="space-y-2">

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -14,7 +13,7 @@ import { collection, getDocs, query, where, orderBy, Timestamp } from "firebase/
 import type { Course, UserProfile, SchoolClass } from "@/lib/types";
 import { getLiveLeaderboard } from "@/app/leaderboard/actions";
 import { getStudentExams } from "@/app/student/deneme/actions";
-import { forceStreakCheck, setStreakForTesting } from "@/app/student/actions"; 
+import { forceStreakCheck } from "@/app/student/actions"; 
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -96,13 +95,23 @@ export default function StudentDashboard() {
   const [examStats, setExamStats] = useState<{ pending: number, solved: number }>({ pending: 0, solved: 0 });
   const [isChecking, setIsChecking] = useState(false);
   const [canSpinWheel, setCanSpinWheel] = useState(false);
+  
+  // localStreak: Veritabanındaki değeri anlık yansıtmak için.
+  // Kullanıcı giriş yaptığında `forceStreakCheck` çalışır, eğer gün kaçırıldıysa 0 döner ve burayı günceller.
+  const [localStreak, setLocalStreak] = useState(0);
 
   const checkStreak = useCallback(async () => {
     if (!user || isChecking) return;
     setIsChecking(true);
     try {
+        // Backend'deki bu fonksiyon son aktivite tarihine bakar.
+        // Eğer son yapılan tarih dün değilse (örneğin 2 gün önceyse), seriyi sıfırlar ve 0 döner.
         const res = await forceStreakCheck(user.uid);
         setCanSpinWheel(res.canSpinWheel);
+        
+        if (res.currentStreak !== undefined) {
+             setLocalStreak(res.currentStreak);
+        }
     } catch(e) {
         console.error("Streak check failed", e);
     } finally {
@@ -112,6 +121,9 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     if (user) {
+        // Sayfa ilk yüklendiğinde kullanıcının mevcut bildiği serisini koyuyoruz
+        setLocalStreak(user.currentStreak || 0);
+        // Hemen ardından kontrol fonksiyonunu çalıştırıyoruz (Sıfırlanması gerekiyorsa burada sıfırlanacak)
         checkStreak();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -162,7 +174,6 @@ export default function StudentDashboard() {
             branchRank = allStudents.filter(s => s.class === branchName).sort((a,b) => (b.score || 0) - (a.score || 0)).findIndex(s => s.uid === user.uid) + 1;
         }
 
-        // Düzeltilmiş ders sayısı hesaplaması
         const allClasses = classesSnapshot.docs.map(d => ({id: d.id, ...d.data()}) as SchoolClass);
         const allCourses = allCoursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
         
@@ -191,7 +202,8 @@ export default function StudentDashboard() {
   const progressToDailyGoal = Math.min((stats.todayScore / dailyGoal) * 100, 100);
   const isGoalReached = stats.todayScore >= dailyGoal;
   
-  const currentStreak = user?.currentStreak || 0;
+  // localStreak kullanıyoruz. Eğer backend seri bozuldu derse burası 0 olur.
+  const currentStreak = localStreak;
   const daysToNextSpin = 7 - (currentStreak % 7);
   
   return (
@@ -226,12 +238,14 @@ export default function StudentDashboard() {
                                 <div className="flex items-center flex-wrap justify-center md:justify-start gap-x-3 gap-y-1 mt-3 text-slate-300 font-medium">
                                     <span className="flex items-center gap-2"><Backpack className="h-4 w-4 text-indigo-400" />{user?.class || 'Sınıfsız'}</span>
                                     {user?.schoolName && <><span className="text-slate-600">•</span><span className="flex items-center gap-2"><School className="h-4 w-4 text-cyan-400" />{user.schoolName}</span></>}
-                                    <span className="text-slate-600">•</span>
-                                    <span className="text-indigo-300">{stats.totalCourses} Ders</span>
+                                    
+                                    {/* MOBİL DÜZENLEME: md:inline ile sadece tablette/pcde göster */}
+                                    <span className="hidden md:inline text-slate-600">•</span>
+                                    <span className="hidden md:inline text-indigo-300">{stats.totalCourses} Ders</span>
                                 </div>
                             </div>
                             
-                            {/* İstatistik Kutucukları - YENİ TASARIM */}
+                            {/* İstatistik Kutucukları */}
                             <div className="w-full md:w-auto mt-4 md:mt-0">
                                 <div className="grid grid-cols-2 gap-3 md:flex md:items-center md:gap-4">
                                     
@@ -264,7 +278,7 @@ export default function StudentDashboard() {
                                         </div>
                                         <div className="flex items-baseline gap-1">
                                             <span className="text-lg sm:text-lg md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-orange-200 tabular-nums tracking-tight">
-                                                {user?.currentStreak || 0}
+                                                {currentStreak}
                                             </span>
                                             <span className="text-xs font-bold text-orange-400/60 uppercase">Gün</span>
                                         </div>
@@ -282,21 +296,17 @@ export default function StudentDashboard() {
                 </div>
            </div>
            
-           {/* --- GÜNLÜK GÖREV KARTI (YENİ TASARIM) --- */}
+           {/* --- GÜNLÜK GÖREV KARTI --- */}
             <div className="relative w-full rounded-3xl p-[1px] bg-gradient-to-r from-emerald-500/50 via-slate-500/30 to-indigo-500/50 shadow-2xl group overflow-hidden">
-                {/* Arka Plan Glow Efekti */}
                 <div className={cn("absolute inset-0 opacity-20 transition-all duration-1000", isGoalReached ? "bg-emerald-600 blur-xl" : "bg-slate-900")}></div>
                 
                 <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-[23px] p-6 md:p-8 overflow-hidden">
-                    
-                    {/* Dekoratif Arka Plan İkonu */}
                     <div className="absolute -right-6 -top-6 text-white/5 rotate-12 pointer-events-none">
                         <Target className="w-48 h-48" />
                     </div>
 
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12">
                         
-                        {/* SOL KISIM: İkon ve Metin */}
                         <div className="flex items-center gap-5 w-full md:w-auto z-10">
                             <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center border-2 shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-all duration-500", 
                                 isGoalReached ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : "bg-slate-800 border-slate-700 text-slate-400"
@@ -316,16 +326,13 @@ export default function StudentDashboard() {
                             </div>
                         </div>
 
-                        {/* ORTA KISIM: Progress Bar */}
                         <div className="flex-1 w-full z-10">
                             <div className="flex justify-between text-xs font-bold text-slate-400 mb-2 tracking-wider">
                                 <span>İLERLEME DURUMU</span>
                                 <span className={cn(isGoalReached ? "text-emerald-400" : "text-white")}>{Math.floor(progressToDailyGoal)}%</span>
                             </div>
                             
-                            {/* Bar Container */}
                             <div className="h-5 w-full bg-slate-950 rounded-full border border-white/10 p-1 relative shadow-inner">
-                                {/* Doluluk */}
                                 <div 
                                     className={cn(
                                         "h-full rounded-full relative overflow-hidden transition-all duration-1000 ease-out flex items-center justify-end pr-1",
@@ -335,10 +342,7 @@ export default function StudentDashboard() {
                                     )}
                                     style={{ width: `${progressToDailyGoal}%` }}
                                 >
-                                    {/* Striped Animation (Hareketli Çizgiler) */}
                                     <div className="absolute inset-0 w-full h-full bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem] animate-[progress-stripes_1s_linear_infinite]" />
-                                    
-                                    {/* Parlama Efekti (Barın ucunda) */}
                                     <div className="h-full w-2 bg-white/50 blur-[2px] rounded-full absolute right-0" />
                                 </div>
                             </div>
@@ -353,7 +357,6 @@ export default function StudentDashboard() {
                             )}
                         </div>
 
-                        {/* SAĞ KISIM: Aksiyon Butonu */}
                         <div className="w-full md:w-auto z-10 flex justify-end">
                             {canSpinWheel ? (
                                 <Button 
@@ -413,5 +416,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-    
