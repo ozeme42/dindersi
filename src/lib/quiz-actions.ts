@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import type { Question, GetQuizInput, GetQuizOutput, ActivityItem } from "@/lib/types";
@@ -18,9 +19,12 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
     // Eğer statik mod ise, getStaticQuestionsForGame'i çağır
     if (isStatic) {
-        const staticItems = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        // Here, we call a new function dedicated to reading static files for both questions and activities
+        const staticItems = await getStaticGameData({ topicId });
         
         let filteredItems: (Question | ActivityItem)[] = staticItems;
+
+        // Map short types like 'mcq' to full names if needed
         const mappedTypes = questionTypes?.map(qt => ({ 'mcq': 'Çoktan Seçmeli', 'tf': 'Doğru/Yanlış', 'fitb': 'Boşluk Doldurma' }[qt] || qt));
 
         if (mappedTypes && mappedTypes.length > 0) {
@@ -33,16 +37,14 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
         }
         if (difficulty && difficulty.length > 0) {
             filteredItems = filteredItems.filter(item => {
-                if('difficulty' in item) {
+                if('difficulty' in item && item.difficulty) { // Check if difficulty exists
                     return difficulty.includes(item.difficulty);
                 }
                 return true; // Keep activity items that don't have difficulty
             });
         }
 
-        // Shuffle all found items
         const shuffled = filteredItems.sort(() => 0.5 - Math.random());
-        // Take the requested number of items
         const selectedItems = shuffled.slice(0, questionCount);
 
         return { questions: JSON.parse(JSON.stringify(selectedItems)) };
@@ -114,9 +116,10 @@ export async function getQuestionsFromBank(params: GetQuizInput): Promise<GetQui
 
 
 /**
- * Fetches all activity items for a given context. If topicId is 'all', it fetches for the entire unit.
+ * Fetches data from static JSON files for games. It can read from both `activities` and `questions` directories.
+ * If topicId is 'all', it aggregates data from all topics within the given unit.
  */
-export async function getStaticQuestionsForGame(params: {
+export async function getStaticGameData(params: {
   courseId?: string;
   unitId?: string;
   topicId?: string;
@@ -128,22 +131,26 @@ export async function getStaticQuestionsForGame(params: {
             const fileContent = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(fileContent);
         } catch (e: any) {
-            if (e.code !== 'ENOENT') {
-                console.error(`Error reading ${filePath}:`, e);
-            }
+            if (e.code !== 'ENOENT') console.error(`Error reading ${filePath}:`, e);
             return null;
         }
     };
     
-    const activityBaseDir = path.join(process.cwd(), 'public', 'curriculum', 'activities');
+    const readDataForTopic = async (topicIdToFetch: string): Promise<(ActivityItem | Question)[]> => {
+        const activityPath = path.join(process.cwd(), 'public', 'curriculum', 'activities', `${topicIdToFetch}.json`);
+        const questionPath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicIdToFetch}.json`);
+
+        const [activityData, questionData] = await Promise.all([
+            readJsonFile(activityPath),
+            readJsonFile(questionPath)
+        ]);
+
+        return [...(activityData || []), ...(questionData || [])];
+    }
 
     if (topicId && topicId !== 'all') {
-        // Fetch for a single topic
-        const topicPath = path.join(activityBaseDir, `${topicId}.json`);
-        const topicData = await readJsonFile(topicPath);
-        return topicData || [];
+        return readDataForTopic(topicId);
     } else if (unitId && unitId !== 'all') {
-        // Fetch for all topics in a unit
         let allUnitItems: (ActivityItem | Question)[] = [];
         try {
             const manifestPath = path.join(process.cwd(), 'public', 'curriculum', 'manifest.json');
@@ -163,13 +170,9 @@ export async function getStaticQuestionsForGame(params: {
             }
 
             if (targetUnit && targetUnit.topics) {
-                for (const topic of targetUnit.topics) {
-                    const topicPath = path.join(activityBaseDir, `${topic.id}.json`);
-                    const topicData = await readJsonFile(topicPath);
-                    if (topicData) {
-                        allUnitItems = [...allUnitItems, ...topicData];
-                    }
-                }
+                const topicDataPromises = targetUnit.topics.map((topic: any) => readDataForTopic(topic.id));
+                const allTopicsData = await Promise.all(topicDataPromises);
+                allUnitItems = allTopicsData.flat();
             }
         } catch(e) {
             console.error("Error reading manifest to get topics for unit:", e);
@@ -178,4 +181,30 @@ export async function getStaticQuestionsForGame(params: {
     }
 
     return [];
+}
+
+
+// --- This function is now a specific wrapper around getStaticGameData ---
+export async function getStaticQuestionsForGame(params: {
+  courseId?: string;
+  unitId?: string;
+  topicId?: string;
+  dataType?: 'activities' | 'questions' | 'all';
+}): Promise<(ActivityItem | Question)[]> {
+    const { dataType = 'all', ...restParams } = params;
+    
+    const allData = await getStaticGameData(restParams);
+
+    if (dataType === 'all') {
+        return allData;
+    }
+    
+    return allData.filter(item => {
+        if ('text' in item && typeof item.text === 'string') { // Likely a Question
+             if (dataType === 'questions') return true;
+        } else { // Likely an ActivityItem
+             if (dataType === 'activities') return true;
+        }
+        return false;
+    });
 }

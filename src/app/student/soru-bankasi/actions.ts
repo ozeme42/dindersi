@@ -15,7 +15,8 @@ import {
   where, 
   getDocs, 
   getCountFromServer,
-  limit 
+  limit, 
+  getDoc
 } from 'firebase/firestore';
 import { unstable_noStore as noStore } from 'next/cache';
 import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats, Topic } from '@/lib/types';
@@ -110,24 +111,25 @@ export async function getQuestionsForTest(topicId: string, difficulty: 'Kolay' |
 export async function getQuestionCounts(topicId: string): Promise<{ easy: number, medium: number, hard: number } | null> {
     if (!topicId) return null;
     try {
-        // Use the static file reader which now has fallbacks.
-        const questions = await getQuestionsFromBank({ topicId, isStatic: true });
-        if (questions.error || !questions.questions) {
-             return { easy: 0, medium: 0, hard: 0 };
-        }
-        
+        const filePath = path.join(process.cwd(), 'public', 'curriculum', 'questions', `${topicId}.json`);
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const questions = JSON.parse(fileContent) as Question[];
+
         const counts = { easy: 0, medium: 0, hard: 0 };
-        (questions.questions as Question[]).forEach(question => {
+        questions.forEach(question => {
             if (question.difficulty === 'Kolay') counts.easy++;
             else if (question.difficulty === 'Orta') counts.medium++;
             else if (question.difficulty === 'Zor') counts.hard++;
         });
 
         return counts;
+
     } catch (error: any) {
         if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+            // File doesn't exist, which is a valid state (no questions for this topic)
             return { easy: 0, medium: 0, hard: 0 };
         }
+        // For other errors, log them but return a default value
         console.error(`Error fetching question counts for topic ${topicId} from static file:`, error);
         return { easy: 0, medium: 0, hard: 0 };
     }
