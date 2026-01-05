@@ -47,74 +47,56 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
       db.collection('users').get()
     ]);
     
-    let userResults: UserProfile[] = [];
+    // 1. KULLANICI VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
+    let allUsers = allUsersSnap.docs.map(doc => {
+        const serializedData = deepSerialize(doc.data());
+        return { 
+            uid: doc.id, 
+            ...serializedData, 
+        } as UserProfile
+    }).filter(user => ['student', 'guest', 'pending', 'teacher', 'superadmin'].includes(user.role));
+
+    // Filtreleme artık istemci tarafında yapılacak, sunucudan tüm ilgili roller çekilir.
     
-    // Eğer istek yapan bir öğretmense (Süper Admin DEĞİLSE)
-    if (teacher && teacher.role === 'teacher') {
-        const queries = [];
-
-        // 1. Öğretmenin kendi oluşturduğu sanal öğrenciler
-        queries.push(
-            db.collection("users")
-              .where("teacherId", "==", teacher.uid)
-              .where("role", "==", "guest")
-              .get()
-        );
-
-        // 2. Öğretmenin okulu varsa, o okulda bulunan diğer sanal öğrenciler
-        if (teacher.schoolId) {
-            queries.push(
-                db.collection("users")
-                  .where("schoolId", "==", teacher.schoolId)
-                  .where("role", "==", "guest")
-                  .get()
-            );
-        }
-        
-        const querySnapshots = await Promise.all(queries);
-        
-        const uniqueUsersMap = new Map<string, UserProfile>();
-        
-        querySnapshots.forEach(snapshot => {
-            snapshot.forEach(doc => {
-                if (!uniqueUsersMap.has(doc.id)) {
-                     const serializedData = deepSerialize(doc.data());
-                     uniqueUsersMap.set(doc.id, { 
-                        uid: doc.id, 
-                        ...serializedData, 
-                    } as UserProfile);
-                }
-            });
-        });
-        
-        userResults = Array.from(uniqueUsersMap.values());
-        
-    } else if (teacher?.role === 'superadmin') { // Süper admin ise tüm sanal öğrencileri getir
-        const q = db.collection("users").where("role", "==", "guest");
-        const snap = await q.get();
-        userResults = snap.docs.map(doc => {
-             const serializedData = deepSerialize(doc.data());
-             return { uid: doc.id, ...serializedData } as UserProfile
-        });
-    }
-
+    // 2. SINIF VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
     const classes = classesSnap.docs.map(doc => {
         const serializedData = deepSerialize(doc.data());
-        return { id: doc.id, ...serializedData } as SchoolClass;
+        return { 
+            id: doc.id, 
+            ...serializedData 
+        } as SchoolClass
     });
     
-    const schools = schoolsSnap.docs.map(doc => ({ id: doc.id, name: doc.data().name } as School));
+    // 3. OKUL VERİLERİNİ GÜVENLİ HALE GETİRİYORUZ
+    const schoolSet = new Map<string, School>();
+    schoolsSnap.docs.forEach(doc => {
+        const schoolData = doc.data() as { name: string };
+        if (schoolData.name && !schoolSet.has(schoolData.name.toLowerCase())) {
+            schoolSet.set(schoolData.name.toLowerCase(), { id: doc.id, name: schoolData.name });
+        }
+    });
+
+    allUsersSnap.docs.forEach(userDoc => {
+        const student = userDoc.data() as any;
+        if (student.schoolName && !schoolSet.has(student.schoolName.toLowerCase())) {
+            const pseudoId = student.schoolName.toLowerCase().replace(/\s+/g, '-');
+            schoolSet.set(student.schoolName.toLowerCase(), { id: pseudoId, name: student.schoolName });
+        }
+    });
+
+    const combinedSchools = Array.from(schoolSet.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
 
     return { 
-        students: userResults,
+        students: allUsers,
         classes: classes,
-        schools: schools,
+        schools: combinedSchools,
     };
   } catch (error) {
     console.error('Error fetching student data:', error);
     return { students: [], classes: [], schools: [] };
   }
 }
+
 
 // --- YAZMA İŞLEMLERİ (Admin SDK) ---
 
@@ -285,7 +267,7 @@ export async function bulkAddStudents(names: string[], className: string, school
     return { success: true, successCount: successfulCreations.length };
 }
 
-export async function addStudentToClass(displayName: string, className: string, teacherId: string | null): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
+export async function addGuestStudent(displayName: string, className: string, teacherId: string | null, schoolId?: string, schoolName?: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     const finalDisplayName = displayName.trim();
     if (!finalDisplayName) {
         return { success: false, error: "Öğrenci adı boş olamaz." };
@@ -303,6 +285,8 @@ export async function addStudentToClass(displayName: string, className: string, 
             score: 0,
             createdAt: FieldValue.serverTimestamp() as any,
             teacherId: teacherId || undefined,
+            schoolId: schoolId || undefined,
+            schoolName: schoolName || undefined,
             ownedItems: [],
         };
 
@@ -404,45 +388,6 @@ function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/ö/g, 'o')
     .replace(/ç/g, 'c')
     .replace(/[^a-z0-9.-]/g, '');
-}
-
-export async function addGuestStudent(displayName: string, className: string, teacherId: string | null, schoolId?: string, schoolName?: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
-    const finalDisplayName = displayName.trim();
-    if (!finalDisplayName) {
-        return { success: false, error: "Öğrenci adı boş olamaz." };
-    }
-    
-    try {
-        const db = getAdminDb();
-        const docRef = db.collection("users").doc();
-        
-        const newUserProfile: Omit<UserProfile, 'uid'> = {
-            displayName: finalDisplayName,
-            email: `${docRef.id}@guest.degerleroyunu.app`,
-            role: 'guest',
-            class: className,
-            score: 0,
-            createdAt: FieldValue.serverTimestamp() as any,
-            teacherId: teacherId || undefined,
-            schoolId: schoolId || undefined,
-            schoolName: schoolName || undefined,
-            ownedItems: [],
-        };
-
-        await docRef.set(newUserProfile);
-        
-        const serializableNewUser: UserProfile = {
-            ...newUserProfile,
-            uid: docRef.id,
-            createdAt: new Date().toISOString(),
-        };
-        
-        return { success: true, newUser: serializableNewUser };
-
-    } catch (error: any) {
-        console.error("Error creating new guest student:", error);
-        return { success: false, error: `Sanal öğrenci oluşturulurken hata: ${error.message}` };
-    }
 }
 
 export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ success: boolean, error?: string }> {
