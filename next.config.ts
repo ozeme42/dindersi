@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    allowedDevOrigins: ["https://6000-firebase-degerleroyunu-1767537398519.cluster-6frnii43o5blcu522sivebzpii.cloudworkstations.dev"],
+    // This key is moved out of experimental for newer Next.js versions.
+    // However, the error log indicates it might be an invalid experimental key
+    // which suggests it should be top-level. We'll try moving it out.
   },
   images: {
     remotePatterns: [
@@ -24,6 +26,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Correctly placing allowedDevOrigins at the top level
+  allowedDevOrigins: ["https://6000-firebase-degerleroyunu-1767537398519.cluster-6frnii43o5blcu522sivebzpii.cloudworkstations.dev"],
 };
 
 export default nextConfig;
