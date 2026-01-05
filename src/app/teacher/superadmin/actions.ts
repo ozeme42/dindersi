@@ -1,5 +1,3 @@
-
-
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -575,5 +573,79 @@ export async function exportActivityData() {
     } catch (e: any) {
         console.error("Error exporting game data:", e);
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
+    }
+}
+
+// --------------------------------------------------------
+// OKUL YÖNETİMİ VE TOPLU GÜNCELLEME
+// --------------------------------------------------------
+
+export async function saveSchool(data: { id?: string; name: string }) {
+    if (!data.name || data.name.trim() === '') {
+        return { success: false, error: "Okul adı boş olamaz." };
+    }
+
+    const db = getAdminDb();
+    try {
+        if (data.id) {
+            // Güncelleme
+            await db.collection('schools').doc(data.id).update({ 
+                name: data.name.trim() 
+            });
+        } else {
+            // Yeni Ekleme
+            await db.collection('schools').add({ 
+                name: data.name.trim(),
+                createdAt: new Date().toISOString()
+            });
+        }
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error saving school:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function deleteSchool(schoolId: string) {
+    if (!schoolId) {
+        return { success: false, error: "Okul ID'si gerekli." };
+    }
+
+    const db = getAdminDb();
+    try {
+        await db.collection('schools').doc(schoolId).delete();
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error deleting school:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function bulkUpdateStudentSchool(userIds: string[], schoolId: string, schoolName: string) {
+    if (!userIds || userIds.length === 0) {
+        return { success: false, error: "Öğrenci seçilmedi." };
+    }
+    if (!schoolId || !schoolName) {
+        return { success: false, error: "Hedef okul seçilmedi." };
+    }
+
+    const db = getAdminDb();
+    const batch = db.batch();
+
+    try {
+        userIds.forEach(userId => {
+            const userRef = db.collection('users').doc(userId);
+            batch.update(userRef, { 
+                schoolId: schoolId,
+                schoolName: schoolName,
+                updatedAt: new Date().toISOString()
+            });
+        });
+
+        await batch.commit();
+        return { success: true, count: userIds.length };
+    } catch (error: any) {
+        console.error("Error bulk updating schools:", error);
+        return { success: false, error: error.message };
     }
 }

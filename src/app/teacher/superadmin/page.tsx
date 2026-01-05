@@ -1,31 +1,46 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-// EKLENDİ: Search ikonu import listesine eklendi
-import { User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, HardDriveDownload, Search } from "lucide-react";
+import { 
+  User, Download, AlertTriangle, Loader2, Book, FileQuestion, List, FileJson, 
+  Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, 
+  ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, 
+  GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, 
+  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft
+} from "lucide-react";
+
+// Server Actions
 import { getStudentData } from "@/app/teacher/students/actions";
-import { exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers } from "./actions";
+import { 
+  exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers,
+  saveSchool, deleteSchool, bulkUpdateStudentSchool 
+} from "./actions";
+
+import { getExamCreationData } from "../exams/actions";
+import { saveUser } from "@/app/teacher/students/actions";
+
+// Types & Zod
 import type { UserProfile, SchoolClass, Course, Unit, Topic, School } from "@/lib/types";
+import { z } from "zod";
+
+// UI Components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getExamCreationData } from "../exams/actions";
 import Link from 'next/link';
 import { UserAvatar } from "@/components/user-avatar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { UserEditorDialog } from "@/components/user-editor-dialog";
-import { saveUser } from "@/app/teacher/students/actions";
-import { z } from "zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check } from 'lucide-react';
-
+import { Label } from "@/components/ui/label";
 
 // --- YARDIMCI FONKSİYONLAR ---
 function downloadJson(data: any, filename: string) {
@@ -70,19 +85,19 @@ const UserEditorSchema = z.object({
   newSchoolName: z.string().optional(),
   score: z.coerce.number().optional().default(0),
 }).refine(data => {
-    if (!data.uid && (!data.password || data.password.length < 6)) {
-      return false;
-    }
-    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) {
-      return false;
-    }
-    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) {
-        return false;
-    }
+    if (!data.uid && (!data.password || data.password.length < 6)) return false;
+    if (data.uid && data.password && data.password.length > 0 && data.password.length < 6) return false;
+    if(data.schoolId === 'new' && (!data.newSchoolName || data.newSchoolName.trim() === '')) return false;
     return true;
 }, {
-    message: "Yeni kullanıcı için şifre zorunludur ve en az 6 karakter olmalıdır. Yeni okul adı boş bırakılamaz.",
+    message: "Şifre/Okul adı kontrolü başarısız.",
     path: ["password"],
+});
+
+// Okul Schema
+const SchoolEditorSchema = z.object({
+    id: z.string().optional(),
+    name: z.string().min(3, "Okul adı en az 3 karakter olmalıdır."),
 });
 
 // --- ISTATISTIK KARTI BILEŞENI ---
@@ -103,26 +118,40 @@ function StatCard({ title, value, icon: Icon, colorClass }: { title: string, val
 }
 
 export default function SuperAdminPage() {
+  const { toast } = useToast();
+  
+  // Data States
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
+  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
+  const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[] })[] })[]>([]);
+  
+  // Loading & Filter States
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState<string | null>(null);
   const [isExportingStatic, setIsExportingStatic] = useState(false);
   const [exportStep, setExportStep] = useState<string | null>(null);
-  
-  const [allClasses, setAllClasses] = useState<SchoolClass[]>([]);
-  const [allCourses, setAllCourses] = useState<(Course & { units: (Unit & { topics: Topic[] })[] })[]>([]);
-  const [schools, setSchools] = useState<School[]>([]);
   const [filters, setFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
       classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
   });
   
-  const { toast } = useToast();
+  // User Management States
   const [dialogState, setDialogState] = useState<{isOpen: boolean; user: Partial<UserProfile> | null}>({isOpen: false, user: null});
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedUserIds, setSelectedUserIds] = useState<Set<string>>(new Set());
 
-  // Pagination & Filter States
+  // Bulk School Change States
+  const [bulkSchoolDialog, setBulkSchoolDialog] = useState(false);
+  const [selectedTargetSchoolId, setSelectedTargetSchoolId] = useState<string>("");
+  const [isBulkUpdating, setIsBulkUpdating] = useState(false);
+
+  // School Management States
+  const [schoolDialogState, setSchoolDialogState] = useState<{isOpen: boolean; school: School | null}>({isOpen: false, school: null});
+  const [schoolNameInput, setSchoolNameInput] = useState("");
+  const [isSavingSchool, setIsSavingSchool] = useState(false);
+
+  // Pagination & Search
   const [studentsCurrentPage, setStudentsCurrentPage] = useState(1);
   const [teachersCurrentPage, setTeachersCurrentPage] = useState(1);
   const itemsPerPage = 8;
@@ -153,8 +182,19 @@ export default function SuperAdminPage() {
     fetchAllData();
   }, [fetchAllData]);
 
-  // Derived Data
-  const students = useMemo(() => users.filter(u => u.role === 'student' || u.role === 'pending'), [users]);
+  // Derived Data & Filtering (SANAL ÖĞRENCİLER GİZLENDİ)
+  const students = useMemo(() => {
+      return users.filter(u => {
+          // Rol kontrolü: Sadece öğrenci veya pending
+          const isStudentRole = u.role === 'student' || u.role === 'pending';
+          // Sanal kontrolü: Guest olanlar veya isVirtual flag'i true olanlar elenir
+          // (Types dosyanızda isVirtual yoksa 'as any' ile geçiçi kontrol yapılabilir)
+          const isNotVirtual = u.role !== 'guest' && !(u as any).isVirtual; 
+          
+          return isStudentRole && isNotVirtual;
+      });
+  }, [users]);
+
   const teachers = useMemo(() => users.filter(u => u.role === 'teacher'), [users]);
   
   const filterList = (list: UserProfile[]) => {
@@ -181,7 +221,7 @@ export default function SuperAdminPage() {
   const totalStudentPages = Math.ceil(filteredStudents.length / itemsPerPage);
   const totalTeacherPages = Math.ceil(filteredTeachers.length / itemsPerPage);
 
-  // Handlers
+  // --- HANDLERS: USER ---
   const handleOpenDialog = (user: Partial<UserProfile> | null = null, role: 'student' | 'teacher') => {
       const defaultUser = { role };
       setDialogState({ isOpen: true, user: user || defaultUser });
@@ -205,6 +245,7 @@ export default function SuperAdminPage() {
   };
   
   const handleDeleteUser = async (userId: string) => {
+    if(!confirm("Kullanıcıyı silmek istediğinize emin misiniz?")) return;
     const originalUsers = [...users];
     setUsers(prev => prev.filter(s => s.uid !== userId));
     const result = await deleteBulkUsers([userId]);
@@ -225,15 +266,95 @@ export default function SuperAdminPage() {
     const result = await deleteBulkUsers(Array.from(selectedUserIds));
     if (result.success) {
         toast({ title: "Başarılı", description: `${result.deletedCount} kullanıcı silindi.` });
-        await fetchAllData(); // Refresh all data from server
+        await fetchAllData(); 
     } else {
         toast({ title: "Hata", description: result.error, variant: "destructive" });
-        setUsers(originalUsers); // Revert UI on failure
+        setUsers(originalUsers);
     }
     setSelectedUserIds(new Set());
     setIsDeleting(false);
   };
 
+  // --- HANDLER: BULK SCHOOL UPDATE ---
+  const handleBulkSchoolUpdate = async () => {
+      if (!selectedTargetSchoolId) {
+          toast({ title: "Hata", description: "Lütfen bir okul seçiniz.", variant: "destructive" });
+          return;
+      }
+      
+      const targetSchool = schools.find(s => s.id === selectedTargetSchoolId);
+      if (!targetSchool) return;
+
+      setIsBulkUpdating(true);
+      const result = await bulkUpdateStudentSchool(
+          Array.from(selectedUserIds),
+          targetSchool.id,
+          targetSchool.name
+      );
+
+      if (result.success) {
+          toast({ title: "Başarılı", description: `${result.count} öğrencinin okulu güncellendi.` });
+          await fetchAllData();
+          setBulkSchoolDialog(false);
+          setSelectedUserIds(new Set()); // Seçimleri temizle
+          setSelectedTargetSchoolId("");
+      } else {
+          toast({ title: "Hata", description: result.error, variant: "destructive" });
+      }
+      setIsBulkUpdating(false);
+  };
+
+
+  // --- HANDLERS: SCHOOL ---
+  const handleOpenSchoolDialog = (school: School | null = null) => {
+      setSchoolNameInput(school ? school.name : "");
+      setSchoolDialogState({ isOpen: true, school });
+  };
+
+  const handleSaveSchool = async () => {
+      try {
+          SchoolEditorSchema.parse({ name: schoolNameInput });
+      } catch (error: any) {
+          toast({ title: "Hata", description: error.errors[0].message, variant: "destructive" });
+          return;
+      }
+
+      setIsSavingSchool(true);
+      const result = await saveSchool({
+          id: schoolDialogState.school?.id,
+          name: schoolNameInput
+      });
+
+      if (result.success) {
+          toast({ title: "Başarılı", description: `Okul ${schoolDialogState.school ? 'güncellendi' : 'eklendi'}.` });
+          await fetchAllData(); // Verileri yenile
+          setSchoolDialogState({ isOpen: false, school: null });
+      } else {
+          toast({ title: "Hata", description: result.error, variant: "destructive" });
+      }
+      setIsSavingSchool(false);
+  };
+
+  const handleDeleteSchool = async (schoolId: string) => {
+      // Okula bağlı kullanıcı kontrolü (Client side simple check)
+      const hasUsers = users.some(u => u.schoolName === schools.find(s => s.id === schoolId)?.name);
+      if (hasUsers) {
+          toast({ title: "Silinemez", description: "Bu okula kayıtlı kullanıcılar var. Önce kullanıcıları silin veya taşıyın.", variant: "destructive" });
+          return;
+      }
+
+      if(!confirm("Bu okulu silmek istediğinize emin misiniz?")) return;
+
+      const result = await deleteSchool(schoolId);
+      if (result.success) {
+          toast({ title: "Başarılı", description: "Okul silindi." });
+          await fetchAllData();
+      } else {
+          toast({ title: "Hata", description: result.error, variant: "destructive" });
+      }
+  };
+
+  // --- HANDLERS: EXPORT ---
   const handleDownload = async (dataType: 'users' | 'curriculum' | 'questions' | 'examQuestions' | 'assignments' | 'scoreEvents' | 'activity-items' | 'yazilacaklar', baseFilename: string) => {
     setIsDownloading(dataType);
     let filenameParts = [];
@@ -350,8 +471,8 @@ export default function SuperAdminPage() {
                         <CardHeader className="border-b border-white/5 pb-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
-                                    <CardTitle className="text-xl text-white flex items-center gap-2"><UserCog className="h-5 w-5 text-indigo-400"/> Kullanıcı Listesi</CardTitle>
-                                    <CardDescription>Sistemdeki tüm kullanıcıları görüntüleyin ve düzenleyin.</CardDescription>
+                                    <CardTitle className="text-xl text-white flex items-center gap-2"><UserCog className="h-5 w-5 text-indigo-400"/> Veri Yönetim Merkezi</CardTitle>
+                                    <CardDescription>Sistemdeki kullanıcıları ve okulları yönetin.</CardDescription>
                                 </div>
                                 <div className="flex gap-2 w-full md:w-auto">
                                      <Button onClick={() => handleOpenDialog(null, 'student')} className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500"><UserPlus className="mr-2 h-4 w-4"/> Öğrenci Ekle</Button>
@@ -379,16 +500,25 @@ export default function SuperAdminPage() {
                         
                         <CardContent className="p-0">
                             <Tabs defaultValue="students_list" className="w-full">
-                                <div className="px-6 py-2 border-b border-white/5 flex justify-between items-center">
+                                <div className="px-6 py-2 border-b border-white/5 flex justify-between items-center overflow-x-auto">
                                     <TabsList className="bg-transparent h-10 gap-4">
                                         <TabsTrigger value="students_list" className="bg-transparent data-[state=active]:bg-slate-800 data-[state=active]:text-white border border-transparent data-[state=active]:border-white/10 rounded-full px-4 text-slate-400">Öğrenciler ({filteredStudents.length})</TabsTrigger>
                                         <TabsTrigger value="teachers_list" className="bg-transparent data-[state=active]:bg-slate-800 data-[state=active]:text-white border border-transparent data-[state=active]:border-white/10 rounded-full px-4 text-slate-400">Öğretmenler ({filteredTeachers.length})</TabsTrigger>
+                                        <TabsTrigger value="schools_list" className="bg-transparent data-[state=active]:bg-slate-800 data-[state=active]:text-white border border-transparent data-[state=active]:border-white/10 rounded-full px-4 text-slate-400 flex items-center gap-2">
+                                            <Building2 className="h-3 w-3" /> Okullar ({schools.length})
+                                        </TabsTrigger>
                                     </TabsList>
                                      {selectedUserIds.size > 0 && (
                                         <div className="flex items-center gap-2">
                                             <Badge variant="secondary" className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30">
                                                 {selectedUserIds.size} kullanıcı seçildi
                                             </Badge>
+                                            
+                                            {/* TOPLU OKUL DEĞİŞTİRME BUTONU */}
+                                            <Button variant="outline" size="sm" onClick={() => setBulkSchoolDialog(true)} className="border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300">
+                                                <ArrowRightLeft className="mr-2 h-4 w-4" /> Okul Değiştir
+                                            </Button>
+
                                              <AlertDialog>
                                                 <AlertDialogTrigger asChild>
                                                     <Button variant="destructive" size="sm" disabled={isDeleting}>
@@ -412,6 +542,7 @@ export default function SuperAdminPage() {
                                     )}
                                 </div>
 
+                                {/* STUDENTS TAB */}
                                 <TabsContent value="students_list" className="mt-0">
                                     <div className="overflow-x-auto">
                                         <Table>
@@ -449,7 +580,7 @@ export default function SuperAdminPage() {
                                                         <TableCell><Badge className="bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30">{student.class || 'N/A'}</Badge></TableCell>
                                                         <TableCell className="font-mono text-amber-500">{student.score}</TableCell>
                                                         <TableCell className="text-right">
-                                                             <DropdownMenu>
+                                                            <DropdownMenu>
                                                                 <DropdownMenuTrigger asChild>
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-white"><MoreHorizontal className="h-4 w-4"/></Button>
                                                                 </DropdownMenuTrigger>
@@ -476,6 +607,7 @@ export default function SuperAdminPage() {
                                     </div>
                                 </TabsContent>
 
+                                {/* TEACHERS TAB */}
                                 <TabsContent value="teachers_list" className="mt-0">
                                     <div className="overflow-x-auto">
                                         <Table>
@@ -522,6 +654,48 @@ export default function SuperAdminPage() {
                                         </div>
                                     </div>
                                 </TabsContent>
+
+                                {/* SCHOOLS TAB */}
+                                <TabsContent value="schools_list" className="mt-0">
+                                    <div className="p-4 border-b border-white/5 flex justify-end">
+                                        <Button onClick={() => handleOpenSchoolDialog(null)} className="bg-purple-600 hover:bg-purple-500 text-white">
+                                            <Plus className="mr-2 h-4 w-4"/> Yeni Okul Ekle
+                                        </Button>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                        <Table>
+                                            <TableHeader className="bg-slate-950/50">
+                                                <TableRow className="border-white/5 hover:bg-transparent">
+                                                    <TableHead className="text-slate-300">Okul Adı</TableHead>
+                                                    <TableHead className="text-slate-300">ID</TableHead>
+                                                    <TableHead className="text-slate-300">Öğrenci Sayısı</TableHead>
+                                                    <TableHead className="text-right text-slate-300">İşlemler</TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {schools.length > 0 ? schools.map(school => {
+                                                    const studentCount = users.filter(u => u.schoolName === school.name).length;
+                                                    return (
+                                                        <TableRow key={school.id} className="border-white/5 hover:bg-white/5">
+                                                            <TableCell className="font-medium text-white">{school.name}</TableCell>
+                                                            <TableCell className="font-mono text-xs text-slate-500">{school.id}</TableCell>
+                                                            <TableCell><Badge variant="secondary" className="bg-slate-800 text-slate-300">{studentCount} Öğrenci</Badge></TableCell>
+                                                            <TableCell className="text-right">
+                                                                <div className="flex justify-end gap-2">
+                                                                    <Button size="sm" variant="ghost" onClick={() => handleOpenSchoolDialog(school)} className="h-8 w-8 p-0 text-slate-400 hover:text-white"><FilePenLine className="h-4 w-4"/></Button>
+                                                                    <Button size="sm" variant="ghost" onClick={() => handleDeleteSchool(school.id)} className="h-8 w-8 p-0 text-red-400 hover:text-red-300"><Trash2 className="h-4 w-4"/></Button>
+                                                                </div>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                }) : (
+                                                    <TableRow><TableCell colSpan={4} className="h-24 text-center text-slate-500">Henüz okul eklenmemiş.</TableCell></TableRow>
+                                                )}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </TabsContent>
+
                             </Tabs>
                         </CardContent>
                     </Card>
@@ -608,6 +782,7 @@ export default function SuperAdminPage() {
                 </TabsContent>
             </Tabs>
 
+            {/* USER EDITOR DIALOG */}
             {dialogState.isOpen && (
                 <UserEditorDialog 
                     isOpen={dialogState.isOpen}
@@ -619,6 +794,67 @@ export default function SuperAdminPage() {
                     schools={schools}
                 />
             )}
+
+            {/* SCHOOL EDITOR DIALOG */}
+            <Dialog open={schoolDialogState.isOpen} onOpenChange={(isOpen) => setSchoolDialogState({ ...schoolDialogState, isOpen })}>
+                <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>{schoolDialogState.school ? 'Okul Düzenle' : 'Yeni Okul Ekle'}</DialogTitle>
+                        <DialogDescription>
+                            Okul adını giriniz. Değişiklikler sisteme anında yansır.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="name" className="text-white">Okul Adı</Label>
+                            <Input
+                                id="name"
+                                value={schoolNameInput}
+                                onChange={(e) => setSchoolNameInput(e.target.value)}
+                                className="bg-slate-950 border-white/10 text-white"
+                                placeholder="Örn: Atatürk Ortaokulu"
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit" onClick={handleSaveSchool} disabled={isSavingSchool} className="bg-purple-600 hover:bg-purple-500 text-white">
+                            {isSavingSchool ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
+                            {schoolDialogState.school ? 'Güncelle' : 'Kaydet'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* TOPLU OKUL DEĞİŞTİRME DIALOG (YENİ) */}
+            <Dialog open={bulkSchoolDialog} onOpenChange={setBulkSchoolDialog}>
+                <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Toplu Okul Değiştirme</DialogTitle>
+                        <DialogDescription>
+                            Seçilen <b>{selectedUserIds.size}</b> öğrenci için yeni okulu seçiniz.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="bulk-school" className="text-white">Yeni Okul</Label>
+                             <Select value={selectedTargetSchoolId} onValueChange={setSelectedTargetSchoolId}>
+                                <SelectTrigger className="bg-slate-950 border-white/10 h-10"><SelectValue placeholder="Okul Seçiniz" /></SelectTrigger>
+                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                    {schools.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setBulkSchoolDialog(false)}>İptal</Button>
+                        <Button type="submit" onClick={handleBulkSchoolUpdate} disabled={isBulkUpdating} className="bg-indigo-600 hover:bg-indigo-500 text-white">
+                            {isBulkUpdating ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Save className="mr-2 h-4 w-4"/>}
+                            Değişiklikleri Kaydet
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
         </main>
     </div>
   );
