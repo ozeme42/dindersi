@@ -4,7 +4,20 @@ import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
 import type { UserProfile, SchoolClass, School } from "@/lib/types";
 
-// --- YARDIMCI: DATA TEMİZLEME ---
+// --- YARDIMCI: DATA TEMİZLEME (Firestore 'undefined' kabul etmez, 'null' ister) ---
+const cleanUndefined = (obj: any): any => {
+    const newObj: any = {};
+    Object.keys(obj).forEach(key => {
+        if (obj[key] === undefined) {
+            newObj[key] = null; // Firestore için undefined -> null çevrimi
+        } else {
+            newObj[key] = obj[key];
+        }
+    });
+    return newObj;
+};
+
+// --- YARDIMCI: DATA SERIALIZE (Tarih formatları için) ---
 const deepSerialize = (data: any): any => {
     if (data === null || data === undefined) return data;
     if (typeof data === 'object' && 'toDate' in data && typeof data.toDate === 'function') {
@@ -22,14 +35,14 @@ const deepSerialize = (data: any): any => {
     return data;
 };
 
-// --- İSİM NORMALİZASYONU (Email oluşturmak için) ---
+// --- İSİM NORMALİZASYONU ---
 function normalizeNameToEmailLocalPart(name: string): string {
-  if (!name) return '';
+  if (!name) return 'ogrenci';
   return name.trim().toLocaleLowerCase('tr-TR')
     .replace(/\s+/g, '.')
     .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
     .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
-    .replace(/[^a-z0-9.-]/g, '');
+    .replace(/[^a-z0-9.-]/g, '') || 'ogrenci';
 }
 
 // --- VERİ ÇEKME ---
@@ -43,7 +56,6 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
 
     let usersQuery: FirebaseFirestore.Query = db.collection('users');
 
-    // FİLTRELEME: Eğer SuperAdmin değilse
     if (teacher && teacher.role !== 'superadmin') {
         if (teacher.schoolName) {
             usersQuery = usersQuery.where('schoolName', '==', teacher.schoolName);
@@ -54,7 +66,6 @@ export async function getStudentData(teacher?: UserProfile): Promise<{ students:
 
     const allUsersSnap = await usersQuery.get();
     
-    // Sadece misafir, öğrenci veya beklemedeki kullanıcıları al
     let allUsers = allUsersSnap.docs.map(doc => {
         const serializedData = deepSerialize(doc.data());
         return { uid: doc.id, ...serializedData } as UserProfile
@@ -81,7 +92,7 @@ export async function addGuestStudent(
     displayName: string, 
     className: string, 
     teacherId: string,
-    overrideSchoolId?: string, // Admin manuel seçerse
+    overrideSchoolId?: string, 
     overrideSchoolName?: string
 ): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
     
@@ -93,14 +104,12 @@ export async function addGuestStudent(
         const db = getAdminDb();
         
         let schoolName = "Tanımsız Okul";
-        let schoolId = undefined;
+        let schoolId = null;
 
-        // Okul bilgisini belirle
         if (overrideSchoolName && overrideSchoolId) {
             schoolName = overrideSchoolName;
-            schoolId = overrideSchoolId;
+            schoolId = overrideSchoolId as any;
         } else {
-            // Öğretmenden çek
             const teacherDoc = await db.collection('users').doc(teacherId).get();
             const teacherData = teacherDoc.data();
             if (teacherData?.schoolName) schoolName = teacherData.schoolName;
@@ -108,21 +117,23 @@ export async function addGuestStudent(
         }
 
         const docRef = db.collection("users").doc();
-        // Benzersiz email oluştur
         const email = `${normalizeNameToEmailLocalPart(finalDisplayName)}.${docRef.id.substring(0,4)}@guest.degerleroyunu.app`;
 
-        const newUserProfile: Omit<UserProfile, 'uid'> = {
+        // undefined değerleri temizle
+        const rawData = {
             displayName: finalDisplayName,
             email: email,
             role: 'guest',
             class: className,
             score: 0,
-            createdAt: FieldValue.serverTimestamp() as any,
+            createdAt: FieldValue.serverTimestamp(),
             teacherId: teacherId,
             schoolId: schoolId,
             schoolName: schoolName,
             ownedItems: [],
         };
+
+        const newUserProfile = cleanUndefined(rawData);
 
         await docRef.set(newUserProfile);
         
@@ -132,7 +143,7 @@ export async function addGuestStudent(
                 ...newUserProfile, 
                 uid: docRef.id, 
                 createdAt: new Date().toISOString() 
-            } 
+            } as UserProfile
         };
     } catch (error: any) {
         console.error("Add Guest Error:", error);
@@ -140,7 +151,7 @@ export async function addGuestStudent(
     }
 }
 
-// --- TOPLU EKLEME (LISTE) ---
+// --- TOPLU EKLEME (DÜZELTİLMİŞ VERSİYON) ---
 export async function bulkAddStudents(
     names: string[], 
     className: string, 
@@ -149,21 +160,19 @@ export async function bulkAddStudents(
     overrideSchoolName?: string
 ): Promise<{ success: boolean; error?: string, successCount?: number }> {
     
-    if (!names.length) return { success: false, error: "Liste boş." };
+    if (!names || names.length === 0) return { success: false, error: "Liste boş." };
     if (!teacherId) return { success: false, error: "Öğretmen kimliği yok." };
     
-    const auth = getAdminAuth();
     const db = getAdminDb();
     const batch = db.batch();
     
     try {
         let schoolName = "Tanımsız Okul";
-        let schoolId = undefined;
+        let schoolId = null;
 
-        // Okul bilgisini belirle
         if (overrideSchoolName && overrideSchoolId) {
             schoolName = overrideSchoolName;
-            schoolId = overrideSchoolId;
+            schoolId = overrideSchoolId as any;
         } else {
             const teacherDoc = await db.collection('users').doc(teacherId).get();
             const teacherData = teacherDoc.data();
@@ -178,46 +187,47 @@ export async function bulkAddStudents(
             if (!cleanName) continue;
 
             try {
-                // Doküman ID'sini önceden oluştur (Batch işlemi için)
                 const userRef = db.collection('users').doc();
                 const randomSuffix = userRef.id.substring(0, 4);
-                
                 const email = `${normalizeNameToEmailLocalPart(cleanName)}.${randomSuffix}@guest.degerleroyunu.app`;
-                // Guest kullanıcılar auth tablosunda olmak zorunda değil ama 
-                // sistem tutarlılığı için genelde users koleksiyonu yeterlidir.
-                // Eğer Auth da gerekiyorsa `auth.createUser` eklenmeli. 
-                // Performans için şu an sadece Firestore'a ekliyoruz (Guest mantığı).
 
-                const userProfile: Omit<UserProfile, 'uid'> = {
+                // Firestore'a gidecek ham veri
+                const rawUser = {
                     displayName: cleanName,
                     email: email,
                     role: 'guest', 
                     class: className,
                     schoolName: schoolName,
-                    schoolId: schoolId,
+                    schoolId: schoolId, // Burası null olabilir ama undefined olmamalı
                     score: 0,
-                    createdAt: FieldValue.serverTimestamp() as any,
+                    createdAt: FieldValue.serverTimestamp(),
                     ownedItems: [],
                     teacherId: teacherId,
                 };
 
-                batch.set(userRef, userProfile);
+                // Undefined değerleri temizle (En önemli kısım)
+                const safeUser = cleanUndefined(rawUser);
+
+                batch.set(userRef, safeUser);
                 successCount++;
-            } catch (e) { console.error(`Hata ${cleanName}:`, e); }
+            } catch (e) { 
+                console.error(`Satır Hatası (${cleanName}):`, e); 
+            }
         }
 
         if (successCount > 0) {
             await batch.commit();
             return { success: true, successCount };
         }
-        return { success: false, error: "Öğrenciler oluşturulamadı." };
+        return { success: false, error: "Eklenecek geçerli isim bulunamadı." };
 
     } catch(e: any) {
+        console.error("Bulk Add Critical Error:", e);
         return { success: false, error: "Sunucu hatası: " + e.message };
     }
 }
 
-// --- TOPLU SİLME ---
+// --- SİLME VE GÜNCELLEME ---
 export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ success: boolean, error?: string }> {
     if (!userIds.length) return { success: false, error: "Seçim yok." };
     const db = getAdminDb();
@@ -226,40 +236,31 @@ export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ succ
     try {
         for (const uid of userIds) {
             batch.delete(db.collection("users").doc(uid));
-            // Eğer auth kaydı varsa silmeyi dene, yoksa devam et
-            auth.deleteUser(uid).catch(() => {});
+            try { await auth.deleteUser(uid); } catch {}
         }
         await batch.commit();
         return { success: true };
     } catch(e: any) { return { success: false, error: e.message }; }
 }
 
-// --- SINIF GÜNCELLEME (Tablo üzerinden hızlı işlem için) ---
 export async function updateStudentClass(studentId: string, newClassName: string) {
-    try { 
-        await getAdminDb().collection('users').doc(studentId).update({ class: newClassName }); 
-        return { success: true }; 
-    } catch (e: any) { return { success: false, error: e.message }; }
+    try { await getAdminDb().collection('users').doc(studentId).update({ class: newClassName }); return { success: true }; } catch (e: any) { return { success: false, error: e.message }; }
 }
 
-// --- TOPLU DÜZENLEME ---
 export async function bulkUpdateGuestStudents(studentIds: string[], updates: any) {
     if (!studentIds.length) return { success: false, error: "Seçim yok." };
     try {
         const batch = getAdminDb().batch();
         const updateData: any = {};
         if (updates.className) updateData.class = updates.className;
-        if (updates.schoolId && updates.schoolName) { 
-            updateData.schoolId = updates.schoolId; 
-            updateData.schoolName = updates.schoolName; 
-        }
+        if (updates.schoolId && updates.schoolName) { updateData.schoolId = updates.schoolId; updateData.schoolName = updates.schoolName; }
+        
         studentIds.forEach(id => batch.update(getAdminDb().collection("users").doc(id), updateData));
         await batch.commit();
         return { success: true };
     } catch (e: any) { return { success: false, error: e.message }; }
 }
 
-// --- TEKİL KAYDETME (Dialog İçin) ---
 export async function saveUser(data: any): Promise<{ success: boolean; error?: string }> {
     const { uid, displayName, role, class: className, schoolName, password } = data;
     try {
@@ -268,7 +269,10 @@ export async function saveUser(data: any): Promise<{ success: boolean; error?: s
         if(uid) {
              if(password) await auth.updateUser(uid, { password });
              await auth.updateUser(uid, { displayName });
-             await db.collection('users').doc(uid).update({ displayName, role, class: className, schoolName });
+             
+             // Undefined temizliği
+             const updatePayload = cleanUndefined({ displayName, role, class: className, schoolName });
+             await db.collection('users').doc(uid).update(updatePayload);
         }
         return { success: true };
     } catch(e:any) { return { success: false, error: e.message }; }

@@ -3,9 +3,23 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, getDocs, query, where, orderBy, updateDoc, writeBatch, serverTimestamp, increment, getCountFromServer, setDoc } from "firebase/firestore";
-import type { Course, QuestionBankProgress, Question, UserProfile, TestResult, QuestionBankStats, Topic } from "@/lib/types";
-import { getQuestionsFromBank } from "@/lib/quiz-actions";
+import { 
+  doc, 
+  updateDoc, 
+  increment, 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  writeBatch, 
+  query, 
+  where, 
+  getDocs, 
+  getCountFromServer,
+  limit 
+} from 'firebase/firestore';
+import { unstable_noStore as noStore } from 'next/cache';
+import type { Course, Question, QuestionBankProgress, TestResult, QuestionBankStats, Topic } from '@/lib/types';
+import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import fs from 'fs/promises';
 import path from 'path';
 
