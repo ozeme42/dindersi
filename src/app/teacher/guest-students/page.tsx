@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -573,7 +574,7 @@ export default function GuestStudentManagementPage() {
                                       <TabsContent value="bulk" className="mt-0 space-y-4">
                                         <div className="space-y-2">
                                             <Label className="text-slate-300">Öğrenci Listesi (Her Satıra Bir İsim)</Label>
-                                            <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz&#10;Ayşe Kaya&#10;Mehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
+                                            <Textarea value={bulkStudentNames} onChange={e => setBulkStudentNames(e.target.value)} placeholder="Ahmet Yılmaz\nAyşe Kaya\nMehmet Doğan" className="min-h-[200px] bg-slate-900 border-white/10 text-white font-mono text-sm leading-relaxed focus:border-emerald-500/50" />
                                         </div>
                                         <div className="flex justify-end mt-6">
                                             <Button type="submit" size="lg" onClick={handleBulkAdd} className="h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20" disabled={isSaving || !selectedBulkClassData || !bulkBranch || bulkBranch === 'all' || !bulkStudentNames.trim()}>
@@ -597,10 +598,10 @@ export default function GuestStudentManagementPage() {
                      onSave={handleSaveUser as any}
                      isSaving={isSaving}
                      classes={classes}
-                     schools={[]}
+                     schools={schools}
                  />
               )}
         </div>
     );
+}
 
-    
