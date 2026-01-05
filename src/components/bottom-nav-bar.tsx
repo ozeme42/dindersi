@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { 
   Home, Trophy, User, PenSquare, Users, MonitorPlay, 
-  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, LogOut, Swords, Library, FileText, ChevronRight, ArrowRight
+  ClipboardList, ShoppingCart, DollarSign, LayoutGrid, Gamepad2, Star, Sparkles, ChevronDown, PlayCircle, Menu, X, LogOut, Swords, Library, FileText, ChevronRight, ArrowRight, Scale
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
@@ -92,10 +92,10 @@ export function BottomNavBar() {
 
     const teacherLinks = [
         { href: '/', icon: Home, label: 'Panel' },
-        { href: '/teacher/content-creation', icon: PenSquare, label: 'İçerik' },
-        { href: '/teacher/score-events', icon: DollarSign, label: 'Puanlar' },
+        { href: '/teacher/students', icon: Users, label: 'Öğrenciler' },
+        { href: '/leaderboard', icon: Trophy, label: 'Liderlik' },
+        { href: '/teacher/scales', icon: Scale, label: 'Ölçekler' },
         { href: '/teacher/smartboard', icon: MonitorPlay, label: 'Tahta' },
-        { href: '/teacher/stats', icon: Trophy, label: 'Analiz' },
     ];
     
     const links = user.role === 'teacher' || user.role === 'superadmin' ? teacherLinks : studentLinks;
