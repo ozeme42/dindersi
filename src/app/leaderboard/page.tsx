@@ -682,7 +682,7 @@ export default function LeaderboardPage() {
                 </div>
             </header>
 
-            <main className="flex-1 container mx-auto px-4 py-8 relative z-10">
+            <main className="flex-1 container mx-auto px-4 py-8 relative z-10 pb-24 md:pb-8">
                 {/* HERO BÖLÜMÜ */}
                 <div className="text-center mb-10 space-y-4">
                     <div className="inline-flex items-center justify-center p-2 bg-gradient-to-r from-amber-500/10 to-purple-500/10 rounded-full border border-white/5 mb-2">
