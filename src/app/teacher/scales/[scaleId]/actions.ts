@@ -25,11 +25,10 @@ export async function getUnitScaleDetails(
     courseId: string, 
     unitId: string, 
     branchName: string | null,
-    teacherId: string | null // teacherSchoolName ve teacherRole yerine doğrudan teacherId alıyoruz.
+    teacherSchoolName: string | null // teacherId yerine okul adı alıyoruz.
 ): Promise<{ success: boolean; data?: UnitScaleDetails; error?: string }> {
     noStore();
     if (!courseId || !unitId) return { success: false, error: 'Ders veya Ünite ID\'si bulunamadı.' };
-    if (!teacherId) return { success: false, error: 'Öğretmen bilgisi eksik.'};
     if (!branchName) return { success: false, error: 'Şube bilgisi eksik.' };
 
     try {
@@ -51,12 +50,17 @@ export async function getUnitScaleDetails(
             a.title.localeCompare(b.title, 'tr', { numeric: true, sensitivity: 'base' })
         );
         
-        // --- DEĞİŞİKLİK: Sorgu artık sadece öğretmenin sanal öğrencilerini (guest) getiriyor. ---
-        let studentsQuery = query(
-            collection(db, 'users'), 
-            where('role', '==', 'guest'),
-            where('teacherId', '==', teacherId)
-        );
+        // --- YENİ MANTIK: Tüm sanal öğrencileri çekip okul adına göre filtrele ---
+        const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
+        const allGuestsSnapshot = await getDocs(allGuestsQuery);
+        let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        
+        // Eğer öğretmen bir okula atanmışsa, sadece o okulun sanal öğrencilerini al.
+        if (teacherSchoolName) {
+            allGuests = allGuests.filter(s => s.schoolName === teacherSchoolName);
+        }
+
+        let students = allGuests;
         
         // Şube filtresini uygula
         if (branchName !== 'all') {
@@ -67,13 +71,10 @@ export async function getUnitScaleDetails(
                     const className = classSnap.data().name;
                     const fullClassName = `${className} - ${branchName}`;
                     const poolClassName = `${fullClassName} (Havuz)`;
-                    studentsQuery = query(studentsQuery, where('class', 'in', [fullClassName, poolClassName]));
+                    students = students.filter(s => s.class === fullClassName || s.class === poolClassName);
                  }
             }
         }
-        
-        const studentsSnapshot = await getDocs(studentsQuery);
-        let students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
         
         const entriesRef = collection(db, `evaluationScales/${unitId}/entries`);
         const entriesSnapshot = await getDocs(entriesRef);
@@ -121,15 +122,18 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
 
         const course = { id: courseSnap.id, ...courseSnap.data() } as Course;
         
-        // --- DEĞİŞİKLİK: Sorgu sadece öğretmenin sanal öğrencilerini getirecek ---
-        let studentsQuery = query(
-            collection(db, 'users'), 
-            where('role', '==', 'guest'),
-            where('teacherId', '==', scale.teacherId)
-        );
-        
-        const studentsSnapshot = await getDocs(studentsQuery);
-        const students = studentsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+        // --- YENİ MANTIK: Tüm sanal öğrencileri çekip öğretmenin okuluna göre filtrele ---
+        const allGuestsQuery = query(collection(db, 'users'), where('role', '==', 'guest'));
+        const allGuestsSnapshot = await getDocs(allGuestsQuery);
+        let allGuests = allGuestsSnapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile));
+
+        const teacherSnap = await getDoc(doc(db, 'users', scale.teacherId));
+        if (teacherSnap.exists()) {
+            const teacherData = teacherSnap.data() as UserProfile;
+            if (teacherData.schoolName) {
+                allGuests = allGuests.filter(s => s.schoolName === teacherData.schoolName);
+            }
+        }
         
         const entriesQuery = query(collection(db, `evaluationScales/${scaleId}/entries`));
         const entriesSnapshot = await getDocs(entriesQuery);
@@ -140,7 +144,7 @@ export async function getScaleDetails(scaleId: string): Promise<{ success: boole
 
         return { success: true, data: JSON.parse(JSON.stringify({ 
             scale: scale, 
-            students: students,
+            students: allGuests,
             entries: entries,
             course: course,
         })) };
