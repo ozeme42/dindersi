@@ -7,7 +7,7 @@ import {
     ImageIcon, Settings, Trophy, DollarSign,  
     Gamepad2, StickyNote, LayoutGrid, Library, ArrowRight, LogOut, MonitorPlay,
     Feather, CheckCircle2, Layers, Sparkles,
-    LogIn, UserPlus, Download
+    LogIn, UserPlus, Download, TabletSmartphone
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
@@ -38,43 +38,11 @@ type PublicUnit = { id: string; title: string; topics: PublicTopic[]; hasUnitOze
 type PublicCourse = { id: string; title: string; units: PublicUnit[] };
 export type PublicClass = { name: string; courses: PublicCourse[] };
 
-// --- YARDIMCI BİLEŞENLER ---
-
-const MobileAppBanner = () => (
-    <div className="container mx-auto px-4 mb-12 relative z-20">
-        <div className="group relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 p-8 shadow-2xl shadow-indigo-200">
-            {/* Dekoratif Arka Plan Parıltıları */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl transition-transform duration-700 group-hover:scale-150" />
-            <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl" />
-            
-            <div className="relative z-10 flex flex-col items-center justify-between gap-8 md:flex-row">
-                <div className="flex items-center gap-6 text-center md:text-left">
-                    <div className="hidden rounded-3xl bg-white/10 p-5 backdrop-blur-xl border border-white/20 sm:block">
-                        <MonitorPlay className="h-10 w-10 text-white" />
-                    </div>
-                    <div>
-                        <h3 className="text-2xl font-black text-white md:text-3xl">Atölye Cebinizde!</h3>
-                        <p className="mt-2 font-medium text-indigo-100 opacity-90">
-                            Din Dersi Atölyesi Android uygulamasını indirerek içeriklere çok daha hızlı erişin.
-                        </p>
-                    </div>
-                </div>
-
-                <Link 
-                    href="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/DinDersi%20At%C3%B6lyesi.apk?alt=media&token=0421a76b-8ca8-404b-9b05-d5f88afb343f"
-                    className="flex items-center gap-3 rounded-2xl bg-white px-8 py-4 text-sm font-black text-indigo-700 shadow-xl transition-all hover:scale-105 hover:bg-indigo-50 active:scale-95 shrink-0"
-                >
-                    <Download className="h-5 w-5" />
-                    MOBİL UYGULAMAYI İNDİR (APK)
-                </Link>
-            </div>
-        </div>
-    </div>
-);
-
+// --- YARDIMCI FONKSİYONLAR ---
 const getCourseDisplayInfo = (name: string) => {
     if (!name) return { full: "", short: "" };
     const lowerName = name.toLocaleLowerCase('tr');
+    
     if (lowerName.includes('dkab') || lowerName === 'din' || lowerName.includes('din kültürü')) {
         return { full: "Din Kültürü ve Ahlak Bilgisi", short: "DKAB" };
     }
@@ -109,28 +77,55 @@ const MagnificentLightBackground = () => (
     </div>
 );
 
+// --- YENİLENMİŞ FOOTER (MOBİL UYGULAMA DAHİL) ---
 const SiteFooter = () => {
   return (
     <footer className="w-full border-t border-slate-200 bg-white/90 backdrop-blur-md py-3 mt-auto relative z-20">
-      <div className="container mx-auto px-4 flex flex-row items-center justify-between">
+      <div className="container mx-auto px-4 flex flex-row items-center justify-between gap-4">
+        
+        {/* Sol Taraf: Marka */}
         <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 text-left">
-          <span className="text-xs font-black text-slate-700 tracking-tight">Din Dersi Atölyesi</span>
+          <span className="text-xs font-black text-slate-700 tracking-tight whitespace-nowrap">
+            Din Dersi Atölyesi
+          </span>
           <span className="hidden md:inline text-slate-300">|</span>
-          <span className="text-[10px] text-slate-500 font-medium">© {new Date().getFullYear()} Tüm hakları saklıdır.</span>
+          <span className="hidden sm:inline text-[10px] text-slate-500 font-medium whitespace-nowrap">
+            © {new Date().getFullYear()} Tüm hakları saklıdır.
+          </span>
         </div>
-        <Link 
-          href="https://t.me/dindersiatolyesi" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 shadow-sm"
-        >
-          <div className="relative flex items-center justify-center w-5 h-5 rounded-full bg-[#24A1DE] text-white group-hover:scale-110 transition-transform">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 ml-[-1px] mt-[0.5px]">
-              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-            </svg>
-          </div>
-          <span className="text-[11px] font-bold text-slate-600 group-hover:text-[#24A1DE] transition-colors">DinDersiAtölyesi</span>
-        </Link>
+
+        {/* Sağ Taraf: Butonlar Grubu */}
+        <div className="flex items-center gap-2">
+            {/* Mobil Uygulama İndir Butonu */}
+            <Link 
+                href="https://firebasestorage.googleapis.com/v0/b/tamuyum.firebasestorage.app/o/DinDersi%20At%C3%B6lyesi.apk?alt=media&token=0421a76b-8ca8-404b-9b05-d5f88afb343f"
+                className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-100 transition-all duration-300 shadow-sm"
+            >
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-600 text-white group-hover:scale-110 transition-transform">
+                    <Download className="w-2.5 h-2.5" />
+                </div>
+                <span className="text-[10px] md:text-[11px] font-bold text-indigo-700 whitespace-nowrap">
+                    Uygulamayı İndir
+                </span>
+            </Link>
+
+            {/* Telegram Butonu */}
+            <Link 
+                href="https://t.me/dindersiatolyesi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300 shadow-sm"
+            >
+                <div className="relative flex items-center justify-center w-5 h-5 rounded-full bg-[#24A1DE] text-white group-hover:scale-110 transition-transform">
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-2.5 h-2.5 ml-[-1px] mt-[0.5px]">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 11.944 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </div>
+                <span className="hidden md:inline text-[11px] font-bold text-slate-600 group-hover:text-[#24A1DE] transition-colors">
+                    Telegram
+                </span>
+            </Link>
+        </div>
       </div>
     </footer>
   );
@@ -255,7 +250,6 @@ const LoggedInDashboard = ({ user }: { user: any }) => {
         </div>
       </main>
       
-      <MobileAppBanner />
       <SiteFooter />
     </div>
   );
@@ -524,7 +518,6 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 )}
              </main>
 
-            <MobileAppBanner />
             <SiteFooter />
         </div>
     );
