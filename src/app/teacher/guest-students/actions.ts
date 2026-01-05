@@ -1,3 +1,4 @@
+
 'use server';
 
 import { getAdminDb } from "@/lib/firebase-admin";
@@ -25,7 +26,7 @@ export async function addGuestStudent(displayName: string, className: string, te
             role: 'guest',
             class: className,
             score: 0,
-            // Admin SDK timestamp syntax
+            // Admin SDK syntax: FieldValue
             createdAt: FieldValue.serverTimestamp() as any,
             teacherId: teacherId,
             ownedItems: [],
@@ -108,5 +109,25 @@ export async function updateStudentClass(studentId: string, newClassName: string
     } catch (error: any) {
         console.error("Error updating student class:", error);
         return { success: false, error: "Öğrenci sınıfı güncellenirken bir hata oluştu." };
+    }
+}
+
+export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ success: boolean; error?: string }> {
+    if (!userIds || userIds.length === 0) {
+        return { success: false, error: "Silinecek öğrenci seçilmedi." };
+    }
+
+    try {
+        const db = getAdminDb();
+        const batch = db.batch();
+        userIds.forEach(id => {
+            const docRef = db.collection("users").doc(id);
+            batch.delete(docRef);
+        });
+        await batch.commit();
+        return { success: true };
+    } catch (error: any) {
+        console.error("Error bulk deleting guest students:", error);
+        return { success: false, error: "Sanal öğrenciler silinirken bir hata oluştu." };
     }
 }

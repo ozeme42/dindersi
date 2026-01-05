@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from "react";
@@ -403,7 +402,7 @@ export default function SuperAdminPage() {
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                         <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                        <AlertDialogAction onClick={handleBulkDelete} disabled={isDeleting}>
+                                                        <AlertDialogAction onClick={handleBulkDelete} disabled={isDeleting} className="bg-red-600 hover:bg-red-500">
                                                             {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : null} Sil
                                                         </AlertDialogAction>
                                                     </AlertDialogFooter>
@@ -455,7 +454,8 @@ export default function SuperAdminPage() {
                                                                     <Button size="icon" variant="ghost" className="h-8 w-8 text-slate-400 hover:text-white"><MoreHorizontal className="h-4 w-4"/></Button>
                                                                 </DropdownMenuTrigger>
                                                                 <DropdownMenuContent align="end" className="bg-slate-900 border-white/10 text-white w-48">
-                                                                    <DropdownMenuItem onClick={() => handleOpenDialog(student, 'student')}><FilePenLine className="mr-2 h-4 w-4"/> Düzenle</DropdownMenuItem>
+                                                                    <DropdownMenuLabel className="text-slate-500 text-xs uppercase tracking-wider">Seçenekler</DropdownMenuLabel>
+                                                                    <DropdownMenuItem onClick={() => handleOpenDialog(student, 'student')}><FilePenLine className="mr-2 h-4 w-4 text-emerald-400"/> Düzenle</DropdownMenuItem>
                                                                     <DropdownMenuItem onClick={() => handleDeleteUser(student.uid)} className="text-red-400 focus:text-red-300"><Trash2 className="mr-2 h-4 w-4"/> Sil</DropdownMenuItem>
                                                                 </DropdownMenuContent>
                                                             </DropdownMenu>
