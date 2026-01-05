@@ -1,14 +1,13 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getQuestionsFromBank } from '@/lib/quiz-actions';
 import { submitSoruBankasiScore } from '@/app/student/soru-bankasi/actions';
-import type { Question, GetQuizInput, GetQuizOutput } from '@/lib/types';
+import type { Question, GetQuizInput } from '@/lib/types'; // GetQuizOutput gerekmiyorsa sildim
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, CheckCircle2, Home } from 'lucide-react';
+import { Loader2, ArrowRight, ArrowLeft, BrainCircuit, PartyPopper, Repeat, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -22,10 +21,16 @@ function QuizGame() {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { toast } = useToast();
+
+    // Parametreleri al
+    const courseId = searchParams.get('courseId');
+    const topicId = searchParams.get('topicId');
+    const difficulty = searchParams.get('difficulty')?.split(',');
+
     const [isLoading, setIsLoading] = useState(true);
     const [questions, setQuestions] = useState<Question[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const { toast } = useToast();
     
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<(string | boolean | null)[]>([]);
@@ -35,9 +40,6 @@ function QuizGame() {
     const [score, setScore] = useState(0);
     const [correctCount, setCorrectCount] = useState(0);
 
-    const topicId = searchParams.get('topicId');
-    const difficulty = searchParams.get('difficulty')?.split(',');
-    
     const fetchQuestions = useCallback(async () => {
         if (!topicId || !difficulty) {
             setError("Geçersiz test parametreleri.");
@@ -48,11 +50,11 @@ function QuizGame() {
         setError(null);
         setQuestions([]);
         const params: GetQuizInput = {
-            courseId: searchParams.get('courseId') || undefined,
+            courseId: courseId || undefined,
             unitId: searchParams.get('unitId') || undefined,
-            topicId: searchParams.get('topicId') || undefined,
+            topicId: topicId || undefined,
             questionCount: parseInt(searchParams.get('questionCount') || '10'),
-            difficulty: searchParams.get('difficulty')?.split(','),
+            difficulty: difficulty,
             questionTypes: searchParams.get('questionTypes')?.split(','),
         };
         const result = await getQuestionsFromBank(params as any);
@@ -62,7 +64,7 @@ function QuizGame() {
             setQuestions(result.questions as Question[]);
         }
         setIsLoading(false);
-    }, [searchParams, difficulty, topicId]);
+    }, [searchParams, difficulty, topicId, courseId]);
 
     useEffect(() => {
         fetchQuestions();
@@ -77,7 +79,6 @@ function QuizGame() {
 
         const question = questions[currentQuestionIndex];
         const isCorrect = answer === question.correctAnswer || (question.type === 'Doğru/Yanlış' && (answer ? "Doğru" : "Yanlış") === question.correctAnswer);
-
 
         if(isCorrect) {
             playSound('correct');
@@ -99,9 +100,15 @@ function QuizGame() {
         }
     }
     
+    // Geri Dönüş Linki Oluşturma (Topic filtresinden kurtulmak için)
+    const getBackLink = () => {
+        return courseId ? `/student/soru-bankasi/${courseId}` : '/student/soru-bankasi';
+    };
+
     const handleSaveAndExit = async () => {
+        // Eğer kullanıcı öğrenci değilse veya puanı yoksa direkt çık
         if (!user || user.role !== 'student' || score <= 0 || isSubmitting) {
-            router.push('/student/soru-bankasi');
+            router.push(getBackLink());
             return;
         }
 
@@ -115,7 +122,9 @@ function QuizGame() {
             toast({ title: "Hata", description: result.error, variant: "destructive" });
         }
         setIsSubmitting(false);
-        router.push(`/student/soru-bankasi/${searchParams.get('courseId')}`);
+        
+        // Buradaki yönlendirme artık temiz bir URL'e gidiyor (query params olmadan)
+        router.push(getBackLink());
     };
 
     const handleRestart = () => {
@@ -137,7 +146,11 @@ function QuizGame() {
                 <Alert variant="destructive" className="max-w-lg">
                     <AlertTitle>Hata!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
-                     <div className="mt-4"><Button asChild variant="outline"><Link href="/student/soru-bankasi"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
+                     <div className="mt-4">
+                        <Button asChild variant="outline">
+                            <Link href={getBackLink()}><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link>
+                        </Button>
+                    </div>
                 </Alert>
             </div>
         );
@@ -149,7 +162,11 @@ function QuizGame() {
                 <Alert className="max-w-lg">
                     <AlertTitle>Soru Bulunamadı</AlertTitle>
                     <AlertDescription>Bu kriterlere uygun soru bulunamadı. Lütfen filtrelerinizi değiştirerek tekrar deneyin.</AlertDescription>
-                    <div className="mt-4"><Button asChild variant="outline"><Link href="/student/soru-bankasi"><ArrowLeft className="mr-2 h-4 w-4"/>Geri Dön</Link></Button></div>
+                    <div className="mt-4">
+                        <Button asChild variant="outline">
+                            <Link href={getBackLink()}><ArrowLeft className="mr-2 h-4 w-4"/>Listeye Dön</Link>
+                        </Button>
+                    </div>
                 </Alert>
             </div>
         )
@@ -174,7 +191,7 @@ function QuizGame() {
                         </Button>
                         <Button onClick={handleSaveAndExit} className="w-full" variant="outline" disabled={isSubmitting}>
                              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Home className="mr-2 h-4 w-4"/>}
-                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Konuya Dön"}
+                             {isSubmitting ? "Kaydediliyor..." : "Kaydet ve Listeye Dön"}
                         </Button>
                     </CardFooter>
                 </Card>
@@ -215,7 +232,8 @@ function QuizGame() {
                      {currentQuestion.type === 'Doğru/Yanlış' && ["Doğru", "Yanlış"].map(option => {
                         const answerValue = option === 'Doğru';
                         const isSelected = currentAnswer === answerValue;
-                        const isCorrect = (question.isTrue ?? (question.correctAnswer === 'Doğru')) === answerValue;
+                        // HATA DÜZELTİLDİ: 'question' yerine 'currentQuestion' kullanıldı
+                        const isCorrect = (currentQuestion.isTrue ?? (currentQuestion.correctAnswer === 'Doğru')) === answerValue;
                         
                         return (
                             <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
@@ -243,5 +261,3 @@ export default function SoruCozOyunPage() {
         </Suspense>
     )
 }
-
-    

@@ -516,7 +516,7 @@ function QuestionBankCoursePageComponent() {
                 <ScrollArea className="h-full bg-slate-950">
                     <div className="p-4 md:p-8 space-y-8 pb-24">
                         <div className="md:hidden mb-4">
-                             <Button variant="ghost" size="sm" onClick={() => setActiveTopic(null)} className="text-slate-400 hover:text-white">
+                             <Button variant="ghost" size="sm" onClick={() => { setActiveTopic(null); setCurrentStep(3); }} className="text-slate-400 hover:text-white">
                                 <ArrowLeft className="mr-2 h-4 w-4"/> Konulara Dön
                             </Button>
                         </div>
@@ -634,7 +634,7 @@ function QuestionBankCoursePageComponent() {
                                     <h1 className="text-lg font-bold text-white truncate max-w-[200px] md:max-w-md">
                                         {course.title}
                                     </h1>
-                                     <Badge variant="outline" className="border-green-500/20 text-green-400">Dosyadan</Badge>
+                                     <Badge variant="outline" className="border-green-500/20 text-green-400">Soru Bankası</Badge>
                                 </div>
                                 <div className="flex items-center gap-2">
                                      <AccordionTrigger className="py-0 hover:no-underline pr-2">
@@ -711,4 +711,5 @@ function Page() {
 }
 
 export default Page;
+
 
