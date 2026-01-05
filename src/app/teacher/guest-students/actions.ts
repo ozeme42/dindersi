@@ -405,3 +405,61 @@ function normalizeNameToEmailLocalPart(name: string): string {
     .replace(/ç/g, 'c')
     .replace(/[^a-z0-9.-]/g, '');
 }
+
+export async function addGuestStudent(displayName: string, className: string, teacherId: string | null, schoolId?: string, schoolName?: string): Promise<{ success: boolean; error?: string; newUser?: UserProfile }> {
+    const finalDisplayName = displayName.trim();
+    if (!finalDisplayName) {
+        return { success: false, error: "Öğrenci adı boş olamaz." };
+    }
+    
+    try {
+        const db = getAdminDb();
+        const docRef = db.collection("users").doc();
+        
+        const newUserProfile: Omit<UserProfile, 'uid'> = {
+            displayName: finalDisplayName,
+            email: `${docRef.id}@guest.degerleroyunu.app`,
+            role: 'guest',
+            class: className,
+            score: 0,
+            createdAt: FieldValue.serverTimestamp() as any,
+            teacherId: teacherId || undefined,
+            schoolId: schoolId || undefined,
+            schoolName: schoolName || undefined,
+            ownedItems: [],
+        };
+
+        await docRef.set(newUserProfile);
+        
+        const serializableNewUser: UserProfile = {
+            ...newUserProfile,
+            uid: docRef.id,
+            createdAt: new Date().toISOString(),
+        };
+        
+        return { success: true, newUser: serializableNewUser };
+
+    } catch (error: any) {
+        console.error("Error creating new guest student:", error);
+        return { success: false, error: `Sanal öğrenci oluşturulurken hata: ${error.message}` };
+    }
+}
+
+export async function deleteBulkGuestStudents(userIds: string[]): Promise<{ success: boolean, error?: string }> {
+    if (!userIds || userIds.length === 0) {
+        return { success: false, error: "Silinecek öğrenci seçilmedi." };
+    }
+    try {
+        const db = getAdminDb();
+        const batch = db.batch();
+        userIds.forEach(id => {
+            const docRef = db.collection("users").doc(id);
+            batch.delete(docRef);
+        });
+        await batch.commit();
+        return { success: true };
+    } catch(e) {
+        console.error("Error deleting bulk guest students", e);
+        return { success: false, error: "Öğrenciler silinirken bir hata oluştu." };
+    }
+}
