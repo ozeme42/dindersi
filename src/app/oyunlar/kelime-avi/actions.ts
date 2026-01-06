@@ -23,8 +23,13 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        // SADECE 'concept' türündeki verileri almak için dataType'ı 'activities' olarak belirleyip sonrasında filtreliyoruz.
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
+        // Sadece 'concept' türündeki verileri almak için dataType'ı 'activities' olarak belirleyip sonrasında filtreliyoruz.
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ 
+            courseId, 
+            unitId, 
+            topicId, 
+            dataType: 'activities' 
+        });
         
         // Sadece 'concept' tipindeki öğeleri filtrele
         const validItems = allItems.filter(item => item.type === 'concept');
@@ -36,17 +41,12 @@ export async function getKelimeAviAction(
         const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
         
         const allConcepts = validItems
-            .flatMap(item => {
-                const content = item.content || {};
-                if (item.type === 'concept' && content.text) {
-                    return content.text.split(/\s+/); // Boşluklara göre ayır
-                }
-                return [];
-            })
+            .map(item => item.content.text) // Sadece concept tipinden text'i al
             .filter((text): text is string => 
                 typeof text === 'string' && 
                 text.trim().length > 2 &&
                 text.trim().length <= 12 &&
+                !text.trim().includes(' ') && // Sadece tek kelime olanları al
                 turkishAlphabetRegex.test(text.trim())
             )
             .map(text => text.trim().toLocaleUpperCase('tr-TR'));
@@ -54,7 +54,7 @@ export async function getKelimeAviAction(
         const uniqueConcepts = [...new Set(allConcepts)];
 
         if (uniqueConcepts.length < 5) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime (3-12 harf arası, sadece harf içeren) bulunmalıdır.", concepts: null };
+            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime (3-12 harf arası, tek kelime, sadece harf içeren) bulunmalıdır.", concepts: null };
         }
         
         // Karıştır
