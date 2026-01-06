@@ -23,41 +23,41 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        // SADECE kavram ve tanım verilerini almak için dataType'ı 'activities' olarak değiştiriyoruz.
-        // getStaticQuestionsForGame içinde bu ayrım yapılacak.
+        // SADECE 'concept' türündeki verileri almak için dataType'ı 'activities' olarak belirleyip sonrasında filtreliyoruz.
         let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
-        if (allItems.length === 0) {
-            return { error: "Bu konu için oynanabilir veri bulunamadı.", concepts: null };
+        // Sadece 'concept' tipindeki öğeleri filtrele
+        const validItems = allItems.filter(item => item.type === 'concept');
+
+        if (validItems.length === 0) {
+            return { error: "Bu konu için oynanabilir 'kavram' verisi bulunamadı.", concepts: null };
         }
         
-        // Sadece 'concept' (text) ve 'definition' (term) türündeki kelimeleri al
-        const allConcepts = allItems
+        const turkishAlphabetRegex = /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/;
+        
+        const allConcepts = validItems
             .flatMap(item => {
                 const content = item.content || {};
                 if (item.type === 'concept' && content.text) {
-                    return [content.text];
-                }
-                if (item.type === 'definition' && content.term) {
-                    return [content.term];
+                    return content.text.split(/\s+/); // Boşluklara göre ayır
                 }
                 return [];
             })
-            .flatMap(text => text.split(/\s+/)) // Split by any whitespace
             .filter((text): text is string => 
                 typeof text === 'string' && 
                 text.trim().length > 2 &&
                 text.trim().length <= 12 &&
-                /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/.test(text.trim()) // Ensure it's only letters (Turkish included)
+                turkishAlphabetRegex.test(text.trim())
             )
             .map(text => text.trim().toLocaleUpperCase('tr-TR'));
 
         const uniqueConcepts = [...new Set(allConcepts)];
 
         if (uniqueConcepts.length < 5) {
-            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime bulunmalıdır.", concepts: null };
+            return { error: "Kelime Avı oynamak için bu konuda en az 5 adet uygun kelime (3-12 harf arası, sadece harf içeren) bulunmalıdır.", concepts: null };
         }
         
+        // Karıştır
         for (let i = uniqueConcepts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [uniqueConcepts[i], uniqueConcepts[j]] = [uniqueConcepts[j], uniqueConcepts[i]];
