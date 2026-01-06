@@ -23,21 +23,32 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId });
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
         
         if (allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", concepts: null };
         }
-
+        
         const allConcepts = allItems
-            .map(item => item.content.text || item.content.term)
+            .flatMap(item => {
+                const content = item.content || {};
+                // Handle different content structures
+                if (content.text) return [content.text];
+                if (content.term) return [content.term];
+                if (Array.isArray(content.items)) {
+                    // Handle both string arrays and object arrays with a 'text' property
+                    return content.items.flatMap((subItem: any) => typeof subItem === 'string' ? subItem.split(' ') : (subItem.text ? subItem.text.split(' ') : []) );
+                }
+                return [];
+            })
+            .flatMap(text => text.split(/\s+/)) // Split by any whitespace
             .filter((text): text is string => 
                 typeof text === 'string' && 
                 text.trim().length > 2 &&
                 text.trim().length <= 12 &&
-                !text.includes(' ')
+                /^[a-zA-ZçÇğĞıİöÖşŞüÜ]+$/.test(text.trim()) // Ensure it's only letters (Turkish included)
             )
-            .map(text => text.toLocaleUpperCase('tr-TR'));
+            .map(text => text.trim().toLocaleUpperCase('tr-TR'));
 
         const uniqueConcepts = [...new Set(allConcepts)];
 
