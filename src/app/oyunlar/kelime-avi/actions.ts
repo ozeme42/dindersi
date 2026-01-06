@@ -23,21 +23,23 @@ export async function getKelimeAviAction(
 ): Promise<{ concepts: string[] | null; error?: string }> {
     noStore();
     try {
-        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'all' });
+        // SADECE kavram ve tanım verilerini almak için dataType'ı 'activities' olarak değiştiriyoruz.
+        // getStaticQuestionsForGame içinde bu ayrım yapılacak.
+        let allItems: ActivityItem[] = await getStaticQuestionsForGame({ courseId, unitId, topicId, dataType: 'activities' });
         
         if (allItems.length === 0) {
             return { error: "Bu konu için oynanabilir veri bulunamadı.", concepts: null };
         }
         
+        // Sadece 'concept' (text) ve 'definition' (term) türündeki kelimeleri al
         const allConcepts = allItems
             .flatMap(item => {
                 const content = item.content || {};
-                // Handle different content structures
-                if (content.text) return [content.text];
-                if (content.term) return [content.term];
-                if (Array.isArray(content.items)) {
-                    // Handle both string arrays and object arrays with a 'text' property
-                    return content.items.flatMap((subItem: any) => typeof subItem === 'string' ? subItem.split(' ') : (subItem.text ? subItem.text.split(' ') : []) );
+                if (item.type === 'concept' && content.text) {
+                    return [content.text];
+                }
+                if (item.type === 'definition' && content.term) {
+                    return [content.term];
                 }
                 return [];
             })
