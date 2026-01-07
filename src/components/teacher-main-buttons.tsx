@@ -51,7 +51,7 @@ export function TeacherMainButtons() {
     {
       key: 'dersAkisi',
       href: '/teacher/ders-akisi',
-      title: 'Ders Akışı Yönetimi',
+      title: 'Ders Akışı',
       description: 'Derslerin ve konuların akışını görselleştirin ve yönetin.',
       icon: <Workflow />,
       colorClass: 'bg-teal-600 border-teal-800 hover:bg-teal-500',
