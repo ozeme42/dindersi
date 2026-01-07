@@ -6,7 +6,7 @@ import { Suspense, useState, useEffect, useCallback, useRef, useMemo, type React
 import { useSearchParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import type { LessonStep, Topic } from '@/lib/types';
+import type { LessonStep, Topic, Question, ActivityItem, ImageAsset, AnagramGameStep, AnagramStep, AnagramFlashcardStep, SentenceScrambleStep, AccordionStep, FlashcardStep } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { 
@@ -296,7 +296,7 @@ export function TopicEditor({
         setIsLibraryPanelOpen(true);
     };
 
-    const handleItemsImportedFromLibrary = (importedItems: any[], stepType: any) => {
+    const handleItemsImportedFromLibrary = (importedItems: (ActivityItem | Question | ImageAsset)[], stepType: any) => {
         if (importedItems.length === 0) return;
         
         let newSteps: LessonStep[] = [];
@@ -602,7 +602,7 @@ export function TopicEditor({
                 <LibraryImportDialog 
                     isOpen={isLibraryPanelOpen}
                     onOpenChange={setIsLibraryPanelOpen}
-                    onItemsSelected={handleItemsImportedFromLibrary as any}
+                    onItemsSelected={handleItemsImportedFromLibrary}
                     context={context}
                     config={libraryConfig!}
                 />
