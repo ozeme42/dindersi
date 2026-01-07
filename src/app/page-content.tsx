@@ -296,12 +296,42 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
         return activeClassData.courses.find(c => c.id === activeCourseId);
     }, [activeClassData, activeCourseId]);
 
+    // --- GÜNCELLENMİŞ VE ORTALANMIŞ GRID YAPILANDIRMASI ---
     const getResponsiveGridConfig = (unitCount: number) => {
-        if (unitCount === 1) return { wrapper: "max-w-md", grid: "grid-cols-1" };
-        if (unitCount === 2) return { wrapper: "max-w-4xl", grid: "grid-cols-1 md:grid-cols-2" };
-        if (unitCount === 3) return { wrapper: "max-w-6xl", grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" };
-        if (unitCount === 4) return { wrapper: "max-w-[96rem]", grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4" };
-        return { wrapper: "max-w-[100rem]", grid: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5" };
+        // Base wrapper: mx-auto ile her zaman ortala ve flex justify-center kullan
+        const baseWrapper = "w-full px-4 md:px-6 mx-auto flex justify-center";
+        
+        // Grid ayarları:
+        // justify-center: Grid içindeki elemanları ortalar (eğer tam dolmazsa)
+        // grid-cols: İçerik sayısına tam uyan kolon sayısı vererek boşlukları optimize ediyoruz.
+        
+        if (unitCount === 1) return { 
+            wrapper: `${baseWrapper} max-w-2xl`, 
+            grid: "grid-cols-1 w-full max-w-md" 
+        };
+        
+        if (unitCount === 2) return { 
+            wrapper: `${baseWrapper} max-w-5xl`, 
+            grid: "grid-cols-1 md:grid-cols-2 w-full" 
+        };
+        
+        if (unitCount === 3) return { 
+            wrapper: `${baseWrapper} max-w-7xl`, 
+            grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full" 
+        };
+        
+        if (unitCount === 4) return { 
+            wrapper: `${baseWrapper} max-w-[90rem]`, 
+            // lg ekranlarda 2x2, xl ve üstü için 4 yan yana
+            grid: "grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 w-full" 
+        };
+        
+        // 5 ve üzeri (Akıllı Tahta / Geniş Ekran Modu)
+        // xl:grid-cols-5 diyerek 5. ünitenin aşağı düşmesini engelliyoruz.
+        return { 
+            wrapper: `${baseWrapper} max-w-[110rem]`, 
+            grid: "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full justify-center" 
+        };
     };
 
     const gridConfig = useMemo(() => {
@@ -316,6 +346,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
 
              <main className="flex-1 container mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10 pb-16">
                 
+                {/* Header Kısmı */}
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200/60 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <div className="flex items-center gap-4">
                          <div className="relative p-3 bg-white rounded-2xl shadow-xl shadow-indigo-100 border border-indigo-50">
@@ -368,6 +399,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                 ) : (
                     <>
                         <div className="sticky top-6 z-50 flex justify-center animate-in fade-in slide-in-from-top-8 duration-700 px-4 sm:px-0">
+                            {/* Mobil Seçim Menüsü */}
                             <div className="md:hidden w-full flex flex-col gap-3 p-3 bg-white/90 backdrop-blur-2xl border border-white/80 rounded-[2.5rem] shadow-2xl shadow-indigo-100/30">
                                 <div className="flex items-center gap-3 px-2">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -404,6 +436,7 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                 </div>
                             </div>
 
+                            {/* Masaüstü Seçim Menüsü */}
                             <div className="hidden md:flex flex-row items-center gap-6 animate-in fade-in duration-1000">
                                 <div className="flex items-center gap-4 p-2 pl-4 bg-white/80 backdrop-blur-2xl border border-white rounded-[2rem] shadow-xl shadow-slate-200/50">
                                     <div className="flex flex-col items-center justify-center pr-3 border-r border-slate-100">
@@ -443,35 +476,36 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                             </div>
                         </div>
 
-                        <div className={cn("w-full mx-auto mt-16 px-4 sm:px-6 transition-all duration-700", gridConfig.wrapper)}>
+                        {/* İÇERİK GRID ALANI - GÜNCELLENMİŞ VE ORTALANMIŞ */}
+                        <div className={cn("mt-16 transition-all duration-700", gridConfig.wrapper)}>
                             {activeCourseData && (
-                                <div className={cn("grid gap-10 gap-y-20 animate-in zoom-in-95 duration-1000", gridConfig.grid)}>
+                                <div className={cn("grid gap-5 xl:gap-6 gap-y-12 animate-in zoom-in-95 duration-1000 place-content-center", gridConfig.grid)}>
                                     {activeCourseData.units.sort((a: PublicUnit, b: PublicUnit) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((unit, index) => {
                                         const theme = getUnitTheme(index);
                                         const { full: courseFullName } = getCourseDisplayInfo(activeCourseData.title);
                                         return (
-                                            <div key={unit.id} className="flex flex-col gap-10 group/unit">
+                                            <div key={unit.id} className="flex flex-col gap-6 group/unit w-full">
                                                 <div className="relative">
-                                                    <div className={cn("absolute -top-12 -left-4 text-[8rem] font-black opacity-[0.03] select-none pointer-events-none transition-all duration-1000 group-hover/unit:opacity-[0.07] group-hover/unit:-translate-y-4", theme.text)}>
+                                                    <div className={cn("absolute -top-8 -left-2 text-[6rem] font-black opacity-[0.03] select-none pointer-events-none transition-all duration-1000 group-hover/unit:opacity-[0.07] group-hover/unit:-translate-y-4", theme.text)}>
                                                         {index + 1}
                                                     </div>
-                                                    <div className={cn("relative flex flex-col p-8 bg-white rounded-[2.5rem] border-b-4 shadow-2xl shadow-slate-200/50 overflow-hidden", theme.border)}>
-                                                        <div className="flex items-center justify-between mb-6">
-                                                            <div className={cn("px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] bg-white border shadow-sm", theme.text)}>
+                                                    <div className={cn("relative flex flex-col p-6 bg-white rounded-[2rem] border-b-4 shadow-2xl shadow-slate-200/50 overflow-hidden", theme.border)}>
+                                                        <div className="flex items-center justify-between mb-4">
+                                                            <div className={cn("px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] bg-white border shadow-sm", theme.text)}>
                                                                 Ünite Rehberi
                                                             </div>
                                                             {unit.hasUnitOzet && (
-                                                                <Link href={`/ozetler/${activeCourseData.id}/${unit.id}`} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-600 hover:text-white hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 font-bold text-xs">
-                                                                        <BookOpen className="h-4 w-4" />
-                                                                        <span>Ünite Özeti</span>
+                                                                <Link href={`/ozetler/${activeCourseData.id}/${unit.id}`} className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-600 hover:text-white hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300 font-bold text-[10px]">
+                                                                        <BookOpen className="h-3.5 w-3.5" />
+                                                                        <span>Özet</span>
                                                                 </Link>
                                                             )}
                                                         </div>
-                                                        <h3 className="text-2xl font-black text-slate-800 leading-tight tracking-tight">{unit.title}</h3>
+                                                        <h3 className="text-xl font-black text-slate-800 leading-tight tracking-tight min-h-[3.5rem] flex items-center">{unit.title}</h3>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-col space-y-5">
+                                                <div className="flex flex-col space-y-4">
                                                     {unit.topics.length > 0 ? (
                                                         unit.topics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })).map((topic) => (
                                                             <Link 
@@ -480,32 +514,28 @@ const LoggedOutPage = ({ classGroups }: { classGroups: PublicClass[] }) => {
                                                                 className="group/card block relative"
                                                             >
                                                                 <div className={cn(
-                                                                    "relative flex items-center justify-between min-h-[95px] p-6 pl-10 rounded-[2rem] bg-white/70 backdrop-blur-md border border-white shadow-md transition-all duration-500 overflow-hidden",
-                                                                    "hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 hover:border-indigo-100"
+                                                                    "relative flex items-center justify-between min-h-[80px] p-4 pl-8 rounded-[1.5rem] bg-white/70 backdrop-blur-md border border-white shadow-md transition-all duration-500 overflow-hidden",
+                                                                    "hover:bg-white hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1 hover:border-indigo-100"
                                                                 )}>
-                                                                    <div className={cn("absolute left-0 top-0 bottom-0 w-2.5 transition-all duration-500 group-hover/card:w-4 opacity-80", theme.accent)} />
-                                                                    <div className={cn("absolute -bottom-8 -right-8 w-24 h-24 rounded-full blur-3xl opacity-0 group-hover/card:opacity-20 transition-all duration-700", theme.accent)} />
+                                                                    <div className={cn("absolute left-0 top-0 bottom-0 w-2 transition-all duration-500 group-hover/card:w-3 opacity-80", theme.accent)} />
+                                                                    <div className={cn("absolute -bottom-8 -right-8 w-20 h-20 rounded-full blur-3xl opacity-0 group-hover/card:opacity-20 transition-all duration-700", theme.accent)} />
 
-                                                                    <div className="flex flex-col justify-center flex-1 pr-8 relative z-10 transition-transform duration-500 group-hover/card:translate-x-2">
-                                                                        <h4 className="text-[18px] font-black text-slate-700 leading-snug tracking-tight group-hover/card:text-indigo-900 transition-colors">
+                                                                    <div className="flex flex-col justify-center flex-1 pr-4 relative z-10 transition-transform duration-500 group-hover/card:translate-x-1">
+                                                                        <h4 className="text-[15px] font-black text-slate-700 leading-snug tracking-tight group-hover/card:text-indigo-900 transition-colors line-clamp-2">
                                                                                 {topic.title}
                                                                         </h4>
-                                                                        <div className="flex items-center gap-2 mt-2 opacity-0 -translate-x-4 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-500">
-                                                                                <span className="w-6 h-[2px] bg-indigo-500 rounded-full" />
-                                                                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Konu İçeriği</span>
-                                                                        </div>
                                                                     </div>
                                                                     
                                                                     <div className="flex-shrink-0 relative z-10">
-                                                                        <div className="p-3.5 rounded-[1.2rem] bg-slate-50 text-slate-400 border border-slate-100 transition-all duration-500 group-hover/card:bg-indigo-600 group-hover/card:text-white group-hover/card:border-indigo-600 group-hover/card:shadow-xl group-hover/card:scale-110 group-hover/card:rotate-[-8deg]">
-                                                                                <ArrowRight className="h-6 w-6" />
+                                                                        <div className="p-2 rounded-xl bg-slate-50 text-slate-400 border border-slate-100 transition-all duration-500 group-hover/card:bg-indigo-600 group-hover/card:text-white group-hover/card:border-indigo-600 group-hover/card:shadow-lg group-hover/card:scale-110">
+                                                                                <ArrowRight className="h-4 w-4" />
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </Link>
                                                         ))
                                                     ) : (
-                                                        <div className="p-10 rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-white/30 text-slate-400 text-sm font-bold italic text-center">Henüz içerik eklenmemiş.</div>
+                                                        <div className="p-6 rounded-[2rem] border-2 border-dashed border-slate-200 bg-white/30 text-slate-400 text-xs font-bold italic text-center">İçerik yok.</div>
                                                     )}
                                                 </div>
                                             </div>

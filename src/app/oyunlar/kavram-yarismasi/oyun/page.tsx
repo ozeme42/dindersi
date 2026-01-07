@@ -47,12 +47,61 @@ function KavramYarismaGame() {
 
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const [questions, setQuestions] = useState<ConceptQuizQuestion[]>([]);
+    const baseQuestionsRef = useRef<ConceptQuizQuestion[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const gameContext = `Kavram Yarışması (${gameMode === 'team' ? 'VS' : 'Tekli'}) - ${searchParams.get('topicName') || 'Genel'}`;
 
-    // O anki potansiyel puan (Saniye x 5, minimum 5 puan)
+    // --- PUANLAMA MANTIĞI ---
+    // Single Mod: Süre ile çarpılır (Max 75, Min 5)
+    // Team Mod: handleAnswer içinde sabit 1 atanır, buradaki değer kullanılmaz.
     const currentPotentialScore = Math.max(5, timeLeft * 5);
+
+    // --- ALGORİTMA: SORU VE ŞIK DÜZENLEME ---
+    const prepareQuestions = (baseQs: ConceptQuizQuestion[]): ConceptQuizQuestion[] => {
+        // 1. Her soruyu 3 kez çoğalt
+        const tripledQuestions = baseQs.flatMap(q => [q, q, q]);
+
+        // 2. Rastgele Karıştır
+        let shuffled = [...tripledQuestions].sort(() => Math.random() - 0.5);
+
+        // 3. ARDIŞIK AYNI SORUYU ENGELLEME
+        for (let i = 1; i < shuffled.length; i++) {
+            if (shuffled[i].correctAnswer === shuffled[i-1].correctAnswer) {
+                for (let j = i + 1; j < shuffled.length; j++) {
+                    if (shuffled[j].correctAnswer !== shuffled[i-1].correctAnswer) {
+                        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 4. ARDIŞIK AYNI ŞIK POZİSYONUNU ENGELLEME
+        let lastCorrectIndex = -1;
+
+        const finalQuestions = shuffled.map((q) => {
+            let newOptions = [...q.options];
+            newOptions.sort(() => Math.random() - 0.5);
+
+            let currentCorrectIndex = newOptions.indexOf(q.correctAnswer);
+
+            if (currentCorrectIndex === lastCorrectIndex && newOptions.length > 1) {
+                const swapTarget = (currentCorrectIndex + 1) % newOptions.length;
+                [newOptions[currentCorrectIndex], newOptions[swapTarget]] = [newOptions[swapTarget], newOptions[currentCorrectIndex]];
+                currentCorrectIndex = swapTarget;
+            }
+
+            lastCorrectIndex = currentCorrectIndex;
+
+            return {
+                ...q,
+                options: newOptions
+            };
+        });
+
+        return finalQuestions;
+    };
 
     // --- VERİ ÇEKME ---
     const fetchGameData = useCallback(async () => {
@@ -75,8 +124,9 @@ function KavramYarismaGame() {
             setError(fetchError || "Sorular yüklenemedi.");
             setGameState('error');
         } else {
-            const shuffled = [...fetchedQuestions].sort(() => Math.random() - 0.5);
-            setQuestions(shuffled);
+            baseQuestionsRef.current = fetchedQuestions;
+            const processedQuestions = prepareQuestions(fetchedQuestions);
+            setQuestions(processedQuestions);
             setGameState('mode-select');
         }
     }, [searchParams]);
@@ -152,8 +202,10 @@ function KavramYarismaGame() {
             stopSound('timer');
             playSound('correct');
             
-            // Puanlama (x5)
-            const points = currentPotentialScore;
+            // --- PUANLAMA DEĞİŞİKLİĞİ ---
+            // Takım Modu: Sabit 1 Puan (Süre etkisiz)
+            // Tekli Mod: Süreye bağlı (currentPotentialScore)
+            const points = gameMode === 'team' ? 1 : currentPotentialScore;
             
             if (side === 'left' || side === 'single') {
                 setScoreLeft(prev => prev + points);
@@ -218,7 +270,10 @@ function KavramYarismaGame() {
     };
 
     const resetGame = () => {
-        setQuestions(prev => [...prev].sort(() => Math.random() - 0.5));
+        if (baseQuestionsRef.current.length > 0) {
+            const newProcessed = prepareQuestions(baseQuestionsRef.current);
+            setQuestions(newProcessed);
+        }
         setGameState('mode-select');
     };
 
@@ -254,7 +309,6 @@ function KavramYarismaGame() {
         
         let baseClass = "";
         if (isSingle) {
-             // Tekli mod için font boyutunu küçülttüm (text-lg -> text-base md:text-xl)
              baseClass = 'bg-indigo-100 text-indigo-900 hover:bg-indigo-50 border-b-4 border-indigo-300 active:border-b-0 active:translate-y-1';
         } else if (isLeft) {
              baseClass = 'bg-blue-100 text-blue-900 hover:bg-blue-50 border-b-4 border-blue-300 active:border-b-0 active:translate-y-1';
@@ -282,7 +336,7 @@ function KavramYarismaGame() {
     if (gameState === 'loading') return <div className="h-screen w-screen flex items-center justify-center bg-slate-950"><Loader2 className="w-16 h-16 animate-spin text-indigo-500" /></div>;
     if (error) return <div className="h-screen w-screen flex flex-col items-center justify-center bg-slate-950 text-white"><p className="text-2xl mb-4">{error}</p><Button onClick={() => router.back()}>Geri Dön</Button></div>;
 
-    // --- MOD SEÇİMİ (KOMPAKT HALE GETİRİLDİ) ---
+    // --- MOD SEÇİMİ ---
     if (gameState === 'mode-select') {
         return (
             <div className="h-screen w-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -291,13 +345,11 @@ function KavramYarismaGame() {
                     <div className="bg-gradient-to-bl from-rose-500 to-transparent"></div>
                 </div>
 
-                {/* Container max-w-4xl -> max-w-2xl ve paddingler azaltıldı */}
                 <div className="relative z-10 w-full max-w-2xl text-center space-y-6 animate-in zoom-in-95 duration-500">
                     <h1 className="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-rose-400 drop-shadow-lg">
                         KAVRAM DÜELLOSU
                     </h1>
                     
-                    {/* Grid gap-8 -> gap-4 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                         <button 
                             onClick={() => startGame('single')}
@@ -306,7 +358,6 @@ function KavramYarismaGame() {
                             <div className="absolute top-3 right-3 bg-indigo-500/20 text-indigo-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-500/30">
                                 SIRALAMA
                             </div>
-                            {/* İkon boyutu küçültüldü: w-24 -> w-16 */}
                             <div className="bg-indigo-500/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform border border-indigo-500/20">
                                 <User className="w-8 h-8 text-indigo-400" />
                             </div>
@@ -325,7 +376,7 @@ function KavramYarismaGame() {
                                 <Users className="w-8 h-8 text-rose-400" />
                             </div>
                             <h3 className="text-xl font-bold text-white mb-1">Düello (VS)</h3>
-                            <p className="text-sm text-slate-400 leading-tight">Arkadaşınla kapış. Puan kaydedilmez.</p>
+                            <p className="text-sm text-slate-400 leading-tight">Arkadaşınla kapış. Her kavram 3 kez sorulur.</p>
                         </button>
                     </div>
                     
@@ -344,6 +395,9 @@ function KavramYarismaGame() {
         let winnerDesc = `Toplam Puan: ${scoreLeft}`;
         let WinnerIcon = Trophy;
         let iconColor = "text-yellow-400";
+        
+        // Çıkış butonu için hedef URL
+        const exitHref = user ? '/oyunlar/kavram-yarismasi' : '/';
 
         if (isTeam) {
             if (scoreLeft > scoreRight) {
@@ -400,7 +454,7 @@ function KavramYarismaGame() {
                                 <Repeat className="mr-2 h-5 w-5"/> Tekrar
                             </Button>
                             <Button asChild variant="outline" size="lg" className="flex-1 border-white/10 text-slate-300 hover:text-white hover:bg-white/5 h-12">
-                                <Link href="/oyunlar/kavram-yarismasi"><Home className="mr-2 h-5 w-5"/> Çıkış</Link>
+                                <Link href={exitHref}><Home className="mr-2 h-5 w-5"/> Çıkış</Link>
                             </Button>
                         </div>
                     </CardFooter>
@@ -448,16 +502,14 @@ function KavramYarismaGame() {
                  <div id="p1-zone" className="w-full h-full bg-slate-900 flex flex-col relative overflow-y-auto md:overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/30 to-purple-900/30 pointer-events-none fixed"></div>
 
-                    {/* Header biraz daha sıkıştırıldı */}
+                    {/* Header */}
                     <div className="p-3 md:p-6 bg-slate-800/80 backdrop-blur flex justify-between items-center shadow-lg z-10 border-b border-white/10 shrink-0 sticky top-0">
                         
-                        {/* SOL: Başlık */}
                         <div className="flex items-center gap-2 md:gap-3">
                             <div className="bg-indigo-500/20 p-1.5 md:p-2 rounded-lg hidden md:block"><User className="w-5 h-5 md:w-6 md:h-6 text-indigo-400" /></div>
                             <span className="text-base md:text-2xl font-bold text-indigo-100 hidden sm:inline">TEK KİŞİLİK</span>
                         </div>
 
-                        {/* ORTA: SÜRE */}
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 bg-slate-900/50 rounded-xl border border-indigo-500/30 min-w-[100px] md:min-w-[140px] justify-center">
                                 <Timer className={cn("w-4 h-4 md:w-5 md:h-5", timeLeft <= 5 ? "text-rose-500 animate-pulse" : "text-indigo-400")} />
@@ -472,7 +524,6 @@ function KavramYarismaGame() {
                             </div>
                         </div>
 
-                        {/* SAĞ: Puan */}
                         <div className="flex items-center gap-2 md:gap-4 relative">
                              {scoreDelta && (
                                 <div className={cn(
@@ -499,10 +550,8 @@ function KavramYarismaGame() {
                         </div>
                     </div>
                     
-                    {/* Main Content: Dikey ortalama yerine üstten boşluk bırakarak hizalama ve taşmayı önleme */}
                     <div className="flex-1 flex flex-col justify-start md:justify-center p-3 md:p-12 gap-3 md:gap-6 relative z-0 max-w-5xl mx-auto w-full h-full">
                         
-                        {/* Soru Kutusu: Yüksekliği azalttım */}
                         <div className="bg-white/5 p-4 md:p-10 rounded-2xl md:rounded-3xl min-h-[100px] md:min-h-[220px] flex items-center justify-center backdrop-blur-md border border-white/10 shadow-xl relative overflow-hidden group shrink-0">
                             <div className="absolute top-0 left-0 w-1.5 md:w-2 h-full bg-indigo-500"></div>
                             <p className="text-lg md:text-4xl font-semibold text-center text-indigo-50 leading-relaxed drop-shadow-md">
@@ -510,7 +559,6 @@ function KavramYarismaGame() {
                             </p>
                         </div>
                         
-                        {/* Seçenekler: Mobil için flex-grow kullanarak alanı doldurmasını sağladım ama grid yapısını korudum */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full pb-4 md:pb-0 md:h-80">
                             {currentQ?.options.map(opt => (
                                 <div key={`single-${opt}`} className="h-14 md:h-full">

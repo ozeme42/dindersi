@@ -1,4 +1,6 @@
 .next/
 node_modules/
 public/
+src/app/oyunlar/
+src/app/student/
 

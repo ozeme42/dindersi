@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peygamberimizin Gençlik Yılları ve Risalet Özeti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #e2e8f0;
+            transform: translateX(-50%);
+        }
+        @media (max-width: 768px) {
+            .timeline-line::before { left: 20px; }
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="bg-emerald-700 text-white py-12 px-6 shadow-lg">
+        <div class="max-w-5xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl serif font-bold mb-4">Gençlik Yıllarında Peygamberimiz</h1>
+            <p class="text-emerald-100 text-lg md:text-xl italic">"Ve sen, elbette yüce bir ahlak üzeresin." (Kalem Suresi, 4)</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="max-w-5xl mx-auto mt-8 px-4">
+        <div class="flex flex-wrap justify-center gap-2 md:gap-4 border-b border-gray-200">
+            <button onclick="showTab('tab-ahlak')" class="tab-btn px-6 py-3 font-semibold text-emerald-700 border-b-2 border-emerald-700 transition" id="default-tab">Ahlaki Özellikler</button>
+            <button onclick="showTab('tab-vahiy')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Vahiy ve Davet</button>
+            <button onclick="showTab('tab-tarih')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Tarih Şeridi</button>
+            <button onclick="showTab('tab-siir')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Şiir Köşesi</button>
+            <button onclick="showTab('tab-quiz')" class="tab-btn px-6 py-3 font-semibold text-gray-500 hover:text-emerald-700 transition">Kendini Dene</button>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto p-6">
+        
+        <!-- Tab 1: Ahlaki Özellikler -->
+        <div id="tab-ahlak" class="tab-content active">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-emerald-100 p-3 rounded-lg text-emerald-700 mr-4">
+                            <i class="fas fa-shield-alt text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Muhammedü'l Emin</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Peygamberlik gelmeden önce Mekke halkı ona <strong>"Güvenilir"</strong> anlamına gelen bu lakabı vermiştir. Kimsesizlerin eşyalarını korumuş, emanete asla hıyanet etmemiş ve her zaman doğruyu söylemiştir.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-lg text-blue-700 mr-4">
+                            <i class="fas fa-handshake text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Hilfülfudul (Erdemliler Birliği)</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Genç yaşta katıldığı bu birlik; dili, dini, ırkı ne olursa olsun haksızlığa uğrayanların hakkını savunmak için kurulmuş bir barış cemiyetidir. Adalete verdiği önemin en büyük kanıtıdır.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm card-hover border border-gray-100 md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-amber-100 p-3 rounded-lg text-amber-700 mr-4">
+                            <i class="fas fa-balance-scale text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800">Kâbe Hakemliği</h3>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed">
+                        Hacerülesved taşını yerine yerleştirme konusunda çıkan kavgayı, hırkasını yere serip her kabile reisine bir ucundan tutturarak dâhice bir çözümle sonlandırmıştır. Bu olay onun hem adaletini hem de keskin zekasını gösterir.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Vahiy ve Davet -->
+        <div id="tab-vahiy" class="tab-content">
+            <div class="space-y-6">
+                <div class="bg-emerald-50 border-l-4 border-emerald-600 p-6 rounded-r-xl">
+                    <h4 class="text-xl font-bold text-emerald-800 mb-2">Hira ve Tefekkür Süreci</h4>
+                    <p class="text-emerald-900 leading-relaxed">
+                        Peygamberimiz toplumdaki ahlaki çöküşten uzaklaşmak için Nur Dağı'ndaki Hira Mağarası'na çekilir, burada kainatı ve yaratılışı <strong>tefekkür</strong> ederdi.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-scroll text-emerald-600 mr-3"></i> İlk Vahiy (610)
+                    </h4>
+                    <p class="text-gray-600 mb-4 italic">"Yaratan Rabbinin adıyla oku! O, insanı ‘alak’tan yarattı..." (Alak Suresi, 1-5)</p>
+                    <p class="text-gray-600">Ramazan ayında Kadir Gecesi'nde Cebrail (as) aracılığıyla ilk mesajlar gelmiş ve Risalet görevi başlamıştır.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-xl text-center">
+                        <span class="font-bold text-blue-800 block mb-1">İlk Müslümanlar</span>
+                        <p class="text-sm text-blue-900">Hz. Hatice, Hz. Ebu Bekir, Hz. Ali, Zeyd bin Harise</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl text-center">
+                        <span class="font-bold text-red-800 block mb-1">Hüzün Yılı (620)</span>
+                        <p class="text-sm text-red-900">Hz. Hatice ve Ebu Talib'in vefat ettiği acı dolu yıl.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Tarih Şeridi -->
+        <div id="tab-tarih" class="tab-content">
+            <div class="relative timeline-line">
+                <!-- 571 -->
+                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
+                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
+                        <h4 class="text-2xl font-bold text-emerald-700">571</h4>
+                        <p class="text-gray-800 font-semibold">Mekke'de Doğum</p>
+                    </div>
+                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <p class="text-gray-500 text-sm">20 Nisan'da dünyayı teşrif etti.</p>
+                    </div>
+                </div>
+
+                <!-- 610 -->
+                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
+                    <div class="md:w-1/2 md:pr-12 text-center md:text-right md:order-1">
+                        <h4 class="text-2xl font-bold text-emerald-700">610</h4>
+                        <p class="text-gray-800 font-semibold">İlk Vahiy</p>
+                    </div>
+                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0 md:order-2"></div>
+                    <div class="md:w-1/2 md:pl-12 md:order-3">
+                        <p class="text-gray-500 text-sm">Hira Mağarası'nda nübüvvet görevi verildi.</p>
+                    </div>
+                </div>
+
+                <!-- 622 -->
+                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
+                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
+                        <h4 class="text-2xl font-bold text-emerald-700">622</h4>
+                        <p class="text-gray-800 font-semibold">Hicret</p>
+                    </div>
+                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <p class="text-gray-500 text-sm">Mekke'den Medine'ye kutlu göç.</p>
+                    </div>
+                </div>
+
+                <!-- 630 -->
+                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
+                    <div class="md:w-1/2 md:pr-12 text-center md:text-right md:order-1">
+                        <h4 class="text-2xl font-bold text-emerald-700">630</h4>
+                        <p class="text-gray-800 font-semibold">Mekke'nin Fethi</p>
+                    </div>
+                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0 md:order-2"></div>
+                    <div class="md:w-1/2 md:pl-12 md:order-3">
+                        <p class="text-gray-500 text-sm">Kâbe putlardan temizlendi, genel af ilan edildi.</p>
+                    </div>
+                </div>
+
+                <!-- 632 -->
+                <div class="mb-12 flex flex-col md:flex-row items-center w-full">
+                    <div class="md:w-1/2 md:pr-12 text-center md:text-right">
+                        <h4 class="text-2xl font-bold text-emerald-700">632</h4>
+                        <p class="text-gray-800 font-semibold">Vefat</p>
+                    </div>
+                    <div class="z-10 bg-emerald-600 w-8 h-8 rounded-full border-4 border-white shadow my-4 md:my-0"></div>
+                    <div class="md:w-1/2 md:pl-12">
+                        <p class="text-gray-500 text-sm">Medine'de "En Yüce Dosta" kavuştu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Şiir Köşesi -->
+        <div id="tab-siir" class="tab-content">
+            <div class="bg-white p-12 rounded-3xl shadow-xl text-center border-t-8 border-emerald-600">
+                <h2 class="text-3xl serif font-bold text-emerald-800 mb-8">NAAT</h2>
+                <div class="poem-font text-lg md:text-xl text-gray-700 leading-loose italic">
+                    <p>Gel, Ey Muhammed, bahardır.</p>
+                    <p>Dudaklar ardında saklı</p>
+                    <p>Aminlerimiz vardır!..</p>
+                    <p>Hacdan döner gibi gel;</p>
+                    <p>Mirac’dan iner gibi gel;</p>
+                    <p>Bekliyoruz yıllardır!</p>
+                </div>
+                <p class="mt-8 font-bold text-emerald-700">Arif Nihat Asya</p>
+            </div>
+        </div>
+
+        <!-- Tab 5: Quiz Section -->
+        <div id="tab-quiz" class="tab-content">
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-gray-100">
+                <div id="quiz-container">
+                    <div id="question-area">
+                        <span id="q-number" class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">Soru 1/5</span>
+                        <h3 id="q-text" class="text-xl font-bold text-gray-800 mt-4 mb-6">Peygamberimiz'in dürüstlüğü sebebiyle aldığı lakap hangisidir?</h3>
+                        <div class="space-y-3" id="options">
+                            <button onclick="checkAnswer(0)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">A) Es-Sıddık</button>
+                            <button onclick="checkAnswer(1)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">B) El-Emin</button>
+                            <button onclick="checkAnswer(2)" class="w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium">C) El-Faruk</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="result-area" class="hidden text-center">
+                    <div class="text-6xl text-emerald-600 mb-4"><i class="fas fa-trophy"></i></div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Tebrikler!</h3>
+                    <p id="score-text" class="text-gray-600 mb-6">Testi tamamladınız.</p>
+                    <button onclick="resetQuiz()" class="bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-emerald-700 transition">Tekrar Çöz</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-100 py-8 mt-12 text-center text-gray-500 text-sm">
+        <p>Din Kültürü ve Ahlak Bilgisi Eğitim Portalı &copy; 2024</p>
+    </footer>
+
+    <script>
+        // Tab System
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-emerald-700', 'border-emerald-700', 'border-b-2');
+                btn.classList.add('text-gray-500');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('text-emerald-700', 'border-emerald-700', 'border-b-2');
+            event.currentTarget.classList.remove('text-gray-500');
+        }
+
+        // Quiz Logic
+        const quizData = [
+            {
+                q: "Peygamberimiz'in dürüstlüğü sebebiyle aldığı lakap hangisidir?",
+                a: ["Es-Sıddık", "El-Emin", "El-Faruk"],
+                c: 1
+            },
+            {
+                q: "Haksızlığa uğrayanların hakkını korumak için kurulan derneğin adı nedir?",
+                a: ["Darünnedve", "Hılfü'l-fudûl", "Suffe"],
+                c: 1
+            },
+            {
+                q: "Peygamberimiz'e ilk vahiy nerede gelmiştir?",
+                a: ["Sevr Mağarası", "Hira Mağarası", "Mescid-i Haram"],
+                c: 1
+            },
+            {
+                q: "620 yılında Hz. Hatice ve Ebu Talib'in vefat ettiği yıla ne ad verilir?",
+                a: ["Fil Yılı", "Hicret Yılı", "Hüzün Yılı"],
+                c: 2
+            },
+            {
+                q: "Peygamberimiz'in soyunu devam ettiren kızı hangisidir?",
+                a: ["Hz. Zeyneb", "Hz. Fatıma", "Hz. Rukiye"],
+                c: 1
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function updateQuestion() {
+            if(currentQ < quizData.length) {
+                document.getElementById('q-number').innerText = `Soru ${currentQ + 1}/${quizData.length}`;
+                document.getElementById('q-text').innerText = quizData[currentQ].q;
+                const btns = document.getElementById('options').getElementsByTagName('button');
+                for(let i=0; i<3; i++) {
+                    btns[i].innerText = quizData[currentQ].a[i];
+                    btns[i].className = "w-full text-left p-4 rounded-xl border border-gray-200 hover:bg-emerald-50 hover:border-emerald-500 transition font-medium";
+                }
+            } else {
+                document.getElementById('question-area').classList.add('hidden');
+                document.getElementById('result-area').classList.remove('hidden');
+                document.getElementById('score-text').innerText = `${quizData.length} soruda ${score} doğru yaptınız!`;
+            }
+        }
+
+        function checkAnswer(index) {
+            if(index === quizData[currentQ].c) {
+                score++;
+            }
+            currentQ++;
+            updateQuestion();
+        }
+
+        function resetQuiz() {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('question-area').classList.remove('hidden');
+            document.getElementById('result-area').classList.add('hidden');
+            updateQuestion();
+        }
+
+        updateQuestion();
+    </script>
+</body>
+</html>

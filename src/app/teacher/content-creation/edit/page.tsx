@@ -169,7 +169,7 @@ export function TopicEditor({
     isSaving: boolean,
     isUnitFlow?: boolean,
     onOpenAIGeneration?: (type: 'anlatim' | 'degerlendirme', context: { title: string, sourceText: string }) => void;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [editingStep, setEditingStep] = useState<{ step: LessonStep; index: number } | null>(null);
@@ -336,7 +336,7 @@ export function TopicEditor({
                 scrambledSentence: newSentence.split(' ').sort(() => Math.random() - 0.5).join(' ')
             });
         } else if (stepType === 'keyConcepts') {
-             const newContent = "<ul>" + items.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
+             const newContent = "<ul>" + importedItems.map(item => `<li>${(item as ActivityItem).content.text}</li>`).join('');
              newSteps.push({ type: 'content', title: 'Anahtar Kavramlar', content: newContent });
         } else if (stepType === 'questions') {
             importedItems.forEach(item => {
@@ -484,32 +484,30 @@ export function TopicEditor({
 
                 {setHtmlContent && (
                     <Card className="bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-xl overflow-hidden rounded-2xl">
-                        <Accordion type="single" collapsible className="w-full">
-                            <AccordionItem value="html-content" className="border-b-0">
-                                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                                            <FileText className="h-5 w-5" />
-                                        </div>
-                                        <div className="flex flex-col items-start">
-                                            <span className="text-lg font-bold text-white">İnteraktif HTML İçeriği</span>
-                                            <span className="text-xs text-slate-400 font-normal">Konu detay sayfasında gösterilecek tam sayfa içerik.</span>
-                                        </div>
+                        <Accordion type="single" collapsible className="w-full" defaultValue="html-content">
+                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-white/5 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                                        <FileText className="h-5 w-5" />
                                     </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
-                                    <div>
-                                        <Textarea
-                                            value={htmlContent || ''}
-                                            onChange={(e) => setHtmlContent(e.target.value)}
-                                            placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
-                                            className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
-                                        />
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-lg font-bold text-white">İnteraktif HTML İçeriği</span>
+                                        <span className="text-xs text-slate-400 font-normal">Konu detay sayfasında gösterilecek tam sayfa içerik.</span>
                                     </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
-                    </Card>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6 pt-2 space-y-6 bg-slate-950/30">
+                                <div>
+                                    <Textarea
+                                        value={htmlContent || ''}
+                                        onChange={(e) => setHtmlContent(e.target.value)}
+                                        placeholder="Konu detay sayfasında gösterilecek tam HTML kodunu buraya yapıştırın..."
+                                        className="min-h-[300px] font-mono text-xs bg-slate-950 border-white/10 text-slate-300 focus:border-indigo-500/50"
+                                    />
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                 )}
 
 

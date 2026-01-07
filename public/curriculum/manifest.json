@@ -323,7 +323,7 @@
             {
               "id": "0M2x5SEKuVmzS3qhwvPk",
               "title": "1. Ünite: Gençlik Yıllarında Peygamberimiz",
-              "hasUnitOzet": false,
+              "hasUnitOzet": true,
               "hasFlowContent": false,
               "topics": [
                 {
@@ -345,7 +345,7 @@
             {
               "id": "t9HH1JF2D3UIsCnmUkWa",
               "title": "2. Ünite: Peygamberimizin Çevresindeki Gençler",
-              "hasUnitOzet": false,
+              "hasUnitOzet": true,
               "hasFlowContent": true,
               "topics": [
                 {
