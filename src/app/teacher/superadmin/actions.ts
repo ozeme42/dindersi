@@ -1,3 +1,4 @@
+
 'use server';
 
 import { getAdminDb, getAdminAuth } from "@/lib/firebase-admin";
@@ -537,12 +538,11 @@ export async function exportActivityData() {
     const CHUNK_SIZE = 100;
     const curriculumPath = path.join(process.cwd(), 'public', 'curriculum');
 
-    const processCollection = async (collectionName: string) => {
+    const processCollection = async (collectionName: string, itemsByTopic: { [key: string]: any[] }) => {
         const exportPath = path.join(curriculumPath, collectionName);
         await fs.mkdir(exportPath, { recursive: true });
 
         const snapshot = await db.collection(collectionName).get();
-        const itemsByTopic: { [key: string]: any[] } = {};
         snapshot.docs.forEach((doc) => {
             const item = serialize({ id: doc.id, ...doc.data() });
             if (item.topicId) {
@@ -550,26 +550,30 @@ export async function exportActivityData() {
                 itemsByTopic[item.topicId].push(item);
             }
         });
-        
-        for (const topicId in itemsByTopic) {
-            allDocsToWrite.push({
-                path: path.join(exportPath, `${topicId}.json`),
-                content: JSON.stringify(itemsByTopic[topicId])
-            });
-        }
-        return Object.keys(itemsByTopic).length;
     };
 
     try {
-        const activityCount = await processCollection('activityItems');
-        const questionCount = await processCollection('questions');
+        const itemsByTopic: { [key: string]: any[] } = {};
+        await processCollection('activityItems', itemsByTopic);
+        await processCollection('questions', itemsByTopic);
+        await processCollection('examQuestions', itemsByTopic);
+
+        for (const topicId in itemsByTopic) {
+            allDocsToWrite.push({
+                path: path.join(curriculumPath, 'activities', `${topicId}.json`),
+                content: JSON.stringify(itemsByTopic[topicId])
+            });
+        }
+        
+        // Ensure activities directory exists
+        await fs.mkdir(path.join(curriculumPath, 'activities'), { recursive: true });
 
         for (let i = 0; i < allDocsToWrite.length; i += CHUNK_SIZE) {
             const chunk = allDocsToWrite.slice(i, i + CHUNK_SIZE);
             await Promise.all(chunk.map(file => fs.writeFile(file.path, file.content)));
         }
         
-        return { success: true, message: `${activityCount} konu için etkinlik ve ${questionCount} konu için soru verisi oluşturuldu.` };
+        return { success: true, message: `${Object.keys(itemsByTopic).length} konu için oyun verisi oluşturuldu.` };
     } catch (e: any) {
         console.error("Error exporting game data:", e);
         return { success: false, error: "Oyun verileri oluşturulurken bir hata oluştu: " + e.message };
@@ -649,3 +653,5 @@ export async function bulkUpdateStudentSchool(userIds: string[], schoolId: strin
         return { success: false, error: error.message };
     }
 }
+
+    
