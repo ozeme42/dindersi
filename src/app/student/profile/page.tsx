@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -13,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { 
   Loader2, ArrowLeft, Mail, GraduationCap, Trophy, Award, Medal, 
-  BookOpen, Edit, KeySquare, LogOut, Crown, Save, Shield, Star, 
+  Edit, KeySquare, LogOut, Crown, Save, Shield, Star, 
   Lock, ShieldCheck, School as SchoolIcon, PlusCircle
 } from 'lucide-react';
 import { UserAvatar } from '@/components/user-avatar';
@@ -35,7 +34,6 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, Di
 import { updateUserPassword } from '@/ai/flows/update-user-password-flow'; 
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { getReviewQuestions } from '@/app/student/tekrar-et/actions';
 
 // --- Edit Profile Form Component ---
 function EditProfileForm({ user, classes, schools, onSave, onCancel, isSaving }: { 
@@ -203,7 +201,7 @@ function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, 
                         <Label htmlFor="new-password">Yeni Şifre</Label>
                         <Input id="new-password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="bg-slate-950 border-white/10 text-white focus:border-indigo-500/50" />
                     </div>
-                     <div className="space-y-2">
+                      <div className="space-y-2">
                         <Label htmlFor="confirm-password">Yeni Şifre (Tekrar)</Label>
                         <Input id="confirm-password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-slate-950 border-white/10 text-white focus:border-indigo-500/50" />
                     </div>
@@ -220,44 +218,6 @@ function PasswordChangeDialog({ user, onPasswordChanged }: { user: UserProfile, 
         </Dialog>
     )
 }
-
-// --- Review Questions Card ---
-function ReviewQuestionsCard({ userId }: { userId: string }) {
-    const [reviewCount, setReviewCount] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        if (!userId) return;
-        getReviewQuestions(userId).then(result => {
-            setReviewCount(result.questions?.length || 0);
-        }).finally(() => setIsLoading(false));
-    }, [userId]);
-
-    return (
-        <div className="bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex items-center justify-between group hover:border-indigo-500/30 transition-all shadow-lg">
-            <div className="flex items-center gap-4">
-                <div className="p-3 bg-indigo-500/20 rounded-2xl group-hover:bg-indigo-500/30 transition-colors">
-                    <BookOpen className="h-8 w-8 text-indigo-400" />
-                </div>
-                <div>
-                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                        Tekrar Et
-                        {reviewCount > 0 && (
-                            <span className="bg-indigo-500 text-white text-[10px] px-2 py-0.5 rounded-full animate-pulse">{reviewCount} Soru</span>
-                        )}
-                    </h3>
-                    <p className="text-sm text-slate-400">Yanlışlarını pekiştir.</p>
-                </div>
-            </div>
-            <Button asChild className="h-12 px-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-indigo-900/20">
-                <Link href="/student/tekrar-et">
-                    Başla <ArrowLeft className="ml-2 h-4 w-4 rotate-180" />
-                </Link>
-            </Button>
-        </div>
-    )
-}
-
 
 function ProfilePage() {
   const { user, loading } = useAuth();
@@ -360,7 +320,7 @@ function ProfilePage() {
             <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
+        <div className="relative z-10 max-w-3xl mx-auto p-4 sm:p-6 md:p-8 space-y-8">
             
             {/* Header Area */}
             <div className="flex items-center justify-between">
@@ -375,11 +335,11 @@ function ProfilePage() {
                  </div>
                  
                  <div className="flex items-center gap-3">
-                     <Button asChild variant="outline" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl">
-                         <Link href="/student">Panele Dön</Link>
-                     </Button>
-                     
-                     <AlertDialog>
+                      <Button asChild variant="outline" className="hidden md:flex border-white/10 text-slate-300 hover:text-white hover:bg-white/5 rounded-xl">
+                          <Link href="/student">Panele Dön</Link>
+                      </Button>
+                      
+                      <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" className="bg-red-600 hover:bg-red-500 text-white font-bold px-6 shadow-lg shadow-red-900/20 rounded-xl" disabled={isLoggingOut}>
                                 {isLoggingOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <LogOut className="mr-2 h-4 w-4"/>}
@@ -402,79 +362,72 @@ function ProfilePage() {
                  </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <div className="lg:col-span-1 space-y-8">
-                     
-                     <Card className="overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
-                        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full p-1 bg-gradient-to-br from-cyan-500 via-violet-500 to-fuchsia-500 shadow-[0_0_50px_rgba(139,92,246,0.4)] z-20 group-hover:scale-105 transition-transform duration-500">
-                             <div className="w-full h-full rounded-full bg-slate-900 p-1">
-                                <UserAvatar user={user} className="w-full h-full text-4xl rounded-full" />
-                             </div>
-                             <div className="absolute bottom-0 right-0 bg-slate-900 rounded-full p-2 border border-white/10 shadow-lg">
-                                <ShieldCheck className="h-5 w-5 text-emerald-400" />
-                             </div>
-                        </div>
+            <div className="space-y-8">
+                  
+                  <Card className="overflow-visible bg-slate-900/60 backdrop-blur-md border border-white/10 shadow-2xl rounded-[2.5rem] relative mt-16 group hover:border-indigo-500/30 transition-all duration-500">
+                     <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full p-1 bg-gradient-to-br from-cyan-500 via-violet-500 to-fuchsia-500 shadow-[0_0_50px_rgba(139,92,246,0.4)] z-20 group-hover:scale-105 transition-transform duration-500">
+                          <div className="w-full h-full rounded-full bg-slate-900 p-1">
+                             <UserAvatar user={user} className="w-full h-full text-4xl rounded-full" />
+                          </div>
+                          <div className="absolute bottom-0 right-0 bg-slate-900 rounded-full p-2 border border-white/10 shadow-lg">
+                             <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                          </div>
+                     </div>
 
-                        <CardContent className="pt-20 pb-8 px-6 flex flex-col items-center text-center">
-                            
-                            <div className="w-full">
-                                {isEditMode ? (
-                                    <EditProfileForm 
-                                        user={user as UserProfile} 
-                                        classes={classes} 
-                                        schools={schools}
-                                        onSave={handleSaveProfile} 
-                                        onCancel={() => setIsEditMode(false)}
-                                        isSaving={isSaving}
-                                    />
-                                ) : (
-                                    <div className="space-y-6 animate-in fade-in duration-500">
-                                        <div>
-                                            <div className="flex items-center justify-center gap-3">
-                                                <h2 className="text-3xl font-black text-white tracking-tight">{user.displayName}</h2>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" onClick={() => setIsEditMode(true)}>
-                                                    <Edit className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <p className="text-sm text-slate-400 flex items-center justify-center gap-2 mt-2 font-medium">
-                                                <Mail className="h-3.5 w-3.5 opacity-70"/> {user.email}
-                                            </p>
-                                        </div>
+                     <CardContent className="pt-20 pb-8 px-6 flex flex-col items-center text-center">
+                         
+                         <div className="w-full">
+                             {isEditMode ? (
+                                 <EditProfileForm 
+                                     user={user as UserProfile} 
+                                     classes={classes} 
+                                     schools={schools}
+                                     onSave={handleSaveProfile} 
+                                     onCancel={() => setIsEditMode(false)}
+                                     isSaving={isSaving}
+                                 />
+                             ) : (
+                                 <div className="space-y-6 animate-in fade-in duration-500">
+                                     <div>
+                                         <div className="flex items-center justify-center gap-3">
+                                             <h2 className="text-3xl font-black text-white tracking-tight">{user.displayName}</h2>
+                                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors" onClick={() => setIsEditMode(true)}>
+                                                 <Edit className="h-4 w-4" />
+                                             </Button>
+                                         </div>
+                                         <p className="text-sm text-slate-400 flex items-center justify-center gap-2 mt-2 font-medium">
+                                             <Mail className="h-3.5 w-3.5 opacity-70"/> {user.email}
+                                         </p>
+                                     </div>
 
-                                        <div className="flex flex-col gap-2 items-center justify-center">
-                                            <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
-                                                <SchoolIcon className="h-4 w-4 mr-2 text-cyan-400"/> {user.schoolName || 'Okul Belirtilmemiş'}
-                                            </Badge>
-                                            <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
-                                                <GraduationCap className="h-4 w-4 mr-2 text-indigo-400"/> {user.class || 'Sınıf Belirtilmemiş'}
-                                             </Badge>
-                                             <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/10 py-2 px-4 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.1)] w-fit">
-                                                <Star className="h-4 w-4 mr-2 fill-amber-400/20"/> {user.score?.toLocaleString() || 0} Puan
-                                             </Badge>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </CardContent>
-                     </Card>
+                                     <div className="flex flex-col gap-2 items-center justify-center">
+                                         <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
+                                             <SchoolIcon className="h-4 w-4 mr-2 text-cyan-400"/> {user.schoolName || 'Okul Belirtilmemiş'}
+                                         </Badge>
+                                         <Badge variant="secondary" className="bg-slate-800/80 text-slate-300 border border-white/5 py-2 px-4 rounded-xl text-sm font-medium w-fit">
+                                             <GraduationCap className="h-4 w-4 mr-2 text-indigo-400"/> {user.class || 'Sınıf Belirtilmemiş'}
+                                          </Badge>
+                                          <Badge variant="outline" className="border-amber-500/30 text-amber-400 bg-amber-500/10 py-2 px-4 rounded-xl text-sm font-bold shadow-[0_0_15px_rgba(245,158,11,0.1)] w-fit">
+                                             <Star className="h-4 w-4 mr-2 fill-amber-400/20"/> {user.score?.toLocaleString() || 0} Puan
+                                          </Badge>
+                                     </div>
+                                 </div>
+                             )}
+                         </div>
+                     </CardContent>
+                  </Card>
 
-                     <Card className="bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-3xl shadow-lg overflow-hidden">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
-                        <CardHeader className="pb-3 border-b border-white/5">
-                            <CardTitle className="text-lg font-bold text-slate-200 flex items-center gap-2">
-                                <Lock className="h-4 w-4 text-indigo-400"/> Güvenlik
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pt-4 space-y-3">
-                            <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
-                        </CardContent>
-                     </Card>
-                </div>
-                
-                <div className="lg:col-span-2 space-y-8">
-                     <ReviewQuestionsCard userId={user.uid} />
-                </div>
+                  <Card className="bg-slate-900/40 backdrop-blur-sm border border-white/5 rounded-3xl shadow-lg overflow-hidden">
+                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-transparent opacity-50" />
+                     <CardHeader className="pb-3 border-b border-white/5">
+                         <CardTitle className="text-lg font-bold text-slate-200 flex items-center gap-2">
+                             <Lock className="h-4 w-4 text-indigo-400"/> Güvenlik
+                         </CardTitle>
+                     </CardHeader>
+                     <CardContent className="pt-4 space-y-3">
+                         <PasswordChangeDialog user={user as UserProfile} onPasswordChanged={handleLogout} />
+                     </CardContent>
+                  </Card>
             </div>
         </div>
     </div>

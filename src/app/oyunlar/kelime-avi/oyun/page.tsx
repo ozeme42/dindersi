@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback, Suspense, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKelimeAviAction, submitKelimeAviScoreAction } from '../actions';
 import { Button } from '@/components/ui/button';
-import { Loader2, Search, Ghost, ZoomIn, ZoomOut, RotateCw, ArrowLeft, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, Maximize2, Minimize2, Info, MousePointerClick } from 'lucide-react';
+import { Loader2, Search, Ghost, ZoomIn, ZoomOut, RotateCw, ArrowLeft, Trophy, XOctagon, ChevronDown, ChevronUp, Settings2, Plus, Minus, Type, Scan, GripHorizontal, MousePointerClick } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
 import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { playSound } from '@/lib/audio-service';
 import { GENERIC_TURKISH_WORDS } from '@/lib/generic-words';
@@ -174,25 +173,53 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
     const dragStartPos = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
+        // MOUSE EVENTLERİ
         const handleMouseMove = (e: MouseEvent) => {
             if (!isDragging) return;
             setPosition({ x: e.clientX - dragStartPos.current.x, y: e.clientY - dragStartPos.current.y });
         };
         const handleMouseUp = () => setIsDragging(false);
+
+        // TOUCH EVENTLERİ (Akıllı Tahta için)
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDragging) return;
+            // Sürükleme sırasında sayfanın kaymasını engelle
+            if (e.cancelable) e.preventDefault();
+            
+            const touch = e.touches[0];
+            setPosition({ x: touch.clientX - dragStartPos.current.x, y: touch.clientY - dragStartPos.current.y });
+        };
+        const handleTouchEnd = () => setIsDragging(false);
+
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
+            // passive: false, preventDefault kullanabilmek için gerekli
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('touchend', handleTouchEnd);
         }
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleTouchEnd);
         };
     }, [isDragging]);
+
+    // Ortak başlatma fonksiyonu
+    const handleDragStart = (clientX: number, clientY: number) => {
+        setIsDragging(true);
+        dragStartPos.current = { x: clientX - position.x, y: clientY - position.y };
+    };
 
     return (
         <div className="fixed z-[100] transition-all duration-100 ease-out" style={{ left: '50%', bottom: '2rem', transform: `translate(calc(-50% + ${position.x}px), ${position.y}px)`, cursor: isDragging ? 'grabbing' : 'default', maxWidth: '90vw' }}>
              <div className={cn("flex items-center gap-1 sm:gap-2 p-2 rounded-full bg-white/95 border border-white/50 shadow-2xl backdrop-blur-xl ring-1 ring-slate-900/10 transition-all duration-300", !isToolbarOpen && "w-auto px-3 py-3")}>
-                <div onMouseDown={(e) => { setIsDragging(true); dragStartPos.current = { x: e.clientX - position.x, y: e.clientY - position.y }; }} className={cn("cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 flex-shrink-0", isToolbarOpen ? "pl-2 sm:pl-3 pr-2 py-3 border-r border-slate-200" : "p-1")}>
+                <div 
+                    onMouseDown={(e) => handleDragStart(e.clientX, e.clientY)}
+                    onTouchStart={(e) => handleDragStart(e.touches[0].clientX, e.touches[0].clientY)}
+                    className={cn("cursor-grab active:cursor-grabbing text-slate-400 hover:text-slate-600 flex-shrink-0 touch-none", isToolbarOpen ? "pl-2 sm:pl-3 pr-2 py-3 border-r border-slate-200" : "p-1")}
+                >
                     <GripHorizontal className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 {isToolbarOpen && (
@@ -217,7 +244,7 @@ const EditorToolbar = ({ fontSize, setFontSize, gridScale, setGridScale }: any) 
                 )}
                 {!isToolbarOpen && (
                     <div className="animate-in fade-in zoom-in duration-300 ml-1">
-                         <Button variant="ghost" size="icon" onClick={() => setIsToolbarOpen(true)} className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-600 hover:bg-indigo-200"><Settings2 className="h-5 w-5" /></Button>
+                          <Button variant="ghost" size="icon" onClick={() => setIsToolbarOpen(true)} className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-600 hover:bg-indigo-200"><Settings2 className="h-5 w-5" /></Button>
                     </div>
                 )}
              </div>

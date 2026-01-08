@@ -6,14 +6,15 @@ import {
   Server, ClipboardList, DollarSign, Shield, Filter, Home, UserPlus, Trash2, 
   ArrowLeft, ArrowRight, UserCog, UserCheck, MoreHorizontal, FilePenLine, 
   GraduationCap, School as SchoolIcon, LayoutDashboard, Database, Save, 
-  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft
+  HardDriveDownload, Search, Plus, Building2, ArrowRightLeft, CheckSquare
 } from "lucide-react";
 
 // Server Actions
 import { getStudentData } from "@/app/teacher/students/actions";
 import { 
-  exportAllData, exportManifestAndContent, exportActivityData, deleteBulkUsers,
-  saveSchool, deleteSchool, bulkUpdateStudentSchool 
+  exportAllData, deleteBulkUsers,
+  saveSchool, deleteSchool, bulkUpdateStudentSchool,
+  exportStaticAdvanced // YENİ EKLENEN FONKSİYON
 } from "./actions";
 
 import { getExamCreationData } from "../exams/actions";
@@ -129,8 +130,22 @@ export default function SuperAdminPage() {
   // Loading & Filter States
   const [isLoading, setIsLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState<string | null>(null);
-  const [isExportingStatic, setIsExportingStatic] = useState(false);
-  const [exportStep, setExportStep] = useState<string | null>(null);
+  
+  // --- YENİ STATİK EXPORT STATE'LERİ ---
+  const [isExportingAdvanced, setIsExportingAdvanced] = useState(false);
+  const [staticFilters, setStaticFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
+      classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
+  });
+  const [exportTypes, setExportTypes] = useState({
+      manifest: true,
+      ozet: true,
+      flow: true,
+      questions: true,
+      activities: true,
+      notes: true
+  });
+  
+  // Genel filtreler (Data export için)
   const [filters, setFilters] = useState<{classId: string, courseId: string, unitId: string, topicId: string}>({
       classId: 'all', courseId: 'all', unitId: 'all', topicId: 'all',
   });
@@ -182,15 +197,11 @@ export default function SuperAdminPage() {
     fetchAllData();
   }, [fetchAllData]);
 
-  // Derived Data & Filtering (SANAL ÖĞRENCİLER GİZLENDİ)
+  // Derived Data & Filtering
   const students = useMemo(() => {
       return users.filter(u => {
-          // Rol kontrolü: Sadece öğrenci veya pending
           const isStudentRole = u.role === 'student' || u.role === 'pending';
-          // Sanal kontrolü: Guest olanlar veya isVirtual flag'i true olanlar elenir
-          // (Types dosyanızda isVirtual yoksa 'as any' ile geçiçi kontrol yapılabilir)
           const isNotVirtual = u.role !== 'guest' && !(u as any).isVirtual; 
-          
           return isStudentRole && isNotVirtual;
       });
   }, [users]);
@@ -374,23 +385,47 @@ export default function SuperAdminPage() {
     }
   };
   
-  const handleExportStatic = async (step: 'manifest' | 'activities') => {
-      setIsExportingStatic(true);
-      setExportStep(step);
+  // YENİ GELİŞMİŞ EXPORT HANDLER
+  const handleAdvancedExport = async () => {
+      // En az bir tip seçili olmalı
+      if (!Object.values(exportTypes).some(v => v)) {
+          toast({ title: "Hata", description: "En az bir veri tipi seçmelisiniz.", variant: "destructive" });
+          return;
+      }
+
+      setIsExportingAdvanced(true);
       try {
-          const result = step === 'manifest' ? await exportManifestAndContent() : await exportActivityData();
+          const result = await exportStaticAdvanced(staticFilters, Object.keys(exportTypes).filter(k => exportTypes[k as keyof typeof exportTypes]));
           if (result.success) {
               toast({ title: "Başarılı", description: result.message });
           } else {
               throw new Error(result.error);
           }
-      } catch(e: any) {
-         toast({ title: "Dışa Aktarma Hatası", description: `Hata: ${e.message}`, variant: "destructive" });
+      } catch (e: any) {
+           toast({ title: "Dışa Aktarma Hatası", description: `Hata: ${e.message}`, variant: "destructive" });
       } finally {
-        setExportStep(null);
-        setIsExportingStatic(false);
+          setIsExportingAdvanced(false);
       }
-  }
+  };
+
+  // --- CASCADING SELECT LOGIC FOR STATIC EXPORT ---
+  const availableCourses = useMemo(() => {
+    if (staticFilters.classId === 'all') return allCourses;
+    return allCourses.filter(c => c.classId === staticFilters.classId);
+  }, [allCourses, staticFilters.classId]);
+
+  const availableUnits = useMemo(() => {
+    if (staticFilters.courseId === 'all') return [];
+    const course = allCourses.find(c => c.id === staticFilters.courseId);
+    return course ? course.units : [];
+  }, [allCourses, staticFilters.courseId]);
+
+  const availableTopics = useMemo(() => {
+    if (staticFilters.unitId === 'all') return [];
+    const unit = availableUnits.find(u => u.id === staticFilters.unitId);
+    return unit ? unit.topics : [];
+  }, [availableUnits, staticFilters.unitId]);
+
 
   const dataSections = [
     { type: 'users', title: "Kullanıcılar", icon: <User className="mr-2 h-4 w-4"/>, filename: "kullanicilar", desc: "Tüm öğrenci ve öğretmen verileri" },
@@ -465,9 +500,10 @@ export default function SuperAdminPage() {
                     <TabsTrigger value="tools" className="rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white">Sistem Araçları</TabsTrigger>
                 </TabsList>
                 
-                {/* MANAGEMENT TAB */}
+                {/* MANAGEMENT TAB - (User Table etc.) */}
                 <TabsContent value="management" className="space-y-6">
                     <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl">
+                         {/* ... (Bu kısımlar değişmedi, aynen korundu) ... */}
                         <CardHeader className="border-b border-white/5 pb-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div>
@@ -514,7 +550,6 @@ export default function SuperAdminPage() {
                                                 {selectedUserIds.size} kullanıcı seçildi
                                             </Badge>
                                             
-                                            {/* TOPLU OKUL DEĞİŞTİRME BUTONU */}
                                             <Button variant="outline" size="sm" onClick={() => setBulkSchoolDialog(true)} className="border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300">
                                                 <ArrowRightLeft className="mr-2 h-4 w-4" /> Okul Değiştir
                                             </Button>
@@ -609,7 +644,7 @@ export default function SuperAdminPage() {
 
                                 {/* TEACHERS TAB */}
                                 <TabsContent value="teachers_list" className="mt-0">
-                                    <div className="overflow-x-auto">
+                                   <div className="overflow-x-auto">
                                         <Table>
                                             <TableHeader className="bg-slate-950/50">
                                                 <TableRow className="border-white/5 hover:bg-transparent">
@@ -695,7 +730,6 @@ export default function SuperAdminPage() {
                                         </Table>
                                     </div>
                                 </TabsContent>
-
                             </Tabs>
                         </CardContent>
                     </Card>
@@ -736,44 +770,86 @@ export default function SuperAdminPage() {
                             </Card>
                         </div>
 
-                        {/* STATIC SITE EXPORT */}
+                        {/* ADVANCED STATIC SITE EXPORT */}
                         <div className="space-y-6">
                             <Card className="bg-slate-900/60 border-white/10 backdrop-blur-md shadow-xl h-full">
                                 <CardHeader>
                                     <CardTitle className="text-xl text-white flex items-center gap-2"><HardDriveDownload className="h-5 w-5 text-emerald-400"/> Statik Site Oluşturma</CardTitle>
-                                    <CardDescription>Verileri statik web sitesi için dosyalara dönüştürün.</CardDescription>
+                                    <CardDescription>Filtreleyerek belirli içerikler için dosya oluşturun.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div className="p-4 rounded-xl bg-slate-950/50 border border-white/5 space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">1</div>
-                                            <div>
-                                                <h4 className="font-medium text-white">Temel Veriler</h4>
-                                                <p className="text-xs text-slate-500">Müfredat ve içerik yapısını oluşturur.</p>
-                                            </div>
-                                        </div>
-                                        <Button onClick={() => handleExportStatic('manifest')} disabled={isExportingStatic} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20">
-                                            {exportStep === 'manifest' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
-                                            Manifest Oluştur
-                                        </Button>
-                                    </div>
+                                        <div className="space-y-3">
+                                            <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Filtreleme</Label>
+                                            
+                                            {/* Cascading Selects */}
+                                            <Select value={staticFilters.classId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, classId: val, courseId: 'all', unitId: 'all', topicId: 'all' }))}>
+                                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Sınıf Seç" /></SelectTrigger>
+                                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                    <SelectItem value="all">Tüm Sınıflar</SelectItem>
+                                                    {allClasses.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
 
-                                    <div className="p-4 rounded-xl bg-slate-950/50 border border-white/5 space-y-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">2</div>
-                                            <div>
-                                                <h4 className="font-medium text-white">Oyun İçerikleri</h4>
-                                                <p className="text-xs text-slate-500">Etkinlik ve oyun verilerini işler (Uzun sürebilir).</p>
-                                            </div>
+                                            <Select value={staticFilters.courseId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, courseId: val, unitId: 'all', topicId: 'all' }))} disabled={staticFilters.classId === 'all' && availableCourses.length === 0}>
+                                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Ders Seç" /></SelectTrigger>
+                                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                    <SelectItem value="all">Tüm Dersler</SelectItem>
+                                                    {availableCourses.map(c => <SelectItem key={c.id} value={c.id}>{c.title}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+
+                                            <Select value={staticFilters.unitId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, unitId: val, topicId: 'all' }))} disabled={staticFilters.courseId === 'all'}>
+                                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Ünite Seç" /></SelectTrigger>
+                                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                    <SelectItem value="all">Tüm Üniteler</SelectItem>
+                                                    {availableUnits.map(u => <SelectItem key={u.id} value={u.id}>{u.title}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
+
+                                            <Select value={staticFilters.topicId} onValueChange={(val) => setStaticFilters(prev => ({ ...prev, topicId: val }))} disabled={staticFilters.unitId === 'all'}>
+                                                <SelectTrigger className="bg-slate-900 border-white/10 text-white h-9"><SelectValue placeholder="Konu Seç" /></SelectTrigger>
+                                                <SelectContent className="bg-slate-900 border-white/10 text-white">
+                                                    <SelectItem value="all">Tüm Konular</SelectItem>
+                                                    {availableTopics.map(t => <SelectItem key={t.id} value={t.id}>{t.title}</SelectItem>)}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
-                                         <Button onClick={() => handleExportStatic('activities')} disabled={isExportingStatic} className="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-900/20">
-                                            {exportStep === 'activities' ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <Server className="mr-2 h-4 w-4"/>}
-                                            Oyun Verilerini İşle
+
+                                        <Separator className="bg-white/10" />
+
+                                        <div className="space-y-3">
+                                             <Label className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Veri Tipleri</Label>
+                                             <div className="grid grid-cols-2 gap-2">
+                                                 {[
+                                                     { id: 'manifest', label: 'Manifest' },
+                                                     { id: 'ozet', label: 'Özetler (.html)' },
+                                                     { id: 'flow', label: 'Ders Akışı' },
+                                                     { id: 'questions', label: 'Soru Bankası' },
+                                                     { id: 'activities', label: 'Etkinlik Verileri' },
+                                                     { id: 'notes', label: 'Notlar/Yazılacaklar' },
+                                                 ].map((type) => (
+                                                     <div key={type.id} className="flex items-center space-x-2">
+                                                         <Checkbox 
+                                                             id={`exp-${type.id}`} 
+                                                             checked={(exportTypes as any)[type.id]} 
+                                                             onCheckedChange={(checked) => setExportTypes(prev => ({...prev, [type.id]: checked}))}
+                                                             className="border-white/30 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                                                         />
+                                                         <label htmlFor={`exp-${type.id}`} className="text-sm text-slate-300 cursor-pointer select-none">{type.label}</label>
+                                                     </div>
+                                                 ))}
+                                             </div>
+                                        </div>
+
+                                        <Button onClick={handleAdvancedExport} disabled={isExportingAdvanced} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-900/20 mt-4">
+                                            {isExportingAdvanced ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : <CheckSquare className="mr-2 h-4 w-4"/>}
+                                            Dosyaları Oluştur
                                         </Button>
                                     </div>
                                     
                                     <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                                        <p className="text-xs text-blue-200 flex gap-2"><div className="mt-0.5"><AlertTriangle className="h-3 w-3"/></div> Bu işlem sunucu kaynaklarını yoğun kullanır.</p>
+                                        <p className="text-xs text-blue-200 flex gap-2"><AlertTriangle className="h-3 w-3 shrink-0"/> Public/Curriculum klasörüne yazar.</p>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -825,7 +901,7 @@ export default function SuperAdminPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* TOPLU OKUL DEĞİŞTİRME DIALOG (YENİ) */}
+            {/* TOPLU OKUL DEĞİŞTİRME DIALOG */}
             <Dialog open={bulkSchoolDialog} onOpenChange={setBulkSchoolDialog}>
                 <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-[425px]">
                     <DialogHeader>
