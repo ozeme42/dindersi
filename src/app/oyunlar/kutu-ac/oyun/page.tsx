@@ -331,28 +331,30 @@ function KutuAcGame() {
     const activeTeamConfig = activePlayer?.teamConfig || TEAMS[0];
 
     return (
+        // DÜZELTME: mainContentRef artık padding içermiyor. Tam ekran için temiz bir kapsayıcı.
         <div 
             ref={mainContentRef}
-            className={cn(
-            "w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col relative overflow-hidden transition-all",
-            isFullscreen ? "p-4" : "p-2 sm:p-2 md:p-4"
-        )}>
-            {/* Arka Plan */}
-            <div className="fixed inset-0 pointer-events-none z-0 transition-colors duration-1000">
+            className="relative w-full h-full min-h-screen bg-slate-950 font-sans text-slate-100 flex flex-col overflow-hidden transition-all"
+        >
+            {/* Arka Plan Efektleri */}
+            <div className="absolute inset-0 pointer-events-none z-0">
                 {playerCount && playerCount > 1 && activeTeamConfig ? (
-                    <>
-                        <div className={`absolute top-[-20%] left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] ${activeTeamConfig.bg.replace('/20', '/10')} rounded-full blur-[150px] transition-all duration-1000`} />
-                    </>
+                    <div className={`absolute top-[-20%] left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] ${activeTeamConfig.bg.replace('/20', '/10')} rounded-full blur-[150px] transition-all duration-1000`} />
                 ) : (
                     <div className="absolute top-[-20%] left-[-10%] w-[80vw] h-[80vw] bg-indigo-900/10 rounded-full blur-[150px]" />
                 )}
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            <div className="w-full h-full mx-auto relative z-10 flex-grow flex flex-col">
+            {/* İçerik Kapsayıcısı: Padding buraya taşındı. */}
+            {/* Bu sayede QuestionDialog bu div'in dışında kalıp tam ekranı kaplayabilir */}
+            <div className={cn(
+                "relative z-10 flex flex-col w-full h-full mx-auto",
+                isFullscreen ? "p-4" : "p-2 sm:p-4"
+            )}>
                 
-                {/* HEADER - DEĞİŞİKLİK BURADA: ArrowLeft butonu artık GameEndScreen açıyor */}
-                <header className="flex justify-between items-center mb-4 gap-4 bg-slate-900/40 backdrop-blur-md p-3 rounded-xl border border-white/5 shadow-lg">
+                {/* HEADER */}
+                <header className="flex justify-between items-center mb-4 gap-4 bg-slate-900/40 backdrop-blur-md p-3 rounded-xl border border-white/5 shadow-lg shrink-0">
                     <div className="flex items-center gap-4">
                         <Button 
                             variant="ghost" 
@@ -377,7 +379,8 @@ function KutuAcGame() {
                     </div>
                 </header>
 
-                <div className="w-full flex justify-center mb-4 px-2">
+                {/* SKOR TABLOSU */}
+                <div className="w-full flex justify-center mb-4 px-2 shrink-0">
                     {playerCount && playerCount > 1 && (
                         <div className="flex flex-wrap justify-center gap-4 w-full">
                             {players.map((p, i) => {
@@ -388,7 +391,7 @@ function KutuAcGame() {
                                     <div 
                                         key={p.id} 
                                         className={cn(
-                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center flex-1 min-w-[160px] max-w-[280px]",
+                                            "relative overflow-hidden rounded-xl p-3 border transition-all duration-500 flex flex-col items-center flex-1 min-w-[140px] max-w-[280px]",
                                             isActive 
                                                 ? `bg-slate-900 ${config.border} shadow-[0_0_25px_-5px_rgba(0,0,0,0.5)] ${config.shadow} z-10 scale-[1.05]` 
                                                 : "bg-slate-900/40 border-white/5 opacity-60 grayscale-[0.5]"
@@ -431,9 +434,10 @@ function KutuAcGame() {
                     )}
                 </div>
                 
-                <div className="flex-grow flex flex-col h-full min-h-0">
+                {/* OYUN IZGARASI */}
+                <div className="flex-grow flex flex-col min-h-0">
                      <Card className="bg-slate-900/60 backdrop-blur-xl border-white/10 shadow-2xl flex-grow flex flex-col overflow-hidden">
-                        <CardHeader className="border-b border-white/5 py-3 px-4 flex flex-row items-center justify-between bg-black/20">
+                        <CardHeader className="border-b border-white/5 py-3 px-4 flex flex-row items-center justify-between bg-black/20 shrink-0">
                             <CardTitle className="text-sm text-white font-bold flex items-center gap-2">
                                 <Target className="h-4 w-4 text-indigo-400"/>
                                 Soru Tablosu
@@ -445,7 +449,7 @@ function KutuAcGame() {
                                  </div>
                             )}
                         </CardHeader>
-                        <CardContent className="p-2 sm:p-4 overflow-y-auto flex-grow">
+                        <CardContent className="p-2 sm:p-4 overflow-y-auto custom-scrollbar flex-grow">
                             <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
                                 {questions.map((q, i) => {
                                     const questionNumber = i + 1;
@@ -472,7 +476,8 @@ function KutuAcGame() {
                     </Card>
                 </div>
             </div>
-            
+
+            {/* SORU PENCERESİ: Padding dışına alındı, direkt mainContentRef'e bağlı */}
             {openedQuestion && (
                 <QuestionDialog
                     isFullscreen={isFullscreen}

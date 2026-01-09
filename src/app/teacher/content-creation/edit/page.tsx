@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { Suspense, useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
@@ -14,7 +12,7 @@ import {
     FilePenLine, Eye, Upload, Library, Gamepad2, Search, Crosshair, Shuffle, 
     Lightbulb, Puzzle, Skull, Layers, FolderKanban, MousePointerClick, Trophy, 
     BrainCircuit, Grip, LayoutTemplate, LayersIcon, Link as LinkIcon, 
-    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Workflow, Database, EyeOff
+    Video, FileText, Image as ImageIcon, GraduationCap, HelpCircle, Workflow, Database, EyeOff, CheckCircle2, XCircle
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { updateTopicContent } from './actions';
@@ -72,19 +70,111 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
             case 'mcq': case 'tf': case 'fitb': case 'trueFalseList': return <HelpCircle className="w-5 h-5 text-purple-400" />;
             case 'game': case 'activityLink': return <Gamepad2 className="w-5 h-5 text-orange-400" />;
             case 'anagramGame': return <Puzzle className="w-5 h-5 text-fuchsia-400" />;
+            case 'sentenceScramble': return <Shuffle className="w-5 h-5 text-cyan-400" />;
             default: return <BookOpen className="w-5 h-5 text-slate-400" />;
         }
     };
 
     const renderContentPreview = () => {
          switch (step.type) {
-            case 'content': return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content }} />;
-            case 'objectiveList': return <span className="text-xs text-yellow-400/80">{(step as any).items.length} hedef</span>;
-            case 'conceptExplanation': return <span className="text-xs text-blue-400/80">{(step as any).items.length} kavram</span>;
-            case 'flashcard': return <span className="text-xs text-emerald-400/80">{(step as any).cards.length} kart</span>;
-            case 'anagram': return <span className="text-xs text-orange-400/80 font-mono">{(step as any).scrambledWord}</span>;
-            case 'visual': return (step as any).imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={(step as any).imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
-            case 'video': return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{(step as any).url}</span>;
+            case 'content': 
+                return <div className="line-clamp-2 text-xs text-slate-400" dangerouslySetInnerHTML={{ __html: (step as any).content }} />;
+            
+            case 'objectiveList': 
+                return <span className="text-xs text-yellow-400/80">{(step as any).items.length} hedef</span>;
+            
+            case 'conceptExplanation': 
+                return <span className="text-xs text-blue-400/80">{(step as any).items.length} kavram</span>;
+            
+            case 'flashcard': 
+                return <span className="text-xs text-emerald-400/80">{(step as any).cards.length} kart</span>;
+            
+            case 'anagram': 
+                return <span className="text-xs text-orange-400/80 font-mono">{(step as any).scrambledWord}</span>;
+            
+            case 'visual': 
+                return (step as any).imageUrl ? <div className="relative h-12 w-20 rounded overflow-hidden border border-white/10"><Image src={(step as any).imageUrl} alt={step.title} fill className="object-cover" /></div> : <span className="text-xs text-slate-500">Görsel yok</span>;
+            
+            case 'video': 
+                return <span className="text-xs text-rose-400/80 truncate block max-w-[200px]">{(step as any).url}</span>;
+
+            // --- GÜNCELLENEN KISIMLAR ---
+
+            case 'sentenceScramble':
+                return (
+                    <div className="flex flex-col gap-1 text-xs">
+                        <div className="text-slate-300 font-medium">{(step as any).correctSentence}</div>
+                        <div className="text-slate-500 font-mono text-[10px] truncate">Karışık: {(step as any).scrambledSentence}</div>
+                    </div>
+                );
+
+            case 'mcq':
+                return (
+                    <div className="flex flex-col gap-1.5 text-xs w-full">
+                        <div className="text-slate-200 font-medium line-clamp-1">{(step as any).question}</div>
+                        <div className="flex flex-wrap gap-1">
+                            {(step as any).options?.map((opt: string, i: number) => {
+                                const isCorrect = opt === (step as any).correctAnswer;
+                                return (
+                                    <span key={i} className={cn(
+                                        "px-1.5 py-0.5 rounded text-[10px] border",
+                                        isCorrect 
+                                            ? "bg-green-500/10 border-green-500/30 text-green-400 font-bold" 
+                                            : "bg-slate-800 border-white/5 text-slate-500"
+                                    )}>
+                                        {opt}
+                                    </span>
+                                )
+                            })}
+                        </div>
+                    </div>
+                );
+
+            case 'fitb':
+                return (
+                     <div className="flex flex-col gap-1 text-xs">
+                        <div className="text-slate-300 line-clamp-1">{(step as any).sentenceWithBlank}</div>
+                        <div className="text-purple-400/90 text-[10px] font-mono flex items-center gap-1">
+                            <span className="text-slate-600">Cevap:</span> {(step as any).correctAnswer}
+                        </div>
+                     </div>
+                );
+
+            case 'tf':
+                 return (
+                     <div className="flex flex-col gap-1 text-xs">
+                        <div className="text-slate-300 line-clamp-1">{(step as any).statement}</div>
+                        <div className="flex">
+                            <span className={cn(
+                                "inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] border",
+                                (step as any).isTrue 
+                                    ? "bg-green-500/10 border-green-500/30 text-green-400" 
+                                    : "bg-red-500/10 border-red-500/30 text-red-400"
+                            )}>
+                                {(step as any).isTrue ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                                {(step as any).isTrue ? "Doğru" : "Yanlış"}
+                            </span>
+                        </div>
+                     </div>
+                );
+
+            case 'trueFalseList':
+                const questions = (step as any).questions || [];
+                return (
+                    <div className="flex flex-col gap-1 text-xs">
+                         <div className="text-purple-300/80 mb-0.5">{questions.length} Soru</div>
+                         {questions.slice(0, 2).map((q: any, idx: number) => (
+                             <div key={idx} className="flex justify-between items-center gap-2 text-[10px] text-slate-500 bg-slate-950/30 p-1 rounded">
+                                 <span className="truncate max-w-[150px]">{q.statement}</span>
+                                 <span className={q.isTrue ? "text-green-500 font-bold" : "text-red-500 font-bold"}>{q.isTrue ? "D" : "Y"}</span>
+                             </div>
+                         ))}
+                         {questions.length > 2 && <span className="text-[9px] text-slate-600">+{questions.length - 2} daha...</span>}
+                    </div>
+                );
+            
+            // --- GÜNCELLENEN KISIMLAR SONU ---
+
             default: return null;
         }
     }
@@ -100,17 +190,17 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
                 {!isPublished && (
                     <div className="absolute inset-0 bg-black/30 pointer-events-none z-10" />
                 )}
-                <div className="flex items-center p-3 gap-3">
+                <div className="flex items-start sm:items-center p-3 gap-3">
                     {/* Drag Handle */}
                     <button 
-                        className="touch-none p-2 hover:bg-white/10 rounded-lg text-slate-500 hover:text-white cursor-grab active:cursor-grabbing transition-colors"
+                        className="touch-none p-2 mt-1 sm:mt-0 hover:bg-white/10 rounded-lg text-slate-500 hover:text-white cursor-grab active:cursor-grabbing transition-colors self-start sm:self-center"
                         {...listeners} {...attributes}
                     >
                         <Grip className="h-5 w-5" />
                     </button>
 
                     {/* Order & Icon */}
-                    <div className="flex items-center gap-3 flex-shrink-0">
+                    <div className="flex items-center gap-3 flex-shrink-0 mt-1 sm:mt-0 self-start sm:self-center">
                         <span className="flex h-6 w-6 items-center justify-center rounded bg-slate-950 text-slate-500 text-xs font-bold font-mono border border-white/5">
                             {order}
                         </span>
@@ -120,22 +210,22 @@ function StepCard({ step, order, id, onEdit, onDelete, onSplit, onTogglePublish 
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pt-1 sm:pt-0">
                         <h4 className={cn("text-sm font-bold truncate transition-colors", isPublished ? "text-slate-200 group-hover:text-white" : "text-slate-500 group-hover:text-slate-300")}>{step.title}</h4>
-                        <div className="mt-1">
+                        <div className="mt-1.5">
                             {renderContentPreview()}
                         </div>
                     </div>
 
                     {/* Actions - Always visible on mobile, hover on desktop */}
-                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity self-start sm:self-center">
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-slate-500/20 hover:text-slate-200" onClick={onTogglePublish} title={isPublished ? "Gizle" : "Görünür Yap"}>
                             {isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4 text-amber-500" />}
                         </Button>
-                         {step.type === 'activityLink' && (
+                          {step.type === 'activityLink' && (
                             <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:bg-teal-500/20 hover:text-teal-400" asChild>
                                  <Link href={`/teacher/activity-data?courseId=${(step as any).courseId}&unitId=${(step as any).unitId}&topicId=${(step as any).topicId}`}>
-                                     <Database className="h-4 w-4" />
+                                      <Database className="h-4 w-4" />
                                  </Link>
                             </Button>
                         )}
