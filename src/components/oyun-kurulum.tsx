@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
@@ -277,7 +275,14 @@ export function OyunKurulum({
                   return false;
                });
           }
-          setUnits(unitsWithContent || []);
+
+          // --- DÜZELTME: ÜNİTELERİ NUMARALARA GÖRE SIRALA ---
+          // 'numeric: true' özelliği ile "1. Ünite", "10. Ünite" gibi başlıkları doğru sıralar.
+          const sortedUnits = (unitsWithContent || []).sort((a, b) => 
+            (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })
+          );
+          
+          setUnits(sortedUnits);
           setIsLoading(false);
           setCurrentStep(2);
       }, 300);
@@ -327,7 +332,10 @@ export function OyunKurulum({
               }
           }
           
+          // --- DÜZELTME: KONULARI NUMARALARA GÖRE SIRALA ---
+          // Burada da aynı şekilde 'numeric: true' kullanıyoruz.
           setTopics(topicsWithContent.sort((a,b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })));
+          
           setIsLoading(false);
           setCurrentStep(3);
       }, 300);

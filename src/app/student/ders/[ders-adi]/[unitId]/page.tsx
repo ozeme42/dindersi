@@ -125,6 +125,7 @@ function PageContent() {
                 }
             } else {
                 const allTopics = courseData.units.flatMap((u: Unit) => u.topics || []);
+                allTopics.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true }));
                 const firstUncompletedTopic = allTopics.find((t: Topic) => !(completedTopics[t.id]?.completionCount > 0));
                 contentToActivate = firstUncompletedTopic || allTopics[0] || null;
             }

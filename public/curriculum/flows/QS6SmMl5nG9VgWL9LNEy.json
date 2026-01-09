@@ -1,0 +1,375 @@
+[
+  {
+    "type": "objectiveList",
+    "title": "Öğrenme Hedefleri",
+    "items": [
+      "Evrenin tanımını yapabileceksiniz.",
+      "İnsanın evrendeki yerini ve diğer canlılardan farkını açıklayabileceksiniz.",
+      "İnsan vücudu ve evren arasındaki mükemmel düzenin benzerliklerini ifade edebileceksiniz.",
+      "Su döngüsü gibi doğal olayların evrendeki düzenin bir göstergesi olduğunu açıklayabileceksiniz.",
+      "Canlıların ve organlarının (göz, kulak vb.) belirli bir amaca ve ihtiyaca göre yaratıldığını kavrayabileceksiniz.",
+      "Hayvanların yaşam tarzlarına uygun olarak farklı beden yapılarına sahip olmasının evrendeki düzenle ilişkisini açıklayabileceksiniz.",
+      "Gezegenlerden bitkilere kadar evrendeki her şeyin bir uyum ve denge içinde olduğunu fark edebileceksiniz.",
+      "Doğal olayları (yağmur, kar, ekinlerin yeşermesi) ve varlıkları (ay, güneş) sorgulayarak bunların bir amaç için yaratıldığını anlayabileceksiniz."
+    ]
+  },
+  {
+    "type": "content",
+    "title": "Anahtar Kavramlar",
+    "content": "<ul><li>Araştırma</li><li>Düzen</li><li>Gözlem</li><li>Alem</li><li>Merak</li><li>Denge</li><li>Uyum</li><li>Döngü</li><li>Su döngüsü</li><li>Mevsimler</li><li>İnsan</li><li>Ölçü</li><li>Akıl</li><li>Evren</li><li>Gece ve Gündüz</li>"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "title": "",
+      "items": [],
+      "term": "",
+      "definition": "",
+      "categories": [],
+      "text": ""
+    },
+    "htmlContent": "<div style=\"position: relative; width: 100%; height: 0; padding-top: 56.2500%;\n padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;\n border-radius: 8px; will-change: transform;\">\n  <iframe loading=\"lazy\" style=\"position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;\"\n    src=\"https://www.canva.com/design/DAG9v9zhDsM/y__goj_X4tdN228E3Q1t7g/view?embed\" allowfullscreen=\"allowfullscreen\" allow=\"fullscreen\">\n  </iframe>\n</div>\n"
+  },
+  {
+    "type": "content",
+    "title": "Evrenin Tanımı ve İnsanın Yeri",
+    "content": "<ul><li>Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıkların bütünüdür.</li><li>İnsan, akıl sahibi olması yönüyle diğer canlılardan ayrılır.</li><li>Düşünen ve sorgulayan bir varlık olarak insan, çevresini gözlemleyerek ve araştırarak evreni anlamak ister.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Evrendeki ve İnsan Vücudundaki Mükemmel Düzen",
+    "content": "<ul><li>İnsan vücudundaki her bir sistem birbiriyle uyum içinde çalışarak sağlıklı bir denge sağlar.</li><li>Evrendeki tabiat olayları da doğal dengeyi korur; örneğin, yeryüzündeki varlıkların su ihtiyacı su döngüsüyle karşılanır.</li><li>Bu süreçler, evrende hiçbir şeyin tesadüfen olmadığını, aksine her şeyin mükemmel bir düzen içinde gerçekleştiğini gösterir.</li></ul>"
+  },
+  {
+    "type": "content",
+    "title": "Doğadaki Uyum ve Amaca Yönelik Yaratılış",
+    "content": "<ul><li>İnsan vücudunun dengeli yapısı (göz, kulak gibi uzuvların uygun yerleşimi) evrendeki düzenin ipuçlarını barındırır.</li><li>Hayvanların bedenlerinin yaşayışlarına göre farklı tasarlanması da bu düzenin bir göstergesidir.</li><li>İnsan, yaşadığı evrendeki tüm varlıkların (toprak, ekinler, kuşlar, balıklar, gök cisimleri) bir uyum ve denge içinde olduğunu fark ederek, bunların bir amaç için yaratıldığını ve kendiliğinden meydana gelmediğini anlar.</li></ul>"
+  },
+  {
+    "type": "flashcard",
+    "title": "Veri Bankası Bilgi Kartları",
+    "cards": [
+      {
+        "term": "Evren",
+        "definition": "İçerisinde dünyamız, yıldızlar ve gezegenler gibi tüm varlıkların bulunduğu sonsuz boşluk."
+      },
+      {
+        "term": "Uyum",
+        "definition": "Evrendeki tüm varlıkların birbiriyle dengeli bir şekilde var olması."
+      },
+      {
+        "term": "Akıl",
+        "definition": "İnsanı diğer canlılardan ayıran, onu özel kılan yetenektir."
+      },
+      {
+        "term": "Düzen",
+        "definition": "Evrendeki her şeyin bir amaç için yaratıldığını gösteren kusursuz sistem."
+      },
+      {
+        "term": "Denge",
+        "definition": "Vücudumuzdaki ve evrendeki her şeyin uyumlu bir şekilde çalışmasını sağlayan düzen."
+      },
+      {
+        "term": "Toprak",
+        "definition": "Tohumun ağaca, ağacın meyveye dönüşmesini sağlayan fabrika gibi çalışan doğal yapı."
+      },
+      {
+        "term": "Su Döngüsü",
+        "definition": "Yeryüzündeki canlıların su ihtiyacını karşılayan doğal süreç."
+      },
+      {
+        "term": "Ölçü",
+        "definition": "Kusursuz bir denge, orantı ve amaca uygunluk"
+      },
+      {
+        "term": "Gece ve Gündüz",
+        "definition": "Dünya'nın kendi etrafında dönmesiyle oluşur."
+      },
+      {
+        "term": "Gözlem",
+        "definition": "Çevremizdeki olayları dikkatlice izleyip inceleme."
+      },
+      {
+        "term": "İnsan",
+        "definition": "Düşünen, sorgulayan, akıl sahibi canlı."
+      },
+      {
+        "term": "Mevsimler",
+        "definition": "Dünya'nın güneş etrafındaki dönüşünün sonucudur."
+      },
+      {
+        "term": "Merak",
+        "definition": "Bilgiye ulaşma isteği, öğrenme arzusu."
+      },
+      {
+        "term": "Alem",
+        "definition": "Yeryüzü ve gökyüzündeki nesnelerin oluşturduğu bütün evrenin adıdır"
+      }
+    ]
+  },
+  {
+    "type": "anagramFlashcard",
+    "title": "Veri Bankası Anagram Kartları",
+    "cards": [
+      {
+        "definition": "İpucu: Bu kelime \"Araştırma\"",
+        "scrambledWord": "TIMRRAŞAA",
+        "correctAnswer": "Araştırma"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Düzen\"",
+        "scrambledWord": "ENZÜD",
+        "correctAnswer": "Düzen"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Gözlem\"",
+        "scrambledWord": "ZLMÖEG",
+        "correctAnswer": "Gözlem"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Alem\"",
+        "scrambledWord": "EAML",
+        "correctAnswer": "Alem"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Merak\"",
+        "scrambledWord": "AREMK",
+        "correctAnswer": "Merak"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Denge\"",
+        "scrambledWord": "DNEEG",
+        "correctAnswer": "Denge"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Uyum\"",
+        "scrambledWord": "UYMU",
+        "correctAnswer": "Uyum"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Döngü\"",
+        "scrambledWord": "NGÜÖD",
+        "correctAnswer": "Döngü"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Su döngüsü\"",
+        "scrambledWord": "Ö USÜDÜSGN",
+        "correctAnswer": "Su döngüsü"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Mevsimler\"",
+        "scrambledWord": "MEVSİMLER",
+        "correctAnswer": "Mevsimler"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"İnsan\"",
+        "scrambledWord": "NNSAİ",
+        "correctAnswer": "İnsan"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Ölçü\"",
+        "scrambledWord": "ÜLÖÇ",
+        "correctAnswer": "Ölçü"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Akıl\"",
+        "scrambledWord": "ILKA",
+        "correctAnswer": "Akıl"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Evren\"",
+        "scrambledWord": "VEERN",
+        "correctAnswer": "Evren"
+      },
+      {
+        "definition": "İpucu: Bu kelime \"Gece ve Gündüz\"",
+        "scrambledWord": "GDZ ÜCEEVEGÜN ",
+        "correctAnswer": "Gece ve Gündüz"
+      }
+    ]
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Gece ve gündüz birbirini takip eder.",
+    "scrambledSentence": "ve birbirini eder. Gece gündüz takip"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İnsan, evrende akıl sahibi olması yönüyle diğer canlılardan farklılaşır.",
+    "isTrue": true
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "Evrendeki her şey bir amaç için yaratılmıştır ve tesadüfi değildir.",
+    "scrambledSentence": "Evrendeki her bir için şey amaç değildir. tesadüfi yaratılmıştır ve"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Evrendeki hiçbir şey tesadüfen olmaz, her şey mükemmel bir düzen içindedir.",
+    "isTrue": true
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "İnsan, gözlem yaparak ve sorgulayarak evrendeki düzeni anlayabilir.",
+    "scrambledSentence": "İnsan, sorgulayarak gözlem anlayabilir. evrendeki yaparak ve düzeni"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İnsan vücudundaki sistemler birbirinden bağımsız çalışır ve birbirini etkilemez.",
+    "isTrue": false
+  },
+  {
+    "type": "sentenceScramble",
+    "title": "Cümle Düzeltme",
+    "correctSentence": "İnsan, akıl sahibi olmasıyla diğer canlılardan ayrılır ve evrendeki düzeni anlamaya çalışır.",
+    "scrambledSentence": "akıl diğer canlılardan evrendeki ayrılır çalışır. sahibi İnsan, düzeni olmasıyla anlamaya ve"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "Hayvanların bedenleri, onların yaşayışlarına uygun olarak tasarlanmamıştır.",
+    "isTrue": false
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "question": "insanı diğer canlılardan ayıran temel özellik nedir?",
+    "options": [
+      "Hızlı koşması",
+      "Akıl sahibi olması",
+      "Çok yemek yemesi",
+      "Uzun yaşaması"
+    ],
+    "correctAnswer": "Akıl sahibi olması"
+  },
+  {
+    "type": "tf",
+    "title": "Doğru/Yanlış",
+    "statement": "İnsan, varlıkların bir amaç için yaratıldığını fark eder ve kendiliğinden meydana gelmediğini anlar.",
+    "isTrue": true
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Su döngüsünün gerçekleşme amacı metinde nasıl açıklanmıştır?",
+    "options": [
+      "Okyanusların seviyesini artırmak",
+      "Bitkilerin hızlı büyümesini sağlamak",
+      "Yeryüzündeki varlıkların su ihtiyacını karşılamak",
+      "Havadaki nem oranını düşürmek"
+    ],
+    "correctAnswer": "Yeryüzündeki varlıkların su ihtiyacını karşılamak"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "Evrendeki olayların gerçekleşme şekli hakkında metin ne ifade etmektedir?",
+    "options": [
+      "Tamamen tesadüfen gerçekleşir",
+      "Kaos içinde meydana gelir",
+      "Mükemmel bir düzen içinde gerçekleşir",
+      "Sadece bilimsel yasalarla açıklanabilir"
+    ],
+    "correctAnswer": "Mükemmel bir düzen içinde gerçekleşir"
+  },
+  {
+    "type": "mcq",
+    "title": "Kontrol Sorusu",
+    "question": "İnsan vücudundaki organlar (göz, kulak, burun gibi) neye göre yerleştirilmiş ve şekillendirilmiştir?",
+    "options": [
+      "Estetik kaygılarla",
+      "Rastgele bir şekilde",
+      "Canlıların hareket kabiliyetine göre",
+      "İnsanın ihtiyaçlarına uygun olarak"
+    ],
+    "correctAnswer": "İnsanın ihtiyaçlarına uygun olarak"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Evren, üzerinde yaşadığımız dünya ile tüm yıldız ve gezegenleri içine alan varlıklar ___.",
+    "options": [
+      "yapısıdır",
+      "bütünüdür",
+      "modelidir",
+      "parçasıdır"
+    ],
+    "correctAnswer": "bütünüdür"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Bu varlıklar âleminde insan, ___ sahibi olması yönüyle diğer canlılardan ayrılır.",
+    "options": [
+      "güç",
+      "hız",
+      "akıl",
+      "duygu"
+    ],
+    "correctAnswer": "akıl"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Evrendeki tabiat olaylarının gerçekleşmesi de doğal ___ korunmasını sağlar.",
+    "options": [
+      "gelişimin",
+      "işleyişin",
+      "dengenin",
+      "büyümenin"
+    ],
+    "correctAnswer": "dengenin"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını aksine her şeyin mükemmel bir ___ içinde gerçekleştiğini gösterir.",
+    "options": [
+      "karmaşa",
+      "hız",
+      "tesadüf",
+      "düzen"
+    ],
+    "correctAnswer": "düzen"
+  },
+  {
+    "type": "fitb",
+    "title": "Boşluk Doldurma",
+    "sentenceWithBlank": "Yaşadığımız evrende gezegenlerden insanlara, bitkilerden hayvanlara kadar her şey bir uyum ve ___ içindedir.",
+    "options": [
+      "ayrılık",
+      "kaos",
+      "denge",
+      "rastlantı"
+    ],
+    "correctAnswer": "denge"
+  },
+  {
+    "type": "htmlSlide",
+    "title": "İnteraktif Sunum",
+    "content": {
+      "text": "",
+      "term": "",
+      "definition": "",
+      "title": "",
+      "categories": [],
+      "items": []
+    },
+    "htmlContent": "<!DOCTYPE html>\n<html lang=\"tr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Evrendeki Mükemmel Düzen</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <script src=\"https://unpkg.com/lucide@latest\"></script>\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;600&family=Playfair+Display:wght@700&display=swap');\n\n        body {\n            font-family: 'Exo 2', sans-serif;\n            background-color: #0f172a;\n            color: white;\n            overflow-x: hidden;\n        }\n\n        .serif {\n            font-family: 'Playfair Display', serif;\n        }\n\n        /* Starry Background Animation */\n        .stars {\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            z-index: -1;\n            background: #000 url('https://www.script-tutorials.com/demos/360/images/stars.png') repeat top center;\n            animation: move-twink-back 200s linear infinite;\n        }\n\n        @keyframes move-twink-back {\n            from {background-position:0 0;}\n            to {background-position:-10000px 5000px;}\n        }\n\n        .glass-panel {\n            background: rgba(255, 255, 255, 0.05);\n            backdrop-filter: blur(10px);\n            border: 1px solid rgba(255, 255, 255, 0.1);\n            border-radius: 1rem;\n        }\n\n        .btn-interact {\n            transition: all 0.3s ease;\n        }\n        .btn-interact:hover {\n            transform: translateY(-4px);\n            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);\n        }\n\n        /* Animations */\n        .fade-in {\n            animation: fadeIn 0.8s ease-in-out;\n        }\n        @keyframes fadeIn {\n            from { opacity: 0; transform: translateY(10px); }\n            to { opacity: 1; transform: translateY(0); }\n        }\n\n        .orbit-container {\n            position: relative;\n            width: 300px;\n            height: 300px;\n            margin: 0 auto;\n        }\n\n        /* Habitat Game Styles */\n        .zone {\n            transition: all 0.3s;\n        }\n        .zone:hover {\n            transform: scale(1.02);\n            box-shadow: 0 0 20px rgba(255,255,255,0.1);\n        }\n    </style>\n</head>\n<body class=\"flex flex-col min-h-screen text-lg\">\n\n    <!-- Starry Background -->\n    <div class=\"stars\"></div>\n\n    <!-- Header -->\n    <header class=\"p-6 text-center border-b border-white/10 glass-panel sticky top-0 z-50\">\n        <h1 class=\"text-3xl md:text-4xl font-bold serif text-sky-300 tracking-wide\">Evrendeki Mükemmel Düzen</h1>\n        <p class=\"text-sm md:text-base text-gray-400 mt-2\">Akıl, Gözlem ve Denge</p>\n    </header>\n\n    <!-- Main Content Area -->\n    <main id=\"app-container\" class=\"flex-grow p-4 md:p-12 flex items-center justify-center relative w-full\">\n        \n        <!-- INTRO SCREEN -->\n        <div id=\"screen-intro\" class=\"text-center w-full max-w-6xl mx-auto fade-in flex flex-col items-center justify-center min-h-[60vh]\">\n            <div class=\"mb-12 max-w-3xl\">\n                <i data-lucide=\"infinity\" class=\"w-24 h-24 mx-auto text-sky-400 mb-6\"></i>\n                <p class=\"text-xl md:text-3xl leading-relaxed text-gray-200 mb-8 font-light\">\n                    \"İnsan ve evrenin işleyişi arasında bir benzerlik söz konusudur. Hiçbir şey tesadüfen olmaz, aksine her şey <span class=\"text-sky-300 font-semibold\">mükemmel bir düzen</span> içinde gerçekleşir.\"\n                </p>\n                <p class=\"text-base md:text-lg text-gray-400 italic\">Bu düzeni keşfetmek için bir deneyim seçin:</p>\n            </div>\n\n            <div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 w-full\">\n                <button onclick=\"GameManager.loadGame('orbit')\" class=\"glass-panel p-10 btn-interact group flex flex-col items-center justify-center min-h-[250px]\">\n                    <i data-lucide=\"orbit\" class=\"w-16 h-16 mb-4 text-purple-400 group-hover:text-purple-300 transition-transform group-hover:rotate-180 duration-700\"></i>\n                    <h3 class=\"font-bold text-2xl mb-2\">Kozmik Denge</h3>\n                    <p class=\"text-gray-400\">Gezegenlerin hassas yörüngesi</p>\n                </button>\n\n                <button onclick=\"GameManager.loadGame('habitat')\" class=\"glass-panel p-10 btn-interact group flex flex-col items-center justify-center min-h-[250px]\">\n                    <i data-lucide=\"paw-print\" class=\"w-16 h-16 mb-4 text-green-400 group-hover:text-green-300 transition-transform group-hover:scale-110\"></i>\n                    <h3 class=\"font-bold text-2xl mb-2\">Yaşam Uyumu</h3>\n                    <p class=\"text-gray-400\">Canlıların kusursuz tasarımı</p>\n                </button>\n\n                <button onclick=\"GameManager.loadGame('water')\" class=\"glass-panel p-10 btn-interact group flex flex-col items-center justify-center min-h-[250px]\">\n                    <i data-lucide=\"droplets\" class=\"w-16 h-16 mb-4 text-blue-400 group-hover:text-blue-300 transition-transform group-hover:translate-y-1\"></i>\n                    <h3 class=\"font-bold text-2xl mb-2\">Doğa Döngüsü</h3>\n                    <p class=\"text-gray-400\">Suyun yolculuğu ve denge</p>\n                </button>\n            </div>\n        </div>\n\n        <!-- GAME: ORBIT BALANCE -->\n        <div id=\"screen-orbit\" class=\"hidden w-full max-w-6xl fade-in\">\n            <div class=\"glass-panel p-6 md:p-12 relative min-h-[70vh] flex flex-col justify-center\">\n                <button onclick=\"GameManager.goHome()\" class=\"absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 transition hover:-translate-x-1\"><i data-lucide=\"arrow-left\"></i> Geri Dön</button>\n                \n                <h2 class=\"text-3xl md:text-4xl font-bold text-center mb-2 text-purple-300 mt-8 md:mt-0\">Kozmik Denge</h2>\n                <p class=\"text-base md:text-xl text-center text-gray-300 mb-10\">\"Evrendeki hiçbir şey tesadüf değildir.\"<br>Hızı ayarlayarak gezegenin yörüngeye oturmasını sağla.</p>\n                \n                <div class=\"flex flex-col md:flex-row gap-12 md:gap-24 items-center justify-center\">\n                    <!-- Canvas Scaled up for desktop -->\n                    <div class=\"relative transform md:scale-150 origin-center my-4 md:my-10\">\n                        <div class=\"relative w-[300px] h-[300px] bg-black/40 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden\" id=\"orbit-canvas-container\">\n                            <!-- Sun -->\n                            <div class=\"absolute w-12 h-12 bg-yellow-500 rounded-full shadow-[0_0_30px_rgba(234,179,8,0.6)] z-10\"></div>\n                            <!-- Planet (Animated via JS) -->\n                            <div id=\"planet\" class=\"absolute w-4 h-4 bg-blue-400 rounded-full shadow-[0_0_10px_rgba(96,165,250,0.8)]\" style=\"top: 50%; left: 80%;\"></div>\n                            <!-- Orbit Path Visualization -->\n                            <div class=\"absolute w-[180px] h-[180px] border border-dashed border-gray-600 rounded-full opacity-50\"></div>\n                        </div>\n                    </div>\n\n                    <div class=\"w-full md:w-1/3 space-y-6 z-10\">\n                        <div class=\"bg-gray-800/80 p-8 rounded-2xl border border-white/5 shadow-xl\">\n                            <label class=\"block text-lg mb-4 text-purple-200 font-semibold\">Gezegen Hızı: <span id=\"speed-val\" class=\"text-white font-mono text-xl\">10</span> km/s</label>\n                            <input type=\"range\" id=\"orbit-speed\" min=\"1\" max=\"100\" value=\"10\" class=\"w-full accent-purple-500 h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer hover:bg-gray-600 transition\">\n                            <div class=\"flex justify-between text-sm text-gray-400 mt-2 px-1\">\n                                <span>Çarpışma Riski</span>\n                                <span>Savrulma Riski</span>\n                            </div>\n                        </div>\n                        <div id=\"orbit-feedback\" class=\"text-center text-lg font-bold h-8 text-red-400 transition-all\"></div>\n                        <button onclick=\"OrbitGame.checkBalance()\" class=\"w-full py-4 bg-purple-600 hover:bg-purple-500 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] rounded-xl font-bold text-xl transition transform active:scale-95\">Dengeyi Kontrol Et</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- GAME: HABITAT MATCHING -->\n        <div id=\"screen-habitat\" class=\"hidden w-full max-w-7xl fade-in\">\n            <div class=\"glass-panel p-6 md:p-12 relative min-h-[70vh] flex flex-col justify-center\">\n                <button onclick=\"GameManager.goHome()\" class=\"absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 transition hover:-translate-x-1\"><i data-lucide=\"arrow-left\"></i> Geri Dön</button>\n                \n                <h2 class=\"text-3xl md:text-4xl font-bold text-center mb-2 text-green-300 mt-8 md:mt-0\">Yaşam Uyumu</h2>\n                <p class=\"text-base md:text-xl text-center text-gray-300 mb-10\">\"Her bir organ ve canlı, görevine uygun yaratılmıştır.\"<br>Canlıyı ait olduğu yaşam alanına tıkla.</p>\n\n                <div class=\"grid grid-cols-1 md:grid-cols-3 gap-8 mb-12\">\n                    <!-- Zones (Taller on desktop) -->\n                    <div id=\"zone-sky\" onclick=\"HabitatGame.selectZone('sky')\" class=\"zone h-48 md:h-96 border-4 border-dashed border-sky-700/50 bg-sky-900/10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-sky-900/30 hover:border-sky-500 relative overflow-hidden group\">\n                        <i data-lucide=\"cloud\" class=\"w-12 h-12 md:w-20 md:h-20 text-sky-400 mb-4 transition-transform group-hover:scale-110\"></i>\n                        <span class=\"text-sky-200 font-bold text-xl md:text-3xl\">Gök (Hava)</span>\n                        <div class=\"zone-content flex flex-wrap justify-center gap-4 mt-6 absolute bottom-6 w-full px-4\"></div>\n                    </div>\n                    \n                    <div id=\"zone-land\" onclick=\"HabitatGame.selectZone('land')\" class=\"zone h-48 md:h-96 border-4 border-dashed border-amber-700/50 bg-amber-900/10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-amber-900/30 hover:border-amber-500 relative overflow-hidden group\">\n                        <i data-lucide=\"mountain\" class=\"w-12 h-12 md:w-20 md:h-20 text-amber-400 mb-4 transition-transform group-hover:scale-110\"></i>\n                        <span class=\"text-amber-200 font-bold text-xl md:text-3xl\">Kara (Toprak)</span>\n                        <div class=\"zone-content flex flex-wrap justify-center gap-4 mt-6 absolute bottom-6 w-full px-4\"></div>\n                    </div>\n                    \n                    <div id=\"zone-water\" onclick=\"HabitatGame.selectZone('water')\" class=\"zone h-48 md:h-96 border-4 border-dashed border-blue-700/50 bg-blue-900/10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-blue-900/30 hover:border-blue-500 relative overflow-hidden group\">\n                        <i data-lucide=\"waves\" class=\"w-12 h-12 md:w-20 md:h-20 text-blue-400 mb-4 transition-transform group-hover:scale-110\"></i>\n                        <span class=\"text-blue-200 font-bold text-xl md:text-3xl\">Su (Deniz)</span>\n                        <div class=\"zone-content flex flex-wrap justify-center gap-4 mt-6 absolute bottom-6 w-full px-4\"></div>\n                    </div>\n                </div>\n\n                <!-- Animals Area -->\n                <div class=\"bg-black/40 p-8 rounded-2xl text-center max-w-xl mx-auto border border-white/10 shadow-2xl\">\n                    <p id=\"animal-instruction\" class=\"mb-6 text-gray-300 text-lg\">Şu an seçili canlı:</p>\n                    <div id=\"current-animal\" class=\"inline-flex items-center justify-center w-28 h-28 md:w-36 md:h-36 bg-white/5 rounded-full border-4 border-white/20 animate-bounce shadow-[0_0_30px_rgba(255,255,255,0.1)]\">\n                        <!-- Icon injected by JS -->\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- GAME: WATER CYCLE -->\n        <div id=\"screen-water\" class=\"hidden w-full max-w-6xl fade-in\">\n            <div class=\"glass-panel p-6 md:p-12 relative min-h-[70vh] flex flex-col justify-center\">\n                <button onclick=\"GameManager.goHome()\" class=\"absolute top-6 left-6 text-gray-400 hover:text-white flex items-center gap-2 transition hover:-translate-x-1\"><i data-lucide=\"arrow-left\"></i> Geri Dön</button>\n                \n                <h2 class=\"text-3xl md:text-4xl font-bold text-center mb-2 text-blue-300 mt-8 md:mt-0\">Doğa Döngüsü</h2>\n                <p class=\"text-base md:text-xl text-center text-gray-300 mb-10\">\"Yeryüzündeki su ihtiyacının karşılanması için su döngüsü gerçekleşir.\"<br>Süreci tamamlamak için adımlara sırasıyla tıkla.</p>\n\n                <!-- Bigger Scene Container -->\n                <div class=\"relative h-64 md:h-[500px] bg-gradient-to-b from-sky-900 via-blue-900 to-blue-950 rounded-2xl overflow-hidden border-2 border-white/10 mb-8 shadow-2xl\">\n                    \n                    <!-- Sun (Resized for desktop) -->\n                    <div id=\"wc-sun\" class=\"absolute top-4 right-4 md:top-8 md:right-8 w-16 h-16 md:w-32 md:h-32 bg-yellow-400 rounded-full shadow-[0_0_60px_rgba(250,204,21,0.6)] opacity-50 transition-all duration-1000\"></div>\n                    \n                    <!-- Cloud (Resized & Repositioned) -->\n                    <div id=\"wc-cloud\" class=\"absolute top-8 md:top-24 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-1000 transform translate-y-4\">\n                        <i data-lucide=\"cloud\" class=\"w-24 h-24 md:w-48 md:h-48 text-white fill-white/80 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]\"></i>\n                    </div>\n\n                    <!-- Rain (Resized) -->\n                    <div id=\"wc-rain\" class=\"absolute top-32 md:top-72 left-1/2 -translate-x-1/2 w-24 h-32 md:w-48 md:h-48 opacity-0 transition-all duration-500\">\n                        <!-- More rain drops for bigger screen -->\n                        <div class=\"w-1 md:w-1.5 h-4 md:h-6 bg-blue-300 absolute top-0 left-2 md:left-4 animate-pulse\"></div>\n                        <div class=\"w-1 md:w-1.5 h-4 md:h-6 bg-blue-300 absolute top-6 md:top-10 left-10 md:left-20 animate-pulse\" style=\"animation-delay: 0.2s\"></div>\n                        <div class=\"w-1 md:w-1.5 h-4 md:h-6 bg-blue-300 absolute top-2 md:top-4 left-16 md:left-36 animate-pulse\" style=\"animation-delay: 0.4s\"></div>\n                        <div class=\"w-1 md:w-1.5 h-4 md:h-6 bg-blue-300 absolute top-12 md:top-20 left-6 md:left-12 animate-pulse\" style=\"animation-delay: 0.1s\"></div>\n                        <div class=\"w-1 md:w-1.5 h-4 md:h-6 bg-blue-300 absolute top-8 md:top-16 left-20 md:left-40 animate-pulse\" style=\"animation-delay: 0.3s\"></div>\n                    </div>\n\n                    <!-- Sea/Land -->\n                    <div class=\"absolute bottom-0 w-full h-20 md:h-40 bg-blue-600 flex items-end shadow-[0_-10px_40px_rgba(37,99,235,0.4)]\">\n                        <div class=\"w-1/3 h-full bg-amber-800 clip-mountain shadow-[5px_0_20px_rgba(0,0,0,0.3)]\"></div>\n                    </div>\n                </div>\n\n                <!-- Controls -->\n                <div class=\"grid grid-cols-3 gap-6 md:gap-12 max-w-4xl mx-auto w-full\">\n                    <button id=\"btn-evap\" onclick=\"WaterGame.trigger('evap')\" class=\"bg-yellow-600/50 hover:bg-yellow-600 p-4 md:p-6 rounded-xl text-base md:text-xl font-bold transition flex flex-col items-center gap-2 hover:shadow-lg hover:-translate-y-1\">\n                        <i data-lucide=\"sun\" class=\"w-6 h-6 md:w-8 md:h-8\"></i>\n                        1. Buharlaşma\n                    </button>\n                    <button id=\"btn-cond\" onclick=\"WaterGame.trigger('cond')\" class=\"bg-gray-600/50 hover:bg-gray-600 p-4 md:p-6 rounded-xl text-base md:text-xl font-bold transition disabled:opacity-30 flex flex-col items-center gap-2 hover:shadow-lg hover:-translate-y-1\" disabled>\n                        <i data-lucide=\"cloud\" class=\"w-6 h-6 md:w-8 md:h-8\"></i>\n                        2. Bulutlanma\n                    </button>\n                    <button id=\"btn-rain\" onclick=\"WaterGame.trigger('rain')\" class=\"bg-blue-600/50 hover:bg-blue-600 p-4 md:p-6 rounded-xl text-base md:text-xl font-bold transition disabled:opacity-30 flex flex-col items-center gap-2 hover:shadow-lg hover:-translate-y-1\" disabled>\n                        <i data-lucide=\"cloud-rain\" class=\"w-6 h-6 md:w-8 md:h-8\"></i>\n                        3. Yağmur\n                    </button>\n                </div>\n                <div id=\"water-feedback\" class=\"mt-8 text-center text-lg md:text-2xl font-semibold min-h-[40px] text-green-300 transition-all\"></div>\n            </div>\n        </div>\n\n        <!-- SUCCESS MODAL -->\n        <div id=\"modal-success\" class=\"fixed inset-0 bg-black/90 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm\">\n            <div class=\"glass-panel p-10 md:p-16 max-w-2xl text-center border-2 border-green-500/50 shadow-[0_0_50px_rgba(34,197,94,0.3)]\">\n                <i data-lucide=\"check-circle\" class=\"w-24 h-24 text-green-400 mx-auto mb-6 animate-bounce\"></i>\n                <h3 class=\"text-3xl md:text-5xl font-bold text-white mb-4\">Mükemmel Düzen!</h3>\n                <p id=\"modal-msg\" class=\"text-gray-300 mb-10 text-xl md:text-2xl italic leading-relaxed\">\"Bu süreç, evrendeki hiçbir şeyin tesadüfen olmadığını gösterir.\"</p>\n                <button onclick=\"GameManager.closeModal()\" class=\"px-10 py-4 bg-green-600 hover:bg-green-500 rounded-xl text-white font-bold text-xl transition transform hover:scale-105 shadow-lg\">Devam Et</button>\n            </div>\n        </div>\n\n    </main>\n\n    <script>\n        // Init Icons\n        lucide.createIcons();\n\n        /* --- GLOBAL GAME MANAGER --- */\n        const GameManager = {\n            screens: ['intro', 'orbit', 'habitat', 'water'],\n            \n            loadGame(gameId) {\n                this.screens.forEach(s => document.getElementById(`screen-${s}`).classList.add('hidden'));\n                document.getElementById(`screen-${gameId}`).classList.remove('hidden');\n                \n                // Reset Logic based on game\n                if(gameId === 'orbit') OrbitGame.init();\n                if(gameId === 'habitat') HabitatGame.init();\n                if(gameId === 'water') WaterGame.init();\n                \n                // Re-init icons for newly visible elements\n                setTimeout(() => lucide.createIcons(), 50);\n            },\n\n            goHome() {\n                this.loadGame('intro');\n            },\n\n            showSuccess(message) {\n                const modal = document.getElementById('modal-success');\n                const msgEl = document.getElementById('modal-msg');\n                msgEl.innerText = `\"${message}\"`;\n                modal.classList.remove('hidden');\n                modal.classList.add('flex');\n            },\n\n            closeModal() {\n                document.getElementById('modal-success').classList.add('hidden');\n                document.getElementById('modal-success').classList.remove('flex');\n                this.goHome();\n            }\n        };\n\n        /* --- ORBIT GAME LOGIC --- */\n        const OrbitGame = {\n            planet: null,\n            input: null,\n            feedback: null,\n            animationId: null,\n            angle: 0,\n            radius: 90, // Orbit radius in pixels\n            running: false,\n\n            init() {\n                this.planet = document.getElementById('planet');\n                this.input = document.getElementById('orbit-speed');\n                this.feedback = document.getElementById('orbit-feedback');\n                \n                // Update slider display\n                this.input.addEventListener('input', (e) => {\n                    document.getElementById('speed-val').innerText = e.target.value;\n                });\n                \n                // Reset state\n                this.stopAnimation();\n                this.angle = 0;\n                this.updatePos(this.radius);\n                this.feedback.innerText = \"\";\n                this.input.value = 10;\n                document.getElementById('speed-val').innerText = \"10\";\n            },\n\n            updatePos(r) {\n                const center = 150; // container is 300x300\n                const x = center + r * Math.cos(this.angle);\n                const y = center + r * Math.sin(this.angle);\n                // Offset by planet size (16px / 2 = 8)\n                this.planet.style.left = (x - 8) + 'px';\n                this.planet.style.top = (y - 8) + 'px';\n            },\n\n            startAnimation(speed, isStable) {\n                this.running = true;\n                const animate = () => {\n                    if (!this.running) return;\n                    \n                    // Speed factor\n                    const angularSpeed = isStable ? 0.05 : (speed / 200); \n                    this.angle += angularSpeed;\n                    \n                    let currentRadius = this.radius;\n\n                    if (!isStable) {\n                        // Chaos logic\n                        if (speed < 45) {\n                            // Crash into sun\n                            currentRadius -= 1;\n                            if (currentRadius <= 25) {\n                                this.fail(\"Gezegen yıldıza çarptı! Çekim gücü galip geldi.\");\n                                return;\n                            }\n                        } else {\n                            // Fly away\n                            currentRadius += 1.5;\n                            if (currentRadius > 160) {\n                                this.fail(\"Gezegen savruldu! Hız çok yüksekti.\");\n                                return;\n                            }\n                        }\n                        this.radius = currentRadius; // Update state\n                    }\n\n                    this.updatePos(currentRadius);\n                    this.animationId = requestAnimationFrame(animate);\n                };\n                animate();\n            },\n\n            stopAnimation() {\n                this.running = false;\n                if (this.animationId) cancelAnimationFrame(this.animationId);\n            },\n\n            checkBalance() {\n                const speed = parseInt(this.input.value);\n                this.stopAnimation();\n                this.radius = 90; // reset start pos\n                this.angle = 0;\n\n                // Success Range: 45 to 65\n                if (speed >= 45 && speed <= 65) {\n                    this.feedback.className = \"text-center text-lg font-bold h-8 text-green-400\";\n                    this.feedback.innerText = \"Mükemmel Denge Yakalandı!\";\n                    this.startAnimation(speed, true); // Stable orbit\n                    setTimeout(() => {\n                        this.stopAnimation();\n                        GameManager.showSuccess(\"İnsan vücudunun ölçülü yapısı gibi, evren de hassas bir denge üzerindedir.\");\n                    }, 3000);\n                } else {\n                    this.feedback.className = \"text-center text-lg font-bold h-8 text-red-400\";\n                    this.feedback.innerText = \"Denge Bozuldu...\";\n                    this.startAnimation(speed, false); // Chaos\n                }\n            },\n\n            fail(msg) {\n                this.stopAnimation();\n                this.feedback.innerText = msg;\n            }\n        };\n\n        /* --- HABITAT GAME LOGIC --- */\n        const HabitatGame = {\n            animals: [\n                { id: 'bird', icon: 'bird', zone: 'sky', name: 'Kuş' },\n                { id: 'fish', icon: 'fish', zone: 'water', name: 'Balık' },\n                { id: 'lion', icon: 'cat', zone: 'land', name: 'Aslan' } // using cat icon for lion generic\n            ],\n            currentIndex: 0,\n\n            init() {\n                this.currentIndex = 0;\n                // Clear zones\n                document.querySelectorAll('.zone-content').forEach(el => el.innerHTML = '');\n                this.loadNextAnimal();\n            },\n\n            loadNextAnimal() {\n                if (this.currentIndex >= this.animals.length) {\n                    setTimeout(() => GameManager.showSuccess(\"Her canlı, ihtiyacını karşılayabilecek şekilde donatılmıştır.\"), 500);\n                    return;\n                }\n\n                const animal = this.animals[this.currentIndex];\n                const container = document.getElementById('current-animal');\n                // Use bigger icons for the current animal display\n                container.innerHTML = `<i data-lucide=\"${animal.icon}\" class=\"w-16 h-16 md:w-20 md:h-20 text-white\"></i>`;\n                document.getElementById('animal-instruction').innerText = `${animal.name} nereye aittir?`;\n                lucide.createIcons();\n            },\n\n            selectZone(zoneId) {\n                if (this.currentIndex >= this.animals.length) return;\n\n                const animal = this.animals[this.currentIndex];\n                const zoneEl = document.getElementById(`zone-${zoneId}`);\n\n                if (zoneId === animal.zone) {\n                    // Correct\n                    const iconClone = document.createElement('div');\n                    // Bigger icons inside zones too\n                    iconClone.innerHTML = `<i data-lucide=\"${animal.icon}\" class=\"w-8 h-8 md:w-12 md:h-12 text-white filter drop-shadow-lg\"></i>`;\n                    zoneEl.querySelector('.zone-content').appendChild(iconClone);\n                    lucide.createIcons();\n                    \n                    // Flash Green\n                    zoneEl.classList.add('bg-green-500/30');\n                    setTimeout(() => zoneEl.classList.remove('bg-green-500/30'), 300);\n\n                    this.currentIndex++;\n                    this.loadNextAnimal();\n                } else {\n                    // Wrong\n                    zoneEl.classList.add('bg-red-500/30');\n                    setTimeout(() => zoneEl.classList.remove('bg-red-500/30'), 300);\n                }\n            }\n        };\n\n        /* --- WATER CYCLE GAME LOGIC --- */\n        const WaterGame = {\n            step: 0,\n            \n            init() {\n                this.step = 0;\n                this.resetUI();\n            },\n\n            resetUI() {\n                document.getElementById('wc-sun').style.opacity = '0.5';\n                document.getElementById('wc-cloud').style.opacity = '0';\n                document.getElementById('wc-rain').style.opacity = '0';\n                \n                document.getElementById('btn-evap').disabled = false;\n                document.getElementById('btn-cond').disabled = true;\n                document.getElementById('btn-rain').disabled = true;\n                \n                document.getElementById('water-feedback').innerText = \"Güneş suyu ısıtmaya hazır.\";\n            },\n\n            trigger(action) {\n                const feedback = document.getElementById('water-feedback');\n\n                if (action === 'evap' && this.step === 0) {\n                    document.getElementById('wc-sun').style.opacity = '1';\n                    document.getElementById('wc-sun').classList.add('scale-110');\n                    feedback.innerText = \"Su ısınıyor ve buharlaşıyor...\";\n                    this.step = 1;\n                    document.getElementById('btn-evap').disabled = true;\n                    setTimeout(() => {\n                        document.getElementById('btn-cond').disabled = false;\n                        feedback.innerText = \"Su buharı yükseldi. Şimdi bulut olmalı.\";\n                    }, 1000);\n                }\n                else if (action === 'cond' && this.step === 1) {\n                    const cloud = document.getElementById('wc-cloud');\n                    cloud.style.opacity = '1';\n                    cloud.style.transform = 'translate(-50%, 0)'; // Move up slightly\n                    feedback.innerText = \"Buhar yoğunlaşıp bulutları oluşturdu.\";\n                    this.step = 2;\n                    document.getElementById('btn-cond').disabled = true;\n                    setTimeout(() => {\n                        document.getElementById('btn-rain').disabled = false;\n                        feedback.innerText = \"Bulutlar su ile doldu. Yağmur zamanı.\";\n                    }, 1000);\n                }\n                else if (action === 'rain' && this.step === 2) {\n                    document.getElementById('wc-rain').style.opacity = '1';\n                    feedback.innerText = \"Ve su toprağa geri dönüyor!\";\n                    this.step = 3;\n                    document.getElementById('btn-rain').disabled = true;\n                    setTimeout(() => {\n                        GameManager.showSuccess(\"Su döngüsü, yeryüzündeki yaşamın devamlılığı için kusursuz bir sistemdir.\");\n                    }, 1500);\n                }\n            }\n        };\n\n    </script>\n</body>\n</html>"
+  }
+]

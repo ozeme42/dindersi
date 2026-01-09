@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -26,7 +24,6 @@ import { CourseSidebar } from '@/components/course-sidebar';
 import { GameEndScreen } from '@/components/game-end-screen';
 import { FullscreenToggle } from '@/components/fullscreen-toggle';
 import { Badge } from '@/components/ui/badge';
-
 
 const difficultyMap = { 'Kolay': 'easy', 'Orta': 'medium', 'Zor': 'hard' } as const;
 
@@ -61,31 +58,61 @@ function QuestionTest({
     const PASS_THRESHOLD = 0.7;
 
     useEffect(() => {
+        let isMounted = true;
+
         async function fetchQuestions() {
             setIsLoading(true);
-            const result = await getQuestionsFromBank({
-                topicId: topic.id, 
-                difficulty: [difficulty], 
-                questionCount: 100, // Fetch a large number to sort and slice
-                isStatic: true,
-            });
-            
-             if (result.error || !result.questions) {
-                setError(result.error || "Sorular yüklenemedi.");
-            } else {
-                const allQuestions = (result.questions as Question[]).sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
-                const startIndex = testIndex * 10;
-                const selectedQuestions = allQuestions.slice(startIndex, startIndex + 10);
+            setError(null);
+
+            try {
+                // Zorluk seviyesi belirtmeden TÜM soruları çekiyoruz.
+                // Filtrelemeyi client-side yaparak isim uyuşmazlıklarını önlüyoruz.
+                const result = await getQuestionsFromBank({
+                    topicId: topic.id, 
+                    difficulty: [], 
+                    questionCount: 500,
+                    isStatic: true,
+                });
                 
-                if (selectedQuestions.length === 0) {
-                    setError("Bu test için soru bulunamadı. Lütfen daha sonra tekrar deneyin veya farklı bir test seçin.");
+                if (!isMounted) return;
+
+                if (result.error || !result.questions) {
+                    setError(result.error || "Sorular yüklenemedi.");
                 } else {
-                    setQuestions(selectedQuestions);
+                    const allRawQuestions = result.questions as Question[];
+
+                    // ESNEK FİLTRELEME
+                    const targetDifficulty = difficulty; 
+                    const targetDifficultyEng = difficultyMap[difficulty]; 
+
+                    const filteredQuestions = allRawQuestions.filter(q => {
+                        const qDiff = q.difficulty ? q.difficulty.toLowerCase().trim() : '';
+                        return qDiff === targetDifficulty.toLowerCase() || 
+                               qDiff === targetDifficultyEng.toLowerCase();
+                    });
+
+                    // Sıralama
+                    const sortedQuestions = filteredQuestions.sort((a,b) => (a.text || '').localeCompare(b.text || '', 'tr'));
+                    
+                    // Sayfalama (Pagination)
+                    const startIndex = testIndex * 10;
+                    const selectedQuestions = sortedQuestions.slice(startIndex, startIndex + 10);
+                    
+                    if (selectedQuestions.length === 0) {
+                        setError(`Bu test için soru bulunamadı.`);
+                    } else {
+                        setQuestions(selectedQuestions);
+                    }
                 }
+            } catch (err: any) {
+                if (isMounted) setError("Bir hata oluştu: " + err.message);
+            } finally {
+                if (isMounted) setIsLoading(false);
             }
-            setIsLoading(false);
         }
+
         fetchQuestions();
+        return () => { isMounted = false; };
     }, [topic, difficulty, testIndex, toast]);
 
     const handleAnswer = (answer: string | boolean) => {
@@ -103,7 +130,6 @@ function QuestionTest({
         } else {
              isCorrect = answer === currentQuestion.correctAnswer;
         }
-
 
         if(isCorrect) {
             playSound('correct');
@@ -132,9 +158,16 @@ function QuestionTest({
     }
     
     if (isLoading) return <div className="flex h-full min-h-[50vh] items-center justify-center"><Loader2 className="h-12 w-12 animate-spin text-cyan-500" /></div>;
-    if (error) return <div className="p-8 text-center text-red-500 bg-red-500/10 rounded-2xl border border-red-500/30">{error}</div>;
+    if (error) return (
+        <div className="flex flex-col items-center justify-center h-full p-8 gap-4">
+             <div className="p-6 text-center text-red-400 bg-red-500/10 rounded-2xl border border-red-500/30 max-w-md">
+                <Bug className="h-8 w-8 mx-auto mb-2 text-red-500" />
+                {error}
+             </div>
+             <Button variant="outline" onClick={onBack}>Geri Dön</Button>
+        </div>
+    );
     
-    // --- TEST BİTİŞ EKRANI ---
     if (isFinished) {
         const hasPassed = (correctCount / questions.length) >= PASS_THRESHOLD;
         const incorrectCount = questions.length - correctCount;
@@ -192,16 +225,14 @@ function QuestionTest({
         );
     }
     
-    // --- SORU KARTI ---
     const currentQuestion = questions[currentQuestionIndex];
-    if (!currentQuestion) return <div className="text-center text-slate-500 mt-10">Soru yüklenemedi.</div>;
+    if (!currentQuestion) return <div className="text-center text-slate-500 mt-10">Soru verisi eksik.</div>;
 
     const currentAnswer = answers[currentQuestionIndex];
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
     return (
         <div className="w-full min-h-full flex flex-col items-center justify-start md:justify-center p-4 pb-32 md:pb-8">
-            
             <Card className="w-full max-w-3xl bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden relative flex flex-col">
                 <div className="absolute top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }} />
                 
@@ -221,12 +252,10 @@ function QuestionTest({
                 </CardHeader>
                 
                 <CardContent className="py-6 space-y-8 flex-grow">
-                    {/* Soru Metni */}
                     <div className="text-center bg-slate-900/50 border-2 border-primary/20 p-6 rounded-lg shadow-inner min-h-[140px] flex items-center justify-center">
                         <p className="text-xl md:text-2xl font-semibold text-white leading-relaxed">{currentQuestion.text}</p>
                     </div>
                     
-                    {/* Seçenekler */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                         {currentQuestion.type === 'Doğru/Yanlış' ? (
                              ["Doğru", "Yanlış"].map((option, idx) => {
@@ -236,7 +265,7 @@ function QuestionTest({
                                 
                                 return (
                                     <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50" )} onClick={() => handleAnswer(answerValue)} disabled={!!currentAnswer}>
-                                        {option}
+                                            {option}
                                     </Button>
                                 );
                             })
@@ -245,7 +274,7 @@ function QuestionTest({
                             const isCorrect = currentQuestion.correctAnswer === option;
                             return (
                                 <Button key={option} variant="outline" className={cn("h-auto py-3 text-base md:py-4 md:text-lg whitespace-normal justify-center", !!currentAnswer && isCorrect && "bg-green-100 border-green-500 text-green-800", !!currentAnswer && isSelected && !isCorrect && "bg-red-100 border-red-500 text-red-800", !!currentAnswer && !isSelected && isCorrect && "bg-green-100/50 border-green-500/50 text-green-700", !!currentAnswer && !isSelected && !isCorrect && "opacity-50" )} onClick={() => handleAnswer(option)} disabled={!!currentAnswer}>
-                                    {option}
+                                        {option}
                                 </Button>
                             );
                         })}
@@ -289,6 +318,7 @@ function QuestionBankCoursePageComponent() {
     const [activeTopic, setActiveTopic] = useState<Topic | null>(null);
     const [activeTest, setActiveTest] = useState<{ topic: Topic, difficulty: 'Kolay' | 'Orta' | 'Zor', testIndex: number } | null>(null);
     
+    // Konunun tamamlanıp tamamlanmadığını kontrol eder
     const isTopicCompleted = useCallback((topicId: string) => {
         const progress = topicProgress[topicId];
         const counts = testCounts[topicId];
@@ -303,7 +333,6 @@ function QuestionBankCoursePageComponent() {
         }
 
         return checkLevel('easy') && checkLevel('medium') && checkLevel('hard');
-
     }, [topicProgress, testCounts]);
 
     useEffect(() => {
@@ -347,51 +376,35 @@ function QuestionBankCoursePageComponent() {
         fetchInitialData();
     }, [user?.uid, user?.class, courseId]);
 
+    // ZİNCİRLEME KİLİT SİSTEMİ (Flattened Logic)
+    // Üniteler ve konular tek bir uzun liste gibi davranır.
+    // Bir önceki konu bitmeden bir sonraki açılmaz.
     const isTopicUnlocked = useCallback((topicId: string): boolean => {
         if (!user || user.role === 'teacher' || user.role === 'superadmin') return true;
         if (!course?.units) return false;
     
-        const allUnits = [...(course.units || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+        // 1. Tüm üniteleri sırala
+        const sortedUnits = [...course.units].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
 
-        let currentTopic: Topic | undefined;
-        let currentTopicIndex = -1;
-        let currentUnit: Unit | undefined;
-        let currentUnitIndex = -1;
+        // 2. Tüm konuları tek bir düz listede (zincirde) topla
+        //    Böylece Ünite 1'in son konusu ile Ünite 2'nin ilk konusu art arda gelir.
+        const allTopicsInOrder = sortedUnits.flatMap(unit => 
+            [...(unit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }))
+        );
 
-        // Find the topic and its unit
-        for(let i = 0; i < allUnits.length; i++) {
-            const unit = allUnits[i];
-            const sortedTopics = [...(unit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
-            const topicIndex = sortedTopics.findIndex(t => t.id === topicId);
-            if (topicIndex !== -1) {
-                currentTopic = sortedTopics[topicIndex];
-                currentTopicIndex = topicIndex;
-                currentUnit = unit;
-                currentUnitIndex = i;
-                break;
-            }
-        }
+        // 3. İstenen konunun bu zincirdeki sırasını bul
+        const currentIndex = allTopicsInOrder.findIndex(t => t.id === topicId);
 
-        if (!currentUnit) return false; // Topic not found in any unit
+        // Konu bulunamazsa kilitli say
+        if (currentIndex === -1) return false;
 
-        // Check if previous units are completed
-        for (let i = 0; i < currentUnitIndex; i++) {
-            const prevUnit = allUnits[i];
-            const allTopicsInPrevUnitCompleted = (prevUnit.topics || []).every(topic => isTopicCompleted(topic.id));
-            if (!allTopicsInPrevUnitCompleted) {
-                return false; // A previous unit is not completed
-            }
-        }
-        
-        // If it's not the first topic in its unit, check the previous topic in the same unit
-        if (currentTopicIndex > 0) {
-            const sortedTopicsInUnit = [...(currentUnit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
-            const previousTopicInUnit = sortedTopicsInUnit[currentTopicIndex - 1];
-            return isTopicCompleted(previousTopicInUnit.id);
-        }
+        // Zincirin ilk halkası (ilk ünite, ilk konu) her zaman açıktır
+        if (currentIndex === 0) return true;
 
-        // If it's the first topic of its unit, it's unlocked if all previous units are complete (which we already checked)
-        return true;
+        // 4. Bir önceki konu tamamlanmış mı?
+        //    Eğer önceki tamamlanmışsa, şimdiki açılır.
+        const prevTopic = allTopicsInOrder[currentIndex - 1];
+        return isTopicCompleted(prevTopic.id);
 
     }, [course?.units, isTopicCompleted, user?.role]);
     
@@ -421,14 +434,20 @@ function QuestionBankCoursePageComponent() {
         }
     }, [user, courseId, activeTest, course?.title]);
     
+    // Otomatik olarak ilk açık ve tamamlanmamış konuyu seç
     useEffect(() => {
         if (isLoading || isCountsLoading || !course || activeTopic) return;
-        const allTopics = course.units
-            ?.flatMap(u => u.topics || [])
-            .sort((a, b) => (a.title || '').localeCompare(b.title || '', 'tr', { numeric: true })) || [];
+        
+        const sortedUnits = [...course.units || []].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }));
+        const allTopicsInOrder = sortedUnits.flatMap(unit => 
+            [...(unit.topics || [])].sort((a,b) => a.title.localeCompare(b.title, 'tr', { numeric: true }))
+        );
 
-        const firstUncompletedAndUnlockedTopic = allTopics.find(t => !isTopicCompleted(t.id) && isTopicUnlocked(t.id));
-        setActiveTopic(firstUncompletedAndUnlockedTopic || allTopics[0] || null);
+        // Zincirdeki ilk "kilidi açık" ve "tamamlanmamış" konuyu bul
+        const nextTopic = allTopicsInOrder.find(t => isTopicUnlocked(t.id) && !isTopicCompleted(t.id));
+        
+        // Eğer hepsi tamsa sonuncuyu, yoksa bulunanı, hiçbiri yoksa en baştakini seç
+        setActiveTopic(nextTopic || allTopicsInOrder[allTopicsInOrder.length - 1] || allTopicsInOrder[0] || null);
     }, [isLoading, isCountsLoading, course, isTopicCompleted, activeTopic, isTopicUnlocked]);
 
      const courseStats = useMemo(() => {
@@ -457,6 +476,21 @@ function QuestionBankCoursePageComponent() {
 
     }, [isCountsLoading, course, testCounts, topicProgress, classRank]);
 
+
+    // "Ünite Özetleri"nin Sidebar'da görünmemesi için course verisini temizleyip Sidebar'a gönderiyoruz.
+    // Eğer CourseSidebar bileşeni htmlContent veya summary alanlarına göre render yapıyorsa, bunları silerek engelliyoruz.
+    const sanitizedCourseForSidebar = useMemo(() => {
+        if (!course) return null;
+        return {
+            ...course,
+            units: course.units?.map(u => ({
+                ...u,
+                htmlContent: null, // Özeti kaldırmak için
+                summary: null,
+                topics: u.topics
+            }))
+        } as Course;
+    }, [course]);
 
     const mainContent = () => {
         if (activeTest) {
@@ -497,15 +531,13 @@ function QuestionBankCoursePageComponent() {
                 const prevDifficultyKey = level === 'Orta' ? 'easy' : 'medium';
                 const totalPrev = Math.ceil((counts[prevDifficultyKey] || 0) / 10);
                 if (totalPrev === 0) {
-                     // If easy has no tests, medium should be unlocked.
-                     if (level === 'Orta') return false;
-                     // If medium has no tests, but easy does, check if easy is complete.
-                     if (level === 'Zor') {
+                      if (level === 'Orta') return false;
+                      if (level === 'Zor') {
                         const totalEasy = Math.ceil((counts.easy || 0) / 10);
-                        if (totalEasy === 0) return false; // if easy also has no tests, unlock hard
+                        if (totalEasy === 0) return false;
                         const passedEasy = Object.values(progress?.['easy'] || {}).filter(res => res.status === 'passed').length;
                         return passedEasy < totalEasy;
-                     }
+                      }
                 }
                 
                 const passedPrev = Object.values(progress?.[prevDifficultyKey] || {}).filter(res => res.status === 'passed').length;
@@ -516,7 +548,7 @@ function QuestionBankCoursePageComponent() {
                 <ScrollArea className="h-full bg-slate-950">
                     <div className="p-4 md:p-8 space-y-8 pb-24">
                         <div className="md:hidden mb-4">
-                             <Button variant="ghost" size="sm" onClick={() => { setActiveTopic(null); setCurrentStep(3); }} className="text-slate-400 hover:text-white">
+                             <Button variant="ghost" size="sm" onClick={() => { setActiveTopic(null); }} className="text-slate-400 hover:text-white">
                                 <ArrowLeft className="mr-2 h-4 w-4"/> Konulara Dön
                             </Button>
                         </div>
@@ -543,55 +575,55 @@ function QuestionBankCoursePageComponent() {
                                         "relative overflow-hidden rounded-3xl border backdrop-blur-sm transition-all duration-300",
                                         levelLocked ? "opacity-50 grayscale border-white/5 bg-slate-900/30" : `bg-slate-900/60 ${colorClass}`
                                     )}>
-                                        {levelLocked && (
-                                            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
-                                                <div className="bg-black/60 p-3 rounded-full border border-white/10">
-                                                    <Lock className="h-6 w-6 text-slate-400" />
+                                            {levelLocked && (
+                                                <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-[1px]">
+                                                    <div className="bg-black/60 p-3 rounded-full border border-white/10">
+                                                        <Lock className="h-6 w-6 text-slate-400" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
 
-                                        <div className="p-6 md:p-8">
-                                            <div className="flex items-center gap-4 mb-6">
-                                                <div className={cn("p-3 rounded-2xl bg-black/20")}>
-                                                    <Icon className="h-8 w-8" />
+                                            <div className="p-6 md:p-8">
+                                                <div className="flex items-center gap-4 mb-6">
+                                                    <div className={cn("p-3 rounded-2xl bg-black/20")}>
+                                                        <Icon className="h-8 w-8" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-2xl font-bold text-white">{level} Seviye</h3>
+                                                        <p className="text-slate-400 text-sm">{numTests} Test Mevcut</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-white">{level} Seviye</h3>
-                                                    <p className="text-slate-400 text-sm">{numTests} Test Mevcut</p>
-                                                </div>
-                                            </div>
 
-                                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                                                {Array.from({ length: numTests }).map((_, i) => {
-                                                    const testStatus = progressForLevel?.[i]?.status;
-                                                    const testIsLocked = levelLocked || (i > 0 && progressForLevel?.[i-1]?.status !== 'passed');
-                                                    
-                                                    return (
-                                                        <Button
-                                                            key={i}
-                                                            variant="outline"
-                                                            disabled={testIsLocked}
-                                                            onClick={() => setActiveTest({ topic: activeTopic, difficulty: level, testIndex: i })}
-                                                            className={cn(
-                                                                "h-14 rounded-xl border-2 font-bold text-base transition-all relative overflow-hidden group",
-                                                                testIsLocked 
-                                                                    ? "bg-slate-950 border-white/5 text-slate-600" 
-                                                                    : testStatus === 'passed'
-                                                                        ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/30"
-                                                                        : "bg-slate-800 border-white/10 text-slate-300 hover:border-white/30 hover:bg-slate-700 hover:text-white"
-                                                            )}
-                                                        >
-                                                            <span className="relative z-10 flex items-center gap-2">
-                                                                {testIsLocked ? <Lock className="h-4 w-4"/> : testStatus === 'passed' ? <CheckCircle2 className="h-4 w-4"/> : <PlayCircle className="h-4 w-4"/>}
-                                                                Test {i + 1}
-                                                            </span>
-                                                            {testStatus === 'passed' && <div className="absolute inset-0 bg-emerald-500/10 blur-xl" />}
-                                                        </Button>
-                                                    )
-                                                })}
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                                                    {Array.from({ length: numTests }).map((_, i) => {
+                                                        const testStatus = progressForLevel?.[i]?.status;
+                                                        const testIsLocked = levelLocked || (i > 0 && progressForLevel?.[i-1]?.status !== 'passed');
+                                                        
+                                                        return (
+                                                            <Button
+                                                                key={i}
+                                                                variant="outline"
+                                                                disabled={testIsLocked}
+                                                                onClick={() => setActiveTest({ topic: activeTopic, difficulty: level, testIndex: i })}
+                                                                className={cn(
+                                                                    "h-14 rounded-xl border-2 font-bold text-base transition-all relative overflow-hidden group",
+                                                                    testIsLocked 
+                                                                        ? "bg-slate-950 border-white/5 text-slate-600" 
+                                                                        : testStatus === 'passed'
+                                                                            ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/30"
+                                                                            : "bg-slate-800 border-white/10 text-slate-300 hover:border-white/30 hover:bg-slate-700 hover:text-white"
+                                                                )}
+                                                            >
+                                                                    <span className="relative z-10 flex items-center gap-2">
+                                                                        {testIsLocked ? <Lock className="h-4 w-4"/> : testStatus === 'passed' ? <CheckCircle2 className="h-4 w-4"/> : <PlayCircle className="h-4 w-4"/>}
+                                                                        Test {i + 1}
+                                                                    </span>
+                                                                    {testStatus === 'passed' && <div className="absolute inset-0 bg-emerald-500/10 blur-xl" />}
+                                                            </Button>
+                                                        )
+                                                    })}
+                                                </div>
                                             </div>
-                                        </div>
                                     </div>
                                 )
                             })}
@@ -680,8 +712,9 @@ function QuestionBankCoursePageComponent() {
                     "w-full md:w-80 lg:w-96 bg-slate-900/50 border-r border-white/5 flex-shrink-0 transition-all duration-300",
                     activeTest ? "hidden md:flex" : (activeTopic ? "hidden md:flex" : "flex")
                 )}>
+                    {/* Sanitized Course gönderilerek Özetlerin görünmesi engellenir */}
                      <CourseSidebar
-                        course={course}
+                        course={sanitizedCourseForSidebar}
                         activeTopic={activeTopic}
                         onSelectTopic={(topic) => { setActiveTopic(topic); setActiveTest(null); }}
                         isTopicUnlocked={isTopicUnlocked}
@@ -711,5 +744,3 @@ function Page() {
 }
 
 export default Page;
-
-
